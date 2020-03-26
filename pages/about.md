@@ -33,7 +33,7 @@ After fitting the model parameters we generate forward looking forecasts in a nu
 
 ## Citations and Data sources
 
-[0] https://dash.harvard.edu/bitstream/handle/1/42638988/Social%20distancing%20strategies%20for%20curbing%20the%20COVID-19%20epidemic.pdf?sequence=1&isAllowed=y
+[[0]](https://dash.harvard.edu/bitstream/handle/1/42638988/Social%20distancing%20strategies%20for%20curbing%20the%20COVID-19%20epidemic.pdf?sequence=1&isAllowed=y)
 
 </MDXComponents>
 </Layout>
