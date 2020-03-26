@@ -1,9 +1,12 @@
 import React from 'react';
 import {useRouter} from 'next/router';
+import fs from 'fs';
+import path from 'path';
+
 import Layout from '../../components/Layout';
 import STATES from '../../lib/states';
 
-export default () => {
+export default ({demographics}) => {
   const {
     query: {state},
     push,
@@ -17,8 +20,8 @@ export default () => {
   return (
     <Layout>
       <div className="flex flex-col justify-center">
-        <div className="flex sm:flex-col md:flex-row mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
-          <div className="mr-10">
+        <div className="flex flex-col md:flex-row mb-4 bg-white rounded shadow-lg px-6 py-4">
+          <div className="sm:mb-10 md:mb-0 md:mr-10">
             <div className="text-gray-700">State: </div>
             <div className="inline-block relative w-64">
               <select
@@ -95,7 +98,7 @@ export default () => {
           <div className="mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
             <div className="font-bold text-xl mb-2">Model Inputs</div>
             <div className="flex flex-around sm:flex-col md:flex-row">
-              <div className="w-1/2 sm:mr-0 md:mr-10">
+              <div className="w-full md:w-1/2 sm:mr-0 md:mr-10">
                 <div>
                   <div className="text-gray-600 mb-2">Social Distancing</div>
                   <div className="text-gray-800 text-sm mb-4">
@@ -108,49 +111,49 @@ export default () => {
                   <img src={`/svg/state/${state}/${scenario}/Distancing.svg`} />
                 </div>
               </div>
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <div className="text-gray-600 mb-2">Demographic Parameters</div>
-                {/* <table class="table-fixed">
+                <table class="table-fixed">
                   <tbody>
                     <tr>
                       <td class="border px-4 py-2">Population</td>
                       <td class="border px-4 py-2">
-                        {stateDemographics.Population}
+                        {demographics.Population}
                       </td>
                     </tr>
                     <tr>
                       <td class="border px-4 py-2">Virus Import Date</td>
                       <td class="border px-4 py-2">
-                        {stateDemographics.importtime}
+                        {demographics.importtime}
                       </td>
                     </tr>
                     <tr>
                       <td class="border px-4 py-2">Total Ventalators</td>
                       <td class="border px-4 py-2">
-                        {stateDemographics.ventalators}
+                        {demographics.ventalators}
                       </td>
                     </tr>
                     <tr>
                       <td class="border px-4 py-2">
                         Probability of Not needing hospitalization
                       </td>
-                      <td class="border px-4 py-2">{stateDemographics.pS}</td>
+                      <td class="border px-4 py-2">{demographics.pS}</td>
                     </tr>
 
                     <tr>
                       <td class="border px-4 py-2">
                         Probability of needing hospitalization wihtout ICU
                       </td>
-                      <td class="border px-4 py-2">{stateDemographics.pH}</td>
+                      <td class="border px-4 py-2">{demographics.pH}</td>
                     </tr>
                     <tr>
                       <td class="border px-4 py-2">
                         Probability of needing ICU care
                       </td>
-                      <td class="border px-4 py-2">{stateDemographics.pC}</td>
+                      <td class="border px-4 py-2">{demographics.pC}</td>
                     </tr>
                   </tbody>
-                </table> */}
+                </table>
               </div>
             </div>
           </div>
@@ -164,4 +167,28 @@ export default () => {
       </div>
     </Layout>
   );
+};
+
+export const getStaticProps = ({params: {state}}) => {
+  const rawdata = fs.readFileSync(
+    path.join(process.cwd(), 'public/json/state/demographics.json')
+  );
+  const demographics = JSON.parse(rawdata);
+
+  return {
+    props: {
+      demographics: demographics[state],
+    },
+  };
+};
+
+export const getStaticPaths = (_ctx) => {
+  return {
+    paths: STATES.map((st) => ({
+      params: {
+        state: st,
+      },
+    })),
+    fallback: false,
+  };
 };
