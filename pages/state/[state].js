@@ -112,56 +112,126 @@ export default ({demographics}) => {
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="text-gray-600 mb-2">Demographic Parameters</div>
-                <table class="table-fixed">
-                  <tbody>
-                    <tr>
-                      <td class="border px-4 py-2">Population</td>
-                      <td class="border px-4 py-2">
-                        {demographics.Population}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="border px-4 py-2">Virus Import Date</td>
-                      <td class="border px-4 py-2">
-                        {demographics.importtime}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="border px-4 py-2">Total Ventalators</td>
-                      <td class="border px-4 py-2">
-                        {demographics.ventalators}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="border px-4 py-2">
-                        Probability of Not needing hospitalization
-                      </td>
-                      <td class="border px-4 py-2">{demographics.pS}</td>
-                    </tr>
+                <div>
+                  <div className="text-gray-600 mb-2">
+                    Demographic Parameters
+                  </div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    Demographic parameters are calculated based on publically
+                    available data on age distributions and ventalator capacity.
+                    The hospitalization probabilities are computed based on
+                    assumed age-based need and state age distributions.
+                  </div>
+                  <table class="table-fixed mb-0 md:mb-4">
+                    <tbody>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Population
+                        </td>
+                        <td class="border px-4 py-2">
+                          {demographics.Population}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Total Ventalators
+                        </td>
+                        <td class="border px-4 py-2">
+                          {demographics.ventalators}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Probability of Not needing hospitalization
+                        </td>
+                        <td class="border px-4 py-2">{demographics.pS}</td>
+                      </tr>
 
-                    <tr>
-                      <td class="border px-4 py-2">
-                        Probability of needing hospitalization wihtout ICU
-                      </td>
-                      <td class="border px-4 py-2">{demographics.pH}</td>
-                    </tr>
-                    <tr>
-                      <td class="border px-4 py-2">
-                        Probability of needing ICU care
-                      </td>
-                      <td class="border px-4 py-2">{demographics.pC}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Probability of needing hospitalization wihtout ICU
+                        </td>
+                        <td class="border px-4 py-2">{demographics.pH}</td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Probability of needing ICU care
+                        </td>
+                        <td class="border px-4 py-2">{demographics.pC}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div>
+                    <div className="text-gray-600 mb-2">
+                      Model-fit Parameters
+                    </div>
+                    <div className="text-gray-800 text-sm mb-4">
+                      Most parameters were fit on country data, but we adjust
+                      the following parameters on a per-state basis for a more
+                      accurate fit.
+                    </div>
+                    <table class="table-fixed">
+                      <tbody>
+                        <tr>
+                          <td class="font-semibold border px-4 py-2">
+                            Import Date
+                          </td>
+                          <td class="border px-4 py-2">
+                            {demographics.importtime}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div className="bg-white rounded overflow-hidden shadow-lg px-6 py-4">
             <div className="font-bold text-xl mb-2">Model Predictions</div>
-            <img src={`/svg/state/${state}/${scenario}/ICU.svg`} />
-            <img src={`/svg/state/${state}/${scenario}/Deaths.svg`} />
-            <img src={`/svg/state/${state}/${scenario}/Progression.svg`} />
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 md:mr-10">
+                <div>
+                  <div className="text-gray-600 mb-2">ICU Occupancy</div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    ICU capacity is determined by the number of ventalators in
+                    each state. We also assign a higher probability of fatality
+                    in the case the ICU capacity is over-shot.
+                  </div>
+                  <img src={`/svg/state/${state}/${scenario}/ICU.svg`} />
+                </div>
+              </div>
+              <div className="w-full md:w-1/2">
+                <div>
+                  <div className="text-gray-600 mb-2">Projected Deaths</div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    We project the cumulative number of deaths on a logarithmic
+                    scale.
+                  </div>
+                  <img src={`/svg/state/${state}/${scenario}/Deaths.svg`} />
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className="w-full md:w-1/2 md:mr-10">
+                <div>
+                  <div className="text-gray-600 mb-2">
+                    Case Progression Curve
+                  </div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    We show the current number of infected and infectious
+                    individuals as well as the cumulative number of expected PCR
+                    confirmations. If less than 20% of the population is
+                    infected and the number of active infections is reduced to a
+                    small fraction of the population we consider the epidemic
+                    contained, and place a grey box on the plot.
+                  </div>
+                  <img
+                    src={`/svg/state/${state}/${scenario}/Progression.svg`}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
