@@ -2,16 +2,20 @@ import React from 'react';
 import {useRouter} from 'next/router';
 import fs from 'fs';
 import path from 'path';
+import dayjs from 'dayjs';
+import numeral from 'numeral';
+import Link from 'next/link';
 
 import Layout from '../../components/Layout';
 import STATES from '../../lib/states';
 
-export default ({demographics}) => {
+export default ({demographics, summary}) => {
   const {
     query: {state},
     push,
   } = useRouter();
   const [scenario, setScenario] = React.useState('scenario1');
+  const scenarioSummary = summary[scenario];
 
   const handleStateSelect = (e) => {
     push(`/state/${e.target.value}`);
@@ -118,7 +122,7 @@ export default ({demographics}) => {
                   </div>
                   <div className="text-gray-800 text-sm mb-4">
                     Demographic parameters are calculated based on publically
-                    available data on age distributions and ventalator capacity.
+                    available data on age distributions and ventilator capacity.
                     The hospitalization probabilities are computed based on
                     assumed age-based need and state age distributions.
                   </div>
@@ -129,35 +133,40 @@ export default ({demographics}) => {
                           Population
                         </td>
                         <td class="border px-4 py-2">
-                          {demographics.Population}
+                          {numeral(demographics.Population).format('0,0')}
                         </td>
                       </tr>
                       <tr>
                         <td class="font-semibold border px-4 py-2">
-                          Total Ventalators
+                          Total Ventilators
                         </td>
                         <td class="border px-4 py-2">
-                          {demographics.ventalators}
+                          {numeral(demographics.ventalators).format('0,0')}
                         </td>
                       </tr>
                       <tr>
                         <td class="font-semibold border px-4 py-2">
                           Probability of Not needing hospitalization
                         </td>
-                        <td class="border px-4 py-2">{demographics.pS}</td>
+                        <td class="border px-4 py-2">
+                          {numeral(demographics.pS).format('0.00%')}
+                        </td>
                       </tr>
-
                       <tr>
                         <td class="font-semibold border px-4 py-2">
                           Probability of needing hospitalization wihtout ICU
                         </td>
-                        <td class="border px-4 py-2">{demographics.pH}</td>
+                        <td class="border px-4 py-2">
+                          {numeral(demographics.pH).format('0.00%')}
+                        </td>
                       </tr>
                       <tr>
                         <td class="font-semibold border px-4 py-2">
                           Probability of needing ICU care
                         </td>
-                        <td class="border px-4 py-2">{demographics.pC}</td>
+                        <td class="border px-4 py-2">
+                          {numeral(demographics.pC).format('0.00%')}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -166,9 +175,12 @@ export default ({demographics}) => {
                       Model-fit Parameters
                     </div>
                     <div className="text-gray-800 text-sm mb-4">
-                      Most parameters were fit on country data, but we adjust
-                      the following parameters on a per-state basis for a more
-                      accurate fit.
+                      Most parameters{' '}
+                      <Link href="/about">
+                        <a>were fit</a>
+                      </Link>{' '}
+                      on country data, but we adjust the following parameters on
+                      a per-state basis for a more accurate fit.
                     </div>
                     <table class="table-fixed">
                       <tbody>
@@ -194,7 +206,7 @@ export default ({demographics}) => {
                 <div>
                   <div className="text-gray-600 mb-2">ICU Occupancy</div>
                   <div className="text-gray-800 text-sm mb-4">
-                    ICU capacity is determined by the number of ventalators in
+                    ICU capacity is determined by the number of ventilators in
                     each state. We also assign a higher probability of fatality
                     in the case the ICU capacity is over-shot.
                   </div>
@@ -212,7 +224,7 @@ export default ({demographics}) => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 md:mr-10">
                 <div>
                   <div className="text-gray-600 mb-2">
@@ -231,6 +243,61 @@ export default ({demographics}) => {
                   />
                 </div>
               </div>
+              <div className="w-full md:w-1/2 md:mr-10">
+                <div>
+                  <div className="text-gray-600 mb-2">Outcome Summary</div>
+                  <table class="table-fixed mb-0 md:mb-4">
+                    <tbody>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">Deaths</td>
+                        <td class="border px-4 py-2">
+                          {numeral(scenarioSummary.Deaths).format('0,0')}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          PCR Confirmed
+                        </td>
+                        <td class="border px-4 py-2">
+                          {numeral(scenarioSummary['PCR Confirmed']).format(
+                            '0,0'
+                          )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Percent of Population Infected
+                        </td>
+                        <td class="border px-4 py-2">
+                          {numeral(
+                            scenarioSummary['Population Infected']
+                          ).format('0.00%')}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Fatality Rate
+                        </td>
+                        <td class="border px-4 py-2">
+                          {numeral(scenarioSummary['Fatality Rate']).format(
+                            '0.00%'
+                          )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Date Contained
+                        </td>
+                        <td class="border px-4 py-2">
+                          {dayjs(scenarioSummary['Date Contained']).format(
+                            'MMM D, YYYY'
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -243,11 +310,16 @@ export const getStaticProps = ({params: {state}}) => {
   const rawdata = fs.readFileSync(
     path.join(process.cwd(), 'public/json/state/demographics.json')
   );
+  const rawsummarydata = fs.readFileSync(
+    path.join(process.cwd(), `public/json/state/${state}/summary.json`)
+  );
   const demographics = JSON.parse(rawdata);
+  const summary = JSON.parse(rawsummarydata);
 
   return {
     props: {
       demographics: demographics[state],
+      summary,
     },
   };
 };

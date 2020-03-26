@@ -7,7 +7,7 @@ const Layout = ({children}) => (
       <div className="flex items-center flex-shrink-0 mr-6">
         <Link href="/">
           <a>
-            <span className="font-bold text-xl mb-2 tracking-tight">
+            <span className="text-gray-800 mt-12 mb-4 -ml-1 text-xl font-extrabold tracking-wider">
               COVID-19 Model
             </span>
           </a>
