@@ -177,7 +177,9 @@ export default ({demographics, summary}) => {
                     <div className="text-gray-800 text-sm mb-4">
                       Most parameters{' '}
                       <Link href="/about">
-                        <a>were fit</a>
+                        <a className="text-blue-700 hover:text-blue-500 leading-relaxed font-medium mb-8">
+                          were fit
+                        </a>
                       </Link>{' '}
                       on country data, but we adjust the following parameters on
                       a per-state basis for a more accurate fit.
@@ -189,7 +191,9 @@ export default ({demographics, summary}) => {
                             Import Date
                           </td>
                           <td class="border px-4 py-2">
-                            {demographics.importtime}
+                            {dayjs('2020-01-01')
+                              .add(demographics.importtime - 1, 'day')
+                              .format('MMM DD, YYYY')}
                           </td>
                         </tr>
                       </tbody>
