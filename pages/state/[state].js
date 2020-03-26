@@ -97,7 +97,7 @@ export default ({demographics}) => {
         <div className="flex flex-col">
           <div className="mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
             <div className="font-bold text-xl mb-2">Model Inputs</div>
-            <div className="flex flex-around sm:flex-col md:flex-row">
+            <div className="flex flex-around flex-col md:flex-row">
               <div className="w-full md:w-1/2 sm:mr-0 md:mr-10">
                 <div>
                   <div className="text-gray-600 mb-2">Social Distancing</div>

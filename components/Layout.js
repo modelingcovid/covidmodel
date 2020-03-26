@@ -13,20 +13,20 @@ const Layout = ({children}) => (
           </a>
         </Link>
       </div>
-      <div className="block lg:flex lg:items-center lg:w-auto">
-        <div className="text-sm lg:flex-grow">
+      <div className="flex items-center w-auto">
+        <div className="text-sm flex-grow">
           <Link href="/state">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-blue-600 hover:text-gray-600 mr-4">
+            <a className="inline-block mt-0 text-blue-600 hover:text-gray-600 mr-4">
               States
             </a>
           </Link>
           <Link href="/country">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-blue-600 hover:text-gray-600 mr-4">
+            <a className="inline-block mt-0 text-blue-600 hover:text-gray-600 mr-4">
               Countries
             </a>
           </Link>
           <Link href="/about">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-blue-600 hover:text-gray-600 mr-4">
+            <a className="inline-block mt-0 text-blue-600 hover:text-gray-600 mr-4">
               About
             </a>
           </Link>
