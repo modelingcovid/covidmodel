@@ -6,7 +6,7 @@ import MDXComponents from '../components/MDXComponents';
 
 # About
 
-COVID-19 model is developed by a team at <a href="https://stripe.com">Stripe</a> to help combat the spread of the virus.
+COVID-19 model is developed by a team at <a href="https://stripe.com">Stripe</a> to help combat the spread of the virus. The model Mathematica code is open-source and available on [Github](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
 
 ## Model
 

@@ -21,8 +21,8 @@ export default () => {
                 onChange={handleStateSelect}
                 value="-"
               >
-                {STATES.map((s) => (
-                  <option>{s}</option>
+                {Object.keys(STATES).map((s) => (
+                  <option value={s}>{STATES[s]}</option>
                 ))}
                 <option>-</option>
               </select>

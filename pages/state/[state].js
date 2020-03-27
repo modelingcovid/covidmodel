@@ -33,8 +33,8 @@ export default ({demographics, summary}) => {
                 onChange={handleStateSelect}
                 value={state}
               >
-                {STATES.map((s) => (
-                  <option>{s}</option>
+                {Object.keys(STATES).map((s) => (
+                  <option value={s}>{STATES[s]}</option>
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -49,59 +49,61 @@ export default ({demographics, summary}) => {
             </div>
           </div>
           <div>
-            <div class="block">
-              <span class="text-gray-700">Scenario: </span>
-              <div class="mt-2">
+            <div className="block">
+              <span className="text-gray-700">Scenario: </span>
+              <div className="mt-2">
                 <div>
-                  <label class="inline-flex items-center">
+                  <label className="inline-flex items-center">
                     <input
                       type="radio"
-                      class="form-radio"
+                      className="form-radio"
                       name="radio"
                       checked={scenario === 'scenario4'}
                       onClick={() => setScenario('scenario4')}
                     />
-                    <span class="ml-2">Return to normal (no distancing)</span>
+                    <span className="ml-2">
+                      Return to normal (no distancing)
+                    </span>
                   </label>
                 </div>
                 <div>
-                  <label class="inline-flex items-center">
+                  <label className="inline-flex items-center">
                     <input
                       type="radio"
-                      class="form-radio"
+                      className="form-radio"
                       name="radio"
                       checked={scenario === 'scenario1'}
                       onClick={() => setScenario('scenario1')}
                     />
-                    <span class="ml-2">
+                    <span className="ml-2">
                       Continue current distancing level for 3 months
                     </span>
                   </label>
                 </div>
                 <div>
-                  <label class="inline-flex items-center">
+                  <label className="inline-flex items-center">
                     <input
                       type="radio"
-                      class="form-radio"
+                      className="form-radio"
                       name="radio"
                       checked={scenario === 'scenario2'}
                       onClick={() => setScenario('scenario2')}
                     />
-                    <span class="ml-2">
+                    <span className="ml-2">
                       Increase distancing to Italy levels for 3 months
                     </span>
                   </label>
                 </div>
                 <div>
-                  <label class="inline-flex items-center">
+                  <label className="inline-flex items-center">
                     <input
                       type="radio"
-                      class="form-radio"
+                      className="form-radio"
                       name="radio"
                       checked={scenario === 'scenario3'}
                       onClick={() => setScenario('scenario3')}
                     />
-                    <span class="ml-2">
+                    <span className="ml-2">
                       Increase distancing to Wuhan levels for 2 months
                     </span>
                   </label>
@@ -134,49 +136,60 @@ export default ({demographics, summary}) => {
                   </div>
                   <div className="text-gray-800 text-sm mb-4">
                     Demographic parameters are calculated based on publically
-                    available data on age distributions and ventilator capacity.
+                    available data on age distributions and hospital capacity.
                     The hospitalization probabilities are computed based on
                     assumed age-based need and state age distributions.
                   </div>
-                  <table class="table-fixed mb-0 mb-4 border-2 border-gray-600">
+                  <table className="table-fixed mb-0 mb-4 border-2 border-gray-600">
                     <tbody>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           Population
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(demographics.Population).format('0,0')}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
-                          Total Ventilators
+                        <td className="font-semibold border px-4 py-2">
+                          ICU Beds
                         </td>
-                        <td class="border px-4 py-2">
-                          {numeral(demographics.ventalators).format('0,0')}
+                        <td className="border px-4 py-2">
+                          {numeral(demographics.icuBeds).format('0,0')}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
+                          Available Hospital Beds
+                        </td>
+                        <td className="border px-4 py-2">
+                          {numeral(
+                            demographics.staffedBeds *
+                              (1 - demographics.bedUtilization)
+                          ).format('0,0')}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold border px-4 py-2">
                           Probability of Not needing hospitalization
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(demographics.pS).format('0.00%')}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           Probability of needing hospitalization wihtout ICU
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(demographics.pH).format('0.00%')}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           Probability of needing ICU care
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(demographics.pC).format('0.00%')}
                         </td>
                       </tr>
@@ -196,16 +209,24 @@ export default ({demographics, summary}) => {
                       on country data, but we adjust the following parameters on
                       a per-state basis for a more accurate fit.
                     </div>
-                    <table class="table-fixed border-2 border-gray-600">
+                    <table className="table-fixed border-2 border-gray-600">
                       <tbody>
                         <tr>
-                          <td class="font-semibold border px-4 py-2">
+                          <td className="font-semibold border px-4 py-2">
                             Import Date
                           </td>
-                          <td class="border px-4 py-2">
+                          <td className="border px-4 py-2">
                             {dayjs('2020-01-01')
                               .add(demographics.importtime - 1, 'day')
                               .format('MMM DD, YYYY')}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="font-semibold border px-4 py-2">
+                            Basic Reproduction Number (R0)
+                          </td>
+                          <td className="border px-4 py-2">
+                            {numeral(demographics['R0']).format('0.00')}
                           </td>
                         </tr>
                       </tbody>
@@ -217,29 +238,62 @@ export default ({demographics, summary}) => {
           </div>
           <div className="bg-white rounded overflow-hidden shadow-lg px-6 py-4 mb-4">
             <div className="font-bold text-xl mb-2">Model Predictions</div>
-            <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-1/2 md:mr-10">
-                <div>
-                  <div className="text-gray-600 mb-2">ICU Occupancy</div>
-                  <div className="text-gray-800 text-sm mb-4">
-                    ICU capacity is determined by the number of ventilators in
-                    each state. We also assign a higher probability of fatality
-                    in the case the ICU capacity is over-shot.
-                  </div>
-                  <img src={`/svg/state/${state}/${scenario}/ICU.svg`} />
-                </div>
+            {scenarioSummary['Date Contained'] === 'Not Contained' ? (
+              <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
+                <strong className="font-bold">Virus not contained{` `}</strong>
+                <span className="block m:inline">
+                  {numeral(scenarioSummary['Population Infected']).format(
+                    '0.00%'
+                  )}{' '}
+                  of state infected,{' '}
+                  {numeral(scenarioSummary['Deaths']).format('0,0')} deaths
+                </span>
               </div>
-              <div className="w-full md:w-1/2">
-                <div>
-                  <div className="text-gray-600 mb-2">Projected Deaths</div>
-                  <div className="text-gray-800 text-sm mb-4">
-                    We project the cumulative number of deaths on a logarithmic
-                    scale.
-                  </div>
-                  <img src={`/svg/state/${state}/${scenario}/Deaths.svg`} />
-                </div>
+            ) : (
+              <div className="mb-2 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded">
+                <strong className="font-bold">Virus contained{` `}</strong>
+                <span className="block m:inline">
+                  Virus contained on{' '}
+                  {dayjs(scenarioSummary['Date Contained']).format(
+                    'MMM D, YYYY'
+                  )}
+                </span>
               </div>
-            </div>
+            )}
+            {scenarioSummary['Date Hospitals Over Capacity'] !==
+            'Hospitals Under capacity' ? (
+              <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
+                <strong className="font-bold">Hospitals Overloaded{` `}</strong>
+                <span className="block m:inline">
+                  on{' '}
+                  {dayjs(
+                    scenarioSummary['Date Hospitals Over Capacity']
+                  ).format('MMM D, YYYY')}
+                </span>
+              </div>
+            ) : (
+              <div className="mb-2 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded">
+                <strong className="font-bold">
+                  Hospitals Under Capacity{` `}
+                </strong>
+              </div>
+            )}
+            {scenarioSummary['Date Contained'] === 'Not Contained' ? (
+              <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
+                <strong className="font-bold">ICU Overloaded{` `}</strong>
+                <span className="block m:inline">
+                  on{' '}
+                  {dayjs(scenarioSummary['Date ICU Over Capacity']).format(
+                    'MMM D, YYYY'
+                  )}
+                </span>
+              </div>
+            ) : (
+              <div className="mb-2 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded">
+                <strong className="font-bold">ICU under capacity</strong>
+              </div>
+            )}
+
             <div className="flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 md:mr-10">
                 <div>
@@ -259,52 +313,98 @@ export default ({demographics, summary}) => {
                   />
                 </div>
               </div>
+              <div className="w-full md:w-1/2">
+                <div>
+                  <div className="text-gray-600 mb-2">Projected Deaths</div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    We project the cumulative number of deaths on a logarithmic
+                    scale. Black dots are confirmed counts.
+                  </div>
+                  <img src={`/svg/state/${state}/${scenario}/Deaths.svg`} />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 md:mr-10">
+                <div>
+                  <div className="text-gray-600 mb-2">Hospital Occupancy</div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    We estimate the hospital capacity for COVID-19 patients by
+                    taking the number of available beds and discounting for that
+                    hospital system's typical occupancy rate.
+                  </div>
+                  <img src={`/svg/state/${state}/${scenario}/Hospitals.svg`} />
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 md:mr-10">
+                <div>
+                  <div className="text-gray-600 mb-2">ICU Occupancy</div>
+                  <div className="text-gray-800 text-sm mb-4">
+                    Note: we assign a higher probability of fatality in the case
+                    the ICU capacity is over-shot. This can be seen in countries
+                    like Italy where the fatlity rate is substantially higher
+                    even controlling for the age distriubtion.
+                  </div>
+                  <img src={`/svg/state/${state}/${scenario}/ICU.svg`} />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 md:mr-10">
                 <div>
                   <div className="text-gray-600 mb-2">Outcome Summary</div>
-                  <table class="table-fixed mb-0 md:mb-4 border-2 border-gray-600">
+                  <div className="text-gray-800 text-sm mb-4">
+                    Fatality rate and percent of population infected are the
+                    expected PCR confirmed rates with current levels of testing
+                    in the US. The infected percentage is expected to be a few
+                    times lower than the real rate and the real fatality rate a
+                    few times lower to account for unconfirmed mild cases.
+                  </div>
+                  <table className="table-fixed mb-0 md:mb-4 border-2 border-gray-600">
                     <tbody>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">Deaths</td>
-                        <td class="border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
+                          Deaths
+                        </td>
+                        <td className="border px-4 py-2">
                           {numeral(scenarioSummary.Deaths).format('0,0')}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           PCR Confirmed
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(scenarioSummary['PCR Confirmed']).format(
                             '0,0'
                           )}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           Percent of Population Infected
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(
                             scenarioSummary['Population Infected']
                           ).format('0.00%')}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           Fatality Rate
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {numeral(scenarioSummary['Fatality Rate']).format(
                             '0.00%'
                           )}
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
                           Date Contained
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {scenarioSummary['Date Contained'] === 'Not Contained'
                             ? 'Not Contained'
                             : dayjs(scenarioSummary['Date Contained']).format(
@@ -313,10 +413,23 @@ export default ({demographics, summary}) => {
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-semibold border px-4 py-2">
+                        <td className="font-semibold border px-4 py-2">
+                          Date Hospitals Overloaded
+                        </td>
+                        <td className="border px-4 py-2">
+                          {scenarioSummary['Date Hospitals Over Capacity'] ===
+                          'ICU Under capacity'
+                            ? 'ICU Under capacity'
+                            : dayjs(
+                                scenarioSummary['Date Hospitals Over Capacity']
+                              ).format('MMM D, YYYY')}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold border px-4 py-2">
                           Date ICU Overloaded
                         </td>
-                        <td class="border px-4 py-2">
+                        <td className="border px-4 py-2">
                           {scenarioSummary['Date ICU Over Capacity'] ===
                           'ICU Under capacity'
                             ? 'ICU Under capacity'
@@ -357,7 +470,7 @@ export const getStaticProps = ({params: {state}}) => {
 
 export const getStaticPaths = (_ctx) => {
   return {
-    paths: STATES.map((st) => ({
+    paths: Object.keys(STATES).map((st) => ({
       params: {
         state: st,
       },

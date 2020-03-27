@@ -21,7 +21,7 @@ export default () => {
                 onChange={handleCountrySelect}
                 value="-"
               >
-                {COUNTRIES.map((s) => (
+                {Object.keys(COUNTRIES).map((s) => (
                   <option>{s}</option>
                 ))}
                 <option>-</option>
