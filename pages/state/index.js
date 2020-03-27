@@ -10,9 +10,9 @@ export default () => {
   };
 
   return (
-    <Layout>
+    <Layout noPad>
       <div className="flex flex-col justify-start">
-        <div className="flex sm:flex-col md:flex-row mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
+        <div className="sticky border-t-2 border-b-2 border-gray-600 top-0 flex flex-col md:flex-row mb-4 bg-white px-6 py-4">
           <div className="mr-10">
             <div className="text-gray-700">State: </div>
             <div className="inline-block relative w-64">
