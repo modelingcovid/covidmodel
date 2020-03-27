@@ -58,6 +58,18 @@ export default ({demographics, summary}) => {
                       type="radio"
                       class="form-radio"
                       name="radio"
+                      checked={scenario === 'scenario4'}
+                      onClick={() => setScenario('scenario4')}
+                    />
+                    <span class="ml-2">Return to normal (no distancing)</span>
+                  </label>
+                </div>
+                <div>
+                  <label class="inline-flex items-center">
+                    <input
+                      type="radio"
+                      class="form-radio"
+                      name="radio"
                       checked={scenario === 'scenario1'}
                       onClick={() => setScenario('scenario1')}
                     />
