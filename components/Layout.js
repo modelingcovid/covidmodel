@@ -1,14 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Layout = ({children}) => (
+const Layout = ({children, noPad = false}) => (
   <div className="bg-gray-200">
     <nav className="flex items-center justify-between flex-wrap p-6">
       <div className="flex items-center flex-shrink-0 mr-6">
         <Link href="/">
           <a>
             <span className="text-gray-800 mt-12 mb-4 -ml-1 text-xl font-extrabold tracking-wider">
-              COVID-19 Model
+              Covid Modeling Project
             </span>
           </a>
         </Link>
@@ -33,7 +33,9 @@ const Layout = ({children}) => (
         </div>
       </div>
     </nav>
-    <div className="p-6 min-h-screen bg-gray-200">{children}</div>
+    <div className={`${noPad ? '' : 'p-6'} min-h-screen bg-gray-200`}>
+      {children}
+    </div>
   </div>
 );
 

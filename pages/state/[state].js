@@ -22,9 +22,9 @@ export default ({demographics, summary}) => {
   };
 
   return (
-    <Layout>
+    <Layout noPad>
       <div className="flex flex-col justify-center">
-        <div className="flex flex-col md:flex-row mb-4 bg-white rounded shadow-lg px-6 py-4">
+        <div className="sticky border-t-2 border-b-2 border-gray-600 top-0 flex flex-col md:flex-row mb-4 bg-white px-6 py-4">
           <div className="sm:mb-10 md:mb-0 md:mr-10">
             <div className="text-gray-700">State: </div>
             <div className="inline-block relative w-64">
@@ -62,7 +62,7 @@ export default ({demographics, summary}) => {
                       onClick={() => setScenario('scenario1')}
                     />
                     <span class="ml-2">
-                      Continue Current Distancing Level for 3 months
+                      Continue current distancing level for 3 months
                     </span>
                   </label>
                 </div>
@@ -98,7 +98,7 @@ export default ({demographics, summary}) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col px-6">
           <div className="mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
             <div className="font-bold text-xl mb-2">Model Inputs</div>
             <div className="flex flex-around flex-col md:flex-row">
@@ -126,7 +126,7 @@ export default ({demographics, summary}) => {
                     The hospitalization probabilities are computed based on
                     assumed age-based need and state age distributions.
                   </div>
-                  <table class="table-fixed mb-0 md:mb-4">
+                  <table class="table-fixed mb-0 mb-4 border-2 border-gray-600">
                     <tbody>
                       <tr>
                         <td class="font-semibold border px-4 py-2">
@@ -184,7 +184,7 @@ export default ({demographics, summary}) => {
                       on country data, but we adjust the following parameters on
                       a per-state basis for a more accurate fit.
                     </div>
-                    <table class="table-fixed">
+                    <table class="table-fixed border-2 border-gray-600">
                       <tbody>
                         <tr>
                           <td class="font-semibold border px-4 py-2">
@@ -203,7 +203,7 @@ export default ({demographics, summary}) => {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded overflow-hidden shadow-lg px-6 py-4">
+          <div className="bg-white rounded overflow-hidden shadow-lg px-6 py-4 mb-4">
             <div className="font-bold text-xl mb-2">Model Predictions</div>
             <div className="flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 md:mr-10">
@@ -250,7 +250,7 @@ export default ({demographics, summary}) => {
               <div className="w-full md:w-1/2 md:mr-10">
                 <div>
                   <div className="text-gray-600 mb-2">Outcome Summary</div>
-                  <table class="table-fixed mb-0 md:mb-4">
+                  <table class="table-fixed mb-0 md:mb-4 border-2 border-gray-600">
                     <tbody>
                       <tr>
                         <td class="font-semibold border px-4 py-2">Deaths</td>
@@ -293,9 +293,24 @@ export default ({demographics, summary}) => {
                           Date Contained
                         </td>
                         <td class="border px-4 py-2">
-                          {dayjs(scenarioSummary['Date Contained']).format(
-                            'MMM D, YYYY'
-                          )}
+                          {scenarioSummary['Date Contained'] === 'Not Contained'
+                            ? 'Not Contained'
+                            : dayjs(scenarioSummary['Date Contained']).format(
+                                'MMM D, YYYY'
+                              )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-semibold border px-4 py-2">
+                          Date ICU Overloaded
+                        </td>
+                        <td class="border px-4 py-2">
+                          {scenarioSummary['Date ICU Over Capacity'] ===
+                          'ICU Under capacity'
+                            ? 'ICU Under capacity'
+                            : dayjs(
+                                scenarioSummary['Date ICU Over Capacity']
+                              ).format('MMM D, YYYY')}
                         </td>
                       </tr>
                     </tbody>
