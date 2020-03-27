@@ -8,7 +8,7 @@ const Layout = ({children, noPad = false}) => (
         <Link href="/">
           <a>
             <span className="text-gray-800 mt-12 mb-4 -ml-1 text-xl font-extrabold tracking-wider">
-              Covid Modeling Project
+              COVID Modeling Project
             </span>
           </a>
         </Link>
