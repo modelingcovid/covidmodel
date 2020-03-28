@@ -21,7 +21,7 @@ daysTogoToCriticalCare0 = 6;
 (*Rate of leaving critical care, weeks*)
 daysFromCriticalToRecoveredOrDeceased0 = 6;
 
-pPCRH0 = 0.114;
+pPCRH0 = 0.8;
 pPCRNH0 = 0.08;
 
 (* How out of date are reports of hospitalizations? *)
@@ -118,8 +118,9 @@ Eq'[t] ==( distancing[t]* (* Exposed *)
 Iq[t]==ISq[t] + IHq[t] + ICq[t] (* Infectious total, not yet PCR confirmed, age indep *),
 ISq'[t] == pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected without needing care *)
 RSq'[t] == ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Recovered without needing care *)
-IHq'[t] ==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/(daysUntilNotInfectiousOrHospitalized * daysForHospitalsToReportCases0), (* Infected and will need hospital, won't need critical care *)
-HHq'[t]== IHq[t]/(daysUntilNotInfectiousOrHospitalized * daysForHospitalsToReportCases0) - HHq[t]/daysToLeaveHosptialNonCritical, (* Going to hospital *) 
+IHq'[t] ==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected and will need hospital, won't need critical care *)
+HHq'[t]== IHq[t]/daysUntilNotInfectiousOrHospitalized - HHq[t]/daysToLeaveHosptialNonCritical, (* Going to hospital *) 
+RepHq'[t] == (pPCRH * HHq'[t]) / daysForHospitalsToReportCases0,
 EHq'[t] == IHq[t]/daysUntilNotInfectiousOrHospitalized,
 RHq'[t] == HHq[t]/daysToLeaveHosptialNonCritical, (* Recovered after hospitalization *)
 PCR'[t] == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized0, (* pcr confirmation *)
@@ -135,9 +136,9 @@ WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(* Hospitals Capa
 WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
 WhenEvent[t >importtime+importlength, est[t]->0 ],
 Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
-HHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
+HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
 EHq[0]==0
-},{Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},{t, 0, tmax}
+},{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},{t, 0, tmax}
 ],{"containment","icu","hospital"},Rule];
 
 infectedCritical[a_,medianHospitalizationAge_,pCLimit_,ageCriticalDependence_] := 
