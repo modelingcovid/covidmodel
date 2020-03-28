@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import numeral from 'numeral';
 import Link from 'next/link';
 
-import {Layout, OccupancyGraph, PopulationGraph} from '../../components';
+import {Layout, Line, OccupancyGraph, PopulationGraph} from '../../components';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import STATES from '../../lib/states';
 
@@ -336,15 +336,17 @@ export default ({data, states}) => {
                     scenario={scenario}
                     data={data}
                     x={getDate}
-                    lines={[
-                      {y: getProjectedCurrentlyInfected, stroke: '#0670de'},
-                      {y: getProjectedCurrentlyInfectious, stroke: '#228403'},
-                      {y: getProjectedPcr, stroke: '#ed6804'},
-                    ]}
                     xLabel="Case progression curve"
                     width="500"
                     height="300"
-                  />
+                  >
+                    <Line y={getProjectedCurrentlyInfected} stroke="#0670de" />
+                    <Line
+                      y={getProjectedCurrentlyInfectious}
+                      stroke="#228403"
+                    />
+                    <Line y={getProjectedPcr} stroke="#ed6804" />
+                  </PopulationGraph>
                 </div>
               </div>
               <div className="w-full md:w-1/2">
@@ -358,11 +360,12 @@ export default ({data, states}) => {
                     scenario={scenario}
                     data={data}
                     x={getDate}
-                    lines={[{y: getProjectedDeaths, stroke: '#0670de'}]}
                     xLabel="Projected deaths"
                     width="500"
                     height="300"
-                  />
+                  >
+                    <Line y={getProjectedDeaths} stroke="#0670de" />
+                  </PopulationGraph>
                 </div>
               </div>
             </div>

@@ -10,7 +10,9 @@ import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
-import {useComponentId} from '../lib/useComponentId';
+import {GraphContext} from './GraphContext';
+
+const {createContext, useCallback, useMemo} = React;
 
 const parseDate = timeParse('%Y%m%d');
 
@@ -36,8 +38,6 @@ const dateTickLabelProps = (date) => ({
   textAnchor: 'middle',
 });
 
-const {useMemo} = React;
-
 const identity = (n) => n;
 
 const today = new Date();
@@ -47,10 +47,10 @@ today.setSeconds(0);
 today.setMilliseconds(0);
 
 export const PopulationGraph = ({
+  children,
   data,
   scenario,
   x = identity,
-  lines = [],
   xLabel = '',
   width = 600,
   height = 400,
@@ -98,12 +98,18 @@ export const PopulationGraph = ({
   xScale.range([0, xMax]);
   yScale.range([yMax, 0]);
 
-  const gradientId = useComponentId('thresholdGradient');
+  const context = useMemo(() => ({data: scenarioData, x, xScale, yScale}), [
+    scenarioData,
+    x,
+    xScale,
+    yScale,
+  ]);
 
   return (
-    <div>
-      <svg width={width} height={height}>
-        {/* <rect
+    <GraphContext.Provider value={context}>
+      <div>
+        <svg width={width} height={height}>
+          {/* <rect
           x={0}
           y={0}
           width={width}
@@ -111,69 +117,61 @@ export const PopulationGraph = ({
           fill="#f3f3f3"
           rx={14}
         /> */}
-        <Group left={margin.left} top={margin.top}>
-          <GridRows
-            scale={yScale}
-            width={xMax}
-            height={yMax}
-            stroke="#e0e0e0"
-          />
-          <GridColumns
-            scale={xScale}
-            width={xMax}
-            height={yMax}
-            stroke="#e0e0e0"
-          />
-          <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
-          <AxisBottom
-            top={yMax}
-            scale={xScale}
-            numTicks={width > 300 ? 10 : 5}
-            tickFormat={dateAxisFormat}
-            tickLabelProps={dateTickLabelProps}
-          />
-          <AxisLeft
-            scale={yScale}
-            numTicks={5}
-            tickFormat={valueFormat}
-            tickLabelProps={valueTickLabelProps}
-          />
-          {lines.map(({y, stroke = 'blue', strokeWidth = 1.5}, i) => (
-            <LinePath
-              key={i}
-              data={scenarioData}
-              x={(d) => xScale(x(d))}
-              y={(d) => yScale(y(d))}
-              stroke={stroke}
-              strokeWidth={strokeWidth}
+          <Group left={margin.left} top={margin.top}>
+            <GridRows
+              scale={yScale}
+              width={xMax}
+              height={yMax}
+              stroke="#e0e0e0"
             />
-          ))}
-          <Marker
-            from={{x: xScale(today), y: 0}}
-            to={{x: xScale(today), y: yMax}}
-            stroke="#8691a1"
-            label={'Today'}
-            labelStroke={'none'}
-            strokeDasharray="2,1"
-            strokeWidth={1.5}
-            labelDx={6}
-            labelDy={15}
-          />
-          <text
-            x="0"
-            y="15"
-            textAnchor="end"
-            transform="rotate(-90)"
-            fontSize={13}
-            stroke="#fff"
-            strokeWidth="5"
-            fill="#000"
-            paintOrder="stroke"
-          >
-            {xLabel}
-          </text>
-        </Group>
-      </svg>
-    </div>
+            <GridColumns
+              scale={xScale}
+              width={xMax}
+              height={yMax}
+              stroke="#e0e0e0"
+            />
+            <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
+            <AxisBottom
+              top={yMax}
+              scale={xScale}
+              numTicks={width > 300 ? 10 : 5}
+              tickFormat={dateAxisFormat}
+              tickLabelProps={dateTickLabelProps}
+            />
+            <AxisLeft
+              scale={yScale}
+              numTicks={5}
+              tickFormat={valueFormat}
+              tickLabelProps={valueTickLabelProps}
+            />
+            {children}
+            <Marker
+              from={{x: xScale(today), y: 0}}
+              to={{x: xScale(today), y: yMax}}
+              stroke="#8691a1"
+              label={'Today'}
+              labelStroke={'none'}
+              strokeDasharray="2,1"
+              strokeWidth={1.5}
+              labelDx={6}
+              labelDy={15}
+            />
+            <text
+              x="0"
+              y="15"
+              textAnchor="end"
+              transform="rotate(-90)"
+              fontSize={13}
+              stroke="#fff"
+              strokeWidth="5"
+              fill="#000"
+              paintOrder="stroke"
+            >
+              {xLabel}
+            </text>
+          </Group>
+        </svg>
+      </div>
+    </GraphContext.Provider>
   );
 };
