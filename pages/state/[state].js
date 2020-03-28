@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import numeral from 'numeral';
 import Link from 'next/link';
 
-import {Layout, OccupancyGraph} from '../../components';
+import {Layout, OccupancyGraph, PopulationGraph} from '../../components';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import STATES from '../../lib/states';
 
@@ -15,6 +15,12 @@ const dayZero = new Date('Dec 31, 2019').getTime();
 const dayToDate = (day) => new Date(dayZero + dayInMs * day);
 
 const getDate = ({day}) => dayToDate(day);
+const getProjectedPcr = ({projectedPcr}) => projectedPcr;
+const getProjectedCurrentlyInfected = ({projectedCurrentlyInfected}) =>
+  projectedCurrentlyInfected;
+const getProjectedCurrentlyInfectious = ({projectedCurrentlyInfectious}) =>
+  projectedCurrentlyInfectious;
+const getProjectedDeaths = ({projectedDeaths}) => projectedDeaths;
 const getProjectedCurrentlyHospitalized = ({projectedCurrentlyHospitalized}) =>
   projectedCurrentlyHospitalized;
 const getProjectedCurrentlyCritical = ({projectedCurrentlyCritical}) =>
@@ -145,7 +151,6 @@ export default ({data, states}) => {
                     zero-percent distance is the un-inhibited reproduction
                     number which is thought to be around 3.1.
                   </div>
-                  <img src={`/svg/state/${state}/${scenario}/Distancing.svg`} />
                 </div>
               </div>
               <div className="w-full md:w-1/2">
@@ -327,8 +332,18 @@ export default ({data, states}) => {
                     small fraction of the population we consider the epidemic
                     contained, and place a grey box on the plot.
                   </div>
-                  <img
-                    src={`/svg/state/${state}/${scenario}/Progression.svg`}
+                  <PopulationGraph
+                    scenario={scenario}
+                    data={data}
+                    x={getDate}
+                    lines={[
+                      {y: getProjectedCurrentlyInfected, stroke: '#0670de'},
+                      {y: getProjectedCurrentlyInfectious, stroke: '#228403'},
+                      {y: getProjectedPcr, stroke: '#ed6804'},
+                    ]}
+                    xLabel="Case progression curve"
+                    width="500"
+                    height="300"
                   />
                 </div>
               </div>
@@ -339,7 +354,15 @@ export default ({data, states}) => {
                     We project the cumulative number of deaths on a logarithmic
                     scale. Black dots are confirmed counts.
                   </div>
-                  <img src={`/svg/state/${state}/${scenario}/Deaths.svg`} />
+                  <PopulationGraph
+                    scenario={scenario}
+                    data={data}
+                    x={getDate}
+                    lines={[{y: getProjectedDeaths, stroke: '#0670de'}]}
+                    xLabel="Projected deaths"
+                    width="500"
+                    height="300"
+                  />
                 </div>
               </div>
             </div>
@@ -362,7 +385,6 @@ export default ({data, states}) => {
                     width="500"
                     height="300"
                   />
-                  {/* <img src={`/svg/state/${state}/${scenario}/Hospitals.svg`} /> */}
                 </div>
               </div>
               <div className="w-full md:w-1/2 md:mr-10">
@@ -384,7 +406,6 @@ export default ({data, states}) => {
                     width="500"
                     height="300"
                   />
-                  {/* <img src={`/svg/state/${state}/${scenario}/ICU.svg`} /> */}
                 </div>
               </div>
             </div>
