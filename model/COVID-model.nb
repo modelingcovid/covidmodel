@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    198816,       4548]
-NotebookOptionsPosition[    196313,       4500]
-NotebookOutlinePosition[    196752,       4517]
-CellTagsIndexPosition[    196709,       4514]
+NotebookDataLength[    260654,       6013]
+NotebookOptionsPosition[    255529,       5929]
+NotebookOutlinePosition[    255966,       5946]
+CellTagsIndexPosition[    255923,       5943]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -34,34 +34,29 @@ Cell["SEIR Model augmented with healthcare and PCR states:", "Subtitle",
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{"MemoWolframAlpha", "=", 
-  RowBox[{"Memoize", "[", "WolframAlpha", "]"}]}]], "Input",
- CellChangeTimes->{{3.794322874833823*^9, 3.794322882433655*^9}},
- CellLabel->
-  "In[212]:=",ExpressionUUID->"4b2dffb7-aae7-41ab-9c77-7352637274dd"],
+ RowBox[{"SetDirectory", "[", 
+  RowBox[{"$UserDocumentsDirectory", "<>", "\"\</Github/covidmodel\>\""}], 
+  "]"}]], "Input",
+ CellLabel->"In[13]:=",ExpressionUUID->"5af3047b-5885-4ff0-a750-3fa93083a133"],
 
-Cell[BoxData[
- RowBox[{"Memoize", "[", "WolframAlpha", "]"}]], "Output",
- CellChangeTimes->{3.794322884149527*^9, 3.794344510453154*^9},
- CellLabel->
-  "Out[212]=",ExpressionUUID->"a8225ef8-d404-484c-bb26-ba85a5004754"]
+Cell[BoxData["\<\"/Users/wbunting/Documents/Github/covidmodel\"\>"], "Output",
+ CellChangeTimes->{3.7943634727004213`*^9},
+ CellLabel->"Out[13]=",ExpressionUUID->"273dc2c1-7822-446e-877e-b149c550970c"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
- RowBox[{"SetDirectory", "[", 
-  RowBox[{"$UserDocumentsDirectory", "<>", "\"\</Github/covidmodel\>\""}], 
-  "]"}]], "Input",
- CellChangeTimes->{{3.7943231056644783`*^9, 3.794323138325479*^9}},
- CellLabel->
-  "In[277]:=",ExpressionUUID->"07db6fe3-56d2-40a5-8392-72196b11ecce"],
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7943231056644783`*^9, 3.794323138325479*^9}, {
+   3.794363251398979*^9, 3.794363253030406*^9}, 
+   3.794363463894479*^9},ExpressionUUID->"07db6fe3-56d2-40a5-8392-\
+72196b11ecce"],
 
 Cell[BoxData["\<\"/Users/wbunting/Documents/Github/covidmodel\"\>"], "Output",
  CellChangeTimes->{{3.7943231352918797`*^9, 3.794323138975585*^9}, 
-   3.794344762918971*^9},
- CellLabel->
-  "Out[277]=",ExpressionUUID->"55941bd8-b1a8-471f-94c1-04827ae045cb"]
+   3.794344762918971*^9, 3.79435839322472*^9, 3.794358621103217*^9, 
+   3.794362414272868*^9, 3.794363254627955*^9},
+ CellLabel->"Out[83]=",ExpressionUUID->"caa123f8-f841-44e5-bb69-027f7d91b004"]
 }, Open  ]],
 
 Cell["\<\
@@ -117,8 +112,8 @@ Cell[BoxData[
          "\[IndentingNewLine]", "daysFromCriticalToRecoveredOrDeceased", ",", 
          "\[IndentingNewLine]", "fractionOfCriticalDeceased", ",", 
          "\[IndentingNewLine]", 
-         RowBox[{"params", "[", "\"\<importtime\>\"", "]"}], ",", 
-         "\[IndentingNewLine]", "importlength", ",", "\[IndentingNewLine]", 
+         RowBox[{"params", "[", "\"\<importtime0\>\"", "]"}], ",", 
+         "\[IndentingNewLine]", "importlength0", ",", "\[IndentingNewLine]", 
          "initialInfectionImpulse", ",", "\[IndentingNewLine]", "tmax", ",", 
          "\[IndentingNewLine]", 
          RowBox[{"1", "-", "pH", "-", "pC"}], ",", "\[IndentingNewLine]", 
@@ -625,7 +620,7 @@ Cell[BoxData[
                     RowBox[{"{", 
                     RowBox[{"2020", ",", "1", ",", "1"}], "}"}], ",", 
                     RowBox[{
-                    RowBox[{"#", "[", "\"\<importtime\>\"", "]"}], "-", 
+                    RowBox[{"#", "[", "\"\<importtime0\>\"", "]"}], "-", 
                     "1"}]}], "]"}], "]"}]}], ",", 
                     RowBox[{"\"\<Ventalators\>\"", "\[Rule]", 
                     RowBox[{"#", "[", "\"\<ventalators\>\"", "]"}]}], ",", 
@@ -908,16 +903,17 @@ Cell[BoxData[
    3.794303073078678*^9, 3.794303087758334*^9}, {3.7943033276842823`*^9, 
    3.794303328024796*^9}, {3.794303363581959*^9, 3.794303402481442*^9}, {
    3.794322022202524*^9, 3.794322040960223*^9}, {3.794322578895487*^9, 
-   3.7943225802085876`*^9}, {3.794322804947178*^9, 3.79432281055826*^9}},
+   3.7943225802085876`*^9}, {3.794322804947178*^9, 3.79432281055826*^9}, 
+   3.794358719965518*^9, 3.794358937318491*^9, 3.7943592832883263`*^9},
  CellLabel->
-  "In[278]:=",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
+  "In[158]:=",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
 
 Cell[BoxData[
  TagBox[
   StyleBox[
    DynamicModuleBox[{$CellContext`ageCriticalDependence$$ = 
     3, $CellContext`ageHospitalizedDependence$$ = 5, $CellContext`country$$ = 
-    "Italy", $CellContext`daysFromCriticalToRecoveredOrDeceased$$ = 
+    "United States", $CellContext`daysFromCriticalToRecoveredOrDeceased$$ = 
     6, $CellContext`daysFromInfectedToInfectious$$ = 
     2.8, $CellContext`daysTogoToCriticalCare$$ = 
     6, $CellContext`daysToLeaveHosptialNonCritical$$ = 
@@ -949,7 +945,7 @@ Cell[BoxData[
        Hold[$CellContext`pPCRNH$$], 0.08}, 0, 1}, {{
        Hold[$CellContext`pPCRH$$], 0.114}, 0, 1}, {{
        Hold[$CellContext`daysTogoToCriticalCare$$], 6}, 0, 10}}, 
-    Typeset`size$$ = {1417., {544.634033203125, 550.365966796875}}, 
+    Typeset`size$$ = {1417., {545.134033203125, 550.865966796875}}, 
     Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
     
     DynamicBox[Manipulate`ManipulateBoxes[
@@ -994,7 +990,7 @@ $CellContext`pPCRH$$, $CellContext`daysTogoToCriticalCare$$, \
 $CellContext`daysFromCriticalToRecoveredOrDeceased$$, \
 $CellContext`fractionOfCriticalDeceased$$, 
            $CellContext`params[
-           "importtime"], $CellContext`importlength, \
+           "importtime0"], $CellContext`importlength0, \
 $CellContext`initialInfectionImpulse$$, $CellContext`tmax, 
            1 - $CellContext`pH$$ - $CellContext`pC$$, $CellContext`pH$$, \
 $CellContext`pC$$, $CellContext`containmentThresholdRatio0, \
@@ -1166,7 +1162,7 @@ PCR[$CellContext`t$], $CellContext`sol], {$CellContext`t$ -> 1000}]]],
                   SlotSequence[1]}]& ][
                 (Association[
                 "Population" -> #["Population"], "Import Time" -> DateString[
-                   DatePlus[{2020, 1, 1}, #["importtime"] - 1]], 
+                   DatePlus[{2020, 1, 1}, #["importtime0"] - 1]], 
                  "Ventalators" -> #["ventalators"], 
                  "Probability No Care Needed" -> PercentForm[
                    #["pS"]], "Probability ICU" -> PercentForm[
@@ -1245,7 +1241,7 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
          1}, {{$CellContext`pPCRH$$, 0.114}, 0, 
          1}, {{$CellContext`daysTogoToCriticalCare$$, 6}, 0, 10}}, 
       "Options" :> {}, "DefaultOptions" :> {}],
-     ImageSizeCache->{1862., {575., 581.}},
+     ImageSizeCache->{1862., {576., 581.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -1268,9 +1264,12 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
    3.794303387046774*^9, 3.794303403307157*^9}, 3.7943219787562857`*^9, 
    3.794322503613358*^9, 3.794322771383478*^9, 3.7943228142227383`*^9, 
    3.794322892374041*^9, 3.794323022270742*^9, 3.794323263424087*^9, 
-   3.7943447664820957`*^9},
+   3.7943447664820957`*^9, 3.794358623812118*^9, {3.79435892808224*^9, 
+   3.794358938068993*^9}, {3.794359255393566*^9, 3.794359288136552*^9}, 
+   3.7943626041103277`*^9, 3.794363231546013*^9, 3.79436326436376*^9, 
+   3.794363316722806*^9, 3.794363486060231*^9, 3.79436364922556*^9},
  CellLabel->
-  "Out[278]=",ExpressionUUID->"e8e048b9-d679-4b89-9f4f-009e03e26961"]
+  "Out[158]=",ExpressionUUID->"bbe4c50a-55e7-40f2-9729-fdfe4600ab4c"]
 }, Open  ]],
 
 Cell["\<\
@@ -1284,15 +1283,6 @@ but we can just go down to the smallest applicable eg 3 -> 0, 90 -> 85 etc. \
   3.794118368348238*^9, 3.794118417711561*^9}, {3.7941420265551023`*^9, 
   3.794142040455536*^9}},ExpressionUUID->"25c53830-e113-4e30-9cf4-\
 0ae795214ea4"],
-
-Cell[BoxData[""], "Input",
- InitializationCell->True,
- CellChangeTimes->{{3.794183508517742*^9, 3.794183528181446*^9}, {
-   3.794183613007388*^9, 3.794183618755623*^9}, {3.794184934831747*^9, 
-   3.794184934990265*^9}, 3.794185512390524*^9, 3.794191611297824*^9, 
-   3.794306493691083*^9, 3.794322910898656*^9},
- CellLabel->
-  "In[204]:=",ExpressionUUID->"8afd392d-8e6f-4bec-a7da-060db6b67a47"],
 
 Cell[BoxData[{
  RowBox[{
@@ -1408,7 +1398,7 @@ Cell[BoxData[{
  CellChangeTimes->{{3.7942940337831373`*^9, 3.7942940462461357`*^9}, {
   3.794305839491599*^9, 3.794305841992836*^9}},
  CellLabel->
-  "In[205]:=",ExpressionUUID->"4bc57190-9816-470c-9144-e975e4a9be8d"],
+  "In[126]:=",ExpressionUUID->"4bc57190-9816-470c-9144-e975e4a9be8d"],
 
 Cell[BoxData[{
  RowBox[{
@@ -1457,8 +1447,9 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"#", "[", "\"\<hospitalizations\>\"", "]"}], ">", "0"}], 
      "&"}]}], "]"}]}]}], "Input",
- InitializationCell->
-  True,ExpressionUUID->"4d80d66a-1463-442a-9119-cef9fb016e04"],
+ InitializationCell->True,
+ CellLabel->
+  "In[159]:=",ExpressionUUID->"4d80d66a-1463-442a-9119-cef9fb016e04"],
 
 Cell[BoxData[
  RowBox[{"\[IndentingNewLine]", 
@@ -1520,7 +1511,7 @@ Cell[BoxData[
         RowBox[{
          RowBox[{"\"\<Population\>\"", "->", "pop"}], ",", 
          "\[IndentingNewLine]", 
-         RowBox[{"\"\<importtime\>\"", "\[Rule]", 
+         RowBox[{"\"\<importtime0\>\"", "\[Rule]", 
           RowBox[{"If", "[", 
            RowBox[{
             RowBox[{"!", 
@@ -1654,9 +1645,9 @@ Cell[BoxData[
    3.7941822285689087`*^9}, {3.794183552178952*^9, 3.794183586830393*^9}, {
    3.794183655725911*^9, 3.794183659409666*^9}, 3.7941849387405367`*^9, {
    3.794294024352419*^9, 3.794294121011056*^9}, {3.7942976841333103`*^9, 
-   3.794297684381403*^9}, {3.79430221982908*^9, 3.794302220253738*^9}},
- CellLabel->
-  "In[211]:=",ExpressionUUID->"79aa2523-088e-4dc0-af91-2f921206213d"],
+   3.794297684381403*^9}, {3.79430221982908*^9, 3.794302220253738*^9}, 
+   3.7943582422813387`*^9},
+ CellLabel->"In[12]:=",ExpressionUUID->"79aa2523-088e-4dc0-af91-2f921206213d"],
 
 Cell[CellGroupData[{
 
@@ -1708,7 +1699,7 @@ Cell[BoxData[
        RowBox[{"distance", "[", "t_", "]"}], ":=", 
        RowBox[{"Piecewise", "[", 
         RowBox[{
-         RowBox[{"caHistoricalDistancing", "[", 
+         RowBox[{"stateHistoricalDistancing", "[", 
           RowBox[{"state", ",", "scenario", ",", "t"}], "]"}], ",", "1"}], 
         "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{
@@ -1726,8 +1717,8 @@ Cell[BoxData[
          "\[IndentingNewLine]", "daysFromCriticalToRecoveredOrDeceased0", ",",
           "\[IndentingNewLine]", "fractionOfCriticalDeceased0", ",", 
          "\[IndentingNewLine]", 
-         RowBox[{"params", "[", "\"\<importtime\>\"", "]"}], ",", 
-         "\[IndentingNewLine]", "importlength", ",", "\[IndentingNewLine]", 
+         RowBox[{"params", "[", "\"\<importtime0\>\"", "]"}], ",", 
+         "\[IndentingNewLine]", "importlength0", ",", "\[IndentingNewLine]", 
          "initialInfectionImpulse0", ",", "\[IndentingNewLine]", "tmax", ",", 
          "\[IndentingNewLine]", 
          RowBox[{"params", "[", "\"\<pS\>\"", "]"}], ",", 
@@ -2539,7 +2530,7 @@ Cell[BoxData[
                     RowBox[{"{", 
                     RowBox[{"2020", ",", "1", ",", "1"}], "}"}], ",", 
                     RowBox[{
-                    RowBox[{"#", "[", "\"\<importtime\>\"", "]"}], "-", 
+                    RowBox[{"#", "[", "\"\<importtime0\>\"", "]"}], "-", 
                     "1"}]}], "]"}], "]"}]}], ",", 
                     RowBox[{"\"\<R0\>\"", "\[Rule]", 
                     RowBox[{"#", "[", "\"\<R0\>\"", "]"}]}], ",", 
@@ -2816,9 +2807,11 @@ Cell[BoxData[
    3.794305368299758*^9, 3.794305368646426*^9}, {3.794305882494515*^9, 
    3.79430590997644*^9}, {3.794306479884925*^9, 3.79430648761234*^9}, 
    3.794322033193795*^9, {3.794323402376556*^9, 3.794323403355411*^9}, {
-   3.794345687138048*^9, 3.794345714008473*^9}},
+   3.794345687138048*^9, 3.794345714008473*^9}, {3.7943553048176327`*^9, 
+   3.794355306131392*^9}, {3.794359339172401*^9, 3.794359348019218*^9}, 
+   3.7943593783195868`*^9},
  CellLabel->
-  "In[279]:=",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
+  "In[234]:=",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
 
 Cell[BoxData[
  TagBox[
@@ -2833,7 +2826,7 @@ Cell[BoxData[
        "OH", "OR", "PA", "SC", "TX", "VA", "VT", "WA", "WI"}}, {
       Hold[$CellContext`scenario$$], {
       "scenario1", "scenario2", "scenario3", "scenario4"}}}, 
-    Typeset`size$$ = {972., {606.134033203125, 611.865966796875}}, 
+    Typeset`size$$ = {1018., {623.134033203125, 628.865966796875}}, 
     Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
     
     DynamicBox[Manipulate`ManipulateBoxes[
@@ -2864,7 +2857,7 @@ $CellContext`stateHospitalizationData[$CellContext`state$$]; \
 $CellContext`distance$[
            Pattern[$CellContext`t$, 
             Blank[]]] := Piecewise[
-           $CellContext`caHistoricalDistancing[$CellContext`state$$, \
+           $CellContext`stateHistoricalDistancing[$CellContext`state$$, \
 $CellContext`scenario$$, $CellContext`t$], 
            1]; {$CellContext`sol, $CellContext`evts} = \
 $CellContext`CovidModel[$CellContext`r0natural0, \
@@ -2876,7 +2869,7 @@ $CellContext`pPCRH0, $CellContext`daysTogoToCriticalCare0, \
 $CellContext`daysFromCriticalToRecoveredOrDeceased0, \
 $CellContext`fractionOfCriticalDeceased0, 
            $CellContext`params[
-           "importtime"], $CellContext`importlength, \
+           "importtime0"], $CellContext`importlength0, \
 $CellContext`initialInfectionImpulse0, $CellContext`tmax, 
            $CellContext`params["pS"], 
            $CellContext`params["pH"], 
@@ -3140,7 +3133,7 @@ PCR[$CellContext`t$], $CellContext`sol], {$CellContext`t$ -> 1000}]],
                   SlotSequence[1]}]& ][
                 (Association[
                 "Population" -> #["Population"], "Import Time" -> DateString[
-                   DatePlus[{2020, 1, 1}, #["importtime"] - 1]], 
+                   DatePlus[{2020, 1, 1}, #["importtime0"] - 1]], 
                  "R0" -> #["R0"], "Ventalators" -> #["ventalators"], 
                  "Probability No Care Needed" -> PercentForm[
                    #["pS"]], "Probability ICU" -> PercentForm[
@@ -3217,7 +3210,7 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
           "WI"}}, {$CellContext`scenario$$, {
          "scenario1", "scenario2", "scenario3", "scenario4"}}}, 
       "Options" :> {}, "DefaultOptions" :> {}],
-     ImageSizeCache->{1017., {664., 670.}},
+     ImageSizeCache->{1063., {681., 687.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -3230,9 +3223,108 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
   Manipulate`InterpretManipulate[1]]], "Output",
  CellChangeTimes->{{3.7943063199371347`*^9, 3.7943063262533493`*^9}, 
    3.7943067006297617`*^9, 3.794307174323782*^9, 3.794307446266397*^9, 
-   3.794323368328381*^9, 3.7943234046932993`*^9, 3.7943457257554703`*^9},
+   3.794323368328381*^9, 3.7943234046932993`*^9, 3.7943457257554703`*^9, 
+   3.794359310733281*^9, {3.7943593609729156`*^9, 3.794359379747785*^9}, 
+   3.794363274431923*^9, 3.794363660273985*^9, 3.7943637009678392`*^9, 
+   3.794363795771682*^9},
  CellLabel->
-  "Out[279]=",ExpressionUUID->"8e822287-901f-40d0-a389-e53963802bd2"]
+  "Out[234]=",ExpressionUUID->"b0e2ae87-621f-47ee-92db-66be197b04a5"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "StringCases", "strse", 
+   "\"String or list of strings expected at position \\!\\(\\*RowBox[{\\\"1\\\
+\"}]\\) in \\!\\(\\*RowBox[{\\\"StringCases\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"0.06396518448229294`\\\"}], \\\"}\\\"}], \\\",\\\", \
+\\\"NumberString\\\"}], \\\"]\\\"}]\\).\"", 2, 235, 82, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794363799814165*^9},
+ CellLabel->"",ExpressionUUID->"d1dc507e-d641-4b58-820c-1afee2edc4c2"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NDSolve", "icfail", 
+   "\"Unable to find initial conditions that satisfy the residual function \
+within specified tolerances. Try giving initial conditions for both values \
+and derivatives of the functions.\"", 2, 235, 83, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7943638033002357`*^9},
+ CellLabel->"",ExpressionUUID->"27f599d2-5685-4fc8-b5d3-15f59d762f36"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "StringCases", "strse", 
+   "\"String or list of strings expected at position \\!\\(\\*RowBox[{\\\"1\\\
+\"}]\\) in \\!\\(\\*RowBox[{\\\"StringCases\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"0.06396518448229294`\\\"}], \\\"}\\\"}], \\\",\\\", \
+\\\"NumberString\\\"}], \\\"]\\\"}]\\).\"", 2, 235, 84, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794363807988593*^9},
+ CellLabel->"",ExpressionUUID->"04f15eae-8932-4e7e-85af-f9159fe8abdb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NDSolve", "icfail", 
+   "\"Unable to find initial conditions that satisfy the residual function \
+within specified tolerances. Try giving initial conditions for both values \
+and derivatives of the functions.\"", 2, 235, 85, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794363811453506*^9},
+ CellLabel->"",ExpressionUUID->"7c8225d3-2cfc-4824-b444-14caafea549d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "StringCases", "strse", 
+   "\"String or list of strings expected at position \\!\\(\\*RowBox[{\\\"1\\\
+\"}]\\) in \\!\\(\\*RowBox[{\\\"StringCases\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"0.06396518448229294`\\\"}], \\\"}\\\"}], \\\",\\\", \
+\\\"NumberString\\\"}], \\\"]\\\"}]\\).\"", 2, 235, 86, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794363815231258*^9},
+ CellLabel->"",ExpressionUUID->"2f68015d-77a2-47f9-85d9-2008caf1055e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NDSolve", "icfail", 
+   "\"Unable to find initial conditions that satisfy the residual function \
+within specified tolerances. Try giving initial conditions for both values \
+and derivatives of the functions.\"", 2, 235, 87, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794363819121999*^9},
+ CellLabel->"",ExpressionUUID->"77d242a6-f57c-4bc0-8848-49c48e30c76b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "StringCases", "strse", 
+   "\"String or list of strings expected at position \\!\\(\\*RowBox[{\\\"1\\\
+\"}]\\) in \\!\\(\\*RowBox[{\\\"StringCases\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"0.06396518448229294`\\\"}], \\\"}\\\"}], \\\",\\\", \
+\\\"NumberString\\\"}], \\\"]\\\"}]\\).\"", 2, 235, 88, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794363867086109*^9},
+ CellLabel->"",ExpressionUUID->"b1793bd0-0d6b-499f-a4b5-66392fc9e06c"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NDSolve", "icfail", 
+   "\"Unable to find initial conditions that satisfy the residual function \
+within specified tolerances. Try giving initial conditions for both values \
+and derivatives of the functions.\"", 2, 235, 89, 22985061471626479054, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7943638706585073`*^9},
+ CellLabel->"",ExpressionUUID->"0d4bb5fa-7be6-405f-ae38-5a9000eb7bc0"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -3279,9 +3371,9 @@ Cell[BoxData[
       RowBox[{"distance", "[", "t_", "]"}], ":=", 
       RowBox[{"Piecewise", "[", 
        RowBox[{
-        RowBox[{"caHistoricalDistancing", "[", 
+        RowBox[{"stateHistoricalDistancing", "[", 
          RowBox[{"state", ",", "scenario", ",", "t"}], "]"}], ",", "1"}], 
-       "]"}]}], ";", "\[IndentingNewLine]", 
+       "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
      RowBox[{
       RowBox[{"{", 
        RowBox[{"sol", ",", "evts"}], "}"}], "=", 
@@ -3297,8 +3389,8 @@ Cell[BoxData[
         "\[IndentingNewLine]", "daysFromCriticalToRecoveredOrDeceased0", ",", 
         "\[IndentingNewLine]", "fractionOfCriticalDeceased0", ",", 
         "\[IndentingNewLine]", 
-        RowBox[{"params", "[", "\"\<importtime\>\"", "]"}], ",", 
-        "\[IndentingNewLine]", "importlength", ",", "\[IndentingNewLine]", 
+        RowBox[{"params", "[", "\"\<importtime0\>\"", "]"}], ",", 
+        "\[IndentingNewLine]", "importlength0", ",", "\[IndentingNewLine]", 
         "initialInfectionImpulse0", ",", "\[IndentingNewLine]", "tmax", ",", 
         "\[IndentingNewLine]", 
         RowBox[{"params", "[", "\"\<pS\>\"", "]"}], ",", 
@@ -3786,7 +3878,7 @@ Cell[BoxData[
               RowBox[{"0.5", ",", "1"}], "}"}]}], "}"}]}], "]"}]}]}], "]"}]}],
       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
      RowBox[{"summary", "=", 
-      RowBox[{"<|", 
+      RowBox[{"<|", "\[IndentingNewLine]", 
        RowBox[{
         RowBox[{"\"\<Deaths\>\"", "\[Rule]", 
          RowBox[{"If", "[", 
@@ -4027,12 +4119,11 @@ Cell[BoxData[
            ",", "\"\<Hospitals Under capacity\>\""}], "]"}]}]}], "|>"}]}], 
      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
      RowBox[{"Association", "[", 
-      RowBox[{"{", 
+      RowBox[{"{", "\[IndentingNewLine]", 
        RowBox[{
         RowBox[{"\"\<Distancing\>\"", "->", "setDistancingPlot"}], ",", 
-        "\[IndentingNewLine]", "\t     ", 
+        "\[IndentingNewLine]", 
         RowBox[{"\"\<Demographics\>\"", "\[Rule]", "params"}], ",", 
-        "\[IndentingNewLine]", "               ", 
         RowBox[{"\"\<Deaths\>\"", "->", 
          RowBox[{"Show", "[", 
           RowBox[{"deathsPlot", ",", 
@@ -4061,7 +4152,7 @@ Cell[BoxData[
                     RowBox[{"params", "[", "\"\<Population\>\"", "]"}]}], 
                     "]"}]}], "}"}]}], "]"}]}], "}"}], "]"}], ",", 
              RowBox[{"Graphics", "[", "]"}]}], "]"}]}], "]"}]}], ",", 
-        "\[IndentingNewLine]", "               ", 
+        "               ", 
         RowBox[{"\"\<Progression\>\"", "->", 
          RowBox[{"Show", "[", 
           RowBox[{"progressionPlot", ",", 
@@ -4089,7 +4180,6 @@ Cell[BoxData[
                     RowBox[{"params", "[", "\"\<Population\>\"", "]"}], 
                     "]"}]}], "}"}]}], "]"}]}], "}"}], "]"}], ",", 
              RowBox[{"Graphics", "[", "]"}]}], "]"}]}], "]"}]}], ",", 
-        "\[IndentingNewLine]", "\t     ", 
         RowBox[{"\"\<Hospitals\>\"", "\[Rule]", 
          RowBox[{"Show", "[", 
           RowBox[{"hospitalPlot", ",", " ", 
@@ -4116,7 +4206,6 @@ Cell[BoxData[
                     RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "/", 
                     "500"}]}], "}"}]}], "]"}]}], "}"}], "]"}], ",", 
              RowBox[{"Graphics", "[", "]"}]}], "]"}]}], "]"}]}], ",", 
-        "\[IndentingNewLine]", "               ", 
         RowBox[{"\"\<ICU\>\"", "->", 
          RowBox[{"Show", "[", 
           RowBox[{"criticalPlot", ",", 
@@ -4162,9 +4251,11 @@ Cell[BoxData[
    3.7942954474663*^9}, {3.7943054906662817`*^9, 3.794305504160976*^9}, {
    3.794308942290307*^9, 3.794308951729864*^9}, {3.794309134102919*^9, 
    3.794309136988126*^9}, 3.7943220352490387`*^9, {3.794323655263709*^9, 
-   3.7943236558631697`*^9}, 3.794345721800173*^9},
+   3.7943236558631697`*^9}, 3.794345721800173*^9, 3.7943552156343613`*^9, {
+   3.794355249182415*^9, 3.794355295196492*^9}, 3.79435563050566*^9, 
+   3.794359343301776*^9, 3.794359383896535*^9},
  CellLabel->
-  "In[280]:=",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
+  "In[176]:=",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
 
 Cell[BoxData[
  RowBox[{
@@ -4495,11 +4586,1349 @@ c8c582b7285f"],
 Cell[BoxData[""], "Input",
  CellChangeTimes->{{3.794346155032124*^9, 
   3.794346158077139*^9}},ExpressionUUID->"535dd15e-0b43-4066-9543-\
-69e659ca82ab"]
+69e659ca82ab"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"Select", "[", 
+    RowBox[{"parsedData", ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "[", "\"\<state\>\"", "]"}], "\[Equal]", "\"\<CA\>\""}],
+         "&&", 
+        RowBox[{
+         RowBox[{"#", "[", "\"\<positive\>\"", "]"}], ">", "0"}], "&&", 
+        RowBox[{
+         RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "86"}]}], ")"}], 
+      "&"}]}], "]"}], "[", 
+   RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<death\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"stateParams", "[", 
+  RowBox[{
+  "\"\<CA\>\"", ",", "pC0", ",", "pH0", ",", "medianHospitalizationAge0", ",",
+    "ageCriticalDependence0", ",", "ageHospitalizedDependence0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{
+  3.7943554768905573`*^9, {3.794355805938566*^9, 3.794355840851779*^9}, 
+   3.794356164980378*^9, {3.794356202999803*^9, 3.794356260619123*^9}, {
+   3.794356366548606*^9, 3.7943563702011023`*^9}, {3.794358311579055*^9, 
+   3.794358316480915*^9}},
+ CellLabel->
+  "In[931]:=",ExpressionUUID->"e80b83d8-0bae-484b-851d-4a1ffa7e91e3"],
+
+Cell[BoxData["78"], "Output",
+ CellChangeTimes->{
+  3.794356213783339*^9, {3.7943562481138363`*^9, 3.794356261212185*^9}, 
+   3.794356370863299*^9, {3.794358302888233*^9, 3.794358316620047*^9}},
+ CellLabel->
+  "Out[931]=",ExpressionUUID->"d747fd29-48e4-448d-9926-5b1b3678dada"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"Population\"\>", "\[Rule]", "38982847"}], ",", 
+   RowBox[{"\<\"importtime0\"\>", "\[Rule]", "56"}], ",", 
+   RowBox[{"\<\"ventalators\"\>", "\[Rule]", "6589"}], ",", 
+   RowBox[{"\<\"icuBeds\"\>", "\[Rule]", "6925"}], ",", 
+   RowBox[{"\<\"staffedBeds\"\>", "\[Rule]", "80802"}], ",", 
+   RowBox[{"\<\"bedUtilization\"\>", "\[Rule]", "0.540439790024938`"}], ",", 
+   RowBox[{"\<\"R0\"\>", "\[Rule]", "2.7900000000000005`"}], ",", 
+   RowBox[{"\<\"pS\"\>", "\[Rule]", "0.9679755492908334`"}], ",", 
+   RowBox[{"\<\"pH\"\>", "\[Rule]", "0.022799928886664707`"}], ",", 
+   RowBox[{"\<\"pC\"\>", "\[Rule]", "0.009224521822501901`"}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{
+  3.794356213783339*^9, {3.7943562481138363`*^9, 3.794356261212185*^9}, 
+   3.794356370863299*^9, {3.794358302888233*^9, 3.79435831662354*^9}},
+ CellLabel->
+  "Out[932]=",ExpressionUUID->"b1d5a13f-e82c-4e5f-a6f8-4b78767ffa19"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"evaluateScenario", "[", 
+   RowBox[{"state_", ",", " ", "scenario_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"distance", ",", "t"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"params", "=", 
+      RowBox[{"stateParams", "[", 
+       RowBox[{
+       "state", ",", "pC0", ",", "pH0", ",", "medianHospitalizationAge0", ",",
+         "ageCriticalDependence0", ",", "ageHospitalizedDependence0"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"thisStateData", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"parsedData", ",", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"#", "[", "\"\<state\>\"", "]"}], "\[Equal]", "state"}], "&&", 
+           RowBox[{
+            RowBox[{"#", "[", "\"\<positive\>\"", "]"}], ">", "0"}]}], ")"}], 
+         "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"icuCapacity", "=", 
+      RowBox[{
+       RowBox[{"params", "[", "\"\<icuBeds\>\"", "]"}], "/", 
+       RowBox[{"params", "[", "\"\<Population\>\"", "]"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"hospitalCapacity", "=", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"params", "[", "\"\<bedUtilization\>\"", "]"}]}], ")"}], "*", 
+       RowBox[{
+        RowBox[{"params", "[", "\"\<staffedBeds\>\"", "]"}], "/", 
+        RowBox[{"params", "[", "\"\<Population\>\"", "]"}]}]}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"distance", "[", "t_", "]"}], ":=", 
+      RowBox[{"Piecewise", "[", 
+       RowBox[{
+        RowBox[{"stateHistoricalDistancing", "[", 
+         RowBox[{"state", ",", "scenario", ",", "t"}], "]"}], ",", "1"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"sol", ",", "evts"}], "}"}], "=", 
+      RowBox[{"CovidModel", "[", "\[IndentingNewLine]", 
+       RowBox[{
+       "r0natural0", ",", "\[IndentingNewLine]", 
+        "daysUntilNotInfectiousOrHospitalized0", ",", "\[IndentingNewLine]", 
+        "daysFromInfectedToInfectious0", ",", "\[IndentingNewLine]", 
+        "daysUntilNotInfectiousOrHospitalized0", ",", "\[IndentingNewLine]", 
+        "daysToLeaveHosptialNonCritical0", ",", "\[IndentingNewLine]", 
+        "pPCRNH0", ",", "\[IndentingNewLine]", "pPCRH0", ",", 
+        "\[IndentingNewLine]", "daysTogoToCriticalCare0", ",", 
+        "\[IndentingNewLine]", "daysFromCriticalToRecoveredOrDeceased0", ",", 
+        "\[IndentingNewLine]", "fractionOfCriticalDeceased0", ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"params", "[", "\"\<importtime0\>\"", "]"}], ",", 
+        "\[IndentingNewLine]", "importlength0", ",", "\[IndentingNewLine]", 
+        "initialInfectionImpulse0", ",", "\[IndentingNewLine]", "tmax", ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"params", "[", "\"\<pS\>\"", "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"params", "[", "\"\<pH\>\"", "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"params", "[", "\"\<pC\>\"", "]"}], ",", 
+        "\[IndentingNewLine]", "containmentThresholdRatio0", ",", 
+        "\[IndentingNewLine]", "icuCapacity", ",", "\[IndentingNewLine]", 
+        "distance", ",", "\[IndentingNewLine]", "hospitalCapacity"}], 
+       "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"events", "=", 
+      RowBox[{"Association", "[", 
+       RowBox[{"Flatten", "[", "evts", "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"baseline", "=", 
+      RowBox[{"distance", "[", "1", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{"make", " ", "plots"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"setDistancingPlot", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<day\>\"", "\[Rule]", "t"}], ",", 
+          RowBox[{"\"\<distancing\>\"", "->", 
+           RowBox[{
+            RowBox[{"distance", "[", "t", "]"}], "/", "baseline"}]}]}], "}"}],
+         ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "0", ",", "300"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"timeSeriesData", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"\"\<day\>\"", "\[Rule]", "t"}], ",", "\[IndentingNewLine]",
+           "\[IndentingNewLine]", 
+          RowBox[{"\"\<confirmedDeaths\>\"", "\[Rule]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", 
+               RowBox[{"Select", "[", 
+                RowBox[{"thisStateData", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "t"}],
+                    ")"}], "&"}]}], "]"}], "]"}], "\[NotEqual]", "1"}], ",", 
+             "0", ",", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Select", "[", 
+                RowBox[{"thisStateData", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "t"}],
+                    ")"}], "&"}]}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<death\>\"", "]"}]}], 
+            "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<confirmedPcr\>\"", "\[Rule]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", 
+               RowBox[{"Select", "[", 
+                RowBox[{"thisStateData", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "t"}],
+                    ")"}], "&"}]}], "]"}], "]"}], "\[NotEqual]", "1"}], ",", 
+             "0", ",", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Select", "[", 
+                RowBox[{"thisStateData", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "t"}],
+                    ")"}], "&"}]}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<positive\>\"", 
+              "]"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<confirmedHospitalizations\>\"", "\[Rule]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", 
+               RowBox[{"Select", "[", 
+                RowBox[{"hospitalizationData", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "t"}],
+                    ")"}], "&"}]}], "]"}], "]"}], "\[NotEqual]", "1"}], ",", 
+             "0", ",", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Select", "[", 
+                RowBox[{"hospitalizationData", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"#", "[", "\"\<day\>\"", "]"}], "\[Equal]", "t"}],
+                    ")"}], "&"}]}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<hospitalized\>\"", 
+              "]"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+          "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedPcr\>\"", "->", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"(", 
+                RowBox[{"PCR", "[", "t", "]"}], ")"}]}], "/.", "sol"}], "]"}],
+             "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedDeaths\>\"", "\[Rule]", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"Deaq", "[", "t", "]"}]}], "/.", "sol"}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedCurrentlyInfected\>\"", "\[Rule]", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"(", 
+                RowBox[{"Eq", "[", "t", "]"}], ")"}]}], "/.", "sol"}], "]"}], 
+            "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedCurrentlyInfectious\>\"", "\[Rule]", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"(", 
+                RowBox[{"Iq", "[", "t", "]"}], ")"}]}], "/.", "sol"}], "]"}], 
+            "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedCumulativeInfections\>\"", "\[Rule]", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"RSq", "[", "t", "]"}], "+", 
+                 RowBox[{"RHq", "[", "t", "]"}], "+", 
+                 RowBox[{"RCq", "[", "t", "]"}]}], ")"}]}], "/.", "sol"}], 
+             "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedCurrentlyHospitalized\>\"", "->", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"HHq", "[", "t", "]"}]}], "/.", "sol"}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<projectedCurrentlyCritical\>\"", "\[Rule]", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"CCq", "[", "t", "]"}]}], "/.", "sol"}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}]}], "\[IndentingNewLine]", "}"}], 
+        ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "0", ",", "300"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"summary", "=", 
+      RowBox[{"<|", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"\"\<totalProjectedDeaths\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"KeyExistsQ", "[", 
+            RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}], ",", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+                RowBox[{"Deaq", "[", "t", "]"}]}], "/.", "sol"}], "/.", 
+              RowBox[{"{", 
+               RowBox[{"t", "\[Rule]", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+           RowBox[{
+            RowBox[{"Evaluate", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+                RowBox[{"Deaq", "[", "t", "]"}]}], "/.", "sol"}], "/.", 
+              RowBox[{"{", 
+               RowBox[{"t", "\[Rule]", "1000"}], "}"}]}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], " ", ",", 
+        RowBox[{"\"\<totalProjectedPCRConfirmed\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"KeyExistsQ", "[", 
+            RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+                RowBox[{"PCR", "[", "t", "]"}]}], "/.", "sol"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], ",", 
+           "\[IndentingNewLine]", " ", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+                RowBox[{"PCR", "[", "t", "]"}]}], "/.", "sol"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", "1000"}], "}"}]}]}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"\"\<totalProjectedInfected\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"KeyExistsQ", "[", 
+            RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"RSq", "[", "t", "]"}], "+", 
+                 RowBox[{"RHq", "[", "t", "]"}], "+", 
+                 RowBox[{"RCq", "[", "t", "]"}]}], ")"}], "/.", "sol"}], 
+              "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"RSq", "[", "t", "]"}], "+", 
+                 RowBox[{"RHq", "[", "t", "]"}], "+", 
+                 RowBox[{"RCq", "[", "t", "]"}]}], ")"}], "/.", "sol"}], 
+              "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", "1000"}], "}"}]}]}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"\"\<Fatality Rate\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"KeyExistsQ", "[", 
+            RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"Deaq", "[", "t", "]"}], "/", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"RSq", "[", "t", "]"}], "+", 
+                   RowBox[{"RHq", "[", "t", "]"}], "+", 
+                   RowBox[{"RCq", "[", "t", "]"}]}], ")"}]}], ")"}], "/.", 
+               "sol"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], ",", " ", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"Deaq", "[", "t", "]"}], "/", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"RSq", "[", "t", "]"}], "+", 
+                   RowBox[{"RHq", "[", "t", "]"}], "+", 
+                   RowBox[{"RCq", "[", "t", "]"}]}], ")"}]}], ")"}], "/.", 
+               "sol"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", "1000"}], "}"}]}]}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"\"\<Fatality Rate (PCR)\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"KeyExistsQ", "[", 
+            RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"Deaq", "[", "t", "]"}], "/", 
+                 RowBox[{"PCR", "[", "t", "]"}]}], ")"}], "/.", "sol"}], 
+              "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], ",", " ", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Evaluate", "[", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"Deaq", "[", "t", "]"}], "/", 
+                 RowBox[{"PCR", "[", "t", "]"}]}], ")"}], "/.", "sol"}], 
+              "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "/.", 
+            RowBox[{"{", 
+             RowBox[{"t", "\[Rule]", "1000"}], "}"}]}]}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"\"\<Date Contained\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"KeyExistsQ", "[", 
+            RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"DateString", "[", 
+            RowBox[{"DatePlus", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"2020", ",", "1", ",", "1"}], "}"}], ",", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "-", "1"}]}], "]"}], "]"}], 
+           ",", " ", "\[IndentingNewLine]", "\"\<Not Contained\>\""}], 
+          "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{"\"\<Date ICU Over Capacity\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"KeyExistsQ", "[", 
+             RowBox[{"events", ",", " ", "\"\<icu\>\""}], "]"}], "&&", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"!", 
+               RowBox[{"KeyExistsQ", "[", 
+                RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}]}], 
+              "||", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"events", "[", "\"\<icu\>\"", "]"}], "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "-", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}]}], ")"}], "<=", "0"}]}], 
+             ")"}]}], ",", 
+           RowBox[{"DateString", "[", 
+            RowBox[{"DatePlus", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"2020", ",", "1", ",", "1"}], "}"}], ",", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"events", "[", "\"\<icu\>\"", "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "-", "1"}]}], "]"}], "]"}], 
+           ",", "\"\<ICU Under capacity\>\""}], "]"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"\"\<Date Hospitals Over Capacity\>\"", "\[Rule]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"KeyExistsQ", "[", 
+             RowBox[{"events", ",", " ", "\"\<hospital\>\""}], "]"}], "&&", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"!", 
+               RowBox[{"KeyExistsQ", "[", 
+                RowBox[{"events", ",", " ", "\"\<containment\>\""}], "]"}]}], 
+              "||", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"events", "[", "\"\<hospital\>\"", "]"}], "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "-", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"events", "[", "\"\<containment\>\"", "]"}], "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}]}], ")"}], "<=", "0"}]}], 
+             ")"}]}], ",", 
+           RowBox[{"DateString", "[", 
+            RowBox[{"DatePlus", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"2020", ",", "1", ",", "1"}], "}"}], ",", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"events", "[", "\"\<hospital\>\"", "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "-", "1"}]}], "]"}], "]"}], 
+           ",", "\"\<Hospitals Under capacity\>\""}], "]"}]}]}], "|>"}]}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Association", "[", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"\"\<timeSeriesData\>\"", "->", "timeSeriesData"}], ",", 
+        "\[IndentingNewLine]", " ", 
+        RowBox[{"\"\<summary\>\"", "->", "summary"}]}], "\[IndentingNewLine]",
+        "}"}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.794355491875404*^9, 3.794355497718205*^9}, {
+   3.7943558395394*^9, 3.794355846316869*^9}, {3.79435590636868*^9, 
+   3.7943561578872967`*^9}, {3.794356398322139*^9, 3.794356439570636*^9}, {
+   3.794356479738185*^9, 3.794356512146122*^9}, {3.794356727947884*^9, 
+   3.7943568076687098`*^9}, {3.794356859938888*^9, 3.794356866638466*^9}, {
+   3.794356938911091*^9, 3.794356957184309*^9}, {3.794357031844296*^9, 
+   3.794357033165958*^9}, {3.794357246849127*^9, 3.79435736547217*^9}, {
+   3.794357432931698*^9, 3.7943574607085876`*^9}, {3.794357533639956*^9, 
+   3.7943576202262917`*^9}, {3.794357713217256*^9, 3.794357906481509*^9}, 
+   3.794358088253695*^9, {3.794358148662423*^9, 3.7943581754496603`*^9}, {
+   3.794358352445198*^9, 3.794358357559862*^9}, 3.794359392903594*^9, {
+   3.794359571899778*^9, 3.794359574972845*^9}, {3.794359612575959*^9, 
+   3.79435966170052*^9}, {3.794359753896963*^9, 3.794359770743088*^9}, {
+   3.794360036255576*^9, 3.7943600431242027`*^9}, {3.794360158462522*^9, 
+   3.7943602521762*^9}, {3.794360321475527*^9, 3.794360388496647*^9}, {
+   3.7943604433061857`*^9, 3.794360613144767*^9}, {3.794360771578219*^9, 
+   3.794360929401267*^9}},
+ CellLabel->
+  "In[229]:=",ExpressionUUID->"c3ee7b4f-ba61-4998-a5ff-7b866b6d6f2c"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.794361001179611*^9, 
+  3.7943610121914787`*^9}},ExpressionUUID->"7664ec08-1c3c-43d4-9473-\
+c72387337668"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"stateParams", "[", 
+  RowBox[{
+  "\"\<CA\>\"", ",", " ", "pC0", ",", "pH0", ",", "medianHospitalizationAge0",
+    ",", "ageCriticalDependence0", ",", "ageHospitalizedDependence0"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.794361305052862*^9, 3.794361352306986*^9}},
+ CellLabel->
+  "In[234]:=",ExpressionUUID->"84c538fa-c83b-46b3-82f0-ce8d75c5d54b"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"Population\"\>", "\[Rule]", "38982847"}], ",", 
+   RowBox[{"\<\"importtime0\"\>", "\[Rule]", "56"}], ",", 
+   RowBox[{"\<\"ventalators\"\>", "\[Rule]", "6589"}], ",", 
+   RowBox[{"\<\"icuBeds\"\>", "\[Rule]", "6925"}], ",", 
+   RowBox[{"\<\"staffedBeds\"\>", "\[Rule]", "80802"}], ",", 
+   RowBox[{"\<\"bedUtilization\"\>", "\[Rule]", "0.540439790024938`"}], ",", 
+   RowBox[{"\<\"R0\"\>", "\[Rule]", "2.7900000000000005`"}], ",", 
+   RowBox[{"\<\"pS\"\>", "\[Rule]", "0.9679755492908334`"}], ",", 
+   RowBox[{"\<\"pH\"\>", "\[Rule]", "0.022799928886664707`"}], ",", 
+   RowBox[{"\<\"pC\"\>", "\[Rule]", "0.009224521822501901`"}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{3.7943613530878*^9},
+ CellLabel->
+  "Out[234]=",ExpressionUUID->"5210cd6c-ec1a-4f2c-967d-9fe14531db69"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"scenarios", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<scenario1\>\"", ",", "\"\<scenario2\>\"", ",", "\"\<scenario3\>\"", 
+     ",", "\"\<scenario4\>\""}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evaluateState", "[", "state_", "]"}], ":=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"Association", "[", 
+        RowBox[{"{", 
+         RowBox[{"#", "->", 
+          RowBox[{"evaluateScenario", "[", 
+           RowBox[{"state", ",", "#"}], "]"}]}], "}"}], "]"}], "&"}], "/@", 
+      "scenarios"}], ",", 
+     RowBox[{"{", "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.794360398979166*^9, 3.7943604136054993`*^9}, 
+   3.7943605943234158`*^9, {3.794360944886704*^9, 3.7943610263656883`*^9}, {
+   3.794361150985183*^9, 3.794361151167143*^9}, {3.794361186681363*^9, 
+   3.794361196636022*^9}, {3.7943612328537703`*^9, 
+   3.794361246952001*^9}},ExpressionUUID->"ce69e19d-43db-465f-a041-\
+7dcb90023f69"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"evaluateState", "[", "\"\<CA\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.794361200178124*^9, 3.794361203469372*^9}},
+ CellLabel->
+  "In[233]:=",ExpressionUUID->"faf4f7a9-f4dd-490e-943d-61f1f47c4e24"],
+
+Cell[BoxData[
+ InterpretationBox[
+  TagBox[
+   FrameBox[GridBox[{
+      {
+       ItemBox[
+        TagBox[
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"\[LeftAssociation]", 
+            RowBox[{"\<\"scenario1\"\>", "\[Rule]", 
+             RowBox[{"\[LeftAssociation]", 
+              RowBox[{
+               RowBox[{"\<\"timeSeriesData\"\>", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"\<\"day\"\>", "\[Rule]", "0"}], ",", 
+                    RowBox[{"\<\"confirmedDeaths\"\>", "\[Rule]", "0"}], ",", 
+                    
+                    RowBox[{"\<\"confirmedPcr\"\>", "\[Rule]", "0"}], ",", 
+                    
+                    RowBox[{"\<\"confirmedHospitalizations\"\>", "\[Rule]", 
+                    "0"}], ",", 
+                    RowBox[{"\<\"projectedPcr\"\>", "\[Rule]", "0.`"}], ",", 
+                    RowBox[{"\<\"projectedDeaths\"\>", "\[Rule]", "0.`"}], 
+                    ",", 
+                    
+                    RowBox[{"\<\"projectedCurrentlyInfected\"\>", "\[Rule]", 
+                    "0.`"}], ",", 
+                    RowBox[{"\<\"projectedCurrentlyInfectious\"\>", "\[Rule]", 
+                    RowBox[{"-", "3.4114041761025607`*^-9"}]}], ",", 
+                    
+                    RowBox[{"\<\"projectedCumulativeInfections\"\>", 
+                    "\[Rule]", "0.`"}], ",", 
+                    
+                    RowBox[{"\<\"projectedCurrentlyHospitalized\"\>", 
+                    "\[Rule]", "0.`"}], ",", 
+                    
+                    RowBox[{"\<\"projectedCurrentlyCritical\"\>", "\[Rule]", 
+                    "0.`"}]}], "}"}], ",", 
+                  TemplateBox[{"299"},
+                   "OutputSizeLimit`Skeleton"], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"\<\"day\"\>", "\[Rule]", "300"}], ",", 
+                    RowBox[{"\<\"confirmedDeaths\"\>", "\[Rule]", "0"}], ",", 
+                    
+                    TemplateBox[{"8"},
+                    "OutputSizeLimit`Skeleton"], ",", 
+                    RowBox[{"\<\"projectedCurrentlyCritical\"\>", "\[Rule]", 
+                    "41.1104024952258`"}]}], "}"}]}], "}"}]}], ",", 
+               RowBox[{"\<\"summary\"\>", "\[Rule]", 
+                TemplateBox[{"1"},
+                 "OutputSizeLimit`Skeleton"]}]}], "\[RightAssociation]"}]}], 
+            "\[RightAssociation]"}], ",", 
+           TemplateBox[{"3"},
+            "OutputSizeLimit`Skeleton"]}], "}"}],
+         Short[#, 5]& ],
+        BaseStyle->{Deployed -> False},
+        StripOnInput->False]},
+      {GridBox[{
+         {
+          PaneBox[
+           TagBox[
+            TooltipBox[
+             StyleBox[
+              StyleBox[
+               DynamicBox[ToBoxes[
+                 FEPrivate`FrontEndResource[
+                 "FEStrings", "sizeBriefExplanation"], StandardForm],
+                ImageSizeCache->{58., {2., 8.}}],
+               StripOnInput->False,
+               DynamicUpdating->True,
+               LineSpacing->{1, 2},
+               LineIndent->0,
+               LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLText",
+              StripOnInput->False],
+             StyleBox[
+              DynamicBox[
+               ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeExplanation"], 
+                StandardForm]], DynamicUpdating -> True, LineIndent -> 0, 
+              LinebreakAdjustments -> {1., 100, 0, 0, 0}, 
+              LineSpacing -> {1, 2}, StripOnInput -> False]],
+            Annotation[#, 
+             Style[
+              Dynamic[
+               FEPrivate`FrontEndResource["FEStrings", "sizeExplanation"]], 
+              DynamicUpdating -> True, LineIndent -> 0, 
+              LinebreakAdjustments -> {1., 100, 0, 0, 0}, 
+              LineSpacing -> {1, 2}], "Tooltip"]& ],
+           Alignment->Center,
+           BaselinePosition->Baseline,
+           ImageSize->{Automatic, {25, Full}}], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowLess"], 
+                StandardForm],
+               ImageSizeCache->{50., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowLess"], 
+                StandardForm],
+               ImageSizeCache->{50., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           
+           ButtonFunction:>OutputSizeLimit`ButtonFunction[
+            OutputSizeLimit`Defer, 233, 22985028147734185317, 5/2],
+           Enabled->True,
+           Evaluator->Automatic,
+           Method->"Queued"], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowMore"], 
+                StandardForm],
+               ImageSizeCache->{56., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowMore"], 
+                StandardForm],
+               ImageSizeCache->{56., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           
+           ButtonFunction:>OutputSizeLimit`ButtonFunction[
+            OutputSizeLimit`Defer, 233, 22985028147734185317, 5 2],
+           Enabled->True,
+           Evaluator->Automatic,
+           Method->"Queued"], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowAll"], 
+                StandardForm],
+               ImageSizeCache->{42., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowAll"], 
+                StandardForm],
+               ImageSizeCache->{42., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           
+           ButtonFunction:>OutputSizeLimit`ButtonFunction[
+            OutputSizeLimit`Defer, 233, 22985028147734185317, Infinity],
+           Enabled->True,
+           Evaluator->Automatic,
+           Method->"Queued"], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeChangeLimit"], 
+                StandardForm],
+               ImageSizeCache->{74., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeChangeLimit"], 
+                StandardForm],
+               ImageSizeCache->{74., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           ButtonFunction:>FrontEndExecute[{
+              FrontEnd`SetOptions[
+              FrontEnd`$FrontEnd, 
+               FrontEnd`PreferencesSettings -> {"Page" -> "Advanced"}], 
+              FrontEnd`FrontEndToken["PreferencesDialog"]}],
+           Evaluator->None,
+           Method->"Preemptive"]}
+        },
+        AutoDelete->False,
+        FrameStyle->GrayLevel[0.85],
+        GridBoxDividers->{"Columns" -> {False, {True}}},
+        GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+        GridBoxSpacings->{"Columns" -> {{2}}}]}
+     },
+     DefaultBaseStyle->"Column",
+     GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+     GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{1.}}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.5599999999999999]}, 
+         Offset[0.27999999999999997`]}, "Rows" -> {
+         Offset[0.2], 
+         Offset[1.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}}],
+    BaseStyle->"OutputSizeLimit",
+    FrameMargins->{{12, 12}, {0, 15}},
+    FrameStyle->GrayLevel[0.85],
+    RoundingRadius->5,
+    StripOnInput->False],
+   Deploy,
+   DefaultBaseStyle->"Deploy"],
+  If[22985028147734185317 === $SessionID, 
+   Out[233], Message[
+     MessageName[Syntax, "noinfoker"]]; Missing["NotAvailable"]; 
+   Null]]], "Output",
+ CellChangeTimes->{3.7943612057834063`*^9},
+ CellLabel->
+  "Out[233]=",ExpressionUUID->"ae5ad4c1-cd6b-4d72-96b3-f21520ac090c"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"evaluateState", "[", "state_", "]"}], ":=", 
+  RowBox[{"Merge", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"Association", "[", 
+         RowBox[{"{", 
+          RowBox[{"#", "->", 
+           RowBox[{"evaluateScenario", "[", 
+            RowBox[{"state", ",", "#"}], "]"}]}], "}"}], "]"}], "&"}], "/@", 
+       "scenarios"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"stateParams", "[", 
+       RowBox[{
+       "state", ",", " ", "pC0", ",", "pH0", ",", "medianHospitalizationAge0",
+         ",", "ageCriticalDependence0", ",", "ageHospitalizedDependence0"}], 
+       "]"}]}], "}"}], ",", "\[IndentingNewLine]", "First"}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.794361573615995*^9, 3.794361619456648*^9}},
+ CellLabel->
+  "In[235]:=",ExpressionUUID->"490fda34-6846-4a51-968c-c7da2e304152"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"califtest", "=", 
+  RowBox[{"evaluateState", "[", "\"\<CA\>\"", "]"}]}]], "Input",
+ CellChangeTimes->{{3.794361621633769*^9, 3.794361638942477*^9}},
+ CellLabel->
+  "In[237]:=",ExpressionUUID->"9c37c1fb-f68d-4283-8849-2f780c0d19a2"],
+
+Cell[BoxData[
+ InterpretationBox[
+  TagBox[
+   FrameBox[GridBox[{
+      {
+       ItemBox[
+        TagBox[
+         RowBox[{"\[LeftAssociation]", 
+          RowBox[{
+           RowBox[{"\<\"scenario1\"\>", "\[Rule]", 
+            RowBox[{"\[LeftAssociation]", 
+             RowBox[{
+              RowBox[{"\<\"timeSeriesData\"\>", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"\<\"day\"\>", "\[Rule]", "0"}], ",", 
+                   RowBox[{"\<\"confirmedDeaths\"\>", "\[Rule]", "0"}], ",", 
+                   RowBox[{"\<\"confirmedPcr\"\>", "\[Rule]", "0"}], ",", 
+                   
+                   RowBox[{"\<\"confirmedHospitalizations\"\>", "\[Rule]", 
+                    "0"}], ",", 
+                   RowBox[{"\<\"projectedPcr\"\>", "\[Rule]", "0.`"}], ",", 
+                   RowBox[{"\<\"projectedDeaths\"\>", "\[Rule]", "0.`"}], ",", 
+                   
+                   RowBox[{"\<\"projectedCurrentlyInfected\"\>", "\[Rule]", 
+                    "0.`"}], ",", 
+                   
+                   RowBox[{"\<\"projectedCurrentlyInfectious\"\>", "\[Rule]", 
+                    
+                    RowBox[{"-", "3.4114041761025607`*^-9"}]}], ",", 
+                   
+                   RowBox[{"\<\"projectedCumulativeInfections\"\>", "\[Rule]",
+                     "0.`"}], ",", 
+                   
+                   RowBox[{"\<\"projectedCurrentlyHospitalized\"\>", 
+                    "\[Rule]", "0.`"}], ",", 
+                   
+                   RowBox[{"\<\"projectedCurrentlyCritical\"\>", "\[Rule]", 
+                    "0.`"}]}], "}"}], ",", 
+                 TemplateBox[{"299"},
+                  "OutputSizeLimit`Skeleton"], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"\<\"day\"\>", "\[Rule]", "300"}], ",", 
+                   RowBox[{"\<\"confirmedDeaths\"\>", "\[Rule]", "0"}], ",", 
+                   TemplateBox[{"8"},
+                    "OutputSizeLimit`Skeleton"], ",", 
+                   
+                   RowBox[{"\<\"projectedCurrentlyCritical\"\>", "\[Rule]", 
+                    "41.1104024952258`"}]}], "}"}]}], "}"}]}], ",", 
+              RowBox[{"\<\"summary\"\>", "\[Rule]", 
+               TemplateBox[{"1"},
+                "OutputSizeLimit`Skeleton"]}]}], "\[RightAssociation]"}]}], 
+           ",", 
+           TemplateBox[{"12"},
+            "OutputSizeLimit`Skeleton"], ",", 
+           RowBox[{"\<\"pC\"\>", "\[Rule]", 
+            TemplateBox[{"21"},
+             "OutputSizeLimit`Skeleton"]}]}], "\[RightAssociation]"}],
+         Short[#, 5]& ],
+        BaseStyle->{Deployed -> False},
+        StripOnInput->False]},
+      {GridBox[{
+         {
+          PaneBox[
+           TagBox[
+            TooltipBox[
+             StyleBox[
+              StyleBox[
+               DynamicBox[ToBoxes[
+                 FEPrivate`FrontEndResource[
+                 "FEStrings", "sizeBriefExplanation"], StandardForm],
+                ImageSizeCache->{58., {2., 8.}}],
+               StripOnInput->False,
+               DynamicUpdating->True,
+               LineSpacing->{1, 2},
+               LineIndent->0,
+               LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLText",
+              StripOnInput->False],
+             StyleBox[
+              DynamicBox[
+               ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeExplanation"], 
+                StandardForm]], DynamicUpdating -> True, LineIndent -> 0, 
+              LinebreakAdjustments -> {1., 100, 0, 0, 0}, 
+              LineSpacing -> {1, 2}, StripOnInput -> False]],
+            Annotation[#, 
+             Style[
+              Dynamic[
+               FEPrivate`FrontEndResource["FEStrings", "sizeExplanation"]], 
+              DynamicUpdating -> True, LineIndent -> 0, 
+              LinebreakAdjustments -> {1., 100, 0, 0, 0}, 
+              LineSpacing -> {1, 2}], "Tooltip"]& ],
+           Alignment->Center,
+           BaselinePosition->Baseline,
+           ImageSize->{Automatic, {25, Full}}], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowLess"], 
+                StandardForm],
+               ImageSizeCache->{50., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowLess"], 
+                StandardForm]],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           
+           ButtonFunction:>OutputSizeLimit`ButtonFunction[
+            OutputSizeLimit`Defer, 237, 22985028147734185317, 5/2],
+           Enabled->True,
+           Evaluator->Automatic,
+           Method->"Queued"], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowMore"], 
+                StandardForm],
+               ImageSizeCache->{56., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowMore"], 
+                StandardForm],
+               ImageSizeCache->{56., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           
+           ButtonFunction:>OutputSizeLimit`ButtonFunction[
+            OutputSizeLimit`Defer, 237, 22985028147734185317, 5 2],
+           Enabled->True,
+           Evaluator->Automatic,
+           Method->"Queued"], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowAll"], 
+                StandardForm],
+               ImageSizeCache->{42., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeShowAll"], 
+                StandardForm],
+               ImageSizeCache->{42., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           
+           ButtonFunction:>OutputSizeLimit`ButtonFunction[
+            OutputSizeLimit`Defer, 237, 22985028147734185317, Infinity],
+           Enabled->True,
+           Evaluator->Automatic,
+           Method->"Queued"], 
+          ButtonBox[
+           PaneSelectorBox[{False->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeChangeLimit"], 
+                StandardForm],
+               ImageSizeCache->{74., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControl",
+             StripOnInput->False], True->
+            StyleBox[
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource["FEStrings", "sizeChangeLimit"], 
+                StandardForm],
+               ImageSizeCache->{74., {0., 8.}}],
+              StripOnInput->False,
+              DynamicUpdating->True,
+              LineSpacing->{1, 2},
+              LineIndent->0,
+              LinebreakAdjustments->{1., 100, 0, 0, 0}], "OSLControlActive",
+             StripOnInput->False]}, Dynamic[
+             CurrentValue["MouseOver"]],
+            Alignment->Center,
+            FrameMargins->0,
+            ImageSize->{Automatic, {25, Full}}],
+           Appearance->None,
+           BaselinePosition->Baseline,
+           ButtonFunction:>FrontEndExecute[{
+              FrontEnd`SetOptions[
+              FrontEnd`$FrontEnd, 
+               FrontEnd`PreferencesSettings -> {"Page" -> "Advanced"}], 
+              FrontEnd`FrontEndToken["PreferencesDialog"]}],
+           Evaluator->None,
+           Method->"Preemptive"]}
+        },
+        AutoDelete->False,
+        FrameStyle->GrayLevel[0.85],
+        GridBoxDividers->{"Columns" -> {False, {True}}},
+        GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+        GridBoxSpacings->{"Columns" -> {{2}}}]}
+     },
+     DefaultBaseStyle->"Column",
+     GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+     GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{1.}}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.5599999999999999]}, 
+         Offset[0.27999999999999997`]}, "Rows" -> {
+         Offset[0.2], 
+         Offset[1.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}}],
+    BaseStyle->"OutputSizeLimit",
+    FrameMargins->{{12, 12}, {0, 15}},
+    FrameStyle->GrayLevel[0.85],
+    RoundingRadius->5,
+    StripOnInput->False],
+   Deploy,
+   DefaultBaseStyle->"Deploy"],
+  If[22985028147734185317 === $SessionID, 
+   Out[237], Message[
+     MessageName[Syntax, "noinfoker"]]; Missing["NotAvailable"]; 
+   Null]]], "Output",
+ CellChangeTimes->{{3.794361627946466*^9, 3.79436164134965*^9}},
+ CellLabel->
+  "Out[237]=",ExpressionUUID->"175ffe6f-f431-4157-8c8c-c0d63230c2f2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"califtest", "[", "\"\<pC\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.794361804345776*^9, 3.794361808695323*^9}},
+ CellLabel->
+  "In[238]:=",ExpressionUUID->"a31f2a44-7afe-476d-baf8-071e7f73e794"],
+
+Cell[BoxData["0.009224521822501901`"], "Output",
+ CellChangeTimes->{3.794361808933401*^9},
+ CellLabel->
+  "Out[238]=",ExpressionUUID->"0a3782c2-1d19-46ce-a255-9c6886e81e32"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Keys", "[", "califtest", "]"}]], "Input",
+ CellChangeTimes->{{3.794361813572769*^9, 3.794361816090661*^9}},
+ CellLabel->
+  "In[239]:=",ExpressionUUID->"f79dc0a1-ba27-460b-a412-8a620c709960"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"scenario1\"\>", ",", "\<\"scenario2\"\>", 
+   ",", "\<\"scenario3\"\>", ",", "\<\"scenario4\"\>", 
+   ",", "\<\"Population\"\>", ",", "\<\"importtime0\"\>", 
+   ",", "\<\"ventalators\"\>", ",", "\<\"icuBeds\"\>", 
+   ",", "\<\"staffedBeds\"\>", ",", "\<\"bedUtilization\"\>", 
+   ",", "\<\"R0\"\>", ",", "\<\"pS\"\>", ",", "\<\"pH\"\>", 
+   ",", "\<\"pC\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.7943618162515907`*^9},
+ CellLabel->
+  "Out[239]=",ExpressionUUID->"0ff57ef6-4ae6-4386-823a-dfa7cc5589b5"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"exportData", "=", 
+  RowBox[{"Association", "[", 
+   RowBox[{"{", 
+    RowBox[{"#", "->", 
+     RowBox[{"evaluateState", "["}]}]}]}]}]], "Input",
+ CellChangeTimes->{{3.794361839904543*^9, 
+  3.794361858421535*^9}},ExpressionUUID->"07d5cc26-e849-4903-9c5d-\
+37da7ec19a20"]
 }, Open  ]]
 },
-WindowSize->{1682, 1385},
-WindowMargins->{{313, Automatic}, {Automatic, -390}},
+WindowSize->{1192, 1151},
+WindowMargins->{{Automatic, 211}, {Automatic, 34}},
 TaggingRules->{"TryRealOnly" -> False},
 FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 13, 2020)",
 StyleDefinitions->"Default.nb",
@@ -4520,35 +5949,71 @@ Cell[558, 20, 179, 3, 30, "Input",ExpressionUUID->"f8e87a96-6358-4f9d-91e3-8046d
 Cell[CellGroupData[{
 Cell[762, 27, 251, 4, 53, "Subtitle",ExpressionUUID->"b3c28571-b149-4346-9612-394f4762b4bd"],
 Cell[CellGroupData[{
-Cell[1038, 35, 258, 5, 30, "Input",ExpressionUUID->"4b2dffb7-aae7-41ab-9c77-7352637274dd"],
-Cell[1299, 42, 219, 4, 34, "Output",ExpressionUUID->"a8225ef8-d404-484c-bb26-ba85a5004754"]
+Cell[1038, 35, 218, 4, 30, "Input",ExpressionUUID->"5af3047b-5885-4ff0-a750-3fa93083a133"],
+Cell[1259, 41, 201, 2, 34, "Output",ExpressionUUID->"273dc2c1-7822-446e-877e-b149c550970c"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1555, 51, 290, 6, 30, "Input",ExpressionUUID->"07db6fe3-56d2-40a5-8392-72196b11ecce"],
-Cell[1848, 59, 255, 4, 34, "Output",ExpressionUUID->"55941bd8-b1a8-471f-94c1-04827ae045cb"]
+Cell[1497, 48, 227, 4, 30, "Input",ExpressionUUID->"07db6fe3-56d2-40a5-8392-72196b11ecce"],
+Cell[1727, 54, 342, 4, 34, "Output",ExpressionUUID->"caa123f8-f841-44e5-bb69-027f7d91b004"]
 }, Open  ]],
-Cell[2118, 66, 216, 5, 35, "Text",ExpressionUUID->"3e98a561-e844-4b52-aa98-e9dec381af4c"],
+Cell[2084, 61, 216, 5, 35, "Text",ExpressionUUID->"3e98a561-e844-4b52-aa98-e9dec381af4c"],
 Cell[CellGroupData[{
-Cell[2359, 75, 37218, 837, 2698, "Input",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
-Cell[39580, 914, 17939, 358, 1175, "Output",ExpressionUUID->"e8e048b9-d679-4b89-9f4f-009e03e26961"]
+Cell[2325, 70, 37293, 838, 3055, "Input",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
+Cell[39621, 910, 18207, 361, 1176, "Output",ExpressionUUID->"bbe4c50a-55e7-40f2-9729-fdfe4600ab4c"]
 }, Open  ]],
-Cell[57534, 1275, 633, 10, 58, "Text",ExpressionUUID->"25c53830-e113-4e30-9cf4-0ae795214ea4"],
-Cell[58170, 1287, 394, 7, 46, "Input",ExpressionUUID->"8afd392d-8e6f-4bec-a7da-060db6b67a47",
+Cell[57843, 1274, 633, 10, 58, "Text",ExpressionUUID->"25c53830-e113-4e30-9cf4-0ae795214ea4"],
+Cell[58479, 1286, 4180, 114, 236, "Input",ExpressionUUID->"4bc57190-9816-470c-9144-e975e4a9be8d",
  InitializationCell->True],
-Cell[58567, 1296, 4180, 114, 215, "Input",ExpressionUUID->"4bc57190-9816-470c-9144-e975e4a9be8d",
+Cell[62662, 1402, 1741, 49, 173, "Input",ExpressionUUID->"4d80d66a-1463-442a-9119-cef9fb016e04",
  InitializationCell->True],
-Cell[62750, 1412, 1716, 48, 131, "Input",ExpressionUUID->"4d80d66a-1463-442a-9119-cef9fb016e04",
- InitializationCell->True],
-Cell[64469, 1462, 8513, 196, 446, "Input",ExpressionUUID->"79aa2523-088e-4dc0-af91-2f921206213d",
+Cell[64406, 1453, 8538, 196, 551, "Input",ExpressionUUID->"79aa2523-088e-4dc0-af91-2f921206213d",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[73007, 1662, 53021, 1158, 2887, "Input",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
-Cell[126031, 2822, 19360, 412, 1353, "Output",ExpressionUUID->"8e822287-901f-40d0-a389-e53963802bd2"]
+Cell[72969, 1653, 53153, 1160, 3307, "Input",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
+Cell[126125, 2815, 19539, 415, 1387, "Output",ExpressionUUID->"b0e2ae87-621f-47ee-92db-66be197b04a5"],
+Cell[145667, 3232, 559, 11, 24, "Message",ExpressionUUID->"d1dc507e-d641-4b58-820c-1afee2edc4c2"],
+Cell[146229, 3245, 448, 9, 24, "Message",ExpressionUUID->"27f599d2-5685-4fc8-b5d3-15f59d762f36"],
+Cell[146680, 3256, 559, 11, 24, "Message",ExpressionUUID->"04f15eae-8932-4e7e-85af-f9159fe8abdb"],
+Cell[147242, 3269, 446, 9, 24, "Message",ExpressionUUID->"7c8225d3-2cfc-4824-b444-14caafea549d"],
+Cell[147691, 3280, 559, 11, 24, "Message",ExpressionUUID->"2f68015d-77a2-47f9-85d9-2008caf1055e"],
+Cell[148253, 3293, 446, 9, 24, "Message",ExpressionUUID->"77d242a6-f57c-4bc0-8848-49c48e30c76b"],
+Cell[148702, 3304, 559, 11, 24, "Message",ExpressionUUID->"b1793bd0-0d6b-499f-a4b5-66392fc9e06c"],
+Cell[149264, 3317, 448, 9, 24, "Message",ExpressionUUID->"0d4bb5fa-7be6-405f-ae38-5a9000eb7bc0"]
 }, Open  ]],
-Cell[145406, 3237, 39621, 929, 2362, "Input",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
-Cell[185030, 4168, 730, 14, 30, "Input",ExpressionUUID->"a8e87d5d-9b3c-4c09-93cc-03ad2d3cde15"],
-Cell[185763, 4184, 10379, 308, 514, "Input",ExpressionUUID->"22241097-c883-4ac0-891f-c8c582b7285f"],
-Cell[196145, 4494, 152, 3, 30, "Input",ExpressionUUID->"535dd15e-0b43-4066-9543-69e659ca82ab"]
+Cell[149727, 3329, 39659, 928, 2803, "Input",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
+Cell[189389, 4259, 730, 14, 30, "Input",ExpressionUUID->"a8e87d5d-9b3c-4c09-93cc-03ad2d3cde15"],
+Cell[190122, 4275, 10379, 308, 514, "Input",ExpressionUUID->"22241097-c883-4ac0-891f-c8c582b7285f"],
+Cell[200504, 4585, 152, 3, 30, "Input",ExpressionUUID->"535dd15e-0b43-4066-9543-69e659ca82ab"],
+Cell[CellGroupData[{
+Cell[200681, 4592, 1119, 29, 52, "Input",ExpressionUUID->"e80b83d8-0bae-484b-851d-4a1ffa7e91e3"],
+Cell[201803, 4623, 277, 5, 34, "Output",ExpressionUUID->"d747fd29-48e4-448d-9926-5b1b3678dada"],
+Cell[202083, 4630, 991, 18, 60, "Output",ExpressionUUID->"b1d5a13f-e82c-4e5f-a6f8-4b78767ffa19"]
+}, Open  ]],
+Cell[203089, 4651, 24260, 554, 1858, "Input",ExpressionUUID->"c3ee7b4f-ba61-4998-a5ff-7b866b6d6f2c"],
+Cell[227352, 5207, 154, 3, 30, "Input",ExpressionUUID->"7664ec08-1c3c-43d4-9473-c72387337668"],
+Cell[CellGroupData[{
+Cell[227531, 5214, 374, 8, 30, "Input",ExpressionUUID->"84c538fa-c83b-46b3-82f0-ce8d75c5d54b"],
+Cell[227908, 5224, 867, 16, 60, "Output",ExpressionUUID->"5210cd6c-ec1a-4f2c-967d-9fe14531db69"]
+}, Open  ]],
+Cell[228790, 5243, 1044, 26, 73, "Input",ExpressionUUID->"ce69e19d-43db-465f-a041-7dcb90023f69"],
+Cell[CellGroupData[{
+Cell[229859, 5273, 224, 4, 30, "Input",ExpressionUUID->"faf4f7a9-f4dd-490e-943d-61f1f47c4e24"],
+Cell[230086, 5279, 11310, 281, 165, "Output",ExpressionUUID->"ae5ad4c1-cd6b-4d72-96b3-f21520ac090c"]
+}, Open  ]],
+Cell[241411, 5563, 931, 23, 115, "Input",ExpressionUUID->"490fda34-6846-4a51-968c-c7da2e304152"],
+Cell[CellGroupData[{
+Cell[242367, 5590, 255, 5, 30, "Input",ExpressionUUID->"9c37c1fb-f68d-4283-8849-2f780c0d19a2"],
+Cell[242625, 5597, 11341, 282, 165, "Output",ExpressionUUID->"175ffe6f-f431-4157-8c8c-c0d63230c2f2"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[254003, 5884, 220, 4, 30, "Input",ExpressionUUID->"a31f2a44-7afe-476d-baf8-071e7f73e794"],
+Cell[254226, 5890, 173, 3, 34, "Output",ExpressionUUID->"0a3782c2-1d19-46ce-a255-9c6886e81e32"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[254436, 5898, 214, 4, 30, "Input",ExpressionUUID->"f79dc0a1-ba27-460b-a412-8a620c709960"],
+Cell[254653, 5904, 550, 11, 34, "Output",ExpressionUUID->"0ff57ef6-4ae6-4386-823a-dfa7cc5589b5"]
+}, Open  ]],
+Cell[255218, 5918, 295, 8, 30, "Input",ExpressionUUID->"07d5cc26-e849-4903-9c5d-37da7ec19a20"]
 }, Open  ]]
 }
 ]
