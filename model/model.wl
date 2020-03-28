@@ -67,6 +67,10 @@ pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
 
 pS0 = 1-(pC0 + pH0);
 
+(** Utils **)
+
+dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
+
 dateticks = {
 	{0, Rotate["Jan",\[Pi]/2]},
 		{(31),""},
@@ -329,24 +333,44 @@ countryData = Association[{"United States"->nationalData,"France"->franceData,"S
 (*ClearAll[Memoize];*)
 Memoize[fn_] = Module[{cache=<||>}, Function[If[KeyExistsQ[cache, #1], cache[#1], cache[#1] = Apply[fn,{##}]]]];
 
-countryRawDemographicData = Association[
-	(#->If[#=="United States",
-		MemoWolframAlpha["United States age distribution",
+queryAlphaForDistribution[country_] := 
+	If[country =="United States",
+		WolframAlpha["United States age distribution",
 					 {{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
-		MemoWolframAlpha[StringTemplate["`` age distribution"][#],
+		WolframAlpha[StringTemplate["`` age distribution"][country],
 					 {{"AgeDistributionGrid:AgeDistributionData",1},"ComputableData"},
-					 PodStates->{"AgeDistributionGrid:AgeDistributionData__Show details"}]]) & /@ countries];
+					 PodStates->{"AgeDistributionGrid:AgeDistributionData__Show details"}]]
+
+ageDistributionFor[country_] := Module[{rawdist, pop, dist, buckets},
+	rawdist = queryAlphaForDistribution[country];
+	pop = QuantityMagnitude[Last[rawdist][[4]]];
+	dist = {StringCases[#[[1]], NumberString][[1]] // ToExpression,
+			QuantityMagnitude[#[[4]]/pop]} & /@ (Most@Rest@rawdist); 
+	buckets=(#[[1]]) & /@ dist;
+	<|
+ 		"Population" -> pop,
+ 		"Distribution" -> dist,
+ 		"Buckets" -> buckets
+ 	|>
+	];
+	
+exportDistributionJSON[] := With[{countries = {"United States", "France", "Italy", "Spain"}},
+	Export[dataFile["age-distributions.json"], AssociationMap[ageDistributionFor, countries]]];
+	
+cachedAgeDistributionFor[country_] := Module[{countryData},
+	countryData = Import[dataFile["age-distributions.json"]];
+	Association[Association[countryData][country]]];
 
 countryVentalators = Association[{"United States"->61929,"France"->5000,"Italy"->3000,"Spain"->2000}];
 
 countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
 
 countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] := 
-	Module[{rawdist,pop,dist,buckets},
-		rawdist=countryRawDemographicData[country];
-		pop=QuantityMagnitude[Last[rawdist][[4]]];
-		dist={StringCases[#[[1]], NumberString][[1]]//ToExpression,QuantityMagnitude[#[[4]]]/pop}&/@Most[Rest[rawdist]];
-		buckets=(#[[1]])&/@dist;
+	Module[{raw,pop,dist,buckets},
+		raw = cachedAgeDistributionFor[country];
+		pop = raw["Population"];
+		dist = raw["Distribution"];
+		buckets = raw["Buckets"];
 
 (*return a map of per state params to values *)
 <|"Population"->pop,
