@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Layout = ({children, noPad = false}) => (
+export const Layout = ({children, noPad = false}) => (
   <div className="bg-gray-200">
     <nav className="flex items-center justify-between flex-wrap p-6">
       <div className="flex items-center flex-shrink-0 mr-6">
@@ -38,5 +38,3 @@ const Layout = ({children, noPad = false}) => (
     </div>
   </div>
 );
-
-export default Layout;

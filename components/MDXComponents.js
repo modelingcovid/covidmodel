@@ -7,7 +7,7 @@ const tagWithClassName = (Tag, className) => ({children, ...props}) => (
   </Tag>
 );
 
-export default ({children}) => {
+export const MDXComponents = ({children}) => {
   return (
     <MDXProvider
       components={{
