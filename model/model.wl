@@ -301,7 +301,7 @@ RSq'[t] == ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Recovered without nee
 IHq'[t] ==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected and will need hospital, won't need critical care *)
 HHq'[t]== IHq[t]/daysUntilNotInfectiousOrHospitalized - HHq[t]/daysToLeaveHosptialNonCritical, (* Going to hospital *) 
 RHq'[t] == HHq[t]/daysToLeaveHosptialNonCritical, (* Recovered after hospitalization *)
-PCR'[t] == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized, (* pcr confirmation *)
+PCR'[t] == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized0, (* pcr confirmation *)
 ICq'[t] == pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected, will need critical care *)
 HCq'[t] == ICq[t]/daysUntilNotInfectiousOrHospitalized - HCq[t]/daysTogoToCriticalCare, (* Hospitalized, need critical care *)
 CCq'[t] ==HCq[t]/daysTogoToCriticalCare - CCq[t]/daysFromCriticalToRecoveredOrDeceased (* Entering critical care *),
@@ -384,7 +384,7 @@ countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalD
 
 (*return a map of per state params to values *)
 <|"Population"->pop,
-"importtime"->countryImportTime[country],
+"importtime0"->countryImportTime[country],
 "ventalators"->countryVentalators[country],
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
