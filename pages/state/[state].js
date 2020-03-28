@@ -1,21 +1,40 @@
 import React from 'react';
 import {useRouter} from 'next/router';
-import fs from 'fs';
-import path from 'path';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
 import Link from 'next/link';
 
-import Layout from '../../components/Layout';
+import {Layout, OccupancyGraph} from '../../components';
+import {getStateData} from '../../lib/data';
 import STATES from '../../lib/states';
 
-export default ({demographics, summary}) => {
+const {useCallback, useState} = React;
+
+const dayInMs = 24 * 60 * 60 * 1000;
+const dayZero = new Date('Dec 31, 2019').getTime();
+const dayToDate = (day) => new Date(dayZero + dayInMs * day);
+
+const getDate = ({day}) => dayToDate(day);
+const getProjectedCurrentlyHospitalized = ({projectedCurrentlyHospitalized}) =>
+  projectedCurrentlyHospitalized;
+const getProjectedCurrentlyCritical = ({projectedCurrentlyCritical}) =>
+  projectedCurrentlyCritical;
+
+export default ({data}) => {
   const {
     query: {state},
     push,
   } = useRouter();
-  const [scenario, setScenario] = React.useState('scenario1');
-  const scenarioSummary = summary[scenario];
+  console.log('State', state, data);
+  const [scenario, setScenario] = useState('scenario1');
+
+  if (!data) {
+    return <Layout noPad>Missing data for {state}</Layout>;
+  }
+
+  const scenarioSummary = data[scenario].summary;
+
+  const hospitalCapacity = (1 - data.bedUtilization) * data.staffedBeds;
 
   const handleStateSelect = (e) => {
     push(`/state/${e.target.value}`);
@@ -147,7 +166,7 @@ export default ({demographics, summary}) => {
                           Population
                         </td>
                         <td className="border px-4 py-2">
-                          {numeral(demographics.Population).format('0,0')}
+                          {numeral(data.Population).format('0,0')}
                         </td>
                       </tr>
                       <tr>
@@ -155,7 +174,7 @@ export default ({demographics, summary}) => {
                           ICU Beds
                         </td>
                         <td className="border px-4 py-2">
-                          {numeral(demographics.icuBeds).format('0,0')}
+                          {numeral(data.icuBeds).format('0,0')}
                         </td>
                       </tr>
                       <tr>
@@ -164,8 +183,7 @@ export default ({demographics, summary}) => {
                         </td>
                         <td className="border px-4 py-2">
                           {numeral(
-                            demographics.staffedBeds *
-                              (1 - demographics.bedUtilization)
+                            data.staffedBeds * (1 - data.bedUtilization)
                           ).format('0,0')}
                         </td>
                       </tr>
@@ -174,7 +192,7 @@ export default ({demographics, summary}) => {
                           Probability of Not needing hospitalization
                         </td>
                         <td className="border px-4 py-2">
-                          {numeral(demographics.pS).format('0.00%')}
+                          {numeral(data.pS).format('0.00%')}
                         </td>
                       </tr>
                       <tr>
@@ -182,7 +200,7 @@ export default ({demographics, summary}) => {
                           Probability of needing hospitalization wihtout ICU
                         </td>
                         <td className="border px-4 py-2">
-                          {numeral(demographics.pH).format('0.00%')}
+                          {numeral(data.pH).format('0.00%')}
                         </td>
                       </tr>
                       <tr>
@@ -190,7 +208,7 @@ export default ({demographics, summary}) => {
                           Probability of needing ICU care
                         </td>
                         <td className="border px-4 py-2">
-                          {numeral(demographics.pC).format('0.00%')}
+                          {numeral(data.pC).format('0.00%')}
                         </td>
                       </tr>
                     </tbody>
@@ -217,7 +235,7 @@ export default ({demographics, summary}) => {
                           </td>
                           <td className="border px-4 py-2">
                             {dayjs('2020-01-01')
-                              .add(demographics.importtime - 1, 'day')
+                              .add(data.importtime - 1, 'day')
                               .format('MMM DD, YYYY')}
                           </td>
                         </tr>
@@ -226,7 +244,7 @@ export default ({demographics, summary}) => {
                             Basic Reproduction Number (R0)
                           </td>
                           <td className="border px-4 py-2">
-                            {numeral(demographics['R0']).format('0.00')}
+                            {numeral(data.R0).format('0.00')}
                           </td>
                         </tr>
                       </tbody>
@@ -334,7 +352,17 @@ export default ({demographics, summary}) => {
                     taking the number of available beds and discounting for that
                     hospital system's typical occupancy rate.
                   </div>
-                  <img src={`/svg/state/${state}/${scenario}/Hospitals.svg`} />
+                  <OccupancyGraph
+                    scenario={scenario}
+                    data={data}
+                    x={getDate}
+                    y={getProjectedCurrentlyHospitalized}
+                    cutoff={hospitalCapacity}
+                    xLabel="Hospital occupancy"
+                    width="500"
+                    height="300"
+                  />
+                  {/* <img src={`/svg/state/${state}/${scenario}/Hospitals.svg`} /> */}
                 </div>
               </div>
               <div className="w-full md:w-1/2 md:mr-10">
@@ -346,7 +374,17 @@ export default ({demographics, summary}) => {
                     like Italy where the fatlity rate is substantially higher
                     even controlling for the age distriubtion.
                   </div>
-                  <img src={`/svg/state/${state}/${scenario}/ICU.svg`} />
+                  <OccupancyGraph
+                    scenario={scenario}
+                    data={data}
+                    x={getDate}
+                    y={getProjectedCurrentlyCritical}
+                    cutoff={data.icuBeds}
+                    xLabel="ICU occupancy"
+                    width="500"
+                    height="300"
+                  />
+                  {/* <img src={`/svg/state/${state}/${scenario}/ICU.svg`} /> */}
                 </div>
               </div>
             </div>
@@ -452,19 +490,11 @@ export default ({demographics, summary}) => {
 };
 
 export const getStaticProps = ({params: {state}}) => {
-  const rawdata = fs.readFileSync(
-    path.join(process.cwd(), 'public/json/state/demographics.json')
-  );
-  const rawsummarydata = fs.readFileSync(
-    path.join(process.cwd(), `public/json/state/${state}/summary.json`)
-  );
-  const demographics = JSON.parse(rawdata);
-  const summary = JSON.parse(rawsummarydata);
+  const data = getStateData(state);
 
   return {
     props: {
-      demographics: demographics[state],
-      summary,
+      data,
     },
   };
 };

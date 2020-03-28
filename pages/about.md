@@ -1,5 +1,4 @@
-import Layout from '../components/Layout';
-import MDXComponents from '../components/MDXComponents';
+import {Layout, MDXComponents} from '../components';
 
 <Layout>
 <MDXComponents>
