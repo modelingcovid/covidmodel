@@ -1,22 +1,15 @@
 import * as React from 'react';
-import {motion} from 'framer-motion';
 import {Group} from '@vx/group';
 import {curveBasis} from '@vx/curve';
 import {LinearGradient} from '@vx/gradient';
 import {Marker} from '@vx/marker';
-import {LinePath} from '@vx/shape';
+import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleLinear} from '@vx/scale';
 import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {useComponentId} from '../lib/useComponentId';
-
-const spring = {
-  type: 'spring',
-  damping: 28,
-  stiffness: 300,
-};
 
 const parseDate = timeParse('%Y%m%d');
 
@@ -163,7 +156,6 @@ export const OccupancyGraph = ({
           /> */}
           <LinePath
             data={scenarioData}
-            curve={curveBasis}
             x={(d) => xScale(x(d))}
             y={(d) => yScale(cutoff)}
             stroke="#ed6804"
@@ -171,24 +163,12 @@ export const OccupancyGraph = ({
             strokeDasharray="2,1"
           />
           <LinePath
-            curve={curveBasis}
+            data={scenarioData}
             x={(d) => xScale(x(d))}
             y={(d) => yScale(y(d))}
-          >
-            {({path}) => {
-              const d = path(scenarioData) || '';
-              return (
-                <motion.path
-                  initial={{d}}
-                  animate={{d}}
-                  transition={spring}
-                  stroke={`url(#${gradientId})`}
-                  strokeWidth={1.5}
-                  fill="transparent"
-                />
-              );
-            }}
-          </LinePath>
+            stroke={`url(#${gradientId})`}
+            strokeWidth={1.5}
+          />
           <Marker
             from={{x: xScale(today), y: 0}}
             to={{x: xScale(today), y: yMax}}
