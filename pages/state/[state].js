@@ -385,6 +385,7 @@ export default ({data, states}) => {
                     y={getProjectedCurrentlyHospitalized}
                     cutoff={hospitalCapacity}
                     xLabel="Hospital occupancy"
+                    cutoffLabel="Hospital capacity"
                     width="500"
                     height="300"
                   />
@@ -406,6 +407,7 @@ export default ({data, states}) => {
                     y={getProjectedCurrentlyCritical}
                     cutoff={data.icuBeds}
                     xLabel="ICU occupancy"
+                    cutoffLabel="ICU capacity"
                     width="500"
                     height="300"
                   />

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
 import {curveBasis} from '@vx/curve';
-import {LinearGradient} from '@vx/gradient';
 import {Marker} from '@vx/marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
@@ -11,7 +10,9 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
-import {useComponentId} from '../lib/useComponentId';
+import {LinearGradient} from './LinearGradient';
+import {Stop} from './Stop';
+import {WithComponentId} from './useComponentId';
 
 const parseDate = timeParse('%Y%m%d');
 
@@ -36,11 +37,13 @@ const {useMemo} = React;
 const identity = (n) => n;
 
 export const OccupancyGraph = ({
+  children,
   data,
   scenario,
   x = identity,
   y = identity,
   cutoff = 0,
+  cutoffLabel = '',
   xLabel = '',
   width = 600,
   height = 400,
@@ -83,8 +86,6 @@ export const OccupancyGraph = ({
 
   const offset = (yMax - yScale(cutoff)) / yMax;
 
-  const gradientId = useComponentId('thresholdGradient');
-
   return (
     <GraphDataProvider
       data={scenarioData}
@@ -96,27 +97,6 @@ export const OccupancyGraph = ({
     >
       <div>
         <svg width={width} height={height}>
-          <LinearGradient
-            id={gradientId}
-            x1="0"
-            x2="0"
-            y1={yMax}
-            y2="0"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset={0} stopColor="#222" />
-            <stop offset={offset} stopColor="#222" />
-            <stop offset={offset} stopColor="#f00" />
-            <stop offset={1} stopColor="#f00" />
-          </LinearGradient>
-          {/* <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fill="#f3f3f3"
-          rx={14}
-        /> */}
           <Group left={margin.left} top={margin.top}>
             <GridRows
               scale={yScale}
@@ -143,37 +123,46 @@ export const OccupancyGraph = ({
               numTicks={5}
               tickLabelProps={valueTickLabelProps}
             />
-            {/* <Threshold
-            data={data}
-            x={(d) => xScale(x(d))}
-            y0={(d) => yScale(ny(d))}
-            y1={(d) => yScale(cutoff)}
-            clipAboveTo={0}
-            clipBelowTo={yMax}
-            curve={curveBasis}
-            belowAreaProps={{
-              fill: 'transparent',
-            }}
-            aboveAreaProps={{
-              fill: 'rgba(255, 0, 0, 0.2)',
-            }}
-          /> */}
-            <LinePath
+
+            {/* <LinePath
               data={scenarioData}
               x={(d) => xScale(x(d))}
               y={(d) => yScale(cutoff)}
               stroke="#ed6804"
               strokeWidth={1.5}
               strokeDasharray="2,1"
-            />
-            <LinePath
-              data={scenarioData}
-              x={(d) => xScale(x(d))}
-              y={(d) => yScale(y(d))}
-              stroke={`url(#${gradientId})`}
-              strokeWidth={1.5}
-            />
+            /> */}
             <TodayMarker />
+            <Marker
+              from={{x: 0, y: yScale(cutoff)}}
+              to={{x: xMax, y: yScale(cutoff)}}
+              stroke="#ed6804"
+              label={cutoffLabel}
+              labelStroke="#fff"
+              labelStrokeWidth="5"
+              strokeDasharray="2,1"
+              strokeWidth={1.5}
+              labelDx={20}
+              labelDy={-6}
+            />
+            {children}
+            <WithComponentId prefix="linearGradient">
+              {(gradientId) => (
+                <>
+                  <LinearGradient id={gradientId} from="#222" to="#f00">
+                    <Stop offset={cutoff} stopColor="#222" />
+                    <Stop offset={cutoff} stopColor="#f00" />
+                  </LinearGradient>
+                  <LinePath
+                    data={scenarioData}
+                    x={(d) => xScale(x(d))}
+                    y={(d) => yScale(y(d))}
+                    stroke={`url(#${gradientId})`}
+                    strokeWidth={1.5}
+                  />
+                </>
+              )}
+            </WithComponentId>
             <text
               x="0"
               y="15"

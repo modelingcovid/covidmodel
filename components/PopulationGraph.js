@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
 import {curveBasis} from '@vx/curve';
-import {LinearGradient} from '@vx/gradient';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleSymlog} from '@vx/scale';

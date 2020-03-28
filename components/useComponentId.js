@@ -28,3 +28,6 @@ export const useComponentId = (prefix) => {
   }, [context]);
   return `${prefix}${id}`;
 };
+
+export const WithComponentId = ({children, prefix}) =>
+  children(useComponentId(prefix));

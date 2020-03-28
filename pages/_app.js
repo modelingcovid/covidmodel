@@ -1,5 +1,5 @@
 import '../styles/main.css';
-import {ComponentIdProvider} from '../lib/useComponentId';
+import {ComponentIdProvider} from '../components/useComponentId';
 
 export default function MyApp({Component, pageProps}) {
   return (
