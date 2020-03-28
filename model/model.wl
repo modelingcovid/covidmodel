@@ -330,7 +330,6 @@ evaluateScenario[state_, scenario_]:=Module[{distance,t},
 ];
 
 scenarios={"scenario1","scenario2","scenario3","scenario4"};
-distancingStates={"CA","CO","CT","FL","GA","IL","IN","LA","MI","NJ","NY","OH","OR","PA","SC","TX","VT","WA","WI"};
 
 (* evaluate state for all scenarios *)
 evaluateState[state_]:=Merge[
