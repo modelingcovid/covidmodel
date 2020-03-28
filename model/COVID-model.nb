@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    182675,       4132]
-NotebookOptionsPosition[    181140,       4102]
-NotebookOutlinePosition[    181577,       4119]
-CellTagsIndexPosition[    181534,       4116]
+NotebookDataLength[    182731,       4133]
+NotebookOptionsPosition[    181196,       4103]
+NotebookOutlinePosition[    181633,       4120]
+CellTagsIndexPosition[    181590,       4117]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -63,7 +63,7 @@ Cell[BoxData[
       RowBox[{"icuCapacity", "=", 
        RowBox[{"2", "*", 
         RowBox[{
-         RowBox[{"params", "[", "\"\<ventalators\>\"", "]"}], "/", 
+         RowBox[{"params", "[", "\"\<ventilators\>\"", "]"}], "/", 
          RowBox[{"params", "[", "\"\<Population\>\"", "]"}]}]}]}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
       RowBox[{
@@ -315,7 +315,7 @@ Cell[BoxData[
               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
               RowBox[{"CCq", "[", "t", "]"}]}], "/.", "sol"}], "]"}], ",", 
            RowBox[{"2", "*", 
-            RowBox[{"params", "[", "\"\<ventalators\>\"", "]"}]}]}], "}"}], 
+            RowBox[{"params", "[", "\"\<ventilators\>\"", "]"}]}]}], "}"}], 
          ",", "\[IndentingNewLine]", 
          RowBox[{"{", 
           RowBox[{"t", ",", "40", ",", "300"}], "}"}], ",", 
@@ -359,7 +359,7 @@ Cell[BoxData[
            RowBox[{"{", 
             RowBox[{
             "\"\<Critical Care Needed\>\"", ",", 
-             "\"\<ICU capacity (ventalator constrained)\>\""}], "}"}], 
+             "\"\<ICU capacity (ventilator constrained)\>\""}], "}"}], 
            "]"}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"ageDependencyPlot", "=", 
        RowBox[{"Plot", "[", 
@@ -597,8 +597,8 @@ Cell[BoxData[
                     RowBox[{
                     RowBox[{"#", "[", "\"\<importtime0\>\"", "]"}], "-", 
                     "1"}]}], "]"}], "]"}]}], ",", 
-                    RowBox[{"\"\<Ventalators\>\"", "\[Rule]", 
-                    RowBox[{"#", "[", "\"\<ventalators\>\"", "]"}]}], ",", 
+                    RowBox[{"\"\<Ventilators\>\"", "\[Rule]", 
+                    RowBox[{"#", "[", "\"\<ventilators\>\"", "]"}]}], ",", 
                     RowBox[{"\"\<Probability No Care Needed\>\"", "\[Rule]", 
                     RowBox[{"PercentForm", "[", 
                     RowBox[{"#", "[", "\"\<pS\>\"", "]"}], "]"}]}], ",", 
@@ -879,9 +879,10 @@ Cell[BoxData[
    3.794303328024796*^9}, {3.794303363581959*^9, 3.794303402481442*^9}, {
    3.794322022202524*^9, 3.794322040960223*^9}, {3.794322578895487*^9, 
    3.7943225802085876`*^9}, {3.794322804947178*^9, 3.79432281055826*^9}, 
-   3.794358719965518*^9, 3.794358937318491*^9, 3.7943592832883263`*^9},
- CellLabel->
-  "In[158]:=",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
+   3.794358719965518*^9, 3.794358937318491*^9, 3.7943592832883263`*^9, {
+   3.7944135950854807`*^9, 
+   3.794413603581959*^9}},ExpressionUUID->"8f417bc9-a111-4e5e-9647-\
+a9ceb8851b0e"],
 
 Cell[BoxData[
  TagBox[
@@ -1216,7 +1217,7 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
          1}, {{$CellContext`pPCRH$$, 0.114}, 0, 
          1}, {{$CellContext`daysTogoToCriticalCare$$, 6}, 0, 10}}, 
       "Options" :> {}, "DefaultOptions" :> {}],
-     ImageSizeCache->{1862., {576., 581.}},
+     ImageSizeCache->{1909., {576., 581.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -2144,8 +2145,8 @@ Cell[BoxData[
                     "1"}]}], "]"}], "]"}]}], ",", 
                     RowBox[{"\"\<R0\>\"", "\[Rule]", 
                     RowBox[{"#", "[", "\"\<R0\>\"", "]"}]}], ",", 
-                    RowBox[{"\"\<Ventalators\>\"", "\[Rule]", 
-                    RowBox[{"#", "[", "\"\<ventalators\>\"", "]"}]}], ",", 
+                    RowBox[{"\"\<Ventilators\>\"", "\[Rule]", 
+                    RowBox[{"#", "[", "\"\<ventilators\>\"", "]"}]}], ",", 
                     RowBox[{"\"\<Probability No Care Needed\>\"", "\[Rule]", 
                     RowBox[{"PercentForm", "[", 
                     RowBox[{"#", "[", "\"\<pS\>\"", "]"}], "]"}]}], ",", 
@@ -2419,9 +2420,9 @@ Cell[BoxData[
    3.794322033193795*^9, {3.794323402376556*^9, 3.794323403355411*^9}, {
    3.794345687138048*^9, 3.794345714008473*^9}, {3.7943553048176327`*^9, 
    3.794355306131392*^9}, {3.794359339172401*^9, 3.794359348019218*^9}, 
-   3.7943593783195868`*^9},
- CellLabel->
-  "In[609]:=",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
+   3.7943593783195868`*^9, {3.794413605581169*^9, 
+   3.7944136075983267`*^9}},ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-\
+36ff5cc43dd1"],
 
 Cell[BoxData[
  TagBox[
@@ -4121,19 +4122,19 @@ Notebook[{
 Cell[558, 20, 725, 14, 52, "Input",ExpressionUUID->"f8e87a96-6358-4f9d-91e3-8046d84b9916"],
 Cell[1286, 36, 216, 5, 35, "Text",ExpressionUUID->"3e98a561-e844-4b52-aa98-e9dec381af4c"],
 Cell[CellGroupData[{
-Cell[1527, 45, 37293, 838, 2845, "Input",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
-Cell[38823, 885, 18207, 361, 1176, "Output",ExpressionUUID->"bbe4c50a-55e7-40f2-9729-fdfe4600ab4c"]
+Cell[1527, 45, 37323, 839, 2845, "Input",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
+Cell[38853, 886, 18207, 361, 1176, "Output",ExpressionUUID->"bbe4c50a-55e7-40f2-9729-fdfe4600ab4c"]
 }, Open  ]],
-Cell[57045, 1249, 633, 10, 58, "Text",ExpressionUUID->"25c53830-e113-4e30-9cf4-0ae795214ea4"],
+Cell[57075, 1250, 633, 10, 58, "Text",ExpressionUUID->"25c53830-e113-4e30-9cf4-0ae795214ea4"],
 Cell[CellGroupData[{
-Cell[57703, 1263, 53153, 1160, 3076, "Input",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
-Cell[110859, 2425, 19560, 415, 1353, "Output",ExpressionUUID->"cc2390de-c3a2-4be5-93ea-d7e08dc3b2a3"]
+Cell[57733, 1264, 53179, 1160, 3055, "Input",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
+Cell[110915, 2426, 19560, 415, 1353, "Output",ExpressionUUID->"cc2390de-c3a2-4be5-93ea-d7e08dc3b2a3"]
 }, Open  ]],
-Cell[130434, 2843, 344, 7, 30, "Input",ExpressionUUID->"b407d622-bd82-458b-93ee-67d968657022"],
-Cell[130781, 2852, 39659, 928, 2614, "Input",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
-Cell[170443, 3782, 156, 3, 30, "Input",ExpressionUUID->"2056ff86-2202-4cd3-a8b0-6bd4e0617dc5"],
-Cell[170602, 3787, 10379, 308, 514, "Input",ExpressionUUID->"22241097-c883-4ac0-891f-c8c582b7285f"],
-Cell[180984, 4097, 152, 3, 30, "Input",ExpressionUUID->"535dd15e-0b43-4066-9543-69e659ca82ab"]
+Cell[130490, 2844, 344, 7, 30, "Input",ExpressionUUID->"b407d622-bd82-458b-93ee-67d968657022"],
+Cell[130837, 2853, 39659, 928, 2614, "Input",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
+Cell[170499, 3783, 156, 3, 30, "Input",ExpressionUUID->"2056ff86-2202-4cd3-a8b0-6bd4e0617dc5"],
+Cell[170658, 3788, 10379, 308, 514, "Input",ExpressionUUID->"22241097-c883-4ac0-891f-c8c582b7285f"],
+Cell[181040, 4098, 152, 3, 30, "Input",ExpressionUUID->"535dd15e-0b43-4066-9543-69e659ca82ab"]
 }
 ]
 *)

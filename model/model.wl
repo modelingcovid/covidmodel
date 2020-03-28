@@ -188,7 +188,7 @@ cachedAgeDistributionFor[place_] := Module[{placeData},
 	placeData = Import[dataFile["age-distributions.json"]];
 	Association[Association[placeData][place]]];
 
-countryVentalators = Association[{"United States"->61929,"France"->5000,"Italy"->3000,"Spain"->2000}];
+countryVentilators = Association[{"United States"->61929,"France"->5000,"Italy"->3000,"Spain"->2000}];
 
 countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
 
@@ -202,7 +202,7 @@ countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalD
 (*return a map of per state params to values *)
 <|"Population"->pop,
 "importtime0"->countryImportTime[country],
-"ventalators"->countryVentalators[country],
+"ventilators"->countryVentilators[country],
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
@@ -241,7 +241,7 @@ buckets = raw["Buckets"];
 (*return a map of per state params to values *)
 <|"Population"->pop,
 "importtime0"->If[!KeyExistsQ[stateImportTime, state],Min[#["day"]&/@Select[parsedData,(#["state"]==state&&#["positive"]>=50)&]] - 20,stateImportTime[state]], (* importtime 20 days before 50 PCR confirmed reached *)
-"ventalators"->ventalators[state],
+"ventilators"->ventilators[state],
 "icuBeds"->stateICUData[state]["icuBeds"],
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
