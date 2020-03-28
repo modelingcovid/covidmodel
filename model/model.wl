@@ -24,6 +24,9 @@ daysFromCriticalToRecoveredOrDeceased0 = 6;
 pPCRH0 = 0.114;
 pPCRNH0 = 0.08;
 
+(* How out of date are reports of hospitalizations? *)
+daysForHospitalsToReportCases0 = 2;
+
 daysToGetTestedIfNotHospitalized0 = 5.5;
 daysToGetTestedIfHospitalized0 = 1.5;
  
@@ -115,8 +118,8 @@ Eq'[t] ==( distancing[t]* (* Exposed *)
 Iq[t]==ISq[t] + IHq[t] + ICq[t] (* Infectious total, not yet PCR confirmed, age indep *),
 ISq'[t] == pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected without needing care *)
 RSq'[t] == ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Recovered without needing care *)
-IHq'[t] ==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected and will need hospital, won't need critical care *)
-HHq'[t]== IHq[t]/daysUntilNotInfectiousOrHospitalized - HHq[t]/daysToLeaveHosptialNonCritical, (* Going to hospital *) 
+IHq'[t] ==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/(daysUntilNotInfectiousOrHospitalized * daysForHospitalsToReportCases0), (* Infected and will need hospital, won't need critical care *)
+HHq'[t]== IHq[t]/(daysUntilNotInfectiousOrHospitalized * daysForHospitalsToReportCases0) - HHq[t]/daysToLeaveHosptialNonCritical, (* Going to hospital *) 
 EHq'[t] == IHq[t]/daysUntilNotInfectiousOrHospitalized,
 RHq'[t] == HHq[t]/daysToLeaveHosptialNonCritical, (* Recovered after hospitalization *)
 PCR'[t] == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized0, (* pcr confirmation *)

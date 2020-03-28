@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    182731,       4133]
-NotebookOptionsPosition[    181196,       4103]
-NotebookOutlinePosition[    181633,       4120]
-CellTagsIndexPosition[    181590,       4117]
+NotebookDataLength[    221343,       4908]
+NotebookOptionsPosition[    214255,       4821]
+NotebookOutlinePosition[    214690,       4838]
+CellTagsIndexPosition[    214647,       4835]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -880,9 +880,8 @@ Cell[BoxData[
    3.794322022202524*^9, 3.794322040960223*^9}, {3.794322578895487*^9, 
    3.7943225802085876`*^9}, {3.794322804947178*^9, 3.79432281055826*^9}, 
    3.794358719965518*^9, 3.794358937318491*^9, 3.7943592832883263`*^9, {
-   3.7944135950854807`*^9, 
-   3.794413603581959*^9}},ExpressionUUID->"8f417bc9-a111-4e5e-9647-\
-a9ceb8851b0e"],
+   3.7944135950854807`*^9, 3.794413603581959*^9}},
+ CellLabel->"In[67]:=",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
 
 Cell[BoxData[
  TagBox[
@@ -921,7 +920,7 @@ Cell[BoxData[
        Hold[$CellContext`pPCRNH$$], 0.08}, 0, 1}, {{
        Hold[$CellContext`pPCRH$$], 0.114}, 0, 1}, {{
        Hold[$CellContext`daysTogoToCriticalCare$$], 6}, 0, 10}}, 
-    Typeset`size$$ = {1417., {545.134033203125, 550.865966796875}}, 
+    Typeset`size$$ = {1446., {526.634033203125, 532.365966796875}}, 
     Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
     
     DynamicBox[Manipulate`ManipulateBoxes[
@@ -951,7 +950,7 @@ $CellContext`pH$$, $CellContext`medianHospitalizationAge$$, \
 $CellContext`ageCriticalDependence$$, \
 $CellContext`ageHospitalizedDependence$$]; $CellContext`thisCountryData = \
 $CellContext`countryData[$CellContext`country$$]; $CellContext`icuCapacity = 
-         2 ($CellContext`params["ventalators"]/$CellContext`params[
+         2 ($CellContext`params["ventilators"]/$CellContext`params[
            "Population"]); $CellContext`distance$[
            Pattern[$CellContext`t$, 
             Blank[]]] := Piecewise[
@@ -1038,7 +1037,7 @@ $CellContext`sol]],
              
              ReplaceAll[$CellContext`params[
                "Population"] $CellContext`CCq[$CellContext`t$], \
-$CellContext`sol]], 2 $CellContext`params["ventalators"]}, {$CellContext`t$, 
+$CellContext`sol]], 2 $CellContext`params["ventilators"]}, {$CellContext`t$, 
             40, 300}, PlotRange -> {1, $CellContext`params["Population"]/500},
             Frame -> {True, True, False, False}, 
            FrameTicks -> {{Automatic, None}, {$CellContext`dateticks, None}}, 
@@ -1047,7 +1046,7 @@ $CellContext`sol]], 2 $CellContext`params["ventalators"]}, {$CellContext`t$,
            Filling -> {2 -> {{1}, {LightRed, White}}}, PlotLegends -> 
            SwatchLegend[{
              "Critical Care Needed", 
-              "ICU capacity (ventalator constrained)"}]]; \
+              "ICU capacity (ventilator constrained)"}]]; \
 $CellContext`ageDependencyPlot = Plot[{
             $CellContext`infectedCritical[$CellContext`a, \
 $CellContext`medianHospitalizationAge$$, $CellContext`pC$$, \
@@ -1139,7 +1138,7 @@ PCR[$CellContext`t$], $CellContext`sol], {$CellContext`t$ -> 1000}]]],
                 (Association[
                 "Population" -> #["Population"], "Import Time" -> DateString[
                    DatePlus[{2020, 1, 1}, #["importtime0"] - 1]], 
-                 "Ventalators" -> #["ventalators"], 
+                 "Ventilators" -> #["ventilators"], 
                  "Probability No Care Needed" -> PercentForm[
                    #["pS"]], "Probability ICU" -> PercentForm[
                    #["pC"]], "Probability Hospitalized (not ICU)" -> 
@@ -1217,7 +1216,7 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
          1}, {{$CellContext`pPCRH$$, 0.114}, 0, 
          1}, {{$CellContext`daysTogoToCriticalCare$$, 6}, 0, 10}}, 
       "Options" :> {}, "DefaultOptions" :> {}],
-     ImageSizeCache->{1909., {576., 581.}},
+     ImageSizeCache->{1864., {599., 605.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -1243,9 +1242,720 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
    3.7943447664820957`*^9, 3.794358623812118*^9, {3.79435892808224*^9, 
    3.794358938068993*^9}, {3.794359255393566*^9, 3.794359288136552*^9}, 
    3.7943626041103277`*^9, 3.794363231546013*^9, 3.79436326436376*^9, 
-   3.794363316722806*^9, 3.794363486060231*^9, 3.79436364922556*^9},
- CellLabel->
-  "Out[158]=",ExpressionUUID->"bbe4c50a-55e7-40f2-9729-fdfe4600ab4c"]
+   3.794363316722806*^9, 3.794363486060231*^9, 3.79436364922556*^9, 
+   3.794413643459634*^9},
+ CellLabel->"Out[67]=",ExpressionUUID->"53db25d9-e11d-42d7-b6ae-a21e0acfd834"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Set", "shape", 
+   "\"Lists \\!\\(\\*RowBox[{\\\"{\\\", RowBox[{\\\"sol\\\", \\\",\\\", \
+\\\"evts\\\"}], \\\"}\\\"}]\\) and \\!\\(\\*RowBox[{\\\"\[LeftSkeleton]\\\", \
+\\\"1\\\", \\\"\[RightSkeleton]\\\"}]\\) are not the same shape.\"", 2, 1, 1, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142272121973`*^9},
+ CellLabel->"",ExpressionUUID->"92f40cfd-05a8-4b66-b3d1-824239588f26"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Flatten", "normal", 
+   "\"Nonatomic expression expected at position \
+\\!\\(\\*RowBox[{\\\"1\\\"}]\\) in \\!\\(\\*RowBox[{\\\"Flatten\\\", \
+\\\"[\\\", \\\"evts\\\", \\\"]\\\"}]\\).\"", 2, 1, 2, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.79441422724209*^9},
+ CellLabel->"",ExpressionUUID->"8cd6c201-542a-469d-87a1-2cd66142c517"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \
+\\\"0.0061285714285714285`\\\"}], \\\"]\\\"}]\\) of Piecewise is not a list \
+of pairs.\"", 2, 1, 3, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142273499947`*^9},
+ CellLabel->"",ExpressionUUID->"06c5ed99-cf49-4ad4-a6fb-bdbe833e2e41"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"6.128577551020408`\\\"}], \
+\\\"]\\\"}]\\) of Piecewise is not a list of pairs.\"", 2, 1, 4, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227381112*^9},
+ CellLabel->"",ExpressionUUID->"037162fe-8e4c-4427-9ed8-b5652f7689ac"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"12.251026530612243`\\\"}], \
+\\\"]\\\"}]\\) of Piecewise is not a list of pairs.\"", 2, 1, 5, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227416251*^9},
+ CellLabel->"",ExpressionUUID->"102020f4-88ca-4349-bcde-91b2f8c654e8"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Piecewise\\\", \\\"::\\\
+\", \\\"pairs\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 1, 6, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227449403*^9},
+ CellLabel->"",ExpressionUUID->"3d9a5e5d-173e-4292-879e-22b0d075b200"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 1, 7, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227482462*^9},
+ CellLabel->"",ExpressionUUID->"1ab19233-b905-4f14-b14a-7f9c319aa303"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "LogPlot", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{\\\"0.1`\\\", \\\" \\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \
+\\\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 1, 8, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227515456*^9},
+ CellLabel->"",ExpressionUUID->"3fd7a47d-7415-4cc9-a625-405c3f6bff23"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 1, 9, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227561235*^9},
+ CellLabel->"",ExpressionUUID->"744ba1d4-8166-4024-a8f8-531944a2da13"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 1, 10, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142276003857`*^9},
+ CellLabel->"",ExpressionUUID->"17b10760-e111-4745-bf1f-d00f5354e634"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"ReplaceAll\\\", \
+\\\"::\\\", \\\"reps\\\"}], \\\"MessageName\\\"]\\) will be suppressed during \
+this calculation.\"", 2, 1, 11, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142276409893`*^9},
+ CellLabel->"",ExpressionUUID->"cabacd40-e61b-4506-a18e-ef791ffa3802"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "LogPlot", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{\\\"3\\\", \\\" \\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \
+\\\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 1, 12, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414227689411*^9},
+ CellLabel->"",ExpressionUUID->"06be9b29-4881-4f79-8379-70707f436fe9"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{FractionBox[\\\"1\\\", \\\"500\\\"], \\\
+\" \\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\
+\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\
+\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \\\
+\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \\\
+\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 1, 13, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142283641567`*^9},
+ CellLabel->"",ExpressionUUID->"fa9b5945-f148-46e2-b931-fbcb3c7a2b35"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 1, 14, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414228468346*^9},
+ CellLabel->"",ExpressionUUID->"acff8ebd-2f08-4cab-9953-30a8fbecaffd"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 1, 15, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414228496901*^9},
+ CellLabel->"",ExpressionUUID->"974352c2-3b48-47d7-8eb4-fe7b7b26e5eb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 1, 16, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142285039577`*^9},
+ CellLabel->"",ExpressionUUID->"ec033c54-ce4f-43d3-83ad-268ee43d39eb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"KeyExistsQ\\\", \
+\\\"::\\\", \\\"invrl\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 1, 17, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414228538438*^9},
+ CellLabel->"",ExpressionUUID->"56084782-60a7-4bb8-948b-c78a19792a8d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "DatePlus", "inc", 
+   "\"\\!\\(\\*RowBox[{RowBox[{\\\"-\\\", \\\"1\\\"}], \\\"+\\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"importtime0\\\\\\\"\\\", \\\"]\\\"}]}]\\) \
+is not a recognized calendar increment specification for \
+\\!\\(\\*RowBox[{\\\"DatePlus\\\"}]\\).\"", 2, 1, 18, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414228571835*^9},
+ CellLabel->"",ExpressionUUID->"8cd59885-8f4d-462f-87a8-22620810bbe8"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "DateString", "arg", 
+   "\"Argument \\!\\(\\*RowBox[{\\\"DatePlus\\\", \\\"[\\\", RowBox[{RowBox[{\
+\\\"{\\\", RowBox[{\\\"2020\\\", \\\",\\\", \\\"1\\\", \\\",\\\", \
+\\\"1\\\"}], \\\"}\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"-\\\", \\\"1\\\"}], \
+\\\"+\\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\
+\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \
+\\\"0.175`\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\
+\\\"}], \\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"importtime0\\\\\\\"\\\", \
+\\\"]\\\"}]}]}], \\\"]\\\"}]\\) cannot be interpreted as a date or time input \
+or as a date string format.\"", 2, 1, 19, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414228576885*^9},
+ CellLabel->"",ExpressionUUID->"b2c9ce0f-c690-4a2b-9b56-17f493bd38c6"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Set", "shape", 
+   "\"Lists \\!\\(\\*RowBox[{\\\"{\\\", RowBox[{\\\"sol\\\", \\\",\\\", \
+\\\"evts\\\"}], \\\"}\\\"}]\\) and \\!\\(\\*RowBox[{\\\"\[LeftSkeleton]\\\", \
+\\\"1\\\", \\\"\[RightSkeleton]\\\"}]\\) are not the same shape.\"", 2, 1, 20,
+    29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243036611*^9},
+ CellLabel->"",ExpressionUUID->"a1dd6655-a316-43ee-82a3-18a336d4c62e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Flatten", "normal", 
+   "\"Nonatomic expression expected at position \
+\\!\\(\\*RowBox[{\\\"1\\\"}]\\) in \\!\\(\\*RowBox[{\\\"Flatten\\\", \
+\\\"[\\\", \\\"evts\\\", \\\"]\\\"}]\\).\"", 2, 1, 21, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142433242617`*^9},
+ CellLabel->"",ExpressionUUID->"9603bb00-378c-4d87-9038-fde60c73b746"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \
+\\\"0.0061285714285714285`\\\"}], \\\"]\\\"}]\\) of Piecewise is not a list \
+of pairs.\"", 2, 1, 22, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243391711*^9},
+ CellLabel->"",ExpressionUUID->"53b77298-863d-46bc-930f-5fe7e332a3d6"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"6.128577551020408`\\\"}], \
+\\\"]\\\"}]\\) of Piecewise is not a list of pairs.\"", 2, 1, 23, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243433675*^9},
+ CellLabel->"",ExpressionUUID->"e1b98165-98a5-4421-8d59-32dcca9182bd"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"12.251026530612243`\\\"}], \
+\\\"]\\\"}]\\) of Piecewise is not a list of pairs.\"", 2, 1, 24, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142434740667`*^9},
+ CellLabel->"",ExpressionUUID->"ad8bd64a-5078-46ab-831f-fd077a41c5eb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Piecewise\\\", \\\"::\\\
+\", \\\"pairs\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 1, 25, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142435087967`*^9},
+ CellLabel->"",ExpressionUUID->"db161c6e-e7b6-488f-936c-7a1d56d0bc09"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 1, 26, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243561097*^9},
+ CellLabel->"",ExpressionUUID->"803c09e5-d721-49d9-b9f7-9c55e38751a3"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "LogPlot", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{\\\"0.1`\\\", \\\" \\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \
+\\\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 1, 27, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243593957*^9},
+ CellLabel->"",ExpressionUUID->"291efe71-ce65-4265-864c-bbe7b91b09ec"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 1, 28, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142436439962`*^9},
+ CellLabel->"",ExpressionUUID->"6a6f7a31-5bd1-4e30-bf00-63b2eaecba1c"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 1, 29, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142436829777`*^9},
+ CellLabel->"",ExpressionUUID->"c04b3d58-23be-405e-9af4-138ea5322357"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"ReplaceAll\\\", \
+\\\"::\\\", \\\"reps\\\"}], \\\"MessageName\\\"]\\) will be suppressed during \
+this calculation.\"", 2, 1, 30, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142437234907`*^9},
+ CellLabel->"",ExpressionUUID->"607373c6-c596-4130-a02e-e9e5e05dcb7b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "LogPlot", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{\\\"3\\\", \\\" \\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \
+\\\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 1, 31, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.79441424377698*^9},
+ CellLabel->"",ExpressionUUID->"39498b54-fb03-4224-8533-e5a770960e63"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{FractionBox[\\\"1\\\", \\\"500\\\"], \\\
+\" \\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\
+\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\
+\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \\\
+\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \\\
+\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 1, 32, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243849163*^9},
+ CellLabel->"",ExpressionUUID->"a761fb4d-5dc4-4c07-aaab-0c304bd4ce4e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 1, 33, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142439228163`*^9},
+ CellLabel->"",ExpressionUUID->"034f422b-4010-467d-b941-38cb45e02507"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 1, 34, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243948391*^9},
+ CellLabel->"",ExpressionUUID->"9f9ac6be-b228-4b58-8f47-235e8c0e768f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 1, 35, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944142439551*^9},
+ CellLabel->"",ExpressionUUID->"df7de0a1-5abe-44de-8707-26302308c456"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"KeyExistsQ\\\", \
+\\\"::\\\", \\\"invrl\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 1, 36, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243993813*^9},
+ CellLabel->"",ExpressionUUID->"71125f75-e4eb-4b0a-85dc-82dde6f83347"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "DatePlus", "inc", 
+   "\"\\!\\(\\*RowBox[{RowBox[{\\\"-\\\", \\\"1\\\"}], \\\"+\\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"importtime0\\\\\\\"\\\", \\\"]\\\"}]}]\\) \
+is not a recognized calendar increment specification for \
+\\!\\(\\*RowBox[{\\\"DatePlus\\\"}]\\).\"", 2, 1, 37, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414243998781*^9},
+ CellLabel->"",ExpressionUUID->"fad7d850-b442-4b88-a8cc-28e29203b1c8"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "DateString", "arg", 
+   "\"Argument \\!\\(\\*RowBox[{\\\"DatePlus\\\", \\\"[\\\", RowBox[{RowBox[{\
+\\\"{\\\", RowBox[{\\\"2020\\\", \\\",\\\", \\\"1\\\", \\\",\\\", \
+\\\"1\\\"}], \\\"}\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"-\\\", \\\"1\\\"}], \
+\\\"+\\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\
+\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \
+\\\"0.175`\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\
+\\\"}], \\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"importtime0\\\\\\\"\\\", \
+\\\"]\\\"}]}]}], \\\"]\\\"}]\\) cannot be interpreted as a date or time input \
+or as a date string format.\"", 2, 1, 38, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414244030648*^9},
+ CellLabel->"",ExpressionUUID->"71499a92-e0ed-4bbf-80b8-e92df7abbf2b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Set", "shape", 
+   "\"Lists \\!\\(\\*RowBox[{\\\"{\\\", RowBox[{\\\"sol\\\", \\\",\\\", \
+\\\"evts\\\"}], \\\"}\\\"}]\\) and \\!\\(\\*RowBox[{\\\"CovidModel\\\", \\\"[\
+\\\", RowBox[{\\\"3.1`\\\", \\\",\\\", \\\"2.5`\\\", \\\",\\\", \\\"2.8`\\\", \
+\\\",\\\", \\\"2.5`\\\", \\\",\\\", \\\"8\\\", \\\",\\\", \\\"0.08`\\\", \
+\\\",\\\", \\\"0.114`\\\", \\\",\\\", \\\"6\\\", \\\",\\\", \\\"6\\\", \
+\\\",\\\", \\\"0.3`\\\", \\\",\\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\
+\"[\\\", RowBox[{\\\"\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\
+\\\", \\\",\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"6\\\", \\\"\
+\[RightSkeleton]\\\"}], \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \
+\\\",\\\", \\\"5\\\"}], \\\"]\\\"}], \\\"[\\\", \
+RowBox[{\\\"\\\\\\\"\\\\\\\"\\\", \\\"\[Ellipsis]\\\", \\\"\\\\\\\"\\\\\\\"\\\
+\"}], \\\"]\\\"}], \\\",\\\", \\\"importlength0\\\", \\\",\\\", \
+\\\"12.5`\\\", \\\",\\\", \\\"tmax\\\", \\\",\\\", \\\"0.75`\\\", \\\",\\\", \
+\\\"0.175`\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \
+\\\"containmentThresholdRatio0\\\", \\\",\\\", FractionBox[RowBox[{\\\"2\\\", \
+\\\" \\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\
+\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \
+\\\"0.175`\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\
+\\\"}], \\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"ventilators\\\\\\\"\\\", \
+\\\"]\\\"}]}], RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \
+\\\"0.175`\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\
+\\\"}], \\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \
+\\\"]\\\"}]], \\\",\\\", \\\"distance$9262\\\"}], \\\"]\\\"}]\\) are not the \
+same shape.\"", 2, 3, 133, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143085006866`*^9},
+ CellLabel->"",ExpressionUUID->"94d5585d-0a39-4346-9ae6-18d45aabbc8a"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Flatten", "normal", 
+   "\"Nonatomic expression expected at position \
+\\!\\(\\*RowBox[{\\\"1\\\"}]\\) in \\!\\(\\*RowBox[{\\\"Flatten\\\", \
+\\\"[\\\", \\\"evts\\\", \\\"]\\\"}]\\).\"", 2, 3, 134, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143085362997`*^9},
+ CellLabel->"",ExpressionUUID->"049fa558-b5d4-4521-913d-4f930829f616"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \
+\\\"0.0061285714285714285`\\\"}], \\\"]\\\"}]\\) of Piecewise is not a list \
+of pairs.\"", 2, 3, 135, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143085794888`*^9},
+ CellLabel->"",ExpressionUUID->"9aa54c19-eef0-430c-ac2f-2dceb15aff06"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"6.128577551020408`\\\"}], \
+\\\"]\\\"}]\\) of Piecewise is not a list of pairs.\"", 2, 3, 136, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414308610642*^9},
+ CellLabel->"",ExpressionUUID->"c50a68ae-7c45-453f-8f78-16b71a7131a3"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Piecewise", "pairs", 
+   "\"The first argument \
+\\!\\(\\*RowBox[{\\\"countryHistoricalDistancing\\\", \\\"[\\\", RowBox[{\\\"\
+\\\\\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"12.251026530612243`\\\"}], \
+\\\"]\\\"}]\\) of Piecewise is not a list of pairs.\"", 2, 3, 137, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414308641366*^9},
+ CellLabel->"",ExpressionUUID->"45d03322-d642-4ee8-b4ab-c26fa7982b8d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Piecewise\\\", \\\"::\\\
+\", \\\"pairs\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 3, 138, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.79441430867192*^9},
+ CellLabel->"",ExpressionUUID->"d72302c1-4d6e-4fdd-b5b4-b68b72dbdfc0"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 3, 139, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414308706902*^9},
+ CellLabel->"",ExpressionUUID->"600153b9-c03f-4603-9627-cc8ec77e9d1c"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "LogPlot", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{\\\"0.1`\\\", \\\" \\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \
+\\\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 3, 140, 29599592530089396626,
+    "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414308739443*^9},
+ CellLabel->"",ExpressionUUID->"238a2e5a-e484-4ab5-bf1d-9f12bd1eadfb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 3, 141, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143087907*^9},
+ CellLabel->"",ExpressionUUID->"18590d49-badd-469c-a35d-e7a12a938c33"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ReplaceAll", "reps", 
+   "\"\\!\\(\\*RowBox[{\\\"{\\\", \\\"sol\\\", \\\"}\\\"}]\\) is neither a \
+list of replacement rules nor a valid dispatch table, and so cannot be used \
+for replacing.\"", 2, 3, 142, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143088338118`*^9},
+ CellLabel->"",ExpressionUUID->"4342f89d-c927-451c-abbc-d6d6bf363642"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"ReplaceAll\\\", \
+\\\"::\\\", \\\"reps\\\"}], \\\"MessageName\\\"]\\) will be suppressed during \
+this calculation.\"", 2, 3, 143, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414308874731*^9},
+ CellLabel->"",ExpressionUUID->"fcc840e2-3982-483a-b9af-00bc7c6472c2"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "LogPlot", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{\\\"3\\\", \\\" \\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \
+\\\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 3, 144, 29599592530089396626,
+    "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143089537477`*^9},
+ CellLabel->"",ExpressionUUID->"16313605-16cf-404a-ac9e-3898dbe18d82"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "prng", 
+   "\"Value of option PlotRange -> \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"1\\\", \\\",\\\", RowBox[{FractionBox[\\\"1\\\", \\\"500\\\"], \\\
+\" \\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\
+\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\
+\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \\\
+\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"Population\\\\\\\"\\\", \\\"]\\\"}]}]}], \\\
+\"}\\\"}]\\) is not All, Full, Automatic, a positive machine number, or an \
+appropriate list of range specifications.\"", 2, 3, 145, 29599592530089396626,
+    "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143090247307`*^9},
+ CellLabel->"",ExpressionUUID->"76bbe679-e4ae-40cf-a1c6-6eb8cdbecc89"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 3, 146, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7944143091177187`*^9},
+ CellLabel->"",ExpressionUUID->"a1d2dbd5-e69a-410b-8a9f-2751b85147e9"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 3, 147, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414309140094*^9},
+ CellLabel->"",ExpressionUUID->"b205d91f-87a4-4fd7-b927-85dfb7e43288"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "KeyExistsQ", "invrl", 
+   "\"The argument \\!\\(\\*RowBox[{\\\"Association\\\", \\\"[\\\", \
+RowBox[{\\\"Flatten\\\", \\\"[\\\", \\\"evts\\\", \\\"]\\\"}], \\\"]\\\"}]\\) \
+is not a valid Association or a list of rules.\"", 2, 3, 148, 
+   29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414309171502*^9},
+ CellLabel->"",ExpressionUUID->"ac228ed7-23fc-4581-b5f5-5ec93fbbeaf9"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"KeyExistsQ\\\", \
+\\\"::\\\", \\\"invrl\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 3, 149, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414309175851*^9},
+ CellLabel->"",ExpressionUUID->"e0e40882-2922-4933-bb37-f37b748c04e9"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "DatePlus", "inc", 
+   "\"\\!\\(\\*RowBox[{RowBox[{\\\"-\\\", \\\"1\\\"}], \\\"+\\\", \
+RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\\\"United \
+States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \\\"0.175`\\\", \
+\\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\\\"}], \
+\\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"importtime0\\\\\\\"\\\", \\\"]\\\"}]}]\\) \
+is not a recognized calendar increment specification for \
+\\!\\(\\*RowBox[{\\\"DatePlus\\\"}]\\).\"", 2, 3, 150, 29599592530089396626, 
+   "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414309182734*^9},
+ CellLabel->"",ExpressionUUID->"ed87edbc-3010-4509-bb59-d9b9b244b787"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "DateString", "arg", 
+   "\"Argument \\!\\(\\*RowBox[{\\\"DatePlus\\\", \\\"[\\\", RowBox[{RowBox[{\
+\\\"{\\\", RowBox[{\\\"2020\\\", \\\",\\\", \\\"1\\\", \\\",\\\", \
+\\\"1\\\"}], \\\"}\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"-\\\", \\\"1\\\"}], \
+\\\"+\\\", RowBox[{RowBox[{\\\"countryParams\\\", \\\"[\\\", RowBox[{\\\"\\\\\
+\\\"United States\\\\\\\"\\\", \\\",\\\", \\\"0.075`\\\", \\\",\\\", \
+\\\"0.175`\\\", \\\",\\\", \\\"65\\\", \\\",\\\", \\\"3\\\", \\\",\\\", \\\"5\
+\\\"}], \\\"]\\\"}], \\\"[\\\", \\\"\\\\\\\"importtime0\\\\\\\"\\\", \
+\\\"]\\\"}]}]}], \\\"]\\\"}]\\) cannot be interpreted as a date or time input \
+or as a date string format.\"", 2, 3, 151, 29599592530089396626, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.794414309209916*^9},
+ CellLabel->"",ExpressionUUID->"f82d037f-a1b1-419c-8404-eeb7d78e542c"]
 }, Open  ]],
 
 Cell["\<\
@@ -1733,22 +2443,26 @@ Cell[BoxData[
          RowBox[{"{", 
           RowBox[{
            RowBox[{"Evaluate", "[", 
-            RowBox[{
+            RowBox[{"Log", "[", 
              RowBox[{
-              RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
-              RowBox[{"HHq", "[", "t", "]"}]}], "/.", "sol"}], "]"}], ",", 
-           RowBox[{
-            RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
-            "hospitalCapacity"}]}], "}"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+               RowBox[{"HHq", "[", "t", "]"}]}], "/.", "sol"}], "]"}], "]"}], 
+           ",", 
+           RowBox[{"Log", "[", 
+            RowBox[{
+             RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "*", 
+             "hospitalCapacity"}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
          RowBox[{"{", 
           RowBox[{"t", ",", "0", ",", "300"}], "}"}], ",", 
          "\[IndentingNewLine]", 
          RowBox[{"PlotRange", "\[Rule]", 
           RowBox[{"{", 
            RowBox[{"1", ",", 
-            RowBox[{
-             RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "/", 
-             "300"}]}], "}"}]}], ",", "\[IndentingNewLine]", 
+            RowBox[{"Log", "[", 
+             RowBox[{
+              RowBox[{"params", "[", "\"\<Population\>\"", "]"}], "/", 
+              "200"}], "]"}]}], "}"}]}], ",", "\[IndentingNewLine]", 
          RowBox[{"Frame", "\[Rule]", 
           RowBox[{"{", 
            RowBox[{"True", ",", "True", ",", "False", ",", "False"}], "}"}]}],
@@ -1775,7 +2489,8 @@ Cell[BoxData[
                 RowBox[{"{", 
                  RowBox[{
                   RowBox[{"#", "[", "\"\<day\>\"", "]"}], ",", 
-                  RowBox[{"#", "[", "\"\<hospitalizations\>\"", "]"}]}], 
+                  RowBox[{"Log", "@", 
+                   RowBox[{"#", "[", "\"\<hospitalizations\>\"", "]"}]}]}], 
                  "}"}], "&"}], "/@", "hospitalizationData"}], ")"}]}], ",", 
             RowBox[{"Directive", "[", 
              RowBox[{"Gray", ",", "Thick", ",", "Dashed"}], "]"}], ",", 
@@ -2420,15 +3135,18 @@ Cell[BoxData[
    3.794322033193795*^9, {3.794323402376556*^9, 3.794323403355411*^9}, {
    3.794345687138048*^9, 3.794345714008473*^9}, {3.7943553048176327`*^9, 
    3.794355306131392*^9}, {3.794359339172401*^9, 3.794359348019218*^9}, 
-   3.7943593783195868`*^9, {3.794413605581169*^9, 
-   3.7944136075983267`*^9}},ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-\
-36ff5cc43dd1"],
+   3.7943593783195868`*^9, {3.794413605581169*^9, 3.7944136075983267`*^9}, {
+   3.794414221742474*^9, 3.794414263015345*^9}, {3.794414640740082*^9, 
+   3.7944146447236223`*^9}, {3.7944146900539103`*^9, 3.794414692166054*^9}, {
+   3.794414730819577*^9, 3.794414731215135*^9}, {3.794414774250689*^9, 
+   3.794414783757638*^9}},
+ CellLabel->"In[90]:=",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
 
 Cell[BoxData[
  TagBox[
   StyleBox[
    DynamicModuleBox[{$CellContext`scenario$$ = 
-    "scenario1", $CellContext`state$$ = "CA", Typeset`show$$ = True, 
+    "scenario1", $CellContext`state$$ = "NY", Typeset`show$$ = True, 
     Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
     Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
     "\"untitled\"", Typeset`specs$$ = {{
@@ -2437,7 +3155,7 @@ Cell[BoxData[
        "OH", "OR", "PA", "SC", "TX", "VA", "VT", "WA", "WI"}}, {
       Hold[$CellContext`scenario$$], {
       "scenario1", "scenario2", "scenario3", "scenario4"}}}, 
-    Typeset`size$$ = {972., {606.134033203125, 611.865966796875}}, 
+    Typeset`size$$ = {1037., {640.134033203125, 645.865966796875}}, 
     Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
     
     DynamicBox[Manipulate`ManipulateBoxes[
@@ -2601,19 +3319,25 @@ $CellContext`sol]],
              SwatchLegend[{"Critical Care Needed", "ICU capacity"}], {{
               0.7, 1}, {0.5, 1}}]]; $CellContext`hospitalPlot = Plot[{
             Evaluate[
-             
-             ReplaceAll[$CellContext`params[
-               "Population"] $CellContext`HHq[$CellContext`t$], \
-$CellContext`sol]], $CellContext`params[
-             "Population"] $CellContext`hospitalCapacity}, {$CellContext`t$, 
-            0, 300}, PlotRange -> {1, $CellContext`params["Population"]/300}, 
+             Log[
+              
+              ReplaceAll[$CellContext`params[
+                "Population"] $CellContext`HHq[$CellContext`t$], \
+$CellContext`sol]]], 
+            
+            Log[$CellContext`params[
+              "Population"] $CellContext`hospitalCapacity]}, {$CellContext`t$,
+             0, 300}, PlotRange -> {1, 
+             Log[$CellContext`params["Population"]/200]}, 
            Frame -> {True, True, False, False}, 
            FrameTicks -> {{Automatic, None}, {$CellContext`dateticks, None}}, 
            ImageSize -> 475, PlotStyle -> Thick, Epilog -> {
              Point[
               Map[{
                 #["day"], 
-                #["hospitalizations"]}& , $CellContext`hospitalizationData]], 
+                Log[
+                 #[
+                 "hospitalizations"]]}& , $CellContext`hospitalizationData]], 
              
              Directive[Gray, Thick, Dashed], 
              
@@ -2650,7 +3374,6 @@ $CellContext`sol], {$CellContext`t$ -> Part[
 $CellContext`sol], {$CellContext`t$ -> 1000}]], "PCR Confirmed" -> If[
                  KeyExistsQ[$CellContext`events, "containment"], 
                  ReplaceAll[
-                  
                   ReplaceAll[$CellContext`params[
                     "Population"] $CellContext`PCR[$CellContext`t$], \
 $CellContext`sol], {$CellContext`t$ -> Part[
@@ -2745,7 +3468,7 @@ PCR[$CellContext`t$], $CellContext`sol], {$CellContext`t$ -> 1000}]],
                 (Association[
                 "Population" -> #["Population"], "Import Time" -> DateString[
                    DatePlus[{2020, 1, 1}, #["importtime0"] - 1]], 
-                 "R0" -> #["R0"], "Ventalators" -> #["ventalators"], 
+                 "R0" -> #["R0"], "Ventilators" -> #["ventilators"], 
                  "Probability No Care Needed" -> PercentForm[
                    #["pS"]], "Probability ICU" -> PercentForm[
                    #["pC"]], "Probability Hospitalized (not ICU)" -> 
@@ -2821,7 +3544,7 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
           "WI"}}, {$CellContext`scenario$$, {
          "scenario1", "scenario2", "scenario3", "scenario4"}}}, 
       "Options" :> {}, "DefaultOptions" :> {}],
-     ImageSizeCache->{1017., {664., 670.}},
+     ImageSizeCache->{1082., {698., 704.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -2832,14 +3555,9 @@ $CellContext`icuBelowCapacityGraphics]}]}, {
    Deployed->True,
    StripOnInput->False],
   Manipulate`InterpretManipulate[1]]], "Output",
- CellChangeTimes->{{3.7943063199371347`*^9, 3.7943063262533493`*^9}, 
-   3.7943067006297617`*^9, 3.794307174323782*^9, 3.794307446266397*^9, 
-   3.794323368328381*^9, 3.7943234046932993`*^9, 3.7943457257554703`*^9, 
-   3.794359310733281*^9, {3.7943593609729156`*^9, 3.794359379747785*^9}, 
-   3.794363274431923*^9, 3.794363660273985*^9, 3.7943637009678392`*^9, 
-   3.794363795771682*^9, 3.794367241557005*^9},
- CellLabel->
-  "Out[609]=",ExpressionUUID->"cc2390de-c3a2-4be5-93ea-d7e08dc3b2a3"]
+ CellChangeTimes->{3.794414264569791*^9, 3.79441465435385*^9, 
+  3.794414694632554*^9, 3.794414731685815*^9, 3.794414834628551*^9},
+ CellLabel->"Out[90]=",ExpressionUUID->"c55cfb9e-19c9-46b0-8b75-d21522305b5f"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -4101,8 +4819,8 @@ Cell[BoxData[""], "Input",
   3.794346158077139*^9}},ExpressionUUID->"535dd15e-0b43-4066-9543-\
 69e659ca82ab"]
 },
-WindowSize->{1516, 1285},
-WindowMargins->{{Automatic, 411}, {54, Automatic}},
+WindowSize->{1516, 1075},
+WindowMargins->{{Automatic, 26}, {Automatic, 0}},
 TaggingRules->{"TryRealOnly" -> False},
 FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 13, 2020)",
 StyleDefinitions->"Default.nb",
@@ -4122,19 +4840,76 @@ Notebook[{
 Cell[558, 20, 725, 14, 52, "Input",ExpressionUUID->"f8e87a96-6358-4f9d-91e3-8046d84b9916"],
 Cell[1286, 36, 216, 5, 35, "Text",ExpressionUUID->"3e98a561-e844-4b52-aa98-e9dec381af4c"],
 Cell[CellGroupData[{
-Cell[1527, 45, 37323, 839, 2845, "Input",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
-Cell[38853, 886, 18207, 361, 1176, "Output",ExpressionUUID->"bbe4c50a-55e7-40f2-9729-fdfe4600ab4c"]
+Cell[1527, 45, 37341, 838, 2845, "Input",ExpressionUUID->"8f417bc9-a111-4e5e-9647-a9ceb8851b0e"],
+Cell[38871, 885, 18229, 361, 1223, "Output",ExpressionUUID->"53db25d9-e11d-42d7-b6ae-a21e0acfd834"],
+Cell[57103, 1248, 470, 9, 24, "Message",ExpressionUUID->"92f40cfd-05a8-4b66-b3d1-824239588f26"],
+Cell[57576, 1259, 416, 9, 24, "Message",ExpressionUUID->"8cd6c201-542a-469d-87a1-2cd66142c517"],
+Cell[57995, 1270, 496, 10, 24, "Message",ExpressionUUID->"06c5ed99-cf49-4ad4-a6fb-bdbe833e2e41"],
+Cell[58494, 1282, 492, 10, 24, "Message",ExpressionUUID->"037162fe-8e4c-4427-9ed8-b5652f7689ac"],
+Cell[58989, 1294, 493, 10, 24, "Message",ExpressionUUID->"102020f4-88ca-4349-bcde-91b2f8c654e8"],
+Cell[59485, 1306, 419, 8, 24, "Message",ExpressionUUID->"3d9a5e5d-173e-4292-879e-22b0d075b200"],
+Cell[59907, 1316, 422, 8, 24, "Message",ExpressionUUID->"1ab19233-b905-4f14-b14a-7f9c319aa303"],
+Cell[60332, 1326, 809, 14, 24, "Message",ExpressionUUID->"3fd7a47d-7415-4cc9-a625-405c3f6bff23"],
+Cell[61144, 1342, 422, 8, 24, "Message",ExpressionUUID->"744ba1d4-8166-4024-a8f8-531944a2da13"],
+Cell[61569, 1352, 425, 8, 24, "Message",ExpressionUUID->"17b10760-e111-4745-bf1f-d00f5354e634"],
+Cell[61997, 1362, 422, 8, 24, "Message",ExpressionUUID->"cabacd40-e61b-4506-a18e-ef791ffa3802"],
+Cell[62422, 1372, 807, 14, 24, "Message",ExpressionUUID->"06be9b29-4881-4f79-8379-70707f436fe9"],
+Cell[63232, 1388, 835, 14, 40, "Message",ExpressionUUID->"fa9b5945-f148-46e2-b931-fbcb3c7a2b35"],
+Cell[64070, 1404, 455, 9, 24, "Message",ExpressionUUID->"acff8ebd-2f08-4cab-9953-30a8fbecaffd"],
+Cell[64528, 1415, 455, 9, 24, "Message",ExpressionUUID->"974352c2-3b48-47d7-8eb4-fe7b7b26e5eb"],
+Cell[64986, 1426, 457, 9, 24, "Message",ExpressionUUID->"ec033c54-ce4f-43d3-83ad-268ee43d39eb"],
+Cell[65446, 1437, 421, 8, 24, "Message",ExpressionUUID->"56084782-60a7-4bb8-948b-c78a19792a8d"],
+Cell[65870, 1447, 727, 13, 24, "Message",ExpressionUUID->"8cd59885-8f4d-462f-87a8-22620810bbe8"],
+Cell[66600, 1462, 886, 14, 24, "Message",ExpressionUUID->"b2c9ce0f-c690-4a2b-9b56-17f493bd38c6"],
+Cell[67489, 1478, 469, 9, 24, "Message",ExpressionUUID->"a1dd6655-a316-43ee-82a3-18a336d4c62e"],
+Cell[67961, 1489, 420, 9, 24, "Message",ExpressionUUID->"9603bb00-378c-4d87-9038-fde60c73b746"],
+Cell[68384, 1500, 495, 10, 24, "Message",ExpressionUUID->"53b77298-863d-46bc-930f-5fe7e332a3d6"],
+Cell[68882, 1512, 493, 10, 24, "Message",ExpressionUUID->"e1b98165-98a5-4421-8d59-32dcca9182bd"],
+Cell[69378, 1524, 496, 10, 24, "Message",ExpressionUUID->"ad8bd64a-5078-46ab-831f-fd077a41c5eb"],
+Cell[69877, 1536, 422, 8, 24, "Message",ExpressionUUID->"db161c6e-e7b6-488f-936c-7a1d56d0bc09"],
+Cell[70302, 1546, 423, 8, 24, "Message",ExpressionUUID->"803c09e5-d721-49d9-b9f7-9c55e38751a3"],
+Cell[70728, 1556, 810, 14, 24, "Message",ExpressionUUID->"291efe71-ce65-4265-864c-bbe7b91b09ec"],
+Cell[71541, 1572, 425, 8, 24, "Message",ExpressionUUID->"6a6f7a31-5bd1-4e30-bf00-63b2eaecba1c"],
+Cell[71969, 1582, 425, 8, 24, "Message",ExpressionUUID->"c04b3d58-23be-405e-9af4-138ea5322357"],
+Cell[72397, 1592, 422, 8, 24, "Message",ExpressionUUID->"607373c6-c596-4130-a02e-e9e5e05dcb7b"],
+Cell[72822, 1602, 806, 14, 24, "Message",ExpressionUUID->"39498b54-fb03-4224-8533-e5a770960e63"],
+Cell[73631, 1618, 833, 14, 40, "Message",ExpressionUUID->"a761fb4d-5dc4-4c07-aaab-0c304bd4ce4e"],
+Cell[74467, 1634, 457, 9, 24, "Message",ExpressionUUID->"034f422b-4010-467d-b941-38cb45e02507"],
+Cell[74927, 1645, 455, 9, 24, "Message",ExpressionUUID->"9f9ac6be-b228-4b58-8f47-235e8c0e768f"],
+Cell[75385, 1656, 453, 9, 24, "Message",ExpressionUUID->"df7de0a1-5abe-44de-8707-26302308c456"],
+Cell[75841, 1667, 421, 8, 24, "Message",ExpressionUUID->"71125f75-e4eb-4b0a-85dc-82dde6f83347"],
+Cell[76265, 1677, 727, 13, 24, "Message",ExpressionUUID->"fad7d850-b442-4b88-a8cc-28e29203b1c8"],
+Cell[76995, 1692, 886, 14, 24, "Message",ExpressionUUID->"71499a92-e0ed-4bbf-80b8-e92df7abbf2b"],
+Cell[77884, 1708, 2031, 30, 70, "Message",ExpressionUUID->"94d5585d-0a39-4346-9ae6-18d45aabbc8a"],
+Cell[79918, 1740, 421, 9, 24, "Message",ExpressionUUID->"049fa558-b5d4-4521-913d-4f930829f616"],
+Cell[80342, 1751, 498, 10, 24, "Message",ExpressionUUID->"9aa54c19-eef0-430c-ac2f-2dceb15aff06"],
+Cell[80843, 1763, 494, 10, 24, "Message",ExpressionUUID->"c50a68ae-7c45-453f-8f78-16b71a7131a3"],
+Cell[81340, 1775, 495, 10, 24, "Message",ExpressionUUID->"45d03322-d642-4ee8-b4ab-c26fa7982b8d"],
+Cell[81838, 1787, 420, 8, 24, "Message",ExpressionUUID->"d72302c1-4d6e-4fdd-b5b4-b68b72dbdfc0"],
+Cell[82261, 1797, 424, 8, 24, "Message",ExpressionUUID->"600153b9-c03f-4603-9627-cc8ec77e9d1c"],
+Cell[82688, 1807, 811, 14, 24, "Message",ExpressionUUID->"238a2e5a-e484-4ab5-bf1d-9f12bd1eadfb"],
+Cell[83502, 1823, 422, 8, 24, "Message",ExpressionUUID->"18590d49-badd-469c-a35d-e7a12a938c33"],
+Cell[83927, 1833, 426, 8, 24, "Message",ExpressionUUID->"4342f89d-c927-451c-abbc-d6d6bf363642"],
+Cell[84356, 1843, 421, 8, 24, "Message",ExpressionUUID->"fcc840e2-3982-483a-b9af-00bc7c6472c2"],
+Cell[84780, 1853, 810, 14, 24, "Message",ExpressionUUID->"16313605-16cf-404a-ac9e-3898dbe18d82"],
+Cell[85593, 1869, 836, 14, 40, "Message",ExpressionUUID->"76bbe679-e4ae-40cf-a1c6-6eb8cdbecc89"],
+Cell[86432, 1885, 458, 9, 24, "Message",ExpressionUUID->"a1d2dbd5-e69a-410b-8a9f-2751b85147e9"],
+Cell[86893, 1896, 456, 9, 24, "Message",ExpressionUUID->"b205d91f-87a4-4fd7-b927-85dfb7e43288"],
+Cell[87352, 1907, 456, 9, 24, "Message",ExpressionUUID->"ac228ed7-23fc-4581-b5f5-5ec93fbbeaf9"],
+Cell[87811, 1918, 422, 8, 24, "Message",ExpressionUUID->"e0e40882-2922-4933-bb37-f37b748c04e9"],
+Cell[88236, 1928, 728, 13, 24, "Message",ExpressionUUID->"ed87edbc-3010-4509-bb59-d9b9b244b787"],
+Cell[88967, 1943, 887, 14, 24, "Message",ExpressionUUID->"f82d037f-a1b1-419c-8404-eeb7d78e542c"]
 }, Open  ]],
-Cell[57075, 1250, 633, 10, 58, "Text",ExpressionUUID->"25c53830-e113-4e30-9cf4-0ae795214ea4"],
+Cell[89869, 1960, 633, 10, 58, "Text",ExpressionUUID->"25c53830-e113-4e30-9cf4-0ae795214ea4"],
 Cell[CellGroupData[{
-Cell[57733, 1264, 53179, 1160, 3055, "Input",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
-Cell[110915, 2426, 19560, 415, 1353, "Output",ExpressionUUID->"cc2390de-c3a2-4be5-93ea-d7e08dc3b2a3"]
+Cell[90527, 1974, 53630, 1168, 3055, "Input",ExpressionUUID->"804b14a1-2ed4-4d4d-8b1f-36ff5cc43dd1"],
+Cell[144160, 3144, 19374, 415, 1444, "Output",ExpressionUUID->"c55cfb9e-19c9-46b0-8b75-d21522305b5f"]
 }, Open  ]],
-Cell[130490, 2844, 344, 7, 30, "Input",ExpressionUUID->"b407d622-bd82-458b-93ee-67d968657022"],
-Cell[130837, 2853, 39659, 928, 2614, "Input",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
-Cell[170499, 3783, 156, 3, 30, "Input",ExpressionUUID->"2056ff86-2202-4cd3-a8b0-6bd4e0617dc5"],
-Cell[170658, 3788, 10379, 308, 514, "Input",ExpressionUUID->"22241097-c883-4ac0-891f-c8c582b7285f"],
-Cell[181040, 4098, 152, 3, 30, "Input",ExpressionUUID->"535dd15e-0b43-4066-9543-69e659ca82ab"]
+Cell[163549, 3562, 344, 7, 30, "Input",ExpressionUUID->"b407d622-bd82-458b-93ee-67d968657022"],
+Cell[163896, 3571, 39659, 928, 2593, "Input",ExpressionUUID->"75e1263f-cc9d-40e7-9cdd-3c2466656987"],
+Cell[203558, 4501, 156, 3, 30, "Input",ExpressionUUID->"2056ff86-2202-4cd3-a8b0-6bd4e0617dc5"],
+Cell[203717, 4506, 10379, 308, 514, "Input",ExpressionUUID->"22241097-c883-4ac0-891f-c8c582b7285f"],
+Cell[214099, 4816, 152, 3, 30, "Input",ExpressionUUID->"535dd15e-0b43-4066-9543-69e659ca82ab"]
 }
 ]
 *)
