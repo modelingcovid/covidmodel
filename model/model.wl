@@ -1,36 +1,38 @@
 (* ::Package:: *)
 
-(*BeginPackage["Covid`"]
-
-CovidModel::usage = "";
-r0natural0::usage = "";
-initialInfectionImpulse::usage = "";
-daysUntilNotInfectiousOrHospitalized::usage = "";
-daysFromInfectedToInfectious::usage = "";
-daysUntilNotInfectiousOrHospitalized::usage = "";
-daysToLeaveHosptialNonCritical::usage = "";
-pPCRH0::usage = "";
-pPCRNH0::usage = "";
-daysTogoToCriticalCare::usage = "";
-daysFromCriticalToRecoveredOrDeceased::usage = "";
-fractionOfCriticalDeceased::usage = "";
-containmentThresholdRatio0::usage = "";
-importlength::usage = "";
-importtime::usage = "";
-USAPopulation::usage = "";
-tmax::usage = "";
-medianHospitalizationAge0::usage = "";
-ageCriticalDependence0::usage = "";
-ageHospitalizedDependence0::usage = "";
-pHospitalized100Yo::usage = "";
-pCriticalGivenHospitalized100Yo::usage = "";
-pC0::usage = "";
-pH0::usage = "";
-pS0::usage = "";
-*)
-(*Begin["`Private`"]*)
-
-dateticks={{0,Rotate["Jan",\[Pi]/2]},{(31),""},{(31+28),""},{(31+28+31),Rotate["Apr",\[Pi]/2]},{(31+28+31+30),""},{(31+28+31+30+31),""},{(31+28+31+30+31+30),Rotate["July",\[Pi]/2]},{(31+28+31+30+31+30+31),""},{(31+28+31+30+31+30+31+31),""},{(31+28+31+30+31+30+31+31+30),Rotate["Oct",\[Pi]/2]},{(31+28+31+30+31+30+31+31+30+31),""},{(31+28+31+30+31+30+31+31+30+31+30),""},{365,Rotate["Jan",\[Pi]/2]},{365+(31),""},{365+(31+28),""},{365+(31+28+31),Rotate["Apr",\[Pi]/2]},{365+(31+28+31+30),""},{365+(31+28+31+30+31),""},{365+(31+28+31+30+31+30),Rotate["July",\[Pi]/2]},{365+(31+28+31+30+31+30+31),""},{365+(31+28+31+30+31+30+31+31),""},{365+(31+28+31+30+31+30+31+31+30),Rotate["Oct",\[Pi]/2]},{365+(31+28+31+30+31+30+31+31+30+31),""},{365+(31+28+31+30+31+30+31+31+30+31+30),""},{365*2,Rotate["Jan",\[Pi]/2]},{365*2+(31),""},{365*2+(31+28),""},{365*2+(31+28+31),Rotate["Apr",\[Pi]/2]},{365*2+(31+28+31+30),""},{365*2+(31+28+31+30+31),""},{365*2+(31+28+31+30+31+30),Rotate["July",\[Pi]/2]},{365*2+(31+28+31+30+31+30+31),""},{365*2+(31+28+31+30+31+30+31+31),""},{365*2+(31+28+31+30+31+30+31+31+30),Rotate["Oct",\[Pi]/2]}};
+dateticks = {
+	{0, Rotate["Jan",\[Pi]/2]},
+		{(31),""},
+		{(31+28),""},
+		{(31+28+31),Rotate["Apr",\[Pi]/2]},
+		{(31+28+31+30),""},
+		{(31+28+31+30+31),""},
+		{(31+28+31+30+31+30),Rotate["July",\[Pi]/2]},
+		{(31+28+31+30+31+30+31),""},
+		{(31+28+31+30+31+30+31+31),""},
+		{(31+28+31+30+31+30+31+31+30),Rotate["Oct",\[Pi]/2]},
+		{(31+28+31+30+31+30+31+31+30+31),""},
+		{(31+28+31+30+31+30+31+31+30+31+30),""},
+		{365,Rotate["Jan",\[Pi]/2]},{365+(31),""},
+		{365+(31+28),""},
+		{365+(31+28+31),Rotate["Apr",\[Pi]/2]},
+		{365+(31+28+31+30),""},
+		{365+(31+28+31+30+31),""},
+		{365+(31+28+31+30+31+30),Rotate["July",\[Pi]/2]},
+		{365+(31+28+31+30+31+30+31),""},
+		{365+(31+28+31+30+31+30+31+31),""},
+		{365+(31+28+31+30+31+30+31+31+30),Rotate["Oct",\[Pi]/2]},
+		{365+(31+28+31+30+31+30+31+31+30+31),""},
+		{365+(31+28+31+30+31+30+31+31+30+31+30),""},
+		{365*2,Rotate["Jan",\[Pi]/2]},{365*2+(31),""},
+		{365*2+(31+28),""},
+		{365*2+(31+28+31),Rotate["Apr",\[Pi]/2]},
+		{365*2+(31+28+31+30),""},
+		{365*2+(31+28+31+30+31),""},
+		{365*2+(31+28+31+30+31+30),Rotate["July",\[Pi]/2]},
+		{365*2+(31+28+31+30+31+30+31),""},
+		{365*2+(31+28+31+30+31+30+31+31),""},
+		{365*2+(31+28+31+30+31+30+31+31+30),Rotate["Oct",\[Pi]/2]}};
 
 ventalators=Association[{"AL"->920,"AK"->104,"AZ"->1309,"AR"->633,"CA"->6589,"CO"->913,"CT"->688,"DE"->200,"FL"->4307,"GA"->2093,"HI"->241,"ID"->182,"IL"->2311,"IN"->1472,"IA"->542,"KS"->514,"KY"->949,"LA"->1109,"ME"->214,"MD"->953,"MA"->1408,"MI"->1847,"MN"->811,"MS"->769,"MO"->1437,"MT"->158,"NE"->466,"NV"->753,"NH"->207,"NJ"->1487,"NM"->366,"NY"->4506,"NC"->1782,"ND"->180,"OH"->2729,"OK"->740,"OR"->503,"PA"->3013,"RI"->196,"SC"->949,"SD"->149,"TN"->1517,"TX"->5419,"UT"->503,"VT"->90,"VA"->1334,"WA"->836,"WV"->550,"WI"->864,"WY"->117}];
 
@@ -344,10 +346,6 @@ parsedData=Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}]
 statesWith50CasesAnd5Deaths=DeleteDuplicates[#["state"]&/@Select[parsedData,(#["positive"]>=50&&#["death"]>=5)&]];
 stateRawDemographicData=Association[(#->MemoWolframAlpha[StringTemplate["`` state age distribution"][#],{{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}])&/@statesWith50CasesAnd5Deaths];
 stateImportTime=Association[{"NY"->56,"AZ"->63,"CA"->56,"CO"->55,"CT"->57,"FL"->56,"GA"->52,"IL"->58,"IN"->58,"MA"->58, "MI"->59,"NJ"->56,"NV"->58,"OH"->61,"PA"->62,"SC"->59,"TX"->61,"VA"->58,"VT"->54,"WA"->41,"WI"->60,"LA"->51,"OR"->55}];
-
-(*End[]*)
-(*EndPackage[]*)
-
 
 
 
