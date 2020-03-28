@@ -1,5 +1,72 @@
 (* ::Package:: *)
 
+(** Model parameters. See https://docs.google.com/spreadsheets/d/1DH58EFf_YkWHa_zn8-onBGzsYFMamjSjOItr137vu9g/edit#gid=0 **)
+
+(*Rate of progressing to infectiousness, days*)
+daysFromInfectedToInfectious0 = 2.8;
+
+(*Rate of losing infectiousness or going to the hospital, weeks*)
+daysUntilNotInfectiousOrHospitalized0 = 2.5;
+
+(*Rate of leaving hospital for those not going to critical care, weeks*)
+daysToLeaveHosptialNonCritical0 = 8;
+
+(*Rate of leaving hospital and going to critical care, weeks*)
+daysTogoToCriticalCare0 = 6;
+
+(*Rate of leaving critical care, weeks*)
+daysFromCriticalToRecoveredOrDeceased0 = 6;
+
+pPCRH0 = 0.114;
+pPCRNH0 = 0.08;
+
+daysToGetTestedIfNotHospitalized0 = 5.5;
+daysToGetTestedIfHospitalized0 = 1.5;
+ 
+(* virus start parameters *)
+initialInfectionImpulse0 = 12.5;
+
+(*Duration of pulse in force of infection for establishment, days*)
+importlength0 = 3;
+
+(*Establishment time, N days before X Cases*)
+importtime0 = (31+20);
+
+(* mitigation parameters *)
+r0natural0 = 3.1;
+
+(*Fraction of critical patents who pass *)
+fractionOfCriticalDeceased0 = 0.3;
+
+USAPopulation = (327.2*10^6);
+
+(* less than 100 cases in a country the size of the US *)
+containmentThresholdRatio0 = 100/USAPopulation;
+
+(* model predict max *)
+tmax = 5*365;
+
+(* interpret as: steepness of age depencence*)
+medianHospitalizationAge0 = 65;
+
+(* interpret as: steepness of age depencence*)
+ageCriticalDependence0 = 3;
+
+ageHospitalizedDependence0 = 5;
+
+pHospitalized100Yo = 0.25;
+
+(*Probability of needing critical care*)
+pCriticalGivenHospitalized100Yo = 0.3;
+
+(*Probability of hospitalization but not critical care*)
+pC0 = pCriticalGivenHospitalized100Yo*pHospitalized100Yo;
+
+(*Probability of not needing care*)
+pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
+
+pS0 = 1-(pC0 + pH0);
+
 dateticks = {
 	{0, Rotate["Jan",\[Pi]/2]},
 		{(31),""},
@@ -171,55 +238,6 @@ icuBelowCapacityGraphics=Graphics[icuBelowCapacity,ImageSize->Rasterize[icuBelow
 icuOvershotText=Text[Framed[Style["ICU Capacity Overshot",FontSize->24,Bold,Black,FontFamily->"Calibri"],Background->Red,ContentPadding->False]];
 icuOvershotTextGraphics=Graphics[icuOvershotText,ImageSize->Rasterize[icuOvershotText,"RasterSize"]];
 
-(*Rate of progressing to infectiousness, days*)
-daysFromInfectedToInfectious0 = 2.8;
-(*Rate of losing infectiousness or going to the hospital, weeks*)
-daysUntilNotInfectiousOrHospitalized0 = 2.5;
-(*Rate of leaving hospital for those not going to critical care, weeks*)
-daysToLeaveHosptialNonCritical0 = 8;
-(*Rate of leaving hospital and going to critical care, weeks*)
-daysTogoToCriticalCare0 = 6;
-(*Rate of leaving critical care, weeks*)
-daysFromCriticalToRecoveredOrDeceased0 = 6;
-pPCRH0 = 0.114;
-pPCRNH0 = 0.08;
-
-daysToGetTestedIfNotHospitalized = 5.5;
-daysToGetTestedIfHospitalized = 1.5;
- 
-(* virus start parameters *)
-initialInfectionImpulse0 = 12.5;
-(*Duration of pulse in force of infection for establishment, days*)
-importlength = 3;
-
-(*Establishment time, N days before X Cases*)
-importtime = (31+20);
-
-(* mitigation parameters *)
-r0natural0 = 3.1;
-
-(*Fraction of critical patents who pass *)
-fractionOfCriticalDeceased0= 0.3;
-USAPopulation=(327.2*10^6);
-(* less than 100 cases in a country the size of the US *)
-containmentThresholdRatio0 = 100/USAPopulation;
-
-(* model predict max *)
-tmax = 5*365;
-
-medianHospitalizationAge0 = 65;
-(* interpret as: steepness of age depencence*)
-ageCriticalDependence0 = 3;
-(* interpret as: steepness of age depencence*)
-ageHospitalizedDependence0 = 5;
-pHospitalized100Yo = 0.25;
-pCriticalGivenHospitalized100Yo = 0.3;
-(*Probability of needing critical care*)
-pC0 = pCriticalGivenHospitalized100Yo*pHospitalized100Yo;
-(*Probability of hospitalization but not critical care*)
-pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
-(*Probability of not needing care*)
-pS0 = 1-(pC0 + pH0);
 
 stateHistoryHelper=StringTemplate["\"`state`\"-><|\"scenario1\"->{{`baseline`/100,t<69},{`d69`/100,69<=t<70},{`d70`/100,70<=t<71},{`d71`/100,71<=t<72},{`d72`/100,72<=t<73},{`d73`/100,73<=t<74},{`d74`/100,74<=t<75},{`d75`/100,75<=t<76},{`d76`/100,76<=t<77},{`d77`/100,77<=t<78},{`d78`/100,78<=t<79},{`d79`/100,79<=t<80},{`d80`/100,80<=t<81},{`d81`/100,81<=t<82},{`d81`/100,82<=t<175},{`baseline`/100,175<=t<=tmax}},
       \"scenario2\"->{{`baseline`/100,t<69},{`d69`/100,t<=69},{`d70`/100,70<=t<71},{`d71`/100,71<=t<72},{`d72`/100,72<=t<73},{`d73`/100,73<=t<74},{`d74`/100,74<=t<75},{`d75`/100,75<=t<76},{`d76`/100,76<=t<77},{`d77`/100,77<=t<78},{`d78`/100,78<=t<79},{`d79`/100,79<=t<80},{`d80`/100,80<=t<81},{`d81`/100,81<=t<82},{`d81`/100,82<=t<87},{40/100,87<=t<175},{`baseline`/100,175<=t<=tmax}},
