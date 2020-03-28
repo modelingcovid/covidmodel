@@ -278,7 +278,8 @@ export default ({demographics, summary}) => {
                 </strong>
               </div>
             )}
-            {scenarioSummary['Date Contained'] === 'Not Contained' ? (
+            {scenarioSummary['Date ICU Over Capacity'] !==
+            'ICU Under capacity' ? (
               <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
                 <strong className="font-bold">ICU Overloaded{` `}</strong>
                 <span className="block m:inline">
