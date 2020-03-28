@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Group} from '@vx/group';
 import {curveBasis} from '@vx/curve';
 import {LinearGradient} from '@vx/gradient';
-import {Marker} from '@vx/marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleSymlog} from '@vx/scale';
@@ -10,7 +9,8 @@ import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
-import {GraphContext} from './GraphContext';
+import {TodayMarker} from './TodayMarker';
+import {GraphDataProvider} from './useGraphData';
 
 const {createContext, useCallback, useMemo} = React;
 
@@ -39,12 +39,6 @@ const dateTickLabelProps = (date) => ({
 });
 
 const identity = (n) => n;
-
-const today = new Date();
-today.setHours(0);
-today.setMinutes(0);
-today.setSeconds(0);
-today.setMilliseconds(0);
 
 export const PopulationGraph = ({
   children,
@@ -98,15 +92,15 @@ export const PopulationGraph = ({
   xScale.range([0, xMax]);
   yScale.range([yMax, 0]);
 
-  const context = useMemo(() => ({data: scenarioData, x, xScale, yScale}), [
-    scenarioData,
-    x,
-    xScale,
-    yScale,
-  ]);
-
   return (
-    <GraphContext.Provider value={context}>
+    <GraphDataProvider
+      data={scenarioData}
+      x={x}
+      xScale={xScale}
+      yScale={yScale}
+      xMax={xMax}
+      yMax={yMax}
+    >
       <div>
         <svg width={width} height={height}>
           {/* <rect
@@ -145,17 +139,7 @@ export const PopulationGraph = ({
               tickLabelProps={valueTickLabelProps}
             />
             {children}
-            <Marker
-              from={{x: xScale(today), y: 0}}
-              to={{x: xScale(today), y: yMax}}
-              stroke="#8691a1"
-              label={'Today'}
-              labelStroke={'none'}
-              strokeDasharray="2,1"
-              strokeWidth={1.5}
-              labelDx={6}
-              labelDy={15}
-            />
+            <TodayMarker />
             <text
               x="0"
               y="15"
@@ -172,6 +156,6 @@ export const PopulationGraph = ({
           </Group>
         </svg>
       </div>
-    </GraphContext.Provider>
+    </GraphDataProvider>
   );
 };
