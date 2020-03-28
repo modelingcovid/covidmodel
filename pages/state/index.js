@@ -1,9 +1,10 @@
 import {useRouter} from 'next/router';
 
 import {Layout} from '../../components';
+import {getStatesWithData} from '../../lib/data';
 import STATES from '../../lib/states';
 
-export default () => {
+export default ({states}) => {
   const {push} = useRouter();
   const handleStateSelect = (e) => {
     push(`/state/${e.target.value}`);
@@ -21,7 +22,7 @@ export default () => {
                 onChange={handleStateSelect}
                 value="-"
               >
-                {Object.keys(STATES).map((s) => (
+                {states.map((s) => (
                   <option value={s}>{STATES[s]}</option>
                 ))}
                 <option>-</option>
@@ -42,3 +43,9 @@ export default () => {
     </Layout>
   );
 };
+
+export const getStaticProps = () => ({
+  props: {
+    states: getStatesWithData(),
+  },
+});

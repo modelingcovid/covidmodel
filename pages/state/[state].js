@@ -5,7 +5,7 @@ import numeral from 'numeral';
 import Link from 'next/link';
 
 import {Layout, OccupancyGraph} from '../../components';
-import {getStateData} from '../../lib/data';
+import {getStateData, getStatesWithData} from '../../lib/data';
 import STATES from '../../lib/states';
 
 const {useCallback, useState} = React;
@@ -20,7 +20,7 @@ const getProjectedCurrentlyHospitalized = ({projectedCurrentlyHospitalized}) =>
 const getProjectedCurrentlyCritical = ({projectedCurrentlyCritical}) =>
   projectedCurrentlyCritical;
 
-export default ({data}) => {
+export default ({data, states}) => {
   const {
     query: {state},
     push,
@@ -52,7 +52,7 @@ export default ({data}) => {
                 onChange={handleStateSelect}
                 value={state}
               >
-                {Object.keys(STATES).map((s) => (
+                {states.map((s) => (
                   <option value={s}>{STATES[s]}</option>
                 ))}
               </select>
@@ -495,16 +495,15 @@ export const getStaticProps = ({params: {state}}) => {
   return {
     props: {
       data,
+      states: getStatesWithData(),
     },
   };
 };
 
 export const getStaticPaths = (_ctx) => {
   return {
-    paths: Object.keys(STATES).map((st) => ({
-      params: {
-        state: st,
-      },
+    paths: getStatesWithData().map((state) => ({
+      params: {state},
     })),
     fallback: false,
   };
