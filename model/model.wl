@@ -364,8 +364,7 @@ ageDistributionFor[place_] := Module[{rawdist, pop, dist, buckets},
  	|>
 	];
 	
-exportDistributionJSON[] := With[
-		{places = {"United States", "France", "Italy", "Spain"} ~Join~ USStates},
+exportDistributionJSON[] := With[{places = countries ~Join~ USStates},
 	Export[dataFile["age-distributions.json"], AssociationMap[ageDistributionFor, places]]];
 	
 cachedAgeDistributionFor[place_] := Module[{placeData},
