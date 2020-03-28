@@ -263,6 +263,7 @@ evaluateScenario[state_, scenario_]:=Module[{distance,t},
 	hospitalizationData = stateHospitalizationData[state];
 	
 	distance[t_]:=Piecewise[stateHistoricalDistancing[state,scenario,t],1];
+	baseline=distance[1];
 	
 	{sol,evts}=CovidModel[
 	r0natural0,
@@ -290,14 +291,11 @@ evaluateScenario[state_, scenario_]:=Module[{distance,t},
 	
 	events=Association[Flatten[evts]];
 	
-	baseline=distance[1];
-	(* make plots *)
-	setDistancingPlot=Table[{"day"->t,"distancing"->distance[t]/baseline},{t,0,300}];
-	
-	timeSeriesData=Table[{
+	timeSeriesData=Table[Module[{},
+	{
 
 	"day"->t,
-	
+	"distancing"->(distance[t]/baseline),
 	"confirmedDeaths"->If[Length[Select[thisStateData,(#["day"]==t)&]]!=1,0,Select[thisStateData,(#["day"]==t)&][[1]]["death"]],
 	"confirmedPcr"->If[Length[Select[thisStateData,(#["day"]==t)&]]!=1,0,Select[thisStateData,(#["day"]==t)&][[1]]["positive"]],
 	"confirmedHospitalizations"->If[Length[Select[hospitalizationData,(#["day"]==t)&]]!=1,0,Select[hospitalizationData,(#["day"]==t)&][[1]]["hospitalizations"]],
@@ -309,7 +307,7 @@ evaluateScenario[state_, scenario_]:=Module[{distance,t},
 	"projectedCumulativeInfections"->Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]],
 	"projectedCurrentlyHospitalized"->Evaluate[params["Population"]*HHq[t]/.sol][[1]],
 	"projectedCurrentlyCritical"->Evaluate[params["Population"]*CCq[t]/.sol][[1]]
-	},{t,0,300}];
+	}],{t,0,300}];
 	
 	summary=<|
 	"totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],Evaluate[params["Population"]*Deaq[t]/.sol/.{t->events["containment"][[1]][[1]]}][[1]], Evaluate[params["Population"]*Deaq[t]/.sol/.{t->1000}][[1]]] ,"totalProjectedPCRConfirmed"->If[KeyExistsQ[events, "containment"],
@@ -326,7 +324,7 @@ evaluateScenario[state_, scenario_]:=Module[{distance,t},
 	"Not Contained"],
 	"Date ICU Over Capacity"->If[KeyExistsQ[events, "icu"]&&(!KeyExistsQ[events, "containment"]||(events["icu"][[1]][[1]]-events["containment"][[1]][[1]])<=0),DateString[DatePlus[{2020,1,1},events["icu"][[1]][[1]]-1]],"ICU Under capacity"],
 	"Date Hospitals Over Capacity"->If[KeyExistsQ[events, "hospital"]&&(!KeyExistsQ[events, "containment"]||(events["hospital"][[1]][[1]]-events["containment"][[1]][[1]])<=0),DateString[DatePlus[{2020,1,1},events["hospital"][[1]][[1]]-1]],"Hospitals Under capacity"]|>;
-	
+
 	Association[{
 	"timeSeriesData"->timeSeriesData,
 	 "summary"->summary
