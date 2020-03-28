@@ -34,7 +34,7 @@ importlength0 = 3;
 importtime0 = (31+20);
 
 (* mitigation parameters *)
-r0natural0 = 3.1;
+r0natural0 = 4.6919085929677085;
 
 (*Fraction of critical patents who pass *)
 fractionOfCriticalDeceased0 = 0.3;
@@ -374,7 +374,7 @@ cachedAgeDistributionFor[place_] := Module[{placeData},
 
 countryVentalators = Association[{"United States"->61929,"France"->5000,"Italy"->3000,"Spain"->2000}];
 
-countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
+countryImportTime=Association[{"United States"->56.60493474787505,"France"->49.4167048395893,"Italy"->41.26541269222781,"Spain"->47.900359618306204}];
 
 countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] := 
 	Module[{raw,pop,dist,buckets},
@@ -487,7 +487,7 @@ timeSeriesData=Table[{
 "projectedCumulativeInfections"->Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]],
 "projectedCurrentlyHospitalized"->Evaluate[params["Population"]*HHq[t]/.sol][[1]],
 "projectedCurrentlyCritical"->Evaluate[params["Population"]*CCq[t]/.sol][[1]]
-},{t,0,300}];
+},{t,1,300}];
 
 summary=<|
 "totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],Evaluate[params["Population"]*Deaq[t]/.sol/.{t->events["containment"][[1]][[1]]}][[1]], Evaluate[params["Population"]*Deaq[t]/.sol/.{t->1000}][[1]]] ,"totalProjectedPCRConfirmed"->If[KeyExistsQ[events, "containment"],
@@ -525,6 +525,12 @@ First
 
 (* export the full model data *)
 Export["public/json/model.json",Association[{#->evaluateState[#]}&/@distancingStates]];
+
+
+
+
+
+
 
 
 
