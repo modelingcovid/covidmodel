@@ -5,7 +5,7 @@ import {Section} from './Section';
 export const Layout = ({children, noPad = false}) => (
   <div>
     <style jsx>{`
-      nav {
+      heading {
         padding: 16px 0;
         display: flex;
         justify-content: space-between;
@@ -21,7 +21,7 @@ export const Layout = ({children, noPad = false}) => (
       }
     `}</style>
     <Section>
-      <nav className="section">
+      <heading className="section">
         <Link href="/">
           <a className="focus title color-dark">COVID Modeling Project</a>
         </Link>
@@ -36,7 +36,7 @@ export const Layout = ({children, noPad = false}) => (
             <a className="focus link">About</a>
           </Link>
         </div>
-      </nav>
+      </heading>
     </Section>
     {children}
   </div>
