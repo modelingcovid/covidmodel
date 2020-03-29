@@ -104,41 +104,73 @@ distancing_,
 hospitalCapacity_:1000000 (*defaulted since we dont evaluate this on a country basis yet *)
 ]:=
 Reap[NDSolve[{
-Sq'[t] == (-distancing[t]* (* Susceptible *)
-		 r0natural*
-		Iq[t]*
-		Sq[t])/daysUntilNotInfectiousOrHospitalized
- - est[t]*Sq[t],
-Eq'[t] ==( distancing[t]* (* Exposed *)
-		 r0natural*
-		Iq[t]*
-		Sq[t]) /daysUntilNotInfectiousOrHospitalized
-+ est[t]*Sq[t] 
-- Eq[t]/daysFromInfectedToInfectious,
-Iq[t]==ISq[t] + IHq[t] + ICq[t] (* Infectious total, not yet PCR confirmed, age indep *),
-ISq'[t] == pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected without needing care *)
-RSq'[t] == ISq[t]/daysUntilNotInfectiousOrHospitalized, (* Recovered without needing care *)
-IHq'[t] ==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected and will need hospital, won't need critical care *)
-HHq'[t]== IHq[t]/daysUntilNotInfectiousOrHospitalized - HHq[t]/daysToLeaveHosptialNonCritical, (* Going to hospital *) 
-RepHq'[t] == (pPCRH * HHq'[t]) / daysForHospitalsToReportCases0,
-EHq'[t] == IHq[t]/daysUntilNotInfectiousOrHospitalized,
-RHq'[t] == HHq[t]/daysToLeaveHosptialNonCritical, (* Recovered after hospitalization *)
-PCR'[t] == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized0, (* pcr confirmation *)
-ICq'[t] == pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilNotInfectiousOrHospitalized, (* Infected, will need critical care *)
-HCq'[t] == ICq[t]/daysUntilNotInfectiousOrHospitalized - HCq[t]/daysTogoToCriticalCare, (* Hospitalized, need critical care *)
-CCq'[t] ==HCq[t]/daysTogoToCriticalCare - CCq[t]/daysFromCriticalToRecoveredOrDeceased (* Entering critical care *),
-Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
-RCq'[t] == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased(* Leaving critical care *),
-est'[t] == 0,
-WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
-WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]], (* ICU Capacity overshot *)
-WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(* Hospitals Capacity overshot *)
-WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
-WhenEvent[t >importtime+importlength, est[t]->0 ],
-Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
-HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
-EHq[0]==0
-},{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},{t, 0, tmax}
+	
+	Sq'[t]    == (-distancing[t] *
+			 	  r0natural *
+				  Iq[t] *
+				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
+	 			 - est[t] * Sq[t],
+	
+	Eq'[t]    == (distancing[t] *
+			 	  r0natural *
+				  Iq[t] *
+				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
+				 + est[t] * Sq[t] 
+				 - Eq[t] / daysFromInfectedToInfectious,
+	
+	(* Infectious total, not yet PCR confirmed, age indep *)
+	Iq[t]     == ISq[t] + IHq[t] + ICq[t],
+	
+	(* Infected without needing care *)
+	ISq'[t]   == pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized,
+	
+	(* Recovered without needing care *)
+	RSq'[t]   == ISq[t]/daysUntilNotInfectiousOrHospitalized,
+	
+	(* Infected and will need hospital, won't need critical care *)	
+	IHq'[t]   == pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilNotInfectiousOrHospitalized,
+
+	(* Going to hospital *) 
+	HHq'[t]   == IHq[t]/daysUntilNotInfectiousOrHospitalized - HHq[t]/daysToLeaveHosptialNonCritical,
+	
+	(* Reported positive hospital cases *)
+	RepHq'[t] == (pPCRH * HHq'[t]) / daysForHospitalsToReportCases0,
+
+	(* Cumulative hospitalized count *)	
+	EHq'[t]   == IHq[t]/daysUntilNotInfectiousOrHospitalized,
+
+	(* Recovered after hospitalization *)	
+	RHq'[t]   == HHq[t]/daysToLeaveHosptialNonCritical,
+
+	(* pcr confirmation *)	
+	PCR'[t]   == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized0,
+
+	(* Infected, will need critical care *)	
+	ICq'[t]   == pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilNotInfectiousOrHospitalized,
+	
+	(* Hospitalized, need critical care *)
+	HCq'[t]   == ICq[t]/daysUntilNotInfectiousOrHospitalized - HCq[t]/daysTogoToCriticalCare,
+
+	(* Entering critical care *)	
+	CCq'[t]   == HCq[t]/daysTogoToCriticalCare - CCq[t]/daysFromCriticalToRecoveredOrDeceased,
+	
+	(* Dying *)
+	Deaq'[t]  == CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
+	
+	(* Leaving critical care *)
+	RCq'[t]   == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
+	
+	est'[t]   == 0,
+
+	WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
+	WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]], (* ICU Capacity overshot *)
+	WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(* Hospitals Capacity overshot *)
+	WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
+	WhenEvent[t >importtime+importlength, est[t]->0 ],
+	Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
+	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
+	EHq[0]==0
+	},{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},{t, 0, tmax}
 ],{"containment","icu","hospital"},Rule];
 
 infectedCritical[a_,medianHospitalizationAge_,pCLimit_,ageCriticalDependence_] := 
