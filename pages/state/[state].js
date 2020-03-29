@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 import {
   Controls,
+  DistancingGradient,
   DistancingGraph,
   HospitalCapacity,
   Layout,
@@ -17,7 +18,7 @@ import {
   PopulationGraph,
   Section,
 } from '../../components';
-import {useContentRect} from '../../components/util';
+import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate} from '../../lib/date';
 import {stateLabels} from '../../lib/controls';
@@ -61,6 +62,8 @@ export default ({data, states}) => {
   const handleStateSelect = (e) => {
     push(`/state/${e.target.value}`);
   };
+
+  const socialDistancingGradientId = useComponentId('socialDistancingGradient');
 
   return (
     <Layout>
@@ -143,7 +146,12 @@ export default ({data, states}) => {
                       rightLabel="R0"
                       width={width}
                       height={height}
-                    />
+                    >
+                      <DistancingGradient
+                        id={socialDistancingGradientId}
+                        y={getDistancing}
+                      />
+                    </DistancingGraph>
                   </div>
                 </div>
                 <div>

@@ -8,8 +8,7 @@ import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
-import {LinearGradient} from './LinearGradient';
-import {Stop} from './Stop';
+import {LinearGradient, Stop} from './LinearGradient';
 import {GraphDataProvider, WithComponentId} from './util';
 
 const parseDate = timeParse('%Y%m%d');
@@ -82,8 +81,6 @@ export const OccupancyGraph = ({
   xScale.range([0, xMax]);
   yScale.range([yMax, 0]);
 
-  const offset = (yMax - yScale(cutoff)) / yMax;
-
   return (
     <GraphDataProvider
       data={scenarioData}
@@ -137,7 +134,12 @@ export const OccupancyGraph = ({
             <WithComponentId prefix="linearGradient">
               {(gradientId) => (
                 <>
-                  <LinearGradient id={gradientId} from="#0670de" to="#f00">
+                  <LinearGradient
+                    direction="up"
+                    id={gradientId}
+                    from="#0670de"
+                    to="#f00"
+                  >
                     <Stop offset={cutoff} stopColor="#0670de" />
                     <Stop offset={cutoff} stopColor="#f00" />
                   </LinearGradient>

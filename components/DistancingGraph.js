@@ -9,8 +9,7 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
-import {LinearGradient} from './LinearGradient';
-import {Stop} from './Stop';
+import {LinearGradient, Stop} from './LinearGradient';
 import {GraphDataProvider, WithComponentId} from './util';
 
 const parseDate = timeParse('%Y%m%d');
@@ -54,7 +53,7 @@ export const DistancingGraph = ({
   rightLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 16, left: 64, right: 64, bottom: 32},
+  margin = {top: 48, left: 64, right: 64, bottom: 32},
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
   const allPoints = useMemo(
