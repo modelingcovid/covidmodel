@@ -11,6 +11,7 @@ import {
   Layout,
   Line,
   OccupancyGraph,
+  Points,
   PopulationGraph,
   Section,
 } from '../../components';
@@ -25,6 +26,10 @@ const dayToDate = (day) => new Date(dayZero + dayInMs * day);
 
 const getDate = ({day}) => dayToDate(day);
 const getDistancing = ({distancing}) => distancing;
+const getConfirmedPcr = ({confirmedPcr}) => confirmedPcr;
+const getConfirmedDeaths = ({confirmedDeaths}) => confirmedDeaths;
+const getConfirmedHospitalizations = ({confirmedHospitalizations}) =>
+  confirmedHospitalizations;
 const getProjectedPcr = ({projectedPcr}) => projectedPcr;
 const getProjectedCurrentlyInfected = ({projectedCurrentlyInfected}) =>
   projectedCurrentlyInfected;
@@ -356,6 +361,7 @@ export default ({data, states}) => {
                         stroke="#228403"
                       />
                       <Line y={getProjectedPcr} stroke="#ed6804" />
+                      <Points y={getConfirmedPcr} fill="var(--color-gray-03)" />
                     </PopulationGraph>
                   </div>
                 </div>
@@ -375,6 +381,10 @@ export default ({data, states}) => {
                       height={height}
                     >
                       <Line y={getProjectedDeaths} stroke="#0670de" />
+                      <Points
+                        y={getConfirmedDeaths}
+                        fill="var(--color-gray-03)"
+                      />
                     </PopulationGraph>
                   </div>
                 </div>
@@ -398,7 +408,12 @@ export default ({data, states}) => {
                       cutoffLabel="Hospital capacity"
                       width={width}
                       height={height}
-                    />
+                    >
+                      <Points
+                        y={getConfirmedHospitalizations}
+                        fill="var(--color-gray-03)"
+                      />
+                    </OccupancyGraph>
                   </div>
                 </div>
                 <div>
