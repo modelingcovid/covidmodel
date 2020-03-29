@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {
   Controls,
   DistancingGraph,
+  HospitalCapacity,
   Layout,
   Legend,
   Line,
@@ -18,27 +19,20 @@ import {
 } from '../../components';
 import {useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
+import {getDate} from '../../lib/date';
+import {stateLabels} from '../../lib/controls';
 
 const {useCallback, useRef, useState} = React;
 
-const dayInMs = 24 * 60 * 60 * 1000;
-const dayZero = new Date('Dec 31, 2019').getTime();
-const dayToDate = (day) => new Date(dayZero + dayInMs * day);
-
-const getDate = ({day}) => dayToDate(day);
 const getDistancing = ({distancing}) => distancing;
 const getConfirmedPcr = ({confirmedPcr}) => confirmedPcr;
 const getConfirmedDeaths = ({confirmedDeaths}) => confirmedDeaths;
-const getConfirmedHospitalizations = ({confirmedHospitalizations}) =>
-  confirmedHospitalizations;
 const getProjectedPcr = ({projectedPcr}) => projectedPcr;
 const getProjectedCurrentlyInfected = ({projectedCurrentlyInfected}) =>
   projectedCurrentlyInfected;
 const getProjectedCurrentlyInfectious = ({projectedCurrentlyInfectious}) =>
   projectedCurrentlyInfectious;
 const getProjectedDeaths = ({projectedDeaths}) => projectedDeaths;
-const getProjectedCurrentlyHospitalized = ({projectedCurrentlyHospitalized}) =>
-  projectedCurrentlyHospitalized;
 const getProjectedCurrentlyCritical = ({projectedCurrentlyCritical}) =>
   projectedCurrentlyCritical;
 
@@ -63,8 +57,6 @@ export default ({data, states}) => {
   }
 
   const scenarioSummary = data[scenario].summary;
-
-  const hospitalCapacity = (1 - data.bedUtilization) * data.staffedBeds;
 
   const handleStateSelect = (e) => {
     push(`/state/${e.target.value}`);
@@ -338,30 +330,13 @@ export default ({data, states}) => {
               </div>
               <div className="flex flex-col">
                 <div>
-                  <div>
-                    <div className="section-heading">Hospital Occupancy</div>
-                    <p className="paragraph">
-                      We estimate the hospital capacity for COVID-19 patients by
-                      taking the number of available beds and discounting for
-                      that hospital system's typical occupancy rate.
-                    </p>
-                    <OccupancyGraph
-                      scenario={scenario}
-                      data={data}
-                      x={getDate}
-                      y={getProjectedCurrentlyHospitalized}
-                      cutoff={hospitalCapacity}
-                      xLabel="Hospital occupancy"
-                      cutoffLabel="Hospital capacity"
-                      width={width}
-                      height={height}
-                    >
-                      <Points
-                        y={getConfirmedHospitalizations}
-                        fill="var(--color-gray-03)"
-                      />
-                    </OccupancyGraph>
-                  </div>
+                  <HospitalCapacity
+                    data={data}
+                    scenario={scenario}
+                    state={state}
+                    width={width}
+                    height={height}
+                  />
                 </div>
                 <div>
                   <div>

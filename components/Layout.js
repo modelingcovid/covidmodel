@@ -21,7 +21,7 @@ export const Layout = ({children, noPad = false}) => (
       }
     `}</style>
     <Section>
-      <heading className="section">
+      <header className="section">
         <Link href="/">
           <a className="focus title color-dark">COVID Modeling Project</a>
         </Link>
@@ -36,7 +36,7 @@ export const Layout = ({children, noPad = false}) => (
             <a className="focus link">About</a>
           </Link>
         </div>
-      </heading>
+      </header>
     </Section>
     {children}
   </div>

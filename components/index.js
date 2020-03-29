@@ -1,5 +1,6 @@
 export * from './Controls';
 export * from './DistancingGraph';
+export * from './HospitalCapacity';
 export * from './Layout';
 export * from './Legend';
 export * from './Line';
