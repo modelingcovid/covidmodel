@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {LinearGradient as VxLinearGradient} from '@vx/gradient';
-import {useGraphData} from './useGraphData';
-import {useComponentId} from './useComponentId';
+import {useComponentId, useGraphData} from './util';
 
 export const LinearGradient = ({children, from, id, to, ...props}) => {
   const {yMax} = useGraphData();

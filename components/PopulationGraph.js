@@ -9,7 +9,7 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
-import {GraphDataProvider} from './useGraphData';
+import {GraphDataProvider} from './util';
 
 const {createContext, useCallback, useMemo} = React;
 

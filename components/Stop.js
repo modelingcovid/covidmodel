@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useGraphData} from './useGraphData';
+import {useGraphData} from './util';
 
 export const Stop = ({offset, ...props}) => {
   const {yMax, yScale} = useGraphData();

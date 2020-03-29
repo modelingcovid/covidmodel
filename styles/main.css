@@ -7,13 +7,6 @@ text {
   font-family: inherit;
 }
 
-.section {
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
 :root {
   --font-family-ui: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
     Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -32,6 +25,15 @@ text {
   --spacing-01: 16px;
   --spacing-02: 32px;
   --font-size-small: 14px;
+  --font-size-title: 20px;
+  --font-size-subtitle: 16px;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --font-size-title: 24px;
+    --font-size-subtitle: 20px;
+  }
 }
 
 html {
@@ -40,6 +42,15 @@ html {
 
 .text-small {
   font-size: var(--font-size-small);
+}
+.text-title {
+  font-size: var(--font-size-title);
+  line-height: 1.3;
+  font-weight: 600;
+}
+.text-subtitle {
+  font-size: var(--font-size-subtitle);
+  font-weight: 500;
 }
 .color-dark {
   color: var(--color-gray-04);

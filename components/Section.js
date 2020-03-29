@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-export const Section = ({children, ...props}) => (
-  <section {...props}>
+export const Section = React.forwardRef(({children, ...props}, ref) => (
+  <section {...props} ref={ref}>
     <style jsx>{`
       section {
         padding: 0 var(--spacing-01);
@@ -12,4 +12,4 @@ export const Section = ({children, ...props}) => (
     `}</style>
     {children}
   </section>
-);
+));

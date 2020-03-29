@@ -10,10 +10,9 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
-import {GraphDataProvider} from './useGraphData';
 import {LinearGradient} from './LinearGradient';
 import {Stop} from './Stop';
-import {WithComponentId} from './useComponentId';
+import {GraphDataProvider, WithComponentId} from './util';
 
 const parseDate = timeParse('%Y%m%d');
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Marker} from '@vx/marker';
-import {useGraphData} from './useGraphData';
+import {useGraphData} from './util';
 
 export const VMarker = ({anchor = 'start', value, ...props}) => {
   const {xScale, yMax} = useGraphData();

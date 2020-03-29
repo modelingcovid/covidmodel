@@ -33,9 +33,6 @@ export const Select = ({
         }
         .content {
           min-height: 1em;
-          font-size: 24px;
-          line-height: 1.3;
-          font-weight: 600;
           pointer-events: none;
           display: inline-flex;
           align-items: baseline;
@@ -49,7 +46,7 @@ export const Select = ({
           height: 100%;
         }
       `}</style>
-      <div className="content">
+      <div className="content text-title">
         <span>{children(toLabel(currentValue))}</span>
         <DownArrow fill="var(--color-gray-02)" style={{flexShrink: 0}} />
       </div>
