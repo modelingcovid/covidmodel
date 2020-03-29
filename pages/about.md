@@ -6,7 +6,7 @@ import {Layout, Section, MDXComponents} from '../components';
 
 # About
 
-COVID-19 model is developed by the Covid Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [Github](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
+This model is developed by the Covid Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [GitHub](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
 
 The Covid Open Source Modeling Collaboration is comprised of:
 
