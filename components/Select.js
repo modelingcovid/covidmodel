@@ -30,11 +30,11 @@ export const Select = ({
         .select {
           position: relative;
           display: inline-flex;
-          line-height: 1;
         }
         .content {
           min-height: 1em;
           font-size: 24px;
+          line-height: 1.3;
           font-weight: 600;
           pointer-events: none;
           display: inline-flex;
@@ -51,7 +51,7 @@ export const Select = ({
       `}</style>
       <div className="content">
         <span>{children(toLabel(currentValue))}</span>
-        <DownArrow fill="var(--color-gray-02)" />
+        <DownArrow fill="var(--color-gray-02)" style={{flexShrink: 0}} />
       </div>
       <select value={value} onChange={onChange}>
         {values.map((v, i) => (
