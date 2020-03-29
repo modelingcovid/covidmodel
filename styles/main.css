@@ -6,3 +6,75 @@ text {
   font-size: 14px;
   font-family: inherit;
 }
+
+.section {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+:root {
+  --font-family-ui: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --color-gray-01: #8691a1;
+  --color-gray-02: #515a70;
+  --color-gray-03: #2d3146;
+  --color-gray-04: #181b2c;
+  --color-blue-00: #b5eff1;
+  --color-blue-02: #0670de;
+  --color-blue-03: #0055bc;
+  --color-yellow-00: #fae498;
+  --max-width: 1024px;
+  --spacing-00: 8px;
+  --spacing-01: 16px;
+  --spacing-02: 32px;
+  --font-size-small: 14px;
+}
+
+html {
+  font-family: var(--font-family-ui);
+}
+
+.text-small {
+  font-size: var(--font-size-small);
+}
+.color-dark {
+  color: var(--color-gray-04);
+}
+.underline-blue {
+  background: linear-gradient(
+    transparent 80%,
+    var(--color-blue-00) 80%,
+    var(--color-blue-00) 93%,
+    transparent 93%
+  );
+}
+.underline-yellow {
+  background: linear-gradient(
+    transparent 80%,
+    var(--color-yellow-00) 80%,
+    var(--color-yellow-00) 93%,
+    transparent 93%
+  );
+}
+
+.link {
+  color: var(--color-gray-03);
+  font-weight: 500;
+}
+.link:hover {
+  color: var(--color-blue-03);
+}
+
+.focus:focus,
+.focus-within:focus-within {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  outline: none;
+  border-radius: 3px;
+}
+.focus-within:focus-within .focus:focus {
+  box-shadow: none;
+}

@@ -5,13 +5,11 @@ import numeral from 'numeral';
 import Link from 'next/link';
 
 import {
-  Controls,
   DistancingGraph,
   Layout,
   Line,
   OccupancyGraph,
   PopulationGraph,
-  Section,
 } from '../../components';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import STATES from '../../lib/states';
@@ -56,26 +54,95 @@ export default ({data, states}) => {
   };
 
   return (
-    <Layout>
-      <style jsx>{`
-        .controls {
-          position: sticky;
-          top: 0;
-          background: white;
-          padding: var(--spacing-02) 0;
-          box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-        }
-      `}</style>
+    <Layout noPad>
       <div className="flex flex-col justify-center">
-        <div className="controls">
-          <Section>
-            <Controls
-              state={state}
-              states={states}
-              scenario={scenario}
-              setScenario={setScenario}
-            />
-          </Section>
+        <div className="sticky border-t-2 border-b-2 border-gray-600 top-0 flex flex-col md:flex-row mb-4 bg-white px-6 py-4">
+          <div className="sm:mb-10 md:mb-0 md:mr-10">
+            <div className="text-gray-700">State: </div>
+            <div className="inline-block relative w-64">
+              <select
+                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                onChange={handleStateSelect}
+                value={state}
+              >
+                {states.map((s) => (
+                  <option value={s}>{STATES[s]}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="block">
+              <span className="text-gray-700">Scenario: </span>
+              <div className="mt-2">
+                <div>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      className="form-radio"
+                      name="radio"
+                      checked={scenario === 'scenario4'}
+                      onClick={() => setScenario('scenario4')}
+                    />
+                    <span className="ml-2">
+                      Return to normal (no distancing)
+                    </span>
+                  </label>
+                </div>
+                <div>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      className="form-radio"
+                      name="radio"
+                      checked={scenario === 'scenario1'}
+                      onClick={() => setScenario('scenario1')}
+                    />
+                    <span className="ml-2">
+                      Continue current distancing level for 3 months
+                    </span>
+                  </label>
+                </div>
+                <div>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      className="form-radio"
+                      name="radio"
+                      checked={scenario === 'scenario2'}
+                      onClick={() => setScenario('scenario2')}
+                    />
+                    <span className="ml-2">
+                      Increase distancing to Italy levels for 3 months
+                    </span>
+                  </label>
+                </div>
+                <div>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      className="form-radio"
+                      name="radio"
+                      checked={scenario === 'scenario3'}
+                      onClick={() => setScenario('scenario3')}
+                    />
+                    <span className="ml-2">
+                      Increase distancing to Wuhan levels for 2 months
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col px-6">
           <div className="mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
