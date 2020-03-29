@@ -6,6 +6,9 @@ SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"]
 Import["model/data.wl"];
 Import["model/plot-utils.wl"];
 
+(* model predict max *)
+tmax = 5*365;
+
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 2.8;
 
@@ -50,9 +53,6 @@ USAPopulation = (327.2*10^6);
 (* less than 100 cases in a country the size of the US *)
 containmentThresholdRatio0 = 100/USAPopulation;
 
-(* model predict max *)
-tmax = 5*365;
-
 (* interpret as: steepness of age depencence*)
 medianHospitalizationAge0 = 65;
 
@@ -75,8 +75,6 @@ pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
 pS0 = 1-(pC0 + pH0);
 
 (** Utils **)
-
-dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
       
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
 
@@ -183,12 +181,6 @@ noCare[a_,medianHospitalizationAge_,pCLimit_, pHLimit_,ageCriticalDependence_,ag
 	1-infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]-
 	infectedHospitalized[a, medianHospitalizationAge,pHLimit, ageHospitalizedDependence];
 
-nationalData = Append[#, "day" ->
-					QuantityMagnitude[DateDifference[DateList[{2020,1,1}], DateList[#["date"] // ToString]]]] & /@
-				URLExecute[URLBuild["https://covidtracking.com/api/us/daily"],"RawJSON"];
-
-countryData = Association[{"United States"->nationalData,"France"->franceData,"Spain"->spainData,"Italy"->italyData}];
-
 queryAlphaForDistribution[place_] := 
 	Which[
 		place == "United States",
@@ -221,10 +213,6 @@ cachedAgeDistributionFor[place_] := Module[{placeData},
 	placeData = Import[dataFile["age-distributions.json"]];
 	Association[Association[placeData][place]]];
 
-countryVentilators = Association[{"United States"->61929,"France"->5000,"Italy"->3000,"Spain"->2000}];
-
-countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
-
 countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] := 
 	Module[{raw,pop,dist,buckets},
 		raw = cachedAgeDistributionFor[country];
@@ -241,30 +229,6 @@ countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalD
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
 ];
 
-countryHistoricalDistancing[country_,t_]:=Association[{"Italy"->{{1,t<58},{0.8,58<=t<68},{0.5,68<=t<75},{0.3,68<=t<200},{1,200<=t<=tmax}},"France"->{{1,t<64},{0.8,64<=t<74},{0.35,74<=t<81},{0.35,81<=t<200},{1,200<=t<=tmax}},"Spain"->{{1,t<73},{0.6,74<=t<=81},{0.4,81<=t<200},{1,200<=t<=tmax}},"United States"->{{1,t<85},{0.8,85<=t<85+14},{0.4,85+14<=t<200},{1,200<=t<=tmax}}}][country];
-
-stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
-parsedData = Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}],DateList[#["date"]//ToString]]]]&/@stateData;
-statesWith50CasesAnd5Deaths = DeleteDuplicates[#["state"]&/@Select[parsedData,(#["positive"]>=50&&#["death"]>=5)&]];
-stateRawDemographicData = Association[(#->cachedAgeDistributionFor[#])&/@statesWith50CasesAnd5Deaths];
-stateImportTime = Association[{"NY"->56,"AZ"->63,"CA"->56,"CO"->55,"CT"->57,"FL"->56,"GA"->52,"IL"->58,"IN"->58,"MA"->58, "MI"->59,"NJ"->56,"NV"->58,"OH"->61,"PA"->62,"SC"->59,"TX"->61,"VA"->58,"VT"->54,"WA"->41,"WI"->60,"LA"->51,"OR"->55}];
-
-icuRawData=Import["model/data/icu-beds.csv","CSV"];
-icuHeader=icuRawData[[1]];
-icuBody=icuRawData[[2;;]];
-icuParsedData=Thread[icuHeader->#]&/@icuBody//Map[Association];
-stateICURawData=GroupBy[icuParsedData,#["HQ_STATE"]&];
-stateICUData=<|"icuBeds"->Sum[If[#[[i]]["NUM_ICU_BEDS"] == "",0,#[[i]]["NUM_ICU_BEDS"]],{i,1,Length[#]}],
-"staffedBeds"->Sum[If[#[[i]]["NUM_STAFFED_BEDS"] == "",0,#[[i]]["NUM_STAFFED_BEDS"]],{i,1,Length[#]}],
-"bedUtilization"->Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,#[[i]]["BED_UTILIZATION"]],{i,1,Length[#]}]/Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,1],{i,1,Length[#]}]
-|>&/@stateICURawData; //Quiet
-
-hospitalizationsRawData=Import["model/data/hospitalized.csv"];
-hospitalizationsHeader=hospitalizationsRawData[[1]];
-hospitalizationsBody=hospitalizationsRawData[[2;;]];
-hospitalizationsParsedData=Thread[hospitalizationsHeader->#]&/@hospitalizationsBody//Map[Association];
-stateHospitalizationData[state_]:=Select[Association[{"day"->#["State"], "hospitalizations"->If[#[state]=="",0,#[state]]}]&/@hospitalizationsParsedData,#["hospitalizations"]>0&]
-
 stateParams[state_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_]:=Module[{raw,pop,dist,buckets},
 raw = stateRawDemographicData[state];
 pop = raw["Population"];
@@ -278,20 +242,19 @@ buckets = raw["Buckets"];
 "icuBeds"->stateICUData[state]["icuBeds"],
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
-"R0"->Association[Select[stateDistancingData,#["state"]==state&]]["baseline"]*r0natural0/100,
+"R0"-> If[KeyExistsQ[Association[Select[stateDistancingData,#["state"]==state&]],"baseline"],Association[Select[stateDistancingData,#["state"]==state&]]["baseline"]*r0natural0/100,r0natural0],
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
 ];
 
-evaluateScenario[state_, scenario_]:=Module[{distance,interp,t},
+evaluateScenario[state_, scenario_]:=Module[{distance,t},
 	params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0];
 	thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
 	icuCapacity=params["icuBeds"]/params["Population"];
 	hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["Population"];
 	hospitalizationData = stateHospitalizationData[state];
-	interp = Interpolation[Table[Piecewise[stateHistoricalDistancing[state, scenario, i], 1], {i, 0, 200}]];
-	distance[t_] := interp[Max[1, Min[t, 200]]];
+	distance[t_] := stateDistancing[state,scenario,t];
 	
 	baseline=distance[1];
 	
@@ -322,7 +285,7 @@ evaluateScenario[state_, scenario_]:=Module[{distance,interp,t},
 	events=Association[Flatten[evts]];
 	
 	timeSeriesData=Table[Module[{},
-	{
+	Association[{
 
 	"day"->t,
 	"distancing"->(distance[t]/baseline),
@@ -337,7 +300,7 @@ evaluateScenario[state_, scenario_]:=Module[{distance,interp,t},
 	"projectedCumulativeInfections"->Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]],
 	"projectedCurrentlyHospitalized"->Evaluate[params["Population"]*HHq[t]/.sol][[1]],
 	"projectedCurrentlyCritical"->Evaluate[params["Population"]*CCq[t]/.sol][[1]]
-	}],{t,0,300}];
+	}]],{t,0,300}];
 	
 	summary=<|
 	"totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],Evaluate[params["Population"]*Deaq[t]/.sol/.{t->events["containment"][[1]][[1]]}][[1]], Evaluate[params["Population"]*Deaq[t]/.sol/.{t->1000}][[1]]] ,"totalProjectedPCRConfirmed"->If[KeyExistsQ[events, "containment"],
@@ -361,18 +324,32 @@ evaluateScenario[state_, scenario_]:=Module[{distance,interp,t},
 	}]
 ];
 
-scenarios={"scenario1","scenario2","scenario3","scenario4"};
+(* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
+(* maintain takes the last day of data from the historicals and uses that as the distancing level *)
+scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True|>;
+scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False|>;
+scenario3=<|"id"->"scenario3","distancingDays"->90,"distancingLevel"->0.11,"maintain"->False|>;
+scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False|>;
+
+scenarios={scenario1,scenario2,scenario3,scenario4};
 
 (* evaluate state for all scenarios *)
 evaluateState[state_]:=Merge[
-{Association[{#->evaluateScenario[state,#]}]&/@scenarios,
+{Association[{#["id"]->evaluateScenario[state,#]}]&/@scenarios,
 stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0]},
 First
 ];
 
 (* export the full model data *)
-GenerateModelExport[] := Export["public/json/model.json",
-	Association[{# -> evaluateState[#]} & /@ distancingStates]];
+evaluateStateAndPrint[state_]:=Module[{},
+  Print["generating data for " <> state];
+  evaluateState[state]
+];
+GenerateModelExport[] := Module[{allStateData},
+allStateData=Parallelize[
+Map[{#->evaluateStateAndPrint[#]}&,distancingStates]];
+Export["public/json/model.json",Association[allStateData]]
+]
 
 
 

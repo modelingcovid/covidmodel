@@ -2,7 +2,7 @@ import {useRouter} from 'next/router';
 
 import {Layout} from '../../components';
 import {getStatesWithData} from '../../lib/data';
-import STATES from '../../lib/states';
+import {stateLabels} from '../../lib/controls';
 
 export default ({states}) => {
   const {push} = useRouter();
@@ -23,7 +23,7 @@ export default ({states}) => {
                 value="-"
               >
                 {states.map((s) => (
-                  <option value={s}>{STATES[s]}</option>
+                  <option value={s}>{stateLabels[s]}</option>
                 ))}
                 <option>-</option>
               </select>

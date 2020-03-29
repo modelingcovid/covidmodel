@@ -16,7 +16,6 @@ import {
 } from '../../components';
 import {useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
-import STATES from '../../lib/states';
 
 const {useCallback, useRef, useState} = React;
 
