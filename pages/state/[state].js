@@ -103,9 +103,6 @@ export default ({data, states}) => {
         .section {
           padding-bottom: 128px;
         }
-        .notices {
-          padding-top: 16px;
-        }
       `}</style>
       <style jsx>{`
         .sticky-overlay,
@@ -268,68 +265,7 @@ export default ({data, states}) => {
             <Section>The model predicts…</Section>
           </div>
           <Section>
-            <div className="notices">
-              {scenarioSummary['Date Contained'] === 'Not Contained' ? (
-                <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
-                  <strong className="font-bold">
-                    Virus not contained{` `}
-                  </strong>
-                  <span className="block m:inline">
-                    {numeral(scenarioSummary['Population Infected']).format(
-                      '0.00%'
-                    )}{' '}
-                    of state infected,{' '}
-                    {numeral(scenarioSummary['Deaths']).format('0,0')} deaths
-                  </span>
-                </div>
-              ) : (
-                <div className="mb-2 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded">
-                  <strong className="font-bold">Virus contained{` `}</strong>
-                  <span className="block m:inline">
-                    Virus contained on{' '}
-                    {dayjs(scenarioSummary['Date Contained']).format(
-                      'MMM D, YYYY'
-                    )}
-                  </span>
-                </div>
-              )}
-              {scenarioSummary['Date Hospitals Over Capacity'] !==
-              'Hospitals Under capacity' ? (
-                <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
-                  <strong className="font-bold">
-                    Hospitals Overloaded{` `}
-                  </strong>
-                  <span className="block m:inline">
-                    on{' '}
-                    {dayjs(
-                      scenarioSummary['Date Hospitals Over Capacity']
-                    ).format('MMM D, YYYY')}
-                  </span>
-                </div>
-              ) : (
-                <div className="mb-2 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded">
-                  <strong className="font-bold">
-                    Hospitals Under Capacity{` `}
-                  </strong>
-                </div>
-              )}
-              {scenarioSummary['Date ICU Over Capacity'] !==
-              'ICU Under capacity' ? (
-                <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
-                  <strong className="font-bold">ICU Overloaded{` `}</strong>
-                  <span className="block m:inline">
-                    on{' '}
-                    {dayjs(scenarioSummary['Date ICU Over Capacity']).format(
-                      'MMM D, YYYY'
-                    )}
-                  </span>
-                </div>
-              ) : (
-                <div className="mb-2 bg-green-200 border border-green-400 text-green-700 px-4 py-3 rounded">
-                  <strong className="font-bold">ICU under capacity</strong>
-                </div>
-              )}
-
+            <div>
               <div className="flex flex-col">
                 <div>
                   <div>
