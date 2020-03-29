@@ -1,7 +1,39 @@
 (* ::Package:: *)
 
-
 dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
+
+(* get data for age distribution and cache it in a json file *)
+queryAlphaForDistribution[place_] := 
+	Which[
+		place == "United States",
+			WolframAlpha["United States age distribution",
+					 {{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
+		StringLength[place] == 2,
+			WolframAlpha[StringTemplate["`` state age distribution"][place],
+				{{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
+		True, WolframAlpha[StringTemplate["`` age distribution"][place],
+					 {{"AgeDistributionGrid:AgeDistributionData",1},"ComputableData"},
+					 PodStates->{"AgeDistributionGrid:AgeDistributionData__Show details"}]];
+
+ageDistributionFor[place_] := Module[{rawdist, pop, dist, buckets},
+	rawdist = queryAlphaForDistribution[place];
+	pop = QuantityMagnitude[Last[rawdist][[4]]];
+	dist = {StringCases[#[[1]], NumberString][[1]] // ToExpression,
+			QuantityMagnitude[#[[4]]/pop]} & /@ (Most@Rest@rawdist); 
+	buckets=(#[[1]]) & /@ dist;
+	<|
+ 		"Population" -> pop,
+ 		"Distribution" -> dist,
+ 		"Buckets" -> buckets
+ 	|>
+	];
+	
+exportDistributionJSON[] := With[{places = countries ~Join~ USStates},
+	Export[dataFile["age-distributions.json"], AssociationMap[ageDistributionFor, places]]];
+	
+cachedAgeDistributionFor[place_] := Module[{placeData},
+	placeData = Import[dataFile["age-distributions.json"]];
+	Association[Association[placeData][place]]];
 
 (* country level data *)
 countries={"United States","France","Spain","Italy"};
@@ -17,17 +49,17 @@ countryVentilators = Association[{"United States"->61929,"France"->5000,"Italy"-
 countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
 
 (* https://docs.google.com/spreadsheets/d/1-kffWhXDyR4s0hL9YWG2ld0QWcCkxp8YxrbwFp52MJg *)
-italyDataRaw=Import[dataFile["italy.csv"]]
+italyDataRaw=Import[dataFile["italy.csv"]];
 italyDataHeader=italyDataRaw[[1]];
 italyDataBody=italyDataRaw[[2;;]];
 italyData=Thread[italyDataHeader->#]&/@italyDataBody//Map[Association];
 
-franceDataRaw=Import[dataFile["france.csv"]]
+franceDataRaw=Import[dataFile["france.csv"]];
 franceDataHeader=franceDataRaw[[1]];
 franceDataBody=franceDataRaw[[2;;]];
 franceData=Thread[franceDataHeader->#]&/@franceDataBody//Map[Association];
 
-spainDataRaw=Import[dataFile["spain.csv"]]
+spainDataRaw=Import[dataFile["spain.csv"]];
 spainDataHeader=spainDataRaw[[1]];
 spainDataBody=spainDataRaw[[2;;]];
 spainData=Thread[spainDataHeader->#]&/@spainDataBody//Map[Association];
@@ -101,7 +133,10 @@ mapLevels[scenario["distancingLevel"]]
 Merge[{mapLevels[1],<|"day"->#+today+distancingEasePeriod+scenario["distancingDays"]|>},First]&/@Range[365-scenario["distancingDays"]-today-distancingEasePeriod]
 ]
 ]
+
+(* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
 stateDistancing[state_,scenario_,t_]:=Interpolation[{#["day"],#[state]}&/@evalScenario[scenario]][Max[1, Min[t, 300]]];
+
 
 
 
