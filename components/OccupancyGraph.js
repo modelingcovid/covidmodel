@@ -164,7 +164,7 @@ export const OccupancyGraph = ({
               )}
             </WithComponentId>
             <text
-              x="0"
+              x="-5"
               y="15"
               textAnchor="end"
               transform="rotate(-90)"

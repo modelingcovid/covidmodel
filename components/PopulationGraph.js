@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
-import {curveBasis} from '@vx/curve';
+import {Marker} from '@vx/marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleSymlog} from '@vx/scale';
@@ -137,10 +137,23 @@ export const PopulationGraph = ({
               tickFormat={valueFormat}
               tickLabelProps={valueTickLabelProps}
             />
+            <Marker
+              from={{x: xMax, y: yScale(population)}}
+              to={{x: 0, y: yScale(population)}}
+              stroke="#515a70"
+              label={`Population ${valueFormat(population)}`}
+              labelStroke="#fff"
+              labelAnchor="end"
+              labelStrokeWidth="5"
+              strokeDasharray="2,1"
+              strokeWidth={1.5}
+              labelDx={-20}
+              labelDy={15}
+            />
             {children}
             <TodayMarker />
             <text
-              x="0"
+              x="-5"
               y="15"
               textAnchor="end"
               transform="rotate(-90)"

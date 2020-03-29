@@ -16,11 +16,12 @@ export const TodayMarker = () => {
       to={{x: xScale(today), y: yMax}}
       stroke="#8691a1"
       label="Today"
+      labelAnchor="end"
       labelStroke="none"
       strokeDasharray="2,1"
       strokeWidth={1.5}
-      labelDx={6}
-      labelDy={15}
+      labelDx={-6}
+      labelDy={30}
     />
   );
 };
