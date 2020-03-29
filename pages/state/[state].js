@@ -9,6 +9,7 @@ import {
   Controls,
   DistancingGraph,
   Layout,
+  Legend,
   Line,
   OccupancyGraph,
   Points,
@@ -299,6 +300,15 @@ export default ({data, states}) => {
                       <Line y={getProjectedPcr} stroke="#ed6804" />
                       <Points y={getConfirmedPcr} fill="var(--color-gray-03)" />
                     </PopulationGraph>
+                    <div style={{paddingTop: '16px'}}>
+                      <Legend color="#ed6804">Projected PCR</Legend>
+                      <Legend color="#0670de">
+                        Projected currently infected
+                      </Legend>
+                      <Legend color="#228403">
+                        Projected currently infectious
+                      </Legend>
+                    </div>
                   </div>
                 </div>
                 <div>
