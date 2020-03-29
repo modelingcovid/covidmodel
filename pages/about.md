@@ -12,7 +12,7 @@ The Covid Open Source Modeling Collaboration is comprised of:
 
 - [Marc Lipsitch](https://www.hsph.harvard.edu/marc-lipsitch/), [Yonatan Grad](https://www.hsph.harvard.edu/yonatan-grad/), [Stephen Kissler](https://www.hsph.harvard.edu/stephen-kissler/), and [Christine Tedijanto](https://ccdd.hsph.harvard.edu/people/christine-tedijanto/) at Harvard.
 - [Silvana Konermann](https://biochemistry.stanford.edu/silvana-konermann) at Stanford.
-- [Stripe](https://stripe.com).
+- Will Bunting, Daryl Koopersmith, and others at [Stripe](https://stripe.com).
 - [GitHub](https://github.com).
 
 ## Model
