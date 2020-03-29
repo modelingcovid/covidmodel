@@ -11,14 +11,8 @@ export const MDXComponents = ({children}) => {
   return (
     <MDXProvider
       components={{
-        h1: tagWithClassName(
-          'h1',
-          'text-gray-800 mt-12 mb-4 -ml-1 text-xl font-extrabold tracking-wider'
-        ),
-        h2: tagWithClassName(
-          'h2',
-          'text-gray-800 mt-12 mb-4 -ml-1 text-xl font-bold tracking-wide'
-        ),
+        h1: tagWithClassName('h1', 'text-title'),
+        h2: tagWithClassName('h2', 'text-subtitle'),
         h3: tagWithClassName(
           'h3',
           'text-gray-800 mt-12 mb-4 -ml-1 text-lg font-bold'
@@ -35,10 +29,7 @@ export const MDXComponents = ({children}) => {
           'h6',
           'text-gray-800 mt-12 mb-4 -ml-1 text-base font-semibold'
         ),
-        p: tagWithClassName(
-          'p',
-          'text-gray-800 leading-relaxed font-light mt-2 mb-4'
-        ),
+        p: tagWithClassName('p', 'paragraph'),
         a: tagWithClassName(
           'a',
           'text-blue-700 hover:text-blue-500 leading-relaxed font-medium mb-8'
@@ -49,7 +40,7 @@ export const MDXComponents = ({children}) => {
         ),
         ul: tagWithClassName('ul', 'list-disc m-4'),
         ol: tagWithClassName('ol', 'list-decimal m-4'),
-        li: tagWithClassName('li', 'text-gray-800 font-light my-1'),
+        li: tagWithClassName('li', 'text-body'),
         strong: tagWithClassName('strong', 'font-semibold'),
         em: tagWithClassName('em', 'italic'),
       }}

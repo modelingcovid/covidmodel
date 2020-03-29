@@ -63,13 +63,19 @@ html {
   font-size: var(--font-size-subtitle);
   font-weight: 500;
 }
+.text-heading,
 .section-heading {
-  margin-top: var(--spacing-04);
   font-size: var(--font-size-section);
   font-weight: 600;
 }
+.section-heading {
+  margin-top: var(--spacing-04);
+}
+.text-body,
 .paragraph {
   font-size: var(--font-size-body);
+}
+.paragraph {
   max-width: 640px;
   margin-bottom: var(--spacing-02);
 }
