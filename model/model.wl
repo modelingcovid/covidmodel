@@ -278,7 +278,7 @@ buckets = raw["Buckets"];
 "icuBeds"->stateICUData[state]["icuBeds"],
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
-"R0"->Association[Select[stateDistancingData,#["state"]=="CA"&]]["baseline"]*r0natural0/100,
+"R0"->Association[Select[stateDistancingData,#["state"]==state&]]["baseline"]*r0natural0/100,
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
