@@ -6,7 +6,14 @@ import {Layout, Section, MDXComponents} from '../components';
 
 # About
 
-COVID-19 model is developed by a team at <a href="https://stripe.com">Stripe</a> to help combat the spread of the virus. The model Mathematica code is open-source and available on [Github](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
+COVID-19 model is developed by the Covid Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [Github](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
+
+The Covid Open Source Modeling Collaboration is comprised of:
+
+- [Marc Lipsitch](https://www.hsph.harvard.edu/marc-lipsitch/)'s Lab at Harvard
+- [Silvana Konermann](https://biochemistry.stanford.edu/silvana-konermann)'s Lab at Stanford
+- [Stripe](https://stripe.com)
+- [GitHub](https://github.com)
 
 ## Model
 
