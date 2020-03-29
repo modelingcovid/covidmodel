@@ -136,7 +136,7 @@ export const OccupancyGraph = ({
             <Marker
               from={{x: 0, y: yScale(cutoff)}}
               to={{x: xMax, y: yScale(cutoff)}}
-              stroke="#ed6804"
+              stroke="#f00"
               label={cutoffLabel}
               labelStroke="#fff"
               labelStrokeWidth="5"
@@ -149,8 +149,8 @@ export const OccupancyGraph = ({
             <WithComponentId prefix="linearGradient">
               {(gradientId) => (
                 <>
-                  <LinearGradient id={gradientId} from="#222" to="#f00">
-                    <Stop offset={cutoff} stopColor="#222" />
+                  <LinearGradient id={gradientId} from="#0670de" to="#f00">
+                    <Stop offset={cutoff} stopColor="#0670de" />
                     <Stop offset={cutoff} stopColor="#f00" />
                   </LinearGradient>
                   <LinePath
