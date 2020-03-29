@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
-import {curveBasis} from '@vx/curve';
 import {HMarker} from './Marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
@@ -46,7 +45,7 @@ export const OccupancyGraph = ({
   xLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 10, left: 80, right: 0, bottom: 50},
+  margin = {top: 16, left: 64, right: 64, bottom: 32},
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
   const allPoints = useMemo(
@@ -94,7 +93,7 @@ export const OccupancyGraph = ({
       xMax={xMax}
       yMax={yMax}
     >
-      <div>
+      <div className="graph">
         <svg width={width} height={height}>
           <Group left={margin.left} top={margin.top}>
             <GridRows

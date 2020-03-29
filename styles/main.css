@@ -20,24 +20,35 @@ text {
   --color-blue-02: #0670de;
   --color-blue-03: #0055bc;
   --color-yellow-00: #fae498;
-  --max-width: 1024px;
   --spacing-00: 8px;
   --spacing-01: 16px;
   --spacing-02: 32px;
+  --spacing-03: 64px;
+  --spacing-04: 96px;
   --font-size-small: 14px;
   --font-size-title: 20px;
   --font-size-subtitle: 16px;
+  --font-size-section: 14px;
+  --font-size-body: 14px;
+  --column-count: 16;
+  --column-width: 32px;
+  --gutter-width: var(--column-width);
+  --max-width: calc(var(--column-width) * var(--column-count));
 }
 
 @media (min-width: 600px) {
   :root {
+    --column-width: 64px;
     --font-size-title: 24px;
     --font-size-subtitle: 20px;
+    --font-size-section: 16px;
+    --font-size-body: 14px;
   }
 }
 
 html {
   font-family: var(--font-family-ui);
+  color: var(--color-gray-03);
 }
 
 .text-small {
@@ -51,6 +62,16 @@ html {
 .text-subtitle {
   font-size: var(--font-size-subtitle);
   font-weight: 500;
+}
+.section-heading {
+  margin-top: var(--spacing-04);
+  font-size: var(--font-size-section);
+  font-weight: 600;
+}
+.paragraph {
+  font-size: var(--font-size-body);
+  max-width: 640px;
+  margin-bottom: var(--spacing-02);
 }
 .color-dark {
   color: var(--color-gray-04);
@@ -88,4 +109,7 @@ html {
 }
 .focus-within:focus-within .focus:focus {
   box-shadow: none;
+}
+.graph {
+  margin: 0 calc(-1 * var(--gutter-width));
 }

@@ -44,10 +44,12 @@ export default ({data, states}) => {
   console.log('State', state, data);
   const [scenario, setScenario] = useState('scenario1');
   const controlRef = useRef(null);
-  const controlRect = useContentRect(controlRef, {width: 992, height: 126});
+  const controlRect = useContentRect(controlRef, {width: 896, height: 126});
 
   const sizeRef = useRef(null);
-  const {width} = useContentRect(sizeRef, {width: 992, height: 360});
+  const sizeRect = useContentRect(sizeRef, {width: 896, height: 360});
+  // TODO(koop): Move gutter calculations
+  const width = sizeRect.width + 64 * 2;
   const height = 360;
 
   if (!data) {
@@ -66,7 +68,10 @@ export default ({data, states}) => {
     <Layout>
       <Head>
         <title>{states[state]} COVID model forecast</title>
-        <meta name="Description" content={`A projection of COVID 19 cases in ${states[state]} under various scenarios of social distancing.`} />
+        <meta
+          name="Description"
+          content={`A projection of COVID 19 cases in ${states[state]} under various scenarios of social distancing.`}
+        />
       </Head>
       <style jsx>{`
         .sticky,
@@ -91,7 +96,10 @@ export default ({data, states}) => {
           z-index: 0;
         }
         .section {
-          padding-top: 64px;
+          padding-bottom: 128px;
+        }
+        .notices {
+          padding-top: 16px;
         }
       `}</style>
       <style jsx>{`
@@ -119,18 +127,18 @@ export default ({data, states}) => {
             <Section>Based on these inputs</Section>
           </div>
           <Section>
-            <div ref={sizeRef}>
-              <div className="section">
+            <div ref={sizeRef} className="section">
+              <div>
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">Social Distancing</div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <div className="section-heading">Social Distancing</div>
+                    <p className="paragraph">
                       On the left axis social distance of 100% means no contact
                       with others, which yields an R0 (basic reproduction
                       number) for the virus of zero, since it cannot find new
                       hosts. The zero-percent distance is the un-inhibited
                       reproduction number which is thought to be around 3.1.
-                    </div>
+                    </p>
                     <DistancingGraph
                       scenario={scenario}
                       data={data}
@@ -144,15 +152,15 @@ export default ({data, states}) => {
                 </div>
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">
+                    <div className="section-heading">
                       Demographic Parameters
                     </div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <p className="paragraph">
                       Demographic parameters are calculated based on publically
                       available data on age distributions and hospital capacity.
                       The hospitalization probabilities are computed based on
                       assumed age-based need and state age distributions.
-                    </div>
+                    </p>
                     <table className="table-fixed mb-0 mb-4 border-2 border-gray-600">
                       <tbody>
                         <tr>
@@ -208,7 +216,7 @@ export default ({data, states}) => {
                       </tbody>
                     </table>
                     <div>
-                      <div className="text-gray-600 mb-2">
+                      <div className="section-heading">
                         Model-fit Parameters
                       </div>
                       <div className="text-gray-800 text-sm mb-4">
@@ -255,7 +263,7 @@ export default ({data, states}) => {
             <Section>The model predicts…</Section>
           </div>
           <Section>
-            <div className="section">
+            <div className="notices">
               {scenarioSummary['Date Contained'] === 'Not Contained' ? (
                 <div className="mb-2 bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded">
                   <strong className="font-bold">
@@ -320,17 +328,17 @@ export default ({data, states}) => {
               <div className="flex flex-col">
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">
+                    <div className="section-heading">
                       Case Progression Curve
                     </div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <p className="paragraph">
                       We show the current number of infected and infectious
                       individuals as well as the cumulative number of expected
                       PCR confirmations. If less than 20% of the population is
                       infected and the number of active infections is reduced to
                       a small fraction of the population we consider the
                       epidemic contained, and place a grey box on the plot.
-                    </div>
+                    </p>
                     <PopulationGraph
                       scenario={scenario}
                       data={data}
@@ -353,11 +361,11 @@ export default ({data, states}) => {
                 </div>
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">Projected deaths</div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <div className="section-heading">Projected deaths</div>
+                    <p className="paragraph">
                       We project the cumulative number of deaths on a
                       logarithmic scale. Black dots are confirmed counts.
-                    </div>
+                    </p>
                     <PopulationGraph
                       scenario={scenario}
                       data={data}
@@ -374,12 +382,12 @@ export default ({data, states}) => {
               <div className="flex flex-col">
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">Hospital Occupancy</div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <div className="section-heading">Hospital Occupancy</div>
+                    <p className="paragraph">
                       We estimate the hospital capacity for COVID-19 patients by
                       taking the number of available beds and discounting for
                       that hospital system's typical occupancy rate.
-                    </div>
+                    </p>
                     <OccupancyGraph
                       scenario={scenario}
                       data={data}
@@ -395,14 +403,14 @@ export default ({data, states}) => {
                 </div>
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">ICU Occupancy</div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <div className="section-heading">ICU Occupancy</div>
+                    <p className="paragraph">
                       Note: we assign a higher probability of fatality in the
                       case the ICU capacity is over-shot. This can be seen in
                       countries like Italy where the fatlity rate is
                       substantially higher even controlling for the age
                       distriubtion.
-                    </div>
+                    </p>
                     <OccupancyGraph
                       scenario={scenario}
                       data={data}
@@ -420,15 +428,15 @@ export default ({data, states}) => {
               <div className="flex flex-col">
                 <div>
                   <div>
-                    <div className="text-gray-600 mb-2">Outcome Summary</div>
-                    <div className="text-gray-800 text-sm mb-4">
+                    <div className="section-heading">Outcome Summary</div>
+                    <p className="paragraph">
                       Fatality rate and percent of population infected are the
                       expected PCR confirmed rates with current levels of
                       testing in the US. The infected percentage is expected to
                       be a few times lower than the real rate and the real
                       fatality rate a few times lower to account for unconfirmed
                       mild cases.
-                    </div>
+                    </p>
                     <table className="table-fixed mb-0 md:mb-4 border-2 border-gray-600">
                       <tbody>
                         <tr>

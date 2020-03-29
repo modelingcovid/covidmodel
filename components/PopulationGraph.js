@@ -47,7 +47,7 @@ export const PopulationGraph = ({
   xLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 10, left: 80, right: 0, bottom: 50},
+  margin = {top: 16, left: 64, right: 64, bottom: 32},
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
   const xScale = useMemo(
@@ -100,7 +100,7 @@ export const PopulationGraph = ({
       xMax={xMax}
       yMax={yMax}
     >
-      <div>
+      <div className="graph">
         <svg width={width} height={height}>
           {/* <rect
           x={0}
