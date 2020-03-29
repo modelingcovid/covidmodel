@@ -1,5 +1,7 @@
 (* ::Package:: *)
 
+SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
+
 dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
 
 (* get data for age distribution and cache it in a json file *)
