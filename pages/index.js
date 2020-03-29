@@ -1,8 +1,13 @@
 import Link from 'next/link';
+import Head from 'next/head';
 import {Layout} from '../components';
 
 export default () => (
   <Layout>
+    <Head>
+      <title>COVID Modeling Project</title>
+      <meta name="Description" content={`COVID-19 forecasting models trained to actual social distancing, PCR test, and fatality data.`} />
+    </Head>
     <div className="flex flex-col justify-start">
       <div className="mb-4 bg-white rounded overflow-hidden shadow-lg px-6 py-4">
         <p className="mb-4">

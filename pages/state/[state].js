@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import {useRouter} from 'next/router';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
@@ -64,6 +65,10 @@ export default ({data, states}) => {
 
   return (
     <Layout>
+      <Head>
+        <title>{states[state]} COVID model forecast</title>
+        <meta name="Description" content={`A projection of COVID 19 cases in ${states[state]} under various scenarios of social distancing.`} />
+      </Head>
       <style jsx>{`
         .sticky,
         .sticky-overlay,
