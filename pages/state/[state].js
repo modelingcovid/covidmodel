@@ -87,7 +87,7 @@ export default ({data, states}) => {
           z-index: 0;
         }
         .section {
-          padding-top: 32px;
+          padding-top: 64px;
         }
       `}</style>
       <style jsx>{`
