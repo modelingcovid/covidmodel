@@ -11,6 +11,7 @@ import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
 import {LinearGradient, Stop} from './LinearGradient';
 import {GraphDataProvider, WithComponentId} from './util';
+import {today} from '../lib/date';
 
 const parseDate = timeParse('%Y%m%d');
 
@@ -142,13 +143,23 @@ export const DistancingGraph = ({
             />
             <TodayMarker anchor="end" />
             {children}
-            <LinePath
-              data={scenarioData}
-              x={(d) => xScale(x(d))}
-              y={(d) => yScale(y(d))}
-              stroke="#0670de"
-              strokeWidth={1.5}
-            />
+            <WithComponentId prefix="linearGradient">
+              {(gradientId) => (
+                <>
+                  <LinearGradient direction="right" id={gradientId}>
+                    <Stop offset={today} stopColor="var(--color-blue-02)" />
+                    <Stop offset={today} stopColor="var(--color-yellow-02)" />
+                  </LinearGradient>
+                  <LinePath
+                    data={scenarioData}
+                    x={(d) => xScale(x(d))}
+                    y={(d) => yScale(y(d))}
+                    stroke={`url(#${gradientId})`}
+                    strokeWidth={1.5}
+                  />
+                </>
+              )}
+            </WithComponentId>
             <text
               x="-5"
               y="15"
