@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
-import {curveBasis} from '@vx/curve';
 import {Marker} from '@vx/marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
