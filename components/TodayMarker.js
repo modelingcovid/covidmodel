@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Marker} from '@vx/marker';
+import {VMarker} from './Marker';
 import {useGraphData} from './useGraphData';
 
 const today = new Date();
@@ -8,12 +8,11 @@ today.setMinutes(0);
 today.setSeconds(0);
 today.setMilliseconds(0);
 
-export const TodayMarker = () => {
-  const {xScale, yMax} = useGraphData();
+export const TodayMarker = ({anchor = 'start'}) => {
   return (
-    <Marker
-      from={{x: xScale(today), y: 0}}
-      to={{x: xScale(today), y: yMax}}
+    <VMarker
+      anchor={anchor}
+      value={today}
       stroke="#8691a1"
       label="Today"
       labelAnchor="end"
@@ -21,7 +20,7 @@ export const TodayMarker = () => {
       strokeDasharray="2,1"
       strokeWidth={1.5}
       labelDx={-6}
-      labelDy={30}
+      labelDy={anchor === 'start' ? 30 : -30}
     />
   );
 };

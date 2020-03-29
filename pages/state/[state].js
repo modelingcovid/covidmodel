@@ -4,7 +4,13 @@ import dayjs from 'dayjs';
 import numeral from 'numeral';
 import Link from 'next/link';
 
-import {Layout, Line, OccupancyGraph, PopulationGraph} from '../../components';
+import {
+  DistancingGraph,
+  Layout,
+  Line,
+  OccupancyGraph,
+  PopulationGraph,
+} from '../../components';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import STATES from '../../lib/states';
 
@@ -15,6 +21,7 @@ const dayZero = new Date('Dec 31, 2019').getTime();
 const dayToDate = (day) => new Date(dayZero + dayInMs * day);
 
 const getDate = ({day}) => dayToDate(day);
+const getDistancing = ({distancing}) => distancing;
 const getProjectedPcr = ({projectedPcr}) => projectedPcr;
 const getProjectedCurrentlyInfected = ({projectedCurrentlyInfected}) =>
   projectedCurrentlyInfected;
@@ -151,6 +158,15 @@ export default ({data, states}) => {
                     zero-percent distance is the un-inhibited reproduction
                     number which is thought to be around 3.1.
                   </div>
+                  <DistancingGraph
+                    scenario={scenario}
+                    data={data}
+                    x={getDate}
+                    y={getDistancing}
+                    xLabel="Social distance"
+                    width="500"
+                    height="300"
+                  />
                 </div>
               </div>
               <div className="w-full md:w-1/2">

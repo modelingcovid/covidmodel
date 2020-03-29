@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
-import {Marker} from '@vx/marker';
+import {HMarker} from './Marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleSymlog} from '@vx/scale';
@@ -137,9 +137,9 @@ export const PopulationGraph = ({
               tickFormat={valueFormat}
               tickLabelProps={valueTickLabelProps}
             />
-            <Marker
-              from={{x: xMax, y: yScale(population)}}
-              to={{x: 0, y: yScale(population)}}
+            <HMarker
+              value={population}
+              anchor="end"
               stroke="#515a70"
               label={`Population ${valueFormat(population)}`}
               labelStroke="#fff"

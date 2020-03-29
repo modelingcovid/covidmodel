@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
 import {curveBasis} from '@vx/curve';
-import {HMarker} from './Marker';
+import {Marker} from '@vx/marker';
 import {LinePath} from './LinePath';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleLinear} from '@vx/scale';
-import {AxisLeft, AxisBottom} from '@vx/axis';
+import {AxisLeft, AxisBottom, AxisRight} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
+import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
@@ -20,23 +21,30 @@ const yearFormat = timeFormat('%Y');
 const shortMonthFormat = timeFormat('%b');
 const isYear = (date) => date.getMonth() === 0;
 
+const round2Format = formatNumber('.3');
+const invertPercentFormat = (n) => formatNumber('.0%')(1 - n);
 const dateAxisFormat = (date) =>
   isYear(date) ? yearFormat(date) : shortMonthFormat(date);
 
-const valueTickLabelProps = () => ({
+const startTickLabelProps = () => ({
   dx: '-0.25em',
   dy: '0.25em',
   textAnchor: 'end',
+});
+const endTickLabelProps = () => ({
+  dx: '0.25em',
+  dy: '0.25em',
+  textAnchor: 'start',
 });
 const dateTickLabelProps = (date) => ({
   textAnchor: 'middle',
 });
 
-const {useMemo} = React;
+const {useCallback, useMemo} = React;
 
 const identity = (n) => n;
 
-export const OccupancyGraph = ({
+export const DistancingGraph = ({
   children,
   data,
   scenario,
@@ -47,7 +55,7 @@ export const OccupancyGraph = ({
   xLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 10, left: 80, right: 0, bottom: 50},
+  margin = {top: 10, left: 80, right: 80, bottom: 50},
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
   const allPoints = useMemo(
@@ -58,6 +66,9 @@ export const OccupancyGraph = ({
       ),
     [data]
   );
+
+  const {R0} = data;
+  const formatR0 = useCallback((n) => round2Format(n * R0), [R0]);
 
   const xScale = useMemo(
     () =>
@@ -121,38 +132,25 @@ export const OccupancyGraph = ({
             <AxisLeft
               scale={yScale}
               numTicks={5}
-              tickLabelProps={valueTickLabelProps}
+              tickFormat={invertPercentFormat}
+              tickLabelProps={startTickLabelProps}
             />
-            <TodayMarker />
-            <HMarker
-              value={cutoff}
-              stroke="#f00"
-              label={cutoffLabel}
-              labelStroke="#fff"
-              labelStrokeWidth="5"
-              strokeDasharray="2,1"
-              strokeWidth={1.5}
-              labelDx={20}
-              labelDy={-6}
+            <AxisRight
+              left={xMax}
+              scale={yScale}
+              numTicks={5}
+              tickFormat={formatR0}
+              tickLabelProps={endTickLabelProps}
             />
+            <TodayMarker anchor="end" />
             {children}
-            <WithComponentId prefix="linearGradient">
-              {(gradientId) => (
-                <>
-                  <LinearGradient id={gradientId} from="#0670de" to="#f00">
-                    <Stop offset={cutoff} stopColor="#0670de" />
-                    <Stop offset={cutoff} stopColor="#f00" />
-                  </LinearGradient>
-                  <LinePath
-                    data={scenarioData}
-                    x={(d) => xScale(x(d))}
-                    y={(d) => yScale(y(d))}
-                    stroke={`url(#${gradientId})`}
-                    strokeWidth={1.5}
-                  />
-                </>
-              )}
-            </WithComponentId>
+            <LinePath
+              data={scenarioData}
+              x={(d) => xScale(x(d))}
+              y={(d) => yScale(y(d))}
+              stroke="#0670de"
+              strokeWidth={1.5}
+            />
             <text
               x="-5"
               y="15"
