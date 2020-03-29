@@ -50,7 +50,8 @@ export const DistancingGraph = ({
   y = identity,
   cutoff = 0,
   cutoffLabel = '',
-  xLabel = '',
+  leftLabel = '',
+  rightLabel = '',
   width = 600,
   height = 400,
   margin = {top: 16, left: 64, right: 64, bottom: 32},
@@ -160,7 +161,20 @@ export const DistancingGraph = ({
               fill="#000"
               paintOrder="stroke"
             >
-              {xLabel}
+              {leftLabel}
+            </text>
+            <text
+              x="-5"
+              y={xMax - 5}
+              textAnchor="end"
+              transform="rotate(-90)"
+              fontSize={13}
+              stroke="#fff"
+              strokeWidth="5"
+              fill="#000"
+              paintOrder="stroke"
+            >
+              {rightLabel}
             </text>
           </Group>
         </svg>

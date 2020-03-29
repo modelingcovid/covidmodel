@@ -147,7 +147,8 @@ export default ({data, states}) => {
                       data={data}
                       x={getDate}
                       y={getDistancing}
-                      xLabel="Social distance"
+                      leftLabel="Social distance"
+                      rightLabel="R0"
                       width={width}
                       height={height}
                     />
