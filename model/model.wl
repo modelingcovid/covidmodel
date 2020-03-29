@@ -157,9 +157,6 @@ nationalData = Append[#, "day" ->
 
 countryData = Association[{"United States"->nationalData,"France"->franceData,"Spain"->spainData,"Italy"->italyData}];
 
-(*ClearAll[Memoize];*)
-Memoize[fn_] = Module[{cache=<||>}, Function[If[KeyExistsQ[cache, #1], cache[#1], cache[#1] = Apply[fn,{##}]]]];
-
 queryAlphaForDistribution[place_] := 
 	Which[
 		place == "United States",
