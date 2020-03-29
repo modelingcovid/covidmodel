@@ -315,7 +315,8 @@ buckets = raw["Buckets"];
 "icuBeds"->stateICUData[state]["icuBeds"],
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
-"R0"-> If[KeyExistsQ[Association[Select[stateDistancingData,#["state"]==state&]],"baseline"],Association[Select[stateDistancingData,#["state"]==state&]]["baseline"]*r0natural0/100,r0natural0],
+(* WB: check below *)
+"R0"-> stateDistancing[state,scenario1,1]*(r0natural0/100),
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
@@ -451,6 +452,8 @@ scenario3=<|"id"->"scenario3","distancingDays"->90,"distancingLevel"->0.11,"main
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False|>;
 
 scenarios={scenario1,scenario2,scenario3,scenario4};
+
+scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 
 (* evaluate state for all scenarios *)
 evaluateState[state_]:=Merge[
