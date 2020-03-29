@@ -284,14 +284,15 @@ buckets = raw["Buckets"];
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
 ];
 
-evaluateScenario[state_, scenario_]:=Module[{distance,t},
+evaluateScenario[state_, scenario_]:=Module[{distance,interp,t},
 	params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0];
 	thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
 	icuCapacity=params["icuBeds"]/params["Population"];
 	hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["Population"];
 	hospitalizationData = stateHospitalizationData[state];
+	interp = Interpolation[Table[Piecewise[stateHistoricalDistancing[state, scenario, i], 1], {i, 0, 200}]];
+	distance[t_] := interp[Max[1, Min[t, 200]]];
 	
-	distance[t_]:=Piecewise[stateHistoricalDistancing[state,scenario,t],1];
 	baseline=distance[1];
 	
 	{sol,evts}=CovidModel[
