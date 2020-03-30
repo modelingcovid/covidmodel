@@ -12,8 +12,8 @@ tmax = 365;
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 2.8;
 
-(*Rate of losing infectiousness or going to the hospital*)
-daysUntilNotInfectiousOrHospitalized0 = 2.5;
+(*Rate of losing infectiousness or going to the hospital, weeks*)
+daysUntilNotInfectiousOrHospitalized0 = 5;
 
 (*Rate of leaving hospital for those not going to critical care*)
 daysToLeaveHosptialNonCritical0 = 8;
@@ -27,6 +27,9 @@ daysFromCriticalToRecoveredOrDeceased0 = 10;
 (* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
 pPCRH0 = 0.8;
 pPCRNH0 = 0.08;
+
+(* shape parameter of gamma distribution over # of contacts in a day *)
+k0 = 0.04;
 
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
@@ -204,28 +207,24 @@ pC_,
 containmentThresholdCases_,
 icuCapacity_,
 distancing_,
-hospitalCapacity_:1000000 (*defaulted since we dont evaluate this on a country basis yet *)
+k_,
+hospitalCapacity_:1000000 (*defaulted since we dont evaluate this on a country basis yet *),
+tMin_
 ]:=
 Reap[NDSolve[{
 	
-	Sq'[t]    == (-distancing[t] *
-			 	  r0natural *
-				  Iq[t] *
-				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - est[t] * Sq[t],
+	(* est is for a small importantion of cases to a fully susceptible population instead of teh usual constant new susceptible from population growth *)
+	(* we fit a heterogeneous susceptibility mode as in https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4808916/pdf/ijerph-13-00253.pdf
+	   but with the inclusion of a social distancing term *)
+	Sq'[t]    == -( Sq[t]/daysUntilNotInfectiousOrHospitalized) * k * distancing[t] * Log[1 + r0natural/(k * distancing[t] * daysUntilNotInfectiousOrHospitalized) * Iq[t]]- est[t] * Sq[t],
 	
-	Eq'[t]    == (distancing[t] *
-			 	  r0natural *
-				  Iq[t] *
-				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + est[t] * Sq[t] 
-				 - Eq[t] / daysFromInfectedToInfectious,
+	Eq'[t]    ==  Sq[t]/daysUntilNotInfectiousOrHospitalized * k * distancing[t] * Log[1 + r0natural/(k * distancing[t]*daysUntilNotInfectiousOrHospitalized) * Iq[t]] + est[t] * Sq[t] - Eq[t]/daysFromInfectedToInfectious,
 	
 	(* Infectious total, not yet PCR confirmed, age indep *)
 	Iq[t]     == ISq[t] + IHq[t] + ICq[t],
 	
 	(* Infected without needing care *)
-	ISq'[t]   == pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized,
+	ISq'[t]   == (pS*Eq[t])/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized,
 	
 	(* Recovered without needing care *)
 	RSq'[t]   == ISq[t]/daysUntilNotInfectiousOrHospitalized,
@@ -265,7 +264,7 @@ Reap[NDSolve[{
 	
 	est'[t]   == 0,
 
-	WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
+	WhenEvent[Iq[t]<=containmentThresholdCases && PCR[t]<=0.1, Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
 	WhenEvent[RSq[t]+RSq[t]+RCq[t] >= 0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
 	WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]], (* ICU Capacity overshot *)
 	WhenEvent[Iq[t] <= 1,Sow[{t,Iq[t]},"cutoff"]] (* dont bother running when active infections less than 100 it can lead to evaluation issues in long tail simulations *),
@@ -277,7 +276,7 @@ Reap[NDSolve[{
 	EHq[0]==0
 	},
 	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},
-	{t, 0, tmax}
+	{t, tMin, tmax}
 ],{"containment","herd","icu","hospital","cutoff"},Rule];
 
 (* this is a modified version of CovidModel that does not take an r0 or importtime value, but isntead returns a parametric
@@ -299,22 +298,15 @@ pS_,
 pH_,
 pC_,
 distancing_,
+k_,
 icuCapacity_
 ]:=
 ParametricNDSolveValue[{
 	
-	Sq'[t]    == (-distancing[t] *
-			 	  r0natural *
-				  Iq[t] *
-				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - establishment[t] * Sq[t],
+
+	Sq'[t]    == -( Sq[t]/daysUntilNotInfectiousOrHospitalized) * k * distancing[t] * Log[1 + r0natural/(k * distancing[t] * daysUntilNotInfectiousOrHospitalized) * Iq[t]]- establishment[t] * Sq[t],
 	
-	Eq'[t]    == (distancing[t] *
-			 	  r0natural *
-				  Iq[t] *
-				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + establishment[t] * Sq[t] 
-				 - Eq[t] / daysFromInfectedToInfectious,
+	Eq'[t]    ==  Sq[t]/daysUntilNotInfectiousOrHospitalized * k * distancing[t] * Log[1 + r0natural/(k * distancing[t]*daysUntilNotInfectiousOrHospitalized) * Iq[t]] + establishment[t] * Sq[t] - Eq[t]/daysFromInfectedToInfectious,
 	
 	(* Infectious total, not yet PCR confirmed, age indep *)
 	Iq[t]     == ISq[t] + IHq[t] + ICq[t],
@@ -372,7 +364,7 @@ ParametricNDSolveValue[{
 ];
 
 
-
+may
 (* Given a set fit parameters, simulated parameters and a definition of a scenario,
 run all the simulations and produce the quantiles for the mean and confidence band estimates *)
 evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
@@ -394,6 +386,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
     
 	distance[t_] := stateDistancing[state, scenario, t];
 	
+
 	(* do one solution with the mean param values for the estimate *)
 	{sol,evts}=CovidModel[
 	fitParams["r0natural"],
@@ -416,8 +409,10 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	containmentThresholdRatio0,
 	stateParams["icuCapacity"],
 	distance,
-	stateParams["hospitalCapacity"]
+	stateParams["hospitalCapacity"],
+	fitParams["k"]
 	];
+	
 	
 	events=Association[Flatten[evts]];
 	endOfYear = 365;
@@ -467,6 +462,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	Table[Association[{
 	"day"->t,
 	"distancing"->distance[t],
+
 	"cumulativePcr" -> Merge[{
 	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t][[1]]]]
@@ -558,6 +554,7 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	params["pH"],
 	params["pC"],
 	distance,
+	k0,
 	icuCapacity
 	];
 
@@ -591,9 +588,11 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	];
 	(* if we cannot get smooth enough then use Nelder-Mead Post-processing \[Rule] false *)
 	
+
 	fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
 	     fit["ParameterErrors",
+
 	     ConfidenceLevel->0.97]]];
 	     
 	sims=generateSimulations[100,fitParams,standardErrors];
@@ -613,7 +612,7 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "longData"->longData
-    }, First] 
+    }, First]
 ];
 
 (* export the full model data, Warning: paralllize will eat a lot of laptop resources while it evaluates *)
