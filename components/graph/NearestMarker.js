@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {VMarker} from './Marker';
-import {useGraphData, useNearestPoint} from './util';
-import {formatDate} from '../lib/date';
+import {useGraphData} from './useGraphData';
+import {useNearestPoint} from './useNearestPoint';
+import {formatDate} from '../../lib/date';
 
 export const NearestMarker = () => {
   const {x} = useGraphData();

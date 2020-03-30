@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {format as formatNumber} from 'd3-format';
 import {OccupancyGraph} from './OccupancyGraph';
-import {Points} from './Points';
+import {Points} from './graph';
 import {stateLabels} from '../lib/controls';
 import {getDate, formatDate} from '../lib/date';
 import {getFirstExceedsThreshold} from '../lib/summary';

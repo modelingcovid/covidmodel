@@ -1,54 +1,29 @@
 import * as React from 'react';
-import {Group} from '@vx/group';
-import {Marker} from '@vx/marker';
-import {Graph} from './Graph';
-import {Line} from './Line';
-import {Threshold} from '@vx/threshold';
-import {scaleTime, scaleLinear} from '@vx/scale';
-import {AxisLeft, AxisBottom, AxisRight} from '@vx/axis';
-import {GridRows, GridColumns} from '@vx/grid';
+import {AxisRight} from '@vx/axis';
 import {format as formatNumber} from 'd3-format';
-import {timeFormat, timeParse} from 'd3-time-format';
-import {TodayMarker} from './TodayMarker';
-import {LinearGradient, Stop} from './LinearGradient';
-import {GraphDataProvider, WithComponentId, WithGraphData} from './util';
+import {
+  Graph,
+  GraphDataProvider,
+  Line,
+  LinearGradient,
+  Stop,
+  TodayMarker,
+  WithGraphData,
+} from './graph';
+import {WithComponentId} from './util';
 import {today} from '../lib/date';
-
-const parseDate = timeParse('%Y%m%d');
-
-const yearFormat = timeFormat('%Y');
-const shortMonthFormat = timeFormat('%b');
-const isYear = (date) => date.getMonth() === 0;
 
 const round2Format = formatNumber('.3');
 const invertPercentFormat = (n) => formatNumber('.0%')(1 - n);
-const dateAxisFormat = (date) =>
-  isYear(date) ? yearFormat(date) : shortMonthFormat(date);
-
-const startTickLabelProps = () => ({
-  dx: '-0.25em',
-  dy: '0.25em',
-  textAnchor: 'end',
-});
-const endTickLabelProps = () => ({
-  dx: '0.25em',
-  dy: '0.25em',
-  textAnchor: 'start',
-});
-const dateTickLabelProps = (date) => ({
-  textAnchor: 'middle',
-});
 
 const {useCallback, useMemo} = React;
-
-const identity = (n) => n;
 
 export const DistancingGraph = ({
   children,
   data,
   scenario,
-  x = identity,
-  y = identity,
+  x,
+  y,
   leftLabel = '',
   rightLabel = '',
   width = 600,
@@ -59,6 +34,12 @@ export const DistancingGraph = ({
 
   const {R0} = data;
   const formatR0 = useCallback((n) => round2Format(n * R0), [R0]);
+
+  const endTickLabelProps = () => ({
+    dx: '0.25em',
+    dy: '0.25em',
+    textAnchor: 'start',
+  });
 
   return (
     <Graph

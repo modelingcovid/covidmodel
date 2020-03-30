@@ -9,8 +9,9 @@ import {bisector} from 'd3-array';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {GraphControls} from './GraphControls';
-import {GraphDataProvider, NearestPointContext} from './util';
-import {getDate} from '../lib/date';
+import {GraphDataProvider} from './useGraphData';
+import {NearestPointContext} from './useNearestPoint';
+import {getDate} from '../../lib/date';
 
 const {createContext, useCallback, useMemo, useState} = React;
 

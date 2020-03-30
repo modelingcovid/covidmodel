@@ -1,27 +1,8 @@
 import * as React from 'react';
-import {Group} from '@vx/group';
-import {Graph} from './Graph';
-import {HMarker} from './Marker';
-import {Threshold} from '@vx/threshold';
-import {scaleTime, scaleSymlog} from '@vx/scale';
-import {AxisLeft, AxisBottom} from '@vx/axis';
-import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
-import {timeFormat, timeParse} from 'd3-time-format';
-import {NearestMarker} from './NearestMarker';
-import {TodayMarker} from './TodayMarker';
-import {GraphDataProvider} from './util';
+import {Graph, HMarker, NearestMarker, TodayMarker} from './graph';
 
 const {createContext, useCallback, useMemo} = React;
-
-const parseDate = timeParse('%Y%m%d');
-
-const yearFormat = timeFormat('%Y');
-const shortMonthFormat = timeFormat('%b');
-const isYear = (date) => date.getMonth() === 0;
-
-const dateAxisFormat = (date) =>
-  isYear(date) ? yearFormat(date) : shortMonthFormat(date);
 
 const addCommas = formatNumber(',');
 const valueFormat = (value) =>
@@ -29,22 +10,11 @@ const valueFormat = (value) =>
     ? `${addCommas(Math.round(value / 100000) / 10)}M`
     : addCommas(value);
 
-const valueTickLabelProps = () => ({
-  dx: '-0.25em',
-  dy: '0.25em',
-  textAnchor: 'end',
-});
-const dateTickLabelProps = (date) => ({
-  textAnchor: 'middle',
-});
-
-const identity = (n) => n;
-
 export const PopulationGraph = ({
   children,
   data,
   scenario,
-  x = identity,
+  x,
   xLabel = '',
   width = 600,
   height = 400,

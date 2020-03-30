@@ -1,10 +1,8 @@
 import * as React from 'react';
-import {curveCatmullRom} from '@vx/curve';
-import {LinePath as VxLinePath} from '@vx/shape';
 
 const {useCallback, useEffect, useRef, useState} = React;
 
-const AnimatedPath = ({
+export const AnimatedPath = ({
   d,
   duration = '400ms',
   fill = 'transparent',
@@ -55,15 +53,3 @@ const AnimatedPath = ({
     </path>
   );
 };
-
-export const LinePath = ({
-  curve = curveCatmullRom,
-  data,
-  x,
-  y,
-  ...remaining
-}) => (
-  <VxLinePath curve={curve} x={x} y={(d) => Math.round(y(d) * 10000) / 10000}>
-    {({path}) => <AnimatedPath {...remaining} d={path(data) || ''} />}
-  </VxLinePath>
-);

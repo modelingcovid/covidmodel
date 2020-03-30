@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {interpolateBlues} from 'd3-scale-chromatic';
-import {LinearGradient, Stop} from './LinearGradient';
-import {useGraphData} from './util';
+import {LinearGradient, Stop, useGraphData} from './graph';
 
 export const DistancingGradient = ({id, y, color = interpolateBlues}) => {
   const {data, x, xScale, yScale, xMax, yMax} = useGraphData();

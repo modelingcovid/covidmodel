@@ -12,12 +12,11 @@ import {
   HospitalCapacity,
   Layout,
   Legend,
-  Line,
   OccupancyGraph,
-  Points,
   PopulationGraph,
   Section,
 } from '../../components';
+import {Line, Points} from '../../components/graph';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate} from '../../lib/date';
@@ -42,7 +41,6 @@ export default ({data, states}) => {
     query: {state},
     push,
   } = useRouter();
-  console.log('State', state, data);
   const [scenario, setScenario] = useState('scenario1');
   const controlRef = useRef(null);
   const controlRect = useContentRect(controlRef, {width: 896, height: 126});

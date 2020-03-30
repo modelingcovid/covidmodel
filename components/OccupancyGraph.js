@@ -1,45 +1,23 @@
 import * as React from 'react';
-import {Group} from '@vx/group';
-import {HMarker} from './Marker';
-import {Graph} from './Graph';
-import {Line} from './Line';
-import {Threshold} from '@vx/threshold';
-import {scaleTime, scaleLinear} from '@vx/scale';
-import {AxisLeft, AxisBottom} from '@vx/axis';
-import {GridRows, GridColumns} from '@vx/grid';
-import {timeFormat, timeParse} from 'd3-time-format';
-import {TodayMarker} from './TodayMarker';
-import {LinearGradient, Stop} from './LinearGradient';
-import {GraphDataProvider, WithComponentId} from './util';
-
-const parseDate = timeParse('%Y%m%d');
-
-const yearFormat = timeFormat('%Y');
-const shortMonthFormat = timeFormat('%b');
-const isYear = (date) => date.getMonth() === 0;
-
-const dateAxisFormat = (date) =>
-  isYear(date) ? yearFormat(date) : shortMonthFormat(date);
-
-const valueTickLabelProps = () => ({
-  dx: '-0.25em',
-  dy: '0.25em',
-  textAnchor: 'end',
-});
-const dateTickLabelProps = (date) => ({
-  textAnchor: 'middle',
-});
+import {
+  Graph,
+  GraphDataProvider,
+  HMarker,
+  Line,
+  LinearGradient,
+  Stop,
+  TodayMarker,
+} from './graph';
+import {WithComponentId} from './util';
 
 const {useMemo} = React;
-
-const identity = (n) => n;
 
 export const OccupancyGraph = ({
   children,
   data,
   scenario,
-  x = identity,
-  y = identity,
+  x,
+  y,
   cutoff = 0,
   cutoffLabel = '',
   xLabel = '',

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {VMarker} from './Marker';
-import {useGraphData} from './util';
-import {today} from '../lib/date';
+import {useGraphData} from './useGraphData';
+import {today} from '../../lib/date';
 
 export const TodayMarker = ({anchor = 'start'}) => {
   return (

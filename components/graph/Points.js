@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {LinePath} from './LinePath';
-import {useGraphData} from './util';
+import {useGraphData} from './useGraphData';
 
 const {useCallback} = React;
 

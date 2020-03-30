@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {LinearGradient as VxLinearGradient} from '@vx/gradient';
-import {useComponentId, useGraphData} from './util';
+import {useGraphData} from './useGraphData';
+import {useComponentId} from '../util';
 
 const {createContext, useContext} = React;
 
