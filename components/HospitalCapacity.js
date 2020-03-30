@@ -10,6 +10,12 @@ const getConfirmedHospitalizations = ({confirmedHospitalizations}) =>
   confirmedHospitalizations;
 const getProjectedCurrentlyHospitalized = ({projectedCurrentlyHospitalized}) =>
   projectedCurrentlyHospitalized;
+const getProjectedCurrentlyHospitalizedLCI = ({
+  projectedCurrentlyHospitalizedLCI,
+}) => projectedCurrentlyHospitalizedLCI;
+const getProjectedCurrentlyHospitalizedUCI = ({
+  projectedCurrentlyHospitalizedUCI,
+}) => projectedCurrentlyHospitalizedUCI;
 
 const formatComma = formatNumber(',');
 const formatPercent = formatNumber('.1%');
@@ -60,6 +66,8 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         data={data}
         x={getDate}
         y={getProjectedCurrentlyHospitalized}
+        y0={getProjectedCurrentlyHospitalizedLCI}
+        y1={getProjectedCurrentlyHospitalizedUCI}
         cutoff={hospitalCapacity}
         xLabel="Hospital occupancy"
         cutoffLabel="Hospital capacity"

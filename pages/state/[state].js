@@ -35,6 +35,10 @@ const getProjectedCurrentlyInfectious = ({projectedCurrentlyInfectious}) =>
 const getProjectedDeaths = ({projectedDeaths}) => projectedDeaths;
 const getProjectedCurrentlyCritical = ({projectedCurrentlyCritical}) =>
   projectedCurrentlyCritical;
+const getProjectedCurrentlyCriticalLCI = ({projectedCurrentlyCriticalLCI}) =>
+  projectedCurrentlyCriticalLCI;
+const getProjectedCurrentlyCriticalUCI = ({projectedCurrentlyCriticalUCI}) =>
+  projectedCurrentlyCriticalUCI;
 
 export default ({data, states}) => {
   const {
@@ -359,6 +363,8 @@ export default ({data, states}) => {
                       data={data}
                       x={getDate}
                       y={getProjectedCurrentlyCritical}
+                      y0={getProjectedCurrentlyCriticalLCI}
+                      y1={getProjectedCurrentlyCriticalUCI}
                       cutoff={data.icuBeds}
                       xLabel="ICU occupancy"
                       cutoffLabel="ICU capacity"

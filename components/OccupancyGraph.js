@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Area,
   Graph,
   GraphDataProvider,
   HMarker,
@@ -18,6 +19,8 @@ export const OccupancyGraph = ({
   scenario,
   x,
   y,
+  y0,
+  y1,
   cutoff = 0,
   cutoffLabel = '',
   xLabel = '',
@@ -40,7 +43,7 @@ export const OccupancyGraph = ({
       Math.min(
         // Sometimes, excess data in the models rockets off into the distance.
         // This cap prevents the axis from being too distorted.
-        cutoff * 10,
+        cutoff * 20,
         Math.max(...allPoints.map((d) => Math.max(y(d), cutoff)))
       ),
     [allPoints, y, cutoff, population]
@@ -80,6 +83,14 @@ export const OccupancyGraph = ({
               <Stop offset={cutoff} stopColor="#0670de" />
               <Stop offset={cutoff} stopColor="#f00" />
             </LinearGradient>
+            {y0 && y1 && (
+              <Area
+                y0={y0}
+                y1={y1}
+                fill={`url(#${gradientId})`}
+                opacity="0.15"
+              />
+            )}
             <Line y={y} stroke={`url(#${gradientId})`} strokeWidth={1.5} />
           </>
         )}

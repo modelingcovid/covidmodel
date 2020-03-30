@@ -1,3 +1,4 @@
+export * from './Area';
 export * from './Graph';
 export * from './GraphControls';
 export * from './Line';
