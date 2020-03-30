@@ -168,7 +168,7 @@ export const Graph = ({
               <AxisBottom
                 top={yMax}
                 scale={xScale}
-                numTicks={width > 300 ? 10 : 5}
+                numTicks={width > 600 ? 10 : 5}
                 tickFormat={dateAxisFormat}
                 tickLabelProps={dateTickLabelProps}
               />
