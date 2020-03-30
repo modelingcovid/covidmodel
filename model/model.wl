@@ -12,13 +12,13 @@ tmax = 365;
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 2.8;
 
-(*Rate of losing infectiousness or going to the hospital, weeks*)
+(*Rate of losing infectiousness or going to the hospital*)
 daysUntilNotInfectiousOrHospitalized0 = 2.5;
 
-(*Rate of leaving hospital for those not going to critical care, weeks*)
+(*Rate of leaving hospital for those not going to critical care*)
 daysToLeaveHosptialNonCritical0 = 8;
 
-(*Rate of leaving hospital and going to critical care, weeks*)
+(*Rate of leaving hospital and going to critical care*)
 daysTogoToCriticalCare0 = 3;
 
 (*Rate of leaving critical care, weeks*)
@@ -102,7 +102,8 @@ pC_,
 containmentThresholdCases_,
 icuCapacity_,
 distancing_,
-hospitalCapacity_:1000000 (*defaulted since we dont evaluate this on a country basis yet *)
+hospitalCapacity_:1000000, (*defaulted since we dont evaluate this on a country basis yet *)
+tMin_
 ]:=
 Reap[NDSolve[{
 	
@@ -174,7 +175,7 @@ Reap[NDSolve[{
 	EHq[0]==0
 	},
 	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},
-	{t, 0, tmax}
+	{t, tMin, tmax}
 ],{"containment","herd","icu","hospital"},Rule];
 
 
@@ -207,13 +208,13 @@ ParametricNDSolveValue[{
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - est[t] * Sq[t],
+	 			 - establishment[t] * Sq[t],
 	
 	Eq'[t]    == (distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + est[t] * Sq[t] 
+				 + establishment[t] * Sq[t] 
 				 - Eq[t] / daysFromInfectedToInfectious,
 	
 	(* Infectious total, not yet PCR confirmed, age indep *)
@@ -258,15 +259,15 @@ ParametricNDSolveValue[{
 	(* Leaving critical care *)
 	RCq'[t]   == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
 	
-	est'[t]   == 0,
+	establishment'[t]   == 0,
 	
-	WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
-	WhenEvent[t >importtime+importlength, est[t]->0 ],
+	WhenEvent[t>=importtime , establishment[t]->Exp[-initialInfectionImpulse]], 
+	WhenEvent[t >importtime+importlength, establishment[t]->0 ],
 	Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
-	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
+	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,establishment[0]==0,PCR[0]==0,
 	EHq[0]==0
-	},
-	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est},
+	}/.{r0natural->Exp[r0natural],importtime->Exp[importtime]},
+	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, establishment},
 	{t, 0, tmax},
 	{r0natural, importtime}
 ];
@@ -368,7 +369,8 @@ evaluateScenario[state_, fitParams_, lciuci_, scenario_]:=Module[{
 	containmentThresholdRatio0,
 	icuCapacity,
 	distance,
-	hospitalCapacity
+	hospitalCapacity,
+	Ceiling[lciuci["importtime"][[1]]]
 	];
 	
 	{sol,evts}=CovidModel[
@@ -392,7 +394,8 @@ evaluateScenario[state_, fitParams_, lciuci_, scenario_]:=Module[{
 	containmentThresholdRatio0,
 	icuCapacity,
 	distance,
-	hospitalCapacity
+	hospitalCapacity,
+	Ceiling[lciuci["importtime"][[1]]]
 	];
 	
 	{ucisol,ucievts}=CovidModel[
@@ -416,7 +419,8 @@ evaluateScenario[state_, fitParams_, lciuci_, scenario_]:=Module[{
 	containmentThresholdRatio0,
 	icuCapacity,
 	distance,
-	hospitalCapacity
+	hospitalCapacity,
+	Ceiling[lciuci["importtime"][[1]]]
 	];
 	
 	events=Association[Flatten[evts]];
@@ -473,7 +477,8 @@ evaluateScenario[state_, fitParams_, lciuci_, scenario_]:=Module[{
 	   "lci"-> If[Evaluate[params["Population"]*(CCq[t])/.lcisol][[1]] < 1, Null, Evaluate[params["Population"]*(CCq[t])/.lcisol][[1]]],
 	   "uci" -> If[Evaluate[params["Population"]*(CCq[t])/.ucisol][[1]] < 1, Null, Evaluate[params["Population"]*(CCq[t])/.ucisol][[1]]]
 	|>
-	}]],{t,0,endOfEval}];
+	(* only go from the lci importtime *) 
+	}]],{t,Ceiling[lciuci["importtime"][[1]]],endOfEval}];
 	
     summary=<|
 	"totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],Evaluate[params["Population"]*Deaq[t]/.sol/.{t->events["containment"][[1]][[1]]}][[1]], Evaluate[params["Population"]*Deaq[t]/.sol/.{t->endOfEval}][[1]]] ,"totalProjectedPCRConfirmed"->If[KeyExistsQ[events, "containment"],
@@ -505,6 +510,7 @@ scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True|>;
 scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False|>;
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False|>;
+(*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
 
 scenarios={scenario1,scenario2,scenario3,scenario4};
 
@@ -554,26 +560,36 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	   (0.1)&/@(Select[longData, #[[1]] == 2&])
 	  ];
 
+	(* Switch to nminimize, if we run into issues with the multi-fit not respecting weights *)
+	(* confidence interval we get from doing the log needs to be back-transformed *)
+	(* unclear how easy it is to get parameter confidence intervals from nminmize *)
 	fit=NonlinearModelFit[
 		longData,
 		(* fit to daily increases *) 
-		model[r0natural,importtime][i,t]-model[r0natural,importtime][i,t-1], 
-		{{r0natural, r0natural0}, {importtime, params["importtime0"]}},
+		(* TODO log the model and log the data *)
+		model[r0natural,importtime][i,t] - model[r0natural,importtime][i,t-1], 
+		{{r0natural, Log[r0natural0]}, {importtime, Log[params["importtime0"]]}},
 		{i,t},
 		Weights -> dataWeights
 	];
+	(* if we cannot get smooth enough then use Nelder-Mead Post-processing \[Rule] false *)
 	
-	metrics={Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
-	lciuci=KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},fit["ParameterConfidenceIntervals",
+	lciuci={Exp[#[[1]]],Exp[#[[2]]]}&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
+	     fit["ParameterConfidenceIntervals",
 	     ConfidenceLevel->0.97]]];
-	fitParams=KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
+	fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
 
+	(* do a monte carlo for each scenario *)
     Merge[{
       Association[{#["id"]->evaluateScenario[state,fitParams,lciuci,#]}]&/@scenarios,
       <|"parameterCI"->lciuci,
 	  "parameterBest"->fitParams|>,
-      stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0]
+      KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
+      "R0"->fitParams["r0natural"],
+      "importtime"->fitParams["importtime"],
+      "longData"->longData
     }, First]
+   
 ];
 
 (* export the full model data, Warning: paralllize will eat a lot of laptop resources while it evaluates *)
@@ -584,5 +600,5 @@ evaluateStateAndPrint[state_]:=Module[{},
 GenerateModelExport[] := Module[{allStateData},
 allStateData=Parallelize[
 Map[{#->evaluateStateAndPrint[#]}&,distancingStates]];
-Export["public/json/reformatted-model.json",Association[allStateData]]
+Export["public/json/model.json",Association[allStateData]]
 ]
