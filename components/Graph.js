@@ -5,9 +5,10 @@ import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
+import {GraphControls} from './GraphControls';
 import {GraphDataProvider} from './util';
 
-const {createContext, useCallback, useMemo} = React;
+const {createContext, useCallback, useMemo, useState} = React;
 
 const parseDate = timeParse('%Y%m%d');
 
@@ -41,12 +42,15 @@ export const Graph = ({
   x = identity,
   xLabel = '',
   domain = 1,
-  scale = 'linear',
+  initialScale = 'linear',
   width = 600,
   height = 400,
   tickFormat = valueFormat,
   tickLabelProps = valueTickLabelProps,
+  controls = false,
 }) => {
+  const [scale, setScale] = useState(initialScale);
+
   const margin = {top: 16, left: 64, right: 64, bottom: 32};
   const xScale = useMemo(
     () =>
@@ -73,6 +77,12 @@ export const Graph = ({
         while (currentTick < max) {
           ticks.push(currentTick);
           currentTick = currentTick * 10;
+        }
+        if (currentTick === 10 && max > 0) {
+          while (currentTick > max) {
+            currentTick = currentTick / 10;
+          }
+          ticks.push(currentTick);
         }
 
         yScale.ticks = (count) => ticks;
@@ -102,6 +112,7 @@ export const Graph = ({
       xMax={xMax}
       yMax={yMax}
     >
+      {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph">
         <svg width={width} height={height}>
           <Group left={margin.left} top={margin.top}>

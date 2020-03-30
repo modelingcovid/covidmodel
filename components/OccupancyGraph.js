@@ -69,6 +69,7 @@ export const OccupancyGraph = ({
       width={width}
       x={x}
       xLabel={xLabel}
+      controls
     >
       <TodayMarker />
       <HMarker

@@ -55,11 +55,12 @@ export const PopulationGraph = ({
     <Graph
       data={scenarioData}
       domain={population}
-      scale="log"
+      initialScale="log"
       height={height}
       width={width}
       x={x}
       xLabel={xLabel}
+      controls
     >
       <HMarker
         value={population}
