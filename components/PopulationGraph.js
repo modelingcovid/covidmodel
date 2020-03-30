@@ -31,7 +31,6 @@ export const PopulationGraph = ({
       width={width}
       x={x}
       xLabel={xLabel}
-      controls
     >
       <HMarker
         value={population}
@@ -41,7 +40,7 @@ export const PopulationGraph = ({
         labelStroke="#fff"
         labelAnchor="end"
         labelStrokeWidth="5"
-        strokeDasharray="2,1"
+        strokeDasharray="4,2"
         strokeWidth={1.5}
         labelDx={-20}
         labelDy={15}

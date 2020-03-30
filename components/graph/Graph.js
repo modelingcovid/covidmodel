@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
-import {scaleLinear, scaleSymlog, scaleTime} from '@vx/scale';
+import {scaleLinear, scaleSymlog, scaleUtc} from '@vx/scale';
 import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {localPoint} from '@vx/event';
 import {bisector} from 'd3-array';
 import {format as formatNumber} from 'd3-format';
-import {timeFormat, timeParse} from 'd3-time-format';
+import {utcFormat} from 'd3-time-format';
 import {GraphControls} from './GraphControls';
 import {GraphDataProvider} from './useGraphData';
 import {NearestPointContext} from './useNearestPoint';
@@ -15,11 +15,9 @@ import {getDate} from '../../lib/date';
 
 const {createContext, useCallback, useMemo, useState} = React;
 
-const parseDate = timeParse('%Y%m%d');
-
-const yearFormat = timeFormat('%Y');
-const shortMonthFormat = timeFormat('%b');
-const isYear = (date) => date.getMonth() === 0;
+const yearFormat = utcFormat('%Y');
+const shortMonthFormat = utcFormat('%b');
+const isYear = (date) => date.getUTCMonth() === 0;
 
 const dateAxisFormat = (date) =>
   isYear(date) ? yearFormat(date) : shortMonthFormat(date);
@@ -30,22 +28,24 @@ const valueFormat = (value) =>
     ? `${addCommas(Math.round(value / 100000) / 10)}M`
     : addCommas(value);
 
-const valueTickLabelProps = () => ({
-  dx: '-0.25em',
-  dy: '0.25em',
-  textAnchor: 'end',
-});
-const dateTickLabelProps = (date) => ({
-  textAnchor: 'middle',
-});
+const {sign, pow, floor, log10, abs} = Math;
+const floorLog = (n) =>
+  sign(n) * pow(10, floor(log10(abs(n)) + (n >= 0 ? 0 : 1)));
+const ceilLog = (n) =>
+  sign(n) * pow(10, floor(log10(abs(n)) + (n >= 0 ? 1 : 0)));
 
-const identity = (n) => n;
+const valueTickLabelProps = () => ({
+  dx: '4px',
+  dy: '-4px',
+  textAnchor: 'start',
+  fill: 'var(--color-gray-02)',
+});
 
 export const Graph = ({
   children,
   overlay,
   data,
-  x = identity,
+  x,
   xLabel = '',
   domain = 1,
   initialScale = 'linear',
@@ -60,10 +60,10 @@ export const Graph = ({
   const margin = {top: 16, left: 64, right: 64, bottom: 32};
   const xScale = useMemo(
     () =>
-      scaleTime({
+      scaleUtc({
         domain: [
           new Date('2020-01-01').getTime(),
-          new Date('2020-12-31').getTime(),
+          new Date('2021-01-01').getTime(),
         ],
       }),
     [data, x]
@@ -73,28 +73,30 @@ export const Graph = ({
     const yDomain = typeof domain === 'number' ? [0, domain] : domain;
     switch (scale) {
       case 'log':
+        // scaleSymlog allows us to define a log scale that includes 0, but d3
+        // doesn’t have a useful domain nicing or default ticks... so we define
+        // our own.
+        const domainMin = floorLog(yDomain[0]);
+        const domainMax = ceilLog(yDomain[1]);
         const yScale = scaleSymlog({
-          domain: yDomain,
-          nice: true,
+          domain: [domainMin, domainMax],
         });
 
-        // scaleSymlog allows us to define a log scale that includes 0, but d3
-        // doesn’t have useful default ticks... so we define our own.
-        const max = yDomain[1];
         const ticks = [0];
         let currentTick = 10;
-        while (currentTick < max) {
+        while (domainMax >= currentTick) {
           ticks.push(currentTick);
           currentTick = currentTick * 10;
         }
-        if (currentTick === 10 && max > 0) {
-          while (currentTick > max) {
+        if (currentTick === 10 && domainMax > 0) {
+          while (currentTick > domainMax) {
             currentTick = currentTick / 10;
           }
           ticks.push(currentTick);
         }
 
         yScale.ticks = (count) => ticks;
+
         return yScale;
       case 'linear':
       default:
@@ -128,6 +130,37 @@ export const Graph = ({
     [bisectDate, data, xScale]
   );
 
+  const xTicks = xScale.ticks(width > 600 ? 10 : 5);
+  const xTickCount = xTicks.length;
+  const dateTickLabelProps = useCallback(
+    (date, i) => {
+      const props = {
+        textAnchor: 'middle',
+        dy: '4px',
+        fill: 'var(--color-gray-03)',
+      };
+      if (i === 0) {
+        props.textAnchor = 'start';
+        props.dx = '-2px';
+      } else if (i === xTickCount - 1) {
+        props.textAnchor = 'end';
+        props.dx = '2px';
+      }
+      return props;
+    },
+    [xTickCount]
+  );
+
+  const yTicks = yScale.ticks(5);
+  const yTickCount = yTicks.length;
+  const tickFormatWithLabel = useCallback(
+    (v, i) => {
+      const value = tickFormat(v, i);
+      return xLabel && i === yTickCount - 1 ? `${value} ${xLabel}` : value;
+    },
+    [tickFormat, xLabel, yTickCount]
+  );
+
   return (
     <GraphDataProvider
       data={data}
@@ -154,7 +187,11 @@ export const Graph = ({
         {controls && <GraphControls scale={scale} setScale={setScale} />}
         <div className="graph">
           <svg width={width} height={height} onMouseMove={onMouseMove}>
-            <Group left={margin.left} top={margin.top}>
+            <Group
+              // Add 0.5 to snap centered strokes onto the pixel grid
+              left={margin.left + 0.5}
+              top={margin.top + 0.5}
+            >
               <GridRows
                 scale={yScale}
                 width={xMax}
@@ -171,30 +208,25 @@ export const Graph = ({
               <AxisBottom
                 top={yMax}
                 scale={xScale}
-                numTicks={width > 600 ? 10 : 5}
+                tickValues={xTicks}
+                tickLength={4}
                 tickFormat={dateAxisFormat}
                 tickLabelProps={dateTickLabelProps}
+                strokeWidth={1}
+                stroke="var(--color-gray-01)"
+                tickStroke="var(--color-gray-01)"
               />
               <AxisLeft
                 scale={yScale}
-                numTicks={5}
-                tickFormat={tickFormat}
+                tickFormat={tickFormatWithLabel}
+                tickValues={yTicks}
+                tickLength={0} // positions text at the axis
+                hideTicks
+                stroke="var(--color-gray-01)"
+                strokeWidth={1}
                 tickLabelProps={tickLabelProps}
               />
               {children}
-              <text
-                x="-5"
-                y="15"
-                textAnchor="end"
-                transform="rotate(-90)"
-                fontSize={13}
-                stroke="#fff"
-                strokeWidth="5"
-                fill="#000"
-                paintOrder="stroke"
-              >
-                {xLabel}
-              </text>
             </Group>
           </svg>
           <div className="graph-overlay">{overlay}</div>

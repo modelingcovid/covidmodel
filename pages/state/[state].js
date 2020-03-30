@@ -144,7 +144,7 @@ export default ({data, states}) => {
                       data={data}
                       x={getDate}
                       y={getDistancing}
-                      leftLabel="Social distance"
+                      leftLabel="distancing"
                       rightLabel="R0"
                       width={width}
                       height={height}
@@ -274,7 +274,7 @@ export default ({data, states}) => {
                 <div>
                   <div>
                     <div className="section-heading">
-                      Case Progression Curve
+                      Case progression curve
                     </div>
                     <p className="paragraph">
                       We show the current number of infected and infectious
@@ -288,7 +288,7 @@ export default ({data, states}) => {
                       scenario={scenario}
                       data={data}
                       x={getDate}
-                      xLabel="Case progression curve"
+                      xLabel="people"
                       width={width}
                       height={height}
                     >
@@ -325,7 +325,7 @@ export default ({data, states}) => {
                       scenario={scenario}
                       data={data}
                       x={getDate}
-                      xLabel="Projected deaths"
+                      xLabel="people"
                       width={width}
                       height={height}
                     >
@@ -366,7 +366,7 @@ export default ({data, states}) => {
                       y0={getProjectedCurrentlyCriticalLCI}
                       y1={getProjectedCurrentlyCriticalUCI}
                       cutoff={data.icuBeds}
-                      xLabel="ICU occupancy"
+                      xLabel="people"
                       cutoffLabel="ICU capacity"
                       width={width}
                       height={height}

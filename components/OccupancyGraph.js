@@ -66,9 +66,9 @@ export const OccupancyGraph = ({
         label={cutoffLabel}
         labelStroke="#fff"
         labelStrokeWidth="5"
-        strokeDasharray="2,1"
+        strokeDasharray="4,2"
         strokeWidth={1.5}
-        labelDx={20}
+        labelDx={40}
         labelDy={-6}
       />
       <WithComponentId prefix="linearGradient">

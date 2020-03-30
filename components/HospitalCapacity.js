@@ -67,7 +67,7 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         y0={getProjectedCurrentlyHospitalizedLCI}
         y1={getProjectedCurrentlyHospitalizedUCI}
         cutoff={hospitalCapacity}
-        xLabel="Hospital occupancy"
+        xLabel="people"
         cutoffLabel="Hospital capacity"
         width={width}
         height={height}

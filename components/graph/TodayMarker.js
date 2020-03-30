@@ -12,7 +12,7 @@ export const TodayMarker = ({anchor = 'start'}) => {
       label="Today"
       labelAnchor="end"
       labelStroke="none"
-      strokeDasharray="2,1"
+      strokeDasharray="4,2"
       strokeWidth={1.5}
       labelDx={-6}
       labelDy={anchor === 'start' ? 30 : -30}
