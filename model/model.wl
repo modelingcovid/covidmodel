@@ -563,7 +563,6 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 		Weights -> dataWeights
 	];
 	
-	metrics={Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
 	lciuci=KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},fit["ParameterConfidenceIntervals",
 	     ConfidenceLevel->0.97]]];
 	fitParams=KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
@@ -584,5 +583,5 @@ evaluateStateAndPrint[state_]:=Module[{},
 GenerateModelExport[] := Module[{allStateData},
 allStateData=Parallelize[
 Map[{#->evaluateStateAndPrint[#]}&,distancingStates]];
-Export["public/json/reformatted-model.json",Association[allStateData]]
+Export["public/json/model.json",Association[allStateData]]
 ]

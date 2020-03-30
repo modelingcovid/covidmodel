@@ -61,7 +61,10 @@ export const Graph = ({
   const xScale = useMemo(
     () =>
       scaleTime({
-        domain: [Math.min(...data.map(x)), Math.max(...data.map(x))],
+        domain: [
+          new Date('2020-01-01').getTime(),
+          new Date('2020-12-31').getTime(),
+        ],
       }),
     [data, x]
   );
