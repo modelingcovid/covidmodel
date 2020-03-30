@@ -37,11 +37,8 @@ export const Layout = ({children, noPad = false}) => (
           <a className="focus title color-dark">COVID Modeling Project</a>
         </Link>
         <div className="pages text-small">
-          <Link href="/state">
+          <Link href="/state/NY">
             <a className="focus link">States</a>
-          </Link>
-          <Link href="/country">
-            <a className="focus link">Countries</a>
           </Link>
           <Link href="/about">
             <a className="focus link">About</a>
