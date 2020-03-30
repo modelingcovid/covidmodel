@@ -1,8 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import Link from 'next/link';
 import {Section} from './Section';
+import {Notice} from './Notice';
 
-export const Layout = ({children, noPad = false}) => (
+export const Layout = ({children}) => (
   <div>
     <style jsx>{`
       header {
@@ -31,6 +32,9 @@ export const Layout = ({children, noPad = false}) => (
         }
       }
     `}</style>
+    <Notice>
+      Please do not share these values, this model is under active development.
+    </Notice>
     <Section>
       <header>
         <Link href="/">
