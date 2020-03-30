@@ -8,6 +8,7 @@
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-family-mono: 'IBM Plex Mono', monospace;
+  --font-family-text: 'IBM Plex Serif', serif;
   --background-blue: #ebf7fd;
   --color-gray-00: #e0e6eb;
   --color-gray-01: #8691a1;
@@ -33,8 +34,8 @@
   --font-size-small: 14px;
   --font-size-title: 20px;
   --font-size-subtitle: 16px;
-  --font-size-section: 16px;
-  --font-size-body: 14px;
+  --font-size-section: 20px;
+  --font-size-body: 16px;
   --column-count: 12;
   --gutter-width: 16px;
   --max-width: 864px;
@@ -45,8 +46,6 @@
   :root {
     --font-size-title: 24px;
     --font-size-subtitle: 20px;
-    --font-size-section: 16px;
-    --font-size-body: 14px;
   }
 }
 
@@ -80,13 +79,21 @@ text {
 .section-heading {
   font-size: var(--font-size-section);
   font-weight: 600;
+  line-height: 1.3;
 }
 .section-heading {
   margin-top: var(--spacing-04);
+  margin-bottom: var(--spacing-00);
 }
 .text-body,
 .paragraph {
+  font-family: var(--font-family-text);
   font-size: var(--font-size-body);
+  line-height: 1.6;
+}
+.text-body strong,
+.paragraph strong {
+  font-weight: 600;
 }
 .paragraph {
   margin-bottom: var(--spacing-02);
