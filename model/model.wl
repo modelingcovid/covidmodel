@@ -385,7 +385,6 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
     },
     
 	distance[t_] := stateDistancing[state, scenario, t];
-	
 
 	(* do one solution with the mean param values for the estimate *)
 	{sol,evts}=CovidModel[
@@ -410,9 +409,8 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	stateParams["icuCapacity"],
 	distance,
 	stateParams["hospitalCapacity"],
-	fitParams["k"]
+	k0
 	];
-	
 	
 	events=Association[Flatten[evts]];
 	endOfYear = 365;
@@ -587,13 +585,9 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 		PrecisionGoal->10
 	];
 	(* if we cannot get smooth enough then use Nelder-Mead Post-processing \[Rule] false *)
-	
-
 	fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
-	     fit["ParameterErrors",
-
-	     ConfidenceLevel->0.97]]];
+	     fit["ParameterErrors", ConfidenceLevel->0.97]]];
 	     
 	sims=generateSimulations[100,fitParams,standardErrors];
 
