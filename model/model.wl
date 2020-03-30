@@ -19,19 +19,22 @@ daysUntilNotInfectiousOrHospitalized0 = 2.5;
 daysToLeaveHosptialNonCritical0 = 8;
 
 (*Rate of leaving hospital and going to critical care, weeks*)
-daysTogoToCriticalCare0 = 6;
+daysTogoToCriticalCare0 = 3;
 
 (*Rate of leaving critical care, weeks*)
-daysFromCriticalToRecoveredOrDeceased0 = 6;
+daysFromCriticalToRecoveredOrDeceased0 = 2.5;
 
 pPCRH0 = 0.8;
 pPCRNH0 = 0.08;
 
 (* How out of date are reports of hospitalizations? *)
-daysForHospitalsToReportCases0 = 2;
+daysForHospitalsToReportCases0 = 1;
 
 daysToGetTestedIfNotHospitalized0 = 5.5;
 daysToGetTestedIfHospitalized0 = 1.5;
+
+(* the penalty to fatailty rate in the case patients cannot get ICU care *) 
+icuOverloadDeathPenalty0 = 2;
  
 (* virus start parameters *)
 initialInfectionImpulse0 = 12.5;
@@ -50,8 +53,8 @@ fractionOfCriticalDeceased0 = 0.3;
 
 USAPopulation = (327.2*10^6);
 
-(* less than 100 cases in a country the size of the US *)
-containmentThresholdRatio0 = 100/USAPopulation;
+(* less than 3000 cases in a country the size of the US *)
+containmentThresholdRatio0 = 3000/USAPopulation;
 
 (* interpret as: steepness of age depencence*)
 medianHospitalizationAge0 = 65;
@@ -250,7 +253,7 @@ ParametricNDSolveValue[{
 	CCq'[t]   == HCq[t]/daysTogoToCriticalCare - CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 	
 	(* Dying *)
-	Deaq'[t]  == CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
+	Deaq'[t]  == CCq[t]*If[CCq[t]>=icuCapacity, icuOverloadDeathPenalty0*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
 	
 	(* Leaving critical care *)
 	RCq'[t]   == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
@@ -263,7 +266,7 @@ ParametricNDSolveValue[{
 	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
 	EHq[0]==0
 	},
-	{PCR, Deaq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq, est},
+	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est},
 	{t, 0, tmax},
 	{r0natural, importtime}
 ];
@@ -454,8 +457,13 @@ evaluateScenario[state_, fitParams_, lciuci_, scenario_]:=Module[{
 	   "lci"-> If[Evaluate[params["Population"]*(Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]])/.lcisol][[1]] < 1, Null, Evaluate[params["Population"]*(Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]])/.lcisol][[1]]],
 	   "uci" -> If[Evaluate[params["Population"]*(Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]])/.ucisol][[1]] < 1, Null, Evaluate[params["Population"]*(Evaluate[params["Population"]*(RSq[t]+RHq[t]+RCq[t])/.sol][[1]])/.ucisol][[1]]]
 	|>,
-	"currentlyHospitalized" -> <|
+	"currentlyReportedHospitalized" -> <|
 	   "confirmed"->If[Length[Select[hospitalizationData,(#["day"]==t)&]]!=1, Null,Select[hospitalizationData,(#["day"]==t)&][[1]]["hospitalizations"]],
+	   "projected"-> If[Evaluate[params["Population"]*(RepHq[t])/.sol][[1]] < 1, Null, Evaluate[params["Population"]*(RepHq[t])/.sol][[1]]],
+	   "lci"-> If[Evaluate[params["Population"]*(RepHq[t])/.lcisol][[1]] < 1, Null, Evaluate[params["Population"]*(RepHq[t])/.lcisol][[1]]],
+	   "uci" -> If[Evaluate[params["Population"]*(RepHq[t])/.ucisol][[1]] < 1, Null, Evaluate[params["Population"]*(RepHq[t])/.ucisol][[1]]]
+	|>,
+	"currentlyHospitalized" -> <|
 	   "projected"-> If[Evaluate[params["Population"]*(HHq[t])/.sol][[1]] < 1, Null, Evaluate[params["Population"]*(HHq[t])/.sol][[1]]],
 	   "lci"-> If[Evaluate[params["Population"]*(HHq[t])/.lcisol][[1]] < 1, Null, Evaluate[params["Population"]*(HHq[t])/.lcisol][[1]]],
 	   "uci" -> If[Evaluate[params["Population"]*(HHq[t])/.ucisol][[1]] < 1, Null, Evaluate[params["Population"]*(HHq[t])/.ucisol][[1]]]
@@ -495,7 +503,7 @@ evaluateScenario[state_, fitParams_, lciuci_, scenario_]:=Module[{
 (* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
 scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True|>;
 scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False|>;
-scenario3=<|"id"->"scenario3","distancingDays"->90,"distancingLevel"->0.11,"maintain"->False|>;
+scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False|>;
 
 scenarios={scenario1,scenario2,scenario3,scenario4};
@@ -503,7 +511,7 @@ scenarios={scenario1,scenario2,scenario3,scenario4};
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 
 (* evaluate state for all scenarios *)
-evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model,fit,fitParams,lciuci,icuCapacity,t},
+evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model,fit,fitParams,lciuci,icuCapacity,t,dataWeights},
     (* fit R0 / import time per state, then forecast each scenario *)
     params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0];
 	icuCapacity=params["icuBeds"]/params["Population"];
@@ -536,22 +544,36 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	
 	(* we make the data shape (metric#, day, value) so that we can simultaneously fit PCR and deaths *)
 	longData=Select[Join[
-	{1,#["day"],(#["positive"]/params["Population"])//N}&/@thisStateData,
-	{2,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["Population"])//N]}&/@thisStateData],#[[3]]>0&
+	  {1,#["day"],If[TrueQ[#["deathIncrease"]==Null],0,(#["deathIncrease"]/params["Population"])//N]}&/@thisStateData,
+	  {2,#["day"],(#["positiveIncrease"]/params["Population"])//N}&/@thisStateData
+	],#[[3]]>0&];
+	
+	(* weight the death numbers higher than pcr *)
+	dataWeights = Join[
+	   (1)&/@(Select[longData, #[[1]] == 1&]),
+	   (0.1)&/@(Select[longData, #[[1]] == 2&])
+	  ];
+
+	fit=NonlinearModelFit[
+		longData,
+		(* fit to daily increases *) 
+		model[r0natural,importtime][i,t]-model[r0natural,importtime][i,t-1], 
+		{{r0natural, r0natural0}, {importtime, params["importtime0"]}},
+		{i,t},
+		Weights -> dataWeights
 	];
 	
-	fit=NonlinearModelFit[longData, model[r0natural,importtime][i,t], {{r0natural, r0natural0},{importtime, params["importtime0"]}},{i,t}];
-	metrics={PCR,Deaq,Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
-	lciuci=KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},fit["ParameterConfidenceIntervals",ConfidenceLevel->0.90]]];
+	metrics={Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
+	lciuci=KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},fit["ParameterConfidenceIntervals",
+	     ConfidenceLevel->0.97]]];
 	fitParams=KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
 
-
-  Merge[{
-    Association[{#["id"]->evaluateScenario[state,fitParams,lciuci,#]}]&/@scenarios,
-    <|"parameterCI"->lciuci,
-	"parameterBest"->fitParams|>,
-    stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0]},
-  First]
+    Merge[{
+      Association[{#["id"]->evaluateScenario[state,fitParams,lciuci,#]}]&/@scenarios,
+      <|"parameterCI"->lciuci,
+	  "parameterBest"->fitParams|>,
+      stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0]
+    }, First]
 ];
 
 (* export the full model data, Warning: paralllize will eat a lot of laptop resources while it evaluates *)
