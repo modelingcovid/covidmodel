@@ -39,6 +39,9 @@ const valueTickLabelProps = () => ({
   dy: '-4px',
   textAnchor: 'start',
   fill: 'var(--color-gray-02)',
+  paintOrder: 'stroke',
+  stroke: '#fff',
+  strokeWidth: 5,
 });
 
 export const Graph = ({
@@ -208,6 +211,7 @@ export const Graph = ({
                 stroke="#e0e0e0"
               />
               <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
+              {children}
               <AxisBottom
                 top={yMax}
                 scale={xScale}
@@ -229,7 +233,6 @@ export const Graph = ({
                 strokeWidth={1}
                 tickLabelProps={tickLabelProps}
               />
-              {children}
             </Group>
           </svg>
           <div className="graph-overlay">{overlay}</div>
