@@ -81,10 +81,10 @@ export default ({data, states}) => {
           position: sticky;
           top: 0;
           background: white;
-          z-index: 1;
+          z-index: 2;
         }
         .sticky-overlay {
-          z-index: 0;
+          z-index: 1;
           box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
           height: 64px;
           margin-bottom: -64px;
@@ -94,7 +94,7 @@ export default ({data, states}) => {
         }
         .sticky-inlay {
           padding: var(--spacing-01) 0;
-          z-index: 0;
+          z-index: 1;
         }
         .section {
           padding-bottom: 128px;
