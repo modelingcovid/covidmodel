@@ -33,7 +33,7 @@ export const Layout = ({children}) => (
       }
     `}</style>
     <Notice>
-      Please do not share these values, this model is under active development.
+      Please do not share these values; this model is under active development.
     </Notice>
     <Section>
       <header>
