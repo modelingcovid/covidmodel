@@ -25,20 +25,20 @@ import {stateLabels} from '../../lib/controls';
 const {useCallback, useRef, useState} = React;
 
 const getDistancing = ({distancing}) => distancing;
-const getConfirmedPcr = ({confirmedPcr}) => confirmedPcr;
-const getConfirmedDeaths = ({confirmedDeaths}) => confirmedDeaths;
-const getProjectedPcr = ({projectedPcr}) => projectedPcr;
-const getProjectedCurrentlyInfected = ({projectedCurrentlyInfected}) =>
-  projectedCurrentlyInfected;
-const getProjectedCurrentlyInfectious = ({projectedCurrentlyInfectious}) =>
-  projectedCurrentlyInfectious;
-const getProjectedDeaths = ({projectedDeaths}) => projectedDeaths;
-const getProjectedCurrentlyCritical = ({projectedCurrentlyCritical}) =>
-  projectedCurrentlyCritical;
-const getProjectedCurrentlyCriticalLCI = ({projectedCurrentlyCriticalLCI}) =>
-  projectedCurrentlyCriticalLCI;
-const getProjectedCurrentlyCriticalUCI = ({projectedCurrentlyCriticalUCI}) =>
-  projectedCurrentlyCriticalUCI;
+const getConfirmedDeaths = ({cumulativeDeaths}) => cumulativeDeaths.confirmed;
+const getProjectedDeaths = ({cumulativeDeaths}) => cumulativeDeaths.projected;
+const getConfirmedPcr = ({cumulativePcr}) => cumulativePcr.confirmed;
+const getProjectedPcr = ({cumulativePcr}) => cumulativePcr.projected;
+const getProjectedCurrentlyInfected = ({currentlyInfected}) =>
+  currentlyInfected.projected;
+const getProjectedCurrentlyInfectious = ({currentlyInfectious}) =>
+  currentlyInfectious.projected;
+const getProjectedCurrentlyCritical = ({currentlyCritical}) =>
+  currentlyCritical.projected;
+const getProjectedCurrentlyCriticalLCI = ({currentlyCritical}) =>
+  currentlyCritical.lci;
+const getProjectedCurrentlyCriticalUCI = ({currentlyCritical}) =>
+  currentlyCritical.uci;
 
 export default ({data, states}) => {
   const {

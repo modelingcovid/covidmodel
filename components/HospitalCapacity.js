@@ -6,16 +6,14 @@ import {stateLabels} from '../lib/controls';
 import {getDate, formatDate} from '../lib/date';
 import {getFirstExceedsThreshold} from '../lib/summary';
 
-const getConfirmedHospitalizations = ({confirmedHospitalizations}) =>
-  confirmedHospitalizations;
-const getProjectedCurrentlyHospitalized = ({projectedCurrentlyHospitalized}) =>
-  projectedCurrentlyHospitalized;
-const getProjectedCurrentlyHospitalizedLCI = ({
-  projectedCurrentlyHospitalizedLCI,
-}) => projectedCurrentlyHospitalizedLCI;
-const getProjectedCurrentlyHospitalizedUCI = ({
-  projectedCurrentlyHospitalizedUCI,
-}) => projectedCurrentlyHospitalizedUCI;
+const getConfirmedHospitalizations = ({currentlyHospitalized}) =>
+  currentlyHospitalized.confirmed;
+const getProjectedCurrentlyHospitalized = ({currentlyHospitalized}) =>
+  currentlyHospitalized.projected;
+const getProjectedCurrentlyHospitalizedLCI = ({currentlyHospitalized}) =>
+  currentlyHospitalized.lci;
+const getProjectedCurrentlyHospitalizedUCI = ({currentlyHospitalized}) =>
+  currentlyHospitalized.uci;
 
 const formatComma = formatNumber(',');
 const formatPercent = formatNumber('.1%');
