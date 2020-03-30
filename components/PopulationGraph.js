@@ -8,6 +8,7 @@ import {AxisLeft, AxisBottom} from '@vx/axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
+import {NearestMarker} from './NearestMarker';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './util';
 
