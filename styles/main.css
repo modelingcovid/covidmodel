@@ -33,17 +33,16 @@
   --font-size-small: 14px;
   --font-size-title: 20px;
   --font-size-subtitle: 16px;
-  --font-size-section: 14px;
+  --font-size-section: 16px;
   --font-size-body: 14px;
-  --column-count: 16;
-  --column-width: 32px;
-  --gutter-width: var(--column-width);
-  --max-width: calc(var(--column-width) * var(--column-count));
+  --column-count: 12;
+  --gutter-width: 16px;
+  --max-width: 864px;
+  --column: calc(100% / var(--column-count));
 }
 
 @media (min-width: 600px) {
   :root {
-    --column-width: 64px;
     --font-size-title: 24px;
     --font-size-subtitle: 20px;
     --font-size-section: 16px;
@@ -90,8 +89,12 @@ text {
   font-size: var(--font-size-body);
 }
 .paragraph {
-  max-width: 640px;
   margin-bottom: var(--spacing-02);
+}
+@media (min-width: 600px) {
+  .paragraph {
+    max-width: calc(var(--column) * 9);
+  }
 }
 .definition {
   transition: ease background-color 300ms;
@@ -162,7 +165,4 @@ text {
 }
 .focus-within:focus-within .focus:focus {
   box-shadow: none;
-}
-.graph {
-  margin: 0 calc(-1 * var(--gutter-width));
 }

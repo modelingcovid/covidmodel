@@ -49,15 +49,16 @@ export const Graph = ({
   xLabel = '',
   domain = 1,
   initialScale = 'linear',
-  width = 600,
+  width: propWidth = 600,
   height = 400,
   tickFormat = valueFormat,
   tickLabelProps = valueTickLabelProps,
   controls = false,
 }) => {
   const [scale, setScale] = useState(initialScale);
+  const margin = {top: 16, left: 16, right: 16, bottom: 32};
+  const width = propWidth + margin.left + margin.right;
 
-  const margin = {top: 16, left: 64, right: 64, bottom: 32};
   const xScale = useMemo(
     () =>
       scaleUtc({
@@ -173,6 +174,8 @@ export const Graph = ({
       <style jsx>{`
         .graph {
           position: relative;
+          margin-left: ${-1 * margin.left}px;
+          margin-right: ${-1 * margin.right}px;
         }
         .graph-overlay {
           pointer-events: none;

@@ -50,9 +50,7 @@ export default ({data, states}) => {
   const controlRect = useContentRect(controlRef, {width: 896, height: 126});
 
   const sizeRef = useRef(null);
-  const sizeRect = useContentRect(sizeRef, {width: 896, height: 360});
-  // TODO(koop): Move gutter calculations
-  const width = sizeRect.width + (sizeRect.width > 600 ? 64 : 32) * 2;
+  const {width} = useContentRect(sizeRef, {width: 896, height: 360});
   const height = 360;
 
   if (!data) {
