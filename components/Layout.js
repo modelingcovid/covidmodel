@@ -5,8 +5,8 @@ import {Section} from './Section';
 export const Layout = ({children, noPad = false}) => (
   <div>
     <style jsx>{`
-      heading {
-        padding: 16px 0;
+      header {
+        padding: var(--spacing-01) 0;
         display: flex;
         justify-content: space-between;
       }
@@ -19,9 +19,20 @@ export const Layout = ({children, noPad = false}) => (
       .link {
         margin-left: var(--spacing-01);
       }
+      .link:first-of-type {
+        margin-left: 0;
+      }
+      @media (max-width: 559px) {
+        header {
+          flex-direction: column;
+        }
+        .title {
+          padding-bottom: var(--spacing-01);
+        }
+      }
     `}</style>
     <Section>
-      <header className="section">
+      <header>
         <Link href="/">
           <a className="focus title color-dark">COVID Modeling Project</a>
         </Link>
