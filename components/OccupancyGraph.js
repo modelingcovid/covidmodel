@@ -60,9 +60,9 @@ export const OccupancyGraph = ({
   const domain = useMemo(
     () =>
       Math.min(
-        // Sometimes, excess data in the models can exceed the total population,
-        // which can create unreasonable axes. This fixes that... ish.
-        population,
+        // Sometimes, excess data in the models rockets off into the distance.
+        // This cap prevents the axis from being too distorted.
+        cutoff * 10,
         Math.max(...allPoints.map((d) => Math.max(y(d), cutoff)))
       ),
     [allPoints, y, cutoff, population]
