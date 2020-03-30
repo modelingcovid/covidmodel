@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
 import {Marker} from '@vx/marker';
-import {LinePath} from './LinePath';
+import {Graph} from './Graph';
+import {Line} from './Line';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleLinear} from '@vx/scale';
 import {AxisLeft, AxisBottom, AxisRight} from '@vx/axis';
@@ -10,7 +11,7 @@ import {format as formatNumber} from 'd3-format';
 import {timeFormat, timeParse} from 'd3-time-format';
 import {TodayMarker} from './TodayMarker';
 import {LinearGradient, Stop} from './LinearGradient';
-import {GraphDataProvider, WithComponentId} from './util';
+import {GraphDataProvider, WithComponentId, WithGraphData} from './util';
 import {today} from '../lib/date';
 
 const parseDate = timeParse('%Y%m%d');
@@ -48,8 +49,6 @@ export const DistancingGraph = ({
   scenario,
   x = identity,
   y = identity,
-  cutoff = 0,
-  cutoffLabel = '',
   leftLabel = '',
   rightLabel = '',
   width = 600,
@@ -57,83 +56,22 @@ export const DistancingGraph = ({
   margin = {top: 16, left: 64, right: 64, bottom: 32},
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
-  const allPoints = useMemo(
-    () =>
-      Object.values(data).reduce(
-        (a, v) => (v && v.timeSeriesData ? a.concat(v.timeSeriesData) : a),
-        []
-      ),
-    [data]
-  );
 
   const {R0} = data;
   const formatR0 = useCallback((n) => round2Format(n * R0), [R0]);
 
-  const xScale = useMemo(
-    () =>
-      scaleTime({
-        domain: [
-          Math.min(...scenarioData.map(x)),
-          Math.max(...scenarioData.map(x)),
-        ],
-      }),
-    [scenarioData, x]
-  );
-  const yScale = useMemo(
-    () =>
-      scaleLinear({
-        domain: [0, Math.max(...allPoints.map((d) => Math.max(y(d), cutoff)))],
-        nice: true,
-      }),
-    [allPoints, y, cutoff]
-  );
-  // bounds
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
-
-  xScale.range([0, xMax]);
-  yScale.range([yMax, 0]);
-
-  const offset = (yMax - yScale(cutoff)) / yMax;
-
   return (
-    <GraphDataProvider
+    <Graph
       data={scenarioData}
       x={x}
-      xScale={xScale}
-      yScale={yScale}
-      xMax={xMax}
-      yMax={yMax}
+      xLabel={leftLabel}
+      height={height}
+      width={width}
+      tickFormat={invertPercentFormat}
     >
-      <div className="graph">
-        <svg width={width} height={height}>
-          <Group left={margin.left} top={margin.top}>
-            <GridRows
-              scale={yScale}
-              width={xMax}
-              height={yMax}
-              stroke="#e0e0e0"
-            />
-            <GridColumns
-              scale={xScale}
-              width={xMax}
-              height={yMax}
-              stroke="#e0e0e0"
-            />
-            <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
-            <AxisBottom
-              top={yMax}
-              scale={xScale}
-              numTicks={width > 300 ? 10 : 5}
-              tickFormat={dateAxisFormat}
-              tickLabelProps={dateTickLabelProps}
-            />
-            <AxisLeft
-              scale={yScale}
-              numTicks={5}
-              tickFormat={invertPercentFormat}
-              tickLabelProps={startTickLabelProps}
-            />
+      <WithGraphData>
+        {({xMax, yScale}) => (
+          <>
             <AxisRight
               left={xMax}
               scale={yScale}
@@ -150,29 +88,14 @@ export const DistancingGraph = ({
                     <Stop offset={today} stopColor="var(--color-blue-02)" />
                     <Stop offset={today} stopColor="var(--color-yellow-02)" />
                   </LinearGradient>
-                  <LinePath
-                    data={scenarioData}
-                    x={(d) => xScale(x(d))}
-                    y={(d) => yScale(y(d))}
+                  <Line
+                    y={y}
                     stroke={`url(#${gradientId})`}
                     strokeWidth={1.5}
                   />
                 </>
               )}
             </WithComponentId>
-            <text
-              x="-5"
-              y="15"
-              textAnchor="end"
-              transform="rotate(-90)"
-              fontSize={13}
-              stroke="#fff"
-              strokeWidth="5"
-              fill="#000"
-              paintOrder="stroke"
-            >
-              {leftLabel}
-            </text>
             <text
               x="-5"
               y={xMax - 5}
@@ -186,9 +109,9 @@ export const DistancingGraph = ({
             >
               {rightLabel}
             </text>
-          </Group>
-        </svg>
-      </div>
-    </GraphDataProvider>
+          </>
+        )}
+      </WithGraphData>
+    </Graph>
   );
 };

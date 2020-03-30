@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
 import {HMarker} from './Marker';
-import {LinePath} from './LinePath';
+import {Graph} from './Graph';
+import {Line} from './Line';
 import {Threshold} from '@vx/threshold';
 import {scaleTime, scaleLinear} from '@vx/scale';
 import {AxisLeft, AxisBottom} from '@vx/axis';
@@ -55,120 +56,49 @@ export const OccupancyGraph = ({
       ),
     [data]
   );
-
-  const xScale = useMemo(
-    () =>
-      scaleTime({
-        domain: [
-          Math.min(...scenarioData.map(x)),
-          Math.max(...scenarioData.map(x)),
-        ],
-      }),
-    [scenarioData, x]
-  );
-  const yScale = useMemo(
-    () =>
-      scaleLinear({
-        domain: [0, Math.max(...allPoints.map((d) => Math.max(y(d), cutoff)))],
-        nice: true,
-      }),
+  const domain = useMemo(
+    () => Math.max(...allPoints.map((d) => Math.max(y(d), cutoff))),
     [allPoints, y, cutoff]
   );
-  // bounds
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
-
-  xScale.range([0, xMax]);
-  yScale.range([yMax, 0]);
 
   return (
-    <GraphDataProvider
+    <Graph
       data={scenarioData}
+      domain={domain}
+      height={height}
+      width={width}
       x={x}
-      xScale={xScale}
-      yScale={yScale}
-      xMax={xMax}
-      yMax={yMax}
+      xLabel={xLabel}
     >
-      <div className="graph">
-        <svg width={width} height={height}>
-          <Group left={margin.left} top={margin.top}>
-            <GridRows
-              scale={yScale}
-              width={xMax}
-              height={yMax}
-              stroke="#e0e0e0"
-            />
-            <GridColumns
-              scale={xScale}
-              width={xMax}
-              height={yMax}
-              stroke="#e0e0e0"
-            />
-            <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
-            <AxisBottom
-              top={yMax}
-              scale={xScale}
-              numTicks={width > 300 ? 10 : 5}
-              tickFormat={dateAxisFormat}
-              tickLabelProps={dateTickLabelProps}
-            />
-            <AxisLeft
-              scale={yScale}
-              numTicks={5}
-              tickLabelProps={valueTickLabelProps}
-            />
-            <TodayMarker />
-            <HMarker
-              value={cutoff}
-              stroke="#f00"
-              label={cutoffLabel}
-              labelStroke="#fff"
-              labelStrokeWidth="5"
-              strokeDasharray="2,1"
-              strokeWidth={1.5}
-              labelDx={20}
-              labelDy={-6}
-            />
-            {children}
-            <WithComponentId prefix="linearGradient">
-              {(gradientId) => (
-                <>
-                  <LinearGradient
-                    direction="up"
-                    id={gradientId}
-                    from="#0670de"
-                    to="#f00"
-                  >
-                    <Stop offset={cutoff} stopColor="#0670de" />
-                    <Stop offset={cutoff} stopColor="#f00" />
-                  </LinearGradient>
-                  <LinePath
-                    data={scenarioData}
-                    x={(d) => xScale(x(d))}
-                    y={(d) => yScale(y(d))}
-                    stroke={`url(#${gradientId})`}
-                    strokeWidth={1.5}
-                  />
-                </>
-              )}
-            </WithComponentId>
-            <text
-              x="-5"
-              y="15"
-              textAnchor="end"
-              transform="rotate(-90)"
-              fontSize={13}
-              stroke="#fff"
-              strokeWidth="5"
-              fill="#000"
-              paintOrder="stroke"
+      <TodayMarker />
+      <HMarker
+        value={cutoff}
+        stroke="#f00"
+        label={cutoffLabel}
+        labelStroke="#fff"
+        labelStrokeWidth="5"
+        strokeDasharray="2,1"
+        strokeWidth={1.5}
+        labelDx={20}
+        labelDy={-6}
+      />
+      <WithComponentId prefix="linearGradient">
+        {(gradientId) => (
+          <>
+            <LinearGradient
+              direction="up"
+              id={gradientId}
+              from="#0670de"
+              to="#f00"
             >
-              {xLabel}
-            </text>
-          </Group>
-        </svg>
-      </div>
-    </GraphDataProvider>
+              <Stop offset={cutoff} stopColor="#0670de" />
+              <Stop offset={cutoff} stopColor="#f00" />
+            </LinearGradient>
+            <Line y={y} stroke={`url(#${gradientId})`} strokeWidth={1.5} />
+          </>
+        )}
+      </WithComponentId>
+      {children}
+    </Graph>
   );
 };

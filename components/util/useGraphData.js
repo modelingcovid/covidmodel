@@ -36,3 +36,5 @@ export const useGraphData = () => {
   }
   return context;
 };
+
+export const WithGraphData = ({children}) => children(useGraphData());

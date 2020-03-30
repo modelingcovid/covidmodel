@@ -63,7 +63,7 @@ export const LinePath = ({
   y,
   ...remaining
 }) => (
-  <VxLinePath curve={curve} x={x} y={y}>
+  <VxLinePath curve={curve} x={x} y={(d) => Math.round(y(d) * 10000) / 10000}>
     {({path}) => <AnimatedPath {...remaining} d={path(data) || ''} />}
   </VxLinePath>
 );
