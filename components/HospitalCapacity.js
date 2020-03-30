@@ -28,14 +28,14 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
   const stateName = stateLabels[state];
   const hospitalCapacityHeading = hospitalExceedsCapacity ? (
     <>
-      {stateName} hospitals will{' '}
-      <span className="text-red">exceed capacity</span> on{' '}
+      {stateName} will{' '}
+      <span className="text-red">exceed hospital capacity</span> on{' '}
       {formatDate(getDate(hospitalExceedsCapacity))}
     </>
   ) : (
     <>
-      {stateName} hospitals will stay{' '}
-      <span className="text-green">below capacity</span>
+      {stateName} will stay{' '}
+      <span className="text-green">below hospital capacity</span>
     </>
   );
   return (
