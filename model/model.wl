@@ -90,7 +90,7 @@ getEst[importLength_, initialInfectionImpulse_, importtime_] :=
 		(* area under gaussian with standard_deviation = sigma *)
 		areaUnderCurve = sig*Sqrt[2*Pi];
 		With[{mu0 = mu, sig0 = sig, ti = totalInfection, auc = areaUnderCurve},
-			Function[t, ti/auc * PDF[NormalDistribution[mu0, sig0], t]]]]
+			Function[t, Piecewise[{{ti/auc * PDF[NormalDistribution[mu0, sig0], t],importtime <= t <= importtime + importLength}} ]]]]
 
 
 CovidModel[
@@ -274,7 +274,7 @@ ParametricNDSolveValue[{
 	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq},
 	{t, 0, tmax},
 	{r0natural, importtime}
-]
+];
 
 (* Assumption here is that age dependence follows a logistic curve -- zero year olds dont require any care, 
 100 year olds require significant case, midpoint is the medianHospitalization age *)
