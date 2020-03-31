@@ -24,12 +24,12 @@ daysTogoToCriticalCare0 = 3;
 (*Rate of leaving critical care, weeks*)
 daysFromCriticalToRecoveredOrDeceased0 = 10;
 
+(* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
 pPCRH0 = 0.8;
 pPCRNH0 = 0.08;
 
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
-
 daysToGetTestedIfNotHospitalized0 = 5.5;
 daysToGetTestedIfHospitalized0 = 1.5;
 
@@ -61,20 +61,20 @@ medianHospitalizationAge0 = 65;
 
 (* interpret as: steepness of age depencence*)
 ageCriticalDependence0 = 3;
-
 ageHospitalizedDependence0 = 5;
 
+(*Probability of 100 year being hospitalized*)
 pHospitalized100Yo = 0.25;
-
-(*Probability of needing critical care*)
+(*Probability of 100 year old needing critical care*)
 pCriticalGivenHospitalized100Yo = 0.3;
 
-(*Probability of hospitalization but not critical care*)
+(*Probability of needing critical care*)
 pC0 = pCriticalGivenHospitalized100Yo*pHospitalized100Yo;
 
-(*Probability of not needing care*)
+(*Probability of hospitalization but not critical care*)
 pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
 
+(*Probability of not needing care*)
 pS0 = 1-(pC0 + pH0);
 
 (** Utils **)
@@ -96,9 +96,9 @@ scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 
 (* define some helper distributions and set up all the parameters that need to be simulated *)
 BetaMeanSig[mu_,sig_]:=BetaDistribution[(mu^2-mu^3-mu sig)/sig,((-1+mu) (-mu+mu^2+sig))/sig];
-
 PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu,sig]]
 
+(* a function to generate the monte carlo simulations from combo of fit / assumed parameters *)
 generateSimulations[numberOfSimulations_, fitParams_, standardErrors_]:=<|
 "daysFromInfectedToInfectious"->RandomVariate[PosNormal[daysFromInfectedToInfectious0,1]],
 "daysUntilNotInfectiousOrHospitalized"-> RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,0.5]],
@@ -130,22 +130,6 @@ noCare[a_,medianHospitalizationAge_,pCLimit_, pHLimit_,ageCriticalDependence_,ag
 	1-infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]-
 	infectedHospitalized[a, medianHospitalizationAge,pHLimit, ageHospitalizedDependence];
 
-countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] := 
-	Module[{raw,pop,dist,buckets},
-		raw = cachedAgeDistributionFor[country];
-		pop = raw["Population"];
-		dist = raw["Distribution"];
-		buckets = raw["Buckets"];
-
-(*return a map of per state params to values *)
-<|"population"->pop,
-"importtime0"->countryImportTime[country],
-"ventilators"->countryVentilators[country],
-"pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
-"pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
-"pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
-];
-
 stateParams[state_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_]:=Module[{raw,pop,dist,buckets},
 raw = stateRawDemographicData[state];
 pop = raw["Population"];
@@ -160,7 +144,6 @@ buckets = raw["Buckets"];
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
 "hospitalCapacity"->(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],
-(* WB: check below *)
 "R0"-> stateDistancing[state,scenario1,1]*(r0natural0/100),
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
@@ -168,11 +151,38 @@ buckets = raw["Buckets"];
 ];
 
 
-(* Define the model to be evaulated in the simulations -- all parameters are given either from the Monte-Carlo draws
-or evaluting the means *)
+(* Define the model to be evaulated in the simulations -- 
+all parameters are given either from the Monte-Carlo draws or evaluting the means *)
 (* This defines an enriched SEIR model with extra states for things like PCR confirmation and fatalities *)
-(* It also fires severa events for things like when the hospital / icu capacities are exceeded so that
+(* It also fires several events for things like when the hospital / icu capacities are exceeded so that
 those don't have to be computed manually later *)
+
+(* functions in the model are:
+Sq - the currently susceptible population
+
+Eq - the currently infected population
+
+Iq - the currently infectious population
+ISq - infectious and no care needed
+IHq - infectious and in hospitalized non-ciritcal condition
+ICq - infectious and in critical condition
+
+PCR - cumulative PCR confirmations
+
+RSq - recovered without needing care
+
+RepHq - hospitalized patient reported in data
+EHq - cumulative hospitalized patients
+HHq - hospitalized patients (actual)
+RHq - recovered from hospital without critical care
+
+HCq - hospitalized and in need of critical care
+CCq - in ciritcal care
+RCq - recovered from critical care
+Deaq - passed after critical care
+
+est - initial infection impulse (eg from imported cases at importtime)
+*)
 CovidModel[
 r0natural_,
 daysUntilNotInfectiousOrHospitalized_,
@@ -581,9 +591,6 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	];
 	(* if we cannot get smooth enough then use Nelder-Mead Post-processing \[Rule] false *)
 	
-	lciuci={Exp[#[[1]]],Exp[#[[2]]]}&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
-	     fit["ParameterConfidenceIntervals",
-	     ConfidenceLevel->0.97]]];
 	fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
 	     fit["ParameterErrors",
@@ -593,16 +600,15 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 
 	(* do a monte carlo for each scenario *)
     Merge[{
-      <|"scenarios"->Association[{#["id"]->evaluateScenario[state,fitParams,sims,
+      <|"scenarios"->
+         Association[{#["id"]->evaluateScenario[state,fitParams,sims,
          <|"params"->params,
            "thisStateData"->thisStateData,
            "icuCapacity"->icuCapacity,
            "hospitalCapacity"->hospitalCapacity, 
            "hospitalizationData"-> hospitalizationData
-         |>
-         ,#]}]&/@scenarios|>,
-      <|"parameterCI"->lciuci,
-	  "parameterBest"->fitParams|>,
+         |>, #]}&/@scenarios]|>,
+      <|"parameterBest"->fitParams|>,
       KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
@@ -620,3 +626,22 @@ allStateData=Parallelize[
 Map[{#->evaluateStateAndPrint[#]}&,distancingStates]];
 Export["public/json/model.json",Association[allStateData]]
 ]
+
+
+(* TODO: re-incorporate to validate assumed parameters *)
+
+countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] := 
+	Module[{raw,pop,dist,buckets},
+		raw = cachedAgeDistributionFor[country];
+		pop = raw["Population"];
+		dist = raw["Distribution"];
+		buckets = raw["Buckets"];
+
+(*return a map of per state params to values *)
+<|"population"->pop,
+"importtime0"->countryImportTime[country],
+"ventilators"->countryVentilators[country],
+"pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+"pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+"pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
+];
