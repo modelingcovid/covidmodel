@@ -32,6 +32,7 @@
   --spacing-03: 64px;
   --spacing-04: 96px;
   --font-size-small: 14px;
+  --font-size-jumbo: 36px;
   --font-size-title: 20px;
   --font-size-subtitle: 16px;
   --font-size-section: 20px;
@@ -44,6 +45,7 @@
 
 @media (min-width: 600px) {
   :root {
+    --font-size-jumbo: 64px;
     --font-size-title: 24px;
     --font-size-subtitle: 20px;
   }
@@ -70,6 +72,13 @@ text {
 }
 .text-small {
   font-size: var(--font-size-small);
+}
+.text-jumbo {
+  font-size: var(--font-size-jumbo);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  transform: translateX(calc(-1 * var(--font-size-jumbo) / 40));
 }
 .text-title {
   font-size: var(--font-size-title);

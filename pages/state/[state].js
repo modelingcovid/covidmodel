@@ -87,6 +87,10 @@ export default ({data, states}) => {
           z-index: 2;
         }
         .sticky-overlay,
+        .sticky-inlay {
+          display: none;
+        }
+        .sticky-overlay,
         .sticky-overlay-shadow {
           height: 42px;
         }
@@ -102,11 +106,12 @@ export default ({data, states}) => {
         }
         .sticky-inlay {
           background: transparent;
-          padding: var(--spacing-01) 0;
           z-index: 1;
+          margin-bottom: var(--spacing-02);
         }
-        .section {
-          padding-bottom: 128px;
+        .text-jumbo {
+          padding-top: 96px;
+          margin-bottom: -64px;
         }
       `}</style>
       <style jsx>{`
@@ -140,152 +145,118 @@ export default ({data, states}) => {
             </Section>
           </div>
           <Section>
-            <div ref={sizeRef} className="section">
-              <div>
-                <div>
-                  <div>
-                    <div className="section-heading">Social Distancing</div>
-                    <p className="paragraph">
-                      On the left axis social distance of 100% means no contact
-                      with others, which yields an R0 (basic reproduction
-                      number) for the virus of zero, since it cannot find new
-                      hosts. The zero-percent distance is the un-inhibited
-                      reproduction number which is thought to be around 3.1.
-                    </p>
-                    <DistancingGraph
-                      scenario={scenario}
-                      data={data}
-                      x={getDate}
-                      y={getDistancing}
-                      leftLabel="distancing"
-                      rightLabel="R0"
-                      width={width}
-                      height={height}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <DemographicParameters data={data} />
-                  <ModelFitParameters data={data} />
-                </div>
-              </div>
+            <div className="text-jumbo">Model inputs</div>
+            <div ref={sizeRef}>
+              <div className="section-heading">Social Distancing</div>
+              <p className="paragraph">
+                On the left axis social distance of 100% means no contact with
+                others, which yields an R0 (basic reproduction number) for the
+                virus of zero, since it cannot find new hosts. The zero-percent
+                distance is the un-inhibited reproduction number which is
+                thought to be around 3.1.
+              </p>
+              <DistancingGraph
+                scenario={scenario}
+                data={data}
+                x={getDate}
+                y={getDistancing}
+                leftLabel="distancing"
+                rightLabel="R0"
+                width={width}
+                height={height}
+              />
             </div>
+            <DemographicParameters data={data} />
+            <ModelFitParameters data={data} />
           </Section>
         </div>
         <div>
           <div className="sticky-inlay">
             <Section>
-              <span className="section-label">The model predicts</span>
+              <span className="section-label">The model projects</span>
             </Section>
           </div>
           <Section>
+            <div className="text-jumbo">Projections</div>
             <div>
-              <div className="flex flex-col">
-                <div>
-                  <div>
-                    <div className="section-heading">
-                      Case progression curve
-                    </div>
-                    <p className="paragraph">
-                      We show the current number of infected and infectious
-                      individuals as well as the cumulative number of expected
-                      PCR confirmations. If less than 20% of the population is
-                      infected and the number of active infections is reduced to
-                      a small fraction of the population we consider the
-                      epidemic contained, and place a grey box on the plot.
-                    </p>
-                    <PopulationGraph
-                      scenario={scenario}
-                      data={data}
-                      x={getDate}
-                      xLabel="people"
-                      width={width}
-                      height={height}
-                    >
-                      <Line
-                        y={getProjectedCurrentlyInfected}
-                        stroke="#0670de"
-                      />
-                      <Line
-                        y={getProjectedCurrentlyInfectious}
-                        stroke="#228403"
-                      />
-                      <Line y={getProjectedPcr} stroke="#ed6804" />
-                      <Points y={getConfirmedPcr} fill="var(--color-gray-03)" />
-                    </PopulationGraph>
-                    <div style={{paddingTop: '16px'}}>
-                      <Legend color="#ed6804">Projected PCR</Legend>
-                      <Legend color="#0670de">
-                        Projected currently infected
-                      </Legend>
-                      <Legend color="#228403">
-                        Projected currently infectious
-                      </Legend>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <div className="section-heading">Projected deaths</div>
-                    <p className="paragraph">
-                      We project the cumulative number of deaths on a
-                      logarithmic scale. Black dots are confirmed counts.
-                    </p>
-                    <PopulationGraph
-                      scenario={scenario}
-                      data={data}
-                      x={getDate}
-                      xLabel="people"
-                      width={width}
-                      height={height}
-                    >
-                      <Line y={getProjectedDeaths} stroke="#0670de" />
-                      <Points
-                        y={getConfirmedDeaths}
-                        fill="var(--color-gray-03)"
-                      />
-                    </PopulationGraph>
-                  </div>
-                </div>
+              <div className="section-heading">Case progression curve</div>
+              <p className="paragraph">
+                We show the current number of infected and infectious
+                individuals as well as the cumulative number of expected PCR
+                confirmations. If less than 20% of the population is infected
+                and the number of active infections is reduced to a small
+                fraction of the population we consider the epidemic contained,
+                and place a grey box on the plot.
+              </p>
+              <PopulationGraph
+                scenario={scenario}
+                data={data}
+                x={getDate}
+                xLabel="people"
+                width={width}
+                height={height}
+              >
+                <Line y={getProjectedCurrentlyInfected} stroke="#0670de" />
+                <Line y={getProjectedCurrentlyInfectious} stroke="#228403" />
+                <Line y={getProjectedPcr} stroke="#ed6804" />
+                <Points y={getConfirmedPcr} fill="var(--color-gray-03)" />
+              </PopulationGraph>
+              <div style={{paddingTop: '16px'}}>
+                <Legend color="#ed6804">Projected PCR</Legend>
+                <Legend color="#0670de">Projected currently infected</Legend>
+                <Legend color="#228403">Projected currently infectious</Legend>
               </div>
-              <div className="flex flex-col">
-                <div>
-                  <HospitalCapacity
-                    data={data}
-                    scenario={scenario}
-                    state={state}
-                    width={width}
-                    height={height}
-                  />
-                </div>
-                <div>
-                  <div>
-                    <div className="section-heading">ICU Occupancy</div>
-                    <p className="paragraph">
-                      Note: we assign a higher probability of fatality in the
-                      case the ICU capacity is over-shot. This can be seen in
-                      countries like Italy where the fatlity rate is
-                      substantially higher even controlling for the age
-                      distriubtion.
-                    </p>
-                    <OccupancyGraph
-                      scenario={scenario}
-                      data={data}
-                      x={getDate}
-                      y={getProjectedCurrentlyCritical}
-                      y0={getProjectedCurrentlyCriticalLCI}
-                      y1={getProjectedCurrentlyCriticalUCI}
-                      cutoff={data.icuBeds}
-                      xLabel="people"
-                      cutoffLabel="ICU capacity"
-                      width={width}
-                      height={height}
-                    />
-                  </div>
-                </div>
-              </div>
-              <OutcomeSummary data={scenarioSummary} />
             </div>
+            <div>
+              <div className="section-heading">Projected deaths</div>
+              <p className="paragraph">
+                We project the cumulative number of deaths on a logarithmic
+                scale. Black dots are confirmed counts.
+              </p>
+              <PopulationGraph
+                scenario={scenario}
+                data={data}
+                x={getDate}
+                xLabel="people"
+                width={width}
+                height={height}
+              >
+                <Line y={getProjectedDeaths} stroke="#0670de" />
+                <Points y={getConfirmedDeaths} fill="var(--color-gray-03)" />
+              </PopulationGraph>
+            </div>
+            <div>
+              <HospitalCapacity
+                data={data}
+                scenario={scenario}
+                state={state}
+                width={width}
+                height={height}
+              />
+            </div>
+            <div>
+              <div className="section-heading">ICU Occupancy</div>
+              <p className="paragraph">
+                Note: we assign a higher probability of fatality in the case the
+                ICU capacity is over-shot. This can be seen in countries like
+                Italy where the fatlity rate is substantially higher even
+                controlling for the age distriubtion.
+              </p>
+              <OccupancyGraph
+                scenario={scenario}
+                data={data}
+                x={getDate}
+                y={getProjectedCurrentlyCritical}
+                y0={getProjectedCurrentlyCriticalLCI}
+                y1={getProjectedCurrentlyCriticalUCI}
+                cutoff={data.icuBeds}
+                xLabel="people"
+                cutoffLabel="ICU capacity"
+                width={width}
+                height={height}
+              />
+            </div>
+            <OutcomeSummary data={scenarioSummary} />
           </Section>
         </div>
       </div>
