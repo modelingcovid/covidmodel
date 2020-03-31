@@ -630,5 +630,5 @@ evaluateStateAndPrint[state_]:=Module[{},
 GenerateModelExport[] := Module[{allStateData},
 allStateData=Parallelize[
 Map[{#->evaluateStateAndPrint[#]}&,distancingStates]];
-Export["public/json/simulated-model.json",Association[allStateData]]
+Export["public/json/model.json",Association[allStateData]]
 ]
