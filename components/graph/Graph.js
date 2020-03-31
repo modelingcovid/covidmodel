@@ -9,9 +9,11 @@ import {bisector} from 'd3-array';
 import {format as formatNumber} from 'd3-format';
 import {utcFormat} from 'd3-time-format';
 import {GraphControls} from './GraphControls';
+import {NearestMarker} from './NearestMarker';
+import {NearestOverlay} from './NearestOverlay';
 import {GraphDataProvider} from './useGraphData';
 import {NearestPointContext} from './useNearestPoint';
-import {getDate} from '../../lib/date';
+import {getDate, formatShortDate} from '../../lib/date';
 
 const {createContext, useCallback, useMemo, useState} = React;
 
@@ -233,9 +235,28 @@ export const Graph = ({
                 strokeWidth={1}
                 tickLabelProps={tickLabelProps}
               />
+              <NearestMarker />
             </Group>
           </svg>
-          <div className="graph-overlay">{overlay}</div>
+          <div className="graph-overlay">
+            <NearestOverlay
+              style={{
+                top: '100%',
+                transform: 'translate(-50%, 3px)',
+                background: '#fff',
+                borderRadius: '99em',
+                padding: '6px 12px 5px',
+                boxShadow:
+                  '0 2px 5px -1px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.15)',
+                fontSize: '12px',
+                lineHeight: '1',
+                fontWeight: 500,
+              }}
+            >
+              {(d) => formatShortDate(getDate(d))}
+            </NearestOverlay>
+            {overlay}
+          </div>
         </div>
       </NearestPointContext.Provider>
     </GraphDataProvider>

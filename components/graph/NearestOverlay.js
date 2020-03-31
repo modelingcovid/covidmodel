@@ -3,13 +3,23 @@ import {useGraphData} from './useGraphData';
 import {useNearestPoint} from './useNearestPoint';
 import {formatDate} from '../../lib/date';
 
-export const NearestOverlay = ({children}) => {
-  const {x} = useGraphData();
+export const NearestOverlay = ({children, y, style = {}}) => {
+  const {x, xScale, yScale} = useGraphData();
   const nearest = useNearestPoint();
   if (!nearest) {
     return null;
   }
   return (
-    <div style={{transform: `translateX(${x(nearest)}px)`}}>{children}</div>
+    <div
+      style={{
+        position: 'absolute',
+        ...style,
+        transform: `translate(${xScale(x(nearest))}px, ${
+          y ? yScale(y(nearest)) : 0
+        }px) ${style.transform || ''}`,
+      }}
+    >
+      {children(nearest)}
+    </div>
   );
 };
