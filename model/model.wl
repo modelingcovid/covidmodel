@@ -89,7 +89,8 @@ getEst[importLength_, initialInfectionImpulse_, importtime_] :=
 		mu = importtime + .5*importLength;
 		(* area under gaussian with standard_deviation = sigma *)
 		areaUnderCurve = sig*Sqrt[2*Pi];
-		totalInfection/areaUnderCurve * PDF[NormalDistribution[mu, sig]]]
+		With[{mu0 = mu, sig0 = sig, ti = totalInfection, auc = areaUnderCurve},
+			Function[t, ti/auc * PDF[NormalDistribution[mu0, sig0], t]]]]
 
 
 CovidModel[
@@ -114,24 +115,21 @@ containmentThresholdCases_,
 icuCapacity_,
 distancing_,
 hospitalCapacity_:1000000, (*defaulted since we dont evaluate this on a country basis yet *)
-tMin_,
-est_
+tMin_
 ]:=
-Module[{est},
-est = getEst[importlength, initialInfectionImpulse, importtime]
 Reap[NDSolve[{
 	
 	Sq'[t]    == (-distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - est[t] * Sq[t],
+	 			 - getEst[importlength, initialInfectionImpulse, importtime][t] * Sq[t],
 	
 	Eq'[t]    == (distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + est[t] * Sq[t] 
+				 + getEst[importlength, initialInfectionImpulse, importtime][t] * Sq[t] 
 				 - Eq[t] / daysFromInfectedToInfectious,
 	
 	(* Infectious total, not yet PCR confirmed, age indep *)
@@ -186,7 +184,7 @@ Reap[NDSolve[{
 	},
 	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR},
 	{t, tMin, tmax}
-],{"containment","herd","icu","hospital"},Rule]]
+],{"containment","herd","icu","hospital"},Rule];
 
 
 (* this is a modified version of CovidModel that does not take an r0 or importtime value, but isntead returns a parametric
@@ -210,8 +208,7 @@ pS_,
 pH_,
 pC_,
 distancing_,
-icuCapacity_,
-est_
+icuCapacity_
 ]:=
 ParametricNDSolveValue[{
 	
@@ -219,13 +216,13 @@ ParametricNDSolveValue[{
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - est[t] * Sq[t],
+	 			 - getEst[importlength, initialInfectionImpulse, importtime][t] * Sq[t],
 	
 	Eq'[t]    == (distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + est[t] * Sq[t] 
+				 + getEst[importlength, initialInfectionImpulse, importtime][t] * Sq[t] 
 				 - Eq[t] / daysFromInfectedToInfectious,
 	
 	(* Infectious total, not yet PCR confirmed, age indep *)
@@ -277,7 +274,7 @@ ParametricNDSolveValue[{
 	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq},
 	{t, 0, tmax},
 	{r0natural, importtime}
-];
+]
 
 (* Assumption here is that age dependence follows a logistic curve -- zero year olds dont require any care, 
 100 year olds require significant case, midpoint is the medianHospitalization age *)
