@@ -25,6 +25,7 @@ export const PercentileLine = ({y, color = 'var(--color-blue-02)'}) => {
         strokeWidth={1.5}
         r={2}
         fill="#fff"
+        nearestProps={() => ({r: 3.5})}
       />
     </>
   );
