@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {useGraphData} from './useGraphData';
-import {useNearestPoint} from './useNearestPoint';
+import {useNearestCoordinates} from './useNearestCoordinates';
 
 export const NearestOverlay = ({
   anchor = 'middle',
@@ -8,14 +7,11 @@ export const NearestOverlay = ({
   y,
   style = {},
 }) => {
-  const {x, xScale, yScale} = useGraphData();
-  const nearest = useNearestPoint();
+  const nearest = useNearestCoordinates(y);
   if (!nearest) {
     return null;
   }
-  const transforms = [
-    `translate(${xScale(x(nearest))}px, ${y ? yScale(y(nearest)) : 0}px)`,
-  ];
+  const transforms = [`translate(${nearest.x}px, ${nearest.y}px)`];
   if (anchor === 'middle') {
     transforms.push('translateX(-50%)');
   }
@@ -33,7 +29,7 @@ export const NearestOverlay = ({
         transform: transforms.filter(Boolean).join(' '),
       }}
     >
-      {children(nearest)}
+      {children(nearest?.data)}
     </div>
   );
 };

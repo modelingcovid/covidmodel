@@ -10,4 +10,5 @@ export * from './Points';
 export * from './ScaleGradient';
 export * from './TodayMarker';
 export * from './useGraphData';
+export * from './useNearestCoordinates';
 export * from './useNearestPoint';
