@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {format as formatNumber} from 'd3-format';
 import {Graph, HMarker, NearestMarker, TodayMarker} from './graph';
+import {DistancingGradient} from './DistancingGradient';
 
 const {createContext, useCallback, useMemo} = React;
 
@@ -32,6 +33,7 @@ export const PopulationGraph = ({
       x={x}
       xLabel={xLabel}
     >
+      <DistancingGradient />
       <HMarker
         value={population}
         anchor="end"

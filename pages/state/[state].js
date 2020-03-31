@@ -146,12 +146,7 @@ export default ({data, states}) => {
                       rightLabel="R0"
                       width={width}
                       height={height}
-                    >
-                      <DistancingGradient
-                        id={socialDistancingGradientId}
-                        y={getDistancing}
-                      />
-                    </DistancingGraph>
+                    />
                   </div>
                 </div>
                 <div>

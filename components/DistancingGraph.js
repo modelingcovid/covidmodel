@@ -10,6 +10,7 @@ import {
   TodayMarker,
   WithGraphData,
 } from './graph';
+import {DistancingGradient} from './DistancingGradient';
 import {WithComponentId} from './util';
 import {today} from '../lib/date';
 
@@ -28,7 +29,7 @@ export const DistancingGraph = ({
   rightLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 16, left: 64, right: 64, bottom: 32},
+  margin,
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
 
@@ -63,17 +64,7 @@ export const DistancingGraph = ({
           };
           return (
             <>
-              <AxisRight
-                left={xMax}
-                scale={yScale}
-                tickValues={yTicks}
-                tickFormat={tickFormatWithLabel}
-                tickLabelProps={endTickLabelProps}
-                tickLength={0} // positions text at the axis
-                hideTicks
-                stroke="var(--color-gray-01)"
-                strokeWidth={1}
-              />
+              <DistancingGradient />
               <TodayMarker anchor="end" />
               {children}
               <WithComponentId prefix="linearGradient">
@@ -91,6 +82,17 @@ export const DistancingGraph = ({
                   </>
                 )}
               </WithComponentId>
+              <AxisRight
+                left={xMax}
+                scale={yScale}
+                tickValues={yTicks}
+                tickFormat={tickFormatWithLabel}
+                tickLabelProps={endTickLabelProps}
+                tickLength={0} // positions text at the axis
+                hideTicks
+                stroke="var(--color-gray-01)"
+                strokeWidth={1}
+              />
             </>
           );
         }}

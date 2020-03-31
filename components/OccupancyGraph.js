@@ -9,6 +9,7 @@ import {
   Stop,
   TodayMarker,
 } from './graph';
+import {DistancingGradient} from './DistancingGradient';
 import {WithComponentId} from './util';
 
 const {useMemo} = React;
@@ -59,6 +60,7 @@ export const OccupancyGraph = ({
       xLabel={xLabel}
       controls
     >
+      <DistancingGradient />
       <TodayMarker />
       <HMarker
         value={cutoff}
