@@ -5,13 +5,12 @@ import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {localPoint} from '@vx/event';
-import {bisector} from 'd3-array';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {NearestOverlay} from './NearestOverlay';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
-import {NearestDataContext} from './useNearestData';
+import {useSetNearestData} from './useNearestData';
 import {getDate} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 
@@ -107,20 +106,14 @@ export const Graph = React.memo(function Graph({
     }
   }, [domain, scale, yMax]);
 
-  const [nearestData, setNearestData] = useState(null);
-  const bisectDate = useMemo(() => bisector(x).left, [x]);
+  const setNearestData = useSetNearestData();
   const onMouseMove = useCallback(
     (event) => {
       const point = localPoint(event);
       const x0 = xScale.invert(point.x - margin.left);
-      const index = bisectDate(data, x0, 1);
-      const d0 = data[index - 1];
-      const d1 = data[index];
-      // Which is closest?
-      const d = d1 && x0 - x(d0) > x(d1) - x0 ? d1 : d0;
-      setNearestData(d);
+      setNearestData(x0);
     },
-    [bisectDate, data, xScale]
+    [setNearestData, xScale]
   );
 
   const xTicks = xScale.ticks(width > 600 ? 10 : 5);
@@ -178,56 +171,55 @@ export const Graph = React.memo(function Graph({
           right: ${margin.right}px;
         }
       `}</style>
-      <NearestDataContext.Provider value={nearestData}>
-        {controls && <GraphControls scale={scale} setScale={setScale} />}
-        <div className="graph">
-          <svg width={width} height={height} onMouseMove={onMouseMove}>
-            <Group
-              // Add 0.5 to snap centered strokes onto the pixel grid
-              left={margin.left + 0.5}
-              top={margin.top + 0.5}
-            >
-              <TodayMarker />
-              <NearestMarker />
-              <GridRows
-                scale={yScale}
-                width={xMax}
-                height={yMax}
-                stroke="#e0e0e0"
-              />
-              <GridColumns
-                scale={xScale}
-                width={xMax}
-                height={yMax}
-                stroke="#e0e0e0"
-              />
-              <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
-              {children}
-              <AxisBottom />
-              <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
-            </Group>
-          </svg>
-          <div className="graph-overlay">
-            <NearestOverlay
-              style={{
-                top: '100%',
-                transform: 'translateY(3px)',
-                background: '#fff',
-                borderRadius: '99em',
-                padding: '6px 12px 5px',
-                boxShadow:
-                  '0 2px 5px -1px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.15)',
-                fontSize: '12px',
-                lineHeight: '1',
-                fontWeight: 500,
-              }}
-            >
-              {(d) => formatShortDate(getDate(d))}
-            </NearestOverlay>
-            {overlay}
-          </div>
+
+      {controls && <GraphControls scale={scale} setScale={setScale} />}
+      <div className="graph">
+        <svg width={width} height={height} onMouseMove={onMouseMove}>
+          <Group
+            // Add 0.5 to snap centered strokes onto the pixel grid
+            left={margin.left + 0.5}
+            top={margin.top + 0.5}
+          >
+            <TodayMarker />
+            <NearestMarker />
+            <GridRows
+              scale={yScale}
+              width={xMax}
+              height={yMax}
+              stroke="#e0e0e0"
+            />
+            <GridColumns
+              scale={xScale}
+              width={xMax}
+              height={yMax}
+              stroke="#e0e0e0"
+            />
+            <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
+            {children}
+            <AxisBottom />
+            <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
+          </Group>
+        </svg>
+        <div className="graph-overlay">
+          <NearestOverlay
+            style={{
+              top: '100%',
+              transform: 'translateY(3px)',
+              background: '#fff',
+              borderRadius: '99em',
+              padding: '6px 12px 5px',
+              boxShadow:
+                '0 2px 5px -1px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.15)',
+              fontSize: '12px',
+              lineHeight: '1',
+              fontWeight: 500,
+            }}
+          >
+            {(d) => formatShortDate(getDate(d))}
+          </NearestOverlay>
+          {overlay}
         </div>
-      </NearestDataContext.Provider>
+      </div>
     </GraphDataProvider>
   );
 });
