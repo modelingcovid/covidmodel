@@ -23,5 +23,5 @@ export const HMarker = ({anchor = 'start', value, ...props}) => {
   const from = isStart ? start : end;
   const to = isStart ? end : start;
 
-  return <Marker {...props} from={from} to={to} />;
+  return <Marker labelAnchor={anchor} {...props} from={from} to={to} />;
 };

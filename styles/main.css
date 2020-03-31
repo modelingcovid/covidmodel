@@ -57,6 +57,11 @@ text {
   font-size: 13px;
   font-family: inherit;
 }
+.text-mono {
+  font-family: var(--font-family-mono);
+  font-weight: 500;
+  font-size: 0.9em;
+}
 .text-red {
   color: var(--color-red-02);
 }
@@ -74,6 +79,13 @@ text {
 .text-subtitle {
   font-size: var(--font-size-subtitle);
   font-weight: 500;
+}
+.section-label {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 4px 0;
+  border-bottom: 2px solid var(--color-gray-03);
 }
 .text-heading,
 .section-heading {

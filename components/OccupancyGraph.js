@@ -27,7 +27,7 @@ export const OccupancyGraph = ({
   xLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 16, left: 64, right: 64, bottom: 32},
+  margin,
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
   const allPoints = useMemo(
@@ -63,6 +63,7 @@ export const OccupancyGraph = ({
       <DistancingGradient />
       <TodayMarker />
       <HMarker
+        anchor="end"
         value={cutoff}
         stroke="#f00"
         label={cutoffLabel}
@@ -70,7 +71,7 @@ export const OccupancyGraph = ({
         labelStrokeWidth="5"
         strokeDasharray="4,2"
         strokeWidth={1.5}
-        labelDx={40}
+        labelDx={-20}
         labelDy={-6}
       />
       <WithComponentId prefix="linearGradient">

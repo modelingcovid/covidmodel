@@ -4,8 +4,11 @@ import {Section} from './Section';
 import {Notice} from './Notice';
 
 export const Layout = ({children}) => (
-  <div>
+  <div className="layout">
     <style jsx>{`
+      .layout {
+        padding-bottom: var(--spacing-04);
+      }
       header {
         padding: var(--spacing-01) 0;
         display: flex;

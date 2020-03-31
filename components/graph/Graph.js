@@ -155,7 +155,7 @@ export const Graph = ({
     [xTickCount]
   );
 
-  const yTicks = yScale.ticks(5);
+  const yTicks = yScale.ticks(height > 180 ? 5 : 3);
   const yTickCount = yTicks.length;
   const tickFormatWithLabel = useCallback(
     (v, i) => {

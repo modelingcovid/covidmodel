@@ -7,12 +7,15 @@ import Link from 'next/link';
 
 import {
   Controls,
+  DemographicParameters,
   DistancingGradient,
   DistancingGraph,
   HospitalCapacity,
   Layout,
   Legend,
+  ModelFitParameters,
   OccupancyGraph,
+  OutcomeSummary,
   PopulationGraph,
   Section,
 } from '../../components';
@@ -51,7 +54,7 @@ export default ({data, states}) => {
 
   const sizeRef = useRef(null);
   const {width} = useContentRect(sizeRef, {width: 896, height: 360});
-  const height = 360;
+  const height = width > 600 ? 360 : 256;
 
   if (!data) {
     return <Layout noPad>Missing data for {state}</Layout>;
@@ -83,16 +86,22 @@ export default ({data, states}) => {
           background: white;
           z-index: 2;
         }
+        .sticky-overlay,
+        .sticky-overlay-shadow {
+          height: 42px;
+        }
         .sticky-overlay {
           z-index: 1;
-          box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-          height: 64px;
-          margin-bottom: -64px;
+          margin-bottom: -42px;
+        }
+        .sticky-overlay-shadow {
+          box-shadow: 0 2px rgba(0, 0, 0, 0.04);
         }
         .controls {
-          padding: var(--spacing-02) 0;
+          padding-top: var(--spacing-01);
         }
         .sticky-inlay {
+          background: transparent;
           padding: var(--spacing-01) 0;
           z-index: 1;
         }
@@ -119,10 +128,16 @@ export default ({data, states}) => {
             </div>
           </Section>
         </div>
-        <div className="sticky-overlay" />
+        <div className="sticky-overlay">
+          <Section>
+            <div className="sticky-overlay-shadow" />
+          </Section>
+        </div>
         <div>
-          <div className="text-subtitle sticky-inlay">
-            <Section>Based on these inputs</Section>
+          <div className="sticky-inlay">
+            <Section>
+              <span className="section-label">Based on these inputs</span>
+            </Section>
           </div>
           <Section>
             <div ref={sizeRef} className="section">
@@ -150,116 +165,18 @@ export default ({data, states}) => {
                   </div>
                 </div>
                 <div>
-                  <div>
-                    <div className="section-heading">
-                      Demographic Parameters
-                    </div>
-                    <p className="paragraph">
-                      Demographic parameters are calculated based on publically
-                      available data on age distributions and hospital capacity.
-                      The hospitalization probabilities are computed based on
-                      assumed age-based need and state age distributions.
-                    </p>
-                    <table className="table-fixed mb-0 mb-4 border-2 border-gray-600">
-                      <tbody>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Population
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(data.Population).format('0,0')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            ICU Beds
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(data.icuBeds).format('0,0')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Available Hospital Beds
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(
-                              data.staffedBeds * (1 - data.bedUtilization)
-                            ).format('0,0')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Probability of Not needing hospitalization
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(data.pS).format('0.00%')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Probability of needing hospitalization wihtout ICU
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(data.pH).format('0.00%')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Probability of needing ICU care
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(data.pC).format('0.00%')}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div>
-                      <div className="section-heading">
-                        Model-fit Parameters
-                      </div>
-                      <p className="paragraph">
-                        Most parameters{' '}
-                        <Link href="/about">
-                          <a className="text-blue-700 hover:text-blue-500 leading-relaxed font-medium mb-8">
-                            were fit
-                          </a>
-                        </Link>{' '}
-                        on country data, but we adjust the following parameters
-                        on a per-state basis for a more accurate fit.
-                      </p>
-                      <table className="table-fixed border-2 border-gray-600">
-                        <tbody>
-                          <tr>
-                            <td className="font-semibold border px-4 py-2">
-                              Import Date
-                            </td>
-                            <td className="border px-4 py-2">
-                              {dayjs('2020-01-01')
-                                .add(data.importtime0 - 1, 'day')
-                                .format('MMM DD, YYYY')}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="font-semibold border px-4 py-2">
-                              Basic Reproduction Number (R0)
-                            </td>
-                            <td className="border px-4 py-2">
-                              {numeral(data.R0).format('0.00')}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                  <DemographicParameters data={data} />
+                  <ModelFitParameters data={data} />
                 </div>
               </div>
             </div>
           </Section>
         </div>
         <div>
-          <div className="text-subtitle sticky-inlay">
-            <Section>The model predicts…</Section>
+          <div className="sticky-inlay">
+            <Section>
+              <span className="section-label">The model predicts</span>
+            </Section>
           </div>
           <Section>
             <div>
@@ -367,106 +284,7 @@ export default ({data, states}) => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col">
-                <div>
-                  <div>
-                    <div className="section-heading">Outcome Summary</div>
-                    <p className="paragraph">
-                      Fatality rate and percent of population infected are the
-                      expected PCR confirmed rates with current levels of
-                      testing in the US. The infected percentage is expected to
-                      be a few times lower than the real rate and the real
-                      fatality rate a few times lower to account for unconfirmed
-                      mild cases.
-                    </p>
-                    <table className="table-fixed mb-0 md:mb-4 border-2 border-gray-600">
-                      <tbody>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Deaths
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(
-                              scenarioSummary.totalProjectedDeaths
-                            ).format('0,0')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            PCR Confirmed
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(
-                              scenarioSummary.totalProjectedPCRConfirmed
-                            ).format('0,0')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Percent of Population Infected
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(
-                              scenarioSummary.totalProjectedInfected
-                            ).format('0.00%')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Fatality Rate
-                          </td>
-                          <td className="border px-4 py-2">
-                            {numeral(scenarioSummary['Fatality Rate']).format(
-                              '0.00%'
-                            )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Date Contained
-                          </td>
-                          <td className="border px-4 py-2">
-                            {scenarioSummary['Date Contained'] ===
-                            'Not Contained'
-                              ? 'Not Contained'
-                              : dayjs(scenarioSummary['Date Contained']).format(
-                                  'MMM D, YYYY'
-                                )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Date Hospitals Overloaded
-                          </td>
-                          <td className="border px-4 py-2">
-                            {scenarioSummary['Date Hospitals Over Capacity'] ===
-                            'ICU Under capacity'
-                              ? 'ICU Under capacity'
-                              : dayjs(
-                                  scenarioSummary[
-                                    'Date Hospitals Over Capacity'
-                                  ]
-                                ).format('MMM D, YYYY')}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="font-semibold border px-4 py-2">
-                            Date ICU Overloaded
-                          </td>
-                          <td className="border px-4 py-2">
-                            {scenarioSummary['Date ICU Over Capacity'] ===
-                            'ICU Under capacity'
-                              ? 'ICU Under capacity'
-                              : dayjs(
-                                  scenarioSummary['Date ICU Over Capacity']
-                                ).format('MMM D, YYYY')}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+              <OutcomeSummary data={scenarioSummary} />
             </div>
           </Section>
         </div>
