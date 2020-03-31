@@ -95,8 +95,6 @@ scenarios={scenario1,scenario2,scenario3,scenario4};
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 
 (* define some helper distributions and set up all the parameters that need to be simulated *)
-GammaMeanSig[mean_,sig_]:=GammaDistribution[mean^2/sig,mean/sig];
-
 BetaMeanSig[mu_,sig_]:=BetaDistribution[(mu^2-mu^3-mu sig)/sig,((-1+mu) (-mu+mu^2+sig))/sig];
 
 PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu,sig]]
