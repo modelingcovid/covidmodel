@@ -183,31 +183,7 @@ Deaq - passed after critical care
 
 est - initial infection impulse (eg from imported cases at importtime)
 *)
-CovidModel[
-r0natural_,
-daysUntilNotInfectiousOrHospitalized_,
-daysFromInfectedToInfectious_,
-daysUntilNotInfectiousOrHospitalized_,
-daysToLeaveHosptialNonCritical_,
-pPCRNH_,
-pPCRH_,
-daysTogoToCriticalCare_,
-daysFromCriticalToRecoveredOrDeceased_,
-fractionOfCriticalDeceased_,
-importtime_,
-importlength_,
-initialInfectionImpulse_,
-tmax_,
-pS_,
-pH_,
-pC_,
-containmentThresholdCases_,
-icuCapacity_,
-distancing_,
-hospitalCapacity_:1000000 (*defaulted since we dont evaluate this on a country basis yet *)
-]:=
-Reap[NDSolve[{
-	
+CovidModel[distancing_]:= ParametricNDSolve[{
 	Sq'[t]    == (-distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
@@ -276,9 +252,27 @@ Reap[NDSolve[{
 	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
 	EHq[0]==0
 	},
-	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},
-	{t, 0, tmax}
-],{"containment","herd","icu","hospital","cutoff"},Rule];
+	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR, est},
+	{t, 0, tmax},
+	{r0natural,
+daysUntilNotInfectiousOrHospitalized,
+daysFromInfectedToInfectious,
+daysUntilNotInfectiousOrHospitalized,
+daysToLeaveHosptialNonCritical,
+pPCRNH,
+pPCRH,
+daysTogoToCriticalCare,
+daysFromCriticalToRecoveredOrDeceased,
+fractionOfCriticalDeceased,
+importtime,
+importlength,
+initialInfectionImpulse,
+pS,
+pH,
+pC,
+containmentThresholdCases,
+icuCapacity,
+hospitalCapacity}];
 
 (* this is a modified version of CovidModel that does not take an r0 or importtime value, but isntead returns a parametric
 ndsolve which is used later to fit those parameters against data *)
@@ -382,6 +376,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
     timeSeriesData,
     summary,
     simResults,
+    perSimulationEvents,
     endOfYear,
     events,
     endOfEval,herdTime,
@@ -395,7 +390,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	distance[t_] := stateDistancing[state, scenario, t];
 	
 	(* do one solution with the mean param values for the estimate *)
-	{sol,evts}=CovidModel[
+	{sol,evts}=Reap[CovidModel[
 	fitParams["r0natural"],
 	daysUntilNotInfectiousOrHospitalized0,
 	daysFromInfectedToInfectious0,
@@ -417,7 +412,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	stateParams["icuCapacity"],
 	distance,
 	stateParams["hospitalCapacity"]
-	];
+	]];
 	
 	events=Association[Flatten[evts]];
 	endOfYear = 365;
@@ -427,7 +422,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	    endOfYear]];
 	
 	(* generate a solution for each simulation so we can get bands *)
-    simResults = CovidModel[
+    {simResults, perSimulationEvents} = Reap[CovidModel[
         #["r0natural"],
         #["daysUntilNotInfectiousOrHospitalized"],
         #["daysFromInfectedToInfectious"],
@@ -449,7 +444,9 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
         stateParams["icuCapacity"],
         distance,
         stateParams["hospitalCapacity"]
-    ]&/@sims;
+    ]&/@sims];
+    
+    simResults
     
     deciles = {1/10,2/10,3/10,4/10,5/10,6/10,7/10,8/10,9/10};
 	(* define functions to get the lci, mean, uci quantiles for each of the functions we want
@@ -607,7 +604,7 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
            "icuCapacity"->icuCapacity,
            "hospitalCapacity"->hospitalCapacity, 
            "hospitalizationData"-> hospitalizationData
-         |>, #]}&/@scenarios]|>,
+         |>, #]}&/@{scenario1}]|>,
       <|"parameterBest"->fitParams|>,
       KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
