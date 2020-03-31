@@ -7,7 +7,6 @@ import {
   Line,
   LinearGradient,
   Stop,
-  TodayMarker,
 } from './graph';
 import {DistancingGradient} from './DistancingGradient';
 import {WithComponentId} from './util';
@@ -61,7 +60,6 @@ export const OccupancyGraph = ({
       controls
     >
       <DistancingGradient />
-      <TodayMarker />
       <HMarker
         anchor="end"
         value={cutoff}

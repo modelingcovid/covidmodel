@@ -6,7 +6,6 @@ import {
   Line,
   LinearGradient,
   Stop,
-  TodayMarker,
   WithGraphData,
 } from './graph';
 import {DistancingGradient} from './DistancingGradient';
@@ -64,7 +63,6 @@ export const DistancingGraph = ({
           return (
             <>
               <DistancingGradient />
-              <TodayMarker anchor="end" />
               {children}
               <WithComponentId prefix="linearGradient">
                 {(gradientId) => (

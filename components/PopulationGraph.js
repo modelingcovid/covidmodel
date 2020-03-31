@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Graph, HMarker, NearestMarker, TodayMarker} from './graph';
+import {Graph, HMarker, NearestMarker} from './graph';
 import {DistancingGradient} from './DistancingGradient';
 import {formatLargeNumber} from '../lib/format';
 
@@ -44,7 +44,6 @@ export const PopulationGraph = ({
         labelDy={15}
       />
       {children}
-      <TodayMarker />
     </Graph>
   );
 };

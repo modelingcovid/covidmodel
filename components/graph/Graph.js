@@ -9,6 +9,7 @@ import {bisector} from 'd3-array';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {NearestOverlay} from './NearestOverlay';
+import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
 import {NearestPointContext} from './useNearestPoint';
 import {getDate, isYear} from '../../lib/date';
@@ -194,6 +195,8 @@ export const Graph = ({
               left={margin.left + 0.5}
               top={margin.top + 0.5}
             >
+              <TodayMarker />
+              <NearestMarker />
               <GridRows
                 scale={yScale}
                 width={xMax}
@@ -229,7 +232,6 @@ export const Graph = ({
                 strokeWidth={1}
                 tickLabelProps={tickLabelProps}
               />
-              <NearestMarker />
             </Group>
           </svg>
           <div className="graph-overlay">
