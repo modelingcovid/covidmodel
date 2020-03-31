@@ -17,6 +17,7 @@ import {
   OccupancyGraph,
   OutcomeSummary,
   PopulationGraph,
+  ProjectedDeaths,
   Section,
 } from '../../components';
 import {Line, Points} from '../../components/graph';
@@ -28,8 +29,6 @@ import {stateLabels} from '../../lib/controls';
 const {useCallback, useRef, useState} = React;
 
 const getDistancing = ({distancing}) => distancing;
-const getConfirmedDeaths = ({cumulativeDeaths}) => cumulativeDeaths.confirmed;
-const getProjectedDeaths = ({cumulativeDeaths}) => cumulativeDeaths.projected;
 const getConfirmedPcr = ({cumulativePcr}) => cumulativePcr.confirmed;
 const getProjectedPcr = ({cumulativePcr}) => cumulativePcr.projected;
 const getProjectedCurrentlyInfected = ({currentlyInfected}) =>
@@ -147,7 +146,7 @@ export default ({data, states}) => {
           <Section>
             <div className="text-jumbo">Model inputs</div>
             <div ref={sizeRef}>
-              <div className="section-heading">Social Distancing</div>
+              <div className="section-heading">Social distancing</div>
               <p className="paragraph">
                 On the left axis social distance of 100% means no contact with
                 others, which yields an R0 (basic reproduction number) for the
@@ -207,33 +206,20 @@ export default ({data, states}) => {
                 <Legend color="#228403">Projected currently infectious</Legend>
               </div>
             </div>
-            <div>
-              <div className="section-heading">Projected deaths</div>
-              <p className="paragraph">
-                We project the cumulative number of deaths on a logarithmic
-                scale. Black dots are confirmed counts.
-              </p>
-              <PopulationGraph
-                scenario={scenario}
-                data={data}
-                x={getDate}
-                xLabel="people"
-                width={width}
-                height={height}
-              >
-                <Line y={getProjectedDeaths} stroke="#0670de" />
-                <Points y={getConfirmedDeaths} fill="var(--color-gray-03)" />
-              </PopulationGraph>
-            </div>
-            <div>
-              <HospitalCapacity
-                data={data}
-                scenario={scenario}
-                state={state}
-                width={width}
-                height={height}
-              />
-            </div>
+            <ProjectedDeaths
+              data={data}
+              scenario={scenario}
+              state={state}
+              width={width}
+              height={height}
+            />
+            <HospitalCapacity
+              data={data}
+              scenario={scenario}
+              state={state}
+              width={width}
+              height={height}
+            />
             <div>
               <div className="section-heading">ICU Occupancy</div>
               <p className="paragraph">
