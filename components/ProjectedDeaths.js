@@ -1,8 +1,9 @@
-import {Area, Line, Points} from './graph';
+import * as React from 'react';
+import {PercentileLine} from './PercentileLine';
 import {PopulationGraph} from './PopulationGraph';
 import {getDate} from '../lib/date';
 
-const getDeathsConfirmed = ({cumulativeDeaths}) => cumulativeDeaths.confirmed;
+const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 const getDeathsProjected = ({cumulativeDeaths}) => cumulativeDeaths.projected;
 const getDeathsLci = ({cumulativeDeaths}) => cumulativeDeaths.lci;
 const getDeathsUci = ({cumulativeDeaths}) => cumulativeDeaths.uci;
@@ -22,9 +23,7 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
       width={width}
       height={height}
     >
-      <Area y0={getDeathsLci} y1={getDeathsUci} fill="#0670de" opacity="0.2" />
-      <Line y={getDeathsProjected} stroke="#0670de" />
-      <Points y={getDeathsConfirmed} fill="var(--color-gray-03)" />
+      <PercentileLine y={getCumulativeDeaths} color="var(--color-blue-02)" />
     </PopulationGraph>
   </div>
 );
