@@ -81,6 +81,17 @@ pS0 = 1-(pC0 + pH0);
       
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
 
+getEst[importLength_, initialInfectionImpulse_, importtime_] := 
+	Module[{totalInfection, sig, mu, areaUnderCurve},
+		totalInfection = importLength*Exp[-initialInfectionImpulse];
+		(* the normal should hit the boundaries at +/- 3 standard deviations *)
+		sig = importLength / 6;
+		mu = importtime + .5*importLength;
+		(* area under gaussian with standard_deviation = sigma *)
+		areaUnderCurve = sig*Sqrt[2*Pi];
+		totalInfection/areaUnderCurve * PDF[NormalDistribution[mu, sig]]]
+
+
 CovidModel[
 r0natural_,
 daysUntilNotInfectiousOrHospitalized_,
@@ -103,8 +114,11 @@ containmentThresholdCases_,
 icuCapacity_,
 distancing_,
 hospitalCapacity_:1000000, (*defaulted since we dont evaluate this on a country basis yet *)
-tMin_
+tMin_,
+est_
 ]:=
+Module[{est},
+est = getEst[importlength, initialInfectionImpulse, importtime]
 Reap[NDSolve[{
 	
 	Sq'[t]    == (-distancing[t] *
@@ -161,22 +175,18 @@ Reap[NDSolve[{
 	
 	(* Leaving critical care *)
 	RCq'[t]   == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
-	
-	est'[t]   == 0,
 
 	WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
 	WhenEvent[RSq[t]+RSq[t]+RCq[t] >= 0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
 	WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]], (* ICU Capacity overshot *)
 	WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(* Hospitals Capacity overshot *)
-	WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
-	WhenEvent[t >importtime+importlength, est[t]->0 ],
 	Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
-	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
+	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,PCR[0]==0,
 	EHq[0]==0
 	},
-	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},
+	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR},
 	{t, tMin, tmax}
-],{"containment","herd","icu","hospital"},Rule];
+],{"containment","herd","icu","hospital"},Rule]]
 
 
 (* this is a modified version of CovidModel that does not take an r0 or importtime value, but isntead returns a parametric
@@ -200,7 +210,8 @@ pS_,
 pH_,
 pC_,
 distancing_,
-icuCapacity_
+icuCapacity_,
+est_
 ]:=
 ParametricNDSolveValue[{
 	
@@ -208,13 +219,13 @@ ParametricNDSolveValue[{
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - establishment[t] * Sq[t],
+	 			 - est[t] * Sq[t],
 	
 	Eq'[t]    == (distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
 				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + establishment[t] * Sq[t] 
+				 + est[t] * Sq[t] 
 				 - Eq[t] / daysFromInfectedToInfectious,
 	
 	(* Infectious total, not yet PCR confirmed, age indep *)
@@ -259,15 +270,11 @@ ParametricNDSolveValue[{
 	(* Leaving critical care *)
 	RCq'[t]   == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
 	
-	establishment'[t]   == 0,
-	
-	WhenEvent[t>=importtime , establishment[t]->Exp[-initialInfectionImpulse]], 
-	WhenEvent[t >importtime+importlength, establishment[t]->0 ],
 	Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
-	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,establishment[0]==0,PCR[0]==0,
+	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,PCR[0]==0,
 	EHq[0]==0
 	}/.{r0natural->Exp[r0natural],importtime->Exp[importtime]},
-	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, establishment},
+	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq},
 	{t, 0, tmax},
 	{r0natural, importtime}
 ];
