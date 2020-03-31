@@ -1,10 +1,14 @@
 import * as React from 'react';
 import {OccupancyGraph} from './OccupancyGraph';
 import {Points} from './graph';
+import {Legend, LegendRow} from './Legend';
 import {stateLabels} from '../lib/controls';
 import {getDate} from '../lib/date';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 import {getFirstExceedsThreshold} from '../lib/summary';
+
+const getCurrentlyHospitalized = ({currentlyHospitalized}) =>
+  currentlyHospitalized;
 
 const getConfirmedHospitalizations = ({currentlyHospitalized}) =>
   currentlyHospitalized.confirmed;
@@ -71,6 +75,14 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
       >
         <Points y={getConfirmedHospitalizations} fill="var(--color-gray-03)" />
       </OccupancyGraph>
+      <Legend>
+        <LegendRow
+          y={getCurrentlyHospitalized}
+          format={formatNumber}
+          fill="var(--color-blue-02)"
+          label="Currently hospitalized"
+        />
+      </Legend>
     </div>
   );
 };

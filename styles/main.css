@@ -32,6 +32,7 @@
   --spacing-02: 32px;
   --spacing-03: 64px;
   --spacing-04: 96px;
+  --font-size-micro: 14px;
   --font-size-small: 14px;
   --font-size-jumbo: 36px;
   --font-size-title: 20px;
@@ -82,6 +83,9 @@ text {
 }
 .text-green {
   color: var(--color-green-02);
+}
+.text-micro {
+  font-size: var(--font-size-micro);
 }
 .text-small {
   font-size: var(--font-size-small);

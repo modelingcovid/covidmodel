@@ -13,6 +13,7 @@ import {
   HospitalCapacity,
   Layout,
   Legend,
+  LegendRow,
   ModelFitParameters,
   OccupancyGraph,
   OutcomeSummary,
@@ -33,6 +34,7 @@ const getDistancing = ({distancing}) => distancing;
 const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
 const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
 const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
+const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 const getProjectedCurrentlyCritical = ({currentlyCritical}) =>
   currentlyCritical.projected;
 const getProjectedCurrentlyCriticalLCI = ({currentlyCritical}) =>
@@ -211,15 +213,23 @@ export default ({data, states}) => {
                     color="var(--color-yellow-02)"
                   />
                 </PopulationGraph>
-                <div style={{paddingTop: '16px'}}>
-                  <Legend color="var(--color-yellow-02)">Projected PCR</Legend>
-                  <Legend color="var(--color-magenta-01)">
-                    Projected currently infected
-                  </Legend>
-                  <Legend color="var(--color-blue-02)">
-                    Projected currently infectious
-                  </Legend>
-                </div>
+                <Legend>
+                  <LegendRow
+                    y={getCurrentlyInfected}
+                    fill="var(--color-blue-02)"
+                    label="Currently infected"
+                  />
+                  <LegendRow
+                    y={getCurrentlyInfectious}
+                    fill="var(--color-magenta-01)"
+                    label="Currently infectious"
+                  />
+                  <LegendRow
+                    y={getCumulativePcr}
+                    fill="var(--color-yellow-02)"
+                    label="Cumulative PCR"
+                  />
+                </Legend>
               </div>
               <ProjectedDeaths
                 data={data}
@@ -256,6 +266,13 @@ export default ({data, states}) => {
                   width={width}
                   height={height}
                 />
+                <Legend>
+                  <LegendRow
+                    y={getCurrentlyCritical}
+                    fill="var(--color-blue-02)"
+                    label="Currently in need of ICU care"
+                  />
+                </Legend>
               </div>
               <OutcomeSummary data={scenarioSummary} />
             </Section>
