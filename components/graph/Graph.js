@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
 import {scaleLinear, scaleSymlog, scaleUtc} from '@vx/scale';
-import {AxisLeft, AxisBottom} from '@vx/axis';
+import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {localPoint} from '@vx/event';
@@ -12,18 +12,10 @@ import {NearestOverlay} from './NearestOverlay';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
 import {NearestDataContext} from './useNearestData';
-import {getDate, isYear} from '../../lib/date';
-import {
-  formatLargeNumber,
-  formatShortDate,
-  formatShortMonth,
-  formatYear,
-} from '../../lib/format';
+import {getDate} from '../../lib/date';
+import {formatLargeNumber, formatShortDate} from '../../lib/format';
 
 const {createContext, useCallback, useMemo, useState} = React;
-
-const dateAxisFormat = (date) =>
-  isYear(date) ? formatYear(date) : formatShortMonth(date);
 
 const {sign, pow, floor, log10, abs} = Math;
 const floorLog = (n) =>
@@ -41,7 +33,7 @@ const valueTickLabelProps = () => ({
   strokeWidth: 5,
 });
 
-export const Graph = ({
+export const Graph = React.memo(function Graph({
   children,
   overlay,
   data,
@@ -54,10 +46,14 @@ export const Graph = ({
   tickFormat = formatLargeNumber,
   tickLabelProps = valueTickLabelProps,
   controls = false,
-}) => {
+}) {
   const [scale, setScale] = useState(initialScale);
   const margin = {top: 16, left: 16, right: 16, bottom: 32};
   const width = propWidth + margin.left + margin.right;
+
+  // bounds
+  const xMax = width - margin.left - margin.right;
+  const yMax = height - margin.top - margin.bottom;
 
   const xScale = useMemo(
     () =>
@@ -66,8 +62,9 @@ export const Graph = ({
           new Date('2020-01-01').getTime(),
           new Date('2021-01-01').getTime(),
         ],
+        range: [0, xMax],
       }),
-    [data, x]
+    [data, x, xMax]
   );
 
   const yScale = useMemo(() => {
@@ -81,6 +78,7 @@ export const Graph = ({
         const domainMax = ceilLog(yDomain[1]);
         const yScale = scaleSymlog({
           domain: [domainMin, domainMax],
+          range: [yMax, 0],
         });
 
         const ticks = [0];
@@ -103,17 +101,11 @@ export const Graph = ({
       default:
         return scaleLinear({
           domain: yDomain,
+          range: [yMax, 0],
           nice: true,
         });
     }
-  }, [domain, scale]);
-
-  // bounds
-  const xMax = width - margin.left - margin.right;
-  const yMax = height - margin.top - margin.bottom;
-
-  xScale.range([0, xMax]);
-  yScale.range([yMax, 0]);
+  }, [domain, scale, yMax]);
 
   const [nearestData, setNearestData] = useState(null);
   const bisectDate = useMemo(() => bisector(x).left, [x]);
@@ -211,27 +203,8 @@ export const Graph = ({
               />
               <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
               {children}
-              <AxisBottom
-                top={yMax}
-                scale={xScale}
-                tickValues={xTicks}
-                tickLength={4}
-                tickFormat={dateAxisFormat}
-                tickLabelProps={dateTickLabelProps}
-                strokeWidth={1}
-                stroke="var(--color-gray-01)"
-                tickStroke="var(--color-gray-01)"
-              />
-              <AxisLeft
-                scale={yScale}
-                tickFormat={tickFormatWithLabel}
-                tickValues={yTicks}
-                tickLength={0} // positions text at the axis
-                hideTicks
-                stroke="var(--color-gray-01)"
-                strokeWidth={1}
-                tickLabelProps={tickLabelProps}
-              />
+              <AxisBottom />
+              <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
             </Group>
           </svg>
           <div className="graph-overlay">
@@ -257,4 +230,4 @@ export const Graph = ({
       </NearestDataContext.Provider>
     </GraphDataProvider>
   );
-};
+});

@@ -22,27 +22,30 @@ const Point = ({d, y, fill = 'transparent', r = 1.25, ...remaining}) => {
   );
 };
 
-export const Points = ({nearestProps: getNearestProps, ...remaining}) => {
-  const {data, x, xScale, yScale} = useGraphData();
+const NearestPoint = ({nearestProps, ...remaining}) => {
+  const {data} = useGraphData();
   const nearest = useNearestData();
-  const points = data.map((d, i) => <Point {...remaining} d={d} key={i} />);
 
-  // Bring the nearest point to the top
-  if (nearest) {
-    const nearestIndex = data.indexOf(nearest);
-    if (nearestIndex !== -1) {
-      points.splice(nearestIndex, 1);
-      const nearestProps = getNearestProps ? getNearestProps(nearest) : {};
-      points.push(
-        <Point
-          {...remaining}
-          {...nearestProps}
-          d={nearest}
-          key={nearestIndex}
-        />
-      );
-    }
+  if (!nearest) {
+    return null;
   }
+  const nearestIndex = data.indexOf(nearest);
+  if (nearestIndex === -1) {
+    return null;
+  }
+  const props = nearestProps ? nearestProps(nearest) : {};
+  return <Point {...remaining} {...props} d={nearest} key="nearest" />;
+};
 
-  return <>{points}</>;
+export const Points = ({nearestProps, ...remaining}) => {
+  const {data, x, xScale, yScale} = useGraphData();
+
+  return (
+    <>
+      {data.map((d, i) => (
+        <Point {...remaining} d={d} key={i} />
+      ))}
+      <NearestPoint {...remaining} nearestProps={nearestProps} />
+    </>
+  );
 };
