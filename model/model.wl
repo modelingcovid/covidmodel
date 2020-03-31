@@ -80,6 +80,20 @@ pS0 = 1-(pC0 + pH0);
 (** Utils **)
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
 
+(* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
+(* maintain takes the last day of data from the historicals and uses that as the distancing level *)
+(* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
+scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True|>;
+scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False|>;
+scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False|>;
+scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False|>;
+(*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
+
+scenarios={scenario1,scenario2,scenario3,scenario4};
+
+(* helper to get the scenario for a given id *)
+scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
+
 (* define some helper distributions and set up all the parameters that need to be simulated *)
 GammaMeanSig[mean_,sig_]:=GammaDistribution[mean^2/sig,mean/sig];
 
@@ -245,7 +259,7 @@ Reap[NDSolve[{
 	WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
 	WhenEvent[RSq[t]+RSq[t]+RCq[t] >= 0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
 	WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]], (* ICU Capacity overshot *)
-	WhenEvent[RSq[t]+RSq[t]+RCq[t] >= 0.95,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"cutoff"]],
+	WhenEvent[Iq[t] <= 1,Sow[{t,Iq[t]},"cutoff"]] (* dont bother running when active infections less than 100 it can lead to evaluation issues in long tail simulations *),
 	WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(* Hospitals Capacity overshot *)
 	WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
 	WhenEvent[t >importtime+importlength, est[t]->0 ],
@@ -474,14 +488,14 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	   "uci" -> CurrentlyReportedHospitalizedQuantiles[t][[1]][[3]]
 	|>,
 	"currentlyHospitalized" -> <|
-	   "projected"-> CurrentlyHospitalizedQuantiles[t][[1]][[3]],
+	   "projected"-> CurrentlyHospitalizedQuantiles[t][[1]][[2]],
 	   "lci"-> CurrentlyHospitalizedQuantiles[t][[1]][[1]],
-	   "uci" -> CurrentlyHospitalizedQuantiles[t][[1]][[2]]
+	   "uci" -> CurrentlyHospitalizedQuantiles[t][[1]][[3]]
 	|>,
 	"currentlyCritical" -> <|
-	   "projected"-> CurrentlyCriticalQuantiles[t][[1]][[3]],
+	   "projected"-> CurrentlyCriticalQuantiles[t][[1]][[2]],
 	   "lci"-> CurrentlyCriticalQuantiles[t][[1]][[1]],
-	   "uci" -> CurrentlyCriticalQuantiles[t][[1]][[2]]
+	   "uci" -> CurrentlyCriticalQuantiles[t][[1]][[3]]
 	|>
 	}],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
 	
@@ -518,19 +532,6 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	  "summary"->summary
     }]
 ];
-
-(* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
-(* maintain takes the last day of data from the historicals and uses that as the distancing level *)
-(* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
-scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True|>;
-scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False|>;
-scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False|>;
-scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False|>;
-(*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
-
-scenarios={scenario1,scenario2,scenario3,scenario4};
-
-scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 
 (* evaluate state for all scenarios *)
 (* we first fit the data on PCR and fatalities to find the R0 and importtime for that state
