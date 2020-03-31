@@ -1,9 +1,11 @@
-import {Line, Points} from './graph';
+import {Area, Line, Points} from './graph';
 import {PopulationGraph} from './PopulationGraph';
 import {getDate} from '../lib/date';
 
-const getConfirmedDeaths = ({cumulativeDeaths}) => cumulativeDeaths.confirmed;
-const getProjectedDeaths = ({cumulativeDeaths}) => cumulativeDeaths.projected;
+const getDeathsConfirmed = ({cumulativeDeaths}) => cumulativeDeaths.confirmed;
+const getDeathsProjected = ({cumulativeDeaths}) => cumulativeDeaths.projected;
+const getDeathsLci = ({cumulativeDeaths}) => cumulativeDeaths.lci;
+const getDeathsUci = ({cumulativeDeaths}) => cumulativeDeaths.uci;
 
 export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
   <div>
@@ -20,8 +22,9 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
       width={width}
       height={height}
     >
-      <Line y={getProjectedDeaths} stroke="#0670de" />
-      <Points y={getConfirmedDeaths} fill="var(--color-gray-03)" />
+      <Area y0={getDeathsLci} y1={getDeathsUci} fill="#0670de" opacity="0.2" />
+      <Line y={getDeathsProjected} stroke="#0670de" />
+      <Points y={getDeathsConfirmed} fill="var(--color-gray-03)" />
     </PopulationGraph>
   </div>
 );
