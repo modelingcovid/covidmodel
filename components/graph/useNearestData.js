@@ -13,22 +13,27 @@ export const defaultNearestDataContexts = createNearestDataContexts();
 export const NearestDataProvider = ({
   children,
   data,
+  initial,
   x,
   contexts = defaultNearestDataContexts,
 }) => {
   const [NearestDataContext, SetNearestDataContext] = contexts;
-  const [nearestData, setNearestData] = useState(null);
   const bisectLeft = useMemo(() => bisector(x).left, [x]);
-  const bisectAndSetNearestData = useCallback(
+  const bisect = useCallback(
     (x0) => {
       const index = bisectLeft(data, x0, 1);
       const d0 = data[index - 1];
       const d1 = data[index];
       // Which is closest?
-      const d = d1 && x0 - x(d0) > x(d1) - x0 ? d1 : d0;
-      setNearestData(d);
+      return d1 && x0 - x(d0) > x(d1) - x0 ? d1 : d0;
     },
     [bisectLeft, data, x]
+  );
+
+  const [nearestData, setNearestData] = useState(() => bisect(initial));
+  const bisectAndSetNearestData = useCallback(
+    (x0) => setNearestData(bisect(x0)),
+    [bisect]
   );
   return (
     <SetNearestDataContext.Provider value={bisectAndSetNearestData}>

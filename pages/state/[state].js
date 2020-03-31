@@ -24,7 +24,7 @@ import {
 import {Line, NearestDataProvider, Points} from '../../components/graph';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
-import {getDate} from '../../lib/date';
+import {getDate, today} from '../../lib/date';
 import {stateLabels} from '../../lib/controls';
 
 const {useCallback, useRef, useState} = React;
@@ -66,7 +66,11 @@ export default ({data, states}) => {
   const socialDistancingGradientId = useComponentId('socialDistancingGradient');
 
   return (
-    <NearestDataProvider x={getDate} data={data[scenario].timeSeriesData}>
+    <NearestDataProvider
+      x={getDate}
+      data={data[scenario].timeSeriesData}
+      initial={today}
+    >
       <Layout>
         <Head>
           <title>{states[state]} COVID model forecast</title>
