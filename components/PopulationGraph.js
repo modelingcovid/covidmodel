@@ -19,12 +19,14 @@ export const PopulationGraph = ({
   xLabel = '',
   width = 600,
   height = 400,
-  margin = {top: 16, left: 64, right: 64, bottom: 32},
+  margin,
+  ...remaining
 }) => {
   const scenarioData = data[scenario].timeSeriesData;
   const population = data.Population;
   return (
     <Graph
+      {...remaining}
       data={scenarioData}
       domain={population}
       initialScale="log"

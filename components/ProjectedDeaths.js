@@ -1,12 +1,11 @@
 import * as React from 'react';
+import {NearestOverlay} from './graph';
 import {PercentileLine} from './PercentileLine';
 import {PopulationGraph} from './PopulationGraph';
 import {getDate} from '../lib/date';
+import {formatWholeNumber} from '../lib/format';
 
 const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
-const getDeathsProjected = ({cumulativeDeaths}) => cumulativeDeaths.projected;
-const getDeathsLci = ({cumulativeDeaths}) => cumulativeDeaths.lci;
-const getDeathsUci = ({cumulativeDeaths}) => cumulativeDeaths.uci;
 
 export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
   <div>
@@ -22,6 +21,32 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
       xLabel="people"
       width={width}
       height={height}
+      overlay={
+        <NearestOverlay style={{top: '100%', transform: 'translateY(32px)'}}>
+          {(nearest) => {
+            const confirmed = getCumulativeDeaths(nearest).confirmed;
+            return (
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontSize: 'var(--font-size-small)',
+                }}
+              >
+                <div className="text-mono text-gray">
+                  {formatWholeNumber(getCumulativeDeaths(nearest).projected)}{' '}
+                  <span className="text-gray-faint">deaths projected</span>
+                </div>
+                {confirmed && (
+                  <div className="text-mono text-gray">
+                    {formatWholeNumber(getCumulativeDeaths(nearest).confirmed)}{' '}
+                    <span className="text-gray-faint">deaths confirmed</span>
+                  </div>
+                )}
+              </div>
+            );
+          }}
+        </NearestOverlay>
+      }
     >
       <PercentileLine y={getCumulativeDeaths} color="var(--color-blue-02)" />
     </PopulationGraph>

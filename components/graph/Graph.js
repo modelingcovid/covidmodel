@@ -242,7 +242,7 @@ export const Graph = ({
             <NearestOverlay
               style={{
                 top: '100%',
-                transform: 'translate(-50%, 3px)',
+                transform: 'translateY(3px)',
                 background: '#fff',
                 borderRadius: '99em',
                 padding: '6px 12px 5px',
