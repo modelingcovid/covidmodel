@@ -1,10 +1,7 @@
 import * as React from 'react';
-import {format} from 'd3-format';
-import {dayToDate, formatDate} from '../lib/date';
+import {dayToDate} from '../lib/date';
+import {formatDate, formatNumber, formatPercent2} from '../lib/format';
 import {Definition, Definitions} from './Definition';
-
-const wholeNumber = format(',.0f');
-const percent2 = format('.2%');
 
 export const OutcomeSummary = ({data}) => {
   return (
@@ -18,16 +15,16 @@ export const OutcomeSummary = ({data}) => {
         cases.
       </p>
       <Definitions>
-        <Definition value={wholeNumber(data.totalProjectedDeaths)}>
+        <Definition value={formatNumber(data.totalProjectedDeaths)}>
           Deaths
         </Definition>
-        <Definition value={wholeNumber(data.totalProjectedPCRConfirmed)}>
+        <Definition value={formatNumber(data.totalProjectedPCRConfirmed)}>
           PCR confirmed
         </Definition>
-        <Definition value={percent2(data.totalProjectedInfected)}>
+        <Definition value={formatPercent2(data.totalProjectedInfected)}>
           Percent of population infected
         </Definition>
-        <Definition value={percent2(data['Fatality Rate'])}>
+        <Definition value={formatPercent2(data['Fatality Rate'])}>
           Fatality rate
         </Definition>
         <Definition

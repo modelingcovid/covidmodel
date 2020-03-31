@@ -1,9 +1,6 @@
 import * as React from 'react';
-import {format} from 'd3-format';
 import {Definition, Definitions} from './Definition';
-
-const wholeNumber = format(',.0f');
-const percent2 = format('.2%');
+import {formatNumber, formatPercent2} from '../lib/format';
 
 export const DemographicParameters = ({data}) => {
   return (
@@ -16,20 +13,22 @@ export const DemographicParameters = ({data}) => {
         distributions.
       </p>
       <Definitions>
-        <Definition value={wholeNumber(data.Population)}>Population</Definition>
-        <Definition value={wholeNumber(data.icuBeds)}>ICU beds</Definition>
+        <Definition value={formatNumber(data.Population)}>
+          Population
+        </Definition>
+        <Definition value={formatNumber(data.icuBeds)}>ICU beds</Definition>
         <Definition
-          value={wholeNumber(data.staffedBeds * (1 - data.bedUtilization))}
+          value={formatNumber(data.staffedBeds * (1 - data.bedUtilization))}
         >
           Available hospital beds
         </Definition>
-        <Definition value={percent2(data.pS)}>
+        <Definition value={formatPercent2(data.pS)}>
           Probability of not needing hospitalization
         </Definition>
-        <Definition value={percent2(data.pH)}>
+        <Definition value={formatPercent2(data.pH)}>
           Probability of needing hospitalization without ICU care
         </Definition>
-        <Definition value={percent2(data.pC)}>
+        <Definition value={formatPercent2(data.pC)}>
           Probability of needing ICU care
         </Definition>
       </Definitions>

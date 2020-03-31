@@ -6,29 +6,23 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {localPoint} from '@vx/event';
 import {bisector} from 'd3-array';
-import {format as formatNumber} from 'd3-format';
-import {utcFormat} from 'd3-time-format';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {NearestOverlay} from './NearestOverlay';
 import {GraphDataProvider} from './useGraphData';
 import {NearestPointContext} from './useNearestPoint';
-import {getDate, formatShortDate} from '../../lib/date';
+import {getDate, isYear} from '../../lib/date';
+import {
+  formatLargeNumber,
+  formatShortDate,
+  formatShortMonth,
+  formatYear,
+} from '../../lib/format';
 
 const {createContext, useCallback, useMemo, useState} = React;
 
-const yearFormat = utcFormat('%Y');
-const shortMonthFormat = utcFormat('%b');
-const isYear = (date) => date.getUTCMonth() === 0;
-
 const dateAxisFormat = (date) =>
-  isYear(date) ? yearFormat(date) : shortMonthFormat(date);
-
-const addCommas = formatNumber(',');
-const valueFormat = (value) =>
-  value >= 1000000
-    ? `${addCommas(Math.round(value / 100000) / 10)}M`
-    : addCommas(value);
+  isYear(date) ? formatYear(date) : formatShortMonth(date);
 
 const {sign, pow, floor, log10, abs} = Math;
 const floorLog = (n) =>
@@ -56,7 +50,7 @@ export const Graph = ({
   initialScale = 'linear',
   width: propWidth = 600,
   height = 400,
-  tickFormat = valueFormat,
+  tickFormat = formatLargeNumber,
   tickLabelProps = valueTickLabelProps,
   controls = false,
 }) => {

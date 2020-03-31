@@ -1,15 +1,9 @@
 import * as React from 'react';
-import {format as formatNumber} from 'd3-format';
 import {Graph, HMarker, NearestMarker, TodayMarker} from './graph';
 import {DistancingGradient} from './DistancingGradient';
+import {formatLargeNumber} from '../lib/format';
 
 const {createContext, useCallback, useMemo} = React;
-
-const addCommas = formatNumber(',');
-const valueFormat = (value) =>
-  value >= 1000000
-    ? `${addCommas(Math.round(value / 100000) / 10)}M`
-    : addCommas(value);
 
 export const PopulationGraph = ({
   children,
@@ -40,7 +34,7 @@ export const PopulationGraph = ({
         value={population}
         anchor="end"
         stroke="#515a70"
-        label={`Population ${valueFormat(population)}`}
+        label={`Population ${formatLargeNumber(population)}`}
         labelStroke="#fff"
         labelAnchor="end"
         labelStrokeWidth="5"

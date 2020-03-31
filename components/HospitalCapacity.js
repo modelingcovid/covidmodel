@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {format as formatNumber} from 'd3-format';
 import {OccupancyGraph} from './OccupancyGraph';
 import {Points} from './graph';
 import {stateLabels} from '../lib/controls';
-import {getDate, formatDate} from '../lib/date';
+import {getDate} from '../lib/date';
+import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 import {getFirstExceedsThreshold} from '../lib/summary';
 
 const getConfirmedHospitalizations = ({currentlyHospitalized}) =>
@@ -14,9 +14,6 @@ const getProjectedCurrentlyHospitalizedLCI = ({currentlyHospitalized}) =>
   currentlyHospitalized.lci;
 const getProjectedCurrentlyHospitalizedUCI = ({currentlyHospitalized}) =>
   currentlyHospitalized.uci;
-
-const formatComma = formatNumber(',');
-const formatPercent = formatNumber('.1%');
 
 export const HospitalCapacity = ({data, scenario, state, width, height}) => {
   const hospitalCapacity = (1 - data.bedUtilization) * data.staffedBeds;
@@ -47,14 +44,14 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
           <span className="definition-label">the number of available beds</span>
           &nbsp;
           <span className="definition-data">
-            {formatComma(data.staffedBeds)}
+            {formatNumber(data.staffedBeds)}
           </span>
         </span>{' '}
         and discounting for that hospital system’s{' '}
         <span className="definition">
           <span className="definition-label">typical occupancy rate</span>&nbsp;
           <span className="definition-data">
-            {formatPercent(data.bedUtilization)}
+            {formatPercent1(data.bedUtilization)}
           </span>
         </span>
         .

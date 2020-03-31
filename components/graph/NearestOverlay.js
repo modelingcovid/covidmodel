@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {useGraphData} from './useGraphData';
 import {useNearestPoint} from './useNearestPoint';
-import {formatDate} from '../../lib/date';
 
 export const NearestOverlay = ({
   anchor = 'middle',

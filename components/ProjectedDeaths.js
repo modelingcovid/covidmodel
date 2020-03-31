@@ -3,7 +3,7 @@ import {NearestOverlay} from './graph';
 import {PercentileLine} from './PercentileLine';
 import {PopulationGraph} from './PopulationGraph';
 import {getDate} from '../lib/date';
-import {formatWholeNumber} from '../lib/format';
+import {formatNumber} from '../lib/format';
 
 const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 
@@ -33,12 +33,12 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
                 }}
               >
                 <div className="text-mono text-gray">
-                  {formatWholeNumber(getCumulativeDeaths(nearest).projected)}{' '}
+                  {formatNumber(getCumulativeDeaths(nearest).projected)}{' '}
                   <span className="text-gray-faint">deaths projected</span>
                 </div>
                 {confirmed && (
                   <div className="text-mono text-gray">
-                    {formatWholeNumber(getCumulativeDeaths(nearest).confirmed)}{' '}
+                    {formatNumber(getCumulativeDeaths(nearest).confirmed)}{' '}
                     <span className="text-gray-faint">deaths confirmed</span>
                   </div>
                 )}

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {AxisRight} from '@vx/axis';
-import {format as formatNumber} from 'd3-format';
 import {
   Graph,
   GraphDataProvider,
@@ -13,9 +12,9 @@ import {
 import {DistancingGradient} from './DistancingGradient';
 import {WithComponentId} from './util';
 import {today} from '../lib/date';
+import {formatNumber2, formatPercent} from '../lib/format';
 
-const round2Format = formatNumber('.3');
-const invertPercentFormat = (n) => formatNumber('.0%')(1 - n);
+const formatPercentInverted = (n) => formatPercent(1 - n);
 
 const {useCallback, useMemo} = React;
 
@@ -34,7 +33,7 @@ export const DistancingGraph = ({
   const scenarioData = data[scenario].timeSeriesData;
 
   const {R0} = data;
-  const formatR0 = useCallback((n) => round2Format(n * R0), [R0]);
+  const formatR0 = useCallback((n) => formatNumber2(n * R0), [R0]);
 
   const endTickLabelProps = () => ({
     dx: '-4px',
@@ -50,7 +49,7 @@ export const DistancingGraph = ({
       xLabel={leftLabel}
       height={height}
       width={width}
-      tickFormat={invertPercentFormat}
+      tickFormat={formatPercentInverted}
     >
       <WithGraphData>
         {({xMax, yScale}) => {
