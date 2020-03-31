@@ -1,9 +1,22 @@
 import * as React from 'react';
+import {useGraphData} from './useGraphData';
+import {useNearestData} from './useNearestData';
 
-const {createContext, useContext} = React;
+const {useMemo} = React;
 
-export const NearestPointContext = createContext(null);
+export const useNearestPoint = (y) => {
+  const {x, xScale, yScale} = useGraphData();
+  const nearest = useNearestData();
+  return useMemo(() => {
+    if (!nearest) {
+      return null;
+    }
+    return {
+      data: nearest,
+      x: xScale(x(nearest)),
+      y: y ? yScale(y(nearest)) : 0,
+    };
+  }, [nearest, x, y, xScale, yScale]);
+};
 
-export const useNearestPoint = () => useContext(NearestPointContext);
-
-export const WithNearestPoint = ({children}) => children(useNearestPoint());
+export const WithNearestPoint = ({children, y}) => children(useNearestPoint(y));

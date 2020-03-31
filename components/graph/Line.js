@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {LinePath} from '../path';
 import {useGraphData} from './useGraphData';
-import {useNearestCoordinates} from './useNearestCoordinates';
+import {useNearestPoint} from './useNearestPoint';
 
 const {useCallback} = React;
 
@@ -9,7 +9,7 @@ export const Line = ({y, stroke, strokeWidth = 1.5, ...remaining}) => {
   const {data, x, xScale, yScale} = useGraphData();
   const xFn = useCallback((d) => xScale(x(d)), [x, xScale]);
   const yFn = useCallback((d) => yScale(y(d)), [y, yScale]);
-  const nearest = useNearestCoordinates(y);
+  const nearest = useNearestPoint(y);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useNearestCoordinates} from './useNearestCoordinates';
+import {useNearestPoint} from './useNearestPoint';
 
 export const NearestOverlay = ({
   anchor = 'middle',
@@ -7,7 +7,7 @@ export const NearestOverlay = ({
   y,
   style = {},
 }) => {
-  const nearest = useNearestCoordinates(y);
+  const nearest = useNearestPoint(y);
   if (!nearest) {
     return null;
   }

@@ -11,7 +11,7 @@ import {NearestMarker} from './NearestMarker';
 import {NearestOverlay} from './NearestOverlay';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
-import {NearestPointContext} from './useNearestPoint';
+import {NearestDataContext} from './useNearestData';
 import {getDate, isYear} from '../../lib/date';
 import {
   formatLargeNumber,
@@ -115,7 +115,7 @@ export const Graph = ({
   xScale.range([0, xMax]);
   yScale.range([yMax, 0]);
 
-  const [nearestPoint, setNearestPoint] = useState(null);
+  const [nearestData, setNearestData] = useState(null);
   const bisectDate = useMemo(() => bisector(x).left, [x]);
   const onMouseMove = useCallback(
     (event) => {
@@ -126,7 +126,7 @@ export const Graph = ({
       const d1 = data[index];
       // Which is closest?
       const d = d1 && x0 - x(d0) > x(d1) - x0 ? d1 : d0;
-      setNearestPoint(d);
+      setNearestData(d);
     },
     [bisectDate, data, xScale]
   );
@@ -186,7 +186,7 @@ export const Graph = ({
           right: ${margin.right}px;
         }
       `}</style>
-      <NearestPointContext.Provider value={nearestPoint}>
+      <NearestDataContext.Provider value={nearestData}>
         {controls && <GraphControls scale={scale} setScale={setScale} />}
         <div className="graph">
           <svg width={width} height={height} onMouseMove={onMouseMove}>
@@ -254,7 +254,7 @@ export const Graph = ({
             {overlay}
           </div>
         </div>
-      </NearestPointContext.Provider>
+      </NearestDataContext.Provider>
     </GraphDataProvider>
   );
 };
