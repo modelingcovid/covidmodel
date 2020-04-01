@@ -8,7 +8,7 @@ Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
 (* model predict max *)
-tmax = 365;
+tmax0 = 365;
 
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 4;
@@ -100,24 +100,28 @@ BetaMeanSig[mu_,sig_]:=BetaDistribution[(mu^2-mu^3-mu sig)/sig,((-1+mu) (-mu+mu^
 PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu,sig]]
 
 (* a function to generate the monte carlo simulations from combo of fit / assumed parameters *)
-generateSimulations[numberOfSimulations_, fitParams_, standardErrors_]:=<|
-"daysFromInfectedToInfectious"->RandomVariate[PosNormal[daysFromInfectedToInfectious0,1]],
-"daysUntilNotInfectiousOrHospitalized"-> RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,0.5]],
-"daysToLeaveHosptialNonCritical"-> RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,2]],
-"daysTogoToCriticalCare"-> RandomVariate[PosNormal[daysTogoToCriticalCare0,1]],
-"daysFromCriticalToRecoveredOrDeceased"-> RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,1]],
-"pPCRH"->RandomVariate[NormalDistribution[pPCRH0,0.05]],
-"pPCRNH"->RandomVariate[NormalDistribution[pPCRNH0,0.02]],
-"daysForHospitalsToReportCases"->RandomVariate[PosNormal[daysForHospitalsToReportCases0,0.3]],
-"daysToGetTestedIfNotHospitalized"->RandomVariate[PosNormal[daysToGetTestedIfNotHospitalized0,1]],
-"daysToGetTestedIfHospitalized"->RandomVariate[PosNormal[daysToGetTestedIfHospitalized0,0.3]],
-"icuOverloadDeathPenalty0"->RandomVariate[PosNormal[icuOverloadDeathPenalty0,0.5]],
-"initialInfectionImpulse"->RandomVariate[PosNormal[initialInfectionImpulse0,3]],
-"importlength"->RandomVariate[PosNormal[importlength0,1]],
-"fractionOfCriticalDeceased"->RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,0.02]],
-"r0natural"->RandomVariate[PosNormal[fitParams["r0natural"],standardErrors["r0natural"]]],
-"importtime"->RandomVariate[PosNormal[fitParams["importtime"],standardErrors["importtime"]]]
-|>&/@Range[numberOfSimulations];
+generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_]:=Module[{},
+  {
+   RandomVariate[PosNormal[fitParams["r0natural"],standardErrors["r0natural"]]],
+ RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,0.5]],
+ RandomVariate[PosNormal[daysFromInfectedToInfectious0,1]],
+ RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,2]],
+RandomVariate[NormalDistribution[pPCRH0,0.05]],
+RandomVariate[NormalDistribution[pPCRNH0,0.02]],
+ RandomVariate[PosNormal[daysTogoToCriticalCare0,1]], 
+ RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,1]],
+RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,0.02]],
+RandomVariate[PosNormal[fitParams["importtime"],standardErrors["importtime"]]], 
+RandomVariate[PosNormal[importlength0,1]],
+RandomVariate[PosNormal[initialInfectionImpulse0,3]],
+cutoff,
+pS0,
+pH0,
+pC0,
+containmentThresholdRatio0,
+1000,
+10000
+}&/@Range[numberOfSimulations]]
 
 (* Assumption here is that age dependence follows a logistic curve -- zero year olds dont require any care, 
 100 year olds require significant case, midpoint is the medianHospitalization age *)
@@ -184,102 +188,28 @@ Deaq - passed after critical care
 
 est - initial infection impulse (eg from imported cases at importtime)
 *)
-CovidModel[
-r0natural_,
-daysUntilNotInfectiousOrHospitalized_,
-daysFromInfectedToInfectious_,
-daysUntilNotInfectiousOrHospitalized_,
-daysToLeaveHosptialNonCritical_,
-pPCRNH_,
-pPCRH_,
-daysTogoToCriticalCare_,
-daysFromCriticalToRecoveredOrDeceased_,
-fractionOfCriticalDeceased_,
-importtime_,
-importlength_,
-initialInfectionImpulse_,
-tmax_,
-pS_,
-pH_,
-pC_,
-containmentThresholdCases_,
-icuCapacity_,
-distancing_,
-hospitalCapacity_:1000000 (*defaulted since we dont evaluate this on a country basis yet *)
-]:=
-Reap[NDSolve[{
-	
-	Sq'[t]    == (-distancing[t] *
-			 	  r0natural *
-				  Iq[t] *
-				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-	 			 - est[t] * Sq[t],
-	
-	Eq'[t]    == (distancing[t] *
-			 	  r0natural *
-				  Iq[t] *
-				  Sq[t]) / daysUntilNotInfectiousOrHospitalized
-				 + est[t] * Sq[t] 
-				 - Eq[t] / daysFromInfectedToInfectious,
-	
-	(* Infectious total, not yet PCR confirmed, age indep *)
-	Iq[t]     == ISq[t] + IHq[t] + ICq[t],
-	
-	(* Infected without needing care *)
-	ISq'[t]   == pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectiousOrHospitalized,
-	
-	(* Recovered without needing care *)
-	RSq'[t]   == ISq[t]/daysUntilNotInfectiousOrHospitalized,
-	
-	(* Infected and will need hospital, won't need critical care *)	
-	IHq'[t]   == pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilNotInfectiousOrHospitalized,
 
-	(* Going to hospital *) 
-	HHq'[t]   == IHq[t]/daysUntilNotInfectiousOrHospitalized - HHq[t]/daysToLeaveHosptialNonCritical,
-	
-	(* Reported positive hospital cases *)
-	RepHq'[t] == (pPCRH * HHq'[t]) / daysForHospitalsToReportCases0,
+Clear[Sq,Eq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est]
+Clear[r0natural,daysUntilNotInfectiousOrHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity]
+equationsDAE = {Sq'[t]==(-distancing[t]*r0natural*Iq[t]*Sq[t])/daysUntilNotInfectiousOrHospitalized-est[t]*Sq[t],Eq'[t]==(distancing[t]*r0natural*Iq[t]*Sq[t])/daysUntilNotInfectiousOrHospitalized+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious,(*Infectious total,not yet PCR confirmed,age indep*)ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,(*Recovered without needing care*)RSq'[t]==ISq[t]/daysUntilNotInfectiousOrHospitalized,(*Infected and will need hospital,won't need critical care*)IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious-IHq[t]/daysUntilNotInfectiousOrHospitalized,(*Going to hospital*)HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,(*Reported positive hospital cases*)RepHq'[t]==(pPCRH*HHq'[t])/daysForHospitalsToReportCases0,(*Cumulative hospitalized count*)EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,(*Recovered after hospitalization*)RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,(*pcr confirmation*)PCR'[t]==(pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0+(pPCRH*HHq[t])/daysToGetTestedIfHospitalized0,(*Infected,will need critical care*)ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,(*Hospitalized,need critical care*)HCq'[t]==ICq[t]/daysUntilNotInfectiousOrHospitalized-HCq[t]/daysTogoToCriticalCare,(*Entering critical care*)CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,(*Dying*)Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,(*Leaving critical care*)RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,est'[t]==0,Iq[t]==ISq[t]+IHq[t]+ICq[t](*Infected without needing care*)};
+events = {WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]],(*when the virus is contained without herd immunity extract the time*)WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)WhenEvent[Iq[t]<=1,Sow[{t,Iq[t]},"cutoff"]] (*dont bother running when active infections less than 100 it can lead to evaluation issues in long tail simulations*),WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],WhenEvent[t>importtime+importlength,est[t]->0]};
+initialConditions = {Sq[0]==1,Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0};
+output = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
+dependentVariables = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est,Iq};
+parameters = {r0natural,daysUntilNotInfectiousOrHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity};
+equationsODE = Drop[equationsDAE /. Iq[t]->ISq[t]+IHq[t]+ICq[t], -1];
+outputODE = output /. Iq[t]->ISq[t]+IHq[t]+ICq[t];
+eventsODE = events /. Iq[t]->ISq[t]+IHq[t]+ICq[t];
+lhs = equationsODE[[All,1]];
+rhs = equationsODE[[All,2]];
+rhs = rhs /. Thread[lhs->rhs];
+equationsODE = Thread[lhs==rhs];
+dependentVariablesODE = Drop[dependentVariables, -1];
+pfunODE2 = ParametricNDSolveValue[{
+  equationsODE, eventsODE, initialConditions},outputODE, {t,0,tmax}, parameters,DependentVariables->dependentVariablesODE,Method->{"DiscontinuityProcessing"->False},
+  AccuracyGoal->4,PrecisionGoal->4
+]
 
-	(* Cumulative hospitalized count *)	
-	EHq'[t]   == IHq[t]/daysUntilNotInfectiousOrHospitalized,
-
-	(* Recovered after hospitalization *)	
-	RHq'[t]   == HHq[t]/daysToLeaveHosptialNonCritical,
-
-	(* pcr confirmation *)	
-	PCR'[t]   == (pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*HHq[t])/daysToGetTestedIfHospitalized0,
-
-	(* Infected, will need critical care *)	
-	ICq'[t]   == pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilNotInfectiousOrHospitalized,
-	
-	(* Hospitalized, need critical care *)
-	HCq'[t]   == ICq[t]/daysUntilNotInfectiousOrHospitalized - HCq[t]/daysTogoToCriticalCare,
-
-	(* Entering critical care *)	
-	CCq'[t]   == HCq[t]/daysTogoToCriticalCare - CCq[t]/daysFromCriticalToRecoveredOrDeceased,
-	
-	(* Dying *)
-	Deaq'[t]  == CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
-	
-	(* Leaving critical care *)
-	RCq'[t]   == CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
-	
-	est'[t]   == 0,
-
-	WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]], (* when the virus is contained without herd immunity extract the time *)
-	WhenEvent[RSq[t]+RSq[t]+RCq[t] >= 0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
-	WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]], (* ICU Capacity overshot *)
-	WhenEvent[Iq[t] <= 1,Sow[{t,Iq[t]},"cutoff"]] (* dont bother running when active infections less than 100 it can lead to evaluation issues in long tail simulations *),
-	WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(* Hospitals Capacity overshot *)
-	WhenEvent[t>=importtime , est[t]->Exp[-initialInfectionImpulse]], 
-	WhenEvent[t >importtime+importlength, est[t]->0 ],
-	Sq[0] ==1, Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,
-	HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,
-	EHq[0]==0
-	},
-	{Sq, Eq, ISq, RSq, IHq, HHq, RHq, RepHq, Iq,ICq, EHq, HCq, CCq, RCq,Deaq,PCR,est},
-	{t, 0, tmax}
-],{"containment","herd","icu","hospital","cutoff"},Rule];
 
 (* this is a modified version of CovidModel that does not take an r0 or importtime value, but isntead returns a parametric
 ndsolve which is used later to fit those parameters against data *)
@@ -372,11 +302,18 @@ ParametricNDSolveValue[{
 	{r0natural, importtime}
 ];
 
+endTime[ifun_]:=Part[ifun["Domain"],1,-1];
 
+
+
+setDistancing[state_,scenario_] := Module[{},
+  distancing[t_] := stateDistancing[state, scenario["id"], t];
+];
+QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
 
 (* Given a set fit parameters, simulated parameters and a definition of a scenario,
 run all the simulations and produce the quantiles for the mean and confidence band estimates *)
-evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
+evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, numberOfSimulations_:100]:=Module[{
     distance,
     sol,
     evts,
@@ -390,17 +327,21 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
     deciles,
     containmentTime,
 	hospitalOverloadTime,
-	icuOverloadTime
+	icuOverloadTime,
+	sims,
+	testSim,
+	sim,
+	setDistancing,
+	rawSimResults
     },
-    
-	distance[t_] := stateDistancing[state, scenario, t];
+  
+	setDistancing[state,scenario];
 	
 	(* do one solution with the mean param values for the estimate *)
-	{sol,evts}=CovidModel[
-	fitParams["r0natural"],
+	{sol,evts} = Reap[Apply[pfunODE2,{
+    fitParams["r0natural"],
 	daysUntilNotInfectiousOrHospitalized0,
 	daysFromInfectedToInfectious0,
-	daysUntilNotInfectiousOrHospitalized0,
 	daysToLeaveHosptialNonCritical0,
 	pPCRNH0,
 	pPCRH0,
@@ -410,15 +351,14 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	fitParams["importtime"],
 	importlength0,
 	initialInfectionImpulse0,
-	tmax,
+	tmax0,
 	stateParams["params"]["pS"],
 	stateParams["params"]["pH"],
 	stateParams["params"]["pC"],
 	containmentThresholdRatio0,
 	stateParams["icuCapacity"],
-	distance,
 	stateParams["hospitalCapacity"]
-	];
+	}],{"containment","herd","icu","hospital","cutoff"},Rule];
 	
 	events=Association[Flatten[evts]];
 	endOfYear = 365;
@@ -427,64 +367,47 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 		If[KeyExistsQ[events, "cutoff"], events["cutoff"][[1]][[1]],
 	    endOfYear]];
 	
+	sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval];
 	(* generate a solution for each simulation so we can get bands *)
-    simResults = CovidModel[
-        #["r0natural"],
-        #["daysUntilNotInfectiousOrHospitalized"],
-        #["daysFromInfectedToInfectious"],
-        #["daysUntilNotInfectiousOrHospitalized"],
-        #["daysToLeaveHosptialNonCritical"],
-        #["pPCRNH"],
-        #["pPCRH"],
-        #["daysTogoToCriticalCare"],
-        #["daysFromCriticalToRecoveredOrDeceased"],
-        #["fractionOfCriticalDeceased"],
-        #["importtime"],
-        #["importlength"],
-        #["initialInfectionImpulse"],
-        endOfEval,
-        stateParams["params"]["pS"],
-	    stateParams["params"]["pH"],
-	    stateParams["params"]["pC"],
-        containmentThresholdRatio0,
-        stateParams["icuCapacity"],
-        distance,
-        stateParams["hospitalCapacity"]
-    ]&/@sims;
+	(* Quiet because we handle bad interpolating functions in the next line *)
+	rawSimResults=Apply[pfunODE2, #]&/@sims//Quiet;
+	
+	simResults=Select[rawSimResults, endTime[First[#]]>=endOfEval&];
+   
+    deciles = Range[10]/10;
     
-    deciles = {1/10,2/10,3/10,4/10,5/10,6/10,7/10,8/10,9/10};
 	(* define functions to get the lci, mean, uci quantiles for each of the functions we want
 	to produce time-series for *)
-	PCRQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*PCR[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	DeathQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*Deaq[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	CurrentlyReportedHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*RepHq[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	CurrentlyInfectedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*Eq[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	CurrentlyInfectiousQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*Iq[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(RSq[ta]+RHq[ta]+RCq[ta])/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	CurrentlyHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*HHq[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	CurrentlyCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*CCq[ta]/.#[[1]]/.{ta->t})&/@simResults,deciles];
-	
+	PCRQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[PCR]]][t])&/@simResults,deciles];
+	DeathQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[Deaq]]][t])&/@simResults,deciles];
+	CurrentlyReportedHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[RepHq]]][t])&/@simResults,deciles];
+	CurrentlyInfectedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[Eq]]][t])&/@simResults,deciles];
+	CurrentlyInfectiousQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[ISq]]][t] + #[[QP[IHq]]][t] + #[[QP[ICq]]][t]))&/@simResults,deciles];
+	CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
+	CurrentlyHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[HHq]]][t])&/@simResults,deciles];
+	CurrentlyCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[CCq]]][t])&/@simResults,deciles];	
+
 	timeSeriesData = Module[{},
 	Table[Association[{
 	"day"->t,
-	"distancing"->distance[t],
+	"distancing"->distancing[t],
 	"cumulativePcr" -> Merge[{
 	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
-	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t][[1]]]]
+	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t]]]
 	},First],
 	"cumulativeDeaths" -> Merge[{
 	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null,Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"]]|>,
-	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,DeathQuantiles[t][[1]]]]
+	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,DeathQuantiles[t]]]
 	},First],
-	"currentlyInfected" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectedQuantiles[t][[1]]]],
-	"currentlyInfectious" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectiousQuantiles[t][[1]]]],
-	"cumulativeInfections" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeInfectionQuantiles[t][[1]]]],
+	"currentlyInfected" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectedQuantiles[t]]],
+	"currentlyInfectious" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectiousQuantiles[t]]],
+	"cumulativeInfections" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeInfectionQuantiles[t]]],
 	"currentlyReportedHospitalized" -> Merge[{
 	   <|"confirmed"->If[Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]!=1, Null,Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"]]|>,
-	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyReportedHospitalizedQuantiles[t][[1]]]]
+	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyReportedHospitalizedQuantiles[t]]]
 	},First],
-	"currentlyHospitalized" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyHospitalizedQuantiles[t][[1]]]],
-	"currentlyCritical" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyCriticalQuantiles[t][[1]]]]
+	"currentlyHospitalized" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyHospitalizedQuantiles[t]]],
+	"currentlyCritical" -> Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyCriticalQuantiles[t]]]
 	}],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
 	
 	containmentTime = If[KeyExistsQ[events, "containment"],events["containment"][[1]][[1]],Null];
@@ -493,20 +416,20 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	
      summary=<|
 	"totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],
-	   DeathQuantiles[containmentTime][[1]][[2]],  
-	   DeathQuantiles[endOfEval][[1]][[2]]],
+	   DeathQuantiles[containmentTime][[5]],  
+	   DeathQuantiles[endOfEval][[5]]],
 	"totalProjectedPCRConfirmed"->If[KeyExistsQ[events, "containment"],
-	  PCRQuantiles[containmentTime][[1]][[2]],
-	  PCRQuantiles[endOfEval][[1]][[2]]],
+	  PCRQuantiles[containmentTime][[5]],
+	  PCRQuantiles[endOfEval][[5]]],
 	"totalProjectedInfected"->If[KeyExistsQ[events, "containment"],
-	  CumulativeInfectionQuantiles[containmentTime][[1]][[2]],
-	  CumulativeInfectionQuantiles[endOfEval][[1]][[2]]],
+	  CumulativeInfectionQuantiles[containmentTime][[5]],
+	  CumulativeInfectionQuantiles[endOfEval][[5]]],
 	"fatalityRate"->If[KeyExistsQ[events, "containment"],
-	   (DeathQuantiles[events["containment"][[1]][[1]]][[1]][[2]]/(CumulativeInfectionQuantiles[containmentTime][[1]][[2]])), 
-	   DeathQuantiles[endOfEval][[1]][[2]]/(CumulativeInfectionQuantiles[endOfEval][[1]][[2]])],
+	   (DeathQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])), 
+	   DeathQuantiles[endOfEval][[5]]/(CumulativeInfectionQuantiles[endOfEval][[5]])],
 	"fatalityRatePCR"->If[KeyExistsQ[events, "containment"],
-	  DeathQuantiles[containmentTime][[1]][[2]]/PCRQuantiles[containmentTime][[1]][[2]], 
-	  DeathQuantiles[endOfEval][[1]][[2]]/PCRQuantiles[endOfEval][[1]][[2]]],
+	  DeathQuantiles[containmentTime][[5]]/PCRQuantiles[containmentTime][[5]], 
+	  DeathQuantiles[endOfEval][[5]]/PCRQuantiles[endOfEval][[5]]],
 	"dateContained"->If[KeyExistsQ[events, "containment"],
 	  DateString[DatePlus[{2020,1,1},containmentTime-1]], 
 	  Null],
@@ -517,6 +440,8 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 	   DateString[DatePlus[{2020,1,1},hospitalOverloadTime-1]],
 	   Null]
 	|>;
+	
+	
 	
 	Merge[{
 	  scenario,
@@ -531,7 +456,7 @@ evaluateScenario[state_, fitParams_, sims_, stateParams_, scenario_]:=Module[{
 (* we first fit the data on PCR and fatalities to find the R0 and importtime for that state
 then we generate a set of all the simulated parameters. Finally we call evaluateScenario to run and aggregate the
 simulation results for each scenario *)
-evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model,fit,fitParams,lciuci,icuCapacity,t,dataWeights,standardErrors,hospitalizationData,hospitalCapacity,sims},
+evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,longData,thisStateData,model,fit,fitParams,lciuci,icuCapacity,t,dataWeights,standardErrors,hospitalizationData,hospitalCapacity,sims},
     (* fit R0 / import time per state, then forecast each scenario *)
     params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0];
 	icuCapacity=params["icuBeds"]/params["population"];
@@ -540,7 +465,7 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	hospitalizationData = stateHospitalizationData[state];
 	
     (* just do the fit to scenario1, the fit happens on points that are in the past, sot he future scenario doesn't impact *)
-	distance[t_] := stateDistancing[state,scenario1,t];
+	setDistancing[state,scenario1];
 	
 	sol=CovidModelFit[
 	daysUntilNotInfectiousOrHospitalized0,
@@ -554,11 +479,11 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	fractionOfCriticalDeceased0,
 	importlength0,
 	initialInfectionImpulse0,
-	tmax,
+	tmax0,
 	params["pS"],
 	params["pH"],
 	params["pC"],
-	distance,
+	distancing,
 	icuCapacity
 	];
 
@@ -598,20 +523,24 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
 	     fit["ParameterErrors",
 	     ConfidenceLevel->0.97]]];
+<<<<<<< HEAD
 	gofMetrics=goodnessOfFitMetrics[fit["Residuals"],longData];
 	
 	sims=generateSimulations[100,fitParams,standardErrors];
 
+=======
+  
+>>>>>>> speed
 	(* do a monte carlo for each scenario *)
-    Merge[{
+   Merge[{
       <|"scenarios"->
-         Association[{#["id"]->evaluateScenario[state,fitParams,sims,
+         Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
          <|"params"->params,
            "thisStateData"->thisStateData,
            "icuCapacity"->icuCapacity,
            "hospitalCapacity"->hospitalCapacity, 
            "hospitalizationData"-> hospitalizationData
-         |>, #]}&/@scenarios]|>,
+         |>, #, numberOfSimulations]}&/@scenarios]|>,
       <|"parameterBest"->fitParams|>,
       KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
@@ -622,19 +551,16 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 ];
 
 (* export the full model data, Warning: paralllize will eat a lot of laptop resources while it evaluates *)
-evaluateStateAndPrint[state_]:=Module[{},
+evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
   Print["generating data for " <> state];
-  evaluateState[state]
+  evaluateState[state, simulationsPerCombo]
 ];
-GenerateModelExport[] := Module[{allStateData},
-allStateData=Parallelize[
-Map[{#->evaluateStateAndPrint[#]}&,distancingStates]];
-Export["public/json/model.json",Association[allStateData]]
+GenerateModelExport[simulationsPerCombo_:1000, states_:distancingStates] := Module[{},
+  Parallelize[Map[Export["public/json/"<>#<>".json",evaluateStateAndPrint[#, simulationsPerCombo]]&,states]]
 ]
 
 
 (* TODO: re-incorporate to validate assumed parameters *)
-
 countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] := 
 	Module[{raw,pop,dist,buckets},
 		raw = cachedAgeDistributionFor[country];
