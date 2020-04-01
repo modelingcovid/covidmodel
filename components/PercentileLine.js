@@ -16,7 +16,11 @@ const get70 = (d) => d.percentile70;
 const get80 = (d) => d.percentile80;
 const get90 = (d) => d.percentile90;
 
-export const PercentileLine = ({y, color = 'var(--color-blue-02)'}) => {
+export const PercentileLine = ({
+  y,
+  color = 'var(--color-blue-02)',
+  gradient = false,
+}) => {
   const getConfirmedY = useCallback((d) => getConfirmed(y(d)), [y]);
   const get10Y = useCallback((d) => get10(y(d)), [y]);
   const get20Y = useCallback((d) => get20(y(d)), [y]);
@@ -29,10 +33,14 @@ export const PercentileLine = ({y, color = 'var(--color-blue-02)'}) => {
   const get90Y = useCallback((d) => get90(y(d)), [y]);
   return (
     <>
-      <Area y0={get10Y} y1={get90Y} fill={color} opacity="0.2" />
-      {/* <Area y0={get20Y} y1={get80Y} fill={color} opacity="0.2" /> */}
-      {/* <Area y0={get30Y} y1={get70Y} fill={color} opacity="0.2" /> */}
-      {/* <Area y0={get40Y} y1={get60Y} fill={color} opacity="0.2" /> */}
+      <Area y0={get10Y} y1={get90Y} fill={color} opacity="0.1" />
+      {gradient && (
+        <>
+          <Area y0={get20Y} y1={get80Y} fill={color} opacity="0.1" />
+          <Area y0={get30Y} y1={get70Y} fill={color} opacity="0.1" />
+          <Area y0={get40Y} y1={get60Y} fill={color} opacity="0.1" />
+        </>
+      )}
       <Line y={get50Y} stroke={color} />
       <Points
         y={getConfirmedY}

@@ -35,12 +35,6 @@ const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
 const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
 const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
-const getProjectedCurrentlyCritical = ({currentlyCritical}) =>
-  currentlyCritical.percentile50;
-const getProjectedCurrentlyCriticalLCI = ({currentlyCritical}) =>
-  currentlyCritical.percentile10;
-const getProjectedCurrentlyCriticalUCI = ({currentlyCritical}) =>
-  currentlyCritical.percentile90;
 
 export default ({data, states}) => {
   const {
@@ -257,9 +251,7 @@ export default ({data, states}) => {
                   scenario={scenario}
                   data={data}
                   x={getDate}
-                  y={getProjectedCurrentlyCritical}
-                  y0={getProjectedCurrentlyCriticalLCI}
-                  y1={getProjectedCurrentlyCriticalUCI}
+                  y={getCurrentlyCritical}
                   cutoff={data.icuBeds}
                   xLabel="people"
                   cutoffLabel="ICU capacity"

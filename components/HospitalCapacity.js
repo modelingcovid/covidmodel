@@ -7,31 +7,18 @@ import {getDate} from '../lib/date';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 import {getFirstExceedsThreshold} from '../lib/summary';
 
-const getCurrentlyHospitalized = ({currentlyHospitalized}) =>
-  currentlyHospitalized;
-
-const getConfirmedHospitalizations = ({currentlyHospitalized}) =>
-  currentlyHospitalized.confirmed;
-const getProjectedCurrentlyHospitalized = ({currentlyHospitalized}) =>
-  currentlyHospitalized.percentile50;
-const getProjectedCurrentlyHospitalizedLCI = ({currentlyHospitalized}) =>
-  currentlyHospitalized.percentile10;
-const getProjectedCurrentlyHospitalizedUCI = ({currentlyHospitalized}) =>
-  currentlyHospitalized.percentile90;
+const getCurrentlyReportedHospitalized = ({currentlyReportedHospitalized}) =>
+  currentlyReportedHospitalized;
 
 export const HospitalCapacity = ({data, scenario, state, width, height}) => {
   const hospitalCapacity = data.hospitalCapacity;
-  const hospitalExceedsCapacity = getFirstExceedsThreshold(
-    data.scenarios[scenario].timeSeriesData,
-    getProjectedCurrentlyHospitalized,
-    hospitalCapacity
-  );
+  const {dateHospitalsOverCapacity} = data.scenarios[scenario].summary;
   const stateName = stateLabels[state];
-  const hospitalCapacityHeading = hospitalExceedsCapacity ? (
+  const hospitalCapacityHeading = dateHospitalsOverCapacity ? (
     <>
       {stateName} will{' '}
       <span className="text-red">exceed hospital capacity</span> on{' '}
-      {formatDate(getDate(hospitalExceedsCapacity))}
+      {formatDate(new Date(dateHospitalsOverCapacity))}
     </>
   ) : (
     <>
@@ -64,23 +51,19 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         scenario={scenario}
         data={data}
         x={getDate}
-        y={getProjectedCurrentlyHospitalized}
-        y0={getProjectedCurrentlyHospitalizedLCI}
-        y1={getProjectedCurrentlyHospitalizedUCI}
+        y={getCurrentlyReportedHospitalized}
         cutoff={hospitalCapacity}
         xLabel="people"
         cutoffLabel="Hospital capacity"
         width={width}
         height={height}
-      >
-        <Points y={getConfirmedHospitalizations} fill="var(--color-gray-03)" />
-      </OccupancyGraph>
+      />
       <Legend>
         <LegendRow
-          y={getCurrentlyHospitalized}
+          y={getCurrentlyReportedHospitalized}
           format={formatNumber}
           fill="var(--color-blue-02)"
-          label="Currently hospitalized"
+          label="Currently reported hospitalized"
         />
       </Legend>
     </div>
