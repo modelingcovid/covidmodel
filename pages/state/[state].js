@@ -179,8 +179,7 @@ export default function StatePage({data, states}) {
                   individuals as well as the cumulative number of expected PCR
                   confirmations. If less than 20% of the population is infected
                   and the number of active infections is reduced to a small
-                  fraction of the population we consider the epidemic contained,
-                  and place a grey box on the plot.
+                  fraction of the population we consider the epidemic contained.
                 </p>
                 <PopulationGraph
                   scenario={scenario}
