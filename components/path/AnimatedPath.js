@@ -6,6 +6,7 @@ export const AnimatedPath = ({
   d,
   duration = '400ms',
   fill = 'transparent',
+  immediate = false,
   ...remaining
 }) => {
   const [frozen, setFrozen] = useState(d);
@@ -21,7 +22,7 @@ export const AnimatedPath = ({
       return;
     }
 
-    if (!el.beginElement) {
+    if (immediate || !el.beginElement) {
       onEnd();
       return;
     }
@@ -32,7 +33,7 @@ export const AnimatedPath = ({
     // https://developer.mozilla.org/en-US/docs/Web/API/SVGAnimationElement/endEvent_event#Browser_compatibility
     el.addEventListener('endEvent', onEnd);
     return () => el.removeEventListener('endEvent', onEnd);
-  }, [d, frozen, onEnd]);
+  }, [d, frozen, immediate, onEnd]);
 
   return (
     <path {...remaining} d={frozen} fill={fill}>

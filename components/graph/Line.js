@@ -2,6 +2,7 @@ import * as React from 'react';
 import {LinePath} from '../path';
 import {useGraphData} from './useGraphData';
 import {useNearestPoint} from './useNearestPoint';
+import {usePreviousValue} from '../util';
 
 const {useCallback} = React;
 
@@ -13,7 +14,9 @@ const NearestCircle = ({y, ...remaining}) => {
 };
 
 export const Line = ({y, stroke, strokeWidth = 1.5, ...remaining}) => {
-  const {data, x, xScale, yScale} = useGraphData();
+  const {data, x, xMax, xScale, yScale} = useGraphData();
+  const xMaxPrev = usePreviousValue(xMax);
+
   const xFn = useCallback((d) => xScale(x(d)), [x, xScale]);
   const yFn = useCallback((d) => yScale(y(d)), [y, yScale]);
 
@@ -26,6 +29,7 @@ export const Line = ({y, stroke, strokeWidth = 1.5, ...remaining}) => {
         y={yFn}
         stroke={stroke}
         strokeWidth={strokeWidth}
+        immediate={xMax !== xMaxPrev}
       />
       <NearestCircle y={y} fill={stroke} />
     </>
