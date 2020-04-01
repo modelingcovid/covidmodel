@@ -7,6 +7,7 @@ export const LegendRow = ({
   children,
   format = formatNumber,
   fill,
+  hasConfirmed = false,
   label,
   y,
 }) => {
@@ -35,44 +36,51 @@ export const LegendRow = ({
           }
           .projected-dot,
           .confirmed-dot {
-            height: 6px;
-            width: 6px;
+            height: 8px;
+            width: 8px;
             border-radius: 999em;
             margin-top: 1px;
-            margin-right: 12px;
+            margin-right: 8px;
+          }
+          .legend-description {
+            padding-bottom: var(--spacing-00);
+          }
+          .legend-label {
+            margin-right: var(--spacing-00);
           }
         `}</style>
         <style jsx>{`
           .projected-dot {
             background-color: ${fill};
+            box-shadow: inset 0 0 0 1px white;
           }
           .confirmed-dot {
-            box-shadow: 0 0 0 2px ${fill};
+            box-shadow: inset 0 0 0 2px ${fill};
           }
         `}</style>
-        <td rowSpan="2">{label}</td>
-        <td className="text-mono with-dot">
-          <div className="confirmed-dot" />
-          {confirmed ? format(confirmed) : 'N/A'}
+        <td>
+          <div className="text-small text-gray-dark weight-600">{label}</div>
+          {children && (
+            <div className="legend-description text-small text-gray-light">
+              {children}
+            </div>
+          )}
         </td>
-        <td className="text-mono">
-          <div className="with-dot">
+        <td>
+          <div className="text-micro with-dot">
+            <span className="legend-label text-gray-light">Projected </span>
             <div className="projected-dot" />
-            {format(percentile50)}
+            <span className="text-micro text-mono">{format(percentile50)}</span>
           </div>
-        </td>
-      </tr>
-      <tr>
-        <style jsx>{`
-          td {
-            padding-left: var(--spacing-01);
-            padding-bottom: var(--spacing-01);
-            text-align: right;
-            vertical-align: top;
-          }
-        `}</style>
-        <td className="text-mono text-micro text-gray-faint" colSpan="2">
-          {format(percentile10)} to {format(percentile90)}
+          {hasConfirmed && (
+            <div className="text-micro with-dot">
+              <span className="legend-label text-gray-light">Confirmed </span>
+              <div className="confirmed-dot" />
+              <span className="text-micro text-mono">
+                {confirmed ? format(confirmed) : 'N/A'}
+              </span>
+            </div>
+          )}
         </td>
       </tr>
     </>
@@ -101,13 +109,17 @@ export const Legend = ({children}) => {
           text-align: left;
           padding-left: 0;
         }
+        @media (min-width: 600px) {
+          table {
+            margin-left: calc(var(--column) * 1);
+            max-width: calc(var(--column) * 8);
+          }
+        }
       `}</style>
       <table>
         <thead className="text-small text-gray-light">
           <tr>
             <th>{formatShortDate(getDate(d))}</th>
-            <th>Confirmed</th>
-            <th>Projected</th>
           </tr>
         </thead>
         <tbody>{children}</tbody>

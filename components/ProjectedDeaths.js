@@ -34,6 +34,12 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
         fill="var(--color-blue-02)"
         label="Cumulative deaths"
       />
+      <LegendRow
+        y={getCumulativeDeaths}
+        format={formatNumber}
+        fill="var(--color-blue-02)"
+        label="Cumulative deaths"
+      />
     </Legend>
   </div>
 );

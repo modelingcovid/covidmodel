@@ -212,17 +212,24 @@ export default ({data, states}) => {
                     y={getCurrentlyInfected}
                     fill="var(--color-blue-02)"
                     label="Currently infected"
-                  />
+                  >
+                    People who have COVID-19 but cannot yet infect others.
+                  </LegendRow>
                   <LegendRow
                     y={getCurrentlyInfectious}
                     fill="var(--color-magenta-01)"
                     label="Currently infectious"
-                  />
+                  >
+                    People who have COVID-19 and can infect others.
+                  </LegendRow>
                   <LegendRow
                     y={getCumulativePcr}
                     fill="var(--color-yellow-02)"
                     label="Cumulative PCR"
-                  />
+                    hasConfirmed
+                  >
+                    Total number of positive PCR tests.
+                  </LegendRow>
                 </Legend>
               </div>
               <ProjectedDeaths
