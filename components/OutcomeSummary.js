@@ -24,34 +24,32 @@ export const OutcomeSummary = ({data}) => {
         <Definition value={formatPercent2(data.totalProjectedInfected)}>
           Percent of population infected
         </Definition>
-        <Definition value={formatPercent2(data['Fatality Rate'])}>
+        <Definition value={formatPercent2(data.fatalityRate)}>
           Fatality rate
         </Definition>
         <Definition
           value={
-            data['Date Contained'] === 'Not Contained'
-              ? 'Not contained'
-              : formatDate(new Date(data['Date Contained']))
+            data.dateContained
+              ? formatDate(new Date(data.dateContained))
+              : 'Not contained'
           }
         >
           Date contained
         </Definition>
         <Definition
           value={
-            data['Date Hospitals Over Capacity'].toLowerCase() ===
-            'hospitals under capacity'
-              ? 'N/A'
-              : formatDate(new Date(data['Date Hospitals Over Capacity']))
+            data.dateHospitalsOverCapacity
+              ? formatDate(new Date(data.dateHospitalsOverCapacity))
+              : 'N/A'
           }
         >
           Date hospitals overloaded
         </Definition>
         <Definition
           value={
-            data['Date ICU Over Capacity'].toLowerCase() ===
-            'icu under capacity'
-              ? 'N/A'
-              : formatDate(new Date(data['Date ICU Over Capacity']))
+            data.dateICUOverCapacity
+              ? formatDate(new Date(data.dateICUOverCapacity))
+              : 'N/A'
           }
         >
           Date ICU overloaded

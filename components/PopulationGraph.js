@@ -16,8 +16,8 @@ export const PopulationGraph = ({
   margin,
   ...remaining
 }) => {
-  const scenarioData = data[scenario].timeSeriesData;
-  const population = data.Population;
+  const scenarioData = data.scenarios[scenario].timeSeriesData;
+  const population = data.population;
   return (
     <Graph
       {...remaining}

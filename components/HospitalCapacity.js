@@ -13,16 +13,16 @@ const getCurrentlyHospitalized = ({currentlyHospitalized}) =>
 const getConfirmedHospitalizations = ({currentlyHospitalized}) =>
   currentlyHospitalized.confirmed;
 const getProjectedCurrentlyHospitalized = ({currentlyHospitalized}) =>
-  currentlyHospitalized.projected;
+  currentlyHospitalized.percentile50;
 const getProjectedCurrentlyHospitalizedLCI = ({currentlyHospitalized}) =>
-  currentlyHospitalized.lci;
+  currentlyHospitalized.percentile10;
 const getProjectedCurrentlyHospitalizedUCI = ({currentlyHospitalized}) =>
-  currentlyHospitalized.uci;
+  currentlyHospitalized.percentile90;
 
 export const HospitalCapacity = ({data, scenario, state, width, height}) => {
-  const hospitalCapacity = (1 - data.bedUtilization) * data.staffedBeds;
+  const hospitalCapacity = data.hospitalCapacity;
   const hospitalExceedsCapacity = getFirstExceedsThreshold(
-    data[scenario].timeSeriesData,
+    data.scenarios[scenario].timeSeriesData,
     getProjectedCurrentlyHospitalized,
     hospitalCapacity
   );

@@ -20,7 +20,7 @@ export const ModelFitParameters = ({data}) => {
         <Definition value={formatDate(dayToDate(data.importtime))}>
           Import date
         </Definition>
-        <Definition value={formatNumber2(data.R0)}>
+        <Definition value={formatNumber2(data.r0)}>
           Basic reproduction number (R0)
         </Definition>
       </Definitions>

@@ -14,7 +14,7 @@ export const LegendRow = ({
   if (!d) {
     return null;
   }
-  const {projected, confirmed, lci, uci} = y(d);
+  const {confirmed, percentile10, percentile50, percentile90} = y(d);
   return (
     <>
       <tr>
@@ -50,7 +50,7 @@ export const LegendRow = ({
             box-shadow: 0 0 0 2px ${fill};
           }
         `}</style>
-        <td rowspan="2">{label}</td>
+        <td rowSpan="2">{label}</td>
         <td className="text-mono with-dot">
           <div className="confirmed-dot" />
           {confirmed ? format(confirmed) : 'N/A'}
@@ -58,7 +58,7 @@ export const LegendRow = ({
         <td className="text-mono">
           <div className="with-dot">
             <div className="projected-dot" />
-            {format(projected)}
+            {format(percentile50)}
           </div>
         </td>
       </tr>
@@ -71,8 +71,8 @@ export const LegendRow = ({
             vertical-align: top;
           }
         `}</style>
-        <td className="text-mono text-micro text-gray-faint" colspan="2">
-          {format(lci)} to {format(uci)}
+        <td className="text-mono text-micro text-gray-faint" colSpan="2">
+          {format(percentile10)} to {format(percentile90)}
         </td>
       </tr>
     </>

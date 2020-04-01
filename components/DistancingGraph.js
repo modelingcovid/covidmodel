@@ -29,10 +29,10 @@ export const DistancingGraph = ({
   height = 400,
   margin,
 }) => {
-  const scenarioData = data[scenario].timeSeriesData;
+  const scenarioData = data.scenarios[scenario].timeSeriesData;
 
-  const {R0} = data;
-  const formatR0 = useCallback((n) => formatNumber2(n * R0), [R0]);
+  const {r0} = data;
+  const formatR0 = useCallback((n) => formatNumber2(n * r0), [r0]);
 
   const endTickLabelProps = () => ({
     dx: '-4px',

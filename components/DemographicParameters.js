@@ -13,7 +13,7 @@ export const DemographicParameters = ({data}) => {
         distributions.
       </p>
       <Definitions>
-        <Definition value={formatNumber(data.Population)}>
+        <Definition value={formatNumber(data.population)}>
           Population
         </Definition>
         <Definition value={formatNumber(data.icuBeds)}>ICU beds</Definition>

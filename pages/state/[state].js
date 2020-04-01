@@ -36,11 +36,11 @@ const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
 const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 const getProjectedCurrentlyCritical = ({currentlyCritical}) =>
-  currentlyCritical.projected;
+  currentlyCritical.percentile50;
 const getProjectedCurrentlyCriticalLCI = ({currentlyCritical}) =>
-  currentlyCritical.lci;
+  currentlyCritical.percentile10;
 const getProjectedCurrentlyCriticalUCI = ({currentlyCritical}) =>
-  currentlyCritical.uci;
+  currentlyCritical.percentile90;
 
 export default ({data, states}) => {
   const {
@@ -59,7 +59,7 @@ export default ({data, states}) => {
     return <Layout noPad>Missing data for {state}</Layout>;
   }
 
-  const scenarioSummary = data[scenario].summary;
+  const scenarioSummary = data.scenarios[scenario].summary;
 
   const handleStateSelect = (e) => {
     push(`/state/${e.target.value}`);
@@ -70,7 +70,7 @@ export default ({data, states}) => {
   return (
     <NearestDataProvider
       x={getDate}
-      data={data[scenario].timeSeriesData}
+      data={data.scenarios[scenario].timeSeriesData}
       initial={today}
     >
       <Layout>

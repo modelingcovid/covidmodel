@@ -28,16 +28,15 @@ export const OccupancyGraph = ({
   height = 400,
   margin,
 }) => {
-  const scenarioData = data[scenario].timeSeriesData;
+  const scenarioData = data.scenarios[scenario].timeSeriesData;
   const allPoints = useMemo(
     () =>
-      Object.values(data).reduce(
+      Object.values(data.scenarios).reduce(
         (a, v) => (v && v.timeSeriesData ? a.concat(v.timeSeriesData) : a),
         []
       ),
     [data]
   );
-  const population = data.Population;
   const domain = useMemo(
     () =>
       Math.min(
@@ -46,7 +45,7 @@ export const OccupancyGraph = ({
         cutoff * 20,
         Math.max(...allPoints.map((d) => Math.max(y(d), cutoff)))
       ),
-    [allPoints, y, cutoff, population]
+    [allPoints, y, cutoff]
   );
 
   return (
