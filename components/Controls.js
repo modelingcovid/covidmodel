@@ -18,9 +18,6 @@ export function Controls({
     (state) => push('/state/[state]', `/state/${state}`),
     [push]
   );
-  // const onScenarioChange = useCallback((e) => setScenario(e.target.value), [
-  //   setScenario,
-  // ]);
   return (
     <div className="controls" {...props}>
       <style jsx>{`

@@ -31,8 +31,10 @@ export const useSelect = ({
 
   const mounted = useComponentMounted();
   React.useEffect(() => {
-    mounted && onSelectedItemChange({selectedItem: internalSelectedItem});
-  }, [mounted, internalSelectedItem, onSelectedItemChange]);
+    if (mounted && selectedItem !== internalSelectedItem) {
+      onSelectedItemChange({selectedItem: internalSelectedItem});
+    }
+  }, [mounted, selectedItem, internalSelectedItem, onSelectedItemChange]);
 
   return result;
 };
