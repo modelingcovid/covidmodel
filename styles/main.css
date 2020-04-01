@@ -9,7 +9,11 @@
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-family-mono: 'IBM Plex Mono', monospace;
   --font-family-text: 'IBM Plex Serif', serif;
-  --background-blue: #ebf7fd;
+  --color-background: #fff;
+  --color-focus-00: rgba(66, 153, 225, 0.2);
+  --color-focus-01: rgba(66, 153, 225, 0.5);
+  --color-gray-bg: #f6f8fa;
+  --color-blue-bg: #ddfffe;
   --color-gray-00: #e0e6eb;
   --color-gray-01: #8691a1;
   --color-gray-02: #515a70;
@@ -41,8 +45,10 @@
   --font-size-body: 16px;
   --column-count: 12;
   --gutter-width: 16px;
-  --max-width: 864px;
-  --column: calc(100% / var(--column-count));
+  --max-width: 100vw;
+  --column: calc(
+    (var(--max-width) - var(--gutter-width) * 2) / var(--column-count)
+  );
 }
 
 @media (min-width: 600px) {
@@ -50,6 +56,12 @@
     --font-size-jumbo: 64px;
     --font-size-title: 24px;
     --font-size-subtitle: 20px;
+  }
+}
+
+@media (min-width: 896px) {
+  :root {
+    --max-width: 896px;
   }
 }
 
@@ -78,8 +90,17 @@ text {
 .text-gray-dark {
   color: var(--color-gray-04);
 }
+.text-blue {
+  color: var(--color-blue-02);
+}
+.text-invert {
+  color: var(--color-background);
+}
 .text-red {
   color: var(--color-red-02);
+}
+.text-yellow {
+  color: var(--color-yellow-02);
 }
 .text-green {
   color: var(--color-green-02);
@@ -160,12 +181,6 @@ text {
   background-repeat: repeat-x;
   background-position: 0 100%;
 }
-.definition:hover {
-  background: var(--background-blue);
-}
-.definition:hover .definition-label {
-  color: var(--color-gray-04);
-}
 .definition-data {
   transition: ease color 300ms;
   color: var(--color-gray-01);
@@ -173,9 +188,6 @@ text {
   font-weight: 500;
   font-size: 0.9em;
   padding: 0 2px;
-}
-.definition:hover .definition-data {
-  color: var(--color-gray-04);
 }
 .color-dark {
   color: var(--color-gray-04);
@@ -207,9 +219,9 @@ text {
 
 .focus:focus,
 .focus-within:focus-within {
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  box-shadow: 0 0 0 1px var(--color-focus-01), 0 0 0 4px var(--color-focus-00);
   outline: none;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 .focus-within:focus-within .focus:focus {
   box-shadow: none;

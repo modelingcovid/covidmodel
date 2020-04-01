@@ -93,8 +93,18 @@ export const Legend = ({children}) => {
     return null;
   }
   return (
-    <div style={{paddingTop: 'var(--spacing-01)'}}>
+    <div>
       <style jsx>{`
+        div {
+          margin-top: var(--spacing-01);
+        }
+        @media (min-width: 600px) {
+          div {
+            padding-left: calc(var(--column) / 2);
+            box-shadow: inset 1px 0 0 var(--color-gray-00);
+            max-width: calc(var(--column) * 9);
+          }
+        }
         table {
           table-layout: fixed;
           width: 100%;
@@ -108,12 +118,6 @@ export const Legend = ({children}) => {
         th:first-child {
           text-align: left;
           padding-left: 0;
-        }
-        @media (min-width: 600px) {
-          table {
-            margin-left: calc(var(--column) * 1);
-            max-width: calc(var(--column) * 8);
-          }
         }
       `}</style>
       <table>

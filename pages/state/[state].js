@@ -36,10 +36,9 @@ const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
 const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 
-export default ({data, states}) => {
+export default function StatePage({data, states}) {
   const {
     query: {state},
-    push,
   } = useRouter();
   const [scenario, setScenario] = useState('scenario1');
   const controlRef = useRef(null);
@@ -54,10 +53,6 @@ export default ({data, states}) => {
   }
 
   const scenarioSummary = data.scenarios[scenario].summary;
-
-  const handleStateSelect = (e) => {
-    push(`/state/${e.target.value}`);
-  };
 
   const socialDistancingGradientId = useComponentId('socialDistancingGradient');
 
@@ -100,7 +95,7 @@ export default ({data, states}) => {
             box-shadow: 0 2px rgba(0, 0, 0, 0.04);
           }
           .controls {
-            padding-top: var(--spacing-01);
+            padding: var(--spacing-01) 0;
           }
           .sticky-inlay {
             background: transparent;
@@ -121,6 +116,7 @@ export default ({data, states}) => {
         <div className="flex flex-col justify-center">
           <div className="sticky" ref={controlRef}>
             <Section>
+              <div ref={sizeRef} />
               <div className="controls">
                 <Controls
                   state={state}
@@ -144,7 +140,7 @@ export default ({data, states}) => {
             </div>
             <Section>
               <div className="text-jumbo">Model inputs</div>
-              <div ref={sizeRef}>
+              <div>
                 <div className="section-heading">Social distancing</div>
                 <p className="paragraph">
                   On the left axis social distance of 100% means no contact with
@@ -183,8 +179,7 @@ export default ({data, states}) => {
                   individuals as well as the cumulative number of expected PCR
                   confirmations. If less than 20% of the population is infected
                   and the number of active infections is reduced to a small
-                  fraction of the population we consider the epidemic contained,
-                  and place a grey box on the plot.
+                  fraction of the population we consider the epidemic contained.
                 </p>
                 <PopulationGraph
                   scenario={scenario}
@@ -280,7 +275,7 @@ export default ({data, states}) => {
       </Layout>
     </NearestDataProvider>
   );
-};
+}
 
 export const getStaticProps = ({params: {state}}) => {
   const data = getStateData(state);

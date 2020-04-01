@@ -11,23 +11,23 @@ Import["model/plot-utils.wl"];
 tmax = 365;
 
 (*Rate of progressing to infectiousness, days*)
-daysFromInfectedToInfectious0 = 2.8;
+daysFromInfectedToInfectious0 = 4;
 
 (*Rate of losing infectiousness or going to the hospital*)
-daysUntilNotInfectiousOrHospitalized0 = 2.5;
+daysUntilNotInfectiousOrHospitalized0 = 5;
 
 (*Rate of leaving hospital for those not going to critical care*)
 daysToLeaveHosptialNonCritical0 = 8;
 
 (*Rate of leaving hospital and going to critical care*)
-daysTogoToCriticalCare0 = 3;
+daysTogoToCriticalCare0 = 5;
 
 (*Rate of leaving critical care, weeks*)
 daysFromCriticalToRecoveredOrDeceased0 = 10;
 
 (* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
 pPCRH0 = 0.8;
-pPCRNH0 = 0.08;
+pPCRNH0 = 0.05;
 
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
@@ -58,7 +58,7 @@ USAPopulation = (327.2*10^6);
 containmentThresholdRatio0 = 3000/USAPopulation;
 
 (* interpret as: steepness of age depencence*)
-medianHospitalizationAge0 = 65;
+medianHospitalizationAge0 = 61;
 
 (* interpret as: steepness of age depencence*)
 ageCriticalDependence0 = 3;
@@ -575,7 +575,7 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	(* assume each datapoint otherwise has a constant relative variance (Poissan) for both death and PCR rates. *)
 	(* the constant factor of the population shouldn't matter, but the fit chokes if the weights are too small *)
 	weekOverWeekWeight = .75
-	dataWeights=(weekOverWeekWeight^(#[[1]]/7)Factor (params["population"]#[[3]])^-1)&/@longData;
+	dataWeights=(weekOverWeekWeight^(#[[1]]/7)(params["population"]#[[3]])^-1)&/@longData;
 
 	(* Switch to nminimize, if we run into issues with the multi-fit not respecting weights *)
 	(* confidence interval we get from doing the log needs to be back-transformed *)

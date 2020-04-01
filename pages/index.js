@@ -27,7 +27,7 @@ export default () => (
       </p>
       <p className="paragraph">
         Start by{' '}
-        <Link href="/state/NY">
+        <Link href="/state/[state]" as="/state/NY">
           <a className="text-blue-700 hover:text-blue-500 leading-relaxed font-medium mb-8">
             picking a state
           </a>

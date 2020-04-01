@@ -47,7 +47,7 @@ export const PercentileLine = ({
         stroke={color}
         strokeWidth={1.5}
         r={2}
-        fill="#fff"
+        fill="var(--color-background)"
         nearestProps={() => ({r: 3.5})}
       />
     </>
