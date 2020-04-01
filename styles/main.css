@@ -41,8 +41,10 @@
   --font-size-body: 16px;
   --column-count: 12;
   --gutter-width: 16px;
-  --max-width: 864px;
-  --column: calc(100% / var(--column-count));
+  --max-width: 100vw;
+  --column: calc(
+    (var(--max-width) - var(--gutter-width) * 2) / var(--column-count)
+  );
 }
 
 @media (min-width: 600px) {
@@ -50,6 +52,12 @@
     --font-size-jumbo: 64px;
     --font-size-title: 24px;
     --font-size-subtitle: 20px;
+  }
+}
+
+@media (min-width: 896px) {
+  :root {
+    --max-width: 896px;
   }
 }
 

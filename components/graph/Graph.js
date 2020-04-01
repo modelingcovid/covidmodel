@@ -171,7 +171,6 @@ export const Graph = React.memo(function Graph({
           right: ${margin.right}px;
         }
       `}</style>
-
       {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph">
         <svg width={width} height={height} onMouseMove={onMouseMove}>

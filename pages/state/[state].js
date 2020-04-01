@@ -116,6 +116,7 @@ export default ({data, states}) => {
         <div className="flex flex-col justify-center">
           <div className="sticky" ref={controlRef}>
             <Section>
+              <div ref={sizeRef} />
               <div className="controls">
                 <Controls
                   state={state}
@@ -139,7 +140,7 @@ export default ({data, states}) => {
             </div>
             <Section>
               <div className="text-jumbo">Model inputs</div>
-              <div ref={sizeRef}>
+              <div>
                 <div className="section-heading">Social distancing</div>
                 <p className="paragraph">
                   On the left axis social distance of 100% means no contact with
