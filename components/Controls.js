@@ -14,9 +14,10 @@ export const Controls = ({
   ...props
 }) => {
   const {push} = useRouter();
-  const onStateChange = useCallback((e) => push(`/state/${e.target.value}`), [
-    push,
-  ]);
+  const onStateChange = useCallback(
+    (e) => push('/state/[state]', `/state/${e.target.value}`),
+    [push]
+  );
   const onScenarioChange = useCallback((e) => setScenario(e.target.value), [
     setScenario,
   ]);

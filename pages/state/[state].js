@@ -39,7 +39,6 @@ const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 export default ({data, states}) => {
   const {
     query: {state},
-    push,
   } = useRouter();
   const [scenario, setScenario] = useState('scenario1');
   const controlRef = useRef(null);
@@ -54,10 +53,6 @@ export default ({data, states}) => {
   }
 
   const scenarioSummary = data.scenarios[scenario].summary;
-
-  const handleStateSelect = (e) => {
-    push(`/state/${e.target.value}`);
-  };
 
   const socialDistancingGradientId = useComponentId('socialDistancingGradient');
 

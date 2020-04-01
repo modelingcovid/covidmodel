@@ -44,7 +44,7 @@ export const Layout = ({children}) => (
           <a className="focus title color-dark">COVID Modeling Project</a>
         </Link>
         <div className="pages text-small">
-          <Link href="/state/NY">
+          <Link href="/state/[state]" as="/state/NY">
             <a className="focus link">States</a>
           </Link>
           <Link href="/about">
