@@ -10,6 +10,10 @@
   --font-family-mono: 'IBM Plex Mono', monospace;
   --font-family-text: 'IBM Plex Serif', serif;
   --color-background: #fff;
+  --color-focus-00: rgba(66, 153, 225, 0.2);
+  --color-focus-01: rgba(66, 153, 225, 0.5);
+  --color-gray-bg: #f6f8fa;
+  --color-blue-bg: #ddfffe;
   --color-gray-00: #e0e6eb;
   --color-gray-01: #8691a1;
   --color-gray-02: #515a70;
@@ -86,8 +90,17 @@ text {
 .text-gray-dark {
   color: var(--color-gray-04);
 }
+.text-blue {
+  color: var(--color-blue-02);
+}
+.text-invert {
+  color: var(--color-background);
+}
 .text-red {
   color: var(--color-red-02);
+}
+.text-yellow {
+  color: var(--color-yellow-02);
 }
 .text-green {
   color: var(--color-green-02);
@@ -209,9 +222,9 @@ text {
 
 .focus:focus,
 .focus-within:focus-within {
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  box-shadow: 0 0 0 1px var(--color-focus-01), 0 0 0 4px var(--color-focus-00);
   outline: none;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 .focus-within:focus-within .focus:focus {
   box-shadow: none;

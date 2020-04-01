@@ -5,52 +5,49 @@ import {stateLabels, scenarioLabels, scenarios} from '../lib/controls';
 
 const {useCallback} = React;
 
-export const Controls = ({
+export function Controls({
   children,
   state,
   states,
   scenario,
   setScenario,
   ...props
-}) => {
+}) {
   const {push} = useRouter();
   const onStateChange = useCallback(
-    (e) => push('/state/[state]', `/state/${e.target.value}`),
+    (state) => push('/state/[state]', `/state/${state}`),
     [push]
   );
-  const onScenarioChange = useCallback((e) => setScenario(e.target.value), [
-    setScenario,
-  ]);
+  // const onScenarioChange = useCallback((e) => setScenario(e.target.value), [
+  //   setScenario,
+  // ]);
   return (
-    <div {...props}>
-      <div>
-        <Select
-          value={state}
-          values={states}
-          label={stateLabels}
-          onChange={onStateChange}
-        >
-          {(current) => (
-            <>
-              If <span className="underline-blue">{current}</span>
-            </>
-          )}
-        </Select>
-      </div>
-      <div>
-        <Select
-          value={scenario}
-          values={scenarios}
-          label={scenarioLabels}
-          onChange={onScenarioChange}
-        >
-          {(current) => (
-            <>
-              <span className="underline-yellow">{current}</span>
-            </>
-          )}
-        </Select>
-      </div>
+    <div className="controls" {...props}>
+      <style jsx>{`
+        .controls {
+          display: flex;
+        }
+        .spacer {
+          width: var(--spacing-02);
+        }
+      `}</style>
+      <Select
+        label="Location"
+        placeholder="Choose a location…"
+        value={state}
+        values={states}
+        valueToString={stateLabels}
+        onChange={onStateChange}
+      />
+      <div className="spacer" />
+      <Select
+        label="Scenario"
+        placeholder="Select a scenario…"
+        value={scenario}
+        values={scenarios}
+        valueToString={scenarioLabels}
+        onChange={setScenario}
+      />
     </div>
   );
-};
+}

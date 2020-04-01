@@ -36,7 +36,7 @@ const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
 const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 
-export default ({data, states}) => {
+export default function StatePage({data, states}) {
   const {
     query: {state},
   } = useRouter();
@@ -95,7 +95,7 @@ export default ({data, states}) => {
             box-shadow: 0 2px rgba(0, 0, 0, 0.04);
           }
           .controls {
-            padding-top: var(--spacing-01);
+            padding: var(--spacing-01) 0;
           }
           .sticky-inlay {
             background: transparent;
@@ -276,7 +276,7 @@ export default ({data, states}) => {
       </Layout>
     </NearestDataProvider>
   );
-};
+}
 
 export const getStaticProps = ({params: {state}}) => {
   const data = getStateData(state);
