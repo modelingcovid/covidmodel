@@ -82,7 +82,8 @@ export const Select = ({
         ul {
           position: absolute;
           margin-top: var(--spacing-00);
-          max-height: 80vh;
+          max-height: 50vh;
+          min-width: 180px;
           overflow-y: auto;
           border-top: 0;
           background: white;
