@@ -569,11 +569,9 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	  {2,#["day"],(#["positiveIncrease"]/params["population"])//N}&/@thisStateData
 	],#[[3]]>0&];
 	
-	(* weight the death numbers higher than pcr *)
-	dataWeights = Join[
-	   (1)&/@(Select[longData, #[[1]] == 1&]),
-	   (0.1)&/@(Select[longData, #[[1]] == 2&])
-	  ];
+	(* assume a constant relative variance for death and PCR rates and weight by 1/sigma^2. *)
+	(* the constant factor of the population shouldn't matter, but the fit chokes if the weights are too small *)
+	dataWeights=((params["population"]#[[3]])^-1)&/@longData;
 
 	(* Switch to nminimize, if we run into issues with the multi-fit not respecting weights *)
 	(* confidence interval we get from doing the log needs to be back-transformed *)
