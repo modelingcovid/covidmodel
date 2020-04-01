@@ -4,6 +4,7 @@
 SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 
 Import["model/data.wl"];
+Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
 (* model predict max *)
@@ -569,9 +570,12 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	  {2,#["day"],(#["positiveIncrease"]/params["population"])//N}&/@thisStateData
 	],#[[3]]>0&];
 	
-	(* assume a constant relative variance for death and PCR rates and weight by 1/sigma^2. *)
+	(* set weights for each datapoint in longData *)
+	(* apply a week over week weight reduction, i.e. 0.75 indicates that a data point at day 0 is weighted 75% as strongly as a data point at day 7. *)
+	(* assume each datapoint otherwise has a constant relative variance (Poissan) for both death and PCR rates. *)
 	(* the constant factor of the population shouldn't matter, but the fit chokes if the weights are too small *)
-	dataWeights=((params["population"]#[[3]])^-1)&/@longData;
+	weekOverWeekWeight = .75
+	dataWeights=(weekOverWeekWeight^(#[[1]]/7)Factor (params["population"]#[[3]])^-1)&/@longData;
 
 	(* Switch to nminimize, if we run into issues with the multi-fit not respecting weights *)
 	(* confidence interval we get from doing the log needs to be back-transformed *)
@@ -590,10 +594,12 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
 	(* if we cannot get smooth enough then use Nelder-Mead Post-processing \[Rule] false *)
 	
 	fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
+	(* TODO: try using VarianceEstimatorFunction\[Rule](1)& *)
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
 	     fit["ParameterErrors",
 	     ConfidenceLevel->0.97]]];
-	     
+	gofMetrics=goodnessOfFitMetrics[fit["Residuals"],longData];
+	
 	sims=generateSimulations[100,fitParams,standardErrors];
 
 	(* do a monte carlo for each scenario *)
@@ -610,7 +616,8 @@ evaluateState[state_]:= Module[{distance,sol,params,longData,thisStateData,model
       KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
-      "longData"->longData
+      "longData"->longData,
+      "goodnessOfFitMetrics"->gofMetrics
     }, First] 
 ];
 
