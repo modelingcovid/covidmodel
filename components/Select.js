@@ -5,14 +5,14 @@ import {useSelect} from './util';
 
 const {useEffect, useState} = React;
 
-export const Select = ({
+export const Select = React.memo(function Select({
   label,
   placeholder = '',
   valueToString,
   values,
   value,
   onChange,
-}) => {
+}) {
   const currentValue = value ?? values[0];
   const itemToString =
     typeof valueToString === 'function'
@@ -144,4 +144,4 @@ export const Select = ({
       </ul>
     </div>
   );
-};
+});
