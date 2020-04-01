@@ -9,5 +9,7 @@ export const NearestMarker = () => {
   if (!nearest) {
     return null;
   }
-  return <VMarker value={x(nearest)} stroke="#8691a1" strokeWidth={1} />;
+  return (
+    <VMarker value={x(nearest)} stroke="var(--color-gray-01)" strokeWidth={1} />
+  );
 };

@@ -28,7 +28,7 @@ const valueTickLabelProps = () => ({
   textAnchor: 'start',
   fill: 'var(--color-gray-02)',
   paintOrder: 'stroke',
-  stroke: '#fff',
+  stroke: 'var(--color-background)',
   strokeWidth: 5,
 });
 
@@ -186,15 +186,21 @@ export const Graph = React.memo(function Graph({
               scale={yScale}
               width={xMax}
               height={yMax}
-              stroke="#e0e0e0"
+              stroke="var(--color-gray-00)"
             />
             <GridColumns
               scale={xScale}
               width={xMax}
               height={yMax}
-              stroke="#e0e0e0"
+              stroke="var(--color-gray-00)"
             />
-            <line x1={xMax} x2={xMax} y1={0} y2={yMax} stroke="#e0e0e0" />
+            <line
+              x1={xMax}
+              x2={xMax}
+              y1={0}
+              y2={yMax}
+              stroke="var(--color-gray-00)"
+            />
             {children}
             <AxisBottom />
             <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
@@ -205,7 +211,7 @@ export const Graph = React.memo(function Graph({
             style={{
               top: '100%',
               transform: 'translateY(3px)',
-              background: '#fff',
+              background: 'var(--color-background)',
               borderRadius: '99em',
               padding: '6px 12px 5px',
               boxShadow:

@@ -9,7 +9,7 @@
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-family-mono: 'IBM Plex Mono', monospace;
   --font-family-text: 'IBM Plex Serif', serif;
-  --background-blue: #ebf7fd;
+  --color-background: #fff;
   --color-gray-00: #e0e6eb;
   --color-gray-01: #8691a1;
   --color-gray-02: #515a70;
@@ -159,12 +159,6 @@ text {
   background-size: 8px 1px;
   background-repeat: repeat-x;
   background-position: 0 100%;
-}
-.definition:hover {
-  background: var(--background-blue);
-}
-.definition:hover .definition-label {
-  color: var(--color-gray-04);
 }
 .definition-data {
   transition: ease color 300ms;

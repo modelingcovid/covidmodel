@@ -55,7 +55,7 @@ const leftTickLabelProps = () => ({
   textAnchor: 'start',
   fill: 'var(--color-gray-02)',
   paintOrder: 'stroke',
-  stroke: '#fff',
+  stroke: 'var(--color-background)',
   strokeWidth: 5,
 });
 
