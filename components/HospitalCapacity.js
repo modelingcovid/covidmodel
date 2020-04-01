@@ -7,8 +7,8 @@ import {getDate} from '../lib/date';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 import {getFirstExceedsThreshold} from '../lib/summary';
 
-const getCurrentlyHospitalized = ({currentlyHospitalized}) =>
-  currentlyHospitalized;
+const getCurrentlyReportedHospitalized = ({currentlyReportedHospitalized}) =>
+  currentlyReportedHospitalized;
 
 export const HospitalCapacity = ({data, scenario, state, width, height}) => {
   const hospitalCapacity = data.hospitalCapacity;
@@ -51,7 +51,7 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         scenario={scenario}
         data={data}
         x={getDate}
-        y={getCurrentlyHospitalized}
+        y={getCurrentlyReportedHospitalized}
         cutoff={hospitalCapacity}
         xLabel="people"
         cutoffLabel="Hospital capacity"
@@ -60,7 +60,7 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
       />
       <Legend>
         <LegendRow
-          y={getCurrentlyHospitalized}
+          y={getCurrentlyReportedHospitalized}
           format={formatNumber}
           fill="var(--color-blue-02)"
           label="Currently hospitalized"
