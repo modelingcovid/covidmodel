@@ -1,10 +1,17 @@
+import * as React from 'react';
 import Head from 'next/head';
+
+import {globalStyles} from '../styles';
+
 import '../styles/main.css';
 import {ComponentIdProvider} from '../components/util';
 
 export default function MyApp({Component, pageProps}) {
   return (
     <ComponentIdProvider>
+      <style jsx global>
+        {globalStyles}
+      </style>
       <Component {...pageProps} />
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

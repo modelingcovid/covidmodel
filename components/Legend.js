@@ -1,7 +1,44 @@
 import * as React from 'react';
+import css from 'styled-jsx/css';
+import {breakpoint, theme} from '../styles';
+
 import {useNearestData} from './graph';
 import {getDate} from '../lib/date';
 import {formatShortDate, formatNumber} from '../lib/format';
+
+const legendStyles = css`
+  td {
+    padding-left: ${theme.spacing[1]};
+    text-align: right;
+    vertical-align: top;
+  }
+  td:first-child {
+    text-align: left;
+    padding-left: 0;
+  }
+  .entry {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    font-size: ${theme.font.size.micro};
+  }
+  .entry-label {
+    margin-right: ${theme.spacing[0]};
+    color: ${theme.color.gray[2]};
+  }
+  .entry-symbol {
+    height: 8px;
+    width: 8px;
+    border-radius: 999em;
+    align-self: center;
+    margin-right: ${theme.spacing[0]};
+  }
+  .entry-data {
+    font-family: ${theme.font.family.mono};
+    font-weight: 500;
+    font-size: ${theme.font.size.micro};
+  }
+`;
 
 export const LegendRow = ({
   children,
@@ -17,73 +54,48 @@ export const LegendRow = ({
   }
   const {confirmed, percentile10, percentile50, percentile90} = y(d);
   return (
-    <>
-      <tr>
-        <style jsx>{`
-          td {
-            padding-left: var(--spacing-01);
-            text-align: right;
-            vertical-align: top;
-          }
-          td:first-child {
-            text-align: left;
-            padding-left: 0;
-          }
-          .with-dot {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-          }
-          .projected-dot,
-          .confirmed-dot {
-            height: 8px;
-            width: 8px;
-            border-radius: 999em;
-            margin-top: 1px;
-            margin-right: 8px;
-          }
-          .legend-description {
-            padding-bottom: var(--spacing-00);
-          }
-          .legend-label {
-            margin-right: var(--spacing-00);
-          }
-        `}</style>
-        <style jsx>{`
-          .projected-dot {
-            background-color: ${fill};
-            box-shadow: inset 0 0 0 1px white;
-          }
-          .confirmed-dot {
-            box-shadow: inset 0 0 0 2px ${fill};
-          }
-        `}</style>
-        <td>
-          <div className="text-small text-gray-dark weight-600">{label}</div>
-          {children && (
-            <div className="legend-description text-small text-gray-light">
-              {children}
-            </div>
-          )}
-        </td>
-        <td>
-          <div className="text-micro with-dot">
-            <span className="legend-label text-gray-light">Projected </span>
-            <div className="projected-dot" />
-            <span className="text-micro text-mono">{format(percentile50)}</span>
+    <tr>
+      <style jsx>{legendStyles}</style>
+      <td>
+        <div className="text-small text-gray-dark weight-600">{label}</div>
+        {children && (
+          <div
+            style={{paddingBottom: theme.spacing[0]}}
+            className="text-small text-gray-light"
+          >
+            {children}
           </div>
-          {hasConfirmed && (
-            <div className="text-micro with-dot">
-              <span className="legend-label text-gray-light">Confirmed </span>
-              <div className="confirmed-dot" />
-              <span className="text-micro text-mono">
-                {confirmed ? format(confirmed) : 'N/A'}
-              </span>
+        )}
+      </td>
+      <td>
+        <div className="entry">
+          <div className="entry-label">Projected </div>
+          <div
+            className="entry-symbol"
+            style={{
+              backgroundColor: fill,
+              boxShadow: 'inset 0 0 0 1px white',
+            }}
+          />
+          <div className="entry-data">{format(percentile50)}</div>
+        </div>
+        {hasConfirmed && (
+          <div className="entry">
+            <div className="entry-label">Confirmed </div>
+            <div
+              className="entry-symbol"
+              style={{
+                backgroundColor: theme.color.background,
+                boxShadow: `inset 0 0 0 2px ${fill}`,
+              }}
+            />
+            <div className="entry-data">
+              {confirmed ? format(confirmed) : 'N/A'}
             </div>
-          )}
-        </td>
-      </tr>
-    </>
+          </div>
+        )}
+      </td>
+    </tr>
   );
 };
 

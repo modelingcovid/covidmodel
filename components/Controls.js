@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useRouter} from 'next/router';
 import {Select} from './Select';
 import {stateLabels, scenarioLabels, scenarios} from '../lib/controls';
+import {theme} from '../styles';
 
 const {useCallback} = React;
 
@@ -19,15 +20,7 @@ export function Controls({
     [push]
   );
   return (
-    <div className="controls" {...props}>
-      <style jsx>{`
-        .controls {
-          display: flex;
-        }
-        .spacer {
-          width: var(--spacing-02);
-        }
-      `}</style>
+    <div style={{display: 'flex'}} {...props}>
       <Select
         label="Location"
         placeholder="Choose a location…"
@@ -36,7 +29,7 @@ export function Controls({
         valueToString={stateLabels}
         onChange={onStateChange}
       />
-      <div className="spacer" />
+      <div style={{width: theme.spacing[2]}} />
       <Select
         label="Scenario"
         placeholder="Select a scenario…"
