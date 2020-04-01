@@ -21,8 +21,8 @@ export const OutcomeSummary = ({data}) => {
         <Definition value={formatNumber(data.totalProjectedPCRConfirmed)}>
           PCR confirmed
         </Definition>
-        <Definition value={formatPercent2(data.totalProjectedInfected)}>
-          Percent of population infected
+        <Definition value={formatNumber(data.totalProjectedInfected)}>
+          Total projected infected
         </Definition>
         <Definition value={formatPercent2(data.fatalityRate)}>
           Fatality rate
