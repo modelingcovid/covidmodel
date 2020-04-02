@@ -43,7 +43,7 @@ export const HospitalCapacity = ({width, height}) => {
           typical occupancy rate.
         </p>
       </div>
-      <Grid>
+      <Grid className="margin-bottom-1">
         <Definition
           icon={Bed}
           value={formatNumber(model.staffedBeds)}
