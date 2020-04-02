@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {OccupancyGraph} from './OccupancyGraph';
+import {InlineData} from './content';
 import {Points} from './graph';
 import {Legend} from './Legend';
 import {PercentileLegendRow} from './PercentileLegendRow';
@@ -32,20 +33,15 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
       <div className="section-heading">{hospitalCapacityHeading}</div>
       <p className="paragraph">
         We estimate the hospital capacity for COVID-19 patients by taking{' '}
-        <span className="definition">
-          <span className="definition-label">the number of available beds</span>
-          &nbsp;
-          <span className="definition-data">
-            {formatNumber(data.staffedBeds)}
-          </span>
-        </span>{' '}
+        <InlineData
+          label="the number of available beds"
+          value={formatNumber(data.staffedBeds)}
+        />{' '}
         and discounting for that hospital system’s{' '}
-        <span className="definition">
-          <span className="definition-label">typical occupancy rate</span>&nbsp;
-          <span className="definition-data">
-            {formatPercent1(data.bedUtilization)}
-          </span>
-        </span>
+        <InlineData
+          label="typical occupancy rate"
+          value={formatPercent1(data.bedUtilization)}
+        />
         .
       </p>
       <OccupancyGraph

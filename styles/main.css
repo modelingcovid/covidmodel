@@ -104,30 +104,6 @@ text {
     max-width: calc(var(--column-width) * 9);
   }
 }
-.definition {
-  transition: ease background-color 300ms;
-}
-.definition-label {
-  transition: ease background-color 300ms, ease color 300ms;
-  background-image: linear-gradient(
-    to right,
-    var(--color-gray0) 0%,
-    var(--color-gray0) 60%,
-    transparent 60%,
-    transparent 100%
-  );
-  background-size: 8px 1px;
-  background-repeat: repeat-x;
-  background-position: 0 100%;
-}
-.definition-data {
-  transition: ease color 300ms;
-  color: var(--color-gray1);
-  font-family: var(--font-family-mono);
-  font-weight: 500;
-  font-size: 0.9em;
-  padding: 0 2px;
-}
 .color-dark {
   color: var(--color-gray4);
 }
