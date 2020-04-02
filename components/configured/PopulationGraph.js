@@ -1,27 +1,26 @@
 import * as React from 'react';
 import {Graph, HMarker, NearestMarker} from '../graph';
-import {DistancingGradient} from '../modeling';
+import {DistancingGradient, useModelData} from '../modeling';
 import {formatLargeNumber} from '../../lib/format';
 
 const {createContext, useCallback, useMemo} = React;
 
 export const PopulationGraph = ({
   children,
-  data,
-  scenario,
-  x,
   xLabel = '',
   width = 600,
   height = 400,
-  margin,
   ...remaining
 }) => {
-  const scenarioData = data.scenarios[scenario].timeSeriesData;
-  const population = data.population;
+  const {
+    model: {population},
+    timeSeriesData,
+    x,
+  } = useModelData();
   return (
     <Graph
       {...remaining}
-      data={scenarioData}
+      data={timeSeriesData}
       domain={population}
       initialScale="log"
       height={height}

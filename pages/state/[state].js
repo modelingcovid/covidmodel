@@ -6,6 +6,7 @@ import numeral from 'numeral';
 import Link from 'next/link';
 
 import {
+  CaseProgressionCurve,
   DemographicParameters,
   HospitalCapacity,
   Layout,
@@ -41,9 +42,6 @@ import {stateLabels} from '../../lib/controls';
 const {useCallback, useRef, useState} = React;
 
 const getDistancing = ({distancing}) => distancing;
-const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
-const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
-const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 
 export default function StatePage({data, states}) {
@@ -143,60 +141,7 @@ export default function StatePage({data, states}) {
 
             <Section>
               <div className="text-jumbo">Projections</div>
-              <div className="margin-top-4">
-                <ProjectionDisclaimer />
-                <div className="section-heading">Case progression curve</div>
-                <p className="paragraph">
-                  We show the current number of infected and infectious
-                  individuals as well as the cumulative number of expected PCR
-                  confirmations. If less than 20% of the population is infected
-                  and the number of active infections is reduced to a small
-                  fraction of the population we consider the epidemic contained.
-                </p>
-                <PopulationGraph
-                  scenario={scenario}
-                  data={data}
-                  x={getDate}
-                  xLabel="people"
-                  width={width}
-                  height={height}
-                  after={
-                    <Legend>
-                      <PercentileLegendRow
-                        y={getCurrentlyInfected}
-                        color="var(--color-blue2)"
-                        title="Currently exposed"
-                        description="People who have been exposed to COVID-19 and are in the incubation period, but are not yet infectious."
-                      />
-                      <PercentileLegendRow
-                        y={getCurrentlyInfectious}
-                        color="var(--color-magenta1)"
-                        title="Currently infectious"
-                        description="People who have COVID-19 and can infect others."
-                      />
-                      <PercentileLegendRow
-                        y={getCumulativePcr}
-                        color="var(--color-yellow2)"
-                        title="Cumulative reported positive tests"
-                        description="Total number of COVID-19 that are projected to be positive."
-                      />
-                    </Legend>
-                  }
-                >
-                  <PercentileLine
-                    y={getCurrentlyInfected}
-                    color="var(--color-blue2)"
-                  />
-                  <PercentileLine
-                    y={getCurrentlyInfectious}
-                    color="var(--color-magenta1)"
-                  />
-                  <PercentileLine
-                    y={getCumulativePcr}
-                    color="var(--color-yellow2)"
-                  />
-                </PopulationGraph>
-              </div>
+              <CaseProgressionCurve width={width} height={height} />
               <ProjectedDeaths
                 data={data}
                 scenario={scenario}
