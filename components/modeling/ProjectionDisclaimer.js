@@ -3,7 +3,7 @@ import css from 'styled-jsx/css';
 import {breakpoint, theme} from '../../styles';
 
 import {Label} from '../content';
-import {PeopleArrows} from '../icon';
+import {Clock, PeopleArrows} from '../icon';
 import {useModelData} from './useModelData';
 import {daysToMonths} from '../../lib/date';
 import {formatNumber, formatPercent} from '../../lib/format';
@@ -35,14 +35,15 @@ export const ProjectionDisclaimer = () => {
       <Label>Projection</Label>{' '}
       {distancing && (
         <span className="text-gray-faint distancing-info">
-          <PeopleArrows
-            size={18}
+          <PeopleArrows style={{marginRight: theme.spacing[0]}} />
+          {distancing}
+          <Clock
             style={{
+              marginLeft: theme.spacing[1],
               marginRight: theme.spacing[0],
-              verticalAlign: 'text-bottom',
             }}
           />
-          {distancing} for {formatNumber(daysToMonths(distancingDays))} months
+          {formatNumber(daysToMonths(distancingDays))} months
         </span>
       )}
     </div>
