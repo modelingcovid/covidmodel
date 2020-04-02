@@ -2,11 +2,13 @@ import * as React from 'react';
 import {dayToDate} from '../lib/date';
 import {formatDate, formatNumber, formatPercent2} from '../lib/format';
 import {Definition, Definitions} from './Definition';
+import {ProjectionDisclaimer} from './modeling';
 
 export const OutcomeSummary = ({data}) => {
   return (
-    <div>
-      <div className="section-heading margin-top-4">Outcome summary</div>
+    <div className="margin-top-4">
+      <ProjectionDisclaimer />
+      <div className="section-heading">Outcome summary</div>
       <p className="paragraph">
         Fatality rate and percent of population infected are the expected PCR
         confirmed rates with current levels of testing in the US. The infected

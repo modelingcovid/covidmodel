@@ -29,6 +29,7 @@ import {
   ModelDataProvider,
   PercentileLegendRow,
   PercentileLine,
+  ProjectionDisclaimer,
 } from '../../components/modeling';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
@@ -154,10 +155,8 @@ export default function StatePage({data, states}) {
               </div>
               <Section>
                 <div className="text-jumbo">Model inputs</div>
-                <div>
-                  <div className="section-heading margin-top-4">
-                    Social distancing
-                  </div>
+                <div className="margin-top-4">
+                  <div className="section-heading">Social distancing</div>
                   <p className="paragraph">
                     On the left axis social distance of 100% means no contact
                     with others, which yields an R0 (basic reproduction number)
@@ -188,10 +187,9 @@ export default function StatePage({data, states}) {
               </div>
               <Section>
                 <div className="text-jumbo">Projections</div>
-                <div>
-                  <div className="section-heading margin-top-4">
-                    Case progression curve
-                  </div>
+                <div className="margin-top-4">
+                  <ProjectionDisclaimer />
+                  <div className="section-heading">Case progression curve</div>
                   <p className="paragraph">
                     We show the current number of infected and infectious
                     individuals as well as the cumulative number of expected PCR
@@ -258,10 +256,9 @@ export default function StatePage({data, states}) {
                   width={width}
                   height={height}
                 />
-                <div>
-                  <div className="section-heading margin-top-4">
-                    ICU Occupancy
-                  </div>
+                <div className="margin-top-4">
+                  <ProjectionDisclaimer />
+                  <div className="section-heading">ICU Occupancy</div>
                   <p className="paragraph">
                     Note: we assign a higher probability of fatality in the case
                     the ICU capacity is over-shot. This can be seen in countries
