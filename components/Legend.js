@@ -29,6 +29,7 @@ const entryStyles = css`
     color: ${theme.color.gray[2]};
   }
   .entry-symbol {
+    flex-shrink: 0;
     height: 8px;
     width: 8px;
     border-radius: 999em;
