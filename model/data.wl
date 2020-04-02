@@ -182,5 +182,6 @@ evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarl
    
    Interpolation[{{0,0.15},{365+percentPositiveTestDelay0,0.15}},InterpolationOrder->1]]
 ];
+(*Grid[Partition[Column[{Text[#],Plot[posInterpMap[#][t],{t,0,365}]}]&/@statesWithRates,4]]*)
 posInterpMap=Association[{#->evalStatePosTest[#]}&/@statesWith50CasesAnd5Deaths];
 
