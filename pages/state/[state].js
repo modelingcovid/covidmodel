@@ -212,8 +212,8 @@ export default function StatePage({data, states}) {
                         <PercentileLegendRow
                           y={getCurrentlyInfected}
                           color="var(--color-blue2)"
-                          title="Currently infected"
-                          description="People who have COVID-19 but cannot yet infect others."
+                          title="Currently exposed"
+                          description="People who have been exposed to COVID-19 and are in the incubation period, but are not yet infectious."
                         />
                         <PercentileLegendRow
                           y={getCurrentlyInfectious}
@@ -224,8 +224,8 @@ export default function StatePage({data, states}) {
                         <PercentileLegendRow
                           y={getCumulativePcr}
                           color="var(--color-yellow2)"
-                          title="Cumulative PCR"
-                          description="Total number of positive PCR tests."
+                          title="Cumulative reported positive tests"
+                          description="Total number of COVID-19 that are projected to be positive."
                         />
                       </Legend>
                     }
