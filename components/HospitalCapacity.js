@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {OccupancyGraph} from './OccupancyGraph';
 import {InlineData} from './content';
-import {Points} from './graph';
+import {Legend, Points} from './graph';
 import {useModelData} from './model';
-import {Legend} from './Legend';
 import {PercentileLegendRow} from './PercentileLegendRow';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 

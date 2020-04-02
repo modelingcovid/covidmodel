@@ -5,7 +5,6 @@ export * from './DistancingGradient';
 export * from './DistancingGraph';
 export * from './HospitalCapacity';
 export * from './Layout';
-export * from './Legend';
 export * from './MDXComponents';
 export * from './ModelFitParameters';
 export * from './OccupancyGraph';

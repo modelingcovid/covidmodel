@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {useGraphData, useNearestData} from './graph';
-import {LegendEntry, LegendRow} from './Legend';
+import {LegendEntry, LegendRow, useGraphData, useNearestData} from './graph';
 import {formatNumber, formatNA} from '../lib/format';
 
 const {useMemo} = React;

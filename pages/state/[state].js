@@ -12,7 +12,6 @@ import {
   DistancingGraph,
   HospitalCapacity,
   Layout,
-  Legend,
   ModelFitParameters,
   OccupancyGraph,
   OutcomeSummary,
@@ -22,7 +21,12 @@ import {
   ProjectedDeaths,
   Section,
 } from '../../components';
-import {Line, NearestDataProvider, Points} from '../../components/graph';
+import {
+  Legend,
+  Line,
+  NearestDataProvider,
+  Points,
+} from '../../components/graph';
 import {ModelDataProvider} from '../../components/model';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';

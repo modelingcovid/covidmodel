@@ -2,6 +2,7 @@ export * from './Area';
 export * from './Axis';
 export * from './Graph';
 export * from './GraphControls';
+export * from './Legend';
 export * from './Line';
 export * from './LinearGradient';
 export * from './Marker';

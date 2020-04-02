@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Legend} from './Legend';
+import {Legend} from './graph';
 import {PercentileLegendRow} from './PercentileLegendRow';
 import {PercentileLine} from './PercentileLine';
 import {PopulationGraph} from './PopulationGraph';
