@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import {Layout, Section} from '../components';
+import {Layout} from '../components';
+import {Section} from '../components/content';
 
 export default () => (
   <Layout>

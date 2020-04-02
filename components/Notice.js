@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ExclamationTriangle} from './icon';
-import {Section} from './Section';
+import {Section} from './content';
 
 export const Notice = ({children}) => (
   <div className="notice">

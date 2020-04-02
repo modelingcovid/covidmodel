@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import {Section} from './Section';
+import {Section} from './content';
 import {Notice} from './Notice';
 
 export const Layout = ({children}) => (

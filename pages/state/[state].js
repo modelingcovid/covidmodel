@@ -6,20 +6,20 @@ import numeral from 'numeral';
 import Link from 'next/link';
 
 import {
-  Controls,
   DemographicParameters,
   HospitalCapacity,
   Layout,
   ModelFitParameters,
   OutcomeSummary,
   ProjectedDeaths,
-  Section,
 } from '../../components';
 import {
+  Controls,
   DistancingGraph,
   OccupancyGraph,
   PopulationGraph,
 } from '../../components/configured';
+import {Section} from '../../components/content';
 import {
   Legend,
   Line,

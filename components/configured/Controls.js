@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
-import {Select} from './Select';
-import {stateLabels, scenarioLabels, scenarios} from '../lib/controls';
-import {theme} from '../styles';
+import {Select} from '../Select';
+import {stateLabels, scenarioLabels, scenarios} from '../../lib/controls';
+import {theme} from '../../styles';
 
 const {useCallback} = React;
 
