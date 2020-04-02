@@ -17,13 +17,13 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
   const stateName = stateLabels[state];
   const hospitalCapacityHeading = dateHospitalsOverCapacity ? (
     <>
-      {stateName} will{' '}
+      {stateName} is projected to{' '}
       <span className="text-red">exceed hospital capacity</span> on{' '}
       {formatDate(new Date(dateHospitalsOverCapacity))}
     </>
   ) : (
     <>
-      {stateName} will stay{' '}
+      {stateName} is projected to stay{' '}
       <span className="text-green">below hospital capacity</span>
     </>
   );
