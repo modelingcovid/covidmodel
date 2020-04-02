@@ -27,7 +27,7 @@ export const DistancingGraph = ({
   rightLabel = '',
   width = 600,
   height = 400,
-  margin,
+  ...remaining
 }) => {
   const scenarioData = data.scenarios[scenario].timeSeriesData;
 
@@ -43,6 +43,7 @@ export const DistancingGraph = ({
 
   return (
     <Graph
+      {...remaining}
       data={scenarioData}
       x={x}
       xLabel={leftLabel}

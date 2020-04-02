@@ -188,6 +188,28 @@ export default function StatePage({data, states}) {
                   xLabel="people"
                   width={width}
                   height={height}
+                  after={
+                    <Legend>
+                      <PercentileLegendRow
+                        y={getCurrentlyInfected}
+                        color="var(--color-blue2)"
+                        title="Currently infected"
+                        description="People who have COVID-19 but cannot yet infect others."
+                      />
+                      <PercentileLegendRow
+                        y={getCurrentlyInfectious}
+                        color="var(--color-magenta1)"
+                        title="Currently infectious"
+                        description="People who have COVID-19 and can infect others."
+                      />
+                      <PercentileLegendRow
+                        y={getCumulativePcr}
+                        color="var(--color-yellow2)"
+                        title="Cumulative PCR"
+                        description="Total number of positive PCR tests."
+                      />
+                    </Legend>
+                  }
                 >
                   <PercentileLine
                     y={getCurrentlyInfected}
@@ -202,27 +224,6 @@ export default function StatePage({data, states}) {
                     color="var(--color-yellow2)"
                   />
                 </PopulationGraph>
-                <Legend>
-                  <PercentileLegendRow
-                    y={getCurrentlyInfected}
-                    color="var(--color-blue2)"
-                    title="Currently infected"
-                    description="People who have COVID-19 but cannot yet infect others."
-                  />
-                  <PercentileLegendRow
-                    y={getCurrentlyInfectious}
-                    color="var(--color-magenta1)"
-                    title="Currently infectious"
-                    description="People who have COVID-19 and can infect others."
-                  />
-                  <PercentileLegendRow
-                    y={getCumulativePcr}
-                    color="var(--color-yellow2)"
-                    title="Cumulative PCR"
-                    hasConfirmed
-                    description="Total number of positive PCR tests."
-                  />
-                </Legend>
               </div>
               <ProjectedDeaths
                 data={data}
@@ -256,14 +257,16 @@ export default function StatePage({data, states}) {
                   cutoffLabel="ICU capacity"
                   width={width}
                   height={height}
+                  after={
+                    <Legend>
+                      <PercentileLegendRow
+                        y={getCurrentlyCritical}
+                        color="var(--color-blue2)"
+                        title="Currently in need of ICU care"
+                      />
+                    </Legend>
+                  }
                 />
-                <Legend>
-                  <PercentileLegendRow
-                    y={getCurrentlyCritical}
-                    color="var(--color-blue2)"
-                    title="Currently in need of ICU care"
-                  />
-                </Legend>
               </div>
               <OutcomeSummary data={scenarioSummary} />
             </Section>

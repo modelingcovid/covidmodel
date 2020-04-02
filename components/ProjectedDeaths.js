@@ -20,6 +20,15 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
       xLabel="people"
       width={width}
       height={height}
+      after={
+        <Legend>
+          <PercentileLegendRow
+            title="Cumulative deaths"
+            y={getCumulativeDeaths}
+            color="var(--color-blue2)"
+          />
+        </Legend>
+      }
     >
       <PercentileLine
         y={getCumulativeDeaths}
@@ -27,12 +36,5 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
         gradient
       />
     </PopulationGraph>
-    <Legend>
-      <PercentileLegendRow
-        title="Cumulative deaths"
-        y={getCumulativeDeaths}
-        color="var(--color-blue2)"
-      />
-    </Legend>
   </div>
 );

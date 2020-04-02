@@ -35,6 +35,7 @@ const valueTickLabelProps = () => ({
 export const Graph = React.memo(function Graph({
   children,
   overlay,
+  after,
   data,
   x,
   xLabel = '',
@@ -225,6 +226,7 @@ export const Graph = React.memo(function Graph({
           {overlay}
         </div>
       </div>
+      {after}
     </GraphDataProvider>
   );
 });

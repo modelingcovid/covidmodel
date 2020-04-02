@@ -24,7 +24,7 @@ export const OccupancyGraph = ({
   xLabel = '',
   width = 600,
   height = 400,
-  margin,
+  ...remaining
 }) => {
   const scenarioData = data.scenarios[scenario].timeSeriesData;
   const allPoints = useMemo(
@@ -48,6 +48,7 @@ export const OccupancyGraph = ({
 
   return (
     <Graph
+      {...remaining}
       data={scenarioData}
       domain={domain}
       height={height}

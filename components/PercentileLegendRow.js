@@ -1,17 +1,24 @@
 import * as React from 'react';
-import {useNearestData} from './graph';
+import {useGraphData, useNearestData} from './graph';
 import {LegendEntry, LegendRow} from './Legend';
 import {formatNumber, formatNA} from '../lib/format';
+
+const {useMemo} = React;
 
 export const PercentileLegendRow = ({
   children,
   description,
   format = formatNumber,
   color,
-  hasConfirmed = false,
   title,
   y,
 }) => {
+  const {data} = useGraphData();
+  const hasConfirmed = useMemo(() => data.some((d) => !!y(d).confirmed), [
+    data,
+    y,
+  ]);
+
   const d = useNearestData();
   if (!d) {
     return null;

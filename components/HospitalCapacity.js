@@ -58,14 +58,16 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         cutoffLabel="Hospital capacity"
         width={width}
         height={height}
+        after={
+          <Legend>
+            <PercentileLegendRow
+              title="Currently hospitalized"
+              y={getCurrentlyReportedHospitalized}
+              color="var(--color-blue2)"
+            />
+          </Legend>
+        }
       />
-      <Legend>
-        <PercentileLegendRow
-          title="Currently hospitalized"
-          y={getCurrentlyReportedHospitalized}
-          color="var(--color-blue2)"
-        />
-      </Legend>
     </div>
   );
 };
