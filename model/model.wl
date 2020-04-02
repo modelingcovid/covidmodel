@@ -103,17 +103,17 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{},
   {
    RandomVariate[PosNormal[fitParams["r0natural"],standardErrors["r0natural"]]],
- RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,0.5]],
- RandomVariate[PosNormal[daysFromInfectedToInfectious0,1]],
- RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,2]],
-RandomVariate[PosNormal[pPCRNH0,0.02]],
-RandomVariate[PosNormal[pPCRH0,0.05]],
- RandomVariate[PosNormal[daysTogoToCriticalCare0,1]], 
- RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,1]],
-RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,0.02]],
+ RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,daysUntilNotInfectiousOrHospitalized0*0.05]],
+ RandomVariate[PosNormal[daysFromInfectedToInfectious0,daysFromInfectedToInfectious0*0.05]],
+ RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,daysToLeaveHosptialNonCritical0*0.05]],
+RandomVariate[PosNormal[pPCRNH0,pPCRNH0*0.05]],
+RandomVariate[PosNormal[pPCRH0,pPCRH0*0.05]],
+ RandomVariate[PosNormal[daysTogoToCriticalCare0,daysTogoToCriticalCare0*0.05]], 
+ RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,daysFromCriticalToRecoveredOrDeceased0*0.05]],
+RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,fractionOfCriticalDeceased0*0.02]],
 RandomVariate[PosNormal[fitParams["importtime"],standardErrors["importtime"]]], 
-RandomVariate[PosNormal[importlength0,1]],
-RandomVariate[PosNormal[initialInfectionImpulse0,3]],
+RandomVariate[PosNormal[importlength0,importlength0*0.05]],
+RandomVariate[PosNormal[initialInfectionImpulse0,initialInfectionImpulse0*0.05]],
 cutoff,
 stateParams["params"]["pS"],
 stateParams["params"]["pH"],
@@ -414,8 +414,7 @@ equationsDAE = {
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
     (*pcr confirmation*)
     PCR'[t]==(pPCRNH*Iq[t])/daysToGetTestedIfNotHospitalized0+(pPCRH*HHq[t])/daysToGetTestedIfHospitalized0,
-    (*Infected,
-    will need critical care*)
+    (*Infected, will need critical care*)
     ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Hospitalized,
     need critical care*)
@@ -615,7 +614,7 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 (* we first fit the data on PCR and fatalities to find the R0 and importtime for that state
 then we generate a set of all the simulated parameters. Finally we call evaluateScenario to run and aggregate the
 simulation results for each scenario *)
-evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,longData,thisStateData,model,fit,fitParams,lciuci,icuCapacity,t,dataWeights,standardErrors,hospitalizationData,hospitalCapacity,sims},
+evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,weekOverWeekWeight,longData,thisStateData,model,fit,fitParams,lciuci,icuCapacity,t,dataWeights,standardErrors,hospitalizationData,hospitalCapacity,sims},
     (* fit R0 / import time per state, then forecast each scenario *)
     params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0];
 	icuCapacity=params["icuBeds"]/params["population"];
@@ -658,7 +657,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,lo
 	(* apply a week over week weight reduction, i.e. 0.75 indicates that a data point at day 0 is weighted 75% as strongly as a data point at day 7. *)
 	(* assume each datapoint otherwise has a constant relative variance (Poissan) for both death and PCR rates. *)
 	(* the constant factor of the population shouldn't matter, but the fit chokes if the weights are too small *)
-	weekOverWeekWeight = .75
+	weekOverWeekWeight = .75;
 	dataWeights=(weekOverWeekWeight^(#[[1]]/7)(params["population"]#[[3]])^-1)&/@longData;
 
 	(* Switch to nminimize, if we run into issues with the multi-fit not respecting weights *)
@@ -682,14 +681,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,lo
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
 	     fit["ParameterErrors",
 	     ConfidenceLevel->0.97]]];
-<<<<<<< HEAD
-	gofMetrics=goodnessOfFitMetrics[fit["Residuals"],longData];
+	(*gofMetrics=goodnessOfFitMetrics[fit["Residuals"],longData];*)
 	
 	sims=generateSimulations[100,fitParams,standardErrors];
-
-=======
-  
->>>>>>> speed
+	
 	(* do a monte carlo for each scenario *)
    Merge[{
       <|"scenarios"->
@@ -704,8 +699,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,lo
       KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
-      "longData"->longData,
-      "goodnessOfFitMetrics"->gofMetrics
+      "longData"->longData(*,
+      "goodnessOfFitMetrics"->gofMetrics*)
     }, First] 
 ];
 
