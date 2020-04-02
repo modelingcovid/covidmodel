@@ -51,8 +51,6 @@ export default function StatePage({data, states}) {
     query: {state},
   } = useRouter();
   const [scenario, setScenario] = useState('scenario1');
-  const controlRef = useRef(null);
-  const controlRect = useContentRect(controlRef, {width: 896, height: 126});
 
   const sizeRef = useRef(null);
   const {width} = useContentRect(sizeRef, {width: 896, height: 360});
@@ -88,50 +86,22 @@ export default function StatePage({data, states}) {
             />
           </Head>
           <style jsx>{`
-            .sticky,
-            .sticky-overlay,
-            .sticky-inlay {
+            .sticky {
               position: sticky;
               top: 0;
               background: var(--color-background);
               z-index: 2;
             }
-            .sticky-overlay,
-            .sticky-inlay {
-              display: none;
-            }
-            .sticky-overlay,
-            .sticky-overlay-shadow {
-              height: 42px;
-            }
-            .sticky-overlay {
-              z-index: 1;
-              margin-bottom: -42px;
-            }
-            .sticky-overlay-shadow {
-              box-shadow: 0 2px rgba(0, 0, 0, 0.04);
-            }
             .controls {
               padding: var(--spacing1) 0;
-            }
-            .sticky-inlay {
-              background: transparent;
-              z-index: 1;
-              margin-bottom: var(--spacing2);
             }
             .text-jumbo {
               padding-top: 96px;
               margin-bottom: -64px;
             }
           `}</style>
-          <style jsx>{`
-            .sticky-overlay,
-            .sticky-inlay {
-              top: calc(${controlRect.height}px);
-            }
-          `}</style>
           <div className="flex flex-col justify-center">
-            <div className="sticky" ref={controlRef}>
+            <div className="sticky">
               <Section>
                 <div ref={sizeRef} />
                 <div className="controls">
@@ -144,153 +114,135 @@ export default function StatePage({data, states}) {
                 </div>
               </Section>
             </div>
-            <div className="sticky-overlay">
-              <Section>
-                <div className="sticky-overlay-shadow" />
-              </Section>
-            </div>
-            <div>
-              <div className="sticky-inlay">
-                <Section>
-                  <span className="section-label">Based on these inputs</span>
-                </Section>
-              </div>
-              <Section>
-                <div className="text-jumbo">Model inputs</div>
-                <div className="margin-top-4">
-                  <div className="section-heading">Social distancing</div>
-                  <p className="paragraph">
-                    On the left axis social distance of 100% means no contact
-                    with others, which yields an R₀ (basic reproduction number)
-                    for the virus of zero, since it cannot find new hosts. The
-                    zero-percent distance is the un-inhibited reproduction
-                    number which is thought to be around 3.1.
-                  </p>
-                  <DistancingGraph
-                    scenario={scenario}
-                    data={data}
-                    x={getDate}
-                    y={getDistancing}
-                    leftLabel="distancing"
-                    rightLabel="R₀"
-                    width={width}
-                    height={160}
-                  />
-                </div>
-                <DemographicParameters data={data} />
-                <ModelFitParameters data={data} />
-              </Section>
-            </div>
-            <div>
-              <div className="sticky-inlay">
-                <Section>
-                  <span className="section-label">The model projects</span>
-                </Section>
-              </div>
-              <Section>
-                <div className="text-jumbo">Projections</div>
-                <div className="margin-top-4">
-                  <ProjectionDisclaimer />
-                  <div className="section-heading">Case progression curve</div>
-                  <p className="paragraph">
-                    We show the current number of infected and infectious
-                    individuals as well as the cumulative number of expected PCR
-                    confirmations. If less than 20% of the population is
-                    infected and the number of active infections is reduced to a
-                    small fraction of the population we consider the epidemic
-                    contained.
-                  </p>
-                  <PopulationGraph
-                    scenario={scenario}
-                    data={data}
-                    x={getDate}
-                    xLabel="people"
-                    width={width}
-                    height={height}
-                    after={
-                      <Legend>
-                        <PercentileLegendRow
-                          y={getCurrentlyInfected}
-                          color="var(--color-blue2)"
-                          title="Currently exposed"
-                          description="People who have been exposed to COVID-19 and are in the incubation period, but are not yet infectious."
-                        />
-                        <PercentileLegendRow
-                          y={getCurrentlyInfectious}
-                          color="var(--color-magenta1)"
-                          title="Currently infectious"
-                          description="People who have COVID-19 and can infect others."
-                        />
-                        <PercentileLegendRow
-                          y={getCumulativePcr}
-                          color="var(--color-yellow2)"
-                          title="Cumulative reported positive tests"
-                          description="Total number of COVID-19 that are projected to be positive."
-                        />
-                      </Legend>
-                    }
-                  >
-                    <PercentileLine
-                      y={getCurrentlyInfected}
-                      color="var(--color-blue2)"
-                    />
-                    <PercentileLine
-                      y={getCurrentlyInfectious}
-                      color="var(--color-magenta1)"
-                    />
-                    <PercentileLine
-                      y={getCumulativePcr}
-                      color="var(--color-yellow2)"
-                    />
-                  </PopulationGraph>
-                </div>
-                <ProjectedDeaths
-                  data={data}
+
+            <Section>
+              <div className="text-jumbo">Model inputs</div>
+              <div className="margin-top-4">
+                <div className="section-heading">Social distancing</div>
+                <p className="paragraph">
+                  On the left axis social distance of 100% means no contact with
+                  others, which yields an R₀ (basic reproduction number) for the
+                  virus of zero, since it cannot find new hosts. The
+                  zero-percent distance is the un-inhibited reproduction number
+                  which is thought to be around 3.1.
+                </p>
+                <DistancingGraph
                   scenario={scenario}
-                  state={state}
+                  data={data}
+                  x={getDate}
+                  y={getDistancing}
+                  leftLabel="distancing"
+                  rightLabel="R₀"
+                  width={width}
+                  height={160}
+                />
+              </div>
+              <DemographicParameters data={data} />
+              <ModelFitParameters data={data} />
+            </Section>
+
+            <Section>
+              <div className="text-jumbo">Projections</div>
+              <div className="margin-top-4">
+                <ProjectionDisclaimer />
+                <div className="section-heading">Case progression curve</div>
+                <p className="paragraph">
+                  We show the current number of infected and infectious
+                  individuals as well as the cumulative number of expected PCR
+                  confirmations. If less than 20% of the population is infected
+                  and the number of active infections is reduced to a small
+                  fraction of the population we consider the epidemic contained.
+                </p>
+                <PopulationGraph
+                  scenario={scenario}
+                  data={data}
+                  x={getDate}
+                  xLabel="people"
                   width={width}
                   height={height}
-                />
-                <HospitalCapacity
-                  data={data}
+                  after={
+                    <Legend>
+                      <PercentileLegendRow
+                        y={getCurrentlyInfected}
+                        color="var(--color-blue2)"
+                        title="Currently exposed"
+                        description="People who have been exposed to COVID-19 and are in the incubation period, but are not yet infectious."
+                      />
+                      <PercentileLegendRow
+                        y={getCurrentlyInfectious}
+                        color="var(--color-magenta1)"
+                        title="Currently infectious"
+                        description="People who have COVID-19 and can infect others."
+                      />
+                      <PercentileLegendRow
+                        y={getCumulativePcr}
+                        color="var(--color-yellow2)"
+                        title="Cumulative reported positive tests"
+                        description="Total number of COVID-19 that are projected to be positive."
+                      />
+                    </Legend>
+                  }
+                >
+                  <PercentileLine
+                    y={getCurrentlyInfected}
+                    color="var(--color-blue2)"
+                  />
+                  <PercentileLine
+                    y={getCurrentlyInfectious}
+                    color="var(--color-magenta1)"
+                  />
+                  <PercentileLine
+                    y={getCumulativePcr}
+                    color="var(--color-yellow2)"
+                  />
+                </PopulationGraph>
+              </div>
+              <ProjectedDeaths
+                data={data}
+                scenario={scenario}
+                state={state}
+                width={width}
+                height={height}
+              />
+              <HospitalCapacity
+                data={data}
+                scenario={scenario}
+                state={state}
+                width={width}
+                height={height}
+              />
+              <div className="margin-top-4">
+                <ProjectionDisclaimer />
+                <div className="section-heading">ICU Occupancy</div>
+                <p className="paragraph">
+                  We assign a higher probability of fatality in the case the ICU
+                  capacity is over-shot. This can be seen in countries like
+                  Italy where the fatality rate is substantially higher even
+                  controlling for the age distribution.
+                </p>
+                <OccupancyGraph
                   scenario={scenario}
-                  state={state}
+                  data={data}
+                  x={getDate}
+                  y={getCurrentlyCritical}
+                  cutoff={data.icuBeds}
+                  xLabel="people"
+                  cutoffLabel="ICU capacity"
                   width={width}
                   height={height}
+                  after={
+                    <Legend>
+                      <PercentileLegendRow
+                        y={getCurrentlyCritical}
+                        color="var(--color-blue2)"
+                        title="Currently in need of ICU care"
+                      />
+                    </Legend>
+                  }
                 />
-                <div className="margin-top-4">
-                  <ProjectionDisclaimer />
-                  <div className="section-heading">ICU Occupancy</div>
-                  <p className="paragraph">
-                    We assign a higher probability of fatality in the case the
-                    ICU capacity is over-shot. This can be seen in countries
-                    like Italy where the fatality rate is substantially higher
-                    even controlling for the age distribution.
-                  </p>
-                  <OccupancyGraph
-                    scenario={scenario}
-                    data={data}
-                    x={getDate}
-                    y={getCurrentlyCritical}
-                    cutoff={data.icuBeds}
-                    xLabel="people"
-                    cutoffLabel="ICU capacity"
-                    width={width}
-                    height={height}
-                    after={
-                      <Legend>
-                        <PercentileLegendRow
-                          y={getCurrentlyCritical}
-                          color="var(--color-blue2)"
-                          title="Currently in need of ICU care"
-                        />
-                      </Legend>
-                    }
-                  />
-                </div>
-                <OutcomeSummary data={scenarioSummary} />
-              </Section>
-            </div>
+              </div>
+              <OutcomeSummary data={scenarioSummary} />
+            </Section>
           </div>
         </Layout>
       </NearestDataProvider>
