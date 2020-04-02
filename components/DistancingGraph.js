@@ -53,7 +53,7 @@ export const DistancingGraph = ({
     >
       <WithGraphData>
         {({xMax, yScale}) => {
-          const yTicks = yScale.ticks(4);
+          const yTicks = yScale.ticks(3);
           const yTickCount = yTicks.length;
           const tickFormatWithLabel = (v, i) => {
             const value = formatR0(v, i);
