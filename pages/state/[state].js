@@ -29,7 +29,7 @@ import {
   ModelDataProvider,
   PercentileLegendRow,
   PercentileLine,
-} from '../../components/model';
+} from '../../components/modeling';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate, today} from '../../lib/date';

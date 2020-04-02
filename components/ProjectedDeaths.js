@@ -5,7 +5,7 @@ import {
   PercentileLine,
   ProjectionDisclaimer,
   useModelData,
-} from './model';
+} from './modeling';
 import {PopulationGraph} from './PopulationGraph';
 import {formatDate, formatNumber} from '../lib/format';
 import {getLastDate} from '../lib/date';
