@@ -10,16 +10,17 @@ export const DistancingInfo = () => {
   const {
     scenarioData: {distancingDays, distancingLevel},
   } = useModelData();
+  if (distancingLevel == null) {
+    return null;
+  }
+
   return (
     <span>
-      {distancingLevel && (
-        <span style={{marginRight: theme.spacing[1]}}>
-          <PeopleArrows style={{marginRight: theme.spacing[0]}} />
-          {formatPercent(1 - distancingLevel)}
-        </span>
-      )}
+      <PeopleArrows style={{marginRight: theme.spacing[0]}} />
+      {formatPercent(1 - distancingLevel)}
       <Clock
         style={{
+          marginLeft: theme.spacing[1],
           marginRight: theme.spacing[0],
         }}
       />
