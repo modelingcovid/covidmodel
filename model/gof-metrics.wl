@@ -35,8 +35,32 @@ goodnessOfFitMetrics[residuals_,longData_]:=Module[{RmsRelativeError,MeanRelativ
 		"rmsRelativeErrorDeaths"->rmsRelativeError[fit["FitResiduals"],longData,deathsMask],
 		"rmsRelativeErrorPcr"->rmsRelativeError[fit["FitResiduals"],longData,positivePcrMask],
 		"meanRelativeErrorDeaths"->meanRelativeError[fit["FitResiduals"],longData,deathsMask],
-		"meanRelativeErrorPCR"->meanRelativeError[fit["FitResiduals"],longData,positivePcrMask],
+		"meanRelativeErrorPcr"->meanRelativeError[fit["FitResiduals"],longData,positivePcrMask],
 		"rSquaredDeaths"->rSquared[fit["FitResiduals"],longData,deathsMask],
-		"rSquaredPCR"->rSquared[fit["FitResiduals"],longData,positivePcrMask]
+		"rSquaredPcr"->rSquared[fit["FitResiduals"],longData,positivePcrMask]
 	|>
 ];
+
+
+exportAllStatesGoodnessOfFitMetricsCsv[file_,allStateData_]:=Module[{columnOrder,gofAssociationToArray},
+	columnOrder={"chiSquared",
+		"rmsRelativeError",
+		"rmsRelativeErrorDeaths",
+		"rmsRelativeErrorPcr",
+		"meanRelativeErrorDeaths",
+		"meanRelativeErrorPcr",
+		"rSquaredDeaths",
+		"rSquaredPcr"};
+	gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
+	Export[
+		file,
+		Join[
+			{Join[{"state"},columnOrder]},
+			KeyValueMap[Join[#1,gofAssociationToArray[#2]]&,allStateData]],
+		"CSV"];
+]
+
+
+exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{columnOrder,gofAssociationToArray},
+
+]
