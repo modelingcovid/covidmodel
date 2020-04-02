@@ -125,8 +125,11 @@ export const Select = React.memo(function Select({
         {isOpen &&
           items.map((item, index) => {
             const isHighlighted = highlightedIndex === index;
+            const isSelected = selectedItem === item;
+            console.log('wat', isSelected);
             const style = {
               padding: 'var(--spacing0)',
+              fontWeight: isSelected ? 500 : 400,
               background: isHighlighted ? 'var(--color-gray-bg)' : '',
               boxShadow: isHighlighted
                 ? 'inset 0 1px var(--color-gray0), inset 0 -1px var(--color-gray0)'
@@ -134,7 +137,7 @@ export const Select = React.memo(function Select({
             };
             return (
               <li
-                className={isHighlighted ? 'text-gray-dark' : 'text-gray-dark'}
+                className="text-gray-dark no-select"
                 style={style}
                 key={`${item}${index}`}
                 {...getItemProps({item, index})}

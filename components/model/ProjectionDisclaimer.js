@@ -6,7 +6,6 @@ import {formatNumber, formatPercent} from '../../lib/format';
 
 export const ProjectionDisclaimer = () => {
   const {scenarioData} = useModelData();
-  console.log('distancinglevel', scenarioData);
   const {distancingDays, distancingLevel, maintain} = scenarioData;
 
   let distancing = null;

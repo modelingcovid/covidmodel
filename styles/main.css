@@ -108,6 +108,9 @@ text {
 .nowrap {
   white-space: nowrap;
 }
+.no-select {
+  user-select: none;
+}
 @media (min-width: 600px) {
   .section-heading {
     max-width: calc(var(--column-width) * 10);
