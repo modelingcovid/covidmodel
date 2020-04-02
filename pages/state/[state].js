@@ -262,8 +262,8 @@ export default function StatePage({data, states}) {
                   <p className="paragraph">
                     Note: we assign a higher probability of fatality in the case
                     the ICU capacity is over-shot. This can be seen in countries
-                    like Italy where the fatlity rate is substantially higher
-                    even controlling for the age distriubtion.
+                    like Italy where the fatality rate is substantially higher
+                    even controlling for the age distribution.
                   </p>
                   <OccupancyGraph
                     scenario={scenario}
