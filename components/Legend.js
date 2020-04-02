@@ -4,7 +4,7 @@ import {breakpoint, theme} from '../styles';
 
 import {useNearestData} from './graph';
 import {getDate} from '../lib/date';
-import {formatShortDate, formatNumber} from '../lib/format';
+import {formatShortDate, formatNumber, formatNA} from '../lib/format';
 
 const legendStyles = css`
   td {
@@ -16,6 +16,8 @@ const legendStyles = css`
     text-align: left;
     padding-left: 0;
   }
+`;
+const entryStyles = css`
   .entry {
     display: flex;
     align-items: baseline;
@@ -39,6 +41,38 @@ const legendStyles = css`
     font-size: ${theme.font.size.micro};
   }
 `;
+
+export const LegendEntry = ({
+  children,
+  format = formatNumber,
+  color,
+  label,
+  symbol = 'fill',
+  y,
+}) => {
+  const d = useNearestData();
+  if (!d) {
+    return null;
+  }
+
+  const isStroke = symbol === 'stroke';
+  const shadow = isStroke ? `2px ${color}` : `1px ${theme.color.background}`;
+
+  return (
+    <div className="entry">
+      <style jsx>{entryStyles}</style>
+      <style jsx>{`
+        .entry-symbol {
+          background-color: ${isStroke ? theme.color.background : color};
+          box-shadow: inset 0 0 0 ${shadow};
+        }
+      `}</style>
+      <div className="entry-label">{label}</div>
+      <div className="entry-symbol" />
+      <div className="entry-data">{format(y(d))}</div>
+    </div>
+  );
+};
 
 export const LegendRow = ({
   children,
@@ -68,31 +102,19 @@ export const LegendRow = ({
         )}
       </td>
       <td>
-        <div className="entry">
-          <div className="entry-label">Projected </div>
-          <div
-            className="entry-symbol"
-            style={{
-              backgroundColor: fill,
-              boxShadow: 'inset 0 0 0 1px white',
-            }}
-          />
-          <div className="entry-data">{format(percentile50)}</div>
-        </div>
+        <LegendEntry
+          label="Projected"
+          color={fill}
+          y={(d) => y(d).percentile50}
+        />
         {hasConfirmed && (
-          <div className="entry">
-            <div className="entry-label">Confirmed </div>
-            <div
-              className="entry-symbol"
-              style={{
-                backgroundColor: theme.color.background,
-                boxShadow: `inset 0 0 0 2px ${fill}`,
-              }}
-            />
-            <div className="entry-data">
-              {confirmed ? format(confirmed) : 'N/A'}
-            </div>
-          </div>
+          <LegendEntry
+            label="Confirmed"
+            color={fill}
+            symbol="stroke"
+            y={(d) => y(d).confirmed}
+            format={formatNA(formatNumber)}
+          />
         )}
       </td>
     </tr>
