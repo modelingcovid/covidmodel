@@ -5,7 +5,7 @@ import {formatNumber, formatPercent2} from '../lib/format';
 export const DemographicParameters = ({data}) => {
   return (
     <div>
-      <div className="section-heading">Demographic parameters</div>
+      <div className="section-heading margin-top-4">Demographic parameters</div>
       <p className="paragraph">
         Demographic parameters are calculated based on publicly available data
         on age distributions and hospital capacity. The hospitalization

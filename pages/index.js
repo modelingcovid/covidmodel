@@ -35,7 +35,7 @@ export default () => (
         and scenario to see forecasts.
       </p>
       <div>
-        <div className="section-heading">Changelog</div>
+        <div className="section-heading margin-top-4">Changelog</div>
         <p className="paragraph">
           <em>Coming soon…</em>
         </p>

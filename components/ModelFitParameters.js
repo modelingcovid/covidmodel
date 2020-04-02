@@ -7,7 +7,7 @@ import {Definition, Definitions} from './Definition';
 export const ModelFitParameters = ({data}) => {
   return (
     <div>
-      <div className="section-heading">Model-fit parameters</div>
+      <div className="section-heading margin-top-4">Model-fit parameters</div>
       <p className="paragraph">
         Most parameters{' '}
         <Link href="/about">

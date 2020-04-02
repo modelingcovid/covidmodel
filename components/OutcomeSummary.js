@@ -6,7 +6,7 @@ import {Definition, Definitions} from './Definition';
 export const OutcomeSummary = ({data}) => {
   return (
     <div>
-      <div className="section-heading">Outcome summary</div>
+      <div className="section-heading margin-top-4">Outcome summary</div>
       <p className="paragraph">
         Fatality rate and percent of population infected are the expected PCR
         confirmed rates with current levels of testing in the US. The infected
