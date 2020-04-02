@@ -1,15 +1,17 @@
 import * as React from 'react';
 import css from 'styled-jsx/css';
-import {declarations, tabletUp, properties} from './theme';
-import {px} from './util';
-
-const serializeDeclarations = (declarations) =>
-  Object.entries(declarations)
-    .map(([property, value]) => `${property}: ${value};`)
-    .join('\n');
+import {declarations, breakpoint, properties} from './theme';
+import {px, toRootRule} from './util';
 
 export const globalStyles = css.global`
-  :root {
-    ${serializeDeclarations(declarations)}
+  ${toRootRule(declarations)}
+  ${breakpoint.tabletUp} {
+    ${toRootRule(
+      px({
+        [properties.font.size.jumbo]: 64,
+        [properties.font.size.title]: 24,
+        [properties.font.size.subtitle]: 20,
+      })
+    )}
   }
 `;

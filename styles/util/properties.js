@@ -53,3 +53,12 @@ export const createCssPropertyConverter = ({
 };
 
 export const toCssProperties = createCssPropertyConverter();
+
+export const toCssDeclarations = (declarations) =>
+  Object.entries(declarations)
+    .map(([property, value]) => `${property}: ${value};`)
+    .join('\n');
+
+export const toRootRule = (declarations) => `:root {
+  ${toCssDeclarations(declarations)}
+}`;
