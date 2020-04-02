@@ -260,8 +260,8 @@ export default function StatePage({data, states}) {
                   <ProjectionDisclaimer />
                   <div className="section-heading">ICU Occupancy</div>
                   <p className="paragraph">
-                    Note: we assign a higher probability of fatality in the case
-                    the ICU capacity is over-shot. This can be seen in countries
+                    We assign a higher probability of fatality in the case the
+                    ICU capacity is over-shot. This can be seen in countries
                     like Italy where the fatality rate is substantially higher
                     even controlling for the age distribution.
                   </p>
