@@ -8,7 +8,6 @@ import Link from 'next/link';
 import {
   Controls,
   DemographicParameters,
-  DistancingGradient,
   DistancingGraph,
   HospitalCapacity,
   Layout,
@@ -26,6 +25,7 @@ import {
   Points,
 } from '../../components/graph';
 import {
+  DistancingGradient,
   ModelDataProvider,
   PercentileLegendRow,
   PercentileLine,

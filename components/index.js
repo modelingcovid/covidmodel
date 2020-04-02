@@ -1,7 +1,6 @@
 export * from './Controls';
 export * from './Definition';
 export * from './DemographicParameters';
-export * from './DistancingGradient';
 export * from './DistancingGraph';
 export * from './HospitalCapacity';
 export * from './Layout';

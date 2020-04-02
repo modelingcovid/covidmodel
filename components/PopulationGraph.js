@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Graph, HMarker, NearestMarker} from './graph';
-import {DistancingGradient} from './DistancingGradient';
+import {DistancingGradient} from './model';
 import {formatLargeNumber} from '../lib/format';
 
 const {createContext, useCallback, useMemo} = React;

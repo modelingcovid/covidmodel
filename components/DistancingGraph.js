@@ -8,7 +8,7 @@ import {
   Stop,
   WithGraphData,
 } from './graph';
-import {DistancingGradient} from './DistancingGradient';
+import {DistancingGradient} from './model';
 import {WithComponentId} from './util';
 import {today} from '../lib/date';
 import {formatNumber2, formatPercent} from '../lib/format';
