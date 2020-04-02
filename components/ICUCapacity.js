@@ -3,7 +3,7 @@ import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
 import {Definition, Grid} from './content';
 import {Legend, Points} from './graph';
-import {Bed, Lungs} from './icon';
+import {Bed, Lungs, Poll} from './icon';
 import {
   PercentileLegendRow,
   ProjectionDisclaimer,
@@ -14,8 +14,11 @@ import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 
 export const ICUCapacity = ({width, height}) => {
-  const {model, stateName, summary} = useModelData();
-  const {icuBeds, ventilators} = model;
+  const {
+    model: {icuBeds, ventilators, pC},
+    stateName,
+    summary,
+  } = useModelData();
   const {dateICUOverCapacity: capacityDate} = summary;
 
   const heading = capacityDate ? (
@@ -52,6 +55,11 @@ export const ICUCapacity = ({width, height}) => {
           icon={Lungs}
           value={formatNumber(ventilators)}
           label="ventilators"
+        />
+        <Definition
+          icon={Poll}
+          value={formatPercent1(pC)}
+          label="probability a person with COVID-19 needs ICU care"
         />
       </Grid>
       <OccupancyGraph

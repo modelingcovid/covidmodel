@@ -10,4 +10,5 @@ export * from './HospitalUser';
 export * from './Lungs';
 export * from './People';
 export * from './PeopleArrows';
+export * from './Poll';
 export * from './SVG';

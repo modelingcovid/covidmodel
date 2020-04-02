@@ -48,22 +48,6 @@ export function ModelInputs({height, width}) {
             value={formatNumber(model.population)}
             label="total population"
           />
-          <Definition
-            value={formatNumber(model.icuBeds)}
-            label="available ICU beds"
-          />
-          <Definition
-            value={formatPercent2(model.pS)}
-            label="probability of not needing hospitalization"
-          />
-          <Definition
-            value={formatPercent2(model.pH)}
-            label="probability of needing hospitalization without ICU care"
-          />
-          <Definition
-            value={formatPercent2(model.pC)}
-            label="probability of needing ICU care"
-          />
         </Grid>
       </div>
       <div className="margin-top-4">

@@ -3,7 +3,7 @@ import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
 import {Definition, Grid} from './content';
 import {Legend, Points} from './graph';
-import {Bed, HospitalUser} from './icon';
+import {Bed, HospitalUser, Poll} from './icon';
 import {
   PercentileLegendRow,
   ProjectionDisclaimer,
@@ -15,15 +15,18 @@ const getCurrentlyReportedHospitalized = ({currentlyReportedHospitalized}) =>
   currentlyReportedHospitalized;
 
 export const HospitalCapacity = ({width, height}) => {
-  const {model, stateName, summary} = useModelData();
-  const {hospitalCapacity} = model;
-  const {dateHospitalsOverCapacity} = summary;
+  const {
+    model: {bedUtilization, hospitalCapacity, pC, pH, staffedBeds},
+    stateName,
+    summary,
+  } = useModelData();
+  const {dateHospitalsOverCapacity: capacityDate} = summary;
 
-  const hospitalCapacityHeading = dateHospitalsOverCapacity ? (
+  const hospitalCapacityHeading = capacityDate ? (
     <>
       {stateName} will{' '}
       <span className="text-red">exceed hospital capacity</span> on{' '}
-      {formatDate(new Date(dateHospitalsOverCapacity))}
+      {formatDate(new Date(capacityDate))}
     </>
   ) : (
     <>
@@ -46,13 +49,18 @@ export const HospitalCapacity = ({width, height}) => {
       <Grid className="margin-bottom-1">
         <Definition
           icon={Bed}
-          value={formatNumber(model.staffedBeds)}
+          value={formatNumber(staffedBeds)}
           label="available hospital beds"
         />
         <Definition
           icon={HospitalUser}
-          value={formatPercent1(model.bedUtilization)}
+          value={formatPercent1(bedUtilization)}
           label="typical occupancy rate"
+        />
+        <Definition
+          icon={Poll}
+          value={formatPercent1(pC + pH)}
+          label="probability a person with COVID-19 needs hospitalization"
         />
       </Grid>
       <OccupancyGraph
