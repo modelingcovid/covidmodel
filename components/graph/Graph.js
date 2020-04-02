@@ -11,6 +11,7 @@ import {NearestOverlay} from './NearestOverlay';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
 import {useSetNearestData} from './useNearestData';
+import {useComponentId} from '../util';
 import {getDate} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 
@@ -148,6 +149,8 @@ export const Graph = React.memo(function Graph({
     [tickFormat, xLabel, yTickCount]
   );
 
+  const clipPathId = useComponentId('graphClipPath');
+
   return (
     <GraphDataProvider
       data={data}
@@ -156,6 +159,7 @@ export const Graph = React.memo(function Graph({
       yScale={yScale}
       xMax={xMax}
       yMax={yMax}
+      clipPath={`url(#${clipPathId})`}
     >
       <style jsx>{`
         .graph {
@@ -185,6 +189,11 @@ export const Graph = React.memo(function Graph({
             left={margin.left + 0.5}
             top={margin.top + 0.5}
           >
+            <defs>
+              <clipPath id={clipPathId}>
+                <rect x="0" y="0" width={xMax} height={yMax} />
+              </clipPath>
+            </defs>
             <TodayMarker />
             <NearestMarker />
             <GridRows

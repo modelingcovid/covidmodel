@@ -20,7 +20,7 @@ export const Line = ({
   dot = true,
   ...remaining
 }) => {
-  const {data, x, xMax, xScale, yScale} = useGraphData();
+  const {clipPath, data, x, xMax, xScale, yScale} = useGraphData();
   const xMaxPrev = usePreviousValue(xMax);
 
   const xFn = useCallback((d) => xScale(x(d)), [x, xScale]);
@@ -30,6 +30,7 @@ export const Line = ({
     <>
       <LinePath
         {...remaining}
+        clip-path={clipPath}
         data={data}
         x={xFn}
         y={yFn}

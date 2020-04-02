@@ -7,10 +7,19 @@ import {useGraphData} from './useGraphData';
 const {useCallback} = React;
 
 export const Area = ({curve = curveCatmullRom, y0, y1, ...remaining}) => {
-  const {data, x, xScale, yScale} = useGraphData();
+  const {clipPath, data, x, xScale, yScale} = useGraphData();
   const xFn = useCallback((d) => xScale(x(d)), [x, xScale]);
   const y0Fn = useCallback((d) => yScale(y0(d)), [y0, yScale]);
   const y1Fn = useCallback((d) => yScale(y1(d)), [y1, yScale]);
 
-  return <VxArea {...remaining} data={data} x={xFn} y0={y0Fn} y1={y1Fn} />;
+  return (
+    <VxArea
+      {...remaining}
+      clip-path={clipPath}
+      data={data}
+      x={xFn}
+      y0={y0Fn}
+      y1={y1Fn}
+    />
+  );
 };

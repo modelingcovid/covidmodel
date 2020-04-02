@@ -6,6 +6,7 @@ const GraphDataContext = createContext(null);
 
 export const GraphDataProvider = ({
   children,
+  clipPath,
   data,
   x,
   xScale,
@@ -13,14 +14,10 @@ export const GraphDataProvider = ({
   xMax,
   yMax,
 }) => {
-  const context = useMemo(() => ({data, x, xScale, yScale, xMax, yMax}), [
-    data,
-    x,
-    xScale,
-    yScale,
-    xMax,
-    yMax,
-  ]);
+  const context = useMemo(
+    () => ({data, clipPath, x, xScale, yScale, xMax, yMax}),
+    [data, clipPath, x, xScale, yScale, xMax, yMax]
+  );
 
   return (
     <GraphDataContext.Provider value={context}>

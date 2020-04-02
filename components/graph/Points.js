@@ -5,7 +5,7 @@ import {useNearestData} from './useNearestData';
 const {useCallback} = React;
 
 const Point = ({d, y, fill = 'transparent', r = 1.25, ...remaining}) => {
-  const {x, xScale, yScale} = useGraphData();
+  const {clipPath, x, xScale, yScale} = useGraphData();
   const yVal = y(d);
   // Only show points with data
   if (!yVal) {
@@ -14,6 +14,7 @@ const Point = ({d, y, fill = 'transparent', r = 1.25, ...remaining}) => {
   return (
     <circle
       {...remaining}
+      clip-path={clipPath}
       fill={fill}
       r={r}
       cx={xScale(x(d))}
