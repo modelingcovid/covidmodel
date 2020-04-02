@@ -6,7 +6,7 @@ export const Notice = ({children}) => (
   <div className="notice">
     <style jsx>{`
       .notice {
-        background: var(--color-red-02);
+        background: var(--color-red2);
         padding: 8px 0;
       }
       .content {

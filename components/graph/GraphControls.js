@@ -16,15 +16,15 @@ export const GraphControls = ({scale, setScale}) => (
       }
       a {
         display: block;
-        margin-left: var(--spacing-01);
-        color: var(--color-gray-01);
+        margin-left: var(--spacing1);
+        color: var(--color-gray1);
         transition: 200ms;
       }
       a.active {
-        color: var(--color-gray-03);
+        color: var(--color-gray3);
       }
       a:hover {
-        color: var(--color-gray-04);
+        color: var(--color-gray4);
       }
     `}</style>
     {scales.map((s) => (

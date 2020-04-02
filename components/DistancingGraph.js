@@ -38,7 +38,7 @@ export const DistancingGraph = ({
     dx: '-4px',
     dy: '-4px',
     textAnchor: 'end',
-    fill: 'var(--color-gray-02)',
+    fill: 'var(--color-gray2)',
   });
 
   return (
@@ -68,8 +68,8 @@ export const DistancingGraph = ({
                 {(gradientId) => (
                   <>
                     <LinearGradient direction="right" id={gradientId}>
-                      <Stop offset={today} stopColor="var(--color-blue-02)" />
-                      <Stop offset={today} stopColor="var(--color-yellow-02)" />
+                      <Stop offset={today} stopColor="var(--color-blue2)" />
+                      <Stop offset={today} stopColor="var(--color-yellow2)" />
                     </LinearGradient>
                     <Line
                       y={y}
@@ -87,7 +87,7 @@ export const DistancingGraph = ({
                 tickLabelProps={endTickLabelProps}
                 tickLength={0} // positions text at the axis
                 hideTicks
-                stroke="var(--color-gray-01)"
+                stroke="var(--color-gray1)"
                 strokeWidth={1}
               />
             </>

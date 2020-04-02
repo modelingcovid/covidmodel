@@ -26,7 +26,7 @@ const valueTickLabelProps = () => ({
   dx: '4px',
   dy: '-4px',
   textAnchor: 'start',
-  fill: 'var(--color-gray-02)',
+  fill: 'var(--color-gray2)',
   paintOrder: 'stroke',
   stroke: 'var(--color-background)',
   strokeWidth: 5,
@@ -123,7 +123,7 @@ export const Graph = React.memo(function Graph({
       const props = {
         textAnchor: 'middle',
         dy: '4px',
-        fill: 'var(--color-gray-03)',
+        fill: 'var(--color-gray3)',
       };
       if (i === 0) {
         props.textAnchor = 'start';
@@ -185,20 +185,20 @@ export const Graph = React.memo(function Graph({
               scale={yScale}
               width={xMax}
               height={yMax}
-              stroke="var(--color-gray-00)"
+              stroke="var(--color-gray0)"
             />
             <GridColumns
               scale={xScale}
               width={xMax}
               height={yMax}
-              stroke="var(--color-gray-00)"
+              stroke="var(--color-gray0)"
             />
             <line
               x1={xMax}
               x2={xMax}
               y1={0}
               y2={yMax}
-              stroke="var(--color-gray-00)"
+              stroke="var(--color-gray0)"
             />
             {children}
             <AxisBottom />

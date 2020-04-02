@@ -60,7 +60,7 @@ export const OccupancyGraph = ({
       <HMarker
         anchor="end"
         value={cutoff}
-        stroke="var(--color-red-01)"
+        stroke="var(--color-red1)"
         label={cutoffLabel}
         labelStroke="var(--color-background)"
         labelStrokeWidth="5"
@@ -75,11 +75,11 @@ export const OccupancyGraph = ({
             <LinearGradient
               direction="up"
               id={gradientId}
-              from="var(--color-blue-02)"
-              to="var(--color-red-01)"
+              from="var(--color-blue2)"
+              to="var(--color-red1)"
             >
-              <Stop offset={cutoff} stopColor="var(--color-blue-02)" />
-              <Stop offset={cutoff} stopColor="var(--color-red-01)" />
+              <Stop offset={cutoff} stopColor="var(--color-blue2)" />
+              <Stop offset={cutoff} stopColor="var(--color-red1)" />
             </LinearGradient>
             <PercentileLine y={y} color={`url(#${gradientId})`} gradient />
           </>

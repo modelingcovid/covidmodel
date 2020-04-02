@@ -81,7 +81,7 @@ export const Select = React.memo(function Select({
         }
         ul {
           position: absolute;
-          margin-top: var(--spacing-00);
+          margin-top: var(--spacing0);
           max-height: 50vh;
           min-width: 180px;
           overflow-y: auto;
@@ -96,8 +96,8 @@ export const Select = React.memo(function Select({
         }
         @media (max-width: 400px) {
           ul {
-            left: var(--spacing-00);
-            right: var(--spacing-00);
+            left: var(--spacing0);
+            right: var(--spacing0);
             max-width: 100vw;
           }
         }
@@ -124,10 +124,10 @@ export const Select = React.memo(function Select({
           items.map((item, index) => {
             const isHighlighted = highlightedIndex === index;
             const style = {
-              padding: 'var(--spacing-00)',
+              padding: 'var(--spacing0)',
               background: isHighlighted ? 'var(--color-gray-bg)' : '',
               boxShadow: isHighlighted
-                ? 'inset 0 1px var(--color-gray-00), inset 0 -1px var(--color-gray-00)'
+                ? 'inset 0 1px var(--color-gray0), inset 0 -1px var(--color-gray0)'
                 : '',
             };
             return (

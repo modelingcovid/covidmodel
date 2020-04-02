@@ -7,10 +7,10 @@ export const Layout = ({children}) => (
   <div className="layout">
     <style jsx>{`
       .layout {
-        padding-bottom: var(--spacing-04);
+        padding-bottom: var(--spacing4);
       }
       header {
-        padding: var(--spacing-01) 0;
+        padding: var(--spacing1) 0;
         display: flex;
         justify-content: space-between;
       }
@@ -21,7 +21,7 @@ export const Layout = ({children}) => (
         font-weight: 600;
       }
       .link {
-        margin-left: var(--spacing-01);
+        margin-left: var(--spacing1);
       }
       .link:first-of-type {
         margin-left: 0;
@@ -31,7 +31,7 @@ export const Layout = ({children}) => (
           flex-direction: column;
         }
         .title {
-          padding-bottom: var(--spacing-01);
+          padding-bottom: var(--spacing1);
         }
       }
     `}</style>

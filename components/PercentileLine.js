@@ -18,7 +18,7 @@ const get90 = (d) => d.percentile90;
 
 export const PercentileLine = ({
   y,
-  color = 'var(--color-blue-02)',
+  color = 'var(--color-blue2)',
   gradient = false,
 }) => {
   const getConfirmedY = useCallback((d) => getConfirmed(y(d)), [y]);

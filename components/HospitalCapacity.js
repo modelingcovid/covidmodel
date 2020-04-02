@@ -62,7 +62,7 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         <LegendRow
           y={getCurrentlyReportedHospitalized}
           format={formatNumber}
-          fill="var(--color-blue-02)"
+          fill="var(--color-blue2)"
           label="Currently hospitalized"
         />
       </Legend>

@@ -38,8 +38,8 @@ export const {values: theme, declarations, properties} = toCssProperties({
   column: {
     count: 12,
     // TODO(koop): Define this in relation to other variables
-    size: `calc(
-      (var(--max-width) - var(--gutter-width) * 2) / var(--column-count)
+    width: `calc(
+      (var(--maxWidth) - var(--gutterWidth) * 2) / var(--column-count)
     )`,
   },
   maxWidth: '100vw',

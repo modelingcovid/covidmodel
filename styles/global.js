@@ -5,6 +5,7 @@ import {px, toRootRule} from './util';
 
 export const globalStyles = css.global`
   ${toRootRule(declarations)}
+
   ${breakpoint.tabletUp} {
     ${toRootRule(
       px({
@@ -13,5 +14,10 @@ export const globalStyles = css.global`
         [properties.font.size.subtitle]: 20,
       })
     )}
+  }
+  @media (min-width: 896px) {
+    :root {
+      ${properties.maxWidth}: 896px;
+    }
   }
 `;

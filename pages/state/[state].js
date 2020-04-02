@@ -95,12 +95,12 @@ export default function StatePage({data, states}) {
             box-shadow: 0 2px rgba(0, 0, 0, 0.04);
           }
           .controls {
-            padding: var(--spacing-01) 0;
+            padding: var(--spacing1) 0;
           }
           .sticky-inlay {
             background: transparent;
             z-index: 1;
-            margin-bottom: var(--spacing-02);
+            margin-bottom: var(--spacing2);
           }
           .text-jumbo {
             padding-top: 96px;
@@ -191,35 +191,35 @@ export default function StatePage({data, states}) {
                 >
                   <PercentileLine
                     y={getCurrentlyInfected}
-                    color="var(--color-blue-02)"
+                    color="var(--color-blue2)"
                   />
                   <PercentileLine
                     y={getCurrentlyInfectious}
-                    color="var(--color-magenta-01)"
+                    color="var(--color-magenta1)"
                   />
                   <PercentileLine
                     y={getCumulativePcr}
-                    color="var(--color-yellow-02)"
+                    color="var(--color-yellow2)"
                   />
                 </PopulationGraph>
                 <Legend>
                   <LegendRow
                     y={getCurrentlyInfected}
-                    fill="var(--color-blue-02)"
+                    fill="var(--color-blue2)"
                     label="Currently infected"
                   >
                     People who have COVID-19 but cannot yet infect others.
                   </LegendRow>
                   <LegendRow
                     y={getCurrentlyInfectious}
-                    fill="var(--color-magenta-01)"
+                    fill="var(--color-magenta1)"
                     label="Currently infectious"
                   >
                     People who have COVID-19 and can infect others.
                   </LegendRow>
                   <LegendRow
                     y={getCumulativePcr}
-                    fill="var(--color-yellow-02)"
+                    fill="var(--color-yellow2)"
                     label="Cumulative PCR"
                     hasConfirmed
                   >
@@ -263,7 +263,7 @@ export default function StatePage({data, states}) {
                 <Legend>
                   <LegendRow
                     y={getCurrentlyCritical}
-                    fill="var(--color-blue-02)"
+                    fill="var(--color-blue2)"
                     label="Currently in need of ICU care"
                   />
                 </Legend>

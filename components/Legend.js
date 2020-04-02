@@ -108,13 +108,13 @@ export const Legend = ({children}) => {
     <div>
       <style jsx>{`
         div {
-          margin-top: var(--spacing-01);
+          margin-top: var(--spacing1);
         }
         @media (min-width: 600px) {
           div {
-            padding-left: calc(var(--column) / 2);
-            box-shadow: inset 1px 0 0 var(--color-gray-00);
-            max-width: calc(var(--column) * 9);
+            padding-left: calc(var(--column-width) / 2);
+            box-shadow: inset 1px 0 0 var(--color-gray0);
+            max-width: calc(var(--column-width) * 9);
           }
         }
         table {
@@ -122,7 +122,7 @@ export const Legend = ({children}) => {
           width: 100%;
         }
         th {
-          padding-left: var(--spacing-01);
+          padding-left: var(--spacing1);
           font-weight: 400;
           text-align: right;
           vertical-align: bottom;

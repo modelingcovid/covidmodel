@@ -23,7 +23,7 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
     >
       <PercentileLine
         y={getCumulativeDeaths}
-        color="var(--color-blue-02)"
+        color="var(--color-blue2)"
         gradient
       />
     </PopulationGraph>
@@ -31,7 +31,7 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
       <LegendRow
         y={getCumulativeDeaths}
         format={formatNumber}
-        fill="var(--color-blue-02)"
+        fill="var(--color-blue2)"
         label="Cumulative deaths"
       />
     </Legend>
