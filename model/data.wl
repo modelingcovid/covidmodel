@@ -105,6 +105,12 @@ stateICUData=<|"icuBeds"->Sum[If[#[[i]]["NUM_ICU_BEDS"] == "",0,#[[i]]["NUM_ICU_
 "bedUtilization"->Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,#[[i]]["BED_UTILIZATION"]],{i,1,Length[#]}]/Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,1],{i,1,Length[#]}]
 |>&/@stateICURawData; //Quiet
 
+(* State percent of positive tests *)
+statePositiveTestRawData=Import[dataFile["positive-test.csv"]];
+statePositiveTestRawDataHeader=statePositiveTestRawData[[1]];
+statePositiveTestRawDataBody=statePositiveTestRawData[[2;;]];
+statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]},First]&/@(Thread[statePositiveTestRawDataHeader->#]&/@statePositiveTestRawDataBody//Map[Association]);
+
 (* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
 stateDistancingRawData=Import[dataFile["state-distancing.csv"]];
 stateDistancingRawDataHeader=stateDistancingRawData[[1]];
@@ -112,7 +118,6 @@ stateDistancingRawDataBody=stateDistancingRawData[[2;;]];
 reversePercentages[kv_]:=Association[KeyValueMap[
 #1->(1-#2/100)
 &,kv]]
-
 (* so we can keep the sheet clean state is actually day and we import the transpose *)
 stateDistancingParsedData=
 Merge[{reversePercentages[KeyDrop[#,"State"]],Association[{"day"->#["State"]}]},First]&/@(Thread[stateDistancingRawDataHeader->#]&/@stateDistancingRawDataBody//Map[Association]);
@@ -147,6 +152,35 @@ interpMap=Map[AssociationThread[scenarioIds,#]&,AssociationThread[statesWith50Ca
 stateDistancing[state_,scenarioId_,t_]:=interpMap[state][scenarioId]/.{ta->t}
 
 
-
-
+maxPosTestDay=Max[#["day"]&/@statePositiveTestData];
+statesWithRates=DeleteCases[DeleteCases[DeleteCases[DeleteCases[DeleteCases[Keys[Select[statePositiveTestData,#["day"]==maxPosTestDay&][[1]]][[;;25]],"MS"],"SC"],"MD"],"AZ"],"OH"];
+avgLastThreeDays=KeyDrop[Merge[Select[statePositiveTestData,#["day"]==maxPosTestDay&],If[Length[Select[#,#!=""&]]!=0,Mean[Select[#,#!=""&]],Null]&],"day"];
+removeZeros[association_]:=Module[{inv},
+   inv = association // Normal // GroupBy[Last -> First];
+   inv[""]
+]
+stripOthers[row_, state_]:=Module[{},
+   DeleteCases[DeleteCases[Keys[row],state],"day"]
+];
+evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarliestDay, onlyThisState, valueOnLatestDay, filledFuturePositive, filledPastZeroPositive, fullPostTestData, maxDay, joinedData},
+   If[MemberQ[statesWithRates,state],
+   thisStateData=Select[statePositiveTestData,#[state]!=""&];
+   onlyThisState=KeyDrop[#,stripOthers[#,state]]&/@thisStateData;
+   rollingAvg=MovingMap[Mean, {#["day"],#[state]/100}&/@onlyThisState,{3,Right}];
+   
+   maxDay=Max[#[[1]]&/@rollingAvg];
+   valueOnLatestDay=Max[#[[2]]&/@Select[rollingAvg,#[[1]]==maxDay&]];
+   filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,365}];
+  
+   minDay=Min[#[[1]]&/@rollingAvg];
+   valueOnEarliestDay=Min[#[[2]]&/@Select[rollingAvg,#[[1]]==minDay&]];
+  
+   filledPastZeroPositive={#-1, valueOnEarliestDay}&/@Range[Min[#["day"]&/@statePositiveTestData]+2];
+  
+   fullPostTestData=Join[filledPastZeroPositive,rollingAvg,filledFuturePositive];
+   Interpolation[fullPostTestData],
+   
+   Interpolation[{{0,0.15},{365,0.15}},InterpolationOrder->1]]
+];
+posInterpMap=Association[{#->evalStatePosTest[#]}&/@statesWith50CasesAnd5Deaths];
 
