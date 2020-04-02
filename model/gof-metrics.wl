@@ -3,41 +3,41 @@
 rmsRelativeError[residuals_,longData_,mask_:{}]:=If[
 	Length[mask]==0,
 	Mean[(residuals/longData[[All,3]])^2]^.5,
-	RmsRelativeError[
+	rmsRelativeError[
 		Pick[residuals,mask],
 		Pick[longData,mask]]];
 meanRelativeError[residuals_,longData_,mask_:{}]:=If[
 	Length[mask]==0,
 	Mean[residuals/longData[[All,3]]],
-	SystematicRelativeError[
+	meanRelativeError[
 		Pick[residuals,mask],
 		Pick[longData,mask]]];
 chiSquared[residuals_,longData_,mask_:{}]:=If[
 	Length[mask]==0,
 	Mean[residuals^2/longData[[All,3]]],
-	RSquared[
+	chiSquared[
 		Pick[residuals,mask],
 		Pick[longData,mask]]];
 rSquared[residuals_,longData_,mask_:{}]:=If[
 	Length[mask]==0,
 	Total[residuals^2]/Total[(#-Mean[#])^2]&[longData[[All,3]]],
-	RSquared[
+	rSquared[
 		Pick[residuals,mask],
 		Pick[longData,mask]]];
 
 
-goodnessOfFitMetrics[residuals_,longData_]:=Module[{RmsRelativeError,MeanRelativeError,ChiSquared,RSquared,deathsMask,positivePcrMask},
+goodnessOfFitMetrics[residuals_,longData_]:=Module[{deathsMask,positivePcrMask},
 	deathsMask=(#[[1]]==1)&/@longData;
 	positivePcrMask=(#[[1]]==2)&/@longData;
 	<|
-		"chiSquared"->chiSquared[fit["FitResiduals"],longData],
-		"rmsRelativeError"->rmsRelativeError[fit["FitResiduals"],longData],
-		"rmsRelativeErrorDeaths"->rmsRelativeError[fit["FitResiduals"],longData,deathsMask],
-		"rmsRelativeErrorPcr"->rmsRelativeError[fit["FitResiduals"],longData,positivePcrMask],
-		"meanRelativeErrorDeaths"->meanRelativeError[fit["FitResiduals"],longData,deathsMask],
-		"meanRelativeErrorPcr"->meanRelativeError[fit["FitResiduals"],longData,positivePcrMask],
-		"rSquaredDeaths"->rSquared[fit["FitResiduals"],longData,deathsMask],
-		"rSquaredPcr"->rSquared[fit["FitResiduals"],longData,positivePcrMask]
+		"chiSquared"->chiSquared[residuals,longData],
+		"rmsRelativeError"->rmsRelativeError[residuals,longData],
+		"rmsRelativeErrorDeaths"->rmsRelativeError[residuals,longData,deathsMask],
+		"rmsRelativeErrorPcr"->rmsRelativeError[residuals,longData,positivePcrMask],
+		"meanRelativeErrorDeaths"->meanRelativeError[residuals,longData,deathsMask],
+		"meanRelativeErrorPcr"->meanRelativeError[residuals,longData,positivePcrMask],
+		"rSquaredDeaths"->rSquared[residuals,longData,deathsMask],
+		"rSquaredPcr"->rSquared[residuals,longData,positivePcrMask]
 	|>
 ];
 
@@ -61,6 +61,23 @@ exportAllStatesGoodnessOfFitMetricsCsv[file_,allStateData_]:=Module[{columnOrder
 ]
 
 
-exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{columnOrder,gofAssociationToArray},
-
+exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{data},
+	data=MapIndexed[
+		Join[#2,#1]&,
+		Sort[KeyValueMap[{
+				#1,
+				Around[
+					#2["goodnessOfFitMetrics"]["meanRelativeErrorDeaths"],
+					#2["goodnessOfFitMetrics"]["rmsRelativeErrorDeaths"]],
+				Around[
+					#2["goodnessOfFitMetrics"]["meanRelativeErrorPcr"],
+					#2["goodnessOfFitMetrics"]["rmsRelativeErrorPcr"]]}&,
+			allStateData]]];
+	Export[
+		file,
+		Show[
+			ListPlot[data[[All,{1,3}]]-.1,Ticks->{data[[All,{1,2}]],Automatic},PlotRange->{{.5,Length[data]+.5},{-1.2,1.2}},PlotStyle->{RGBColor["#88bbfe"]}],
+			ListPlot[data[[All,{1,4}]]+.1,PlotStyle->{RGBColor["#aff1b6"]}]],
+		"SVG"
+	];
 ]

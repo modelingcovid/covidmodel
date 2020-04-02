@@ -658,8 +658,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,lo
 	(* apply a week over week weight reduction, i.e. 0.75 indicates that a data point at day 0 is weighted 75% as strongly as a data point at day 7. *)
 	(* assume each datapoint otherwise has a constant relative variance (Poissan) for both death and PCR rates. *)
 	(* the constant factor of the population shouldn't matter, but the fit chokes if the weights are too small *)
-	weekOverWeekWeight = .75
+	weekOverWeekWeight=.75;
 	dataWeights=(weekOverWeekWeight^(#[[1]]/7)(params["population"]#[[3]])^-1)&/@longData;
+	dataWeights=(1)&/@longData;
 
 	(* Switch to nminimize, if we run into issues with the multi-fit not respecting weights *)
 	(* confidence interval we get from doing the log needs to be back-transformed *)
@@ -682,16 +683,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{distance,sol,params,lo
 	standardErrors=Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime},
 	     fit["ParameterErrors",
 	     ConfidenceLevel->0.97]]];
-<<<<<<< HEAD
-	gofMetrics=goodnessOfFitMetrics[fit["Residuals"],longData];
-	
-	sims=generateSimulations[100,fitParams,standardErrors];
 
-=======
-  
->>>>>>> speed
+	gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData];
+
 	(* do a monte carlo for each scenario *)
-   Merge[{
+	Merge[{
       <|"scenarios"->
          Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
          <|"params"->params,
@@ -714,8 +710,18 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
   Print["generating data for " <> state];
   evaluateState[state, simulationsPerCombo]
 ];
-GenerateModelExport[simulationsPerCombo_:1000, states_:distancingStates] := Module[{},
-  Parallelize[Map[Export["public/json/"<>#<>".json",evaluateStateAndPrint[#, simulationsPerCombo]]&,states]]
+GenerateModelExport[simulationsPerCombo_:1000, states_:distancingStates] := Module[{loopBody,allStatesData},
+	loopBody[state_]:=Module[{stateData},
+		stateData=evaluateStateAndPrint[state, simulationsPerCombo];
+		Export["public/json/"<>state<>".json",stateData];
+		stateData
+	];
+	
+	allStatesData=Parallelize[Map[loopBody,states]];
+	
+(*	exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStateData];
+	exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStateData];*)
+	allStatesData
 ]
 
 
