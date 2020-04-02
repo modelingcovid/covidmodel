@@ -9,8 +9,6 @@ export * from './MDXComponents';
 export * from './ModelFitParameters';
 export * from './OccupancyGraph';
 export * from './OutcomeSummary';
-export * from './PercentileLegendRow';
-export * from './PercentileLine';
 export * from './PopulationGraph';
 export * from './ProjectedDeaths';
 export * from './Section';

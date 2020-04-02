@@ -15,8 +15,6 @@ import {
   ModelFitParameters,
   OccupancyGraph,
   OutcomeSummary,
-  PercentileLegendRow,
-  PercentileLine,
   PopulationGraph,
   ProjectedDeaths,
   Section,
@@ -27,7 +25,11 @@ import {
   NearestDataProvider,
   Points,
 } from '../../components/graph';
-import {ModelDataProvider} from '../../components/model';
+import {
+  ModelDataProvider,
+  PercentileLegendRow,
+  PercentileLine,
+} from '../../components/model';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate, today} from '../../lib/date';

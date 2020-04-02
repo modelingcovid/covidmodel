@@ -7,9 +7,8 @@ import {
   LinearGradient,
   Stop,
 } from './graph';
-import {useModelData} from './model';
+import {PercentileLine, useModelData} from './model';
 import {DistancingGradient} from './DistancingGradient';
-import {PercentileLine} from './PercentileLine';
 import {WithComponentId} from './util';
 
 const {useMemo} = React;

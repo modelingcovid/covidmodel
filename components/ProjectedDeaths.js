@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Legend} from './graph';
-import {PercentileLegendRow} from './PercentileLegendRow';
-import {PercentileLine} from './PercentileLine';
+import {PercentileLegendRow, PercentileLine} from './model';
 import {PopulationGraph} from './PopulationGraph';
 import {getDate} from '../lib/date';
 

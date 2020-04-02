@@ -2,8 +2,7 @@ import * as React from 'react';
 import {OccupancyGraph} from './OccupancyGraph';
 import {InlineData} from './content';
 import {Legend, Points} from './graph';
-import {useModelData} from './model';
-import {PercentileLegendRow} from './PercentileLegendRow';
+import {PercentileLegendRow, useModelData} from './model';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 
 const getCurrentlyReportedHospitalized = ({currentlyReportedHospitalized}) =>
