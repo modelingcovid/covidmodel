@@ -6,7 +6,7 @@ import {
   ProjectionDisclaimer,
   useModelData,
 } from './modeling';
-import {PopulationGraph} from './PopulationGraph';
+import {PopulationGraph} from './configured';
 import {formatDate, formatNumber} from '../lib/format';
 import {getLastDate} from '../lib/date';
 

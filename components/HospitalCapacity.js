@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {OccupancyGraph} from './OccupancyGraph';
+import {OccupancyGraph} from './configured';
 import {Definition, Grid} from './content';
 import {Legend, Points} from './graph';
 import {Bed, HospitalUser} from './icon';

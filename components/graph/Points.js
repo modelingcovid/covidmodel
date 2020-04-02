@@ -14,7 +14,7 @@ const Point = ({d, y, fill = 'transparent', r = 1.25, ...remaining}) => {
   return (
     <circle
       {...remaining}
-      clip-path={clipPath}
+      clipPath={clipPath}
       fill={fill}
       r={r}
       cx={xScale(x(d))}

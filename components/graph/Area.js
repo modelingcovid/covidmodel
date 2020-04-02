@@ -15,7 +15,7 @@ export const Area = ({curve = curveCatmullRom, y0, y1, ...remaining}) => {
   return (
     <VxArea
       {...remaining}
-      clip-path={clipPath}
+      clipPath={clipPath}
       data={data}
       x={xFn}
       y0={y0Fn}

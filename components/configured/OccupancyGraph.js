@@ -6,9 +6,9 @@ import {
   HMarker,
   LinearGradient,
   Stop,
-} from './graph';
-import {DistancingGradient, PercentileLine, useModelData} from './modeling';
-import {WithComponentId} from './util';
+} from '../graph';
+import {DistancingGradient, PercentileLine, useModelData} from '../modeling';
+import {WithComponentId} from '../util';
 
 const {useMemo} = React;
 

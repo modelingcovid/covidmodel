@@ -30,7 +30,7 @@ export const Line = ({
     <>
       <LinePath
         {...remaining}
-        clip-path={clipPath}
+        clipPath={clipPath}
         data={data}
         x={xFn}
         y={yFn}

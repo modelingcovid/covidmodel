@@ -8,16 +8,18 @@ import Link from 'next/link';
 import {
   Controls,
   DemographicParameters,
-  DistancingGraph,
   HospitalCapacity,
   Layout,
   ModelFitParameters,
-  OccupancyGraph,
   OutcomeSummary,
-  PopulationGraph,
   ProjectedDeaths,
   Section,
 } from '../../components';
+import {
+  DistancingGraph,
+  OccupancyGraph,
+  PopulationGraph,
+} from '../../components/configured';
 import {
   Legend,
   Line,

@@ -7,11 +7,11 @@ import {
   LinearGradient,
   Stop,
   WithGraphData,
-} from './graph';
-import {DistancingGradient} from './modeling';
-import {WithComponentId} from './util';
-import {today} from '../lib/date';
-import {formatNumber2, formatPercent} from '../lib/format';
+} from '../graph';
+import {DistancingGradient} from '../modeling';
+import {WithComponentId} from '../util';
+import {today} from '../../lib/date';
+import {formatNumber2, formatPercent} from '../../lib/format';
 
 const formatPercentInverted = (n) => formatPercent(1 - n);
 
