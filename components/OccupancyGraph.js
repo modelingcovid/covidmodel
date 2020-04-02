@@ -7,6 +7,7 @@ import {
   LinearGradient,
   Stop,
 } from './graph';
+import {useModelData} from './model';
 import {DistancingGradient} from './DistancingGradient';
 import {PercentileLine} from './PercentileLine';
 import {WithComponentId} from './util';
@@ -15,9 +16,6 @@ const {useMemo} = React;
 
 export const OccupancyGraph = ({
   children,
-  data,
-  scenario,
-  x,
   y,
   cutoff = 0,
   cutoffLabel = '',
@@ -26,14 +24,14 @@ export const OccupancyGraph = ({
   height = 400,
   ...remaining
 }) => {
-  const scenarioData = data.scenarios[scenario].timeSeriesData;
+  const {model, timeSeriesData, x} = useModelData();
   const allPoints = useMemo(
     () =>
-      Object.values(data.scenarios).reduce(
+      Object.values(model.scenarios).reduce(
         (a, v) => (v && v.timeSeriesData ? a.concat(v.timeSeriesData) : a),
         []
       ),
-    [data]
+    [model]
   );
   const domain = useMemo(
     () =>
@@ -49,7 +47,7 @@ export const OccupancyGraph = ({
   return (
     <Graph
       {...remaining}
-      data={scenarioData}
+      data={timeSeriesData}
       domain={domain}
       height={height}
       width={width}
