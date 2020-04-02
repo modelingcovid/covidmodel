@@ -1,7 +1,9 @@
 import * as React from 'react';
+import {theme} from '../styles';
 import {OccupancyGraph} from './OccupancyGraph';
-import {InlineData} from './content';
+import {Definition, Grid} from './content';
 import {Legend, Points} from './graph';
+import {Bed, HospitalUser} from './icon';
 import {
   PercentileLegendRow,
   ProjectionDisclaimer,
@@ -34,19 +36,25 @@ export const HospitalCapacity = ({width, height}) => {
     <div className="margin-top-4">
       <ProjectionDisclaimer />
       <div className="section-heading">{hospitalCapacityHeading}</div>
-      <p className="paragraph">
-        We estimate the hospital capacity for COVID-19 patients by taking{' '}
-        <InlineData
-          label="the number of available beds"
+      <div style={{display: 'flex'}}>
+        <p className="paragraph" style={{flexGrow: 1}}>
+          We estimate the hospital capacity for COVID-19 patients by taking the
+          number of available beds and discounting for that hospital system’s
+          typical occupancy rate.
+        </p>
+      </div>
+      <Grid>
+        <Definition
+          icon={Bed}
           value={formatNumber(model.staffedBeds)}
-        />{' '}
-        and discounting for that hospital system’s{' '}
-        <InlineData
-          label="typical occupancy rate"
-          value={formatPercent1(model.bedUtilization)}
+          label="available beds"
         />
-        .
-      </p>
+        <Definition
+          icon={HospitalUser}
+          value={formatPercent1(model.bedUtilization)}
+          label="typical occupancy rate"
+        />
+      </Grid>
       <OccupancyGraph
         y={getCurrentlyReportedHospitalized}
         cutoff={hospitalCapacity}

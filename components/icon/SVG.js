@@ -12,7 +12,8 @@ export const SVG = ({children, size = 18, viewBox, ...props}) => (
       svg {
         display: inline-block;
         fill: currentColor;
-        vertical-align: text-bottom;
+        vertical-align: middle;
+        transform: translateY(-7.5%);
       }
     `}</style>
     {children}

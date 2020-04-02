@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {dayToDate} from '../lib/date';
 import {formatDate, formatNumber, formatPercent2} from '../lib/format';
-import {Definition, Definitions} from './Definition';
+import {Definition, Grid} from './content';
 import {ProjectionDisclaimer} from './modeling';
 
 export const OutcomeSummary = ({data}) => {
@@ -16,47 +16,48 @@ export const OutcomeSummary = ({data}) => {
         the real fatality rate a few times lower to account for unconfirmed mild
         cases.
       </p>
-      <Definitions>
-        <Definition value={formatNumber(data.totalProjectedDeaths)}>
-          Deaths
-        </Definition>
-        <Definition value={formatNumber(data.totalProjectedPCRConfirmed)}>
-          PCR confirmed
-        </Definition>
-        <Definition value={formatNumber(data.totalProjectedInfected)}>
-          Total projected infected
-        </Definition>
-        <Definition value={formatPercent2(data.fatalityRate)}>
-          Fatality rate
-        </Definition>
+      <Grid>
+        <Definition
+          value={formatNumber(data.totalProjectedDeaths)}
+          label="deaths"
+        />
+        <Definition
+          value={formatNumber(data.totalProjectedPCRConfirmed)}
+          label="reported positive tests"
+        />
+        <Definition
+          value={formatNumber(data.totalProjectedInfected)}
+          label="projected infected"
+        />
+        <Definition
+          value={formatPercent2(data.fatalityRate)}
+          label="fatality rate"
+        />
         <Definition
           value={
             data.dateContained
               ? formatDate(new Date(data.dateContained))
-              : 'Not contained'
+              : 'N/A'
           }
-        >
-          Date contained
-        </Definition>
+          label="containment date"
+        />
         <Definition
           value={
             data.dateHospitalsOverCapacity
               ? formatDate(new Date(data.dateHospitalsOverCapacity))
               : 'N/A'
           }
-        >
-          Date hospitals overloaded
-        </Definition>
+          label="date hospitals overloaded"
+        />
         <Definition
           value={
             data.dateICUOverCapacity
               ? formatDate(new Date(data.dateICUOverCapacity))
               : 'N/A'
           }
-        >
-          Date ICU overloaded
-        </Definition>
-      </Definitions>
+          label="date ICU overloaded"
+        />
+      </Grid>
     </div>
   );
 };

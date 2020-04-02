@@ -2,7 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import {dayToDate} from '../lib/date';
 import {formatDate, formatNumber2} from '../lib/format';
-import {Definition, Definitions} from './Definition';
+import {Definition, Grid} from './content';
 
 export const ModelFitParameters = ({data}) => {
   return (
@@ -16,14 +16,16 @@ export const ModelFitParameters = ({data}) => {
         on country data, but we adjust the following parameters on a per-state
         basis for a more accurate fit.
       </p>
-      <Definitions>
-        <Definition value={formatDate(dayToDate(data.importtime))}>
-          Import date
-        </Definition>
-        <Definition value={formatNumber2(data.r0)}>
-          Basic reproduction number (R₀)
-        </Definition>
-      </Definitions>
+      <Grid>
+        <Definition
+          value={formatDate(dayToDate(data.importtime))}
+          label="Import date"
+        />
+        <Definition
+          value={formatNumber2(data.r0)}
+          label="Basic reproduction number (R₀)"
+        />
+      </Grid>
     </div>
   );
 };

@@ -43,7 +43,6 @@ export const Select = React.memo(function Select({
       style={{
         whiteSpace: 'nowrap',
         display: 'inline',
-        marginTop: '-2px',
         marginLeft: '2px',
       }}
     />
@@ -126,7 +125,6 @@ export const Select = React.memo(function Select({
           items.map((item, index) => {
             const isHighlighted = highlightedIndex === index;
             const isSelected = selectedItem === item;
-            console.log('wat', isSelected);
             const style = {
               padding: 'var(--spacing0)',
               fontWeight: isSelected ? 500 : 400,
