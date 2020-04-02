@@ -137,7 +137,14 @@ Merge[{mapLevels[1],<|"day"->#+today+distancingEasePeriod+scenario["distancingDa
 ]
 
 (* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
-stateDistancing[state_,scenario_,t_]:=Interpolation[{#["day"],#[state]}&/@evalScenario[scenario]][Max[1, Min[t, 300]]];
+(* pre-compute the interpolating functions so that even though eval interp is kind of slow, it's as fast as possible *)
+
+interps=Table[Table[
+Interpolation[{#["day"],#[statesWith50CasesAnd5Deaths[[i]]]}&/@evalScenario[scenarios[[j]]]][Max[1, Min[ta, 300]]],
+{j,1,Length[scenarios]}],{i,1,Length[statesWith50CasesAnd5Deaths]}];
+scenarioIds=#["id"]&/@scenarios;
+interpMap=Map[AssociationThread[scenarioIds,#]&,AssociationThread[statesWith50CasesAnd5Deaths,interps]];
+stateDistancing[state_,scenarioId_,t_]:=interpMap[state][scenarioId]/.{ta->t}
 
 
 
