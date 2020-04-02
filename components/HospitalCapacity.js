@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {OccupancyGraph} from './OccupancyGraph';
 import {Points} from './graph';
-import {Legend, LegendRow} from './Legend';
+import {Legend} from './Legend';
+import {PercentileLegendRow} from './PercentileLegendRow';
 import {stateLabels} from '../lib/controls';
 import {getDate} from '../lib/date';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
@@ -59,11 +60,10 @@ export const HospitalCapacity = ({data, scenario, state, width, height}) => {
         height={height}
       />
       <Legend>
-        <LegendRow
+        <PercentileLegendRow
+          title="Currently hospitalized"
           y={getCurrentlyReportedHospitalized}
-          format={formatNumber}
-          fill="var(--color-blue2)"
-          label="Currently hospitalized"
+          color="var(--color-blue2)"
         />
       </Legend>
     </div>

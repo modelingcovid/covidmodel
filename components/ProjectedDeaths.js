@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Legend, LegendRow} from './Legend';
+import {Legend} from './Legend';
+import {PercentileLegendRow} from './PercentileLegendRow';
 import {PercentileLine} from './PercentileLine';
 import {PopulationGraph} from './PopulationGraph';
 import {getDate} from '../lib/date';
-import {formatNumber} from '../lib/format';
 
 const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 
@@ -28,11 +28,10 @@ export const ProjectedDeaths = ({data, scenario, state, width, height}) => (
       />
     </PopulationGraph>
     <Legend>
-      <LegendRow
+      <PercentileLegendRow
+        title="Cumulative deaths"
         y={getCumulativeDeaths}
-        format={formatNumber}
-        fill="var(--color-blue2)"
-        label="Cumulative deaths"
+        color="var(--color-blue2)"
       />
     </Legend>
   </div>

@@ -13,10 +13,10 @@ import {
   HospitalCapacity,
   Layout,
   Legend,
-  LegendRow,
   ModelFitParameters,
   OccupancyGraph,
   OutcomeSummary,
+  PercentileLegendRow,
   PercentileLine,
   PopulationGraph,
   ProjectedDeaths,
@@ -203,28 +203,25 @@ export default function StatePage({data, states}) {
                   />
                 </PopulationGraph>
                 <Legend>
-                  <LegendRow
+                  <PercentileLegendRow
                     y={getCurrentlyInfected}
-                    fill="var(--color-blue2)"
-                    label="Currently infected"
-                  >
-                    People who have COVID-19 but cannot yet infect others.
-                  </LegendRow>
-                  <LegendRow
+                    color="var(--color-blue2)"
+                    title="Currently infected"
+                    description="People who have COVID-19 but cannot yet infect others."
+                  />
+                  <PercentileLegendRow
                     y={getCurrentlyInfectious}
-                    fill="var(--color-magenta1)"
-                    label="Currently infectious"
-                  >
-                    People who have COVID-19 and can infect others.
-                  </LegendRow>
-                  <LegendRow
+                    color="var(--color-magenta1)"
+                    title="Currently infectious"
+                    description="People who have COVID-19 and can infect others."
+                  />
+                  <PercentileLegendRow
                     y={getCumulativePcr}
-                    fill="var(--color-yellow2)"
-                    label="Cumulative PCR"
+                    color="var(--color-yellow2)"
+                    title="Cumulative PCR"
                     hasConfirmed
-                  >
-                    Total number of positive PCR tests.
-                  </LegendRow>
+                    description="Total number of positive PCR tests."
+                  />
                 </Legend>
               </div>
               <ProjectedDeaths
@@ -261,10 +258,10 @@ export default function StatePage({data, states}) {
                   height={height}
                 />
                 <Legend>
-                  <LegendRow
+                  <PercentileLegendRow
                     y={getCurrentlyCritical}
-                    fill="var(--color-blue2)"
-                    label="Currently in need of ICU care"
+                    color="var(--color-blue2)"
+                    title="Currently in need of ICU care"
                   />
                 </Legend>
               </div>

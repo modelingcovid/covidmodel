@@ -4,7 +4,7 @@ import {breakpoint, theme} from '../styles';
 
 import {useNearestData} from './graph';
 import {getDate} from '../lib/date';
-import {formatShortDate, formatNumber, formatNA} from '../lib/format';
+import {formatShortDate, formatNumber} from '../lib/format';
 
 const legendStyles = css`
   td {
@@ -74,52 +74,23 @@ export const LegendEntry = ({
   );
 };
 
-export const LegendRow = ({
-  children,
-  format = formatNumber,
-  fill,
-  hasConfirmed = false,
-  label,
-  y,
-}) => {
-  const d = useNearestData();
-  if (!d) {
-    return null;
-  }
-  const {confirmed, percentile10, percentile50, percentile90} = y(d);
-  return (
-    <tr>
-      <style jsx>{legendStyles}</style>
-      <td>
-        <div className="text-small text-gray-dark weight-600">{label}</div>
-        {children && (
-          <div
-            style={{paddingBottom: theme.spacing[0]}}
-            className="text-small text-gray-light"
-          >
-            {children}
-          </div>
-        )}
-      </td>
-      <td>
-        <LegendEntry
-          label="Projected"
-          color={fill}
-          y={(d) => y(d).percentile50}
-        />
-        {hasConfirmed && (
-          <LegendEntry
-            label="Confirmed"
-            color={fill}
-            symbol="stroke"
-            y={(d) => y(d).confirmed}
-            format={formatNA(formatNumber)}
-          />
-        )}
-      </td>
-    </tr>
-  );
-};
+export const LegendRow = ({children, description, title}) => (
+  <tr>
+    <style jsx>{legendStyles}</style>
+    <td>
+      <div className="text-small text-gray-dark weight-600">{title}</div>
+      {description && (
+        <div
+          style={{paddingBottom: theme.spacing[0]}}
+          className="text-small text-gray-light"
+        >
+          {description}
+        </div>
+      )}
+    </td>
+    <td>{children}</td>
+  </tr>
+);
 
 export const Legend = ({children}) => {
   const d = useNearestData();
