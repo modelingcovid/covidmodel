@@ -157,7 +157,7 @@ export default function StatePage({data, states}) {
                   leftLabel="distancing"
                   rightLabel="R0"
                   width={width}
-                  height={height}
+                  height={160}
                 />
               </div>
               <DemographicParameters data={data} />
