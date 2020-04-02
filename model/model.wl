@@ -105,7 +105,7 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 (* a function to generate the monte carlo simulations from combo of fit / assumed parameters *)
 generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{},
   {
-   RandomVariate[PosNormal[fitParams["r0natural"],standardErrors["r0natural"]]],
+   RandomVariate[PosNormal[fitParams["r0natural"],fitParams["r0natural"]*0.05]],
  RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,daysUntilNotInfectiousOrHospitalized0*0.05]],
  RandomVariate[PosNormal[daysFromInfectedToInfectious0,daysFromInfectedToInfectious0*0.05]],
  RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,daysToLeaveHosptialNonCritical0*0.05]],
@@ -114,7 +114,7 @@ RandomVariate[PosNormal[fitParams["pPCRH"],fitParams["pPCRH"]*0.05]],
  RandomVariate[PosNormal[daysTogoToCriticalCare0,daysTogoToCriticalCare0*0.05]], 
  RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,daysFromCriticalToRecoveredOrDeceased0*0.05]],
 RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,fractionOfCriticalDeceased0*0.02]],
-RandomVariate[PosNormal[fitParams["importtime"],standardErrors["importtime"]]], 
+RandomVariate[PosNormal[fitParams["importtime"],fitParams["importtime"]*0.05]], 
 RandomVariate[PosNormal[importlength0,importlength0*0.05]],
 RandomVariate[PosNormal[initialInfectionImpulse0,initialInfectionImpulse0*0.05]],
 cutoff,
@@ -152,7 +152,7 @@ buckets = raw["Buckets"];
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
 "hospitalCapacity"->(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],
-"R0"-> stateDistancing[state,scenario1,1]*(r0natural0/100),
+"R0"-> stateDistancing[state,"scenario1",1]*(r0natural0/100),
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
@@ -253,7 +253,7 @@ ParametricNDSolveValue[{
 	RHq'[t]   == HHq[t]/daysToLeaveHosptialNonCritical,
 
 	(* pcr confirmation *)	
-	PCR'[t]   == (pPCRNH*percentPositiveCase[t]*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*percentPositiveCase[t]*HHq[t])/daysToGetTestedIfHospitalized0,
+	PCR'[t]   == (pPCRNH*percentPositiveCase[t+percentPositiveTestDelay0]*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*percentPositiveCase[t+percentPositiveTestDelay0]*HHq[t])/daysToGetTestedIfHospitalized0,
 
 	(* Infected, will need critical care *)	
 	ICq'[t]   == pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilNotInfectiousOrHospitalized,
@@ -350,7 +350,7 @@ equationsDAE = {
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
     (*pcr confirmation*)
-    PCR'[t]==(pPCRNH*percentPositiveCase[t]*Iq[t])/daysToGetTestedIfNotHospitalized0+(pPCRH*percentPositiveCase[t]*HHq[t])/daysToGetTestedIfHospitalized0,
+    PCR'[t]==(pPCRNH*percentPositiveCase[t+percentPositiveTestDelay0]*Iq[t])/daysToGetTestedIfNotHospitalized0+(pPCRH*percentPositiveCase[t+percentPositiveTestDelay0]*HHq[t])/daysToGetTestedIfHospitalized0,
     (*Infected, will need critical care*)
     ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Hospitalized,
@@ -475,7 +475,10 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t]]]
 	},First],
 	"cumulativeDeaths" -> Merge[{
-	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null,Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"]]|>,
+	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 
+	   Null,
+	   If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],Null]
+	   ]|>,
 	   <|"expected"-> stateParams["params"]["population"]*sol[[QP[Deaq]]][t]|>,
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,DeathQuantiles[t]]]
 	},First],

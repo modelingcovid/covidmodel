@@ -170,7 +170,7 @@ evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarl
    
    maxDay=Max[#[[1]]&/@rollingAvg];
    valueOnLatestDay=Max[#[[2]]&/@Select[rollingAvg,#[[1]]==maxDay&]];
-   filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,365}];
+   filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,365+percentPositiveTestDelay0}];
   
    minDay=Min[#[[1]]&/@rollingAvg];
    valueOnEarliestDay=Min[#[[2]]&/@Select[rollingAvg,#[[1]]==minDay&]];
@@ -180,7 +180,7 @@ evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarl
    fullPostTestData=Join[filledPastZeroPositive,rollingAvg,filledFuturePositive];
    Interpolation[fullPostTestData],
    
-   Interpolation[{{0,0.15},{365,0.15}},InterpolationOrder->1]]
+   Interpolation[{{0,0.15},{365+percentPositiveTestDelay0,0.15}},InterpolationOrder->1]]
 ];
 posInterpMap=Association[{#->evalStatePosTest[#]}&/@statesWith50CasesAnd5Deaths];
 
