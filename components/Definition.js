@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {breakpoint, theme} from '../styles';
+import {theme} from '../styles';
 
 export const Definition = ({children, value}) => (
   <div>
@@ -31,9 +31,11 @@ export const Definitions = ({children}) => (
         grid-template-columns: repeat(2, 1fr);
         grid-gap: ${theme.spacing[1]};
       }
-      ${breakpoint.tabletUp} {
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: ${theme.spacing[2]};
+      @media (min-width: 600px) {
+        div {
+          grid-template-columns: repeat(3, 1fr);
+          grid-gap: ${theme.spacing[2]};
+        }
       }
     `}</style>
     {children}
