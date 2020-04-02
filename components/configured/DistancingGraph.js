@@ -8,7 +8,7 @@ import {
   Stop,
   WithGraphData,
 } from '../graph';
-import {DistancingGradient} from '../modeling';
+import {DistancingGradient, useModelData} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
 import {formatNumber2, formatPercent} from '../../lib/format';
@@ -19,9 +19,6 @@ const {useCallback, useMemo} = React;
 
 export const DistancingGraph = ({
   children,
-  data,
-  scenario,
-  x,
   y,
   leftLabel = '',
   rightLabel = '',
@@ -29,9 +26,12 @@ export const DistancingGraph = ({
   height = 400,
   ...remaining
 }) => {
-  const scenarioData = data.scenarios[scenario].timeSeriesData;
+  const {
+    model: {r0},
+    timeSeriesData,
+    x,
+  } = useModelData();
 
-  const {r0} = data;
   const formatR0 = useCallback((n) => formatNumber2(n * r0), [r0]);
 
   const endTickLabelProps = () => ({
@@ -44,7 +44,7 @@ export const DistancingGraph = ({
   return (
     <Graph
       {...remaining}
-      data={scenarioData}
+      data={timeSeriesData}
       x={x}
       xLabel={leftLabel}
       height={height}

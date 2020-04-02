@@ -7,10 +7,9 @@ import Link from 'next/link';
 
 import {
   CaseProgressionCurve,
-  DemographicParameters,
   HospitalCapacity,
   Layout,
-  ModelFitParameters,
+  ModelInputs,
   OutcomeSummary,
   ProjectedDeaths,
 } from '../../components';
@@ -113,31 +112,7 @@ export default function StatePage({data, states}) {
               </Section>
             </div>
 
-            <Section>
-              <div className="text-jumbo">Model inputs</div>
-              <div className="margin-top-4">
-                <div className="section-heading">Social distancing</div>
-                <p className="paragraph">
-                  On the left axis social distance of 100% means no contact with
-                  others, which yields an R₀ (basic reproduction number) for the
-                  virus of zero, since it cannot find new hosts. The
-                  zero-percent distance is the un-inhibited reproduction number
-                  which is thought to be around 3.1.
-                </p>
-                <DistancingGraph
-                  scenario={scenario}
-                  data={data}
-                  x={getDate}
-                  y={getDistancing}
-                  leftLabel="distancing"
-                  rightLabel="R₀"
-                  width={width}
-                  height={160}
-                />
-              </div>
-              <DemographicParameters data={data} />
-              <ModelFitParameters data={data} />
-            </Section>
+            <ModelInputs width={width} height={160} />
 
             <Section>
               <div className="text-jumbo">Projections</div>

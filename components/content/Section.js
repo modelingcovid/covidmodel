@@ -5,8 +5,10 @@ export const Section = React.forwardRef(({children, ...props}, ref) => (
   <section {...props} ref={ref}>
     <style jsx>{`
       section {
-        padding: 0 ${theme.gutterWidth};
-        margin: 0 auto;
+        padding-left: ${theme.gutterWidth};
+        padding-right: ${theme.gutterWidth};
+        margin-left: auto;
+        margin-right: auto;
         max-width: ${theme.maxWidth};
         width: 100%;
       }
