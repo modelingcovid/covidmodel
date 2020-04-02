@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import {DownArrow} from './icon';
 import {useSelect} from './util';
+import {theme} from '../styles';
 
 const {useEffect, useState} = React;
 
@@ -38,6 +39,7 @@ export const Select = React.memo(function Select({
 
   const icon = (
     <DownArrow
+      fill={theme.color.gray[3]}
       style={{
         whiteSpace: 'nowrap',
         display: 'inline',
@@ -86,7 +88,7 @@ export const Select = React.memo(function Select({
           min-width: 180px;
           overflow-y: auto;
           border-top: 0;
-          background: white;
+          background: var(--color-background);
           transition: opacity 100ms ease-in-out, transform 250ms ease-in-out;
         }
         .closed {

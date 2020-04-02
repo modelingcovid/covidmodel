@@ -2,9 +2,11 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-html {
+html,
+body {
   font-family: var(--font-family-ui);
   color: var(--color-gray3);
+  background-color: var(--color-background);
 }
 text {
   font-size: 13px;

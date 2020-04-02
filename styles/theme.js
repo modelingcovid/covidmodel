@@ -1,6 +1,11 @@
 import {px, toCssProperties} from './util';
 
-export const {values: theme, declarations, properties} = toCssProperties({
+export const {
+  values: theme,
+  declarations,
+  setProperties,
+  properties,
+} = toCssProperties({
   color: {
     background: '#fff',
     focus: ['rgba(66, 153, 225, 0.2)', 'rgba(66, 153, 225, 0.5)'],
@@ -49,5 +54,16 @@ export const {values: theme, declarations, properties} = toCssProperties({
 export const breakpoint = {
   tabletUp: '@media (min-width: 600px)',
 };
+export const mediaQuery = {
+  darkMode: '@media (prefers-color-scheme: dark)',
+};
 
-export const tabletUp = (obj) => ({[breakpoint.tabletUp]: obj});
+export const darkMode = setProperties({
+  color: {
+    background: '#181b2c',
+    gray: {
+      ...['#515a70', '#8691a1', '#c0c8d2', '#e0e6eb', '#f6f8fa'],
+      bg: '#2d3146',
+    },
+  },
+});

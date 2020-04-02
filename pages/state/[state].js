@@ -76,7 +76,7 @@ export default function StatePage({data, states}) {
           .sticky-inlay {
             position: sticky;
             top: 0;
-            background: white;
+            background: var(--color-background);
             z-index: 2;
           }
           .sticky-overlay,

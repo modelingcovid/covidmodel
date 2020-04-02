@@ -1,8 +1,8 @@
 const isNumber = (str) => !Number.isNaN(Number(str));
 
-const defaultCssPropertyPath = (prefix, key, obj) => {
+const defaultCssPropertyName = (prefix, key, obj) => {
   if (!prefix) {
-    return key;
+    return `--${key}`;
   }
   // Allows you to pass an empty key to get a default variable name.
   // For example, this JS object
@@ -19,7 +19,7 @@ const defaultCssPropertyPath = (prefix, key, obj) => {
 };
 
 export const createCssPropertyConverter = ({
-  getPath = defaultCssPropertyPath,
+  getPropertyName = defaultCssPropertyName,
 } = {}) => {
   const toCssProperties = (obj, prefix = '') => {
     // A nested object that remaps the input to CSS custom property names.
@@ -27,28 +27,46 @@ export const createCssPropertyConverter = ({
     // A nested object that remaps the input to CSS custom property names,
     // wrapped with the `var` function.
     const values = {};
-    // A flat object of all the CSS variable definitions.
+    // A flat object of all the CSS custom property definitions.
     const declarations = {};
 
     for (let [key, value] of Object.entries(obj)) {
-      const path = getPath(prefix, key, obj);
+      const property = getPropertyName(prefix, key, obj);
       if (value == null) {
         continue;
       } else if (typeof value === 'object') {
-        const nested = toCssProperties(value, path);
+        const nested = toCssProperties(value, property);
         Object.assign(declarations, nested.declarations);
         values[key] = nested.values;
         properties[key] = nested.properties;
       } else {
-        const property = `--${path}`;
         declarations[property] = value;
         properties[key] = property;
         values[key] = `var(${property})`;
       }
     }
 
-    return {declarations, properties, values};
+    const setProperties = (obj, prefix = '') => {
+      // A flat object of all the CSS custom property overrides.
+      const declarations = {};
+
+      for (let [key, value] of Object.entries(obj)) {
+        const property = getPropertyName(prefix, key, obj);
+        if (value == null) {
+          continue;
+        } else if (typeof value === 'object') {
+          const nested = setProperties(value, property);
+          Object.assign(declarations, nested);
+        } else {
+          declarations[property] = value;
+        }
+      }
+      return declarations;
+    };
+
+    return {declarations, properties, setProperties, values};
   };
+
   return toCssProperties;
 };
 

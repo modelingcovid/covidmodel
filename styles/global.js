@@ -1,6 +1,12 @@
 import * as React from 'react';
 import css from 'styled-jsx/css';
-import {declarations, breakpoint, properties} from './theme';
+import {
+  declarations,
+  breakpoint,
+  mediaQuery,
+  properties,
+  darkMode,
+} from './theme';
 import {px, toRootRule} from './util';
 
 export const globalStyles = css.global`
@@ -14,6 +20,9 @@ export const globalStyles = css.global`
         [properties.font.size.subtitle]: 20,
       })
     )}
+  }
+  ${mediaQuery.darkMode} {
+    ${toRootRule(darkMode)}
   }
   @media (min-width: 896px) {
     :root {
