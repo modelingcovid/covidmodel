@@ -30,7 +30,7 @@ export const {
       text: "'IBM Plex Serif', serif",
     },
     size: px({
-      micro: 14,
+      micro: 13,
       small: 14,
       jumbo: 36,
       title: 20,

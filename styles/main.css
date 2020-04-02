@@ -143,3 +143,15 @@ text {
 .focus-within:focus-within .focus:focus {
   box-shadow: none;
 }
+
+.highlight,
+.highlight-gray {
+  padding: 0 4px;
+  margin: 0 -2px;
+}
+.highlight {
+  background: var(--color-yellow0);
+}
+.highlight-gray {
+  background: var(--color-gray0);
+}

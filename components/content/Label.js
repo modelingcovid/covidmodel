@@ -3,17 +3,16 @@ import css from 'styled-jsx/css';
 import {breakpoint, theme} from '../../styles';
 
 const styles = css`
-  div {
-    font-style: italic;
-    font-size: ${theme.font.size.body};
-    font-family: ${theme.font.family.text};
-    color: ${theme.color.gray[1]};
+  span {
+    font-weight: 500;
+    font-family: ${theme.font.family.mono};
+    text-transform: uppercase;
   }
 `;
 
-export const Label = ({children}) => (
-  <div>
+export const Label = ({children, ...remaining}) => (
+  <span className="highlight" {...remaining}>
     <style jsx>{styles}</style>
     {children}
-  </div>
+  </span>
 );
