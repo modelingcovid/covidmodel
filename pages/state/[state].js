@@ -1,46 +1,26 @@
 import * as React from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import dayjs from 'dayjs';
-import numeral from 'numeral';
-import Link from 'next/link';
 
 import {
   CaseProgressionCurve,
   HospitalCapacity,
+  ICUCapacity,
   Layout,
   ModelInputs,
   OutcomeSummary,
   ProjectedDeaths,
 } from '../../components';
-import {
-  Controls,
-  DistancingGraph,
-  OccupancyGraph,
-  PopulationGraph,
-} from '../../components/configured';
+import {Controls} from '../../components/configured';
 import {Section} from '../../components/content';
-import {
-  Legend,
-  Line,
-  NearestDataProvider,
-  Points,
-} from '../../components/graph';
-import {
-  DistancingGradient,
-  ModelDataProvider,
-  PercentileLegendRow,
-  PercentileLine,
-  ProjectionDisclaimer,
-} from '../../components/modeling';
+import {NearestDataProvider} from '../../components/graph';
+import {ModelDataProvider} from '../../components/modeling';
 import {useComponentId, useContentRect} from '../../components/util';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate, today} from '../../lib/date';
-import {stateLabels} from '../../lib/controls';
 
 const {useCallback, useRef, useState} = React;
 
-const getDistancing = ({distancing}) => distancing;
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 
 export default function StatePage({data, states}) {
@@ -93,7 +73,6 @@ export default function StatePage({data, states}) {
               padding: var(--spacing1) 0;
             }
             .text-jumbo {
-              padding-top: 96px;
               margin-bottom: -64px;
             }
           `}</style>
@@ -114,53 +93,12 @@ export default function StatePage({data, states}) {
 
             <ModelInputs width={width} height={160} />
 
-            <Section>
+            <Section className="margin-top-4">
               <div className="text-jumbo">Projections</div>
               <CaseProgressionCurve width={width} height={height} />
-              <ProjectedDeaths
-                data={data}
-                scenario={scenario}
-                state={state}
-                width={width}
-                height={height}
-              />
-              <HospitalCapacity
-                data={data}
-                scenario={scenario}
-                state={state}
-                width={width}
-                height={height}
-              />
-              <div className="margin-top-4">
-                <ProjectionDisclaimer />
-                <div className="section-heading">ICU Occupancy</div>
-                <p className="paragraph">
-                  We assign a higher probability of fatality in the case the ICU
-                  capacity is over-shot. This can be seen in countries like
-                  Italy where the fatality rate is substantially higher even
-                  controlling for the age distribution.
-                </p>
-                <OccupancyGraph
-                  scenario={scenario}
-                  data={data}
-                  x={getDate}
-                  y={getCurrentlyCritical}
-                  cutoff={data.icuBeds}
-                  xLabel="people"
-                  cutoffLabel="ICU capacity"
-                  width={width}
-                  height={height}
-                  after={
-                    <Legend>
-                      <PercentileLegendRow
-                        y={getCurrentlyCritical}
-                        color="var(--color-blue2)"
-                        title="Currently in need of ICU care"
-                      />
-                    </Legend>
-                  }
-                />
-              </div>
+              <ProjectedDeaths width={width} height={height} />
+              <HospitalCapacity width={width} height={height} />
+              <ICUCapacity width={width} height={height} />
               <OutcomeSummary data={scenarioSummary} />
             </Section>
           </div>

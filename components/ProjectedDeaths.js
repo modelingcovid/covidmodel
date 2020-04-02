@@ -14,8 +14,6 @@ const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 
 export const ProjectedDeaths = ({width, height}) => {
   const {
-    model,
-    scenario,
     stateName,
     summary: {totalProjectedDeaths},
     timeSeriesData,
@@ -39,8 +37,6 @@ export const ProjectedDeaths = ({width, height}) => {
         We project the cumulative number of deaths on a logarithmic scale.
       </p>
       <PopulationGraph
-        scenario={scenario}
-        data={model}
         x={x}
         xLabel="people"
         width={width}

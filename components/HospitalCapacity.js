@@ -47,7 +47,7 @@ export const HospitalCapacity = ({width, height}) => {
         <Definition
           icon={Bed}
           value={formatNumber(model.staffedBeds)}
-          label="available beds"
+          label="available hospital beds"
         />
         <Definition
           icon={HospitalUser}

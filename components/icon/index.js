@@ -7,6 +7,7 @@ export * from './Eye';
 export * from './EyeSlash';
 export * from './Heartbeat';
 export * from './HospitalUser';
+export * from './Lungs';
 export * from './People';
 export * from './PeopleArrows';
 export * from './SVG';
