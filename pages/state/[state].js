@@ -159,7 +159,7 @@ export default function StatePage({data, states}) {
                   <div className="section-heading">Social distancing</div>
                   <p className="paragraph">
                     On the left axis social distance of 100% means no contact
-                    with others, which yields an R0 (basic reproduction number)
+                    with others, which yields an R₀ (basic reproduction number)
                     for the virus of zero, since it cannot find new hosts. The
                     zero-percent distance is the un-inhibited reproduction
                     number which is thought to be around 3.1.
@@ -170,7 +170,7 @@ export default function StatePage({data, states}) {
                     x={getDate}
                     y={getDistancing}
                     leftLabel="distancing"
-                    rightLabel="R0"
+                    rightLabel="R₀"
                     width={width}
                     height={160}
                   />

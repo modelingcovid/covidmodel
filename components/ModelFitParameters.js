@@ -21,7 +21,7 @@ export const ModelFitParameters = ({data}) => {
           Import date
         </Definition>
         <Definition value={formatNumber2(data.r0)}>
-          Basic reproduction number (R0)
+          Basic reproduction number (R₀)
         </Definition>
       </Definitions>
     </div>

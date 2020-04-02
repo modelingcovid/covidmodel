@@ -1,4 +1,5 @@
 export * from './Bed';
+export * from './CalendarDay';
 export * from './Clock';
 export * from './DownArrow';
 export * from './ExclamationTriangle';
