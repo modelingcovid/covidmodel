@@ -42,7 +42,7 @@ export const ProjectionDisclaimer = () => {
               verticalAlign: 'text-bottom',
             }}
           />
-          {distancing} for {formatNumber(daysToMonths(distancingDays))} mo
+          {distancing} for {formatNumber(daysToMonths(distancingDays))} months
         </span>
       )}
     </div>
