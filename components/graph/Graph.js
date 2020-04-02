@@ -108,7 +108,7 @@ export const Graph = React.memo(function Graph({
   }, [domain, scale, yMax]);
 
   const setNearestData = useSetNearestData();
-  const onMouseMove = useCallback(
+  const onMove = useCallback(
     (event) => {
       const point = localPoint(event);
       const x0 = xScale.invert(point.x - margin.left);
@@ -174,7 +174,12 @@ export const Graph = React.memo(function Graph({
       `}</style>
       {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph">
-        <svg width={width} height={height} onMouseMove={onMouseMove}>
+        <svg
+          width={width}
+          height={height}
+          onMouseMove={onMove}
+          onTouchMove={onMove}
+        >
           <Group
             // Add 0.5 to snap centered strokes onto the pixel grid
             left={margin.left + 0.5}
