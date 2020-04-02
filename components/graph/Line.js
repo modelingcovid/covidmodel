@@ -13,7 +13,13 @@ const NearestCircle = ({y, ...remaining}) => {
   );
 };
 
-export const Line = ({y, stroke, strokeWidth = 1.5, ...remaining}) => {
+export const Line = ({
+  y,
+  stroke,
+  strokeWidth = 1.5,
+  dot = true,
+  ...remaining
+}) => {
   const {data, x, xMax, xScale, yScale} = useGraphData();
   const xMaxPrev = usePreviousValue(xMax);
 
@@ -31,7 +37,7 @@ export const Line = ({y, stroke, strokeWidth = 1.5, ...remaining}) => {
         strokeWidth={strokeWidth}
         immediate={xMax !== xMaxPrev}
       />
-      <NearestCircle y={y} fill={stroke} />
+      {dot && <NearestCircle y={y} fill={stroke} />}
     </>
   );
 };

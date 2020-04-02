@@ -5,6 +5,7 @@ import {getDate} from '../../lib/date';
 const {useCallback} = React;
 
 const getConfirmed = (d) => d.confirmed;
+const getExpectedOr50 = (d) => d.expected || d.percentile50;
 const get10 = (d) => d.percentile10;
 const get20 = (d) => d.percentile20;
 const get30 = (d) => d.percentile30;
@@ -21,6 +22,7 @@ export const PercentileLine = ({
   gradient = false,
 }) => {
   const getConfirmedY = useCallback((d) => getConfirmed(y(d)), [y]);
+  const getExpectedOr50Y = useCallback((d) => getExpectedOr50(y(d)), [y]);
   const get10Y = useCallback((d) => get10(y(d)), [y]);
   const get20Y = useCallback((d) => get20(y(d)), [y]);
   const get30Y = useCallback((d) => get30(y(d)), [y]);
@@ -40,7 +42,8 @@ export const PercentileLine = ({
           <Area y0={get40Y} y1={get60Y} fill={color} opacity="0.1" />
         </>
       )}
-      <Line y={get50Y} stroke={color} />
+      <Line y={get50Y} stroke={color} opacity="0.2" dot={false} />
+      <Line y={getExpectedOr50Y} stroke={color} />
       <Points
         y={getConfirmedY}
         stroke={color}

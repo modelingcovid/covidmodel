@@ -3,6 +3,7 @@ import {LegendEntry, LegendRow, useGraphData, useNearestData} from '../graph';
 import {formatNumber, formatNA} from '../../lib/format';
 
 const {useMemo} = React;
+const getExpectedOr50 = (d) => d.expected || d.percentile50;
 
 export const PercentileLegendRow = ({
   children,
@@ -29,7 +30,7 @@ export const PercentileLegendRow = ({
         label="Projected"
         color={color}
         format={format}
-        y={(d) => y(d).percentile50}
+        y={(d) => getExpectedOr50(y(d))}
       />
       {hasConfirmed && (
         <LegendEntry
