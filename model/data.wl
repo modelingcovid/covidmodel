@@ -199,3 +199,22 @@ evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarl
 ];
 posInterpMap=Association[{#->evalStatePosTest[#]}&/@statesWith50CasesAnd5Deaths];
 
+
+Needs["HypothesisTesting`"]
+
+
+toLog[x_] := Log[x]
+
+
+ClearAll[fromLog]
+SetAttributes[fromLog, HoldAll]; 
+fromLog[y_] := Exp[y]
+fromLog[(fit_)["ParameterTable"]] := 
+	fit["ParameterTable"] /. Grid[array_, options___] :> Module[{a = array}, 
+		a[[2;;]] = Replace[a[[2;;]], 
+			{p_, v_, se_, t_, pr_} :> {fromLog[p], fromLog[v], fromLog[v]*se, t, pr}, {1}]; 
+		a = Replace[a, {p_, (v_)?NumberQ, se_, t_, pr_} :> {p, v, se, v/se, 
+			(N[#1, 6] & )[TwoSidedPValue /. StudentTPValue[v/se, 
+			fit["ANOVATableDegreesOfFreedom"][[2]], TwoSided -> True]]}, {1}]; 
+		Grid[a, options]
+		]
