@@ -40,25 +40,27 @@ export function ModelInputs({height, width}) {
           <MethodDefinition
             icon={PeopleArrows}
             value={formatPercent(1 - distancingLevel)}
-            label="social distancing level"
+            label="Social distancing level"
             method="input"
           />
           <MethodDefinition
             icon={Clock}
             value={`${formatNumber(daysToMonths(distancingDays))} months`}
-            label="social distancing period"
+            label="Social distancing period"
             method="input"
           />
+        </Grid>
+        <Grid className="margin-bottom-2">
           <MethodDefinition
             icon={Viruses}
             value={formatNumber2(model.r0)}
-            label="basic reproduction number (R₀)"
+            label="Basic reproduction number (R₀)"
             method="fit"
           />
           <MethodDefinition
             icon={CalendarDay}
             value={formatShortDate(dayToDate(model.importtime))}
-            label="import date of COVID-19"
+            label="Import date of COVID-19"
             method="fit"
           />
         </Grid>

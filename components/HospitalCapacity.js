@@ -51,19 +51,19 @@ export const HospitalCapacity = ({width, height}) => {
         <MethodDefinition
           icon={Bed}
           value={formatNumber(staffedBeds)}
-          label="available hospital beds"
+          label="Available hospital beds"
           method="input"
         />
         <MethodDefinition
           icon={HospitalUser}
           value={formatPercent1(bedUtilization)}
-          label="typical occupancy rate"
+          label="Typical occupancy rate"
           method="input"
         />
         <MethodDefinition
           icon={Poll}
           value={formatPercent1(pC + pH)}
-          label="probability a person with COVID-19 needs hospitalization"
+          label="Probability a person with COVID-19 needs hospitalization"
           method="input"
         />
       </Grid>

@@ -34,7 +34,7 @@ export function CaseProgressionCurve({height, width}) {
         <MethodDefinition
           icon={People}
           value={formatNumber(model.population)}
-          label="total population"
+          label="Total population"
           method="input"
         />
         <MethodDefinition
@@ -42,13 +42,13 @@ export function CaseProgressionCurve({height, width}) {
           value={formatPercent1(
             summary.totalProjectedInfected / model.population
           )}
-          label="of the population infected"
+          label="Percentage of the population infected"
           method="modeled"
         />
         <MethodDefinition
           icon={Vial}
           value={formatNumber(summary.totalProjectedPCRConfirmed)}
-          label="reported positive tests"
+          label="Reported positive tests"
           method="modeled"
         />
       </Grid>

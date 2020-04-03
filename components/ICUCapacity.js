@@ -48,19 +48,19 @@ export const ICUCapacity = ({width, height}) => {
         <MethodDefinition
           icon={Bed}
           value={formatNumber(icuBeds)}
-          label="available ICU beds"
+          label="Available ICU beds"
           method="input"
         />
         <MethodDefinition
           icon={Lungs}
           value={formatNumber(ventilators)}
-          label="ventilators"
+          label="Ventilators"
           method="input"
         />
         <MethodDefinition
           icon={Poll}
           value={formatPercent1(pC)}
-          label="probability a person with COVID-19 needs ICU care"
+          label="Probability a person with COVID-19 needs ICU care"
           method="input"
         />
       </Grid>

@@ -39,19 +39,19 @@ export const ProjectedDeaths = ({width, height}) => {
           value={formatPercent1(
             summary.totalProjectedDeaths / model.population
           )}
-          label="fatality rate of the total population"
+          label="Fatality rate of the total population"
           method="modeled"
         />
         <MethodDefinition
           icon={HeadSideMask}
           value={formatPercent1(summary.fatalityRate)}
-          label="fatality rate of all COVID-19 cases"
+          label="Fatality rate of all COVID-19 cases"
           method="modeled"
         />
         <MethodDefinition
           icon={Vial}
           value={formatPercent1(summary.fatalityRatePCR)}
-          label="fatality rate of COVID-19 cases that have tested positive"
+          label="Fatality rate of COVID-19 cases that have tested positive"
           method="modeled"
         />
       </Grid>
