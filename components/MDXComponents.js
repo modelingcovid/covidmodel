@@ -11,8 +11,8 @@ export const MDXComponents = ({children}) => {
   return (
     <MDXProvider
       components={{
-        h1: tagWithClassName('h1', 'text-title'),
-        h2: tagWithClassName('h2', 'section-heading margin-top-4'),
+        h1: tagWithClassName('h1', 'text-jumbo margin-top-3 margin-bottom-1'),
+        h2: tagWithClassName('h2', 'section-heading margin-top-3'),
         h3: tagWithClassName(
           'h3',
           'text-gray-800 mt-12 mb-4 -ml-1 text-lg font-bold'
