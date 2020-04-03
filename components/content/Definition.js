@@ -17,6 +17,7 @@ const styles = css`
   .definition-value {
     font-family: ${theme.font.family.mono};
     font-weight: 500;
+    margin-top: 1px;
     padding-right: ${theme.spacing[0]};
   }
   @media (min-width: 600px) {
