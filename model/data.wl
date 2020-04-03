@@ -111,45 +111,60 @@ statePositiveTestRawDataHeader=statePositiveTestRawData[[1]];
 statePositiveTestRawDataBody=statePositiveTestRawData[[2;;]];
 statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]},First]&/@(Thread[statePositiveTestRawDataHeader->#]&/@statePositiveTestRawDataBody//Map[Association]);
 
+
+(* grab state distancing data and return smoothed distancing functions for each scenario in the list of scenarios provided. *)
 (* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
-stateDistancingRawData=Import[dataFile["state-distancing.csv"]];
-stateDistancingRawDataHeader=stateDistancingRawData[[1]];
-stateDistancingRawDataBody=stateDistancingRawData[[2;;]];
-reversePercentages[kv_]:=Association[KeyValueMap[
-#1->(1-#2/100)
-&,kv]]
-(* so we can keep the sheet clean state is actually day and we import the transpose *)
-stateDistancingParsedData=
-Merge[{reversePercentages[KeyDrop[#,"State"]],Association[{"day"->#["State"]}]},First]&/@(Thread[stateDistancingRawDataHeader->#]&/@stateDistancingRawDataBody//Map[Association]);
-
-distancingStates=DeleteDuplicates@Flatten[Keys[KeyDrop[#,"day"]]&/@stateDistancingParsedData];
-
-distancingEasePeriod=7 (*days *);
-mapLevels[level_]:=Association[{#->level}&/@distancingStates]
-evalScenario[scenario_]:=Module[{latestDayInDistancingData,latestValuesInDistancingData},
-latestDayInDistancingData=Max[#["day"]&/@stateDistancingParsedData];
-latestValuesInDistancingData=KeyDrop[Select[stateDistancingParsedData,#["day"]==latestDayInDistancingData&][[1]],"day"];
-
-Join[
-Merge[{mapLevels[1],<|"day"->#|>},First]&/@Range[Min[#["day"]&/@stateDistancingParsedData]-1],
-stateDistancingParsedData,
-Merge[{If[scenario["maintain"],
-latestValuesInDistancingData,
-mapLevels[scenario["distancingLevel"]]
-],<|"day"->1+today+#|>},First]&/@Range[scenario["distancingDays"]],
-Merge[{mapLevels[1],<|"day"->#+today+distancingEasePeriod+scenario["distancingDays"]|>},First]&/@Range[365-scenario["distancingDays"]-today-distancingEasePeriod]
-]
-]
-
 (* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
-(* pre-compute the interpolating functions so that even though eval interp is kind of slow, it's as fast as possible *)
+stateDistancingPrecompute = Module[{
+		rawCsvTable,
+		stateLabels,
+		dataDays,
+		stateDistancings,
+		countStates,
+		fullDays,
+		processScenario,
+		processState
+	},
+	
+	rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
 
-interps=Table[Table[
-Interpolation[{#["day"],#[statesWith50CasesAnd5Deaths[[i]]]}&/@evalScenario[scenarios[[j]]]][Max[1, Min[ta, 300]]],
-{j,1,Length[scenarios]}],{i,1,Length[statesWith50CasesAnd5Deaths]}];
-scenarioIds=#["id"]&/@scenarios;
-interpMap=Map[AssociationThread[scenarioIds,#]&,AssociationThread[statesWith50CasesAnd5Deaths,interps]];
-stateDistancing[state_,scenarioId_,t_]:=interpMap[state][scenarioId]/.{ta->t}
+	dataDays = rawCsvTable[[1,2;;]];
+	stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
+	stateLabels = rawCsvTable[[2;;,1]];
+	countStates = Length[stateLabels];
+	
+	fullDays = Range[365];
+		
+	processScenario[scenario_, distancing_] := Module[{
+			distancingLevel,
+			fullDistancing,
+			distancingFunction
+		},
+		
+		distancingLevel = If[
+			scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
+		
+		fullDistancing = Join[
+			ConstantArray[1.,Min[dataDays]-1],
+			distancing,
+			ConstantArray[distancingLevel,scenario["distancingDays"]],
+			ConstantArray[1.,365-scenario["distancingDays"]-Max[dataDays]]];
+
+		distancingFunction = Interpolation[Transpose[{
+				fullDays,
+				GaussianFilter[fullDistancing,4]}]];
+
+		scenario["id"]-><|
+			"distancingLevel"->distancingLevel,
+			"distancingData"->fullDistancing,
+			"distancingFunction"->distancingFunction|>
+	];
+	
+	processState[state_,distancing_] := 
+		state->Association[Map[processScenario[#,distancing]&,scenarios]];
+
+	Association[MapThread[processState,{stateLabels,stateDistancings}]]
+];
 
 
 maxPosTestDay=Max[#["day"]&/@statePositiveTestData];
