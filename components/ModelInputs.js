@@ -37,12 +37,14 @@ export function ModelInputs({height, width}) {
           un-inhibited reproduction number which is thought to be around 3.1.
         </p>
         <Grid className="margin-bottom-2">
-          <MethodDefinition
-            icon={PeopleArrows}
-            value={formatPercent(1 - distancingLevel)}
-            label="Social distancing level"
-            method="input"
-          />
+          {distancingLevel != null && (
+            <MethodDefinition
+              icon={PeopleArrows}
+              value={formatPercent(1 - distancingLevel)}
+              label="Social distancing level"
+              method="input"
+            />
+          )}
           <MethodDefinition
             icon={Clock}
             value={`${formatNumber(daysToMonths(distancingDays))} months`}
