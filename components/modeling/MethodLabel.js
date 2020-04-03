@@ -1,18 +1,14 @@
 import * as React from 'react';
 import {Label} from '../content';
 
-export const MethodLabel = ({method}) => {
+export const MethodLabel = ({method, ...props}) => {
   switch (method) {
     case 'modeled':
-      return <Label>Projection</Label>;
+      return <Label {...props}>Projection</Label>;
     case 'fit':
-      return <Label color="purple">Fit to model</Label>;
+      return <Label {...props}>Fit to model</Label>;
     case 'input':
-      return (
-        <Label className="text-gray-light" color="gray">
-          Model input
-        </Label>
-      );
+      return <Label {...props}>Model input</Label>;
     default:
       return null;
   }

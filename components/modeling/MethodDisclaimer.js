@@ -21,7 +21,7 @@ export const MethodDisclaimer = ({method = 'modeled'}) => {
   return (
     <div className="projection">
       <style jsx>{styles}</style>
-      <MethodLabel method={method} />
+      <MethodLabel method={method} color="yellow" />
       <span className="distancing-info text-gray-faint">
         <DistancingInfo />
       </span>

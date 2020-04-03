@@ -30,15 +30,15 @@ const styles = css`
 
 const getHighlightClass = (color) => {
   switch (color) {
-    case 'gray':
-      return 'label-gray';
     case 'blue':
       return 'label-blue';
     case 'purple':
       return 'label-purple';
     case 'yellow':
-    default:
       return 'label-yellow';
+    case 'gray':
+    default:
+      return 'label-gray';
   }
 };
 
