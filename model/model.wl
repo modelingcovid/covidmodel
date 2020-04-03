@@ -108,7 +108,7 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 (* a function to generate the monte carlo simulations from combo of fit / assumed parameters *)
 generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{},
   {
-   RandomVariate[PosNormal[fitParams["r0natural"],standardErrors["r0natural"]]],
+   RandomVariate[PosNormal[fitParams["r0natural"],0.05*fitParams["r0natural"]]],
  RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,daysUntilNotInfectiousOrHospitalized0*0.05]],
  RandomVariate[PosNormal[daysFromInfectedToInfectious0,daysFromInfectedToInfectious0*0.05]],
  RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,daysToLeaveHosptialNonCritical0*0.05]],
