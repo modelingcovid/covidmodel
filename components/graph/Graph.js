@@ -177,7 +177,7 @@ export const Graph = React.memo(function Graph({
         }
       `}</style>
       {controls && <GraphControls scale={scale} setScale={setScale} />}
-      <div className="graph">
+      <div className="graph no-select">
         <svg
           width={width}
           height={height}
