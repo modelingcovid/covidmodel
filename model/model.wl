@@ -7,6 +7,9 @@ Import["model/data.wl"];
 Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
+(* to do a quick run GenerateModelExport[100,testCaseStates] *)
+testCaseStates={"CA","VA","FL","CO", "MD","TX","WA","OR", "PA", "CT", "OH", "VT"};
+
 (* model predict max *)
 tmax0 = 365;
 
@@ -152,7 +155,6 @@ buckets = raw["Buckets"];
 "staffedBeds"->stateICUData[state]["staffedBeds"],
 "bedUtilization"->stateICUData[state]["bedUtilization"],
 "hospitalCapacity"->(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],
-"R0"-> stateDistancing[state,"scenario1",1]*(r0natural0/100),
 "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
 "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
@@ -314,6 +316,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 	percentPositiveCase,
 	distancing,
 	pfunODE2,
+	prettyEvents,
 	equationsDAE,
 	initialConditions,
 	output,
@@ -324,7 +327,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 	eventsODE,
 	lhs,
 	rhs,
-	dependentVariablesODE
+	dependentVariablesODE,
+	latestDayInDistancingData,
+	latestValue
     },
   
     distancing[t_] := stateDistancing[state, scenario["id"], t];
@@ -439,6 +444,8 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	{sol,evts} = Reap[Apply[pfunODE2,paramExpected],{"containment","herd","icu","hospital","cutoff"},Rule];
 	
 	events=Association[Flatten[evts]];
+	prettyEvents={#-><|"eventName" -> #, "day" -> events[#][[1]][[1]], "thresholdCrossed" -> events[#][[1]][[2]]|>}&/@Keys[events];
+	
 	endOfYear = 365;
 	(* we  chop off the data here with one of either a containment or herd immunity events *)
 	endOfEval = If[KeyExistsQ[events, "containment"], events["containment"][[1]][[1]], 
@@ -474,7 +481,9 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t]]]
 	},First],
 	"cumulativeDeaths" -> Merge[{
-	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null,Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"]]|>,
+	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null,
+	       If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],Null]]
+	       |>,
 	   <|"expected"-> stateParams["params"]["population"]*sol[[QP[Deaq]]][t]|>,
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,DeathQuantiles[t]]]
 	},First],
@@ -537,13 +546,15 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	   Null]
 	|>;
 	
-	
-	
+	latestDayInDistancingData=Max[#["day"]&/@stateDistancingParsedData];
+	latestValue=KeyDrop[Select[stateDistancingParsedData,#["day"]==latestDayInDistancingData&][[1]],"day"][state];
+
 	Merge[{
+	  <|"distancingLevel"-> If[scenario["maintain"],latestValue,mapLevels[scenario["distancingLevel"]]]|>,
 	  scenario,
 	  Association[{
 	    "timeSeriesData"->timeSeriesData,
-	    "events"->events,
+	    "events"->prettyEvents,
 	    "summary"->summary
       }]}, First]
 ];
