@@ -470,7 +470,7 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
 	CurrentlyHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[HHq]]][t])&/@simResults,deciles];
 	CurrentlyCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[CCq]]][t])&/@simResults,deciles];	
-
+	
 	timeSeriesData = Module[{},
 	Table[Association[{
 	"day"->t,
@@ -481,9 +481,7 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t]]]
 	},First],
 	"cumulativeDeaths" -> Merge[{
-	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null,
-	       If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],Null]]
-	       |>,
+	   <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, Null, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],Null]]|>,
 	   <|"expected"-> stateParams["params"]["population"]*sol[[QP[Deaq]]][t]|>,
 	   Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,DeathQuantiles[t]]]
 	},First],
