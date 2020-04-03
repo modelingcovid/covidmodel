@@ -210,14 +210,13 @@ tmax_,
 pS_,
 pH_,
 pC_,
-pPCRNH_,
-pPCRH_,
+(*pPCRNH_,
+pPCRH_,*)
 distancing_,
 icuCapacity_,
 percentPositiveCase_
 ]:=
 ParametricNDSolveValue[{
-	
 	Sq'[t]    == (-distancing[t] *
 			 	  r0natural *
 				  Iq[t] *
@@ -256,7 +255,7 @@ ParametricNDSolveValue[{
 	RHq'[t]   == HHq[t]/daysToLeaveHosptialNonCritical,
 
 	(* pcr confirmation *)	
-	PCR'[t]   == (pPCRNH*percentPositiveCase[t+percentPositiveTestDelay]*Iq[t])/daysToGetTestedIfNotHospitalized + (pPCRH*percentPositiveCase[t+percentPositiveTestDelay0]*HHq[t])/daysToGetTestedIfHospitalized,
+	PCR'[t]   == (pPCRNH*percentPositiveCase[t+percentPositiveTestDelay]*Iq[t])/daysToGetTestedIfNotHospitalized0 + (pPCRH*percentPositiveCase[t+percentPositiveTestDelay0]*HHq[t])/daysToGetTestedIfHospitalized0,
 
 	(* Infected, will need critical care *)	
 	ICq'[t]   == pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilNotInfectiousOrHospitalized,
@@ -282,8 +281,8 @@ ParametricNDSolveValue[{
 	EHq[0]==0
 	}/.{r0natural->Exp[r0natural],importtime->Exp[importtime],daysToGetTestedIfNotHospitalized->Exp[daysToGetTestedIfNotHospitalized],daysToGetTestedIfHospitalized->Exp[daysToGetTestedIfHospitalized]},
 	{Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, establishment},
-	{t, 0, tmax},
-	{r0natural, importtime, daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized}
+	{t, 0, today},
+	{r0natural, importtime, pPCRNH, pPCRH}
 ];
 
 endTime[ifun_]:=Part[ifun["Domain"],1,-1];
@@ -595,10 +594,18 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{sol,distancing,params,
 	];
 	Echo[sol];
 
-    model[r0natural_,importtime_,daysToGetTestedIfNotHospitalized_, daysToGetTestedIfHospitalized_][i_,t_]:=Through[sol[r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized][t],List][[i]]/;And@@NumericQ/@{r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized,i,t};
+    model[
+      r0natural_,
+      importtime_,
+      daysToGetTestedIfNotHospitalized_, 
+      daysToGetTestedIfHospitalized_
+    ][i_,t_]:=Through[sol[r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized][t],List][[i]]/;And@@NumericQ/@{r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized,i,t};
 	
 	(* we make the data shape (metric#, day, value) so that we can simultaneously fit PCR and deaths *)
-	longData=Select[{1,#["day"],If[TrueQ[#["deathIncrease"]==Null],0,(#["deathIncrease"]/params["population"])//N]}&/@thisStateData,#[[3]]>0&];
+	longData=Select[Join[
+	  {1,#["day"],If[TrueQ[#["deathIncrease"]==Null],0,(#["deathIncrease"]/params["population"])//N]}&/@thisStateData,
+	  {2,#["day"],(#["positiveIncrease"]/params["population"])//N}&/@thisStateData
+	],#[[3]]>0&];
 	(*Logging the data seems to get stuck... loggedLongData={#[[1]],#[[2]],Log[#[[3]]]}&/@longData;*)
 	
 	(* set weights for each datapoint in longData *)
@@ -614,13 +621,19 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{sol,distancing,params,
 	Echo[longData];
 	fit=NonlinearModelFit[
 		longData,
-		(* fit to daily increases *) 
-		model[r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized][i,t]-model[r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized][i,t-1],
-		{{r0natural, Log[r0natural0]}, {importtime, Log[params["importtime0"]]}, {daysToGetTestedIfNotHospitalized, Log[daysToGetTestedIfNotHospitalized0]}, {daysToGetTestedIfHospitalized, Log[daysToGetTestedIfHospitalized0]}},
+		(model[r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized][i,t]-
+		model[r0natural,importtime,daysToGetTestedIfNotHospitalized, daysToGetTestedIfHospitalized][i,t-1]),
+		{
+		  {r0natural, Log[r0natural0]}, 
+		  {importtime, Log[params["importtime0"]]}, 
+		  {daysToGetTestedIfNotHospitalized, Log[daysToGetTestedIfNotHospitalized0]}, 
+		  {daysToGetTestedIfHospitalized, Log[daysToGetTestedIfHospitalized0]}
+		},
 		{i,t},
 		Weights->dataWeights,
 		AccuracyGoal->5,
-		PrecisionGoal->8
+		PrecisionGoal->8,
+		Method->{NMinimize,Method->"NedlerMead"}
 	];
 	(* if we cannot get smooth enough then use Nelder-Mead Post-processing \[Rule] false *)
 	Echo[fit];
@@ -635,7 +648,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{sol,distancing,params,
 	
 	Echo[fitParams];
 	Echo[residualsPlot[fit]];
-	
+	(*
 	(* do a monte carlo for each scenario *)
    Merge[{
       <|"scenarios"->
@@ -652,7 +665,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{sol,distancing,params,
       "importtime"->fitParams["importtime"],
       "longData"->longData,
       "goodnessOfFitMetrics"->gofMetrics
-    }, First] 
+    }, First] *)
 ];
 
 (* export the full model data, Warning: paralllize will eat a lot of laptop resources while it evaluates *)
@@ -660,7 +673,7 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
   Print["generating data for " <> state];
   evaluateState[state, simulationsPerCombo]
 ];
-GenerateModelExport[simulationsPerCombo_:1000, states_:distancingStates] := Module[{},
+GenerateModelExport[simulationsPerCombo_:1000, states_:distancingStates] := Module[{allStatesData},
 	loopBody[state_]:=Module[{stateData},
 		stateData=evaluateStateAndPrint[state, simulationsPerCombo];
 		Export["public/json/"<>state<>".json",stateData];
