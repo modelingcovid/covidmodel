@@ -69,8 +69,19 @@ export const darkMode = setProperties({
     background: '#181b2c',
     shadow: ['rgba(255, 255, 255, 0.1)'],
     gray: {
-      ...['#515a70', '#8691a1', '#c0c8d2', '#e0e6eb', '#f6f8fa'],
+      ...['#2d3146', '#8691a1', '#c0c8d2', '#e0e6eb', '#f6f8fa'],
       bg: '#2d3146',
+      muted: '#c0c8d2',
     },
+    red: ['#ffa8a8', '#ff0a33', '#f00028'],
+    blue: {
+      ...['#b5eff1', '#26afff', '#0096ed', '#0670de'],
+      bg: '#ddfffe',
+    },
+    yellow: {
+      ...['#fcbd3a', null, '#ff8f0e', '#ed6804'],
+      muted: '#a82c00',
+    },
+    magenta: [null, '#ff248e'],
   },
 });
