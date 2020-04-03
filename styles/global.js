@@ -12,7 +12,7 @@ import {px, toRootRule} from './util';
 export const globalStyles = css.global`
   ${toRootRule(declarations)}
 
-  ${breakpoint.tabletUp} {
+  @media ${breakpoint.tabletUp} {
     ${toRootRule(
       px({
         [properties.font.size.jumbo]: 64,
@@ -21,7 +21,7 @@ export const globalStyles = css.global`
       })
     )}
   }
-  ${mediaQuery.darkMode} {
+  @media ${mediaQuery.darkMode} {
     ${toRootRule(darkMode)}
   }
   @media (min-width: 896px) {

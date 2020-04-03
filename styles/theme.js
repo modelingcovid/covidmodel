@@ -58,10 +58,10 @@ export const {
 });
 
 export const breakpoint = {
-  tabletUp: '@media (min-width: 600px)',
+  tabletUp: '(min-width: 600px)',
 };
 export const mediaQuery = {
-  darkMode: '@media (prefers-color-scheme: dark)',
+  darkMode: '(prefers-color-scheme: dark)',
 };
 
 export const darkMode = setProperties({

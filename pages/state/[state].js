@@ -70,7 +70,7 @@ export default function StatePage({data, states}) {
               z-index: 2;
             }
             .controls {
-              padding: var(--spacing1);
+              padding: var(--spacing1) 0;
               box-shadow: 0 2px var(--color-shadow0);
             }
             .text-jumbo {
