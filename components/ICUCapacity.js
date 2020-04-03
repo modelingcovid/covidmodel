@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
-import {Definition, Grid} from './content';
+import {Grid} from './content';
 import {Legend, Points} from './graph';
 import {Bed, Lungs, Poll} from './icon';
 import {
+  MethodDefinition,
+  MethodDisclaimer,
   PercentileLegendRow,
-  ProjectionDisclaimer,
   useModelData,
 } from './modeling';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
@@ -35,7 +36,7 @@ export const ICUCapacity = ({width, height}) => {
 
   return (
     <div className="margin-top-4">
-      <ProjectionDisclaimer />
+      <MethodDisclaimer />
       <div className="section-heading">{heading}</div>
       <p className="paragraph">
         We assign a higher probability of fatality in the case the ICU capacity
@@ -44,20 +45,23 @@ export const ICUCapacity = ({width, height}) => {
         distribution.
       </p>
       <Grid className="margin-bottom-2">
-        <Definition
+        <MethodDefinition
           icon={Bed}
           value={formatNumber(icuBeds)}
           label="available ICU beds"
+          method="input"
         />
-        <Definition
+        <MethodDefinition
           icon={Lungs}
           value={formatNumber(ventilators)}
           label="ventilators"
+          method="input"
         />
-        <Definition
+        <MethodDefinition
           icon={Poll}
           value={formatPercent1(pC)}
           label="probability a person with COVID-19 needs ICU care"
+          method="input"
         />
       </Grid>
       <OccupancyGraph

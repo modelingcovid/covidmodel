@@ -2,11 +2,12 @@ import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
 import {DistancingGraph} from './configured';
-import {Definition, Grid, Section} from './content';
-import {useModelData} from './modeling';
+import {Grid, Section} from './content';
+import {CalendarDay, Viruses} from './icon';
+import {MethodDisclaimer, MethodDefinition, useModelData} from './modeling';
 import {dayToDate} from '../lib/date';
 import {
-  formatDate,
+  formatShortDate,
   formatNumber,
   formatNumber2,
   formatPercent2,
@@ -18,8 +19,9 @@ export function ModelInputs({height, width}) {
   const {model, stateName, summary, x} = useModelData();
   return (
     <Section className="margin-top-4">
-      <div className="text-jumbo margin-bottom-1">Model inputs</div>
+      <div className="text-jumbo margin-bottom-2">Model inputs</div>
       <div>
+        <MethodDisclaimer method="input" />
         <div className="section-heading">Social distancing</div>
         <p className="paragraph">
           On the left axis social distance of 100% means no contact with others,
@@ -27,6 +29,20 @@ export function ModelInputs({height, width}) {
           since it cannot find new hosts. The zero-percent distance is the
           un-inhibited reproduction number which is thought to be around 3.1.
         </p>
+        <Grid className="margin-bottom-2">
+          <MethodDefinition
+            icon={CalendarDay}
+            value={formatShortDate(dayToDate(model.importtime))}
+            label="Import date of COVID-19"
+            method="fit"
+          />
+          <MethodDefinition
+            icon={Viruses}
+            value={formatNumber2(model.r0)}
+            label="Basic reproduction number (R₀)"
+            method="fit"
+          />
+        </Grid>
         <DistancingGraph
           y={getDistancing}
           leftLabel="distancing"
@@ -34,44 +50,6 @@ export function ModelInputs({height, width}) {
           width={width}
           height={height}
         />
-      </div>
-      <div className="margin-top-4">
-        <div className="section-heading">Demographic parameters</div>
-        <p className="paragraph">
-          Demographic parameters are calculated based on publicly available data
-          on age distributions and hospital capacity. The hospitalization
-          probabilities are computed based on assumed age-based need and state
-          age distributions.
-        </p>
-        <Grid>
-          <Definition
-            value={formatNumber(model.population)}
-            label="total population"
-          />
-        </Grid>
-      </div>
-      <div className="margin-top-4">
-        <div className="section-heading">Model-fit parameters</div>
-        <p className="paragraph">
-          Most parameters{' '}
-          <Link href="/about">
-            <a>were fit</a>
-          </Link>{' '}
-          on country data, but we adjust the following parameters on a per-state
-          basis for a more accurate fit.
-        </p>
-        <Grid>
-          <Definition
-            value={formatDate(dayToDate(model.importtime))}
-            label="Import date"
-            method="fit"
-          />
-          <Definition
-            value={formatNumber2(model.r0)}
-            label="Basic reproduction number (R₀)"
-            method="fit"
-          />
-        </Grid>
       </div>
     </Section>
   );

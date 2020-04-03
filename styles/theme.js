@@ -13,16 +13,20 @@ export const {
     gray: {
       ...['#e0e6eb', '#8691a1', '#515a70', '#2d3146', '#181b2c'],
       bg: '#f6f8fa',
+      muted: '#515a70',
     },
     blue: {
       ...['#b5eff1', '#0096ed', '#0670de', '#0055bc'],
       bg: '#ddfffe',
     },
-    yellow: ['#fae498', null, '#ed6804', '#c84801'],
+    yellow: {
+      ...['#fae498', null, '#ed6804', '#c84801'],
+      muted: '#8b5904',
+    },
     red: ['#ffa8a8', '#e6082d', '#cd0426'],
     green: [null, null, '#228403'],
     magenta: [null, '#df0371'],
-    purple: ['#f0defe'],
+    purple: {...['#f0defe'], muted: '#5a2c8e'},
   },
   font: {
     family: {

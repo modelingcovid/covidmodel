@@ -100,7 +100,6 @@ export default function StatePage({data, states}) {
               <ProjectedDeaths width={width} height={height} />
               <HospitalCapacity width={width} height={height} />
               <ICUCapacity width={width} height={height} />
-              <OutcomeSummary data={scenarioSummary} />
             </Section>
           </div>
         </Layout>

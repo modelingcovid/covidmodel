@@ -1,8 +1,13 @@
 import * as React from 'react';
 import css from 'styled-jsx/css';
 import {theme} from '../../styles';
+import {Label} from './Label';
 
 const styles = css`
+  .definition-before {
+    font-size: ${theme.font.size.micro};
+    padding-bottom: 4px;
+  }
   .definition {
     display: flex;
     flex-direction: column;
@@ -22,36 +27,27 @@ const styles = css`
   }
 `;
 
-const getValueClass = (method) => {
-  switch (method) {
-    case 'modeled':
-      return 'highlight';
-    case 'fit':
-      return 'highlight-purple';
-    case 'input':
-    default:
-      return '';
-  }
-};
-
-export const Definition = ({icon: Icon, value, label, method}) => {
+export const Definition = ({icon: Icon, value, label, before}) => {
   const valueClasses = [];
 
   return (
-    <div className="definition text-gray">
+    <div className="text-gray">
       <style jsx>{styles}</style>
 
-      <div className="definition-value">
-        {Icon && (
-          <Icon
-            className="text-gray-faint"
-            size={20}
-            style={{flexShrink: 0, marginRight: theme.spacing[0]}}
-          />
-        )}
-        <span className={getValueClass(method)}>{value}</span>
+      {before && <div className="definition-before">{before}</div>}
+      <div className="definition">
+        <div className="definition-value">
+          {Icon && (
+            <Icon
+              className="text-gray-faint"
+              size={20}
+              style={{flexShrink: 0, marginRight: theme.spacing[0]}}
+            />
+          )}
+          <span>{value}</span>
+        </div>
+        {label && <div className="text-gray-light">{label}</div>}
       </div>
-      {label && <div className="text-gray-light">{label}</div>}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import {useModelData} from './useModelData';
 import {daysToMonths} from '../../lib/date';
 import {formatNumber, formatPercent} from '../../lib/format';
 
-export const DistancingInfo = () => {
+export const DistancingInfo = (stacked = false) => {
   const {
     scenarioData: {distancingDays, distancingLevel},
   } = useModelData();

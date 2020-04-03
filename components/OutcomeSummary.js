@@ -2,12 +2,12 @@ import * as React from 'react';
 import {dayToDate} from '../lib/date';
 import {formatDate, formatNumber, formatPercent2} from '../lib/format';
 import {Definition, Grid} from './content';
-import {ProjectionDisclaimer} from './modeling';
+import {MethodDisclaimer} from './modeling';
 
 export const OutcomeSummary = ({data}) => {
   return (
     <div className="margin-top-4">
-      <ProjectionDisclaimer />
+      <MethodDisclaimer />
       <div className="section-heading">Outcome summary</div>
       <p className="paragraph">
         Fatality rate and percent of population infected are the expected PCR

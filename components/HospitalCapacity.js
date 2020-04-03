@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
-import {Definition, Grid} from './content';
+import {Grid} from './content';
 import {Legend, Points} from './graph';
 import {Bed, HospitalUser, Poll} from './icon';
 import {
+  MethodDefinition,
+  MethodDisclaimer,
   PercentileLegendRow,
-  ProjectionDisclaimer,
   useModelData,
 } from './modeling';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
@@ -37,7 +38,7 @@ export const HospitalCapacity = ({width, height}) => {
 
   return (
     <div className="margin-top-4">
-      <ProjectionDisclaimer />
+      <MethodDisclaimer />
       <div className="section-heading">{hospitalCapacityHeading}</div>
       <div style={{display: 'flex'}}>
         <p className="paragraph" style={{flexGrow: 1}}>
@@ -47,20 +48,23 @@ export const HospitalCapacity = ({width, height}) => {
         </p>
       </div>
       <Grid className="margin-bottom-2">
-        <Definition
+        <MethodDefinition
           icon={Bed}
           value={formatNumber(staffedBeds)}
           label="available hospital beds"
+          method="input"
         />
-        <Definition
+        <MethodDefinition
           icon={HospitalUser}
           value={formatPercent1(bedUtilization)}
           label="typical occupancy rate"
+          method="input"
         />
-        <Definition
+        <MethodDefinition
           icon={Poll}
           value={formatPercent1(pC + pH)}
           label="probability a person with COVID-19 needs hospitalization"
+          method="input"
         />
       </Grid>
       <OccupancyGraph

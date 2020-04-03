@@ -2,7 +2,7 @@ import * as React from 'react';
 import css from 'styled-jsx/css';
 import {theme} from '../../styles';
 
-import {Label} from '../content';
+import {MethodLabel} from './MethodLabel';
 import {DistancingInfo} from './DistancingInfo';
 
 const styles = css`
@@ -10,18 +10,18 @@ const styles = css`
     font-family: ${theme.font.family.mono};
     font-size: ${theme.font.size.micro};
     font-weight: 400;
-    margin-bottom: ${theme.spacing[1]};
+    margin-bottom: 12px;
   }
   .distancing-info {
     padding-left: 24px;
   }
 `;
 
-export const ProjectionDisclaimer = () => {
+export const MethodDisclaimer = ({method = 'modeled'}) => {
   return (
     <div className="projection">
       <style jsx>{styles}</style>
-      <Label>Projection</Label>
+      <MethodLabel method={method} />
       <span className="distancing-info text-gray-faint">
         <DistancingInfo />
       </span>

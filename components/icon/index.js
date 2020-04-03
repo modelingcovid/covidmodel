@@ -17,3 +17,4 @@ export * from './ShieldVirus';
 export * from './SVG';
 export * from './Vial';
 export * from './Virus';
+export * from './Viruses';

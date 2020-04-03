@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {PopulationGraph} from './configured';
-import {Definition, Grid} from './content';
+import {Grid} from './content';
 import {Legend} from './graph';
 import {People, Vial, HeadSideMask} from './icon';
 import {
+  MethodDefinition,
+  MethodDisclaimer,
   PercentileLegendRow,
   PercentileLine,
-  ProjectionDisclaimer,
   useModelData,
 } from './modeling';
 import {formatNumber, formatPercent1} from '../lib/format';
@@ -20,7 +21,7 @@ export function CaseProgressionCurve({height, width}) {
   const {model, stateName, summary, x} = useModelData();
   return (
     <div className="margin-top-4">
-      <ProjectionDisclaimer />
+      <MethodDisclaimer />
       <div className="section-heading">Case progression curve</div>
       <p className="paragraph">
         We show the current number of infected and infectious individuals as
@@ -30,12 +31,13 @@ export function CaseProgressionCurve({height, width}) {
         the epidemic contained.
       </p>
       <Grid className="margin-bottom-2">
-        <Definition
+        <MethodDefinition
           icon={People}
           value={formatNumber(model.population)}
           label="total population"
+          method="input"
         />
-        <Definition
+        <MethodDefinition
           icon={HeadSideMask}
           value={formatPercent1(
             summary.totalProjectedInfected / model.population
@@ -43,7 +45,7 @@ export function CaseProgressionCurve({height, width}) {
           label="of the population infected"
           method="modeled"
         />
-        <Definition
+        <MethodDefinition
           icon={Vial}
           value={formatNumber(summary.totalProjectedPCRConfirmed)}
           label="reported positive tests"
