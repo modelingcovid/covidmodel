@@ -1,15 +1,9 @@
 import * as React from 'react';
-import {interpolateBlues} from 'd3-scale-chromatic';
 import {LinearGradient, Stop} from './LinearGradient';
 import {useGraphData} from './useGraphData';
 import {useComponentId} from '../util';
 
-export const ScaleGradient = ({
-  id,
-  y,
-  yScale: yScaleProp,
-  color = interpolateBlues,
-}) => {
+export const ScaleGradient = ({id, y, yScale: yScaleProp, color}) => {
   const {data, x, yScale: yScaleContext, yMax} = useGraphData();
   if (yScaleProp) {
     yScaleProp.range([yMax, 0]);
@@ -29,12 +23,7 @@ export const ScaleGradient = ({
   );
 };
 
-export const ScaleGradientLayer = ({
-  y,
-  yScale,
-  color = interpolateBlues,
-  ...props
-}) => {
+export const ScaleGradientLayer = ({y, yScale, color, ...props}) => {
   const {xMax, yMax} = useGraphData();
   const id = useComponentId('scaleGradientLayer');
   return (

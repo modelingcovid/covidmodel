@@ -1,6 +1,10 @@
 import * as React from 'react';
+import {hcl, rgb} from 'd3-color';
+import {interpolateHcl, piecewise} from 'd3-interpolate';
 import {scaleLinear} from '@vx/scale';
 import {ScaleGradientLayer} from '../graph';
+import {useMatchMedia} from '../util';
+import {darkMode, mediaQuery, declarations, properties} from '../../styles';
 
 const getDistancing = ({distancing}) => distancing;
 
@@ -9,10 +13,29 @@ const distancingScale = scaleLinear({
   nice: true,
 });
 
-export const DistancingGradient = () => (
-  <ScaleGradientLayer
-    y={getDistancing}
-    yScale={distancingScale}
-    style={{opacity: '0.2'}}
-  />
-);
+const lightMode = declarations;
+const lightSource = rgb(lightMode[properties.color.focus[0]]);
+const lightColor = (n) => {
+  lightSource.opacity = n * 0.2;
+  return lightSource.toString();
+};
+
+const darkSource = hcl(darkMode[properties.color.gray[4]]);
+const darkColor = (n) => {
+  darkSource.opacity = n * 0.8;
+  return darkSource.toString();
+};
+
+export const DistancingGradient = () => {
+  const isDarkMode = useMatchMedia(mediaQuery.darkMode);
+  return (
+    <ScaleGradientLayer
+      color={isDarkMode ? darkColor : lightColor}
+      y={getDistancing}
+      yScale={distancingScale}
+      style={{
+        mixBlendMode: isDarkMode ? 'overlay' : 'normal',
+      }}
+    />
+  );
+};
