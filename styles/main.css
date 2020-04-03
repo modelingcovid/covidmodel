@@ -92,6 +92,9 @@ text {
 .margin-bottom-1 {
   margin-bottom: var(--spacing1);
 }
+.margin-bottom-2 {
+  margin-bottom: var(--spacing2);
+}
 .margin-top-4 {
   margin-top: var(--spacing4);
 }
@@ -148,7 +151,8 @@ text {
 }
 
 .highlight,
-.highlight-gray {
+.highlight-gray,
+.highlight-purple {
   padding: 0 4px;
   margin: 0 -2px;
 }
@@ -157,4 +161,7 @@ text {
 }
 .highlight-gray {
   background: var(--color-gray0);
+}
+.highlight-purple {
+  background: var(--color-purple0);
 }

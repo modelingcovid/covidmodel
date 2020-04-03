@@ -64,10 +64,12 @@ export function ModelInputs({height, width}) {
           <Definition
             value={formatDate(dayToDate(model.importtime))}
             label="Import date"
+            method="fit"
           />
           <Definition
             value={formatNumber2(model.r0)}
             label="Basic reproduction number (R₀)"
+            method="fit"
           />
         </Grid>
       </div>

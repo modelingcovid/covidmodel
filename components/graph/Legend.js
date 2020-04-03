@@ -82,7 +82,7 @@ export const LegendRow = ({children, description, title}) => (
       <div className="text-small text-gray-dark weight-600">{title}</div>
       {description && (
         <div
-          style={{paddingBottom: theme.spacing[0]}}
+          style={{paddingBottom: theme.spacing[1]}}
           className="text-small text-gray-light"
         >
           {description}

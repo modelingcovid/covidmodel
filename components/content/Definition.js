@@ -22,20 +22,36 @@ const styles = css`
   }
 `;
 
-export const Definition = ({icon: Icon, value, label}) => (
-  <div className="definition text-gray">
-    <style jsx>{styles}</style>
+const getValueClass = (method) => {
+  switch (method) {
+    case 'modeled':
+      return 'highlight';
+    case 'fit':
+      return 'highlight-purple';
+    case 'input':
+    default:
+      return '';
+  }
+};
 
-    <div className="definition-value">
-      {Icon && (
-        <Icon
-          className="text-gray-faint"
-          size={20}
-          style={{flexShrink: 0, marginRight: theme.spacing[0]}}
-        />
-      )}
-      {value}
+export const Definition = ({icon: Icon, value, label, method}) => {
+  const valueClasses = [];
+
+  return (
+    <div className="definition text-gray">
+      <style jsx>{styles}</style>
+
+      <div className="definition-value">
+        {Icon && (
+          <Icon
+            className="text-gray-faint"
+            size={20}
+            style={{flexShrink: 0, marginRight: theme.spacing[0]}}
+          />
+        )}
+        <span className={getValueClass(method)}>{value}</span>
+      </div>
+      {label && <div className="text-gray-light">{label}</div>}
     </div>
-    {label && <div className="text-gray-light">{label}</div>}
-  </div>
-);
+  );
+};

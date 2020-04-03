@@ -3,20 +3,21 @@ import {theme} from '../styles';
 import {PopulationGraph} from './configured';
 import {Definition, Grid} from './content';
 import {Legend} from './graph';
-// import {Bed, HospitalUser} from './icon';
+import {People, Vial, HeadSideMask} from './icon';
 import {
   PercentileLegendRow,
   PercentileLine,
   ProjectionDisclaimer,
   useModelData,
 } from './modeling';
+import {formatNumber, formatPercent1} from '../lib/format';
 
 const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
 const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
 const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
 
 export function CaseProgressionCurve({height, width}) {
-  const {stateName, summary, x} = useModelData();
+  const {model, stateName, summary, x} = useModelData();
   return (
     <div className="margin-top-4">
       <ProjectionDisclaimer />
@@ -28,6 +29,27 @@ export function CaseProgressionCurve({height, width}) {
         infections is reduced to a small fraction of the population we consider
         the epidemic contained.
       </p>
+      <Grid className="margin-bottom-2">
+        <Definition
+          icon={People}
+          value={formatNumber(model.population)}
+          label="total population"
+        />
+        <Definition
+          icon={HeadSideMask}
+          value={formatPercent1(
+            summary.totalProjectedInfected / model.population
+          )}
+          label="of the population infected"
+          method="modeled"
+        />
+        <Definition
+          icon={Vial}
+          value={formatNumber(summary.totalProjectedPCRConfirmed)}
+          label="reported positive tests"
+          method="modeled"
+        />
+      </Grid>
       <PopulationGraph
         x={x}
         xLabel="people"

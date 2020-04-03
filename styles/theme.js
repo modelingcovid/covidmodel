@@ -9,6 +9,7 @@ export const {
   color: {
     background: '#fff',
     focus: ['rgba(66, 153, 225, 0.2)', 'rgba(66, 153, 225, 0.5)'],
+    shadow: ['rgba(24, 27, 44, 0.1)'],
     gray: {
       ...['#e0e6eb', '#8691a1', '#515a70', '#2d3146', '#181b2c'],
       bg: '#f6f8fa',
@@ -21,6 +22,7 @@ export const {
     red: ['#ffa8a8', '#e6082d', '#cd0426'],
     green: [null, null, '#228403'],
     magenta: [null, '#df0371'],
+    purple: ['#f0defe'],
   },
   font: {
     family: {
@@ -61,6 +63,7 @@ export const mediaQuery = {
 export const darkMode = setProperties({
   color: {
     background: '#181b2c',
+    shadow: ['rgba(255, 255, 255, 0.1)'],
     gray: {
       ...['#515a70', '#8691a1', '#c0c8d2', '#e0e6eb', '#f6f8fa'],
       bg: '#2d3146',

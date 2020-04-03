@@ -37,15 +37,13 @@ export const ICUCapacity = ({width, height}) => {
     <div className="margin-top-4">
       <ProjectionDisclaimer />
       <div className="section-heading">{heading}</div>
-      <div style={{display: 'flex'}}>
-        <p className="paragraph" style={{flexGrow: 1}}>
-          We assign a higher probability of fatality in the case the ICU
-          capacity is over-shot. This can be seen in countries like Italy where
-          the fatality rate is substantially higher even controlling for the age
-          distribution.
-        </p>
-      </div>
-      <Grid className="margin-bottom-1">
+      <p className="paragraph">
+        We assign a higher probability of fatality in the case the ICU capacity
+        is over-shot. This can be seen in countries like Italy where the
+        fatality rate is substantially higher even controlling for the age
+        distribution.
+      </p>
+      <Grid className="margin-bottom-2">
         <Definition
           icon={Bed}
           value={formatNumber(icuBeds)}
