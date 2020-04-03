@@ -328,11 +328,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 	lhs,
 	rhs,
 	dependentVariablesODE,
-	latestDayInDistancingData,
-	latestValue
-    },
+	},
   
-    distancing[t_] := stateDistancing[state, scenario["id"], t];
+    distancing = stateDistancingPrecompute[state][scenario["id"]];
     percentPositiveCase[t_]:=posInterpMap[state][t];
     Clear[Sq,Eq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
 Clear[r0natural,daysUntilNotInfectiousOrHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity];
@@ -544,11 +542,8 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	   Null]
 	|>;
 	
-	latestDayInDistancingData=Max[#["day"]&/@stateDistancingParsedData];
-	latestValue=KeyDrop[Select[stateDistancingParsedData,#["day"]==latestDayInDistancingData&][[1]],"day"][state];
-
 	Merge[{
-	  <|"distancingLevel"-> If[scenario["maintain"],latestValue,mapLevels[scenario["distancingLevel"]]]|>,
+	  <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
 	  scenario,
 	  Association[{
 	    "timeSeriesData"->timeSeriesData,
@@ -570,7 +565,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{sol,distancing,params,
 	hospitalizationData = stateHospitalizationData[state];
 	
     (* just do the fit to scenario1, the fit happens on points that are in the past, sot he future scenario doesn't impact *)
-	distancing[t_] := stateDistancing[state, "scenario1", t];
+	distancing = stateDistancingPrecompute[state]["scenario1"];
 	percentPositiveCase[t_]:=posInterpMap[state][t];
 	
 	sol=CovidModelFit[
