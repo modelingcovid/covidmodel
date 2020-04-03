@@ -2,6 +2,7 @@ import * as React from 'react';
 import Head from 'next/head';
 
 import {globalStyles} from '../styles';
+import {App} from '../components';
 
 import '../styles/main.css';
 import {ComponentIdProvider} from '../components/util';
@@ -12,7 +13,9 @@ export default function MyApp({Component, pageProps}) {
       <style jsx global>
         {globalStyles}
       </style>
-      <Component {...pageProps} />
+      <App>
+        <Component {...pageProps} />
+      </App>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link

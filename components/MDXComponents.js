@@ -1,5 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
 import {MDXProvider} from '@mdx-js/react';
+import {Section} from './content';
 
 const tagWithClassName = (Tag, className) => ({children, ...props}) => (
   <Tag {...props} className={className}>
@@ -11,6 +13,7 @@ export const MDXComponents = ({children}) => {
   return (
     <MDXProvider
       components={{
+        wrapper: Section,
         h1: tagWithClassName('h1', 'text-jumbo margin-top-3 margin-bottom-1'),
         h2: tagWithClassName('h2', 'section-heading margin-top-3'),
         h3: tagWithClassName(

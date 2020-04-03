@@ -6,7 +6,6 @@ import {
   CaseProgressionCurve,
   HospitalCapacity,
   ICUCapacity,
-  Layout,
   ModelInputs,
   OutcomeSummary,
   ProjectedDeaths,
@@ -34,7 +33,7 @@ export default function StatePage({data, states}) {
   const height = width > 600 ? 360 : 256;
 
   if (!data) {
-    return <Layout noPad>Missing data for {state}</Layout>;
+    return <>Missing data for {state}</>;
   }
 
   const scenarioSummary = data.scenarios[scenario].summary;
@@ -54,55 +53,53 @@ export default function StatePage({data, states}) {
         data={data.scenarios[scenario].timeSeriesData}
         initial={today}
       >
-        <Layout>
-          <Head>
-            <title>{states[state]} COVID model forecast</title>
-            <meta
-              name="Description"
-              content={`A projection of COVID 19 cases in ${states[state]} under various scenarios of social distancing.`}
-            />
-          </Head>
-          <style jsx>{`
-            .sticky {
-              position: sticky;
-              top: 0;
-              background: var(--color-background);
-              z-index: 2;
-            }
-            .controls {
-              padding: var(--spacing1) 0;
-              box-shadow: 0 2px var(--color-shadow0);
-            }
-            .text-jumbo {
-              margin-bottom: -64px;
-            }
-          `}</style>
-          <div className="flex flex-col justify-center">
-            <div className="sticky">
-              <Section>
-                <div ref={sizeRef} />
-                <div className="controls">
-                  <Controls
-                    state={state}
-                    states={states}
-                    scenario={scenario}
-                    setScenario={setScenario}
-                  />
-                </div>
-              </Section>
-            </div>
-
-            <ModelInputs width={width} height={160} />
-
-            <Section className="margin-top-4">
-              <div className="text-jumbo">Projections</div>
-              <CaseProgressionCurve width={width} height={height} />
-              <ProjectedDeaths width={width} height={height} />
-              <HospitalCapacity width={width} height={height} />
-              <ICUCapacity width={width} height={height} />
+        <Head>
+          <title>{states[state]} COVID model forecast</title>
+          <meta
+            name="Description"
+            content={`A projection of COVID 19 cases in ${states[state]} under various scenarios of social distancing.`}
+          />
+        </Head>
+        <style jsx>{`
+          .sticky {
+            position: sticky;
+            top: 0;
+            background: var(--color-background);
+            z-index: 2;
+          }
+          .controls {
+            padding: var(--spacing1) 0;
+            box-shadow: 0 2px var(--color-shadow0);
+          }
+          .text-jumbo {
+            margin-bottom: -64px;
+          }
+        `}</style>
+        <div className="flex flex-col justify-center">
+          <div className="sticky">
+            <Section>
+              <div ref={sizeRef} />
+              <div className="controls">
+                <Controls
+                  state={state}
+                  states={states}
+                  scenario={scenario}
+                  setScenario={setScenario}
+                />
+              </div>
             </Section>
           </div>
-        </Layout>
+
+          <ModelInputs width={width} height={160} />
+
+          <Section className="margin-top-4">
+            <div className="text-jumbo">Projections</div>
+            <CaseProgressionCurve width={width} height={height} />
+            <ProjectedDeaths width={width} height={height} />
+            <HospitalCapacity width={width} height={height} />
+            <ICUCapacity width={width} height={height} />
+          </Section>
+        </div>
       </NearestDataProvider>
     </ModelDataProvider>
   );
