@@ -10,8 +10,9 @@ Import["model/plot-utils.wl"];
 (* to do a quick run GenerateModelExport[100,testCaseStates] *)
 testCaseStates={"CA","VA","FL","CO", "MD","TX","WA","OR", "PA", "CT", "OH", "VT"};
 
-(* model predict max *)
+(* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365;
+tmin0 = 1;
 
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 4;
@@ -86,9 +87,6 @@ pS0 = 1-(pC0 + pH0);
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
 k0 = 5*10^-3;
-
-(* to regulate Log[0] *)
-tmin0 = 1;
 
 (** Utils **)
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
