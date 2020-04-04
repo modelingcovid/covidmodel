@@ -515,7 +515,7 @@ then we generate a set of all the simulated parameters. Finally we call evaluate
 simulation results for each scenario *)
 Clear[equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric];
 evaluateState[state_, numberOfSimulations_:100]:= Module[{
-   distancing,params,percentPositiveCase,weekOverWeekWeight,longData,thisStateData,model,fit,
+   distancing,params,percentPositiveCase,longData,thisStateData,model,fit,
    fitParams,icuCapacity,dataWeights,standardErrors,hospitalizationData,hospitalCapacity,gofMetrics,
    equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric,
    rlower, rupper, tlower, tupper, replower, repupper, deathDataLength
@@ -595,11 +595,16 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     {PCRParametric[r0natural,importtime,reportingLag][t] ,c==2}}
   ];
 
-  weekOverWeekWeight=.75;
-  (*dataWeights=(weekOverWeekWeight^(#[[2]]/7)(params["population"]#[[3]])^-1)&/@longData;*)
-  (* straight 3 / 1 weighting, time agnostic *)
-  dataWeights=If[#[[1]]==1,999/1000*weekOverWeekWeight^(#[[2]]/7)/Length[ltd],1/1000 weekOverWeekWeight^(#[[2]]/7)/Length[ltd]]&/@longData;
-
+  (* Weight death and PCR test data appropriatly. Factors include: *)
+  (*   weekOverWeekWeight: weights later data more heavily *)
+  (*   poissonWeight: weights data assuming its uncertainty is poisson *)
+  (*   boostDeathWeight: increases the weighting of deaths by some factor *)
+  dataWeights=Module[{weekOverWeekWeight,poissonWeight,boostDeathWeight},
+	weekOverWeekWeight[factor_]:=Map[(factor^(#[[2]]/7))&,longData];
+	poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
+	boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
+	poissonWeight * weekOverWeekWeight[.75] * boostDeathWeight[3]
+	];
     (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
     fit=Quiet[NonlinearModelFit[
       longData,
