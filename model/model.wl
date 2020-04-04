@@ -101,6 +101,27 @@ scenarios={scenario1,scenario2,scenario3,scenario4};
 (* helper to get the scenario for a given id *)
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 
+(* to help the numerical optimizer we give slightly different problem bounds depening on state
+based on eg their epidemics starting earlier or having different hospital systems and thus a different
+gap between PCR and death *)
+fitStartingOverrides=<|
+"CA"-><|"rlower"->2.9,"rupper"->3.1,"tlower"->45,"tupper"->47,"replower"->5.5,"repupper"->6.5|>,
+"FL"-><|"rlower"->2.9,"rupper"->3.1,"tlower"->50,"tupper"->55,"replower"->5.5,"repupper"->6.5|>,
+"PA"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->55,"tupper"->70,"replower"->4,"repupper"->6|>,
+"CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->40,"tupper"->60,"replower"->3,"repupper"->4.6|>,
+"MD"-><|"rlower"->3.1,"rupper"->4.6,"tlower"->40,"tupper"->60,"replower"->3,"repupper"->5|>,
+"TX"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->4.4,"repupper"->5|>,
+"WA"-><|"rlower"->2.5,"rupper"->4.8,"tlower"->35,"tupper"->44,"replower"->3,"repupper"->5|>,
+"CT"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->5|>,
+"OH"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->4|>,
+"VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->53,"replower"->5,"repupper"->6|>
+|>;
+getBounds[state_]:=Module[{},
+If[MemberQ[Keys[fitStartingOverrides],state],
+{fitStartingOverrides[state]["rlower"],fitStartingOverrides[state]["rupper"],fitStartingOverrides[state]["tlower"],fitStartingOverrides[state]["tupper"],fitStartingOverrides[state]["replower"],fitStartingOverrides[state]["repupper"]},
+{2.5,3.8,40,60,4,6}]
+];
+
 (* define some helper distributions and set up all the parameters that need to be simulated *)
 BetaMeanSig[mu_,sig_]:=BetaDistribution[(mu^2-mu^3-mu sig)/sig,((-1+mu) (-mu+mu^2+sig))/sig];
 PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu,sig]]
@@ -112,8 +133,6 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
  RandomVariate[PosNormal[daysUntilNotInfectiousOrHospitalized0,daysUntilNotInfectiousOrHospitalized0*0.05]],
  RandomVariate[PosNormal[daysFromInfectedToInfectious0,daysFromInfectedToInfectious0*0.05]],
  RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,daysToLeaveHosptialNonCritical0*0.05]],
-(*RandomVariate[PosNormal[fitParams["pPCRNH"],fitParams["pPCRNH"]*0.05]],
-RandomVariate[PosNormal[fitParams["pPCRH"],fitParams["pPCRH"]*0.05]],*)
 RandomVariate[PosNormal[pPCRNH0,pPCRNH0*0.05]],
 RandomVariate[PosNormal[pPCRH0,pPCRH0*0.05]],
  RandomVariate[PosNormal[daysTogoToCriticalCare0,daysTogoToCriticalCare0*0.05]], 
@@ -128,8 +147,8 @@ stateParams["params"]["pH"],
 stateParams["params"]["pC"],
 containmentThresholdRatio0,
 stateParams["icuCapacity"],
-stateParams["hospitalCapacity"](*,
-RandomVariate[PosNormal[fitParams["reportingLag"],fitParams["reportingLag"]*0.05]]*)
+stateParams["hospitalCapacity"],
+RandomVariate[PosNormal[fitParams["reportingLag"],fitParams["reportingLag"]*0.05]]
 }&/@Range[numberOfSimulations]]
 
 (* Assumption here is that age dependence follows a logistic curve -- zero year olds dont require any care, 
@@ -355,7 +374,7 @@ equationsDAE = {
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
     (*pcr confirmation*)
-    PCR'[t]==(pPCRNH*percentPositiveCase[t]*Iq[t])/daysToGetTestedIfNotHospitalized0+(pPCRH*percentPositiveCase[t]*HHq[t])/daysToGetTestedIfHospitalized0,
+    PCR'[t]==(reportingLag*pPCRNH*percentPositiveCase[t]*Iq[t])/daysToGetTestedIfNotHospitalized0+(reportingLag*pPCRH*percentPositiveCase[t]*HHq[t])/daysToGetTestedIfHospitalized0,
     (*Infected, will need critical care*)
     ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Hospitalized,
@@ -402,7 +421,8 @@ parameters = {
     pC,
     containmentThresholdCases,
     icuCapacity,
-    hospitalCapacity
+    hospitalCapacity,
+    reportingLag
 };
 equationsODE = Drop[equationsDAE /. Iq[t]->ISq[t]+IHq[t]+ICq[t], -1];
 outputODE = output /. Iq[t]->ISq[t]+IHq[t]+ICq[t];
@@ -426,9 +446,7 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	daysFromInfectedToInfectious0,
 	daysToLeaveHosptialNonCritical0,
 	pPCRNH0,
-	pPCRNH0,
-(*	fitParams["pPCRNH"],
-	fitParams["pPCRH"],*)
+	pPCRH0,
 	daysTogoToCriticalCare0,
 	daysFromCriticalToRecoveredOrDeceased0,
 	fractionOfCriticalDeceased0,
@@ -441,7 +459,8 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	stateParams["params"]["pC"],
 	containmentThresholdRatio0,
 	stateParams["icuCapacity"],
-	stateParams["hospitalCapacity"]
+	stateParams["hospitalCapacity"],
+	fitParams["reportingLag"]
 	};
 	
 	(* do one solution with the mean param values for the estimate *)
@@ -473,7 +492,7 @@ dependentVariablesODE = Drop[dependentVariables, -1];
 	CurrentlyInfectiousQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[ISq]]][t] + #[[QP[IHq]]][t] + #[[QP[ICq]]][t]))&/@simResults,deciles];
 	CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
 	CurrentlyHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[HHq]]][t])&/@simResults,deciles];
-	CurrentlyCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[CCq]]][t])&/@simResults,deciles];	
+	CurrentlyCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[CCq]]][t])&/@simResults,deciles];
 	
 	timeSeriesData = Module[{},
 	Table[Association[{
@@ -574,8 +593,8 @@ tupper,
 replower,
 repupper
 },
-distancing[t_] :=1;(*stateDistancing[state, "scenario1", t];*)
-percentPositiveCase[t_]:=1;(*posInterpMap[state][t];*)
+distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
+percentPositiveCase[t_]:=posInterpMap[state][t];
 params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0, ageHospitalizedDependence0];
 icuCapacity=params["icuBeds"]/params["population"];
 hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["population"];
@@ -623,9 +642,7 @@ dependentVariablesODE = {Deaq, PCR,
  RSq,RHq, RCq,
 RepHq, Sq, Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est};
 parameters = {logR0Natural,logImportTime,logReportingLag};
-{DeaqParametric,PCRParametric,RSqParametric,RHqParametric,RCqParametric,RepHqParametric,SqParametric,EqParametric,ISqParametric,IHqParametric,HHqParametric,ICqParametric,EHqParametric,HCqParametric,CCqParametric,estParametric}= {Deaq, PCR, 
- RSq,RHq, RCq,
-RepHq, Sq, Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est}/.ParametricNDSolve[{equationsODE, 
+{DeaqParametric,PCRParametric}= {Deaq, PCR}/.ParametricNDSolve[{equationsODE, 
   eventsODE, 
   initialConditions
 }, outputODE, 
@@ -635,31 +652,32 @@ DependentVariables->dependentVariablesODE,
 Method->{"DiscontinuityProcessing"->False}
 ];
 
+{rlower,
+ rupper,
+tlower,
+tupper,
+replower,
+repupper}=getBounds[state];
+
 thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
 
 longData=Select[Join[
-	  {1,#["day"],If[TrueQ[#["deathIncrease"]==Null],0,(#["deathIncrease"]/params["population"])//N]}&/@thisStateData,
-	  {2,#["day"],(#["positiveIncrease"]/params["population"])//N}&/@thisStateData
+	  {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
+	  {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData
 	],#[[3]]>0&];
 model[r0natural_,importtime_,reportingLag_,c_][t_]:=Piecewise[{{
-DeaqParametric[r0natural,importtime,reportingLag][t]-DeaqParametric[r0natural,importtime,reportingLag][t-1],c==1},{PCRParametric[r0natural,importtime,reportingLag][t] - PCRParametric[r0natural,importtime,reportingLag][t -1],c==2}}];
+DeaqParametric[r0natural,importtime,reportingLag][t],c==1},{PCRParametric[r0natural,importtime,reportingLag][t] ,c==2}}];
 
 weekOverWeekWeight=.75;
 dataWeights=(weekOverWeekWeight^(#[[1]]/7)(params["population"]#[[3]])^-1)&/@longData;
 
-rlower = 2.5;
-rupper = 3.8;
-tlower = 40;
-tupper = 60;
-replower = 4;
-repupper = 6;
 fit=NonlinearModelFit[
     longData,
     {model[r0natural,importtime,reportingLag,c][t],
     Log[rlower]<=r0natural<=Log[rupper],
     Log[tlower]<=importtime<=Log[tupper],
     Log[replower]<= reportingLag<=Log[repupper]},{{r0natural,Log[(rlower+rupper)/2]}, {importtime,Log[(tlower+tupper)/2]}, {reportingLag,Log[(replower+repupper)/2]}},{c,t},
-    Method->{"NMinimize",Method->"SimulatedAnnealing"}(*,Weights\[Rule]dataWeights*)];
+    Method->{"NMinimize",Method->"SimulatedAnnealing"},Weights->dataWeights];
     fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
 
 	(* TODO: try using VarianceEstimatorFunction\[Rule](1&) *)
@@ -667,7 +685,17 @@ fit=NonlinearModelFit[
 	     fit["ParameterErrors",
 	     ConfidenceLevel->0.97]]];	
 	gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData];
-
+	
+	Echo[
+	Column[{
+Show[
+ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{1,150},{0,0.0005}}],
+LogPlot[{
+DeaqParametric[Log[fitParams["r0natural"]],Log[fitParams["importtime"]],Log[fitParams["reportingLag"]]][t],PCRParametric[Log[fitParams["r0natural"]],Log[fitParams["importtime"]],Log[fitParams["reportingLag"]]][t]},
+{t,1,150},ImageSize->500]],
+Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
+}]
+	];
 	
 	(* do a monte carlo for each scenario *)
    Merge[{
