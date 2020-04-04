@@ -57,9 +57,6 @@ export const App = ({children}) => (
             <a className="focus title color-dark">COVID Modeling Project</a>
           </Link>
           <div className="pages text-small">
-            <Link href="/state/[state]" as="/state/NY">
-              <a className="focus link">States</a>
-            </Link>
             <Link href="/about">
               <a className="focus link">About</a>
             </Link>
