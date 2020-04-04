@@ -89,6 +89,9 @@ text {
   margin-top: var(--spacing0);
   margin-bottom: var(--spacing0);
 }
+.margin-bottom-0 {
+  margin-bottom: var(--spacing0);
+}
 .margin-bottom-1 {
   margin-bottom: var(--spacing1);
 }
@@ -133,14 +136,6 @@ text {
 }
 .color-dark {
   color: var(--color-gray4);
-}
-
-.link {
-  color: var(--color-gray3);
-  font-weight: 500;
-}
-.link:hover {
-  color: var(--color-blue3);
 }
 
 .focus:focus,

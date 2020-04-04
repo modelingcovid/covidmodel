@@ -8,7 +8,8 @@ const styles = css`
     font-family: ${theme.font.family.mono};
     text-transform: uppercase;
     padding: 0 4px;
-    margin: 0 -2px;
+    margin-left: -2px;
+    margin-right: -2px;
   }
   span.label-gray {
     color: ${theme.color.gray.muted};
