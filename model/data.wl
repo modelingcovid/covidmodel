@@ -5,47 +5,47 @@ SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
 
 (* get data for age distribution and cache it in a json file *)
-queryAlphaForDistribution[place_] := 
-	Which[
-		place == "United States",
-			WolframAlpha["United States age distribution",
-					 {{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
-		StringLength[place] == 2,
-			WolframAlpha[StringTemplate["`` state age distribution"][place],
-				{{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
-		True, WolframAlpha[StringTemplate["`` age distribution"][place],
-					 {{"AgeDistributionGrid:AgeDistributionData",1},"ComputableData"},
-					 PodStates->{"AgeDistributionGrid:AgeDistributionData__Show details"}]];
+queryAlphaForDistribution[place_] :=
+Which[
+  place == "United States",
+  WolframAlpha["United States age distribution",
+    {{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
+  StringLength[place] == 2,
+  WolframAlpha[StringTemplate["`` state age distribution"][place],
+    {{"AgeDistributionGrid:ACSData",1},"ComputableData"},PodStates->{"AgeDistributionGrid:ACSData__Show details"}],
+  True, WolframAlpha[StringTemplate["`` age distribution"][place],
+    {{"AgeDistributionGrid:AgeDistributionData",1},"ComputableData"},
+    PodStates->{"AgeDistributionGrid:AgeDistributionData__Show details"}]];
 
 ageDistributionFor[place_] := Module[{rawdist, pop, dist, buckets},
-	rawdist = queryAlphaForDistribution[place];
-	pop = QuantityMagnitude[Last[rawdist][[4]]];
-	dist = {StringCases[#[[1]], NumberString][[1]] // ToExpression,
-			QuantityMagnitude[#[[4]]/pop]} & /@ (Most@Rest@rawdist); 
-	buckets=(#[[1]]) & /@ dist;
-	<|
- 		"Population" -> pop,
- 		"Distribution" -> dist,
- 		"Buckets" -> buckets
- 	|>
-	];
-	
+  rawdist = queryAlphaForDistribution[place];
+  pop = QuantityMagnitude[Last[rawdist][[4]]];
+  dist = {StringCases[#[[1]], NumberString][[1]] // ToExpression,
+    QuantityMagnitude[#[[4]]/pop]} & /@ (Most@Rest@rawdist);
+  buckets=(#[[1]]) & /@ dist;
+  <|
+    "Population" -> pop,
+    "Distribution" -> dist,
+    "Buckets" -> buckets
+  |>
+];
+
 exportDistributionJSON[] := With[{places = countries ~Join~ USStates},
-	Export[dataFile["age-distributions.json"], AssociationMap[ageDistributionFor, places]]];
-	
+  Export[dataFile["age-distributions.json"], AssociationMap[ageDistributionFor, places]]];
+
 cachedAgeDistributionFor[place_] := Module[{placeData},
-	placeData = Import[dataFile["age-distributions.json"]];
-	Association[Association[placeData][place]]];
+  placeData = Import[dataFile["age-distributions.json"]];
+  Association[Association[placeData][place]]];
 
 (* country level data *)
 countries={"United States","France","Spain","Italy"};
 
 countryHistoricalDistancing[country_,t_]:=Association[{
-	"Italy"->{{1,t<58},{0.8,58<=t<68},{0.5,68<=t<75},{0.3,68<=t<200},{1,200<=t<=tmax}},
-	"France"->{{1,t<64},{0.8,64<=t<74},{0.35,74<=t<81},{0.35,81<=t<200},{1,200<=t<=tmax}},
-	"Spain"->{{1,t<73},{0.6,74<=t<=81},{0.4,81<=t<200},{1,200<=t<=tmax}},
-	"United States"->{{1,t<85},{0.8,85<=t<85+14},{0.4,85+14<=t<200},{1,200<=t<=tmax}}}][country];
-	
+    "Italy"->{{1,t<58},{0.8,58<=t<68},{0.5,68<=t<75},{0.3,68<=t<200},{1,200<=t<=tmax}},
+    "France"->{{1,t<64},{0.8,64<=t<74},{0.35,74<=t<81},{0.35,81<=t<200},{1,200<=t<=tmax}},
+    "Spain"->{{1,t<73},{0.6,74<=t<=81},{0.4,81<=t<200},{1,200<=t<=tmax}},
+    "United States"->{{1,t<85},{0.8,85<=t<85+14},{0.4,85+14<=t<200},{1,200<=t<=tmax}}}][country];
+
 countryVentilators = Association[{"United States"->61929,"France"->5000,"Italy"->3000,"Spain"->2000}];
 
 countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
@@ -73,8 +73,8 @@ FrancePopulation = 66.99*10^6;
 SpainPopulation=46.66*10^6;
 
 usData = Append[#, "day" ->
-					QuantityMagnitude[DateDifference[DateList[{2020,1,1}], DateList[#["date"] // ToString]]]] & /@
-				URLExecute[URLBuild["https://covidtracking.com/api/us/daily"],"RawJSON"];
+  QuantityMagnitude[DateDifference[DateList[{2020,1,1}], DateList[#["date"] // ToString]]]] & /@
+URLExecute[URLBuild["https://covidtracking.com/api/us/daily"],"RawJSON"];
 
 countryData = Association[{"United States"->usData,"France"->franceData,"Spain"->spainData,"Italy"->italyData}];
 
@@ -101,8 +101,8 @@ icuBody=icuRawData[[2;;]];
 icuParsedData=Thread[icuHeader->#]&/@icuBody//Map[Association];
 stateICURawData=GroupBy[icuParsedData,#["HQ_STATE"]&];
 stateICUData=<|"icuBeds"->Sum[If[#[[i]]["NUM_ICU_BEDS"] == "",0,#[[i]]["NUM_ICU_BEDS"]],{i,1,Length[#]}],
-"staffedBeds"->Sum[If[#[[i]]["NUM_STAFFED_BEDS"] == "",0,#[[i]]["NUM_STAFFED_BEDS"]],{i,1,Length[#]}],
-"bedUtilization"->Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,#[[i]]["BED_UTILIZATION"]],{i,1,Length[#]}]/Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,1],{i,1,Length[#]}]
+  "staffedBeds"->Sum[If[#[[i]]["NUM_STAFFED_BEDS"] == "",0,#[[i]]["NUM_STAFFED_BEDS"]],{i,1,Length[#]}],
+  "bedUtilization"->Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,#[[i]]["BED_UTILIZATION"]],{i,1,Length[#]}]/Sum[If[#[[i]]["BED_UTILIZATION"] == "",0,1],{i,1,Length[#]}]
 |>&/@stateICURawData; //Quiet
 
 (* State percent of positive tests *)
@@ -116,54 +116,54 @@ statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]
 (* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
 (* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
 stateDistancingPrecompute = Module[{
-		rawCsvTable,
-		stateLabels,
-		dataDays,
-		stateDistancings,
-		countStates,
-		fullDays,
-		processScenario,
-		processState
-	},
-	
-	rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
-
-	dataDays = rawCsvTable[[1,2;;]];
-	stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
-	stateLabels = rawCsvTable[[2;;,1]];
-	countStates = Length[stateLabels];
-	
-	fullDays = Range[365];
-		
-	processScenario[scenario_, distancing_] := Module[{
-			distancingLevel,
-			fullDistancing,
-			distancingFunction
-		},
-		
-		distancingLevel = If[
-			scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
-		
-		fullDistancing = Join[
-			ConstantArray[1.,Min[dataDays]-1],
-			distancing,
-			ConstantArray[distancingLevel,scenario["distancingDays"]],
-			ConstantArray[1.,365-scenario["distancingDays"]-Max[dataDays]]];
-
-		distancingFunction = Interpolation[Transpose[{
-				fullDays,
-				GaussianFilter[fullDistancing,4]}]];
-
-		scenario["id"]-><|
-			"distancingLevel"->distancingLevel,
-			"distancingData"->fullDistancing,
-			"distancingFunction"->distancingFunction|>
-	];
-	
-	processState[state_,distancing_] := 
-		state->Association[Map[processScenario[#,distancing]&,scenarios]];
-
-	Association[MapThread[processState,{stateLabels,stateDistancings}]]
+    rawCsvTable,
+    stateLabels,
+    dataDays,
+    stateDistancings,
+    countStates,
+    fullDays,
+    processScenario,
+    processState
+  },
+  
+  rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
+  
+  dataDays = rawCsvTable[[1,2;;]];
+  stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
+  stateLabels = rawCsvTable[[2;;,1]];
+  countStates = Length[stateLabels];
+  
+  fullDays = Range[365];
+  
+  processScenario[scenario_, distancing_] := Module[{
+      distancingLevel,
+      fullDistancing,
+      distancingFunction
+    },
+    
+    distancingLevel = If[
+      scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
+    
+    fullDistancing = Join[
+      ConstantArray[1.,Min[dataDays]-1],
+      distancing,
+      ConstantArray[distancingLevel,scenario["distancingDays"]],
+      ConstantArray[1.,365-scenario["distancingDays"]-Max[dataDays]]];
+    
+    distancingFunction = Interpolation[Transpose[{
+          fullDays,
+          GaussianFilter[fullDistancing,4]}]];
+    
+    scenario["id"]-><|
+      "distancingLevel"->distancingLevel,
+      "distancingData"->fullDistancing,
+      "distancingFunction"->distancingFunction|>
+  ];
+  
+  processState[state_,distancing_] :=
+  state->Association[Map[processScenario[#,distancing]&,scenarios]];
+  
+  Association[MapThread[processState,{stateLabels,stateDistancings}]]
 ];
 
 
@@ -171,31 +171,31 @@ maxPosTestDay=Max[#["day"]&/@statePositiveTestData];
 statesWithRates=DeleteCases[DeleteCases[DeleteCases[DeleteCases[DeleteCases[Keys[Select[statePositiveTestData,#["day"]==maxPosTestDay&][[1]]][[;;25]],"MS"],"SC"],"MD"],"AZ"],"OH"];
 avgLastThreeDays=KeyDrop[Merge[Select[statePositiveTestData,#["day"]==maxPosTestDay&],If[Length[Select[#,#!=""&]]!=0,Mean[Select[#,#!=""&]],Null]&],"day"];
 removeZeros[association_]:=Module[{inv},
-   inv = association // Normal // GroupBy[Last -> First];
-   inv[""]
+  inv = association // Normal // GroupBy[Last -> First];
+  inv[""]
 ]
 stripOthers[row_, state_]:=Module[{},
-   DeleteCases[DeleteCases[Keys[row],state],"day"]
+  DeleteCases[DeleteCases[Keys[row],state],"day"]
 ];
 evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarliestDay, onlyThisState, valueOnLatestDay, filledFuturePositive, filledPastZeroPositive, fullPostTestData, maxDay, joinedData},
-   If[MemberQ[statesWithRates,state],
-   thisStateData=Select[statePositiveTestData,#[state]!=""&];
-   onlyThisState=KeyDrop[#,stripOthers[#,state]]&/@thisStateData;
-   rollingAvg=MovingMap[Mean, {#["day"],#[state]/100}&/@onlyThisState,{3,Right}];
-   
-   maxDay=Max[#[[1]]&/@rollingAvg];
-   valueOnLatestDay=Max[#[[2]]&/@Select[rollingAvg,#[[1]]==maxDay&]];
-   filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,365}];
-  
-   minDay=Min[#[[1]]&/@rollingAvg];
-   valueOnEarliestDay=Min[#[[2]]&/@Select[rollingAvg,#[[1]]==minDay&]];
-  
-   filledPastZeroPositive={#-1, valueOnEarliestDay}&/@Range[Min[#["day"]&/@statePositiveTestData]+2];
-  
-   fullPostTestData=Join[filledPastZeroPositive,rollingAvg,filledFuturePositive];
-   Interpolation[fullPostTestData],
-   
-   Interpolation[{{0,0.15},{365,0.15}},InterpolationOrder->1]]
+  If[MemberQ[statesWithRates,state],
+    thisStateData=Select[statePositiveTestData,#[state]!=""&];
+    onlyThisState=KeyDrop[#,stripOthers[#,state]]&/@thisStateData;
+    rollingAvg=MovingMap[Mean, {#["day"],#[state]/100}&/@onlyThisState,{3,Right}];
+    
+    maxDay=Max[#[[1]]&/@rollingAvg];
+    valueOnLatestDay=Max[#[[2]]&/@Select[rollingAvg,#[[1]]==maxDay&]];
+    filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,365}];
+    
+    minDay=Min[#[[1]]&/@rollingAvg];
+    valueOnEarliestDay=Min[#[[2]]&/@Select[rollingAvg,#[[1]]==minDay&]];
+    
+    filledPastZeroPositive={#-1, valueOnEarliestDay}&/@Range[Min[#["day"]&/@statePositiveTestData]+2];
+    
+    fullPostTestData=Join[filledPastZeroPositive,rollingAvg,filledFuturePositive];
+    Interpolation[fullPostTestData],
+    
+    Interpolation[{{0,0.15},{365,0.15}},InterpolationOrder->1]]
 ];
 posInterpMap=Association[{#->evalStatePosTest[#]}&/@statesWith50CasesAnd5Deaths];
 
@@ -207,14 +207,14 @@ toLog[x_] := Log[x]
 
 
 ClearAll[fromLog]
-SetAttributes[fromLog, HoldAll]; 
+SetAttributes[fromLog, HoldAll];
 fromLog[y_] := Exp[y]
-fromLog[(fit_)["ParameterTable"]] := 
-	fit["ParameterTable"] /. Grid[array_, options___] :> Module[{a = array}, 
-		a[[2;;]] = Replace[a[[2;;]], 
-			{p_, v_, se_, t_, pr_} :> {fromLog[p], fromLog[v], fromLog[v]*se, t, pr}, {1}]; 
-		a = Replace[a, {p_, (v_)?NumberQ, se_, t_, pr_} :> {p, v, se, v/se, 
-			(N[#1, 6] & )[TwoSidedPValue /. StudentTPValue[v/se, 
-			fit["ANOVATableDegreesOfFreedom"][[2]], TwoSided -> True]]}, {1}]; 
-		Grid[a, options]
-		]
+fromLog[(fit_)["ParameterTable"]] :=
+fit["ParameterTable"] /. Grid[array_, options___] :> Module[{a = array},
+  a[[2;;]] = Replace[a[[2;;]],
+    {p_, v_, se_, t_, pr_} :> {fromLog[p], fromLog[v], fromLog[v]*se, t, pr}, {1}];
+  a = Replace[a, {p_, (v_)?NumberQ, se_, t_, pr_} :> {p, v, se, v/se,
+      (N[#1, 6] & )[TwoSidedPValue /. StudentTPValue[v/se,
+          fit["ANOVATableDegreesOfFreedom"][[2]], TwoSided -> True]]}, {1}];
+  Grid[a, options]
+]
