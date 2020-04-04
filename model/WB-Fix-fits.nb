@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[   1109080,      21749]
-NotebookOptionsPosition[   1102608,      21647]
-NotebookOutlinePosition[   1103033,      21664]
-CellTagsIndexPosition[   1102990,      21661]
+NotebookDataLength[   1110707,      21788]
+NotebookOptionsPosition[   1104275,      21687]
+NotebookOutlinePosition[   1104671,      21703]
+CellTagsIndexPosition[   1104628,      21700]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -934,66 +934,68 @@ Cell[BoxData[{
           RowBox[{"#", "[", 
            RowBox[{"[", "3", "]"}], "]"}], ">", "0"}], "&"}]}], "]"}]}], ";", 
      "\[IndentingNewLine]", 
-     RowBox[{
-      RowBox[{"rms", "[", 
-       RowBox[{"r0natural_", ",", "importtime_", ",", 
-        RowBox[{"k_", "?", "NumberQ"}]}], "]"}], ":=", 
-      RowBox[{"Total", "[", 
+     RowBox[{"(*", 
+      RowBox[{
        RowBox[{
-        RowBox[{
-         RowBox[{"If", "[", 
+        RowBox[{"rms", "[", 
+         RowBox[{"r0natural_", ",", "importtime_", ",", 
+          RowBox[{"k_", "?", "NumberQ"}]}], "]"}], ":=", 
+        RowBox[{"Total", "[", 
+         RowBox[{
           RowBox[{
-           RowBox[{
-            RowBox[{"#", "[", 
-             RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "1"}], ",", " ", 
-           SuperscriptBox[
-            RowBox[{"(", 
+           RowBox[{"If", "[", 
+            RowBox[{
              RowBox[{
-              RowBox[{
-               RowBox[{"DeaqParametric", "[", 
-                RowBox[{
-                 RowBox[{"Log", "[", "r0natural", "]"}], ",", 
-                 RowBox[{"Log", "[", "importtime", "]"}], ",", 
-                 RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
-               RowBox[{"#", "[", 
-                RowBox[{"[", "1", "]"}], "]"}], "]"}], "-", 
-              RowBox[{
-               RowBox[{"DeaqParametric", "[", 
-                RowBox[{
-                 RowBox[{"Log", "[", "r0natural", "]"}], ",", 
-                 RowBox[{"Log", "[", "importtime", "]"}], ",", 
-                 RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
-               RowBox[{
-                RowBox[{"#", "[", 
-                 RowBox[{"[", "1", "]"}], "]"}], "-", "1"}], "]"}], "-", 
               RowBox[{"#", "[", 
-               RowBox[{"[", "3", "]"}], "]"}]}], ")"}], "2"], ",", 
-           "\[IndentingNewLine]", 
-           SuperscriptBox[
-            RowBox[{"(", 
-             RowBox[{
-              RowBox[{
-               RowBox[{"PCRParametric", "[", 
-                RowBox[{
-                 RowBox[{"Log", "[", "r0natural", "]"}], ",", 
-                 RowBox[{"Log", "[", "importtime", "]"}], ",", 
-                 RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
-               RowBox[{"#", "[", 
-                RowBox[{"[", "1", "]"}], "]"}], "]"}], " ", "-", " ", 
-              RowBox[{
-               RowBox[{"PCRParametric", "[", 
-                RowBox[{
-                 RowBox[{"Log", "[", "r0natural", "]"}], ",", 
-                 RowBox[{"Log", "[", "importtime", "]"}], ",", 
-                 RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
+               RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "1"}], ",", " ", 
+             SuperscriptBox[
+              RowBox[{"(", 
                RowBox[{
+                RowBox[{
+                 RowBox[{"DeaqParametric", "[", 
+                  RowBox[{
+                   RowBox[{"Log", "[", "r0natural", "]"}], ",", 
+                   RowBox[{"Log", "[", "importtime", "]"}], ",", 
+                   RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "]"}], "-", 
+                RowBox[{
+                 RowBox[{"DeaqParametric", "[", 
+                  RowBox[{
+                   RowBox[{"Log", "[", "r0natural", "]"}], ",", 
+                   RowBox[{"Log", "[", "importtime", "]"}], ",", 
+                   RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
+                 RowBox[{
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "-", "1"}], "]"}], "-", 
                 RowBox[{"#", "[", 
-                 RowBox[{"[", "1", "]"}], "]"}], " ", "-", "1"}], "]"}], "-", 
-              
-              RowBox[{"#", "[", 
-               RowBox[{"[", "3", "]"}], "]"}]}], ")"}], "2"]}], 
-          "\[IndentingNewLine]", "]"}], "&"}], "/@", "longData"}], "]"}]}], 
-     ";", "\[IndentingNewLine]", "\t", 
+                 RowBox[{"[", "3", "]"}], "]"}]}], ")"}], "2"], ",", 
+             "\[IndentingNewLine]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"PCRParametric", "[", 
+                  RowBox[{
+                   RowBox[{"Log", "[", "r0natural", "]"}], ",", 
+                   RowBox[{"Log", "[", "importtime", "]"}], ",", 
+                   RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], "]"}], " ", "-", " ", 
+                RowBox[{
+                 RowBox[{"PCRParametric", "[", 
+                  RowBox[{
+                   RowBox[{"Log", "[", "r0natural", "]"}], ",", 
+                   RowBox[{"Log", "[", "importtime", "]"}], ",", 
+                   RowBox[{"Log", "[", "k", "]"}]}], "]"}], "[", 
+                 RowBox[{
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], " ", "-", "1"}], "]"}], 
+                "-", 
+                RowBox[{"#", "[", 
+                 RowBox[{"[", "3", "]"}], "]"}]}], ")"}], "2"]}], 
+            "\[IndentingNewLine]", "]"}], "&"}], "/@", "longData"}], "]"}]}], 
+       ";"}], "*)"}], "\[IndentingNewLine]", "\t", 
      RowBox[{"weekOverWeekWeight", "=", ".75"}], ";", "\[IndentingNewLine]", 
      "\t", 
      RowBox[{"dataWeightsAbsolute", "=", 
@@ -1216,9 +1218,9 @@ Cell[BoxData[{
    3.794940685473359*^9, 3.79494070262261*^9}, 3.794940765566441*^9, {
    3.794940858766974*^9, 3.7949408699005547`*^9}, 3.79494090879195*^9, {
    3.794941029371726*^9, 3.794941031463417*^9}, {3.794942060458564*^9, 
-   3.79494217874708*^9}},
- CellLabel->
-  "In[2329]:=",ExpressionUUID->"7c46df70-8fc1-4c5d-9b3f-ad7d8606c44e"],
+   3.79494217874708*^9}, 
+   3.794945730339868*^9},ExpressionUUID->"7c46df70-8fc1-4c5d-9b3f-\
+ad7d8606c44e"],
 
 Cell[BoxData[""], "Input",
  CellChangeTimes->{
@@ -1272,8 +1274,9 @@ Cell[BoxData[
                     ButtonFunction :> (Typeset`open$$ = True), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -1327,8 +1330,9 @@ OsUlAv8A522W+A==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -1388,8 +1392,9 @@ OsUlAv8A522W+A==
                     ButtonFunction :> (Typeset`open$$ = False), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -1443,8 +1448,9 @@ OsUlAv8A522W+A==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -1754,8 +1760,9 @@ a7/+731fbf9Iigdc2V52nNh18posPaeqOzzu+1n8Z9dHio7qr7xxg7MfixIp
                     ButtonFunction :> (Typeset`open$$ = True), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -1809,8 +1816,9 @@ OsUlAv8A522W+A==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -1870,8 +1878,9 @@ OsUlAv8A522W+A==
                     ButtonFunction :> (Typeset`open$$ = False), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -1925,8 +1934,9 @@ OsUlAv8A522W+A==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -2239,8 +2249,9 @@ a7/+731fbf9Iigdc2V52nNh18posPaeqOzzu+1n8Z9dHio7qr7xxg7MfixIp
                     ButtonFunction :> (Typeset`open$$ = True), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -2294,8 +2305,9 @@ BPwN8SyYww==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -2355,8 +2367,9 @@ BPwN8SyYww==
                     ButtonFunction :> (Typeset`open$$ = False), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -2410,8 +2423,9 @@ BPwN8SyYww==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -2980,11 +2994,11 @@ xXxziXDdOiL7ynV6TT0DE692BW8pqCUh/vvuCi056klzb+7qWvI/pvYYNQ==
                   ParametricNDSolve[{{
                     Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3135,11 +3149,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`Eq][$CellContext`t] == 
                     Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3305,8 +3319,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`RHq][$CellContext`t] == 
                     Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                     Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                    E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                    E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3343,9 +3357,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3392,8 +3406,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                     Derivative[1][$CellContext`CCq][$CellContext`t] == 
                     Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                    Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                    Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                    Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -3470,14 +3485,13 @@ $CellContext`logImportTime$1928037, $CellContext`logK$1928038},
                    None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                   Derivative[
                     1][$CellContext`Sq][$CellContext`t$1928039] == \
--$CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                    Rational[-1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+(-$CellContext`est[$CellContext`t$1928039]) \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3629,13 +3643,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                    Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1928039] + \
 $CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                    Rational[1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3803,9 +3816,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                    Derivative[1][$CellContext`RHq][$CellContext`t$1928039] == 
                    Rational[1, 8] $CellContext`HHq[$CellContext`t$1928039], 
                    Derivative[1][$CellContext`PCR][$CellContext`t$1928039] == 
-                   E^$CellContext`logK$1928038 (
+                   E^$CellContext`logK$1928038 ((
                     0.5333333333333333 \
-$CellContext`HHq[$CellContext`t$1928039] 
+$CellContext`HHq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3842,11 +3855,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1928039] + 
+                    Automatic}][$CellContext`t$1928039] + (
                     0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) 
+$CellContext`ISq[$CellContext`t$1928039])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -3894,8 +3907,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                    Derivative[1][$CellContext`CCq][$CellContext`t$1928039] == 
                    Rational[-1, 10] $CellContext`CCq[$CellContext`t$1928039] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t$1928039], 
-                   Derivative[1][$CellContext`Deaq][$CellContext`t$1928039] == 
-                   Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039] 
+                   Derivative[
+                    1][$CellContext`Deaq][$CellContext`t$1928039] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039]) 
                     If[$CellContext`CCq[$CellContext`t$1928039] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -3917,6 +3931,7 @@ $CellContext`fractionOfCriticalDeceased0],
                     E^$CellContext`logImportTime$1928037, \
 $CellContext`est[$CellContext`t$1928039] -> 
                     Exp[-$CellContext`initialInfectionImpulse0]], 
+                   
                    WhenEvent[$CellContext`t$1928039 > 
                     E^$CellContext`logImportTime$1928037 + \
 $CellContext`importlength0, $CellContext`est[$CellContext`t$1928039] -> 
@@ -3943,11 +3958,11 @@ $CellContext`k][-1 + $CellContext`t] + ParametricFunction[1,
                  ParametricNDSolve[{{
                    Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4098,11 +4113,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`Eq][$CellContext`t] == 
                     Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4268,8 +4283,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`RHq][$CellContext`t] == 
                     Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                     Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                    E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                    E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4306,9 +4321,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4355,8 +4370,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                     Derivative[1][$CellContext`CCq][$CellContext`t] == 
                     Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                    Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                    Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                    Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -4364,7 +4380,6 @@ $CellContext`fractionOfCriticalDeceased0],
                     Derivative[1][$CellContext`RCq][$CellContext`t] == 
                     0.06 $CellContext`CCq[$CellContext`t], 
                     Derivative[1][$CellContext`est][$CellContext`t] == 0}, {
-                    
                     WhenEvent[$CellContext`t >= 
                     E^$CellContext`logImportTime, \
 $CellContext`est[$CellContext`t] -> 
@@ -4433,14 +4448,13 @@ $CellContext`logImportTime$1928037, $CellContext`logK$1928038},
                   None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                  Derivative[
                    1][$CellContext`Sq][$CellContext`t$1928039] == \
--$CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                   Rational[-1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+(-$CellContext`est[$CellContext`t$1928039]) \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4592,13 +4606,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1928039] + \
 $CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                   Rational[1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4765,9 +4778,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                   Derivative[1][$CellContext`RHq][$CellContext`t$1928039] == 
                   Rational[1, 8] $CellContext`HHq[$CellContext`t$1928039], 
                   Derivative[1][$CellContext`PCR][$CellContext`t$1928039] == 
-                  E^$CellContext`logK$1928038 (
+                  E^$CellContext`logK$1928038 ((
                     0.5333333333333333 \
-$CellContext`HHq[$CellContext`t$1928039] 
+$CellContext`HHq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4804,11 +4817,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1928039] + 
+                    Automatic}][$CellContext`t$1928039] + (
                     0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) 
+$CellContext`ISq[$CellContext`t$1928039])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -4856,8 +4869,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                   Derivative[1][$CellContext`CCq][$CellContext`t$1928039] == 
                   Rational[-1, 10] $CellContext`CCq[$CellContext`t$1928039] + 
                    Rational[1, 4] $CellContext`HCq[$CellContext`t$1928039], 
-                  Derivative[1][$CellContext`Deaq][$CellContext`t$1928039] == 
-                  Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039] 
+                  Derivative[
+                   1][$CellContext`Deaq][$CellContext`t$1928039] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039]) 
                    If[$CellContext`CCq[$CellContext`t$1928039] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -4906,11 +4920,11 @@ $CellContext`k][$CellContext`t], $CellContext`c == 1}, {-ParametricFunction[1,
                   ParametricNDSolve[{{
                     Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5061,11 +5075,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`Eq][$CellContext`t] == 
                     Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5231,8 +5245,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`RHq][$CellContext`t] == 
                     Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                     Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                    E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                    E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5269,9 +5283,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5318,8 +5332,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                     Derivative[1][$CellContext`CCq][$CellContext`t] == 
                     Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                    Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                    Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                    Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -5344,7 +5359,6 @@ $CellContext`importlength0, $CellContext`est[$CellContext`t] ->
                     0, $CellContext`CCq[0] == 0, $CellContext`RCq[0] == 
                     0, $CellContext`Deaq[0] == 0, $CellContext`est[0] == 
                     0, $CellContext`PCR[0] == 0, $CellContext`EHq[0] == 
-                    
                     0}}, {$CellContext`Deaq, $CellContext`PCR}, \
 {$CellContext`t, 0, 
                     365}, {$CellContext`logR0Natural, \
@@ -5397,14 +5411,13 @@ $CellContext`logImportTime$1928037, $CellContext`logK$1928038},
                    None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                   Derivative[
                     1][$CellContext`Sq][$CellContext`t$1928039] == \
--$CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                    Rational[-1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+(-$CellContext`est[$CellContext`t$1928039]) \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5541,28 +5554,27 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
+                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}}, {Automatic}][
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}, {
+                    Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t$1928039]]], 
                    Derivative[1][$CellContext`Eq][$CellContext`t$1928039] == 
                    Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1928039] + \
 $CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                    Rational[1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5730,9 +5742,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                    Derivative[1][$CellContext`RHq][$CellContext`t$1928039] == 
                    Rational[1, 8] $CellContext`HHq[$CellContext`t$1928039], 
                    Derivative[1][$CellContext`PCR][$CellContext`t$1928039] == 
-                   E^$CellContext`logK$1928038 (
+                   E^$CellContext`logK$1928038 ((
                     0.5333333333333333 \
-$CellContext`HHq[$CellContext`t$1928039] 
+$CellContext`HHq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5769,11 +5781,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1928039] + 
+                    Automatic}][$CellContext`t$1928039] + (
                     0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) 
+$CellContext`ISq[$CellContext`t$1928039])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -5821,8 +5833,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                    Derivative[1][$CellContext`CCq][$CellContext`t$1928039] == 
                    Rational[-1, 10] $CellContext`CCq[$CellContext`t$1928039] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t$1928039], 
-                   Derivative[1][$CellContext`Deaq][$CellContext`t$1928039] == 
-                   Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039] 
+                   Derivative[
+                    1][$CellContext`Deaq][$CellContext`t$1928039] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039]) 
                     If[$CellContext`CCq[$CellContext`t$1928039] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -5871,11 +5884,11 @@ $CellContext`k][-1 + $CellContext`t] + ParametricFunction[1,
                  ParametricNDSolve[{{
                    Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6026,11 +6039,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`Eq][$CellContext`t] == 
                     Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6167,15 +6180,15 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
+                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}}, {Automatic}][
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}, {
+                    Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t]]], 
                     Derivative[1][$CellContext`ISq][$CellContext`t] == 
@@ -6196,8 +6209,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`RHq][$CellContext`t] == 
                     Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                     Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                    E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                    E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6234,9 +6247,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6283,8 +6296,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                     Derivative[1][$CellContext`CCq][$CellContext`t] == 
                     Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                    Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                    Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                    Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -6353,7 +6367,6 @@ $CellContext`HCq, $CellContext`CCq, $CellContext`est}}},
 $CellContext`logImportTime$1928037, $CellContext`logK$1928038}, 
                    System`Utilities`HashTable[
                    1, {{$CellContext`logK$1928038, $CellContext`logK}, {
-                    
                     "Output", {$CellContext`Deaq, $CellContext`PCR}}, \
 {$CellContext`logR0Natural$1928036, $CellContext`logR0Natural}, \
 {$CellContext`logImportTime$1928037, $CellContext`logImportTime}}], {}, {}, {
@@ -6362,14 +6375,13 @@ $CellContext`logImportTime$1928037, $CellContext`logK$1928038},
                   None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                  Derivative[
                    1][$CellContext`Sq][$CellContext`t$1928039] == \
--$CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                   Rational[-1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+(-$CellContext`est[$CellContext`t$1928039]) \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6521,13 +6533,13 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1928039] + \
 $CellContext`est[$CellContext`t$1928039] \
-$CellContext`Sq[$CellContext`t$1928039] + 
-                   Rational[1, 5] 
-                    E^$CellContext`logR0Natural$1928036 \
+$CellContext`Sq[$CellContext`t$1928039] + (((Rational[1, 5] 
+                    
+                    E^$CellContext`logR0Natural$1928036) \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) \
-$CellContext`Sq[$CellContext`t$1928039] 
+$CellContext`ISq[$CellContext`t$1928039])) \
+$CellContext`Sq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6659,8 +6671,6 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Rational[1, 2]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
-                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
@@ -6671,8 +6681,10 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}, {
-                    Automatic}][
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}}, {Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t$1928039]]], 
                   Derivative[1][$CellContext`ISq][$CellContext`t$1928039] == 
@@ -6694,10 +6706,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                   Derivative[1][$CellContext`RHq][$CellContext`t$1928039] == 
                   Rational[1, 8] $CellContext`HHq[$CellContext`t$1928039], 
                   Derivative[1][$CellContext`PCR][$CellContext`t$1928039] == 
-                  E^$CellContext`logK$1928038 (
-                    
+                  E^$CellContext`logK$1928038 ((
                     0.5333333333333333 \
-$CellContext`HHq[$CellContext`t$1928039] 
+$CellContext`HHq[$CellContext`t$1928039]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6734,11 +6745,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1928039] + 
+                    Automatic}][$CellContext`t$1928039] + (
                     0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1928039] + \
 $CellContext`IHq[$CellContext`t$1928039] + \
-$CellContext`ISq[$CellContext`t$1928039]) 
+$CellContext`ISq[$CellContext`t$1928039])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -6786,8 +6797,9 @@ $CellContext`Eq[$CellContext`t$1928039] +
                   Derivative[1][$CellContext`CCq][$CellContext`t$1928039] == 
                   Rational[-1, 10] $CellContext`CCq[$CellContext`t$1928039] + 
                    Rational[1, 4] $CellContext`HCq[$CellContext`t$1928039], 
-                  Derivative[1][$CellContext`Deaq][$CellContext`t$1928039] == 
-                  Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039] 
+                  Derivative[
+                   1][$CellContext`Deaq][$CellContext`t$1928039] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t$1928039]) 
                    If[$CellContext`CCq[$CellContext`t$1928039] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -6884,8 +6896,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -6922,7 +6935,6 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
                     Opacity[1.], 
-                    
                     LineBox[{{9.09090909090909*^-8, 9.090909090875369*^-8}, {
                     0.0874367476365131, 0.07984396759533968}, {
                     0.18222810297558026`, 0.11939549826670079`}, {
@@ -6996,9 +7008,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -7041,8 +7053,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -7153,9 +7166,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -7241,13 +7254,13 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
                     Opacity[1.], 
-                    
                     LineBox[{{9.09090909090909*^-8, 9.090909090884856*^-8}, {
                     0.0874367476365131, 0.08197166587636243}, {
                     0.18222810297558026`, 0.1358255024317191}, {
@@ -7295,6 +7308,7 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
                     Opacity[1.], 
+                    
                     LineBox[{{9.09090909090909*^-8, 9.090909090870287*^-8}, {
                     0.0874367476365131, 0.07879243663407876}, {
                     0.18222810297558026`, 0.1116081822210312}, {
@@ -7352,9 +7366,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -7397,8 +7411,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -7509,9 +7524,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -7816,8 +7831,9 @@ Cell[BoxData[
                     ButtonFunction :> (Typeset`open$$ = True), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -7871,8 +7887,9 @@ mfwP3qaZIA==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -7932,8 +7949,9 @@ mfwP3qaZIA==
                     ButtonFunction :> (Typeset`open$$ = False), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -7987,8 +8005,9 @@ mfwP3qaZIA==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -8304,8 +8323,9 @@ pg==
                     ButtonFunction :> (Typeset`open$$ = True), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -8359,8 +8379,9 @@ mfwP3qaZIA==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -8420,8 +8441,9 @@ mfwP3qaZIA==
                     ButtonFunction :> (Typeset`open$$ = False), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -8475,8 +8497,9 @@ mfwP3qaZIA==
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -8795,8 +8818,9 @@ pg==
                     ButtonFunction :> (Typeset`open$$ = True), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -8850,8 +8874,9 @@ l+6XG/ZYC3DLjoxlhcHaFS+yMFeAXj05H/oMtooXftCPClAGR4seGPwPl+ml
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -8911,8 +8936,9 @@ l+6XG/ZYC3DLjoxlhcHaFS+yMFeAXj05H/oMtooXftCPClAGR4seGPwPl+ml
                     ButtonFunction :> (Typeset`open$$ = False), Appearance -> 
                     None, Evaluator -> Automatic, Method -> "Preemptive"], 
                     Alignment -> {Center, Center}, ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                     GraphicsBox[{{{{}, {}, 
                     TagBox[{
                     Directive[
@@ -8966,8 +8992,9 @@ l+6XG/ZYC3DLjoxlhcHaFS+yMFeAXj05H/oMtooXftCPClAGR4seGPwPl+ml
                     FrameTicks -> {{None, None}, {None, None}}, 
                     GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
-                    Dynamic[{Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], 
                     Method -> {"DefaultBoundaryStyle" -> Automatic, 
                     "DefaultGraphicsInteraction" -> {
                     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
@@ -9546,11 +9573,11 @@ NLEb3sghQf9OPeZLL2ZrzRlc0f8AEzyTmA==
                  ParametricNDSolve[{{
                    Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -9701,11 +9728,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`Eq][$CellContext`t] == 
                     Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -9871,8 +9898,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`RHq][$CellContext`t] == 
                     Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                     Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                    E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                    E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -9909,9 +9936,9 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -9958,8 +9985,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     Derivative[1][$CellContext`CCq][$CellContext`t] == 
                     Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                    Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                    Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                    Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -10037,14 +10065,13 @@ $CellContext`logR0Natural}, {
                   None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                  Derivative[
                    1][$CellContext`Sq][$CellContext`t$1788674] == \
--$CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                   Rational[-1, 5] 
-                    E^$CellContext`logR0Natural$1788671 \
+(-$CellContext`est[$CellContext`t$1788674]) \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10196,13 +10223,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1788674] + \
 $CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                   Rational[1, 5] 
-                    E^$CellContext`logR0Natural$1788671 \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10369,9 +10395,9 @@ $CellContext`Eq[$CellContext`t$1788674] +
                   Derivative[1][$CellContext`RHq][$CellContext`t$1788674] == 
                   Rational[1, 8] $CellContext`HHq[$CellContext`t$1788674], 
                   Derivative[1][$CellContext`PCR][$CellContext`t$1788674] == 
-                  E^$CellContext`logK$1788673 (
+                  E^$CellContext`logK$1788673 ((
                     0.5333333333333333 \
-$CellContext`HHq[$CellContext`t$1788674] 
+$CellContext`HHq[$CellContext`t$1788674]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10408,11 +10434,11 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t$1788674] + 
+                    Automatic}][$CellContext`t$1788674] + (
                     0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) 
+$CellContext`ISq[$CellContext`t$1788674])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10459,8 +10485,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                   Derivative[1][$CellContext`CCq][$CellContext`t$1788674] == 
                   Rational[-1, 10] $CellContext`CCq[$CellContext`t$1788674] + 
                    Rational[1, 4] $CellContext`HCq[$CellContext`t$1788674], 
-                  Derivative[1][$CellContext`Deaq][$CellContext`t$1788674] == 
-                  Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674] 
+                  Derivative[
+                   1][$CellContext`Deaq][$CellContext`t$1788674] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674]) 
                    If[$CellContext`CCq[$CellContext`t$1788674] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -10509,11 +10536,11 @@ $CellContext`k][-1 + $CellContext`t] + ParametricFunction[1,
                 ParametricNDSolve[{{
                   Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10664,11 +10691,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                    Derivative[1][$CellContext`Eq][$CellContext`t] == 
                    Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10834,8 +10861,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                    Derivative[1][$CellContext`RHq][$CellContext`t] == 
                    Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                    Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                   E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                   E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10872,9 +10899,9 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -10921,8 +10948,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                    Derivative[1][$CellContext`CCq][$CellContext`t] == 
                    Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                   Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                   Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                   Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -10962,6 +10990,7 @@ $CellContext`logImportTime$1788672, $CellContext`logK$1788673},
               System`Utilities`HashTable[
               1, {{$CellContext`logR0Natural$1788671, \
 $CellContext`logR0Natural}, {
+                
                 "Output", {$CellContext`Deaq, $CellContext`PCR}}, \
 {$CellContext`logImportTime$1788672, $CellContext`logImportTime}, \
 {$CellContext`logK$1788673, $CellContext`logK}}], {}, {}, {1, 2, 3}, {
@@ -11000,14 +11029,13 @@ $CellContext`logR0Natural}, {
                  None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                 Derivative[
                   1][$CellContext`Sq][$CellContext`t$1788674] == \
--$CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                  Rational[-1, 5] 
-                   E^$CellContext`logR0Natural$1788671 \
+(-$CellContext`est[$CellContext`t$1788674]) \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11159,13 +11187,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                  Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1788674] + \
 $CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                  Rational[1, 5] 
-                   E^$CellContext`logR0Natural$1788671 \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11294,7 +11321,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Rational[13, 25]}, {
                     Rational[13, 25]}, {
                     Rational[13, 25]}, {
-                    Rational[13, 25]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    Rational[13, 25]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
+                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
@@ -11309,8 +11337,7 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}}, {Automatic}][
+                    1}}, {Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t$1788674]]], 
                  Derivative[1][$CellContext`ISq][$CellContext`t$1788674] == 
@@ -11332,9 +11359,10 @@ $CellContext`Eq[$CellContext`t$1788674] +
                  Derivative[1][$CellContext`RHq][$CellContext`t$1788674] == 
                  Rational[1, 8] $CellContext`HHq[$CellContext`t$1788674], 
                  Derivative[1][$CellContext`PCR][$CellContext`t$1788674] == 
-                 E^$CellContext`logK$1788673 (
-                   0.5333333333333333 $CellContext`HHq[$CellContext`t$1788674]
-                     InterpolatingFunction[{{0., 365.}}, {
+                 E^$CellContext`logK$1788673 ((
+                    0.5333333333333333 \
+$CellContext`HHq[$CellContext`t$1788674]) 
+                    InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
 1:eJxVzUsOVFUUBdCjLZs0bNiw8STGGGNMieBfufgBlI/l/49XEEFUKERpnyHU
@@ -11370,11 +11398,11 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t$1788674] + 
-                   0.009090909090909092 \
+                    Automatic}][$CellContext`t$1788674] + (
+                    0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) 
+$CellContext`ISq[$CellContext`t$1788674])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11421,8 +11449,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                  Derivative[1][$CellContext`CCq][$CellContext`t$1788674] == 
                  Rational[-1, 10] $CellContext`CCq[$CellContext`t$1788674] + 
                   Rational[1, 4] $CellContext`HCq[$CellContext`t$1788674], 
-                 Derivative[1][$CellContext`Deaq][$CellContext`t$1788674] == 
-                 Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674] 
+                 Derivative[
+                  1][$CellContext`Deaq][$CellContext`t$1788674] == (
+                   Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674]) 
                   If[$CellContext`CCq[$CellContext`t$1788674] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -11471,11 +11500,11 @@ $CellContext`k][$CellContext`t], $CellContext`c == 1}, {-ParametricFunction[1,
                  ParametricNDSolve[{{
                    Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11626,11 +11655,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`Eq][$CellContext`t] == 
                     Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11796,8 +11825,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Derivative[1][$CellContext`RHq][$CellContext`t] == 
                     Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                     Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                    E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                    E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11834,9 +11863,9 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -11883,8 +11912,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     Derivative[1][$CellContext`CCq][$CellContext`t] == 
                     Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                    Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                    Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                    Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -11924,6 +11954,7 @@ $CellContext`logImportTime$1788672, $CellContext`logK$1788673},
                System`Utilities`HashTable[
                1, {{$CellContext`logR0Natural$1788671, \
 $CellContext`logR0Natural}, {
+                 
                  "Output", {$CellContext`Deaq, $CellContext`PCR}}, \
 {$CellContext`logImportTime$1788672, $CellContext`logImportTime}, \
 {$CellContext`logK$1788673, $CellContext`logK}}], {}, {}, {1, 2, 3}, {
@@ -11962,14 +11993,13 @@ $CellContext`logR0Natural}, {
                   None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                  Derivative[
                    1][$CellContext`Sq][$CellContext`t$1788674] == \
--$CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                   Rational[-1, 5] 
-                    E^$CellContext`logR0Natural$1788671 \
+(-$CellContext`est[$CellContext`t$1788674]) \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12121,13 +12151,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1788674] + \
 $CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                   Rational[1, 5] 
-                    E^$CellContext`logR0Natural$1788671 \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12256,7 +12285,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Rational[13, 25]}, {
                     Rational[13, 25]}, {
                     Rational[13, 25]}, {
-                    Rational[13, 25]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    Rational[13, 25]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
+                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
@@ -12271,8 +12301,7 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}}, {Automatic}][
+                    1}}, {Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t$1788674]]], 
                   Derivative[1][$CellContext`ISq][$CellContext`t$1788674] == 
@@ -12294,9 +12323,9 @@ $CellContext`Eq[$CellContext`t$1788674] +
                   Derivative[1][$CellContext`RHq][$CellContext`t$1788674] == 
                   Rational[1, 8] $CellContext`HHq[$CellContext`t$1788674], 
                   Derivative[1][$CellContext`PCR][$CellContext`t$1788674] == 
-                  E^$CellContext`logK$1788673 (
+                  E^$CellContext`logK$1788673 ((
                     0.5333333333333333 \
-$CellContext`HHq[$CellContext`t$1788674] 
+$CellContext`HHq[$CellContext`t$1788674]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12333,11 +12362,11 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t$1788674] + 
+                    Automatic}][$CellContext`t$1788674] + (
                     0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) 
+$CellContext`ISq[$CellContext`t$1788674])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12384,8 +12413,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                   Derivative[1][$CellContext`CCq][$CellContext`t$1788674] == 
                   Rational[-1, 10] $CellContext`CCq[$CellContext`t$1788674] + 
                    Rational[1, 4] $CellContext`HCq[$CellContext`t$1788674], 
-                  Derivative[1][$CellContext`Deaq][$CellContext`t$1788674] == 
-                  Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674] 
+                  Derivative[
+                   1][$CellContext`Deaq][$CellContext`t$1788674] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674]) 
                    If[$CellContext`CCq[$CellContext`t$1788674] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -12434,11 +12464,11 @@ $CellContext`k][-1 + $CellContext`t] + ParametricFunction[1,
                 ParametricNDSolve[{{
                   Derivative[
                     1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
                     Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12589,11 +12619,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                    Derivative[1][$CellContext`Eq][$CellContext`t] == 
                    Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
                     Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12759,8 +12789,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                    Derivative[1][$CellContext`RHq][$CellContext`t] == 
                    Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                    Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                   E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                   E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12797,9 +12827,9 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -12846,8 +12876,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                    Derivative[1][$CellContext`CCq][$CellContext`t] == 
                    Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                     Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                   Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                   Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                   Derivative[
+                    1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                     If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -12887,6 +12918,7 @@ $CellContext`logImportTime$1788672, $CellContext`logK$1788673},
               System`Utilities`HashTable[
               1, {{$CellContext`logR0Natural$1788671, \
 $CellContext`logR0Natural}, {
+                
                 "Output", {$CellContext`Deaq, $CellContext`PCR}}, \
 {$CellContext`logImportTime$1788672, $CellContext`logImportTime}, \
 {$CellContext`logK$1788673, $CellContext`logK}}], {}, {}, {1, 2, 3}, {
@@ -12925,14 +12957,13 @@ $CellContext`logR0Natural}, {
                  None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                 Derivative[
                   1][$CellContext`Sq][$CellContext`t$1788674] == \
--$CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                  Rational[-1, 5] 
-                   E^$CellContext`logR0Natural$1788671 \
+(-$CellContext`est[$CellContext`t$1788674]) \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -13084,13 +13115,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                  Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1788674] + \
 $CellContext`est[$CellContext`t$1788674] \
-$CellContext`Sq[$CellContext`t$1788674] + 
-                  Rational[1, 5] 
-                   E^$CellContext`logR0Natural$1788671 \
+$CellContext`Sq[$CellContext`t$1788674] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1788671) \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) \
-$CellContext`Sq[$CellContext`t$1788674] 
+$CellContext`ISq[$CellContext`t$1788674])) \
+$CellContext`Sq[$CellContext`t$1788674]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -13219,7 +13249,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Rational[13, 25]}, {
                     Rational[13, 25]}, {
                     Rational[13, 25]}, {
-                    Rational[13, 25]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    Rational[13, 25]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
+                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
@@ -13234,8 +13265,7 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}}, {Automatic}][
+                    1}}, {Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t$1788674]]], 
                  Derivative[1][$CellContext`ISq][$CellContext`t$1788674] == 
@@ -13257,9 +13287,10 @@ $CellContext`Eq[$CellContext`t$1788674] +
                  Derivative[1][$CellContext`RHq][$CellContext`t$1788674] == 
                  Rational[1, 8] $CellContext`HHq[$CellContext`t$1788674], 
                  Derivative[1][$CellContext`PCR][$CellContext`t$1788674] == 
-                 E^$CellContext`logK$1788673 (
-                   0.5333333333333333 $CellContext`HHq[$CellContext`t$1788674]
-                     InterpolatingFunction[{{0., 365.}}, {
+                 E^$CellContext`logK$1788673 ((
+                    0.5333333333333333 \
+$CellContext`HHq[$CellContext`t$1788674]) 
+                    InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
 1:eJxVzUsOVFUUBdCjLZs0bNiw8STGGGNMieBfufgBlI/l/49XEEFUKERpnyHU
@@ -13295,11 +13326,11 @@ aUNb2hFLHO3pQEc60Zl4utCVbnSnBz3pRW8SSCSJZPrQlxeua5bx
 bbmuLy6w3WXfONW5O+f5bvsU6/v+vdP32asbcqyRiTpgP+/98mPe5gftrcAa
 Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                     "]}, {
-                    Automatic}][$CellContext`t$1788674] + 
-                   0.009090909090909092 \
+                    Automatic}][$CellContext`t$1788674] + (
+                    0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1788674] + \
 $CellContext`IHq[$CellContext`t$1788674] + \
-$CellContext`ISq[$CellContext`t$1788674]) 
+$CellContext`ISq[$CellContext`t$1788674])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {359}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -13346,8 +13377,9 @@ Do3So/QoPUqP0qP0KD1KDxkaAAQBkdU=
                  Derivative[1][$CellContext`CCq][$CellContext`t$1788674] == 
                  Rational[-1, 10] $CellContext`CCq[$CellContext`t$1788674] + 
                   Rational[1, 4] $CellContext`HCq[$CellContext`t$1788674], 
-                 Derivative[1][$CellContext`Deaq][$CellContext`t$1788674] == 
-                 Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674] 
+                 Derivative[
+                  1][$CellContext`Deaq][$CellContext`t$1788674] == (
+                   Rational[1, 10] $CellContext`CCq[$CellContext`t$1788674]) 
                   If[$CellContext`CCq[$CellContext`t$1788674] >= 
                     Rational[6925, 38982847], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -13446,8 +13478,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -13558,9 +13591,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -13603,8 +13636,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -13715,9 +13749,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -13803,8 +13837,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -13915,9 +13950,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -13960,8 +13995,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                    None, Evaluator -> Automatic, Method -> "Preemptive"], 
                   Alignment -> {Center, Center}, ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                  GraphicsBox[{{}, {}, {
                     GrayLevel[0.55], 
                     AbsoluteThickness[1.5], 
@@ -14072,9 +14108,9 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {HoldAll}],
                   GridLines -> {None, None}, GridLinesStyle -> Directive[
                     GrayLevel[0.5, 0.4]], ImageSize -> 
                   Dynamic[{
-                    Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}], 
-                  LabelStyle -> {FontFamily -> "Arial"}, 
+                    Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], LabelStyle -> {FontFamily -> "Arial"}, 
                   Method -> {"ScalingFunctions" -> None}, 
                   PlotRange -> {All, All}, PlotRangeClipping -> True, 
                   PlotRangePadding -> {Automatic, Automatic}, 
@@ -14538,11 +14574,11 @@ Cell[BoxData[
                ParametricNDSolve[{{
                  Derivative[
                    1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                   Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
+                    Rational[-1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -14693,11 +14729,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Derivative[1][$CellContext`Eq][$CellContext`t] == 
                   Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                   Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
+                    Rational[1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -14863,8 +14899,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Derivative[1][$CellContext`RHq][$CellContext`t] == 
                   Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                   Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                  E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                  E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -14901,9 +14937,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -14950,8 +14986,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                   Derivative[1][$CellContext`CCq][$CellContext`t] == 
                   Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                    Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                  Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                  Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                  Derivative[
+                   1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                    If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -15029,14 +15066,13 @@ $CellContext`logImportTime}, {
                 None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                Derivative[
                  1][$CellContext`Sq][$CellContext`t$1966185] == \
--$CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                 Rational[-1, 5] 
-                  E^$CellContext`logR0Natural$1966182 \
+(-$CellContext`est[$CellContext`t$1966185]) \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                   InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15188,13 +15224,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                 Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1966185] + \
 $CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                 Rational[1, 5] 
-                  E^$CellContext`logR0Natural$1966182 \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                   InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15360,8 +15395,9 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                 Derivative[1][$CellContext`RHq][$CellContext`t$1966185] == 
                 Rational[1, 8] $CellContext`HHq[$CellContext`t$1966185], 
                 Derivative[1][$CellContext`PCR][$CellContext`t$1966185] == 
-                E^$CellContext`logK$1966184 (
-                  0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185] 
+                E^$CellContext`logK$1966184 ((
+                    0.5333333333333333 \
+$CellContext`HHq[$CellContext`t$1966185]) 
                    InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15398,11 +15434,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1966185] + 
-                  0.009090909090909092 \
+                    Automatic}][$CellContext`t$1966185] + (
+                    0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) 
+$CellContext`ISq[$CellContext`t$1966185])) 
                    InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15449,8 +15485,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                 Derivative[1][$CellContext`CCq][$CellContext`t$1966185] == 
                 Rational[-1, 10] $CellContext`CCq[$CellContext`t$1966185] + 
                  Rational[1, 4] $CellContext`HCq[$CellContext`t$1966185], 
-                Derivative[1][$CellContext`Deaq][$CellContext`t$1966185] == 
-                Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185] 
+                Derivative[
+                 1][$CellContext`Deaq][$CellContext`t$1966185] == (
+                  Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185]) 
                  If[$CellContext`CCq[$CellContext`t$1966185] >= 
                    Rational[962, 5436519], 
                    2 $CellContext`fractionOfCriticalDeceased0, \
@@ -15499,11 +15536,11 @@ $CellContext`k][-1 + $CellContext`t] + ParametricFunction[1,
               ParametricNDSolve[{{
                 Derivative[
                   1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                  Rational[-1, 5] 
-                   E^$CellContext`logR0Natural \
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
+                    Rational[-1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15654,11 +15691,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                  Derivative[1][$CellContext`Eq][$CellContext`t] == 
                  Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                  Rational[1, 5] 
-                   E^$CellContext`logR0Natural \
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
+                    Rational[1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15824,8 +15861,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                  Derivative[1][$CellContext`RHq][$CellContext`t] == 
                  Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                  Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                 E^$CellContext`logK (
-                   0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                 E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15862,9 +15899,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
-                   0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+                    Automatic}][$CellContext`t] + (
+                    0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -15911,8 +15948,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                  Derivative[1][$CellContext`CCq][$CellContext`t] == 
                  Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                   Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                 Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                 Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                 Derivative[
+                  1][$CellContext`Deaq][$CellContext`t] == (
+                   Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                   If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -15990,14 +16028,13 @@ $CellContext`logImportTime}, {
                None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
               Derivative[
                 1][$CellContext`Sq][$CellContext`t$1966185] == \
--$CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                Rational[-1, 5] 
-                 E^$CellContext`logR0Natural$1966182 \
+(-$CellContext`est[$CellContext`t$1966185]) \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                  InterpolatingFunction[{{1, 365}}, {
                    5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16149,13 +16186,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                Rational[-1, 
                    4] $CellContext`Eq[$CellContext`t$1966185] + \
 $CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                Rational[1, 5] 
-                 E^$CellContext`logR0Natural$1966182 \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                  InterpolatingFunction[{{1, 365}}, {
                    5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16321,8 +16357,9 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                Derivative[1][$CellContext`RHq][$CellContext`t$1966185] == 
                Rational[1, 8] $CellContext`HHq[$CellContext`t$1966185], 
                Derivative[1][$CellContext`PCR][$CellContext`t$1966185] == 
-               E^$CellContext`logK$1966184 (
-                 0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185] 
+               E^$CellContext`logK$1966184 ((
+                   0.5333333333333333 \
+$CellContext`HHq[$CellContext`t$1966185]) 
                   InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16359,11 +16396,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1966185] + 
-                 0.009090909090909092 \
+                    Automatic}][$CellContext`t$1966185] + (
+                   0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) 
+$CellContext`ISq[$CellContext`t$1966185])) 
                   InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16410,8 +16447,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                Derivative[1][$CellContext`CCq][$CellContext`t$1966185] == 
                Rational[-1, 10] $CellContext`CCq[$CellContext`t$1966185] + 
                 Rational[1, 4] $CellContext`HCq[$CellContext`t$1966185], 
-               Derivative[1][$CellContext`Deaq][$CellContext`t$1966185] == 
-               Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185] 
+               Derivative[
+                1][$CellContext`Deaq][$CellContext`t$1966185] == (
+                 Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185]) 
                 If[$CellContext`CCq[$CellContext`t$1966185] >= 
                   Rational[962, 5436519], 
                   2 $CellContext`fractionOfCriticalDeceased0, \
@@ -16460,11 +16498,11 @@ $CellContext`k][$CellContext`t], $CellContext`c == 1}, {-ParametricFunction[1,
                ParametricNDSolve[{{
                  Derivative[
                    1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                   Rational[-1, 5] 
-                    E^$CellContext`logR0Natural \
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
+                    Rational[-1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16615,11 +16653,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Derivative[1][$CellContext`Eq][$CellContext`t] == 
                   Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                   Rational[1, 5] 
-                    E^$CellContext`logR0Natural \
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
+                    Rational[1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                     InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16785,8 +16823,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                   Derivative[1][$CellContext`RHq][$CellContext`t] == 
                   Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                   Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                  E^$CellContext`logK (
-                    0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                  E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16823,9 +16861,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
+                    Automatic}][$CellContext`t] + (
                     0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -16872,8 +16910,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                   Derivative[1][$CellContext`CCq][$CellContext`t] == 
                   Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                    Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                  Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                  Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                  Derivative[
+                   1][$CellContext`Deaq][$CellContext`t] == (
+                    Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                    If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -16881,7 +16920,6 @@ $CellContext`fractionOfCriticalDeceased0],
                   Derivative[1][$CellContext`RCq][$CellContext`t] == 
                   0.06 $CellContext`CCq[$CellContext`t], 
                   Derivative[1][$CellContext`est][$CellContext`t] == 0}, {
-                  
                   WhenEvent[$CellContext`t >= 
                    E^$CellContext`logImportTime, \
 $CellContext`est[$CellContext`t] -> 
@@ -16950,14 +16988,13 @@ $CellContext`logImportTime}, {
                 None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
                Derivative[
                  1][$CellContext`Sq][$CellContext`t$1966185] == \
--$CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                 Rational[-1, 5] 
-                  E^$CellContext`logR0Natural$1966182 \
+(-$CellContext`est[$CellContext`t$1966185]) \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                   InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17109,13 +17146,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                 Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t$1966185] + \
 $CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                 Rational[1, 5] 
-                  E^$CellContext`logR0Natural$1966182 \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                   InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17281,8 +17317,9 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                 Derivative[1][$CellContext`RHq][$CellContext`t$1966185] == 
                 Rational[1, 8] $CellContext`HHq[$CellContext`t$1966185], 
                 Derivative[1][$CellContext`PCR][$CellContext`t$1966185] == 
-                E^$CellContext`logK$1966184 (
-                  0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185] 
+                E^$CellContext`logK$1966184 ((
+                    0.5333333333333333 \
+$CellContext`HHq[$CellContext`t$1966185]) 
                    InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17319,11 +17356,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1966185] + 
-                  0.009090909090909092 \
+                    Automatic}][$CellContext`t$1966185] + (
+                    0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) 
+$CellContext`ISq[$CellContext`t$1966185])) 
                    InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17370,8 +17407,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                 Derivative[1][$CellContext`CCq][$CellContext`t$1966185] == 
                 Rational[-1, 10] $CellContext`CCq[$CellContext`t$1966185] + 
                  Rational[1, 4] $CellContext`HCq[$CellContext`t$1966185], 
-                Derivative[1][$CellContext`Deaq][$CellContext`t$1966185] == 
-                Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185] 
+                Derivative[
+                 1][$CellContext`Deaq][$CellContext`t$1966185] == (
+                  Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185]) 
                  If[$CellContext`CCq[$CellContext`t$1966185] >= 
                    Rational[962, 5436519], 
                    2 $CellContext`fractionOfCriticalDeceased0, \
@@ -17402,6 +17440,7 @@ $CellContext`importlength0, $CellContext`est[$CellContext`t$1966185] ->
                Automatic, {"DiscontinuityProcessing" -> False}, None, None, 
                Automatic, Automatic, Automatic, Automatic, 
                Rational[1, 10], 1, 
+               
                Automatic, {$CellContext`Deaq, $CellContext`PCR, \
 $CellContext`RSq, $CellContext`RHq, $CellContext`RCq, $CellContext`RepHq, \
 $CellContext`Sq, $CellContext`Eq, $CellContext`ISq, $CellContext`IHq, \
@@ -17420,11 +17459,11 @@ $CellContext`k][-1 + $CellContext`t] + ParametricFunction[1,
               ParametricNDSolve[{{
                 Derivative[
                   1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                  Rational[-1, 5] 
-                   E^$CellContext`logR0Natural \
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
+                    Rational[-1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17575,11 +17614,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                  Derivative[1][$CellContext`Eq][$CellContext`t] == 
                  Rational[-1, 
                     4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-                  Rational[1, 5] 
-                   E^$CellContext`logR0Natural \
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
+                    Rational[1, 5] 
+                    E^$CellContext`logR0Natural) \
 ($CellContext`ICq[$CellContext`t] + $CellContext`IHq[$CellContext`t] + \
-$CellContext`ISq[$CellContext`t]) $CellContext`Sq[$CellContext`t] 
+$CellContext`ISq[$CellContext`t])) $CellContext`Sq[$CellContext`t]) 
                    InterpolatingFunction[{{1, 365}}, {
                     5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17711,8 +17750,6 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     Rational[1, 2]}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
-                     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
@@ -17723,8 +17760,10 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
                     1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}, {
-                    Automatic}][
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+                    1}}, {Automatic}][
                     Max[1, 
                     Min[300, $CellContext`t]]], 
                  Derivative[1][$CellContext`ISq][$CellContext`t] == 
@@ -17745,8 +17784,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                  Derivative[1][$CellContext`RHq][$CellContext`t] == 
                  Rational[1, 8] $CellContext`HHq[$CellContext`t], 
                  Derivative[1][$CellContext`PCR][$CellContext`t] == 
-                 E^$CellContext`logK (
-                   0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+                 E^$CellContext`logK ((
+                    0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17783,9 +17822,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t] + 
-                   0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+                    Automatic}][$CellContext`t] + (
+                    0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
                     InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -17832,8 +17871,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                  Derivative[1][$CellContext`CCq][$CellContext`t] == 
                  Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
                   Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-                 Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-                 Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+                 Derivative[
+                  1][$CellContext`Deaq][$CellContext`t] == (
+                   Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
                   If[$CellContext`CCq[$CellContext`t] >= 
                     Rational[962, 5436519], 
                     2 $CellContext`fractionOfCriticalDeceased0, \
@@ -17861,7 +17901,6 @@ $CellContext`est[$CellContext`t] -> 0]}, {$CellContext`Sq[0] ==
                  0}}, {$CellContext`Deaq, $CellContext`PCR}, {$CellContext`t, 
                 0, 365}, {$CellContext`logR0Natural, \
 $CellContext`logImportTime, $CellContext`logK}, 
-               
                DependentVariables -> {$CellContext`Deaq, $CellContext`PCR, \
 $CellContext`RSq, $CellContext`RHq, $CellContext`RCq, $CellContext`RepHq, \
 $CellContext`Sq, $CellContext`Eq, $CellContext`ISq, $CellContext`IHq, \
@@ -17911,14 +17950,13 @@ $CellContext`logImportTime}, {
                None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
               Derivative[
                 1][$CellContext`Sq][$CellContext`t$1966185] == \
--$CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                Rational[-1, 5] 
-                 E^$CellContext`logR0Natural$1966182 \
+(-$CellContext`est[$CellContext`t$1966185]) \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[-1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                  InterpolatingFunction[{{1, 365}}, {
                    5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -18070,13 +18108,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                Rational[-1, 
                    4] $CellContext`Eq[$CellContext`t$1966185] + \
 $CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-                Rational[1, 5] 
-                 E^$CellContext`logR0Natural$1966182 \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[1, 5] 
+                    E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
                  InterpolatingFunction[{{1, 365}}, {
                    5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -18242,8 +18279,9 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
                Derivative[1][$CellContext`RHq][$CellContext`t$1966185] == 
                Rational[1, 8] $CellContext`HHq[$CellContext`t$1966185], 
                Derivative[1][$CellContext`PCR][$CellContext`t$1966185] == 
-               E^$CellContext`logK$1966184 (
-                 0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185] 
+               E^$CellContext`logK$1966184 ((
+                   0.5333333333333333 \
+$CellContext`HHq[$CellContext`t$1966185]) 
                   InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -18280,11 +18318,11 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                     "]}, {
-                    Automatic}][$CellContext`t$1966185] + 
-                 0.009090909090909092 \
+                    Automatic}][$CellContext`t$1966185] + (
+                   0.009090909090909092 \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) 
+$CellContext`ISq[$CellContext`t$1966185])) 
                   InterpolatingFunction[{{0., 365.}}, {
                     5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                     False}, CompressedData["
@@ -18331,8 +18369,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
                Derivative[1][$CellContext`CCq][$CellContext`t$1966185] == 
                Rational[-1, 10] $CellContext`CCq[$CellContext`t$1966185] + 
                 Rational[1, 4] $CellContext`HCq[$CellContext`t$1966185], 
-               Derivative[1][$CellContext`Deaq][$CellContext`t$1966185] == 
-               Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185] 
+               Derivative[
+                1][$CellContext`Deaq][$CellContext`t$1966185] == (
+                 Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185]) 
                 If[$CellContext`CCq[$CellContext`t$1966185] >= 
                   Rational[962, 5436519], 
                   2 $CellContext`fractionOfCriticalDeceased0, \
@@ -18373,6 +18412,7 @@ $CellContext`CCq, $CellContext`est}, {}, {}, Automatic, Automatic, None, None,
               7, "CacheKeyMaxBytes" -> 1000000, "CacheResultMaxBytes" -> 
               1000000, "KeyComparison" -> None, "ResultComparison" -> 
               LessEqual}, {}, 
+             
              All]}][$CellContext`r0natural, $CellContext`importtime, \
 $CellContext`k][$CellContext`t], $CellContext`c == 2}}, 0], 
       0.9162907318741551 <= $CellContext`r0natural <= 1.33500106673234, 
@@ -18430,11 +18470,11 @@ $CellContext`k, $CellContext`r0natural, $CellContext`t}, #], {
       ParametricNDSolve[{{
         Derivative[
           1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-          Rational[-1, 5] 
-           E^$CellContext`logR0Natural ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) \
-$CellContext`Sq[$CellContext`t] 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
+              Rational[-1, 5] 
+              E^$CellContext`logR0Natural) ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) \
+$CellContext`Sq[$CellContext`t]) 
            InterpolatingFunction[{{1, 365}}, {
              5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
               False}, CompressedData["
@@ -18582,11 +18622,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
          Derivative[1][$CellContext`Eq][$CellContext`t] == 
          Rational[-1, 
              4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-          Rational[1, 5] 
-           E^$CellContext`logR0Natural ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) \
-$CellContext`Sq[$CellContext`t] 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
+              Rational[1, 5] 
+              E^$CellContext`logR0Natural) ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) \
+$CellContext`Sq[$CellContext`t]) 
            InterpolatingFunction[{{1, 365}}, {
              5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
               False}, CompressedData["
@@ -18726,9 +18766,9 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
               1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
               1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
               1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-              1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1},
-               {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
-              1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}, {Automatic}][
+              1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+              1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {
+              1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}}, {Automatic}][
              Max[1, 
               Min[300, $CellContext`t]]], 
          Derivative[1][$CellContext`ISq][$CellContext`t] == 
@@ -18749,8 +18789,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
          Derivative[1][$CellContext`RHq][$CellContext`t] == 
          Rational[1, 8] $CellContext`HHq[$CellContext`t], 
          Derivative[1][$CellContext`PCR][$CellContext`t] == 
-         E^$CellContext`logK (
-           0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+         E^$CellContext`logK ((
+             0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
             InterpolatingFunction[{{0., 365.}}, {
               5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                False}, CompressedData["
@@ -18787,9 +18827,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                "]}, {
-              Automatic}][$CellContext`t] + 
-           0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+              Automatic}][$CellContext`t] + (
+             0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
             InterpolatingFunction[{{0., 365.}}, {
               5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                False}, CompressedData["
@@ -18836,8 +18876,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
          Derivative[1][$CellContext`CCq][$CellContext`t] == 
          Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
           Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-         Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-         Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+         Derivative[
+          1][$CellContext`Deaq][$CellContext`t] == (
+           Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
           If[$CellContext`CCq[$CellContext`t] >= Rational[962, 5436519], 
             2 $CellContext`fractionOfCriticalDeceased0, \
 $CellContext`fractionOfCriticalDeceased0], 
@@ -18907,14 +18948,13 @@ $CellContext`logImportTime$1966183, $CellContext`logK$1966184},
        None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
       Derivative[
         1][$CellContext`Sq][$CellContext`t$1966185] == \
--$CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-        Rational[-1, 5] 
-         E^$CellContext`logR0Natural$1966182 \
+(-$CellContext`est[$CellContext`t$1966185]) \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[-1, 5] 
+            E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
          InterpolatingFunction[{{1, 365}}, {
            5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
             False}, CompressedData["
@@ -19062,13 +19102,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
        Rational[-1, 
            4] $CellContext`Eq[$CellContext`t$1966185] + \
 $CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-        Rational[1, 5] 
-         E^$CellContext`logR0Natural$1966182 \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[1, 5] 
+            E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
          InterpolatingFunction[{{1, 365}}, {
            5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
             False}, CompressedData["
@@ -19230,8 +19269,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
        Derivative[1][$CellContext`RHq][$CellContext`t$1966185] == 
        Rational[1, 8] $CellContext`HHq[$CellContext`t$1966185], 
        Derivative[1][$CellContext`PCR][$CellContext`t$1966185] == 
-       E^$CellContext`logK$1966184 (
-         0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185] 
+       E^$CellContext`logK$1966184 ((
+           0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185]) 
           InterpolatingFunction[{{0., 365.}}, {
             5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
              False}, CompressedData["
@@ -19268,10 +19307,10 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
              "]}, {
-            Automatic}][$CellContext`t$1966185] + 
-         0.009090909090909092 ($CellContext`ICq[$CellContext`t$1966185] + \
+            Automatic}][$CellContext`t$1966185] + (
+           0.009090909090909092 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) 
+$CellContext`ISq[$CellContext`t$1966185])) 
           InterpolatingFunction[{{0., 365.}}, {
             5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
              False}, CompressedData["
@@ -19318,8 +19357,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
        Derivative[1][$CellContext`CCq][$CellContext`t$1966185] == 
        Rational[-1, 10] $CellContext`CCq[$CellContext`t$1966185] + 
         Rational[1, 4] $CellContext`HCq[$CellContext`t$1966185], 
-       Derivative[1][$CellContext`Deaq][$CellContext`t$1966185] == 
-       Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185] 
+       Derivative[
+        1][$CellContext`Deaq][$CellContext`t$1966185] == (
+         Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185]) 
         If[$CellContext`CCq[$CellContext`t$1966185] >= Rational[962, 5436519],
            2 $CellContext`fractionOfCriticalDeceased0, \
 $CellContext`fractionOfCriticalDeceased0], 
@@ -19360,11 +19400,11 @@ $CellContext`est}, {}, {}, Automatic, Automatic, None, None, None, Automatic,
       ParametricNDSolve[{{
         Derivative[
           1][$CellContext`Sq][$CellContext`t] == \
--$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-          Rational[-1, 5] 
-           E^$CellContext`logR0Natural ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) \
-$CellContext`Sq[$CellContext`t] 
+(-$CellContext`est[$CellContext`t]) $CellContext`Sq[$CellContext`t] + (((
+              Rational[-1, 5] 
+              E^$CellContext`logR0Natural) ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) \
+$CellContext`Sq[$CellContext`t]) 
            InterpolatingFunction[{{1, 365}}, {
              5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
               False}, CompressedData["
@@ -19512,11 +19552,11 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
          Derivative[1][$CellContext`Eq][$CellContext`t] == 
          Rational[-1, 
              4] $CellContext`Eq[$CellContext`t] + \
-$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + 
-          Rational[1, 5] 
-           E^$CellContext`logR0Natural ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) \
-$CellContext`Sq[$CellContext`t] 
+$CellContext`est[$CellContext`t] $CellContext`Sq[$CellContext`t] + (((
+              Rational[1, 5] 
+              E^$CellContext`logR0Natural) ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) \
+$CellContext`Sq[$CellContext`t]) 
            InterpolatingFunction[{{1, 365}}, {
              5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
               False}, CompressedData["
@@ -19679,8 +19719,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
          Derivative[1][$CellContext`RHq][$CellContext`t] == 
          Rational[1, 8] $CellContext`HHq[$CellContext`t], 
          Derivative[1][$CellContext`PCR][$CellContext`t] == 
-         E^$CellContext`logK (
-           0.5333333333333333 $CellContext`HHq[$CellContext`t] 
+         E^$CellContext`logK ((
+             0.5333333333333333 $CellContext`HHq[$CellContext`t]) 
             InterpolatingFunction[{{0., 365.}}, {
               5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                False}, CompressedData["
@@ -19717,9 +19757,9 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
                "]}, {
-              Automatic}][$CellContext`t] + 
-           0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
-$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t]) 
+              Automatic}][$CellContext`t] + (
+             0.009090909090909092 ($CellContext`ICq[$CellContext`t] + \
+$CellContext`IHq[$CellContext`t] + $CellContext`ISq[$CellContext`t])) 
             InterpolatingFunction[{{0., 365.}}, {
               5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
                False}, CompressedData["
@@ -19766,8 +19806,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
          Derivative[1][$CellContext`CCq][$CellContext`t] == 
          Rational[-1, 10] $CellContext`CCq[$CellContext`t] + 
           Rational[1, 4] $CellContext`HCq[$CellContext`t], 
-         Derivative[1][$CellContext`Deaq][$CellContext`t] == 
-         Rational[1, 10] $CellContext`CCq[$CellContext`t] 
+         Derivative[
+          1][$CellContext`Deaq][$CellContext`t] == (
+           Rational[1, 10] $CellContext`CCq[$CellContext`t]) 
           If[$CellContext`CCq[$CellContext`t] >= Rational[962, 5436519], 
             2 $CellContext`fractionOfCriticalDeceased0, \
 $CellContext`fractionOfCriticalDeceased0], 
@@ -19837,14 +19878,13 @@ $CellContext`logImportTime$1966183, $CellContext`logK$1966184},
        None, {}}}, {$CellContext`Deaq, $CellContext`PCR}, {{
       Derivative[
         1][$CellContext`Sq][$CellContext`t$1966185] == \
--$CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-        Rational[-1, 5] 
-         E^$CellContext`logR0Natural$1966182 \
+(-$CellContext`est[$CellContext`t$1966185]) \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[-1, 5] 
+            E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
          InterpolatingFunction[{{1, 365}}, {
            5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
             False}, CompressedData["
@@ -19992,13 +20032,12 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
        Rational[-1, 
            4] $CellContext`Eq[$CellContext`t$1966185] + \
 $CellContext`est[$CellContext`t$1966185] \
-$CellContext`Sq[$CellContext`t$1966185] + 
-        Rational[1, 5] 
-         E^$CellContext`logR0Natural$1966182 \
+$CellContext`Sq[$CellContext`t$1966185] + (((Rational[1, 5] 
+            E^$CellContext`logR0Natural$1966182) \
 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) \
-$CellContext`Sq[$CellContext`t$1966185] 
+$CellContext`ISq[$CellContext`t$1966185])) \
+$CellContext`Sq[$CellContext`t$1966185]) 
          InterpolatingFunction[{{1, 365}}, {
            5, 3, 0, {351}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
             False}, CompressedData["
@@ -20160,8 +20199,8 @@ aEgjGtOEpjSjOS2IJY6WxJNAIq1oTRva0o72dKAjSXQimRQ6k8ordKEr3XiV
        Derivative[1][$CellContext`RHq][$CellContext`t$1966185] == 
        Rational[1, 8] $CellContext`HHq[$CellContext`t$1966185], 
        Derivative[1][$CellContext`PCR][$CellContext`t$1966185] == 
-       E^$CellContext`logK$1966184 (
-         0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185] 
+       E^$CellContext`logK$1966184 ((
+           0.5333333333333333 $CellContext`HHq[$CellContext`t$1966185]) 
           InterpolatingFunction[{{0., 365.}}, {
             5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
              False}, CompressedData["
@@ -20198,10 +20237,10 @@ aE8HYulIJzrTha7E0Y3uxJNAD3rSi970IZG+9COJ/iQzgIE8B3aEl8Y=
 Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
 6/v+vdP32QftkGt9HXhglB6lR+lRepQepUfpUXrI0AD8F5BO
              "]}, {
-            Automatic}][$CellContext`t$1966185] + 
-         0.009090909090909092 ($CellContext`ICq[$CellContext`t$1966185] + \
+            Automatic}][$CellContext`t$1966185] + (
+           0.009090909090909092 ($CellContext`ICq[$CellContext`t$1966185] + \
 $CellContext`IHq[$CellContext`t$1966185] + \
-$CellContext`ISq[$CellContext`t$1966185]) 
+$CellContext`ISq[$CellContext`t$1966185])) 
           InterpolatingFunction[{{0., 365.}}, {
             5, 7, 0, {361}, {4}, 0, 0, 0, 0, Automatic, {}, {}, 
              False}, CompressedData["
@@ -20248,8 +20287,9 @@ Xvlxl/0i122f/17ZYf8NJPt1h/00526gzE57Q441MlEpu+3Pfw9+vHT2HvsU
        Derivative[1][$CellContext`CCq][$CellContext`t$1966185] == 
        Rational[-1, 10] $CellContext`CCq[$CellContext`t$1966185] + 
         Rational[1, 4] $CellContext`HCq[$CellContext`t$1966185], 
-       Derivative[1][$CellContext`Deaq][$CellContext`t$1966185] == 
-       Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185] 
+       Derivative[
+        1][$CellContext`Deaq][$CellContext`t$1966185] == (
+         Rational[1, 10] $CellContext`CCq[$CellContext`t$1966185]) 
         If[$CellContext`CCq[$CellContext`t$1966185] >= Rational[962, 5436519],
            2 $CellContext`fractionOfCriticalDeceased0, \
 $CellContext`fractionOfCriticalDeceased0], 
@@ -20350,7 +20390,7 @@ $CellContext`PCRParametric$$[
           100}, {{$CellContext`k$$, 
            $CellContext`fitParams$$["k"]}, 1, 20}}, "Options" :> {}, 
        "DefaultOptions" :> {}],
-      ImageSizeCache->{1084., {414., 425.}},
+      ImageSizeCache->{1045., {368., 374.}},
       SingleEvaluation->True],
      Deinitialization:>None,
      DynamicModuleValues:>{},
@@ -21647,7 +21687,6 @@ Cell[BoxData["$Aborted"], "Output",
 },
 WindowSize->{2152, 1327},
 WindowMargins->{{Automatic, 69}, {29, Automatic}},
-Magnification:>2. Inherited,
 FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 13, 2020)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"8baffd29-f62e-4697-bde1-fbc42afdc53a"
@@ -21663,93 +21702,93 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 7437, 193, 3012, "Input",ExpressionUUID->"a14b3e01-a7e8-4a26-9a32-3bb2899d3a50"],
-Cell[7998, 215, 173, 2, 59, "Input",ExpressionUUID->"aa63b95c-d858-41e5-ac55-b0eb0aadec0f"],
-Cell[8174, 219, 2157, 55, 287, "Input",ExpressionUUID->"d74a55a3-a0f6-45dc-8882-cf494bd2f0c7"],
-Cell[10334, 276, 8816, 211, 1517, "Input",ExpressionUUID->"00ed631c-d473-4849-ae66-246b86a90e3e"],
-Cell[19153, 489, 31163, 731, 4949, "Input",ExpressionUUID->"7c46df70-8fc1-4c5d-9b3f-ad7d8606c44e"],
-Cell[50319, 1222, 128, 3, 59, "Input",ExpressionUUID->"8d31e1b3-c3ab-4f93-af55-609174bedc30"],
+Cell[558, 20, 7437, 193, 1543, "Input",ExpressionUUID->"a14b3e01-a7e8-4a26-9a32-3bb2899d3a50"],
+Cell[7998, 215, 173, 2, 30, "Input",ExpressionUUID->"aa63b95c-d858-41e5-ac55-b0eb0aadec0f"],
+Cell[8174, 219, 2157, 55, 136, "Input",ExpressionUUID->"d74a55a3-a0f6-45dc-8882-cf494bd2f0c7"],
+Cell[10334, 276, 8816, 211, 640, "Input",ExpressionUUID->"00ed631c-d473-4849-ae66-246b86a90e3e"],
+Cell[19153, 489, 31327, 733, 2181, "Input",ExpressionUUID->"7c46df70-8fc1-4c5d-9b3f-ad7d8606c44e"],
+Cell[50483, 1224, 128, 3, 30, "Input",ExpressionUUID->"8d31e1b3-c3ab-4f93-af55-609174bedc30"],
 Cell[CellGroupData[{
-Cell[50472, 1229, 301, 6, 81, "Input",ExpressionUUID->"804fac76-dd8a-4099-836c-ab59458c198a"],
-Cell[50776, 1237, 343774, 6452, 854, "Output",ExpressionUUID->"ba962adf-ca46-4875-b433-c4329c0557d4"]
+Cell[50636, 1231, 301, 6, 30, "Input",ExpressionUUID->"804fac76-dd8a-4099-836c-ab59458c198a"],
+Cell[50940, 1239, 344262, 6465, 305, "Output",ExpressionUUID->"ba962adf-ca46-4875-b433-c4329c0557d4"]
 }, Open  ]],
-Cell[394565, 7692, 1808, 46, 265, "Input",ExpressionUUID->"fa362db4-224b-411f-86af-e71a898005d1"],
-Cell[396376, 7740, 1030, 29, 101, "Input",ExpressionUUID->"90c8af12-42a8-4f7c-aaaf-a8c8588eb3c7"],
+Cell[395217, 7707, 1808, 46, 73, "Input",ExpressionUUID->"fa362db4-224b-411f-86af-e71a898005d1"],
+Cell[397028, 7755, 1030, 29, 30, "Input",ExpressionUUID->"90c8af12-42a8-4f7c-aaaf-a8c8588eb3c7"],
 Cell[CellGroupData[{
-Cell[397431, 7773, 303, 6, 81, "Input",ExpressionUUID->"6a00baa3-e3d6-403d-b9a6-d12c7017c8d3"],
-Cell[397737, 7781, 347851, 6480, 955, "Output",ExpressionUUID->"7fb75841-d7e4-47d9-ba59-01756681e58d"]
+Cell[398083, 7788, 303, 6, 30, "Input",ExpressionUUID->"6a00baa3-e3d6-403d-b9a6-d12c7017c8d3"],
+Cell[398389, 7796, 348475, 6501, 305, "Output",ExpressionUUID->"7fb75841-d7e4-47d9-ba59-01756681e58d"]
 }, Open  ]],
-Cell[745603, 14264, 4877, 120, 738, "Input",ExpressionUUID->"042eceb7-965c-4c08-b981-ef425de82f3b"],
-Cell[750483, 14386, 235, 6, 59, "Input",ExpressionUUID->"418b2975-6dfb-4971-8b2a-418b4ecb28cd"],
+Cell[746879, 14300, 4877, 120, 304, "Input",ExpressionUUID->"042eceb7-965c-4c08-b981-ef425de82f3b"],
+Cell[751759, 14422, 235, 6, 30, "Input",ExpressionUUID->"418b2975-6dfb-4971-8b2a-418b4ecb28cd"],
 Cell[CellGroupData[{
-Cell[750743, 14396, 5515, 125, 861, "Input",ExpressionUUID->"3c5cb371-b7b2-4b64-af07-3e2297777a07"],
-Cell[756261, 14523, 296315, 5849, 897, "Output",ExpressionUUID->"b95732bb-34d7-4222-bef9-4607645d5530"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[1052613, 20377, 1784, 41, 306, "Input",ExpressionUUID->"3af2b4d3-cd23-4f98-87b3-08fb7bba7557"],
-Cell[CellGroupData[{
-Cell[1054422, 20422, 311, 8, 49, "Echo",ExpressionUUID->"b8cfca89-1164-4534-8d40-5508fe2de291"],
-Cell[1054736, 20432, 313, 8, 49, "Echo",ExpressionUUID->"e577c510-59fb-4b68-b982-293efa98a4fe"],
-Cell[1055052, 20442, 311, 8, 49, "Echo",ExpressionUUID->"83867a40-130d-4265-b64f-b9ad7ef03ccb"]
-}, Open  ]],
-Cell[1055378, 20453, 160, 3, 67, "Output",ExpressionUUID->"83b617d2-e334-4507-9c4d-9989c7ff5213"]
+Cell[752019, 14432, 5515, 125, 367, "Input",ExpressionUUID->"3c5cb371-b7b2-4b64-af07-3e2297777a07"],
+Cell[757537, 14559, 296706, 5853, 761, "Output",ExpressionUUID->"b95732bb-34d7-4222-bef9-4607645d5530"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1055575, 20461, 357, 6, 101, "Input",ExpressionUUID->"0bc0387d-7ba5-4136-840e-818e38c875cf"],
-Cell[1055935, 20469, 1031, 23, 199, "Output",ExpressionUUID->"624bece0-0d65-412f-b7db-c76adfb0186f"],
-Cell[1056969, 20494, 1030, 23, 199, "Output",ExpressionUUID->"5f16ef88-a0fd-479c-bba2-b010cc32cc30"]
+Cell[1054280, 20417, 1784, 41, 136, "Input",ExpressionUUID->"3af2b4d3-cd23-4f98-87b3-08fb7bba7557"],
+Cell[CellGroupData[{
+Cell[1056089, 20462, 311, 8, 26, "Echo",ExpressionUUID->"b8cfca89-1164-4534-8d40-5508fe2de291"],
+Cell[1056403, 20472, 313, 8, 26, "Echo",ExpressionUUID->"e577c510-59fb-4b68-b982-293efa98a4fe"],
+Cell[1056719, 20482, 311, 8, 26, "Echo",ExpressionUUID->"83867a40-130d-4265-b64f-b9ad7ef03ccb"]
+}, Open  ]],
+Cell[1057045, 20493, 160, 3, 34, "Output",ExpressionUUID->"83b617d2-e334-4507-9c4d-9989c7ff5213"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1058036, 20522, 1149, 31, 142, "Input",ExpressionUUID->"f65dc5ff-e0c7-44b4-a062-7684ef844398"],
-Cell[1059188, 20555, 462, 10, 67, "Output",ExpressionUUID->"9c6ef590-0207-498b-b8a1-eb074e412178"]
+Cell[1057242, 20501, 357, 6, 52, "Input",ExpressionUUID->"0bc0387d-7ba5-4136-840e-818e38c875cf"],
+Cell[1057602, 20509, 1031, 23, 105, "Output",ExpressionUUID->"624bece0-0d65-412f-b7db-c76adfb0186f"],
+Cell[1058636, 20534, 1030, 23, 105, "Output",ExpressionUUID->"5f16ef88-a0fd-479c-bba2-b010cc32cc30"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1059687, 20570, 323, 6, 101, "Input",ExpressionUUID->"070f3794-0ee0-43b5-adb5-cd8926c61dc0"],
-Cell[1060013, 20578, 176, 3, 67, "Output",ExpressionUUID->"24e8e571-37b3-4598-a9e0-99a0e4a89773"],
-Cell[1060192, 20583, 176, 3, 67, "Output",ExpressionUUID->"22517162-9d1a-4ac6-9265-2ba730092b6b"]
+Cell[1059703, 20562, 1149, 31, 52, "Input",ExpressionUUID->"f65dc5ff-e0c7-44b4-a062-7684ef844398"],
+Cell[1060855, 20595, 462, 10, 37, "Output",ExpressionUUID->"9c6ef590-0207-498b-b8a1-eb074e412178"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1060405, 20591, 169, 3, 59, "Input",ExpressionUUID->"80ea4d11-7d67-4168-9bb0-1829ccdd48a8"],
-Cell[1060577, 20596, 463, 10, 67, "Output",ExpressionUUID->"8ceb2aaa-69e4-4235-b73e-921a32f3d7a1"]
+Cell[1061354, 20610, 323, 6, 52, "Input",ExpressionUUID->"070f3794-0ee0-43b5-adb5-cd8926c61dc0"],
+Cell[1061680, 20618, 176, 3, 34, "Output",ExpressionUUID->"24e8e571-37b3-4598-a9e0-99a0e4a89773"],
+Cell[1061859, 20623, 176, 3, 34, "Output",ExpressionUUID->"22517162-9d1a-4ac6-9265-2ba730092b6b"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1061077, 20611, 232, 4, 59, "Input",ExpressionUUID->"4982dcd2-9c39-457a-a629-bb49fb937a4d"],
-Cell[1061312, 20617, 234, 5, 67, "Output",ExpressionUUID->"b08dbd4d-54c4-449f-a2db-243175eb3101"]
+Cell[1062072, 20631, 169, 3, 30, "Input",ExpressionUUID->"80ea4d11-7d67-4168-9bb0-1829ccdd48a8"],
+Cell[1062244, 20636, 463, 10, 37, "Output",ExpressionUUID->"8ceb2aaa-69e4-4235-b73e-921a32f3d7a1"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1061583, 20627, 5428, 132, 839, "Input",ExpressionUUID->"ce418019-476e-42a7-9a5b-9cfeb32e1d53"],
-Cell[1067014, 20761, 496, 11, 67, "Output",ExpressionUUID->"48aef258-ab88-4650-b6c9-5baf95da4b77"],
-Cell[1067513, 20774, 9670, 220, 759, "Output",ExpressionUUID->"cfeb56b5-1cfd-4bdb-a938-71314e6bc773"]
-}, Open  ]],
-Cell[1077198, 20997, 400, 10, 59, "Input",ExpressionUUID->"194b4d62-95eb-45fb-8b18-cff576105970"],
-Cell[1077601, 21009, 154, 3, 59, "Input",ExpressionUUID->"f708dc38-9c80-47f5-ae9b-013e9e17b492"],
-Cell[1077758, 21014, 2220, 51, 716, "Input",ExpressionUUID->"a3b252d6-8879-4b19-bf3f-3b8c05e3767f"],
-Cell[CellGroupData[{
-Cell[1080003, 21069, 342, 6, 101, "Input",ExpressionUUID->"ae20bfab-48cf-42f6-a6ba-b85eece5422f"],
-Cell[1080348, 21077, 1955, 49, 499, "Output",ExpressionUUID->"7bfe05c2-897b-4df4-afaf-ba019d170560"],
-Cell[1082306, 21128, 2105, 51, 489, "Output",ExpressionUUID->"9dd60680-29e1-46ad-b6c2-3b0590ce6330"]
-}, Open  ]],
-Cell[1084426, 21182, 150, 3, 59, "Input",ExpressionUUID->"49119f63-b8ef-453c-bb4a-cefdfe5b1f8f"],
-Cell[1084579, 21187, 4925, 135, 593, "Input",ExpressionUUID->"f4cb036f-9068-492e-a2f0-ba76a50a26e8"],
-Cell[1089507, 21324, 424, 10, 59, "Input",ExpressionUUID->"e868d491-8856-4af9-95b9-71af5261e7c1"],
-Cell[CellGroupData[{
-Cell[1089956, 21338, 292, 5, 101, "Input",ExpressionUUID->"befe77c8-93b5-4ef6-a6b6-cb47c8f16114"],
-Cell[1090251, 21345, 1927, 48, 499, "Output",ExpressionUUID->"df8b7f9f-a5da-4397-a76d-f8d789ea1f3e"],
-Cell[1092181, 21395, 2078, 50, 489, "Output",ExpressionUUID->"645a39d6-685d-446d-9b96-69365ccb1f61"]
+Cell[1062744, 20651, 232, 4, 30, "Input",ExpressionUUID->"4982dcd2-9c39-457a-a629-bb49fb937a4d"],
+Cell[1062979, 20657, 234, 5, 34, "Output",ExpressionUUID->"b08dbd4d-54c4-449f-a2db-243175eb3101"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1094296, 21450, 226, 4, 59, "Input",ExpressionUUID->"cd9808c8-5dc7-44cb-9305-d757ed7ffa63"],
-Cell[1094525, 21456, 2289, 41, 325, "Output",ExpressionUUID->"c9f8b12a-8738-48cd-aa8b-2abd75c67e93"]
+Cell[1063250, 20667, 5428, 132, 367, "Input",ExpressionUUID->"ce418019-476e-42a7-9a5b-9cfeb32e1d53"],
+Cell[1068681, 20801, 496, 11, 37, "Output",ExpressionUUID->"48aef258-ab88-4650-b6c9-5baf95da4b77"],
+Cell[1069180, 20814, 9670, 220, 742, "Output",ExpressionUUID->"cfeb56b5-1cfd-4bdb-a938-71314e6bc773"]
 }, Open  ]],
-Cell[1096829, 21500, 151, 3, 59, "Input",ExpressionUUID->"e87ef539-227c-4467-9b40-968a7bef1a33"],
-Cell[1096983, 21505, 128, 3, 59, "Input",ExpressionUUID->"7fcfb735-d489-4460-8266-bfa6c087168a"],
-Cell[1097114, 21510, 309, 6, 113, "Input",ExpressionUUID->"b207db2b-f589-4fdb-8737-eb247b08b139",
+Cell[1078865, 21037, 400, 10, 30, "Input",ExpressionUUID->"194b4d62-95eb-45fb-8b18-cff576105970"],
+Cell[1079268, 21049, 154, 3, 30, "Input",ExpressionUUID->"f708dc38-9c80-47f5-ae9b-013e9e17b492"],
+Cell[1079425, 21054, 2220, 51, 367, "Input",ExpressionUUID->"a3b252d6-8879-4b19-bf3f-3b8c05e3767f"],
+Cell[CellGroupData[{
+Cell[1081670, 21109, 342, 6, 52, "Input",ExpressionUUID->"ae20bfab-48cf-42f6-a6ba-b85eece5422f"],
+Cell[1082015, 21117, 1955, 49, 249, "Output",ExpressionUUID->"7bfe05c2-897b-4df4-afaf-ba019d170560"],
+Cell[1083973, 21168, 2105, 51, 244, "Output",ExpressionUUID->"9dd60680-29e1-46ad-b6c2-3b0590ce6330"]
+}, Open  ]],
+Cell[1086093, 21222, 150, 3, 29, "Input",ExpressionUUID->"49119f63-b8ef-453c-bb4a-cefdfe5b1f8f"],
+Cell[1086246, 21227, 4925, 135, 296, "Input",ExpressionUUID->"f4cb036f-9068-492e-a2f0-ba76a50a26e8"],
+Cell[1091174, 21364, 424, 10, 29, "Input",ExpressionUUID->"e868d491-8856-4af9-95b9-71af5261e7c1"],
+Cell[CellGroupData[{
+Cell[1091623, 21378, 292, 5, 50, "Input",ExpressionUUID->"befe77c8-93b5-4ef6-a6b6-cb47c8f16114"],
+Cell[1091918, 21385, 1927, 48, 249, "Output",ExpressionUUID->"df8b7f9f-a5da-4397-a76d-f8d789ea1f3e"],
+Cell[1093848, 21435, 2078, 50, 244, "Output",ExpressionUUID->"645a39d6-685d-446d-9b96-69365ccb1f61"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1095963, 21490, 226, 4, 29, "Input",ExpressionUUID->"cd9808c8-5dc7-44cb-9305-d757ed7ffa63"],
+Cell[1096192, 21496, 2289, 41, 162, "Output",ExpressionUUID->"c9f8b12a-8738-48cd-aa8b-2abd75c67e93"]
+}, Open  ]],
+Cell[1098496, 21540, 151, 3, 29, "Input",ExpressionUUID->"e87ef539-227c-4467-9b40-968a7bef1a33"],
+Cell[1098650, 21545, 128, 3, 29, "Input",ExpressionUUID->"7fcfb735-d489-4460-8266-bfa6c087168a"],
+Cell[1098781, 21550, 309, 6, 56, "Input",ExpressionUUID->"b207db2b-f589-4fdb-8737-eb247b08b139",
  InitializationCell->True],
-Cell[1097426, 21518, 595, 11, 125, "Code",ExpressionUUID->"2b5b0b4d-1b37-46a6-9a59-5648b6a1cfa9"],
-Cell[1098024, 21531, 3665, 86, 544, "Code",ExpressionUUID->"a11e8cfd-f35d-4440-8f40-0c8552266c6f"],
+Cell[1099093, 21558, 595, 11, 62, "Code",ExpressionUUID->"2b5b0b4d-1b37-46a6-9a59-5648b6a1cfa9"],
+Cell[1099691, 21571, 3665, 86, 272, "Code",ExpressionUUID->"a11e8cfd-f35d-4440-8f40-0c8552266c6f"],
 Cell[CellGroupData[{
-Cell[1101714, 21621, 714, 18, 164, "Code",ExpressionUUID->"d163fa09-538c-498c-b2dd-6609021968dc"],
-Cell[1102431, 21641, 161, 3, 89, "Output",ExpressionUUID->"0a10f1d5-0b2c-4a83-a309-01ae77c01395"]
+Cell[1103381, 21661, 714, 18, 82, "Code",ExpressionUUID->"d163fa09-538c-498c-b2dd-6609021968dc"],
+Cell[1104098, 21681, 161, 3, 44, "Output",ExpressionUUID->"0a10f1d5-0b2c-4a83-a309-01ae77c01395"]
 }, Open  ]]
 }
 ]
