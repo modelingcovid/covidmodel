@@ -110,16 +110,17 @@ based on eg their epidemics starting earlier or having different hospital system
 gap between PCR and death *)
 fitStartingOverrides=<|
   "CA"-><|"rlower"->2.9,"rupper"->3.1,"tlower"->45,"tupper"->47,"replower"->5.5,"repupper"->6.5|>,
-  "FL"-><|"rlower"->2.9,"rupper"->3.1,"tlower"->50,"tupper"->55,"replower"->5.5,"repupper"->6.5|>,
+  "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->45,"tupper"->55,"replower"->6.3,"repupper"->7.2|>,
   "PA"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->55,"tupper"->70,"replower"->4,"repupper"->6|>,
-  "CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->40,"tupper"->60,"replower"->3,"repupper"->4.6|>,
-  "MD"-><|"rlower"->3.1,"rupper"->4.6,"tlower"->40,"tupper"->60,"replower"->3,"repupper"->5|>,
-  "TX"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->4.4,"repupper"->5|>,
+  "CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->3,"repupper"->4.6|>,
+  "MD"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->62,"replower"->3,"repupper"->4.8|>,
+  "TX"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->5.5,"repupper"->7|>,
   "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->2.7,"repupper"->3.8|>,
-  "CT"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->5|>,
+  "CT"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->8|>,
   "OH"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->4|>,
   "NY"-><|"rlower"->3.4,"rupper"->5.2,"tlower"->44,"tupper"->54,"replower"->2.8,"repupper"->3.6|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->53,"replower"->5,"repupper"->6|>
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->53,"replower"->5,"repupper"->6|>,
+  "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->5,"repupper"->6|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -517,7 +518,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
    distancing,params,percentPositiveCase,weekOverWeekWeight,longData,thisStateData,model,fit,
    fitParams,icuCapacity,dataWeights,standardErrors,hospitalizationData,hospitalCapacity,gofMetrics,
    equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric,
-   rlower, rupper, tlower, tupper, replower, repupper
+   rlower, rupper, tlower, tupper, replower, repupper, deathDataLength
   },
   
   distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
@@ -587,6 +588,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 	  {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
 	  {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData
 	],#[[3]]>0&];
+  deathDataLength=Length[Select[longData,#[[1]]==1&]];
 	
   model[r0natural_,importtime_,reportingLag_,c_][t_]:=Piecewise[{
     {DeaqParametric[r0natural,importtime,reportingLag][t],c==1},
@@ -594,7 +596,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   ];
 
   weekOverWeekWeight=.75;
-  dataWeights=(weekOverWeekWeight^(#[[2]]/7)(params["population"]#[[3]])^-1)&/@longData;
+  (*dataWeights=(weekOverWeekWeight^(#[[2]]/7)(params["population"]#[[3]])^-1)&/@longData;*)
+  (* straight 3 / 1 weighting, time agnostic *)
+  dataWeights=If[#[[1]]==1,999/1000*weekOverWeekWeight^(#[[2]]/7)/Length[ltd],1/1000 weekOverWeekWeight^(#[[2]]/7)/Length[ltd]]&/@longData;
 
     (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
     fit=Quiet[NonlinearModelFit[
@@ -603,7 +607,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       Log[rlower]<=r0natural<=Log[rupper],
       Log[tlower]<=importtime<=Log[tupper],
       Log[replower]<= reportingLag<=Log[repupper]},{{r0natural,Log[(rlower+rupper)/2]}, {importtime,Log[(tlower+tupper)/2]}, {reportingLag,Log[(replower+repupper)/2]}},{c,t},
-      Method->{"NMinimize",Method->"SimulatedAnnealing"},Weights->dataWeights], {InterpolatingFunction::dmval}
+      Method->{"NMinimize",Method->"SimulatedAnnealing"},
+      Weights->dataWeights(*,
+      EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    reportingLag=", Exp[reportingLag]]*)
+      ], {InterpolatingFunction::dmval}
     ];
     
     fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
@@ -613,12 +620,14 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 	and thus we feel okay about using the variance estimates *)
 	standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,reportingLag},
 	     fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];	
+	
 	gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData];
 	
 	Echo[
 	  Column[{
 	    Text["Fit for "<>state],
-        Show[
+	    Row[{ 
+          Show[
           ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{1,150},{0,Automatic}}],
           LogPlot[{
             DeaqParametric[Log[fitParams["r0natural"]],
@@ -627,7 +636,12 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
             PCRParametric[Log[fitParams["r0natural"]],
             Log[fitParams["importtime"]],Log[fitParams["reportingLag"]]][t]},
             {t,tmin0,150},ImageSize->500]],
-          Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
+            ListPlot[{
+              Thread[{#2,#1}&[fit["FitResiduals"][[1;;deathDataLength]], (#[[2]]&/@longData[[1;;deathDataLength]])]],
+              Thread[{#2,#1}&[fit["FitResiduals"][[deathDataLength+1;;Length[longData]]], (#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])]]
+            },ImageSize->500, Filling->Axis]
+         }],
+        Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
       }]
 	];
 	
