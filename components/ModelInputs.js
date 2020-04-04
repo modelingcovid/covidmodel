@@ -2,7 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
 import {DistancingGraph} from './configured';
-import {Grid, Section} from './content';
+import {Grid} from './content';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {MethodDisclaimer, MethodDefinition, useModelData} from './modeling';
 import {dayToDate, daysToMonths} from '../lib/date';
@@ -25,8 +25,7 @@ export function ModelInputs({height, width}) {
     x,
   } = useModelData();
   return (
-    <Section className="margin-top-4">
-      <div className="text-jumbo margin-bottom-2">Model inputs</div>
+    <>
       <div>
         <MethodDisclaimer method="input" />
         <div className="section-heading">Social distancing</div>
@@ -74,6 +73,6 @@ export function ModelInputs({height, width}) {
           height={height}
         />
       </div>
-    </Section>
+    </>
   );
 }

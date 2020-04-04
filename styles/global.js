@@ -16,7 +16,7 @@ export const globalStyles = css.global`
     ${toRootRule(
       px({
         [properties.font.size.jumbo]: 64,
-        [properties.font.size.title]: 24,
+        [properties.font.size.title]: 36,
         [properties.font.size.subtitle]: 20,
       })
     )}

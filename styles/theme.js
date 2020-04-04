@@ -38,8 +38,8 @@ export const {
     size: px({
       micro: 13,
       small: 14,
-      jumbo: 36,
-      title: 20,
+      jumbo: 44,
+      title: 28,
       subtitle: 16,
       section: 20,
       body: 16,
