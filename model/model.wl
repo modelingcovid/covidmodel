@@ -266,7 +266,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 	eventsODE,
 	lhs,
 	rhs,
-	dependentVariablesODE,
+	dependentVariablesODE
 	},
   
     distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
