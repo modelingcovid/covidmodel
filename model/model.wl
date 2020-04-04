@@ -84,10 +84,11 @@ pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
 (*Probability of not needing care*)
 pS0 = 1-(pC0 + pH0);
 
-(* Heterogeneity level *)
-k0 = 10^-5;
+(* Heterogeneity level, determines percent of population infected at equilibrium *)
+k0 = 5*10^-3;
+
 (* to regulate Log[0] *)
-tmin0 = 30;
+tmin0 = 1;
 
 (** Utils **)
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
@@ -356,7 +357,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   pfunODE2 = ParametricNDSolveValue[{
       equationsODE, 
       eventsODE, 
-     initialConditions
+      initialConditions
     }, 
     outputODE, 
     {t,tmin0,tmax}, 
@@ -529,10 +530,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["population"];
   hospitalizationData = stateHospitalizationData[state];
 
-  (* a scoped copy of the ODEs, should be merged with the ODE in the simulator *)
+  (* a scoped copy of the ODEs, Thsese do not use heterogeneous susceptibility since they are fit on low I / early t and we fit *)
+  (* the import time *)
   equationsODE={
-    Sq'[t]==(- k0 * Log[1 + (distancing[t]*Iq[t]*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized )]*Sq[t])-est[t]*Sq[t],
-    Eq'[t]==( k0 * Log[1 + (distancing[t]*Iq[t]*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious,
+    Sq'[t]==(-distancing[t]*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
+    Eq'[t]==(distancing[t]*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
     (*Infectious total, not yet PCR confirmed,age indep*)
     ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0, 
     (*Recovered without needing care*)
