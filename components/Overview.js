@@ -8,9 +8,21 @@ import {formatNumber} from '../lib/format';
 import {theme} from '../styles';
 
 const styles = css`
+  .map-heading {
+    font-size: ${theme.font.size.body};
+    font-weight: 600;
+    color: ${theme.color.gray[5]};
+    margin-bottom: ${theme.spacing[1]};
+    text-align: center;
+  }
+  .map-heading span {
+    background: ${theme.color.gray[0]};
+    padding: 4px ${theme.spacing[0]};
+  }
   .location {
     font-family: ${theme.font.family.mono};
     font-size: ${theme.font.size.small};
+    columns: 2;
   }
   .location-label {
     font-size: ${theme.font.size.small};
@@ -22,6 +34,14 @@ const styles = css`
   a:hover {
     color: ${theme.color.blue[2]};
   }
+  @media (min-width: 600px) {
+    .map-heading {
+      margin-bottom: 0;
+    }
+    .location {
+      columns: 3;
+    }
+  }
 `;
 
 export function Overview({overview, states, topo}) {
@@ -29,11 +49,11 @@ export function Overview({overview, states, topo}) {
   return (
     <div>
       <style jsx>{styles}</style>
+      <div className="margin-top-4 map-heading">
+        <span>Modeled states in the U.S.</span>
+      </div>
       <LocationMap states={states} topo={topo} />
       <div className="location margin-top-3">
-        <div className="margin-bottom-0">
-          <Label color="yellow">Modeled locations</Label>
-        </div>
         {ordered.map((state) => {
           const stateName = stateLabels[state];
           const model = overview[state];
