@@ -2,20 +2,39 @@ import * as React from 'react';
 import Head from 'next/head';
 
 import {globalStyles} from '../styles';
-import {App} from '../components';
 
 import '../styles/main.css';
 import {ComponentIdProvider} from '../components/util';
+import {Layout, MDXComponents} from '../components';
 
-export default function MyApp({Component, pageProps}) {
+const {useState} = React;
+
+export default function App({
+  Component,
+  pageProps,
+  state,
+  states: initialStates,
+}) {
+  const [states] = useState(initialStates);
   return (
     <ComponentIdProvider>
+      <Head>
+        <title>
+          Modeling COVID-19 — The COVID Open Source Modeling Collaboration
+        </title>
+        <meta
+          name="description"
+          content="COVID-19 forecasting models trained to actual social distancing, PCR tests, and fatality data."
+        />
+      </Head>
       <style jsx global>
         {globalStyles}
       </style>
-      <App>
-        <Component {...pageProps} />
-      </App>
+      <Layout states={states}>
+        <MDXComponents>
+          <Component {...pageProps} />
+        </MDXComponents>
+      </Layout>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
@@ -26,3 +45,13 @@ export default function MyApp({Component, pageProps}) {
     </ComponentIdProvider>
   );
 }
+
+// Use getStaticProps here when it becomes available. In the meantime:
+// https://github.com/zeit/next.js/discussions/10949#discussioncomment-2952
+App.getInitialProps = (ctx) => {
+  if (typeof window === 'undefined') {
+    const {getStatesWithData} = require('../lib/data');
+    return {states: getStatesWithData()};
+  }
+  return {};
+};

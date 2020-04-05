@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-# Modeling <span class="nowrap">COVID-19</span>
+# Modeling <span className="nowrap">COVID-19</span>
 
 This site provides guidance on the efficiency of COVID-19 mitigation
 efforts. We’ve implemented a model for the spread of the virus and fit

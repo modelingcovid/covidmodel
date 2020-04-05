@@ -6,19 +6,27 @@ import {theme} from '../styles';
 
 const {useEffect, useState} = React;
 
+const toStringFn = (fnOrObj) => {
+  return typeof fnOrObj === 'function'
+    ? fnOrObj
+    : (v) => (fnOrObj ? fnOrObj[v] : v);
+};
+
 export const Select = React.memo(function Select({
+  children,
   label,
   placeholder = '',
+  selectedToString,
   valueToString,
   values,
   value,
   onChange,
 }) {
-  const currentValue = value ?? values[0];
-  const itemToString =
-    typeof valueToString === 'function'
-      ? valueToString
-      : (v) => (valueToString ? valueToString[v] : v);
+  const itemToString = toStringFn(valueToString);
+
+  const selectedItemToString = selectedToString
+    ? toStringFn(selectedToString)
+    : itemToString;
 
   const items = values;
 
@@ -47,7 +55,7 @@ export const Select = React.memo(function Select({
       }}
     />
   );
-  let itemText = itemToString(selectedItem) || placeholder;
+  let itemText = selectedItemToString(selectedItem) || placeholder;
   if (typeof itemText === 'string') {
     const spaceIndex = itemText.lastIndexOf(' ');
     itemText = (
@@ -81,6 +89,7 @@ export const Select = React.memo(function Select({
           margin: -4px;
         }
         ul {
+          z-index: 100;
           position: absolute;
           margin-top: var(--spacing0);
           max-height: 50vh;
