@@ -50,7 +50,7 @@ importlength0 = 3;
 (*Establishment time, N days before X Cases*)
 importtime0 = (31+20);
 
-(* mitigation parameters *)
+(* baseline r value -- this is now fit on a state by state basis since it varies widely on demographic factors like population density *)
 r0natural0 = 3.1;
 
 (*Fraction of critical patents who pass *)
@@ -68,22 +68,15 @@ medianHospitalizationAge0 = 61;
 ageCriticalDependence0 = 3;
 ageHospitalizedDependence0 = 5;
 
-(*Probability of 100 year being hospitalized*)
-pHospitalized100Yo = 0.25;
-(*Probability of 100 year old needing critical care*)
-pCriticalGivenHospitalized100Yo = 0.3;
-
 (* percent positive test delay *)
 percentPositiveTestDelay0 = 11;
 
-(*Probability of needing critical care*)
-pC0 = pCriticalGivenHospitalized100Yo*pHospitalized100Yo;
+(* probability that an infected 80 year old will require critical care *)
+pCritical80YearOld0=0.15;
 
-(*Probability of hospitalization but not critical care*)
-pH0 = (1-pCriticalGivenHospitalized100Yo)*pHospitalized100Yo;
+(* probability that an infecteed 80 year old will need hospitalization but not critical care *)
+pHospitalized80YearOld0=0.20;
 
-(*Probability of not needing care*)
-pS0 = 1-(pC0 + pH0);
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
 k0 = 5*10^-3;
@@ -112,12 +105,11 @@ scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 based on eg their epidemics starting earlier or having different hospital systems and thus a different
 gap between PCR and death *)
 fitStartingOverrides=<|
-  "CA"-><|"rlower"->2.9,"rupper"->3.1,"tlower"->45,"tupper"->47,"replower"->5.5,"repupper"->6.5|>,
-  "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->45,"tupper"->55,"replower"->6.3,"repupper"->7.2|>,
-  "PA"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->55,"tupper"->70,"replower"->4,"repupper"->6|>,
-  "CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->3,"repupper"->4.6|>,
-  "MD"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->62,"replower"->3,"repupper"->4.8|>,
-  "TX"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->5.5,"repupper"->7|>,
+  "CA"-><|"rlower"->2.9,"rupper"->3.1,"tlower"->46,"tupper"->50,"replower"->7,"repupper"->9|>,
+  "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->45,"tupper"->57,"replower"->8,"repupper"->9|>,
+  "PA"-><|"rlower"->3.5,"rupper"->5,"tlower"->55,"tupper"->70,"replower"->9,"repupper"->11|>,
+  "CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->5.5,"repupper"->7|>,
+  "TX"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->12,"repupper"->13|>,
   "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->2.7,"repupper"->3.8|>,
   "CT"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->8|>,
   "OH"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->4|>,
@@ -125,14 +117,21 @@ fitStartingOverrides=<|
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->53,"replower"->5,"repupper"->6|>,
   "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->5,"repupper"->6|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->49,"replower"->2,"repupper"->4|>,
-  "AZ"-><|"rlower"->3.3,"rupper"->4,"tlower"->50,"tupper"->57,"replower"->3,"repupper"->4.5|>,
+  "AZ"-><|"rlower"->3.3,"rupper"->4,"tlower"->50,"tupper"->58,"replower"->3.4,"repupper"->4.5|>,
   "MI"-><|"rlower"->4,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->2,"repupper"->3|>,
-  "MA"-><|"rlower"->3.7,"rupper"->5.7,"tlower"->45,"tupper"->50,"replower"->5,"repupper"->7|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->49,"replower"->2.2,"repupper"->2.6|>,
+  "MS"-><|"rlower"->3,"rupper"->5,"tlower"->46,"tupper"->54,"replower"->6,"repupper"->7|>,
+  "MA"-><|"rlower"->4.5,"rupper"->5.7,"tlower"->45,"tupper"->55,"replower"->8,"repupper"->10|>,
+  "MD"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->62,"replower"->6.5,"repupper"->8|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->49,"replower"->3.1,"repupper"->5|>,
   "NJ"-><|"rlower"->4.5,"rupper"->5.5,"tlower"->52,"tupper"->55,"replower"->2,"repupper"->3.2|>,
-  "IL"-><|"rlower"->3.4,"rupper"->5,"tlower"->45,"tupper"->52,"replower"->4,"repupper"->6|>,
+  "IL"-><|"rlower"->3.7,"rupper"->5,"tlower"->45,"tupper"->52,"replower"->6,"repupper"->8|>,
+  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->4,"repupper"->8|>,
   "OK"-><|"rlower"->3.4,"rupper"->4,"tlower"->45,"tupper"->53,"replower"->3.5,"repupper"->4.3|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->54,"replower"->5.7,"repupper"->6.5|>
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->54,"replower"->5.7,"repupper"->6.5|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->6.5,"repupper"->10|>,
+  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->9,"repupper"->11|>,
+  "WA"-><|"rlower"->2.5,"rupper"->2.8,"tlower"->28,"tupper"->40,"replower"->4,"repupper"->6|>,
+  "OH"-><|"rlower"->3.6,"rupper"->4.6,"tlower"->48,"tupper"->54,"replower"->4,"repupper"->6|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -174,17 +173,17 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
 
 (* Assumption here is that age dependence follows a logistic curve -- zero year olds dont require any care, 
 100 year olds require significant case, midpoint is the medianHospitalization age *)
-infectedCritical[a_,medianHospitalizationAge_,pCLimit_,ageCriticalDependence_] :=
-pCLimit/(1+Exp[-((a-medianHospitalizationAge)/ageCriticalDependence)]);
+infectedCritical[a_,medianHospitalizationAge_,pC80_,ageCriticalDependence_] :=
+pC80(1+E^((-80+medianHospitalizationAge)/ageCriticalDependence)) 1/(1+Exp[-((a-medianHospitalizationAge)/ageCriticalDependence)]);
 
-infectedHospitalized[a_,medianHospitalizationAge_,pHLimit_,ageHospitalizedDependence_] :=
-pHLimit/(1+Exp[-((a-medianHospitalizationAge)/ageHospitalizedDependence)]);
+infectedHospitalized[a_,medianHospitalizationAge_,pH80_,ageHospitalizedDependence_] :=
+pH80(1+E^((-80+medianHospitalizationAge)/ageHospitalizedDependence)) 1/(1+Exp[-((a-medianHospitalizationAge)/ageHospitalizedDependence)]);
 
-noCare[a_,medianHospitalizationAge_,pCLimit_, pHLimit_,ageCriticalDependence_,ageHospitalizedDependence_] :=
-1-infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]-
-infectedHospitalized[a, medianHospitalizationAge,pHLimit, ageHospitalizedDependence];
+noCare[a_,medianHospitalizationAge_,pC80_, pH80_,ageCriticalDependence_,ageHospitalizedDependence_] :=
+1-infectedCritical[a, medianHospitalizationAge, pC80,ageCriticalDependence]-
+infectedHospitalized[a, medianHospitalizationAge,pH80, ageHospitalizedDependence];
 
-stateParams[state_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_]:=Module[{raw,pop,dist,buckets},
+stateParams[state_]:=Module[{raw,pop,dist,buckets},
   raw = stateRawDemographicData[state];
   pop = raw["Population"];
   dist = raw["Distribution"];
@@ -199,9 +198,9 @@ stateParams[state_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDepen
     "staffedBeds"->stateICUData[state]["staffedBeds"],
     "bedUtilization"->stateICUData[state]["bedUtilization"],
     "hospitalCapacity"->(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],
-    "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
-    "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
-    "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
+    "pS"->Sum[noCare[a, medianHospitalizationAge0, pCritical80YearOld0 ,pHospitalized80YearOld0,ageCriticalDependence0,ageHospitalizedDependence0 ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+    "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge0, pHospitalized80YearOld0,ageHospitalizedDependence0]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+    "pC"->Sum[infectedCritical[a, medianHospitalizationAge0, pCritical80YearOld0,ageCriticalDependence0]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]|>
 ];
 
 
@@ -254,10 +253,23 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     endOfYear,
     events,
     endOfEval,herdTime,
-    PCRQuantiles, DeathQuantiles, CurrentlyReportedHospitalizedQuantiles, CurrentlyInfectedQuantiles, CurrentlyInfectiousQuantiles, CumulativeInfectionQuantiles, CurrentlyHospitalizedQuantiles, CurrentlyCriticalQuantiles,
     deciles,
     containmentTime,
     hospitalOverloadTime,
+    PCRQuantiles,
+    DeathQuantiles,
+    CurrentlyReportedHospitalizedQuantiles,
+    CurrentlyInfectedQuantiles,
+    CurrentlyInfectiousQuantiles,
+    CumulativeInfectionQuantiles,
+    CumulativeRecoveredQuantiles,
+    RecoveredHospitalizedQuantiles,
+    RecoveredCriticalQuantiles,
+    CurrentlyHospitalizedQuantiles,
+    CurrentlyCriticalQuantiles,
+    CumulativeEverHospitalizedQuantiles,
+    CumulativeEverCriticalQuantiles,
+    SuseptibleQuantiles,
     icuOverloadTime,
     sims,
     testSim,
@@ -432,9 +444,15 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CurrentlyReportedHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[RepHq]]][t])&/@simResults,deciles];
   CurrentlyInfectedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[Eq]]][t])&/@simResults,deciles];
   CurrentlyInfectiousQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[ISq]]][t] + #[[QP[IHq]]][t] + #[[QP[ICq]]][t]))&/@simResults,deciles];
-  CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
+  CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[Deaq]]][t] + #[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
+  CumulativeRecoveredQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
+  RecoveredHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RHq]]][t]))&/@simResults,deciles];
+  RecoveredCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[RCq]]][t]))&/@simResults,deciles];
   CurrentlyHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[HHq]]][t])&/@simResults,deciles];
   CurrentlyCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[CCq]]][t])&/@simResults,deciles];
+  CumulativeEverHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[HHq]]][t] + #[[QP[RHq]]][t]))&/@simResults,deciles];
+  CumulativeEverCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[HCq]]][t] + #[[QP[RCq]]][t] + #[[QP[Deaq]]][t]))&/@simResults,deciles];
+  SuseptibleQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[Sq]]][t]))&/@simResults,deciles];
   
   timeSeriesData = Module[{},
     Table[Association[{
@@ -458,8 +476,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectiousQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*(sol[[QP[ISq]]][t] + sol[[QP[IHq]]][t] + sol[[QP[ICq]]][t])|>
             }, First],
-          "cumulativeInfections" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeInfectionQuantiles[t]]],
+          "cumulativeRecoveries" -> Merge[{
+              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeRecoveredQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*(sol[[QP[RSq]]][t] + sol[[QP[RHq]]][t] + sol[[QP[RCq]]][t])|>
             }, First],
           "currentlyReportedHospitalized" -> Merge[{
@@ -471,9 +489,21 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyHospitalizedQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t]|>
             }, First],
+          "cumulativeHospitalized" -> Merge[{
+              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverHospitalizedQuantiles[t])]],
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t]|>
+            }, First],
+          "cumulativeCritical" -> Merge[{
+              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverCriticalQuantiles[t])]],
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t]|>
+            }, First],
           "currentlyCritical" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyCriticalQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[CCq]]][t]|>
+            },First],
+          "susceptible" -> Merge[{
+              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,SuseptibleQuantiles[t]]],
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[Sq]]][t]|>
             },First]
         }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
   
@@ -538,7 +568,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
   percentPositiveCase[t_]:=posInterpMap[state][t];
   
-  params=stateParams[state,pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0, ageHospitalizedDependence0];
+  params=stateParams[state];
   icuCapacity=params["icuBeds"]/params["population"];
   hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["population"];
   hospitalizationData = stateHospitalizationData[state];
@@ -618,7 +648,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     weekOverWeekWeight[factor_]:=Map[(factor^(#[[2]]/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[.75] * boostDeathWeight[3]
+    poissonWeight * weekOverWeekWeight[.75] * boostDeathWeight[5]
   ];
   
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
@@ -628,7 +658,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
         Log[replower]<= reportingLag<=Log[repupper]},{{r0natural,Log[(rlower+rupper)/2]}, {importtime,Log[(tlower+tupper)/2]}, {reportingLag,Log[(replower+repupper)/2]}},{c,t},
-      Method->{"NMinimize",Method->"SimulatedAnnealing"},
+      Method->{"NMinimize",Method->{"SimulatedAnnealing", "RandomSeed"->111}},
       Weights->dataWeights(*,
       EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    reportingLag=", Exp[reportingLag]]*)
     ], {InterpolatingFunction::dmval}
@@ -685,7 +715,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                 "hospitalizationData"-> hospitalizationData
               |>, #, numberOfSimulations]}&/@scenarios]|>,
       <|"parameterBest"->fitParams|>,
-      KeyDrop[stateParams[state, pC0,pH0,medianHospitalizationAge0,ageCriticalDependence0,ageHospitalizedDependence0],{"R0","importtime0"}],
+      KeyDrop[stateParams[state],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "longData"->longData,
@@ -704,7 +734,7 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
 when running the web server *)
-GenerateModelExport[simulationsPerCombo_:1000, states_:distancingStates] := Module[{},
+GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
     Export["public/json/"<>state<>".json",stateData];
