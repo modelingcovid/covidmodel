@@ -2,6 +2,8 @@
 
 SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 
+(* Utils *)
+today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
 dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
 
 (* get data for age distribution and cache it in a json file *)
@@ -121,6 +123,7 @@ statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]
 (* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
 (* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
 stateDistancingPrecompute = Module[{
+    totalDays,
     rawCsvTable,
     stateLabels,
     dataDays,
@@ -128,44 +131,74 @@ stateDistancingPrecompute = Module[{
     countStates,
     fullDays,
     processScenario,
-    processState
+    processState,
+    smoothing,
+    SlowJoin,
+    ApplyWhere
   },
   
   rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
   
   dataDays = rawCsvTable[[1,2;;]];
   stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
-  (* we take the average of the last 3 days in the dataset and extend that as the distancing value
-	until today *)
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
   
-  fullDays = Range[365];
+  totalDays = 365;
+  fullDays = Range[totalDays];
   
+  smoothing = 3;
+  SlowJoin := Fold[Module[{smoother},
+    smoother=1-Exp[-Range[Length[#2]]/smoothing];
+    Join[#1, Last[#1](1-smoother)+#2 smoother]]&];
+  ApplyWhere[list_,condition_,func_]:=Module[{i,l},
+    i=Pick[Range[Length[list]],Map[condition,list]];
+    l=list;
+    l[[i]]=func[list[[i]]];
+    l
+  ];
+
   processScenario[scenario_, distancing_] := Module[{
       distancingLevel,
       fullDistancing,
+      smoothedDistancing,
+      smoothedFullDistancing,
       distancingFunction
     },
     
     distancingLevel = If[
       scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
-    
+
+    (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
-      (* constant *)
-      ConstantArray[1.,Min[dataDays]-1],
-      (* 3 day average until we dont have data *)
+      (* pre-policy distancing - constant at 1 *)
+      ConstantArray[1., Min[dataDays] - 1],
+      (* historical distancing data *)
       distancing,
-      (* flatline at that average between when we dont have data and today *)
-      ((Total[distancing[[-3;;-1]]]/3)&/@Range[today - Max[dataDays]]),
+      (* for any gap between the last day of data and today, fill in with the average of the last three days of data *)
+      ConstantArray[Mean[distancing[[-3;;]]], today - Max[dataDays]],
       (* moving average going forward in the scenario *)
-      ConstantArray[distancingLevel,scenario["distancingDays"]],
-      ConstantArray[1.,365-scenario["distancingDays"]-Max[dataDays]-(today - Max[dataDays])]
-    ];
+      ConstantArray[distancingLevel, scenario["distancingDays"]],
+      (* post-policy distancing - constant at 1 *)
+      ConstantArray[1.,
+        totalDays - scenario["distancingDays"] - today]];
+    
+    smoothedDistancing = ApplyWhere[
+      distancing,
+      #<1&,
+      GaussianFilter[#,smoothing]&];
+    
+    smoothedFullDistancing = SlowJoin[{
+      ConstantArray[1., Min[dataDays] - 1],
+      smoothedDistancing,
+      ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - Max[dataDays]],
+      ConstantArray[distancingLevel, scenario["distancingDays"]],
+      ConstantArray[1., totalDays - scenario["distancingDays"] - today]
+    }];
     
     distancingFunction = Interpolation[Transpose[{
           fullDays,
-          GaussianFilter[fullDistancing,1.5]}]];
+          smoothedFullDistancing}],InterpolationOrder->3];
     
     scenario["id"]-><|
       "distancingLevel"->distancingLevel,

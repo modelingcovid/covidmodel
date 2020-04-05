@@ -84,9 +84,6 @@ k0 = 5*10^-3;
 (* Fraction of symptomatic cases *)
 fractionSymptomatic0 = 0.7;
 
-(** Utils **)
-today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
-
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
 (* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
