@@ -5,6 +5,7 @@ export * from './DownArrow';
 export * from './ExclamationTriangle';
 export * from './Eye';
 export * from './EyeSlash';
+export * from './HeadSideCough';
 export * from './HeadSideMask';
 export * from './Heartbeat';
 export * from './HospitalUser';

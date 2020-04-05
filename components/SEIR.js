@@ -98,13 +98,13 @@ export function SEIR({height, width}) {
       <p className="paragraph">
         The model evaluated here is a standard epidemiological model called
         SEIR. It models the spread of a virus in four states:
-        <ul className="list-disc m-4">
-          <li>Susceptible (healthy, non-immune people)</li>
-          <li>Exposed (infected, but cannot infect others)</li>
-          <li>Infectious</li>
-          <li>Recovered (or deceased)</li>
-        </ul>
       </p>
+      <ul className="paragraph list-disc m-4">
+        <li>Susceptible (healthy, non-immune people)</li>
+        <li>Exposed (infected, but cannot infect others)</li>
+        <li>Infectious</li>
+        <li>Recovered (or deceased)</li>
+      </ul>
       <Grid className="margin-bottom-2">
         <MethodDefinition
           icon={People}
@@ -161,6 +161,7 @@ export function SEIR({height, width}) {
           <Legend>
             {config.map(({y, color, label, description}, i) => (
               <PercentileLegendRow
+                key={i}
                 y={y}
                 color={color}
                 title={label}

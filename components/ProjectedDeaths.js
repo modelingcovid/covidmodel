@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Grid} from './content';
 import {Legend} from './graph';
-import {HeadSideMask, People, Vial} from './icon';
+import {HeadSideCough, People, Vial} from './icon';
 import {
   MethodDefinition,
   MethodDisclaimer,
@@ -43,7 +43,7 @@ export const ProjectedDeaths = ({width, height}) => {
           method="modeled"
         />
         <MethodDefinition
-          icon={HeadSideMask}
+          icon={HeadSideCough}
           value={formatPercent1(summary.fatalityRate)}
           label="Fatality rate of all COVID-19 cases"
           method="modeled"

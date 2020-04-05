@@ -3,7 +3,7 @@ import {theme} from '../styles';
 import {PopulationGraph} from './configured';
 import {Grid} from './content';
 import {Legend} from './graph';
-import {People, Vial, HeadSideMask} from './icon';
+import {People, Vial, HeadSideCough} from './icon';
 import {
   MethodDefinition,
   MethodDisclaimer,
@@ -14,8 +14,18 @@ import {
 import {formatNumber, formatPercent1} from '../lib/format';
 
 const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
-const getCurrentlyInfected = ({currentlyInfected}) => currentlyInfected;
-const getCurrentlyInfectious = ({currentlyInfectious}) => currentlyInfectious;
+const getCumulativeInfected = (d) => {
+  const result = {};
+  for (let key of Object.keys(d.currentlyInfected)) {
+    result[key] =
+      d.currentlyInfected[key] +
+      d.currentlyInfectious[key] +
+      d.cumulativeRecoveries[key] +
+      d.cumulativeDeaths[key];
+  }
+  result.confirmed = 0;
+  return result;
+};
 
 export function CaseProgressionCurve({height, width}) {
   const {model, stateName, summary, x} = useModelData();
@@ -38,7 +48,7 @@ export function CaseProgressionCurve({height, width}) {
           method="input"
         />
         <MethodDefinition
-          icon={HeadSideMask}
+          icon={HeadSideCough}
           value={formatPercent1(
             summary.totalProjectedInfected / model.population
           )}
@@ -60,32 +70,30 @@ export function CaseProgressionCurve({height, width}) {
         after={
           <Legend>
             <PercentileLegendRow
-              y={getCurrentlyInfected}
+              y={getCumulativeInfected}
               color="var(--color-blue2)"
-              title="Exposed"
-              description="People who have been infected with COVID-19 but cannot yet infect others"
-            />
-            <PercentileLegendRow
-              y={getCurrentlyInfectious}
-              color="var(--color-magenta1)"
-              title="Infectious"
-              description="People who have COVID-19 and can infect others"
+              title="Total COVID-19 cases"
+              description="People who have been infected with COVID-19"
             />
             <PercentileLegendRow
               y={getCumulativePcr}
               color="var(--color-yellow3)"
               title="Reported positive tests"
-              description="Total number of COVID-19 that are projected to be positive"
+              description="Total number of COVID-19 tests projected to be positive"
             />
           </Legend>
         }
       >
-        <PercentileLine y={getCurrentlyInfected} color="var(--color-blue2)" />
         <PercentileLine
-          y={getCurrentlyInfectious}
-          color="var(--color-magenta1)"
+          y={getCumulativeInfected}
+          color="var(--color-blue2)"
+          gradient
         />
-        <PercentileLine y={getCumulativePcr} color="var(--color-yellow3)" />
+        <PercentileLine
+          y={getCumulativePcr}
+          color="var(--color-yellow3)"
+          gradient
+        />
       </PopulationGraph>
     </div>
   );
