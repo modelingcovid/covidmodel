@@ -36,7 +36,7 @@ pPCRNH0 = 0.05;
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
 (* days to get tested after infectious *)
-daysToGetTested0 = 5.5;
+daysToGetTested0 = 6.5;
 
 (* the penalty to fatailty rate in the case patients cannot get ICU care *)
 icuOverloadDeathPenalty0 = 1;
@@ -506,6 +506,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[Sq]]][t]|>
             },First]
         }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
+        
+  Echo[ListLogPlot[{#["day"],#["cumulativePcr"]["expected"]}&/@timeSeriesData,Joined->True,ImageSize->300]];
   
   containmentTime = If[KeyExistsQ[events, "containment"],events["containment"][[1]][[1]],Null];
   hospitalOverloadTime = If[KeyExistsQ[events, "hospital"],events["hospital"][[1]][[1]],Null];
@@ -521,6 +523,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     "totalProjectedInfected"->If[KeyExistsQ[events, "containment"],
       CumulativeInfectionQuantiles[containmentTime][[5]],
       CumulativeInfectionQuantiles[endOfEval][[5]]],
+    "totalInfectedFraction"->If[KeyExistsQ[events, "containment"],
+      CumulativeInfectionQuantiles[containmentTime][[5]] / stateParams["params"]["population"],
+      CumulativeInfectionQuantiles[endOfEval][[5]] / stateParams["params"]["population"]],
     "fatalityRate"->If[KeyExistsQ[events, "containment"],
       (DeathQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
       DeathQuantiles[endOfEval][[5]]/(CumulativeInfectionQuantiles[endOfEval][[5]])],
@@ -540,6 +545,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       DateString[DatePlus[{2020,1,1},hospitalOverloadTime-1]],
       "-"]
   |>;
+  
+  Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];
   
   Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
@@ -738,6 +745,19 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPreco
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
     Export["public/json/"<>state<>".json",stateData];
+    
+    Export["tests/summary/"<>state<>".csv", Join[
+    {Keys[
+     Association[Join[
+          KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
+          stateData["scenarios"]["scenario1"]["summary"]
+    ]]
+    ]},
+    Values[Association[Join[
+          KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"][#],"timeSeriesData"],"events"],"summary"],
+          stateData["scenarios"][#]["summary"]
+    ]]]&/@Keys[stateData["scenarios"]]]];
+    
     stateData
   ];
   
