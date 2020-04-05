@@ -310,7 +310,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     (*Going to hospital*)
     HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
     (*Reported positive hospital cases*)
-    RepHq'[t]==(pPCRH*(HHq'[t] + HCq[t]))/daysForHospitalsToReportCases0,
+    RepHq'[t]==(pPCRH*HHq[t])/daysForHospitalsToReportCases0,
     (*Cumulative hospitalized count*)
     EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Recovered after hospitalization*)
@@ -587,7 +587,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     (*Going to hospital*)
     HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0-HHq[t]/daysToLeaveHosptialNonCritical0,
     (*Reported positive hospital cases*)
-    RepHq'[t]==(pPCRH0*HHq'[t])/daysForHospitalsToReportCases0,
+    RepHq'[t]==(pPCRH0*HHq[t])/daysForHospitalsToReportCases0,
     (*Cumulative hospitalized count*)
     EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Recovered after hospitalization*)
