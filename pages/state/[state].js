@@ -9,6 +9,7 @@ import {
   ModelInputs,
   OutcomeSummary,
   ProjectedDeaths,
+  SEIR,
 } from '../../components';
 import {Controls} from '../../components/configured';
 import {Section} from '../../components/content';
@@ -99,6 +100,7 @@ export default function StatePage({data, states}) {
             >
               Projections
             </div>
+            <SEIR width={width} height={height} />
             <CaseProgressionCurve width={width} height={height} />
             <ProjectedDeaths width={width} height={height} />
             <HospitalCapacity width={width} height={height} />

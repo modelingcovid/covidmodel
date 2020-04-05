@@ -1,10 +1,18 @@
 import * as React from 'react';
 import {useGraphData} from './useGraphData';
 import {useNearestData} from './useNearestData';
+import {theme} from '../../styles';
 
 const {useCallback} = React;
 
-const Point = ({d, y, fill = 'transparent', r = 1.25, ...remaining}) => {
+const Point = ({
+  d,
+  y,
+  strokeWidth = 1.5,
+  r = 2,
+  fill = theme.color.background,
+  ...remaining
+}) => {
   const {clipPath, x, xScale, yScale} = useGraphData();
   const yVal = y(d);
   // Only show points with data
@@ -14,6 +22,7 @@ const Point = ({d, y, fill = 'transparent', r = 1.25, ...remaining}) => {
   return (
     <circle
       {...remaining}
+      strokeWidth={strokeWidth}
       clipPath={clipPath}
       fill={fill}
       r={r}

@@ -27,6 +27,11 @@ const styles = css`
     color: ${theme.color.blue.muted};
     background: ${theme.color.blue[0]};
   }
+  @media (prefers-color-scheme: dark) {
+    span.label-yellow {
+      background: ${theme.color.yellow[1]};
+    }
+  }
 `;
 
 const getHighlightClass = (color) => {

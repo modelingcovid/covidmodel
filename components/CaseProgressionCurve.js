@@ -62,20 +62,20 @@ export function CaseProgressionCurve({height, width}) {
             <PercentileLegendRow
               y={getCurrentlyInfected}
               color="var(--color-blue2)"
-              title="Currently exposed"
-              description="People who have been exposed to COVID-19 and are in the incubation period, but are not yet infectious."
+              title="Exposed"
+              description="People who have been infected with COVID-19 but cannot yet infect others"
             />
             <PercentileLegendRow
               y={getCurrentlyInfectious}
               color="var(--color-magenta1)"
-              title="Currently infectious"
-              description="People who have COVID-19 and can infect others."
+              title="Infectious"
+              description="People who have COVID-19 and can infect others"
             />
             <PercentileLegendRow
               y={getCumulativePcr}
-              color="var(--color-yellow2)"
-              title="Cumulative reported positive tests"
-              description="Total number of COVID-19 that are projected to be positive."
+              color="var(--color-yellow3)"
+              title="Reported positive tests"
+              description="Total number of COVID-19 that are projected to be positive"
             />
           </Legend>
         }
@@ -85,7 +85,7 @@ export function CaseProgressionCurve({height, width}) {
           y={getCurrentlyInfectious}
           color="var(--color-magenta1)"
         />
-        <PercentileLine y={getCumulativePcr} color="var(--color-yellow2)" />
+        <PercentileLine y={getCumulativePcr} color="var(--color-yellow3)" />
       </PopulationGraph>
     </div>
   );

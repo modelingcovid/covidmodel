@@ -3,13 +3,12 @@ import {Graph, HMarker, NearestMarker} from '../graph';
 import {DistancingGradient, useModelData} from '../modeling';
 import {formatLargeNumber} from '../../lib/format';
 
-const {createContext, useCallback, useMemo} = React;
-
 export const PopulationGraph = ({
   children,
   xLabel = '',
   width = 600,
   height = 400,
+  initialScale = 'log',
   ...remaining
 }) => {
   const {
@@ -22,13 +21,14 @@ export const PopulationGraph = ({
       {...remaining}
       data={timeSeriesData}
       domain={population}
-      initialScale="log"
+      initialScale={initialScale}
       height={height}
       width={width}
       x={x}
       xLabel={xLabel}
     >
       <DistancingGradient />
+      {children}
       <HMarker
         value={population}
         anchor="end"
@@ -42,7 +42,6 @@ export const PopulationGraph = ({
         labelDx={-20}
         labelDy={15}
       />
-      {children}
     </Graph>
   );
 };

@@ -70,7 +70,7 @@ export const DistancingGraph = ({
                   <>
                     <LinearGradient direction="right" id={gradientId}>
                       <Stop offset={today} stopColor="var(--color-blue2)" />
-                      <Stop offset={today} stopColor="var(--color-yellow2)" />
+                      <Stop offset={today} stopColor="var(--color-yellow3)" />
                     </LinearGradient>
                     <Line
                       y={y}

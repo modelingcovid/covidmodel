@@ -14,6 +14,7 @@ import {useSetNearestData} from './useNearestData';
 import {useComponentId} from '../util';
 import {getDate} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
+import {theme} from '../../styles';
 
 const {createContext, useCallback, useMemo, useState} = React;
 
@@ -194,28 +195,28 @@ export const Graph = React.memo(function Graph({
                 <rect x="0" y="0" width={xMax} height={yMax} />
               </clipPath>
             </defs>
+            {children}
             <TodayMarker />
             <NearestMarker />
             <GridRows
               scale={yScale}
               width={xMax}
               height={yMax}
-              stroke="var(--color-gray0)"
+              stroke={theme.color.shadow[0]}
             />
             <GridColumns
               scale={xScale}
               width={xMax}
               height={yMax}
-              stroke="var(--color-gray0)"
+              stroke={theme.color.shadow[0]}
             />
             <line
               x1={xMax}
               x2={xMax}
               y1={0}
               y2={yMax}
-              stroke="var(--color-gray0)"
+              stroke={theme.color.shadow[0]}
             />
-            {children}
             <AxisBottom />
             <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
           </Group>

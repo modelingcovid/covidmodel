@@ -10,7 +10,11 @@ export const {
     background: '#fff',
     backgroundRgb: '255, 255, 255',
     focus: ['rgba(66, 153, 225, 0.2)', 'rgba(66, 153, 225, 0.5)'],
-    shadow: ['rgba(24, 27, 44, 0.1)'],
+    shadow: [
+      'rgba(24, 27, 44, 0.1)',
+      'rgba(24, 27, 44, 0.2)',
+      'rgba(24, 27, 44, 0.4)',
+    ],
     gray: {
       ...[
         '#e0e6eb',
@@ -29,11 +33,11 @@ export const {
       bg: '#ddfffe',
     },
     yellow: {
-      ...['#fae498', null, '#ed6804', '#c84801'],
+      ...['#fae498', '#fcbd3a', '#ff8f0e', '#ed6804', '#c84801'],
       muted: '#8b5904',
     },
     red: ['#ffa8a8', '#e6082d', '#cd0426'],
-    green: [null, null, '#228403'],
+    green: [null, '#48c404', '#228403'],
     magenta: [null, '#df0371'],
     purple: {...['#f0defe'], muted: '#5a2c8e'},
   },
@@ -77,7 +81,11 @@ export const darkMode = setProperties({
   color: {
     background: '#181b2c',
     backgroundRgb: '24, 27, 44',
-    shadow: ['rgba(255, 255, 255, 0.1)'],
+    shadow: [
+      'rgba(255, 255, 255, 0.1)',
+      'rgba(255, 255, 255, 0.2)',
+      'rgba(255, 255, 255, 0.4)',
+    ],
     gray: {
       ...[
         '#2d3146',
@@ -97,8 +105,8 @@ export const darkMode = setProperties({
       bg: '#ddfffe',
     },
     yellow: {
-      ...['#fcbd3a', null, '#ff8f0e', '#ed6804'],
-      muted: '#a82c00',
+      ...['#fae498', '#fcbd3a', '#ff8f0e', '#ed6804', '#c84801'],
+      muted: '#822707',
     },
     magenta: [null, '#ff248e'],
   },

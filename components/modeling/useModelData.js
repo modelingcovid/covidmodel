@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {stateLabels} from '../../lib/controls';
+import {flattenData} from '../../lib/transform';
 
 const {createContext, useContext, useMemo} = React;
 
@@ -15,6 +16,11 @@ export const ModelDataProvider = ({
 }) => {
   const context = useMemo(() => {
     const scenarioData = model.scenarios[scenario];
+    const allTimeSeriesData = flattenData(
+      Object.values(model.scenarios),
+      (s) => s.timeSeriesData
+    );
+
     return {
       model,
       scenario,
@@ -27,6 +33,7 @@ export const ModelDataProvider = ({
       timeSeriesData: scenarioData.timeSeriesData,
       // Computed properties:
       stateName: stateLabels[state],
+      allTimeSeriesData,
     };
   }, [model, scenario, state, states, x]);
 

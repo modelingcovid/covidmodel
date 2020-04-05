@@ -14,6 +14,7 @@ export * from './People';
 export * from './PeopleArrows';
 export * from './Poll';
 export * from './ShieldVirus';
+export * from './SkullCrossbones';
 export * from './SVG';
 export * from './Vial';
 export * from './Virus';

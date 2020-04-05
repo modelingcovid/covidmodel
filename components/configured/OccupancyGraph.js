@@ -22,24 +22,18 @@ export const OccupancyGraph = ({
   height = 400,
   ...remaining
 }) => {
-  const {model, timeSeriesData, x} = useModelData();
-  const allPoints = useMemo(
-    () =>
-      Object.values(model.scenarios).reduce(
-        (a, v) => (v && v.timeSeriesData ? a.concat(v.timeSeriesData) : a),
-        []
-      ),
-    [model]
-  );
+  const {allTimeSeriesData, model, timeSeriesData, x} = useModelData();
   const domain = useMemo(
     () =>
       Math.min(
         // Sometimes, excess data in the models rockets off into the distance.
         // This cap prevents the axis from being too distorted.
         cutoff * 20,
-        Math.max(...allPoints.map((d) => Math.max(y(d).percentile50, cutoff)))
+        Math.max(
+          ...allTimeSeriesData.map((d) => Math.max(y(d).percentile50, cutoff))
+        )
       ),
-    [allPoints, y, cutoff]
+    [allTimeSeriesData, y, cutoff]
   );
 
   return (

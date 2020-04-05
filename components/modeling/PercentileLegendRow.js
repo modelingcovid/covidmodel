@@ -23,7 +23,6 @@ export const PercentileLegendRow = ({
   if (!d) {
     return null;
   }
-  const {confirmed, percentile10, percentile50, percentile90} = y(d);
   return (
     <LegendRow title={title} description={description}>
       <LegendEntry

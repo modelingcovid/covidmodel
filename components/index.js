@@ -7,3 +7,4 @@ export * from './ModelInputs';
 export * from './OutcomeSummary';
 export * from './Overview';
 export * from './ProjectedDeaths';
+export * from './SEIR';
