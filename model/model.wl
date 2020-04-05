@@ -39,7 +39,7 @@ daysToGetTestedIfNotHospitalized0 = 5.5;
 daysToGetTestedIfHospitalized0 = 1.5;
 
 (* the penalty to fatailty rate in the case patients cannot get ICU care *)
-icuOverloadDeathPenalty0 = 2;
+icuOverloadDeathPenalty0 = 1;
 
 (* virus start parameters *)
 initialInfectionImpulse0 = 12.5;
@@ -88,6 +88,9 @@ pS0 = 1-(pC0 + pH0);
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
 k0 = 5*10^-3;
 
+(* Fraction of symptomatic cases *)
+fractionSymptomatic0 = 0.7;
+
 (** Utils **)
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
 
@@ -118,9 +121,18 @@ fitStartingOverrides=<|
   "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->2.7,"repupper"->3.8|>,
   "CT"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->8|>,
   "OH"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->4|>,
-  "NY"-><|"rlower"->3.4,"rupper"->5.2,"tlower"->44,"tupper"->54,"replower"->2.8,"repupper"->3.6|>,
+  "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->48,"replower"->2.8,"repupper"->3.6|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->53,"replower"->5,"repupper"->6|>,
-  "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->5,"repupper"->6|>
+  "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->5,"repupper"->6|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->49,"replower"->2,"repupper"->4|>,
+  "AZ"-><|"rlower"->3.3,"rupper"->4,"tlower"->50,"tupper"->57,"replower"->3,"repupper"->4.5|>,
+  "MI"-><|"rlower"->4,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->2,"repupper"->3|>,
+  "MA"-><|"rlower"->3.7,"rupper"->5.7,"tlower"->45,"tupper"->50,"replower"->5,"repupper"->7|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->49,"replower"->2.2,"repupper"->2.6|>,
+  "NJ"-><|"rlower"->4.5,"rupper"->5.5,"tlower"->52,"tupper"->55,"replower"->2,"repupper"->3.2|>,
+  "IL"-><|"rlower"->3.4,"rupper"->5,"tlower"->45,"tupper"->52,"replower"->4,"repupper"->6|>,
+  "OK"-><|"rlower"->3.4,"rupper"->4,"tlower"->45,"tupper"->53,"replower"->3.5,"repupper"->4.3|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->54,"replower"->5.7,"repupper"->6.5|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -480,7 +492,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       CumulativeInfectionQuantiles[containmentTime][[5]],
       CumulativeInfectionQuantiles[endOfEval][[5]]],
     "fatalityRate"->If[KeyExistsQ[events, "containment"],
-      (* 30 % asymptomatic haircut *)
+      (DeathQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
+      DeathQuantiles[endOfEval][[5]]/(CumulativeInfectionQuantiles[endOfEval][[5]])],
+    "fatalityRateSymptomatic"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
       (DeathQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
       DeathQuantiles[endOfEval][[5]]/(CumulativeInfectionQuantiles[endOfEval][[5]])],
     "fatalityRatePCR"->If[KeyExistsQ[events, "containment"],
@@ -599,12 +613,14 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (*   weekOverWeekWeight: weights later data more heavily *)
   (*   poissonWeight: weights data assuming its uncertainty is poisson *)
   (*   boostDeathWeight: increases the weighting of deaths by some factor *)
+  weekOverWeekWeight=.5;
   dataWeights=Module[{weekOverWeekWeight,poissonWeight,boostDeathWeight},
     weekOverWeekWeight[factor_]:=Map[(factor^(#[[2]]/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
     poissonWeight * weekOverWeekWeight[.75] * boostDeathWeight[3]
   ];
+  
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
   fit=Quiet[NonlinearModelFit[
       longData,
@@ -642,8 +658,16 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                     Log[fitParams["importtime"]],Log[fitParams["reportingLag"]]][t]},
                 {t,tmin0,150},ImageSize->500]],
             ListPlot[{
-                Thread[{#2,#1}&[fit["FitResiduals"][[1;;deathDataLength]], (#[[2]]&/@longData[[1;;deathDataLength]])]],
-                Thread[{#2,#1}&[fit["FitResiduals"][[deathDataLength+1;;Length[longData]]], (#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])]]
+                Thread[{#2,#1/#3}&[
+                    fit["FitResiduals"][[1;;deathDataLength]],
+                    (#[[2]]&/@longData[[1;;deathDataLength]]),
+                    (#[[3]]&/@longData[[1;;deathDataLength]])
+                  ]],
+                Thread[{#2,#1/#3}&[
+                    fit["FitResiduals"][[deathDataLength+1;;Length[longData]]],
+                    Reverse[(#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])],
+                    Reverse[(#[[3]]&/@longData[[deathDataLength+1;;Length[longData]]])]
+                  ]]
               },ImageSize->500, Filling->Axis]
           }],
         Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
