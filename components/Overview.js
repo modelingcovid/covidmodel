@@ -30,6 +30,9 @@ const styles = css`
   a {
     color: ${theme.color.gray[5]};
     text-decoration: underline;
+    padding: ${theme.spacing[0]};
+    margin: 0 calc(-1 * ${theme.spacing[0]});
+    display: inline-block;
   }
   a:hover {
     color: ${theme.color.blue[2]};
@@ -40,6 +43,9 @@ const styles = css`
     }
     .location {
       columns: 3;
+    }
+    a {
+      padding: 0;
     }
   }
 `;
