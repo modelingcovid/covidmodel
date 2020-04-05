@@ -36,7 +36,7 @@ pPCRNH0 = 0.05;
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
 (* days to get tested after infectious *)
-daysToGetTested0 = 5.5;
+daysToGetTested0 = 6.5;
 
 (* the penalty to fatailty rate in the case patients cannot get ICU care *)
 icuOverloadDeathPenalty0 = 1;
