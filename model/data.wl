@@ -92,9 +92,9 @@ stateHospitalizationData[state_]:=Select[Association[{"day"->#["State"], "hospit
 stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
 (* remove data when there is only one positive case / death since that doesn't contain any trend information *)
 parsedData = Merge[{
-<|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]==1] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>, 
-<|"positive"-> If[KeyExistsQ[#,"positive"],If[TrueQ[#["positive"]<=4] || TrueQ[#["positive"]==Null],Null,#["positive"]],Null]|>, 
-#},First]&/@(Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}],DateList[#["date"]//ToString]]]]&/@stateData);
+    <|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]==1] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>,
+    <|"positive"-> If[KeyExistsQ[#,"positive"],If[TrueQ[#["positive"]<=4] || TrueQ[#["positive"]==Null],Null,#["positive"]],Null]|>,
+    #},First]&/@(Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}],DateList[#["date"]//ToString]]]]&/@stateData);
 statesWith50CasesAnd5Deaths = DeleteDuplicates[#["state"]&/@Select[parsedData,(#["positive"]>=50&&#["death"]>=5)&]];
 stateRawDemographicData = Association[(#->cachedAgeDistributionFor[#])&/@statesWith50CasesAnd5Deaths];
 stateImportTime = Association[{"NY"->56,"AZ"->63,"CA"->56,"CO"->55,"CT"->57,"FL"->56,"GA"->52,"IL"->58,"IN"->58,"MA"->58, "MI"->59,"NJ"->56,"NV"->58,"OH"->61,"PA"->62,"SC"->59,"TX"->61,"VA"->58,"VT"->54,"WA"->41,"WI"->60,"LA"->51,"OR"->55}];
@@ -121,62 +121,62 @@ statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]
 (* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
 (* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
 stateDistancingPrecompute = Module[{
-		rawCsvTable,
-		stateLabels,
-		dataDays,
-		stateDistancings,
-		countStates,
-		fullDays,
-		processScenario,
-		processState
-	},
-	
-	rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
-
-	dataDays = rawCsvTable[[1,2;;]];
-	stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
-	(* we take the average of the last 3 days in the dataset and extend that as the distancing value
+    rawCsvTable,
+    stateLabels,
+    dataDays,
+    stateDistancings,
+    countStates,
+    fullDays,
+    processScenario,
+    processState
+  },
+  
+  rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
+  
+  dataDays = rawCsvTable[[1,2;;]];
+  stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
+  (* we take the average of the last 3 days in the dataset and extend that as the distancing value
 	until today *)
-	stateLabels = rawCsvTable[[2;;,1]];
-	countStates = Length[stateLabels];
-	
-	fullDays = Range[365];
-		
-	processScenario[scenario_, distancing_] := Module[{
-			distancingLevel,
-			fullDistancing,
-			distancingFunction
-		},
-		
-		distancingLevel = If[
-			scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
-		
-		fullDistancing = Join[
-		    (* constant *)
-			ConstantArray[1.,Min[dataDays]-1],
-			(* 3 day average until we dont have data *)
-			distancing,
-			(* flatline at that average between when we dont have data and today *)
-			((Total[distancing[[-3;;-1]]]/3)&/@Range[today - Max[dataDays]]),
-			(* moving average going forward in the scenario *)
-			ConstantArray[distancingLevel,scenario["distancingDays"]],
-			ConstantArray[1.,365-scenario["distancingDays"]-Max[dataDays]-(today - Max[dataDays])]
-		];
-	
-		distancingFunction = Interpolation[Transpose[{
-				fullDays,
-				GaussianFilter[fullDistancing,1.5]}]];
-
-		scenario["id"]-><|
-			"distancingLevel"->distancingLevel,
-			"distancingData"->fullDistancing,
-			"distancingFunction"->distancingFunction|>
-	];
-	
-	processState[state_,distancing_] := 
-		state->Association[Map[processScenario[#,distancing]&,scenarios]];
-
-	Association[MapThread[processState,{stateLabels,stateDistancings}]]
+  stateLabels = rawCsvTable[[2;;,1]];
+  countStates = Length[stateLabels];
+  
+  fullDays = Range[365];
+  
+  processScenario[scenario_, distancing_] := Module[{
+      distancingLevel,
+      fullDistancing,
+      distancingFunction
+    },
+    
+    distancingLevel = If[
+      scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
+    
+    fullDistancing = Join[
+      (* constant *)
+      ConstantArray[1.,Min[dataDays]-1],
+      (* 3 day average until we dont have data *)
+      distancing,
+      (* flatline at that average between when we dont have data and today *)
+      ((Total[distancing[[-3;;-1]]]/3)&/@Range[today - Max[dataDays]]),
+      (* moving average going forward in the scenario *)
+      ConstantArray[distancingLevel,scenario["distancingDays"]],
+      ConstantArray[1.,365-scenario["distancingDays"]-Max[dataDays]-(today - Max[dataDays])]
+    ];
+    
+    distancingFunction = Interpolation[Transpose[{
+          fullDays,
+          GaussianFilter[fullDistancing,1.5]}]];
+    
+    scenario["id"]-><|
+      "distancingLevel"->distancingLevel,
+      "distancingData"->fullDistancing,
+      "distancingFunction"->distancingFunction|>
+  ];
+  
+  processState[state_,distancing_] :=
+  state->Association[Map[processScenario[#,distancing]&,scenarios]];
+  
+  Association[MapThread[processState,{stateLabels,stateDistancings}]]
 ];
 
 
