@@ -47,7 +47,7 @@ const styles = css`
   }
 `;
 
-export const Layout = ({children, state, states}) => (
+export const Layout = ({children, state}) => (
   <div className="layout">
     <style jsx>{styles}</style>
     <Notice>

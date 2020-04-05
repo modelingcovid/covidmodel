@@ -15,7 +15,6 @@ export default function App({
   state,
   states: initialStates,
 }) {
-  const [states] = useState(initialStates);
   return (
     <ComponentIdProvider>
       <Head>
@@ -30,7 +29,7 @@ export default function App({
       <style jsx global>
         {globalStyles}
       </style>
-      <Layout states={states}>
+      <Layout>
         <MDXComponents>
           <Component {...pageProps} />
         </MDXComponents>
@@ -45,13 +44,3 @@ export default function App({
     </ComponentIdProvider>
   );
 }
-
-// Use getStaticProps here when it becomes available. In the meantime:
-// https://github.com/zeit/next.js/discussions/10949#discussioncomment-2952
-App.getInitialProps = (ctx) => {
-  if (typeof window === 'undefined') {
-    const {getStatesWithData} = require('../lib/data');
-    return {states: getStatesWithData()};
-  }
-  return {};
-};
