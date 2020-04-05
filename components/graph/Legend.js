@@ -26,7 +26,7 @@ const entryStyles = css`
   }
   .entry-label {
     margin-right: ${theme.spacing[0]};
-    color: ${theme.color.gray[2]};
+    color: ${theme.color.gray[4]};
   }
   .entry-symbol {
     flex-shrink: 0;

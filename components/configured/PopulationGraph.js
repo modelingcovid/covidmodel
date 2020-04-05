@@ -32,7 +32,7 @@ export const PopulationGraph = ({
       <HMarker
         value={population}
         anchor="end"
-        stroke="var(--color-gray2)"
+        stroke="var(--color-gray4)"
         label={`Population ${formatLargeNumber(population)}`}
         labelStroke="var(--color-background)"
         labelAnchor="end"

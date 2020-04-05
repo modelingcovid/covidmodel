@@ -1,16 +1,12 @@
 import * as React from 'react';
-import {useRouter} from 'next/router';
+import {useNavigateToLocation} from './useNavigateToLocation';
 import {Select} from '../Select';
 import {stateLabels} from '../../lib/controls';
 
 const {useCallback} = React;
 
 export function StateSelect({state, states, ...props}) {
-  const {push} = useRouter();
-  const onStateChange = useCallback(
-    (state) => push('/state/[state]', `/state/${state}`),
-    [push]
-  );
+  const navigateToLocation = useNavigateToLocation();
   return (
     <Select
       label="Location"
@@ -18,7 +14,7 @@ export function StateSelect({state, states, ...props}) {
       value={state}
       values={states}
       valueToString={stateLabels}
-      onChange={onStateChange}
+      onChange={navigateToLocation}
       {...props}
     />
   );

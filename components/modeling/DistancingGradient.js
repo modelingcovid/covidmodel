@@ -20,7 +20,7 @@ const lightColor = (n) => {
   return lightSource.toString();
 };
 
-const darkSource = hcl(darkMode[properties.color.gray[4]]);
+const darkSource = hcl(darkMode[properties.color.gray[6]]);
 const darkColor = (n) => {
   darkSource.opacity = n * 0.8;
   return darkSource.toString();

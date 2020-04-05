@@ -77,7 +77,7 @@ export const HospitalCapacity = ({width, height}) => {
         after={
           <Legend>
             <PercentileLegendRow
-              title="Currently hospitalized"
+              title="Currently reported hospitalized"
               y={getCurrentlyReportedHospitalized}
               color="var(--color-blue2)"
             />

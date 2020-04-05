@@ -19,7 +19,7 @@ export const AxisBottom = React.memo(function AxisBottom(props) {
       const props = {
         textAnchor: 'middle',
         dy: '4px',
-        fill: 'var(--color-gray3)',
+        fill: 'var(--color-gray5)',
       };
       if (i === 0) {
         props.textAnchor = 'start';
@@ -42,8 +42,8 @@ export const AxisBottom = React.memo(function AxisBottom(props) {
       tickFormat={formatDateAxis}
       tickLabelProps={bottomTickLabelProps}
       strokeWidth={1}
-      stroke="var(--color-gray1)"
-      tickStroke="var(--color-gray1)"
+      stroke="var(--color-gray2)"
+      tickStroke="var(--color-gray2)"
       {...props}
     />
   );
@@ -53,7 +53,7 @@ const leftTickLabelProps = () => ({
   dx: '4px',
   dy: '-4px',
   textAnchor: 'start',
-  fill: 'var(--color-gray2)',
+  fill: 'var(--color-gray4)',
   paintOrder: 'stroke',
   stroke: 'var(--color-background)',
   strokeWidth: 5,
@@ -66,7 +66,7 @@ export const AxisLeft = React.memo(function AxisLeft(props) {
       scale={yScale}
       tickLength={0} // positions text at the axis
       hideTicks
-      stroke="var(--color-gray1)"
+      stroke="var(--color-gray2)"
       strokeWidth={1}
       tickLabelProps={leftTickLabelProps}
       {...props}
@@ -78,7 +78,7 @@ const rightTickLabelProps = () => ({
   dx: '-4px',
   dy: '-4px',
   textAnchor: 'end',
-  fill: 'var(--color-gray2)',
+  fill: 'var(--color-gray4)',
 });
 
 export const AxisRight = React.memo(function AxisRight(props) {
@@ -90,7 +90,7 @@ export const AxisRight = React.memo(function AxisRight(props) {
       tickLabelProps={rightTickLabelProps}
       tickLength={0} // positions text at the axis
       hideTicks
-      stroke="var(--color-gray1)"
+      stroke="var(--color-gray2)"
       strokeWidth={1}
       {...props}
     />

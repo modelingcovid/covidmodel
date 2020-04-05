@@ -74,7 +74,7 @@ export const ICUCapacity = ({width, height}) => {
         after={
           <Legend>
             <PercentileLegendRow
-              title="Currently hospitalized"
+              title="Currently require intensive care"
               y={getCurrentlyCritical}
               color="var(--color-blue2)"
             />

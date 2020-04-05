@@ -27,7 +27,7 @@ const valueTickLabelProps = () => ({
   dx: '4px',
   dy: '-4px',
   textAnchor: 'start',
-  fill: 'var(--color-gray2)',
+  fill: 'var(--color-gray4)',
   paintOrder: 'stroke',
   stroke: 'var(--color-background)',
   strokeWidth: 5,
@@ -125,7 +125,7 @@ export const Graph = React.memo(function Graph({
       const props = {
         textAnchor: 'middle',
         dy: '4px',
-        fill: 'var(--color-gray3)',
+        fill: 'var(--color-gray5)',
       };
       if (i === 0) {
         props.textAnchor = 'start';

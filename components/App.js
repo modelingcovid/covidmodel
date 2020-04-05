@@ -17,11 +17,11 @@ const styles = css`
     justify-content: space-between;
     align-items: baseline;
     font-size: ${theme.font.size.small};
-    color: ${theme.color.gray[3]};
+    color: ${theme.color.gray[5]};
   }
   .title {
     font-family: ${theme.font.family.mono};
-    color: ${theme.color.gray[1]};
+    color: ${theme.color.gray[2]};
     font-size: 16px;
     display: block;
     flex-shrink: 0;
@@ -31,7 +31,7 @@ const styles = css`
     margin: 0 -0.4em;
   }
   .title:hover {
-    color: ${theme.color.gray[4]};
+    color: ${theme.color.gray[6]};
   }
   .link {
     margin-left: ${theme.spacing[2]};

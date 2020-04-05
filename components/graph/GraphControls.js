@@ -17,14 +17,14 @@ export const GraphControls = ({scale, setScale}) => (
       a {
         display: block;
         margin-left: var(--spacing1);
-        color: var(--color-gray1);
+        color: var(--color-gray2);
         transition: 200ms;
       }
       a.active {
-        color: var(--color-gray3);
+        color: var(--color-gray5);
       }
       a:hover {
-        color: var(--color-gray4);
+        color: var(--color-gray6);
       }
     `}</style>
     {scales.map((s) => (

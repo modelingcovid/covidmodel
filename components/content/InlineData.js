@@ -20,7 +20,7 @@ const styles = css`
   }
   .inline-data-value {
     transition: ease color 300ms;
-    color: var(--color-gray1);
+    color: var(--color-gray2);
     font-family: var(--font-family-mono);
     font-weight: 500;
     font-size: 0.9em;

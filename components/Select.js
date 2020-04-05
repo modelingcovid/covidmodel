@@ -39,7 +39,7 @@ export const Select = React.memo(function Select({
 
   const icon = (
     <DownArrow
-      fill={theme.color.gray[3]}
+      fill={theme.color.gray[5]}
       style={{
         whiteSpace: 'nowrap',
         display: 'inline',

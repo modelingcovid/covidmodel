@@ -66,7 +66,7 @@ export default function StatePage({data, states}) {
           .sticky {
             position: sticky;
             top: 0;
-            background: rgba(var(--color-background-rgb), 0.8);
+            background: rgba(var(--color-backgroundRgb), 0.8);
             backdrop-filter: blur(16px);
             z-index: 2;
           }

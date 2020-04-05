@@ -10,6 +10,6 @@ export const NearestMarker = () => {
     return null;
   }
   return (
-    <VMarker value={x(nearest)} stroke="var(--color-gray1)" strokeWidth={1} />
+    <VMarker value={x(nearest)} stroke="var(--color-gray2)" strokeWidth={1} />
   );
 };

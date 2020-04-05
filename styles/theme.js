@@ -7,11 +7,20 @@ export const {
   properties,
 } = toCssProperties({
   color: {
-    background: {'': '#fff', rgb: '255, 255, 255'},
+    background: '#fff',
+    backgroundRgb: '255, 255, 255',
     focus: ['rgba(66, 153, 225, 0.2)', 'rgba(66, 153, 225, 0.5)'],
     shadow: ['rgba(24, 27, 44, 0.1)'],
     gray: {
-      ...['#e0e6eb', '#8691a1', '#515a70', '#2d3146', '#181b2c'],
+      ...[
+        '#e0e6eb',
+        '#c0c8d2',
+        '#8691a1',
+        '#687386',
+        '#515a70',
+        '#2d3146',
+        '#181b2c',
+      ],
       bg: '#f6f8fa',
       muted: '#515a70',
     },
@@ -66,10 +75,19 @@ export const mediaQuery = {
 
 export const darkMode = setProperties({
   color: {
-    background: {'': '#181b2c', rgb: '24, 27, 44'},
+    background: '#181b2c',
+    backgroundRgb: '24, 27, 44',
     shadow: ['rgba(255, 255, 255, 0.1)'],
     gray: {
-      ...['#2d3146', '#8691a1', '#c0c8d2', '#e0e6eb', '#f6f8fa'],
+      ...[
+        '#2d3146',
+        '#3c445d',
+        '#8691a1',
+        '#a3acba',
+        '#c0c8d2',
+        '#e0e6eb',
+        '#f6f8fa',
+      ],
       bg: '#2d3146',
       muted: '#c0c8d2',
     },

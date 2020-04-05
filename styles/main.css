@@ -5,7 +5,7 @@
 html,
 body {
   font-family: var(--font-family-ui);
-  color: var(--color-gray3);
+  color: var(--color-gray5);
   background-color: var(--color-background);
 }
 text {
@@ -18,16 +18,16 @@ text {
   font-size: 0.9em;
 }
 .text-gray-faint {
-  color: var(--color-gray1);
-}
-.text-gray-light {
   color: var(--color-gray2);
 }
+.text-gray-light {
+  color: var(--color-gray4);
+}
 .text-gray {
-  color: var(--color-gray3);
+  color: var(--color-gray5);
 }
 .text-gray-dark {
-  color: var(--color-gray4);
+  color: var(--color-gray6);
 }
 .text-blue {
   color: var(--color-blue2);
@@ -75,7 +75,7 @@ text {
   text-transform: uppercase;
   font-size: 14px;
   padding: 4px 0;
-  border-bottom: 2px solid var(--color-gray3);
+  border-bottom: 2px solid var(--color-gray5);
 }
 .text-heading,
 .section-heading {
@@ -136,7 +136,7 @@ text {
   }
 }
 .color-dark {
-  color: var(--color-gray4);
+  color: var(--color-gray6);
 }
 
 .focus:focus,

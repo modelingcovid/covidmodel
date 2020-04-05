@@ -2,17 +2,12 @@ import * as React from 'react';
 import Link from 'next/link';
 import css from 'styled-jsx/css';
 import {Label} from './content';
-import {StateSelect} from './configured';
+import {LocationMap, StateSelect} from './configured';
 import {stateLabels} from '../lib/controls';
 import {formatNumber} from '../lib/format';
 import {theme} from '../styles';
 
 const styles = css`
-  .select {
-    display: flex;
-    padding-top: ${theme.spacing[1]};
-    padding-bottom: ${theme.spacing[3]};
-  }
   .location {
     font-family: ${theme.font.family.mono};
     font-size: ${theme.font.size.small};
@@ -21,7 +16,7 @@ const styles = css`
     font-size: ${theme.font.size.small};
   }
   a {
-    color: ${theme.color.gray[3]};
+    color: ${theme.color.gray[5]};
     text-decoration: underline;
   }
   a:hover {
@@ -29,15 +24,13 @@ const styles = css`
   }
 `;
 
-export function Overview({overview, states}) {
+export function Overview({overview, states, topo}) {
   const ordered = states;
   return (
     <div>
       <style jsx>{styles}</style>
-      <div className="select">
-        <StateSelect states={states} />
-      </div>
-      <div className="location">
+      <LocationMap states={states} topo={topo} />
+      <div className="location margin-top-3">
         <div className="margin-bottom-0">
           <Label color="yellow">Modeled locations</Label>
         </div>

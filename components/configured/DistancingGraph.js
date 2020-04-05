@@ -38,7 +38,7 @@ export const DistancingGraph = ({
     dx: '-4px',
     dy: '-4px',
     textAnchor: 'end',
-    fill: 'var(--color-gray2)',
+    fill: 'var(--color-gray4)',
   });
 
   return (
@@ -88,7 +88,7 @@ export const DistancingGraph = ({
                 tickLabelProps={endTickLabelProps}
                 tickLength={0} // positions text at the axis
                 hideTicks
-                stroke="var(--color-gray1)"
+                stroke="var(--color-gray2)"
                 strokeWidth={1}
               />
             </>
