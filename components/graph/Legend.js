@@ -30,6 +30,7 @@ const entryStyles = css`
   }
   .entry-symbol {
     flex-shrink: 0;
+    border: 2px solid rgb(255, 0, 0, 0.5);
     height: 8px;
     width: 8px;
     border-radius: 999em;
@@ -57,7 +58,7 @@ export const LegendEntry = ({
   }
 
   const isStroke = symbol === 'stroke';
-  const shadow = isStroke ? `2px ${color}` : `1px ${theme.color.background}`;
+  const borderColor = isStroke ? color : 'transparent';
 
   return (
     <div className="entry">
@@ -65,7 +66,7 @@ export const LegendEntry = ({
       <style jsx>{`
         .entry-symbol {
           background-color: ${isStroke ? theme.color.background : color};
-          box-shadow: inset 0 0 0 ${shadow};
+          border-color: ${borderColor};
         }
       `}</style>
       <div className="entry-label">{label}</div>
