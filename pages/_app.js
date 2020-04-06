@@ -9,6 +9,13 @@ import {MDXComponents} from '../components';
 
 const {useState} = React;
 
+const title = 'Modeling COVID-19';
+const browserTitle = `${title} — The COVID Open Source Modeling Collaboration`;
+const description =
+  'COVID-19 forecasting models trained to actual social distancing, testing, and fatality data.';
+const canonicalUrl = 'https://modelingcovid.com/';
+const socialImgUrl = `${canonicalUrl}social.png`;
+
 export default function App({
   Component,
   pageProps,
@@ -18,13 +25,37 @@ export default function App({
   return (
     <ComponentIdProvider>
       <Head>
-        <title>
-          Modeling COVID-19 — The COVID Open Source Modeling Collaboration
-        </title>
-        <meta
-          name="description"
-          content="COVID-19 forecasting models trained to actual social distancing, PCR tests, and fatality data."
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon@32.png"
         />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="96x96"
+          href="/favicon@96.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon@16.png"
+        />
+
+        <title>{browserTitle}</title>
+        <meta name="description" content={description} />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={socialImgUrl} />
+        <meta property="og:url" content={canonicalUrl} />
+
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={socialImgUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <style jsx global>
         {globalStyles}
