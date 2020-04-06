@@ -308,15 +308,15 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     (*Going to hospital*)
     HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
     (*Reported positive hospital cases*)
-    RepHq'[t]==HHq'[t]/daysForHospitalsToReportCases0,
+    RepHq'[t]==testingProbability[t] * HHq'[t]/daysForHospitalsToReportCases0,
     (* cumulative reported hospital cases *)
-    CRepHq'[t]==HHq[t]/daysForHospitalsToReportCases0,
+    CRepHq'[t]==testingProbability[t] * HHq[t]/daysForHospitalsToReportCases0,
     (*Cumulative hospitalized count*)
     EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
     (*pcr confirmation*)
-    PCR'[t] == (stateAdjustmentForTestingDifferences) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
+    PCR'[t] == stateAdjustmentForTestingDifferences * testingProbability[t] * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
     (*Infected, will need critical care*)
     ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Hospitalized,
@@ -523,7 +523,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[Sq]]][t]|>
             },First]
         }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
-        
+  
   Echo[ListLogPlot[{#["day"],#["cumulativePcr"]["expected"]}&/@timeSeriesData,Joined->True,ImageSize->300]];
   
   containmentTime = If[KeyExistsQ[events, "containment"],events["containment"][[1]][[1]],Null];
@@ -614,13 +614,13 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     (*Going to hospital*)
     HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0-HHq[t]/daysToLeaveHosptialNonCritical0,
     (*Reported positive hospital cases*)
-    RepHq'[t]==(pPCRH0*HHq[t])/daysForHospitalsToReportCases0,
+    RepHq'[t]==testingProbability[t] * (pPCRH0*HHq[t])/daysForHospitalsToReportCases0,
     (*Cumulative hospitalized count*)
     EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
     (*pcr confirmation*)
-    PCR'[t] == (stateAdjustmentForTestingDifferences) * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
+    PCR'[t] == stateAdjustmentForTestingDifferences * testingProbability[t] * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
     (*Infected, will need critical care*)
     ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Hospitalized,
@@ -768,16 +768,16 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPreco
     Export["public/json/"<>state<>".json",stateData];
     
     Export["tests/summary/"<>state<>".csv", Join[
-    {Keys[
-     Association[Join[
-          KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
-          stateData["scenarios"]["scenario1"]["summary"]
-    ]]
-    ]},
-    Values[Association[Join[
-          KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"][#],"timeSeriesData"],"events"],"summary"],
-          stateData["scenarios"][#]["summary"]
-    ]]]&/@Keys[stateData["scenarios"]]]];
+        {Keys[
+            Association[Join[
+                KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
+                stateData["scenarios"]["scenario1"]["summary"]
+              ]]
+          ]},
+        Values[Association[Join[
+              KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"][#],"timeSeriesData"],"events"],"summary"],
+              stateData["scenarios"][#]["summary"]
+            ]]]&/@Keys[stateData["scenarios"]]]];
     
     stateData
   ];
