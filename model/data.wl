@@ -6,6 +6,10 @@ SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 today=QuantityMagnitude[DateDifference[DateList[{2020,1,1}],Today]];
 dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <> name;
 
+(* model predict max/min 1 is Jan 1st 2020 *)
+tmax0 = 365 * 2;
+tmin0 = 1;
+
 (* get data for age distribution and cache it in a json file *)
 queryAlphaForDistribution[place_] :=
 Which[
@@ -155,8 +159,8 @@ testingProbability = Module[{rawData,interpolatedData},
     {67.13151633765169, 0.33095609501781265},
     {71.55097421808084, 0.724688328830152},
     {85,1},
-    {365,1}};
-  interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,365]],14];
+    {tmax0,1}};
+  interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,tmax0]],14];
   Interpolation[interpolatedData]
 ];
 
@@ -189,7 +193,7 @@ stateDistancingPrecompute = Module[{
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
   
-  totalDays = 365;
+  totalDays = tmax0;
   fullDays = Range[totalDays];
   
   smoothing = 3;
@@ -278,7 +282,7 @@ evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarl
     
     maxDay=Max[#[[1]]&/@rollingAvg];
     valueOnLatestDay=Max[#[[2]]&/@Select[rollingAvg,#[[1]]==maxDay&]];
-    filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,365}];
+    filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,tmax0}];
     
     minDay=Min[#[[1]]&/@rollingAvg];
     valueOnEarliestDay=Min[#[[2]]&/@Select[rollingAvg,#[[1]]==minDay&]];

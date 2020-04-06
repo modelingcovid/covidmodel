@@ -10,10 +10,6 @@ Import["model/plot-utils.wl"];
 (* to do a quick run GenerateModelExport[100,testCaseStates] *)
 testCaseStates={"CA","VA","FL","CO", "MD","TX","WA","OR", "PA", "CT", "OH", "VT"};
 
-(* model predict max/min 1 is Jan 1st 2020 *)
-tmax0 = 365;
-tmin0 = 1;
-
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 4;
 
@@ -79,7 +75,8 @@ pHospitalized80YearOld0=0.20;
 
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
-k0 = 5*10^-3;
+(* we set this to target 60% infected at the end of 2021 were no intervention to happen *)
+k0 = 1.3*10^-3;
 
 (* Fraction of symptomatic cases *)
 fractionSymptomatic0 = 0.7;
@@ -112,7 +109,7 @@ fitStartingOverrides=<|
   "TX"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->40,"tupper"->58,"replower"->1.6,"repupper"->13|>,
   "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->0.5,"repupper"->3.8|>,
   "CT"-><|"rlower"->4,"rupper"->4.8,"tlower"->47,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
-  "OH"-><|"rlower"->3.7,"rupper"->4.2,"tlower"->53,"tupper"->56,"replower"->4,"repupper"->6|>,
+  "OH"-><|"rlower"->3.8,"rupper"->4.2,"tlower"->53,"tupper"->58,"replower"->0.5,"repupper"->6|>,
   "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->50,"replower"->2,"repupper"->3.6|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->60,"replower"->1,"repupper"->6|>,
   "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->0.5,"repupper"->6|>,
@@ -130,7 +127,6 @@ fitStartingOverrides=<|
   "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->10|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->11|>,
   "WA"-><|"rlower"->2.5,"rupper"->2.8,"tlower"->28,"tupper"->40,"replower"->0.5,"repupper"->6|>,
-  "OH"-><|"rlower"->3.6,"rupper"->4.6,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->6|>,
   "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->48,"tupper"->60,"replower"->0.5,"repupper"->6|>
 |>;
 
@@ -569,7 +565,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       "-"]
   |>;
   
-  (*Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];*)
+  Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];
   
   Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
@@ -709,14 +705,14 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Text["Fit for "<>state],
         Row[{
             Show[
-              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{1,150},{0,Automatic}}],
+              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
               LogPlot[{
                   DeaqParametric[Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]]][t],
                   PCRParametric[Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],Log[fitParams["stateAdjustmentForTestingDifferences"]]][t]},
-                {t,tmin0,150},ImageSize->500]],
+                {t,40,150},ImageSize->500]],
             ListPlot[{
                 Thread[{#2,#1/#3}&[
                     fit["FitResiduals"][[1;;deathDataLength]],
