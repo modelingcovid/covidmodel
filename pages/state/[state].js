@@ -45,7 +45,7 @@ export default function StatePage({data, states}) {
   const stateName = stateLabels[state];
 
   return (
-    <Layout>
+    <Layout states={states}>
       <ModelDataProvider
         model={data}
         scenario={scenario}
@@ -66,16 +66,8 @@ export default function StatePage({data, states}) {
             />
           </Head>
           <style jsx>{`
-            .sticky {
-              position: sticky;
-              top: 0;
-              background: rgba(var(--color-backgroundRgb), 0.8);
-              backdrop-filter: blur(16px);
-              z-index: 2;
-            }
             .controls {
               padding: var(--spacing1) 0;
-              box-shadow: 0 2px var(--color-shadow0);
             }
           `}</style>
           <div className="flex flex-col justify-center">

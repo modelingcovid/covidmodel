@@ -11,12 +11,20 @@ const styles = css`
     padding-bottom: ${theme.spacing[4]};
   }
   header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(${theme.color.backgroundRgb}, 0.8);
+    backdrop-filter: blur(16px);
+  }
+  nav {
     padding: ${theme.spacing[1]} 0;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     font-size: ${theme.font.size.small};
     color: ${theme.color.gray[5]};
+    box-shadow: 0 2px ${theme.color.shadow[0]};
   }
   .title {
     font-family: ${theme.font.family.mono};
@@ -47,27 +55,32 @@ const styles = css`
   }
 `;
 
-export const Layout = ({children, state}) => (
-  <div className="layout">
-    <style jsx>{styles}</style>
-    <Notice>
-      Please do not share these values; this model is under active development.
-    </Notice>
-    <Section>
+export function Layout({children, states}) {
+  return (
+    <div className="layout">
+      <style jsx>{styles}</style>
+      <Notice>
+        Please do not share these values; this model is under active
+        development.
+      </Notice>
       <header>
-        <Link href="/">
-          <a className="focus title">COSMC</a>
-        </Link>
-        <div className="pages text-small">
-          <Link href="/">
-            <a className="focus link">Home</a>
-          </Link>
-          <Link href="/about">
-            <a className="focus link">About</a>
-          </Link>
-        </div>
+        <Section className="nav">
+          <nav>
+            <Link href="/">
+              <a className="focus title">COSMC</a>
+            </Link>
+            <div className="pages text-small">
+              <Link href="/">
+                <a className="focus link">Home</a>
+              </Link>
+              <Link href="/about">
+                <a className="focus link">About</a>
+              </Link>
+            </div>
+          </nav>
+        </Section>
       </header>
-    </Section>
-    {children}
-  </div>
-);
+      {children}
+    </div>
+  );
+}

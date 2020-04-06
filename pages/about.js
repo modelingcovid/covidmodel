@@ -6,7 +6,7 @@ import {About} from '../md';
 
 export default function Index({states}) {
   return (
-    <Layout>
+    <Layout states={states}>
       <About />
     </Layout>
   );

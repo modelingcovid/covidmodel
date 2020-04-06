@@ -1,8 +1,8 @@
 # About
 
-This model is developed by the Covid Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [GitHub](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
+This model is developed by the COVID Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [GitHub](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
 
-The Covid Open Source Modeling Collaboration is comprised of:
+The COVID Open Source Modeling Collaboration is comprised of:
 
 - [Marc Lipsitch](https://www.hsph.harvard.edu/marc-lipsitch/), [Yonatan Grad](https://www.hsph.harvard.edu/yonatan-grad/), [Stephen Kissler](https://www.hsph.harvard.edu/stephen-kissler/), and [Christine Tedijanto](https://ccdd.hsph.harvard.edu/people/christine-tedijanto/) at Harvard.
 - [Silvana Konermann](https://biochemistry.stanford.edu/silvana-konermann) at Stanford.
@@ -20,13 +20,13 @@ The model evaluated here is a standard epidemiological model called SEIR. It mod
 
 In our model we ignore the natural birth and death rates in the population for simplicity but also because the R0 (basic reproduction rate) of COVID-19 is high ~3.1 and therefore demographic shifts play a minimal role in the short term effect. We also follow a recent study out of Harvard [0] in separating states for infected individuals when they need hospitalization or ICU care. This allows us to, after fitting the model, predict when a given country or state will run out of ICU beds.
 
-We also incorporate a best-guess age weighting to the Harvard model to get a more accurate estimate on the ICU bed needs, eg. in states / countries with a higher proportion of elderly individuals.
+We also incorporate a best-guess age weighting to the Harvard model to get a more accurate estimate on the ICU bed needs, e.g. in states / countries with a higher proportion of elderly individuals.
 
-The model is not without its limitations. For example, the model takes an "exponential decay" between the different states, this is likely a good first order approximation, but has it's limitations (eg. you don't have any real patients that take longer than say 1 month to resolve the disease).
+The model is not without its limitations. For example, the model takes an “exponential decay” between the different states, this is likely a good first order approximation, but has its limitations (e.g. you don’t have any real patients that take longer than say 1 month to resolve the disease).
 
 ## Parameter fitting
 
-The parameters we use to forecast both state and country level are fit using country level data from the United States, Spain, France, and Italy. In particular we omit data from Asia where mitigation strategies have been quite different to-date and it's unclear whether we would need to enhance the model to properly account for things like mask usage.
+The parameters we use to forecast both state and country level are fit using country level data from the United States, Spain, France, and Italy. In particular we omit data from Asia where mitigation strategies have been quite different to-date and it’s unclear whether we would need to enhance the model to properly account for things like mask usage.
 
 ## Forecasts
 

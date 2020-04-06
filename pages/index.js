@@ -6,7 +6,7 @@ import {Home} from '../md';
 
 export default function Index(props) {
   return (
-    <Layout>
+    <Layout states={props.states}>
       <Home />
       <Section>
         <Overview {...props} />
