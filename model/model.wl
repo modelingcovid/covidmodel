@@ -757,6 +757,27 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
   evaluateState[state, simulationsPerCombo]
 ];
 
+
+generateSummaryForState[data_, state_]:= Module[{},
+   Flatten[Join[{#},Values[Association[Join[
+           KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],
+           data["scenarios"][#]["summary"]
+    ]]]]&/@Keys[data["scenarios"]]]
+];
+
+
+exportAllStatesSummary[allStates_]:=Module[{header, rows},
+     header = Join[{"State"},{Keys[
+            Association[Join[
+                KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
+                allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summary"]
+              ]]]}];
+                     
+    rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
+    
+    Export["tests/summary.csv", Join[header, rows]];
+]
+
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
@@ -764,24 +785,14 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    Export["public/json/"<>state<>".json",stateData];
-    
-    Export["tests/summary/"<>state<>".csv", Join[
-        {Keys[
-            Association[Join[
-                KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
-                stateData["scenarios"]["scenario1"]["summary"]
-              ]]
-          ]},
-        Values[Association[Join[
-              KeyDrop[KeyDrop[KeyDrop[stateData["scenarios"][#],"timeSeriesData"],"events"],"summary"],
-              stateData["scenarios"][#]["summary"]
-            ]]]&/@Keys[stateData["scenarios"]]]];
-    
+    Export["public/json/"<>state<>".json",stateData]; 
     stateData
   ];
   
   allStatesData=Association[Parallelize[Map[(#->loopBody[#])&,states]]];
+  
+  exportAllStatesSummary[allStatesData];
+  
   exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
   exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
   allStatesData
