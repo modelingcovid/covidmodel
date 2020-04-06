@@ -6,6 +6,7 @@ import {
   CaseProgressionCurve,
   HospitalCapacity,
   ICUCapacity,
+  Layout,
   ModelInputs,
   OutcomeSummary,
   ProjectedDeaths,
@@ -44,71 +45,73 @@ export default function StatePage({data, states}) {
   const stateName = stateLabels[state];
 
   return (
-    <ModelDataProvider
-      model={data}
-      scenario={scenario}
-      state={state}
-      states={states}
-      x={getDate}
-    >
-      <NearestDataProvider
+    <Layout>
+      <ModelDataProvider
+        model={data}
+        scenario={scenario}
+        state={state}
+        states={states}
         x={getDate}
-        data={data.scenarios[scenario].timeSeriesData}
-        initial={today}
       >
-        <Head>
-          <title>{stateName} COVID model forecast</title>
-          <meta
-            name="Description"
-            content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
-          />
-        </Head>
-        <style jsx>{`
-          .sticky {
-            position: sticky;
-            top: 0;
-            background: rgba(var(--color-backgroundRgb), 0.8);
-            backdrop-filter: blur(16px);
-            z-index: 2;
-          }
-          .controls {
-            padding: var(--spacing1) 0;
-            box-shadow: 0 2px var(--color-shadow0);
-          }
-        `}</style>
-        <div className="flex flex-col justify-center">
-          <div className="sticky">
-            <Section>
-              <div ref={sizeRef} />
-              <div className="controls">
-                <Controls
-                  state={state}
-                  states={states}
-                  scenario={scenario}
-                  setScenario={setScenario}
-                />
+        <NearestDataProvider
+          x={getDate}
+          data={data.scenarios[scenario].timeSeriesData}
+          initial={today}
+        >
+          <Head>
+            <title>{stateName} COVID model forecast</title>
+            <meta
+              name="Description"
+              content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
+            />
+          </Head>
+          <style jsx>{`
+            .sticky {
+              position: sticky;
+              top: 0;
+              background: rgba(var(--color-backgroundRgb), 0.8);
+              backdrop-filter: blur(16px);
+              z-index: 2;
+            }
+            .controls {
+              padding: var(--spacing1) 0;
+              box-shadow: 0 2px var(--color-shadow0);
+            }
+          `}</style>
+          <div className="flex flex-col justify-center">
+            <div className="sticky">
+              <Section>
+                <div ref={sizeRef} />
+                <div className="controls">
+                  <Controls
+                    state={state}
+                    states={states}
+                    scenario={scenario}
+                    setScenario={setScenario}
+                  />
+                </div>
+              </Section>
+            </div>
+
+            <Section className="margin-top-4">
+              <div className="text-jumbo margin-bottom-2">{stateName}</div>
+              <ModelInputs width={width} height={160} />
+              <div
+                className="text-title margin-top-4"
+                style={{marginBottom: '-64px'}}
+              >
+                Projections
               </div>
+              <SEIR width={width} height={height} />
+              <CaseProgressionCurve width={width} height={height} />
+              <ProjectedDeaths width={width} height={height} />
+              <HospitalCapacity width={width} height={height} />
+              <ICUCapacity width={width} height={height} />
             </Section>
           </div>
-
-          <Section className="margin-top-4">
-            <div className="text-jumbo margin-bottom-2">{stateName}</div>
-            <ModelInputs width={width} height={160} />
-            <div
-              className="text-title margin-top-4"
-              style={{marginBottom: '-64px'}}
-            >
-              Projections
-            </div>
-            <SEIR width={width} height={height} />
-            <CaseProgressionCurve width={width} height={height} />
-            <ProjectedDeaths width={width} height={height} />
-            <HospitalCapacity width={width} height={height} />
-            <ICUCapacity width={width} height={height} />
-          </Section>
-        </div>
-      </NearestDataProvider>
-    </ModelDataProvider>
+        </NearestDataProvider>
+      </ModelDataProvider>
+    </Layout>
   );
 }
 

@@ -5,7 +5,7 @@ import {globalStyles} from '../styles';
 
 import '../styles/main.css';
 import {ComponentIdProvider} from '../components/util';
-import {Layout, MDXComponents} from '../components';
+import {MDXComponents} from '../components';
 
 const {useState} = React;
 
@@ -29,11 +29,9 @@ export default function App({
       <style jsx global>
         {globalStyles}
       </style>
-      <Layout>
-        <MDXComponents>
-          <Component {...pageProps} />
-        </MDXComponents>
-      </Layout>
+      <MDXComponents>
+        <Component {...pageProps} />
+      </MDXComponents>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
