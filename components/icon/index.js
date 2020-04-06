@@ -11,6 +11,7 @@ export * from './Heartbeat';
 export * from './HospitalUser';
 export * from './Lungs';
 export * from './LungsVirus';
+export * from './MapMarker';
 export * from './People';
 export * from './PeopleArrows';
 export * from './Poll';
