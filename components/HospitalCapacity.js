@@ -23,18 +23,19 @@ export const HospitalCapacity = ({width, height}) => {
   } = useModelData();
   const {dateHospitalsOverCapacity: capacityDate} = summary;
 
-  const hospitalCapacityHeading = capacityDate ? (
-    <>
-      {stateName} will{' '}
-      <span className="text-red">exceed hospital capacity</span> on{' '}
-      {formatDate(new Date(capacityDate))}
-    </>
-  ) : (
-    <>
-      {stateName} will stay{' '}
-      <span className="text-green">below hospital capacity</span>
-    </>
-  );
+  const hospitalCapacityHeading =
+    capacityDate && capacityDate !== '-' ? (
+      <>
+        {stateName} will{' '}
+        <span className="text-red">exceed hospital capacity</span> on{' '}
+        {formatDate(new Date(capacityDate))}
+      </>
+    ) : (
+      <>
+        {stateName} will stay{' '}
+        <span className="text-green">below hospital capacity</span>
+      </>
+    );
 
   return (
     <div className="margin-top-4">
