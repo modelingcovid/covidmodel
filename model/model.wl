@@ -73,6 +73,12 @@ pCritical80YearOld0=0.15;
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
 pHospitalized80YearOld0=0.20;
 
+midpoint=today+60;
+end=today+90;
+(*adjustlimit=3.1893054892883095;*)
+adjustlimit=4;
+
+
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
 (* we set this to target 60% infected at the end of 2021 were no intervention to happen *)
@@ -101,33 +107,32 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->57,"replower"->1,"repupper"->4.5|>,
-  "CA"-><|"rlower"->3,"rupper"->4,"tlower"->46,"tupper"->52,"replower"->1.5,"repupper"->3|>,
-  "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->49,"tupper"->57,"replower"->1,"repupper"->9|>,
-  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->0.5,"repupper"->4|>,
-  "CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1,"repupper"->2|>,
-  "TX"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->40,"tupper"->58,"replower"->1.6,"repupper"->13|>,
-  "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->0.5,"repupper"->3.8|>,
-  "CT"-><|"rlower"->4,"rupper"->4.8,"tlower"->47,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
-  "OH"-><|"rlower"->3.8,"rupper"->4.2,"tlower"->53,"tupper"->58,"replower"->0.5,"repupper"->6|>,
-  "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->50,"replower"->2,"repupper"->3.6|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->60,"replower"->1,"repupper"->6|>,
-  "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->0.5,"repupper"->6|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->48,"replower"->1,"repupper"->4|>,
-  "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->3|>,
-  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->54,"replower"->1,"repupper"->7|>,
-  "MA"-><|"rlower"->4.5,"rupper"->5.7,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->10|>,
-  "MD"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->62,"replower"->0.5,"repupper"->8|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->5|>,
-  "NJ"-><|"rlower"->4.5,"rupper"->5.5,"tlower"->52,"tupper"->55,"replower"->2,"repupper"->3.2|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->8|>,
-  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->8|>,
-  "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->4.3|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->54,"replower"->0.5,"repupper"->6.5|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->10|>,
-  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->11|>,
-  "WA"-><|"rlower"->2.5,"rupper"->2.8,"tlower"->28,"tupper"->40,"replower"->0.5,"repupper"->6|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->48,"tupper"->60,"replower"->0.5,"repupper"->6|>
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->57,"replower"->1.1,"repupper"->2|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.3,"repupper"->2|>,
+  "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->56,"tupper"->60,"replower"->1.3,"repupper"->2|>,
+  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
+  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1.1,"repupper"->1.4|>,
+  "TX"-><|"rlower"->3.5,"rupper"->4.8,"tlower"->40,"tupper"->61,"replower"->1.3,"repupper"->2|>,
+  "WA"-><|"rlower"->2.5,"rupper"->2.65,"tlower"->28,"tupper"->33,"replower"->1.25,"repupper"->2|>,
+  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->47,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
+  "OH"-><|"rlower"->3.8,"rupper"->4.2,"tlower"->53,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
+  "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->53,"replower"->1,"repupper"->1.4|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->60,"replower"->1.1,"repupper"->2|>,
+  "VT"-><|"rlower"->2.7,"rupper"->3.1,"tlower"->38,"tupper"->47,"replower"->0.9,"repupper"->1.1|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.5,"repupper"->1.4|>,
+  "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->1.4|>,
+  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->54,"replower"->1,"repupper"->1.4|>,
+  "MA"-><|"rlower"->4.6,"rupper"->5.7,"tlower"->45,"tupper"->57,"replower"->1.35,"repupper"->1.6|>,
+  "MD"-><|"rlower"->3.7,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->1.2,"repupper"->1.5|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.4|>,
+  "NJ"-><|"rlower"->4.5,"rupper"->5.5,"tlower"->52,"tupper"->55,"replower"->1,"repupper"->1.4|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->45,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
+  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
+  "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->0.7,"repupper"->1.4|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->60,"replower"->0.5,"repupper"->1.7|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->1.4|>,
+  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->1.4|>,
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->48,"tupper"->60,"replower"->0.5,"repupper"->1.4|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -315,7 +320,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
     (*pcr confirmation*)
-    PCR'[t] == stateAdjustmentForTestingDifferences * testingProbability[t] * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
+    PCR'[t] == stateAdjustmentForTestingDifferences * testingProbability[t] * adjustlimit/(1+Exp[-(1/(midpoint-march20))Log[adjustlimit/stateAdjustmentForTestingDifferences-1]*(t-midpoint)]) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
     (*Infected, will need critical care*)
     ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Hospitalized,
@@ -565,7 +570,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       "-"]
   |>;
   
-  Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];
+ (* Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];*)
   
   Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
@@ -598,6 +603,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   icuCapacity=params["icuBeds"]/params["population"];
   hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["population"];
   hospitalizationData = stateHospitalizationData[state];
+ 
   
   (* a scoped copy of the ODEs, Thsese do not use heterogeneous susceptibility since they are fit on low I / early t and we fit *)
   (* the import time *)
@@ -619,7 +625,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
     (*pcr confirmation*)
-    PCR'[t] == stateAdjustmentForTestingDifferences * testingProbability[t] * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
+    PCR'[t] == stateAdjustmentForTestingDifferences *adjustlimit/(1+Exp[-(1/(midpoint-march20))Log[adjustlimit/stateAdjustmentForTestingDifferences-1]*(t-midpoint)]) * testingProbability[t] * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
     (*Infected, will need critical care*)
     ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Hospitalized,
@@ -744,6 +750,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       KeyDrop[stateParams[state],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
+      "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "longData"->longData,
       "goodnessOfFitMetrics"->gofMetrics,
       "hospitalizationsReportedAs"->If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative, Null]
@@ -757,25 +764,32 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
   evaluateState[state, simulationsPerCombo]
 ];
 
-
 generateSummaryForState[data_, state_]:= Module[{},
-   Flatten[Join[{#},Values[Association[Join[
+   Join[{state},Values[Association[Join[
            KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],
            data["scenarios"][#]["summary"]
-    ]]]]&/@Keys[data["scenarios"]]]
+    ]]],
+    {
+      data["r0"],
+      data["importtime"],
+      data["stateAdjustmentForTestingDifferences"]
+    }
+    ]&/@Keys[data["scenarios"]]
 ];
 
 
-exportAllStatesSummary[allStates_]:=Module[{header, rows},
-     header = Join[{"State"},{Keys[
+exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
+     header = {Append[Prepend[Keys[
             Association[Join[
                 KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
                 allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summary"]
-              ]]]}];
-                     
-    rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
+              ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences"}]};            
+    rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];  
     
-    Export["tests/summary.csv", Join[header, rows]];
+    table = Flatten[Join[{header}, rows],1];
+    
+    
+    Export["tests/summary.csv", table];
 ]
 
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first

@@ -119,7 +119,7 @@ hospitalizationsCurrentOrCumulative = <|
 stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
 (* remove data when there is only one positive case / death since that doesn't contain any trend information *)
 parsedData = Merge[{
-    <|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]==1] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>,
+    <|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]<=2] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>,
     <|"positive"-> If[KeyExistsQ[#,"positive"],If[TrueQ[#["positive"]<=4] || TrueQ[#["positive"]==Null],Null,#["positive"]],Null]|>,
     #},First]&/@(Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}],DateList[#["date"]//ToString]]]]&/@stateData);
 statesWith50CasesAnd5Deaths = DeleteDuplicates[#["state"]&/@Select[parsedData,(#["positive"]>=50&&#["death"]>=5)&]];
@@ -147,6 +147,7 @@ statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]
 (* a time varying probability that an individual might get tested *)
 (* this hopefully adjusts for the fact that at early stages not everyone was being tested and the resulting reported positive tests is artificially surpressed *)
 (* This function returns a mock up of figure 2B from https://www.medrxiv.org/content/10.1101/2020.03.15.20036582v2.full.pdf?fbclid=IwAR3YPwHgPdlv_5V-4TOgTKlxCxH7J4SC-r5AiqXxG4lbngq9wpstnXKiEs0 *)
+(* we've extended that curve toward the future to account for the peak in testing probability that occured in Mid-march *)
 testingProbability = Module[{rawData,interpolatedData},
   rawData={
     {1,.4},
@@ -158,8 +159,6 @@ testingProbability = Module[{rawData,interpolatedData},
     {64.19097074242492, 0.14092046954456494},
     {67.13151633765169, 0.33095609501781265},
     {71.55097421808084, 0.724688328830152},
-    (* march 14 go down again *)
-    
     {85,1},
     {tmax0,1}};
   interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,tmax0]],14];
