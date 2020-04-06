@@ -16,8 +16,8 @@ export function Controls({
 }) {
   return (
     <div style={{display: 'flex'}} {...props}>
-      <StateSelect states={states} />
-      <div style={{width: theme.spacing[2]}} />
+      {/* <StateSelect states={states} />
+      <div style={{width: theme.spacing[2]}} /> */}
       <Select
         label="Scenario"
         placeholder="Select a scenario…"
