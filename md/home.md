@@ -1,6 +1,6 @@
 # Modeling <span className="nowrap">COVID-19</span>
 
-<div className="text-title" style={{marginTop: '-8px'}}>An epidemiological model fit to live data</div>
+<div className="dek" style={{marginTop: '-8px'}}>Forecasting models trained to actual social distancing, testing, and fatality data</div>
 
 ## Who built this?
 

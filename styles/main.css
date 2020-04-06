@@ -118,6 +118,12 @@ text {
 .paragraph {
   margin-bottom: var(--spacing2);
 }
+.dek {
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-dek);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
 .nowrap {
   white-space: nowrap;
 }
@@ -125,9 +131,11 @@ text {
   user-select: none;
 }
 @media (min-width: 600px) {
+  .dek,
   .section-heading {
     max-width: calc(var(--column-width) * 10);
   }
+  .text-width,
   .paragraph {
     max-width: calc(var(--column-width) * 9);
   }

@@ -17,6 +17,7 @@ export const globalStyles = css.global`
       px({
         [properties.font.size.jumbo]: 64,
         [properties.font.size.title]: 36,
+        [properties.font.size.dek]: 28,
         [properties.font.size.subtitle]: 20,
       })
     )}

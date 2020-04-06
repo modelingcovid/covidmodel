@@ -53,6 +53,7 @@ export const {
       small: 14,
       jumbo: 44,
       title: 28,
+      dek: 22,
       subtitle: 16,
       section: 20,
       body: 16,
