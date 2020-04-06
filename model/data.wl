@@ -158,6 +158,8 @@ testingProbability = Module[{rawData,interpolatedData},
     {64.19097074242492, 0.14092046954456494},
     {67.13151633765169, 0.33095609501781265},
     {71.55097421808084, 0.724688328830152},
+    (* march 14 go down again *)
+    
     {85,1},
     {tmax0,1}};
   interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,tmax0]],14];
