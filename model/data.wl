@@ -219,7 +219,7 @@ stateDistancingPrecompute = Module[{
     },
     
     distancingLevel = If[
-      scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
+      scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
     
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
