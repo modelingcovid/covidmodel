@@ -140,6 +140,30 @@ statePositiveTestRawDataBody=statePositiveTestRawData[[2;;]];
 statePositiveTestData=Merge[{KeyDrop[#,"State"],Association[{"day"->#["State"]}]},First]&/@(Thread[statePositiveTestRawDataHeader->#]&/@statePositiveTestRawDataBody//Map[Association]);
 
 
+(* a time varying probability that an individual might get tested *)
+(* this hopefully adjusts for the fact that at early stages not everyone was being tested and the resulting reported positive tests is artificially surpressed *)
+(* This function returns a mock up of figure 2B from https://www.medrxiv.org/content/10.1101/2020.03.15.20036582v2.full.pdf?fbclid=IwAR3YPwHgPdlv_5V-4TOgTKlxCxH7J4SC-r5AiqXxG4lbngq9wpstnXKiEs0 *)
+testingProbability = Module[{rawData,interpolatedData},
+  rawData={
+    {1,.4},
+    {32.09419441329686, 0.38560995692669275},
+    {36.59500746852255, 0.20273418266226972},
+    {41.61011002106081, 0.08926560217807777},
+    {50.31847352501851, 0.034472714032133256},
+    {60.68717855354785, 0.0656311418771025},
+    {64.19097074242492, 0.14092046954456494},
+    {67.13151633765169, 0.33095609501781265},
+    {71.55097421808084, 0.724688328830152},
+    {85,1},
+    {365,1}};
+  interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,365]],14];
+  Interpolation[interpolatedData]
+];
+
+(* to turn off the testingProbability, uncomment the following: *)
+(* testingProbability=(1)&; *)
+
+
 (* grab state distancing data and return smoothed distancing functions for each scenario in the list of scenarios provided. *)
 (* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
 (* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
@@ -170,26 +194,27 @@ stateDistancingPrecompute = Module[{
   
   smoothing = 3;
   SlowJoin := Fold[Module[{smoother},
-    smoother=1-Exp[-Range[Length[#2]]/smoothing];
-    Join[#1, Last[#1](1-smoother)+#2 smoother]]&];
+      smoother=1-Exp[-Range[Length[#2]]/smoothing];
+      Join[#1, Last[#1](1-smoother)+#2 smoother]]&];
   ApplyWhere[list_,condition_,func_]:=Module[{i,l},
     i=Pick[Range[Length[list]],Map[condition,list]];
     l=list;
     l[[i]]=func[list[[i]]];
     l
   ];
-
+  
   processScenario[scenario_, distancing_] := Module[{
       distancingLevel,
       fullDistancing,
       smoothedDistancing,
       smoothedFullDistancing,
-      distancingFunction
+      distancingFunction,
+      distancingDelay
     },
     
     distancingLevel = If[
       scenario["maintain"],Last[distancing],scenario["distancingLevel"]];
-
+    
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
       (* pre-policy distancing - constant at 1 *)
@@ -210,15 +235,16 @@ stateDistancingPrecompute = Module[{
       GaussianFilter[#,smoothing]&];
     
     smoothedFullDistancing = SlowJoin[{
-      ConstantArray[1., Min[dataDays] - 1],
-      smoothedDistancing,
-      ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - Max[dataDays]],
-      ConstantArray[distancingLevel, scenario["distancingDays"]],
-      ConstantArray[1., totalDays - scenario["distancingDays"] - today]
-    }];
+        ConstantArray[1., Min[dataDays] - 1],
+        smoothedDistancing,
+        ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - Max[dataDays]],
+        ConstantArray[distancingLevel, scenario["distancingDays"]],
+        ConstantArray[1., totalDays - scenario["distancingDays"] - today]
+      }];
     
+    distancingDelay = 0;
     distancingFunction = Interpolation[Transpose[{
-          fullDays,
+          fullDays + distancingDelay,
           smoothedFullDistancing}],InterpolationOrder->3];
     
     scenario["id"]-><|
