@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useRouter} from 'next/router';
 import {useNavigateToLocation} from './useNavigateToLocation';
 import {Select} from '../Select';
+import {useCurrentLocation} from './useCurrentLocation';
 import {stateLabels} from '../../lib/controls';
 
 const {useCallback} = React;
@@ -12,9 +13,7 @@ export function StateSelect({
   placeholder = 'Choose a location…',
   ...props
 }) {
-  const {
-    query: {state},
-  } = useRouter();
+  const state = useCurrentLocation();
   const navigateToLocation = useNavigateToLocation();
   return (
     <Select

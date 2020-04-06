@@ -66,12 +66,15 @@ export default function StatePage({data, states}) {
             />
           </Head>
           <style jsx>{`
+            .controls-container {
+              z-index: 2;
+            }
             .controls {
               padding: var(--spacing1) 0;
             }
           `}</style>
           <div className="flex flex-col justify-center">
-            <div className="sticky">
+            <div className="controls-container">
               <Section>
                 <div ref={sizeRef} />
                 <div className="controls">

@@ -2,6 +2,7 @@ import * as React from 'react';
 import css from 'styled-jsx/css';
 import Head from 'next/head';
 import Link from 'next/link';
+import {LocationMenu} from './configured';
 import {Section} from './content';
 import {Notice} from './Notice';
 import {theme} from '../styles';
@@ -18,6 +19,7 @@ const styles = css`
     backdrop-filter: blur(16px);
   }
   nav {
+    position: relative;
     padding: ${theme.spacing[1]} 0;
     display: flex;
     justify-content: space-between;
@@ -42,6 +44,9 @@ const styles = css`
   }
   .pages {
     display: flex;
+  }
+  .location-menu {
+    position: relative;
   }
   .link {
     margin-left: ${theme.spacing[2]};
@@ -73,6 +78,14 @@ export function Layout({children, states}) {
               <Link href="/">
                 <a className="focus link">Home</a>
               </Link>
+              <div className="link location-menu">
+                <LocationMenu
+                  states={states}
+                  menuProps={{
+                    style: {left: '50%', transform: 'translateX(-50%)'},
+                  }}
+                />
+              </div>
               <Link href="/about">
                 <a className="focus link">About</a>
               </Link>

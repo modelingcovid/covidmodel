@@ -63,6 +63,7 @@ export function CaseProgressionCurve({height, width}) {
         />
       </Grid>
       <PopulationGraph
+        controls
         x={x}
         xLabel="people"
         width={width}

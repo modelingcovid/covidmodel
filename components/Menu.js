@@ -12,22 +12,15 @@ const toStringFn = (fnOrObj) => {
     : (v) => (fnOrObj ? fnOrObj[v] : v);
 };
 
-export const Select = React.memo(function Select({
+export const Menu = React.memo(function Menu({
   children,
-  label,
-  placeholder = '',
-  selectedToString,
+  menuProps,
   valueToString,
   values,
   value,
   onChange,
 }) {
   const itemToString = toStringFn(valueToString);
-
-  const selectedItemToString = selectedToString
-    ? toStringFn(selectedToString)
-    : itemToString;
-
   const items = values;
 
   const {
@@ -45,58 +38,30 @@ export const Select = React.memo(function Select({
     onSelectedItemChange: ({selectedItem}) => onChange(selectedItem),
   });
 
-  const icon = (
-    <DownArrow
-      style={{
-        whiteSpace: 'nowrap',
-        display: 'inline',
-        marginLeft: '2px',
-      }}
-    />
-  );
-  let itemText = selectedItemToString(selectedItem) || placeholder;
-  if (typeof itemText === 'string' && itemText.includes(' ')) {
-    const spaceIndex = itemText.lastIndexOf(' ');
-    itemText = (
-      <>
-        {itemText.slice(0, spaceIndex)}
-        <span style={{whiteSpace: 'nowrap'}}>
-          {itemText.slice(spaceIndex)}
-          {icon}
-        </span>
-      </>
-    );
-  } else {
-    itemText = (
-      <>
-        {itemText}
-        {icon}
-      </>
-    );
-  }
-
   return (
     <div>
       <style jsx>{`
         button {
+          font-family: inherit;
+          font-weight: inherit;
+          font-style: inherit;
           text-align: left;
-          line-height: 1.4;
           outline: none;
-        }
-        .focus-within {
           padding: 4px;
           margin: -4px;
         }
         ul {
           z-index: 100;
           position: absolute;
-          margin-top: var(--spacing0);
+          margin-top: ${theme.spacing[0]};
           max-height: 50vh;
           min-width: 180px;
           overflow-y: auto;
           border-top: 0;
-          background: var(--color-background);
+          background: ${theme.color.background};
           transition: opacity 100ms ease-in-out, transform 250ms ease-in-out;
+          box-shadow: 0 0 0 1px ${theme.color.shadow[0]};
+          border-radius: 2px;
         }
         .closed {
           opacity: 0;
@@ -105,28 +70,17 @@ export const Select = React.memo(function Select({
         }
         @media (max-width: 400px) {
           ul {
-            left: var(--spacing0);
-            right: var(--spacing0);
+            left: ${theme.spacing[0]};
+            right: ${theme.spacing[0]};
             max-width: 100vw;
           }
         }
       `}</style>
-      <div className="focus-within">
-        <label
-          {...getLabelProps()}
-          className="text-small text-gray-light block"
-        >
-          {label}
-        </label>
-        <button
-          {...getToggleButtonProps()}
-          className="text-ui weight-600 text-gray text-medium"
-        >
-          {itemText}
-        </button>
-      </div>
+      <button className="focus" {...getToggleButtonProps()}>
+        {children}
+      </button>
       <ul
-        {...getMenuProps()}
+        {...getMenuProps(menuProps)}
         className={classNames('focus text-small', {closed: !isOpen})}
       >
         {isOpen &&

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import css from 'styled-jsx/css';
 import {Label} from './content';
-import {LocationMap, StateSelect} from './configured';
+import {LocationMap} from './configured';
 import {stateLabels} from '../lib/controls';
 import {formatNumber} from '../lib/format';
 import {theme} from '../styles';

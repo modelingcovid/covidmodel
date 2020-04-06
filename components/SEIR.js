@@ -91,10 +91,7 @@ export function SEIR({height, width}) {
   return (
     <div className="margin-top-4">
       <MethodDisclaimer />
-      <div className="section-heading">
-        <span className="text-blue">{formatPercent1(percentInfected)}</span> of
-        people in {stateName} will be infected with COVID-19
-      </div>
+      <div className="section-heading">SEIR</div>
       <p className="paragraph">
         The model evaluated here is a standard epidemiological model called
         SEIR. It models the spread of a virus in four states:
