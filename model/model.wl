@@ -235,7 +235,7 @@ est - initial infection impulse (eg from imported cases at importtime)
 *)
 
 
-QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
+QP[symb_]:=Position[{Deaq,PCR,CRepHq,RepHq,Sq,Eq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
 
 endTime[ifun_]:=Part[ifun["Domain"],1,-1];
 
@@ -266,6 +266,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     CurrentlyCriticalQuantiles,
     CumulativeEverHospitalizedQuantiles,
     CumulativeEverCriticalQuantiles,
+    CumulativeReportedHospitalizedQuantiles,
     SuseptibleQuantiles,
     icuOverloadTime,
     sims,
@@ -307,7 +308,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     (*Going to hospital*)
     HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
     (*Reported positive hospital cases*)
-    RepHq'[t]==(pPCRH*HHq[t])/daysForHospitalsToReportCases0,
+    RepHq'[t]==HHq'[t]/daysForHospitalsToReportCases0,
+    (* cumulative reported hospital cases *)
+    CRepHq'[t]==HHq[t]/daysForHospitalsToReportCases0,
     (*Cumulative hospitalized count*)
     EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Recovered after hospitalization*)
@@ -339,9 +342,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength,est[t]->0]
   };
-  initialConditions = {Sq[0]==1,Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0};
-  output = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
-  dependentVariables = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est,Iq};
+  initialConditions = {Sq[0]==1,Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,CRepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0};
+  output = {Deaq, PCR, CRepHq, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
+  dependentVariables = {Deaq, PCR, CRepHq, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est,Iq};
   parameters = {
     r0natural,
     daysUntilNotInfectiousOrHospitalized,
@@ -439,6 +442,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   PCRQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[PCR]]][t])&/@simResults,deciles];
   DeathQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[Deaq]]][t])&/@simResults,deciles];
   CurrentlyReportedHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[RepHq]]][t])&/@simResults,deciles];
+  CumulativeReportedHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[CRepHq]]][t])&/@simResults,deciles];
   CurrentlyInfectedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*#[[QP[Eq]]][t])&/@simResults,deciles];
   CurrentlyInfectiousQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[ISq]]][t] + #[[QP[IHq]]][t] + #[[QP[ICq]]][t]))&/@simResults,deciles];
   CumulativeInfectionQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[Deaq]]][t] + #[[QP[RSq]]][t] + #[[QP[RHq]]][t] + #[[QP[RCq]]][t] ))&/@simResults,deciles];
@@ -478,7 +482,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               <|"expected"-> stateParams["params"]["population"]*(sol[[QP[RSq]]][t] + sol[[QP[RHq]]][t] + sol[[QP[RCq]]][t])|>
             }, First],
           "currentlyReportedHospitalized" -> Merge[{
-              <|"confirmed"->If[Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]!=1, 0, If[KeyExistsQ[Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]],"hospitalizations"], Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"],0]]|>,
+              <|"confirmed"->If[
+                Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]==1 && 
+                If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state]=="current", False],
+                If[KeyExistsQ[Select[stateParams["hospitalizationData"],
+                  (#["day"]==t)&][[1]],"hospitalizations"], 
+                  Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"], 
+                  0
+                ],0]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyReportedHospitalizedQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[RepHq]]][t]|>
             },First],
@@ -486,6 +497,15 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyHospitalizedQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t]|>
             }, First],
+          "cumulativeReportedHospitalized" -> Merge[{
+              <|"confirmed"->If[
+                Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]==1 && 
+                If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state]=="cumulative", False], 
+                If[KeyExistsQ[Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]],"hospitalizations"], 
+                Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"],0], 0]|>,
+              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeReportedHospitalizedQuantiles[t]]],
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[CRepHq]]][t]|>
+            },First],
           "cumulativeHospitalized" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverHospitalizedQuantiles[t])]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t]|>
@@ -726,7 +746,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "longData"->longData,
-      "goodnessOfFitMetrics"->gofMetrics
+      "goodnessOfFitMetrics"->gofMetrics,
+      "hospitalizationsReportedAs"->If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative, Null]
     }, First]
 ]
 
