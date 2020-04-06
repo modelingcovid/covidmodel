@@ -90,6 +90,27 @@ hospitalizationsBody=hospitalizationsRawData[[2;;]];
 hospitalizationsParsedData=Thread[hospitalizationsHeader->#]&/@hospitalizationsBody//Map[Association];
 stateHospitalizationData[state_]:=Select[Association[{"day"->#["State"], "hospitalizations"->If[#[state]=="",0,#[state]]}]&/@hospitalizationsParsedData,#["hospitalizations"]>0&]
 
+(* some states report differently, we need to toggle where to put the data *)
+hospitalizationsCurrentOrCumulative = <|
+  "CA"->"current",
+  "CO"->"cumulative", 
+  "CT"->"current", 
+  "FL"->"cumulative",
+  "GA"->"cumulative",
+  "LA"->"current",
+  "MA"->"cumulative",
+  "MD"->"cumulative",
+  "MS"->"current",
+  "NY"->"cumulative",
+  "OH"->"cumulative",
+  "OK"->"current",
+  "OR"->"cumulative",
+  "PA"->"current",
+  "SC"->"current",
+  "VA"->"current",
+  "VT"->"current"
+|>
+
 (* Data from covidtracking on reported PCR and fatalities *)
 stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
 (* remove data when there is only one positive case / death since that doesn't contain any trend information *)
