@@ -101,34 +101,37 @@ scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
 (* to help the numerical optimizer we give slightly different problem bounds depening on state
 based on eg their epidemics starting earlier or having different hospital systems and thus a different
 gap between PCR and death *)
+(* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
+and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "CA"-><|"rlower"->3,"rupper"->4,"tlower"->46,"tupper"->50,"replower"->0.1,"repupper"->12|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->57,"replower"->1,"repupper"->4.5|>,
+  "CA"-><|"rlower"->3,"rupper"->4,"tlower"->46,"tupper"->52,"replower"->1.5,"repupper"->3|>,
   "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->49,"tupper"->57,"replower"->1,"repupper"->9|>,
-  "PA"-><|"rlower"->3.5,"rupper"->5,"tlower"->55,"tupper"->70,"replower"->9,"repupper"->11|>,
+  "PA"-><|"rlower"->3.5,"rupper"->5,"tlower"->55,"tupper"->60,"replower"->0.5,"repupper"->4|>,
   "CO"-><|"rlower"->3.1,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1,"repupper"->2|>,
-  "TX"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->12,"repupper"->13|>,
-  "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->2.7,"repupper"->3.8|>,
-  "CT"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->8|>,
-  "OH"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->55,"replower"->3,"repupper"->4|>,
-  "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->48,"replower"->2.8,"repupper"->3.6|>,
+  "TX"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->40,"tupper"->58,"replower"->1.6,"repupper"->13|>,
+  "WA"-><|"rlower"->2.5,"rupper"->3,"tlower"->28,"tupper"->33,"replower"->0.5,"repupper"->3.8|>,
+  "CT"-><|"rlower"->4,"rupper"->4.8,"tlower"->47,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
+  "OH"-><|"rlower"->3.7,"rupper"->4.2,"tlower"->53,"tupper"->56,"replower"->4,"repupper"->6|>,
+  "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->50,"replower"->2,"repupper"->3.6|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->60,"replower"->1,"repupper"->6|>,
-  "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->5,"repupper"->6|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->49,"replower"->2,"repupper"->4|>,
-  "AZ"-><|"rlower"->3.3,"rupper"->4,"tlower"->50,"tupper"->58,"replower"->3.4,"repupper"->4.5|>,
-  "MI"-><|"rlower"->4,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->2,"repupper"->3|>,
-  "MS"-><|"rlower"->3,"rupper"->5,"tlower"->46,"tupper"->54,"replower"->6,"repupper"->7|>,
-  "MA"-><|"rlower"->4.5,"rupper"->5.7,"tlower"->45,"tupper"->55,"replower"->8,"repupper"->10|>,
-  "MD"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->62,"replower"->6.5,"repupper"->8|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->49,"replower"->3.1,"repupper"->5|>,
+  "VT"-><|"rlower"->3,"rupper"->4.2,"tlower"->40,"tupper"->53,"replower"->0.5,"repupper"->6|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->55,"replower"->0.5,"repupper"->4|>,
+  "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->3|>,
+  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->54,"replower"->1,"repupper"->7|>,
+  "MA"-><|"rlower"->4.5,"rupper"->5.7,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->10|>,
+  "MD"-><|"rlower"->3.1,"rupper"->4.8,"tlower"->40,"tupper"->62,"replower"->0.5,"repupper"->8|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->5|>,
   "NJ"-><|"rlower"->4.5,"rupper"->5.5,"tlower"->52,"tupper"->55,"replower"->2,"repupper"->3.2|>,
-  "IL"-><|"rlower"->3.7,"rupper"->5,"tlower"->45,"tupper"->52,"replower"->6,"repupper"->8|>,
-  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->4,"repupper"->8|>,
-  "OK"-><|"rlower"->3.4,"rupper"->4,"tlower"->45,"tupper"->53,"replower"->3.5,"repupper"->4.3|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->54,"replower"->5.7,"repupper"->6.5|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->6.5,"repupper"->10|>,
-  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->9,"repupper"->11|>,
-  "WA"-><|"rlower"->2.5,"rupper"->2.8,"tlower"->28,"tupper"->40,"replower"->4,"repupper"->6|>,
-  "OH"-><|"rlower"->3.6,"rupper"->4.6,"tlower"->48,"tupper"->54,"replower"->4,"repupper"->6|>
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->8|>,
+  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->8|>,
+  "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->4.3|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->54,"replower"->0.5,"repupper"->6.5|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->10|>,
+  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->11|>,
+  "WA"-><|"rlower"->2.5,"rupper"->2.8,"tlower"->28,"tupper"->40,"replower"->0.5,"repupper"->6|>,
+  "OH"-><|"rlower"->3.6,"rupper"->4.6,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->6|>,
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->48,"tupper"->60,"replower"->0.5,"repupper"->6|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -524,7 +527,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
             },First]
         }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
   
-  Echo[ListLogPlot[{#["day"],#["cumulativePcr"]["expected"]}&/@timeSeriesData,Joined->True,ImageSize->300]];
+  (*Echo[ListLogPlot[{#["day"],#["cumulativePcr"]["expected"]}&/@timeSeriesData,Joined->True,ImageSize->300]];*)
   
   containmentTime = If[KeyExistsQ[events, "containment"],events["containment"][[1]][[1]],Null];
   hospitalOverloadTime = If[KeyExistsQ[events, "hospital"],events["hospital"][[1]][[1]],Null];
@@ -566,7 +569,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       "-"]
   |>;
   
-  Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];
+  (*Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];*)
   
   Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,

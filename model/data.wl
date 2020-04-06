@@ -109,7 +109,7 @@ hospitalizationsCurrentOrCumulative = <|
   "SC"->"current",
   "VA"->"current",
   "VT"->"current"
-|>
+|>;
 
 (* Data from covidtracking on reported PCR and fatalities *)
 stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
