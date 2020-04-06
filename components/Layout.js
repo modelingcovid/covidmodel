@@ -15,8 +15,7 @@ const styles = css`
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(${theme.color.backgroundRgb}, 0.8);
-    backdrop-filter: blur(16px);
+    background: ${theme.color.background};
   }
   nav {
     position: relative;

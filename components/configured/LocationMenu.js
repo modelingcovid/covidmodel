@@ -8,7 +8,11 @@ import {stateLabels} from '../../lib/controls';
 
 const {useCallback} = React;
 
-export function LocationMenu({children, states, ...props}) {
+export const LocationMenu = React.memo(function LocationMenu({
+  children,
+  states,
+  ...props
+}) {
   const state = useCurrentLocation();
   const navigateToLocation = useNavigateToLocation();
   return (
@@ -38,4 +42,4 @@ export function LocationMenu({children, states, ...props}) {
       )}
     </Menu>
   );
-}
+});
