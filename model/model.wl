@@ -189,7 +189,7 @@ stateParams[state_]:=Module[{raw,pop,dist,buckets},
   pop = raw["Population"];
   dist = raw["Distribution"];
   buckets = raw["Buckets"];
-  
+
   (*return a map of per state params to values *)
   <|
     "population"->pop,
@@ -295,7 +295,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     rhs,
     dependentVariablesODE
   },
-  
+
   distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
   percentPositiveCase[t_]:=posInterpMap[state][t];
   Clear[Sq,Eq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
@@ -383,7 +383,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   rhs = rhs /. Thread[lhs->rhs];
   equationsODE = Thread[lhs==rhs];
   dependentVariablesODE = Drop[dependentVariables, -1];
-  
+
   pfunODE2 = ParametricNDSolveValue[{
       equationsODE,
       eventsODE,
@@ -395,7 +395,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     DependentVariables->dependentVariablesODE,
     Method->{"DiscontinuityProcessing"->False}
   ];
-  
+
   Clear[paramExpected];
   paramExpected = {
     fitParams["r0natural"],
@@ -421,29 +421,29 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     k0,
     fitParams["distpow"]
   };
-  
+
   (* do one solution with the mean param values for the estimate *)
   (* Quiet because the it tries to evaluate the interpolating function at zero when it should hold the evaluation (and not evaluate there) *)
   {sol,evts} = Quiet[Reap[Apply[pfunODE2,paramExpected],{"containment","herd","icu","hospital","cutoff"},Rule],{InterpolatingFunction::dmval}];
-  
+
   events=Association[Flatten[evts]];
   prettyEvents={#-><|"eventName" -> #, "day" -> events[#][[1]][[1]], "thresholdCrossed" -> events[#][[1]][[2]]|>}&/@Keys[events];
-  
+
   endOfYear = 365;
   (* we  chop off the data here with one of either a containment or herd immunity events *)
   endOfEval = If[KeyExistsQ[events, "containment"], events["containment"][[1]][[1]],
     If[KeyExistsQ[events, "cutoff"], events["cutoff"][[1]][[1]],
       endOfYear]];
-  
+
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
-  
+
   sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams];
-  
+
   (* generate a solution for each simulation so we can get bands *)
   (* Quiet because we handle bad interpolating functions in the next line *)
   rawSimResults=Apply[pfunODE2, #]&/@sims//Quiet;
   simResults=Select[rawSimResults, endTime[First[#]]>=endOfEval&];
-  
+
   deciles = Range[10]/10;
   (* define functions to get the lci, mean, uci quantiles for each of the functions we want
 	to produce time-series for *)
@@ -462,7 +462,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CumulativeEverHospitalizedQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[HHq]]][t] + #[[QP[RHq]]][t]))&/@simResults,deciles];
   CumulativeEverCriticalQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[HCq]]][t] + #[[QP[RCq]]][t] + #[[QP[Deaq]]][t]))&/@simResults,deciles];
   SuseptibleQuantiles[t_]:=Quantile[(stateParams["params"]["population"]*(#[[QP[Sq]]][t]))&/@simResults,deciles];
-  
+
   timeSeriesData = Module[{},
     Table[Association[{
           "day"->t,
@@ -491,13 +491,13 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
             }, First],
           "currentlyReportedHospitalized" -> Merge[{
               <|"confirmed"->If[
-                Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]==1 && 
-                If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state]=="current", False],
-                If[KeyExistsQ[Select[stateParams["hospitalizationData"],
-                  (#["day"]==t)&][[1]],"hospitalizations"], 
-                  Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"], 
-                  0
-                ],0]|>,
+                  Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]==1 &&
+                  If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state]=="current", False],
+                  If[KeyExistsQ[Select[stateParams["hospitalizationData"],
+                        (#["day"]==t)&][[1]],"hospitalizations"],
+                    Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"],
+                    0
+                  ],0]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyReportedHospitalizedQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[RepHq]]][t]|>
             },First],
@@ -507,10 +507,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
             }, First],
           "cumulativeReportedHospitalized" -> Merge[{
               <|"confirmed"->If[
-                Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]==1 && 
-                If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state]=="cumulative", False], 
-                If[KeyExistsQ[Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]],"hospitalizations"], 
-                Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"],0], 0]|>,
+                  Length[Select[stateParams["hospitalizationData"],(#["day"]==t)&]]==1 &&
+                  If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state]=="cumulative", False],
+                  If[KeyExistsQ[Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]],"hospitalizations"],
+                    Select[stateParams["hospitalizationData"],(#["day"]==t)&][[1]]["hospitalizations"],0], 0]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeReportedHospitalizedQuantiles[t]]],
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[CRepHq]]][t]|>
             },First],
@@ -531,13 +531,13 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[Sq]]][t]|>
             },First]
         }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
-  
+
   (*Echo[ListLogPlot[{#["day"],#["cumulativePcr"]["expected"]}&/@timeSeriesData,Joined->True,ImageSize->300]];*)
-  
+
   containmentTime = If[KeyExistsQ[events, "containment"],events["containment"][[1]][[1]],Null];
   hospitalOverloadTime = If[KeyExistsQ[events, "hospital"],events["hospital"][[1]][[1]],Null];
   icuOverloadTime = If[KeyExistsQ[events, "icu"],events["icu"][[1]][[1]],Null];
-  
+
   summary=<|
     "totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],
       DeathQuantiles[containmentTime][[5]],
@@ -573,9 +573,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       DateString[DatePlus[{2020,1,1},hospitalOverloadTime-1]],
       "-"]
   |>;
-  
- (* Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];*)
-  
+
+  (* Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];*)
+
   Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
       scenario,
@@ -599,16 +599,16 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric,
     rlower, rupper, tlower, tupper, replower, repupper, deathDataLength
   },
-  
+
   distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
   percentPositiveCase[t_]:=posInterpMap[state][t];
-  
+
   params=stateParams[state];
   icuCapacity=params["icuBeds"]/params["population"];
   hospitalCapacity=(1-params["bedUtilization"])*params["staffedBeds"]/params["population"];
   hospitalizationData = stateHospitalizationData[state];
- 
-  
+
+
   (* a scoped copy of the ODEs, Thsese do not use heterogeneous susceptibility since they are fit on low I / early t and we fit *)
   (* the import time *)
   equationsODE={
@@ -661,11 +661,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     DependentVariables->dependentVariablesODE,
     Method->{"DiscontinuityProcessing"->False}
   ];
-  
+
   {rlower, rupper, tlower, tupper, replower, repupper}=getBounds[state];
-  
+
   thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
-  
+
   longData=Select[Join[
       {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
       {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData
@@ -687,7 +687,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
     poissonWeight * weekOverWeekWeight[.85] * boostDeathWeight[3]
   ];
-  
+
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
   fit=Quiet[NonlinearModelFit[
       longData,
@@ -709,7 +709,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    stateAdjustmentForTestingDifferences=", Exp[stateAdjustmentForTestingDifferences]]*)
     ], {InterpolatingFunction::dmval}
   ];
-  
+
   fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
   (* TODO: try using VarianceEstimatorFunction\[Rule](1&) *)
   (* quiet because of constraint boundary warning -- we have constraints so as to prevent certain local minima from happening
@@ -717,11 +717,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 	and thus we feel okay about using the variance estimates *)
   standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
           fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
-  
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
   
   Echo[gofMetrics];
-  
+
   Echo[
     Column[{
         Text["Fit for "<>state],
@@ -757,8 +756,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
       }]
   ];
-  
-  
+
+
   Merge[{
       <|"scenarios"->
         Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
@@ -788,31 +787,31 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
 ];
 
 generateSummaryForState[data_, state_]:= Module[{},
-   Join[{state},Values[Association[Join[
-           KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],
-           data["scenarios"][#]["summary"]
-    ]]],
+  Join[{state},Values[Association[Join[
+          KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],
+          data["scenarios"][#]["summary"]
+        ]]],
     {
       data["r0"],
       data["importtime"],
       data["stateAdjustmentForTestingDifferences"]
     }
-    ]&/@Keys[data["scenarios"]]
+  ]&/@Keys[data["scenarios"]]
 ];
 
 
 exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
-     header = {Append[Prepend[Keys[
-            Association[Join[
-                KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
-                allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summary"]
-              ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences"}]};            
-    rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];  
-    
-    table = Flatten[Join[{header}, rows],1];
-    
-    
-    Export["tests/summary.csv", table];
+  header = {Append[Prepend[Keys[
+          Association[Join[
+              KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
+              allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summary"]
+            ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences"}]};
+  rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
+
+  table = Flatten[Join[{header}, rows],1];
+
+
+  Export["tests/summary.csv", table];
 ]
 
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
@@ -822,14 +821,14 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    Export["public/json/"<>state<>".json",stateData]; 
+    Export["public/json/"<>state<>".json",stateData];
     stateData
   ];
-  
+
   allStatesData=Association[Parallelize[Map[(#->loopBody[#])&,states]]];
-  
+
   exportAllStatesSummary[allStatesData];
-  
+
   exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
   exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
   allStatesData
@@ -843,7 +842,7 @@ Module[{raw,pop,dist,buckets},
   pop = raw["Population"];
   dist = raw["Distribution"];
   buckets = raw["Buckets"];
-  
+
   (*return a map of per state params to values *)
   <|"population"->pop,
     "importtime0"->countryImportTime[country],

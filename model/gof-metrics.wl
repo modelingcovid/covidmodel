@@ -1,29 +1,29 @@
 (* ::Package:: *)
 
 rmsRelativeError[residuals_,longData_,mask_:{}]:=If[
-	Length[mask]==0,
-	Mean[(residuals/longData[[All,3]])^2]^.5,
-	rmsRelativeError[
-		Pick[residuals,mask],
-		Pick[longData,mask]]];
+  Length[mask]==0,
+  Mean[(residuals/longData[[All,3]])^2]^.5,
+  rmsRelativeError[
+    Pick[residuals,mask],
+    Pick[longData,mask]]];
 meanRelativeError[residuals_,longData_,mask_:{}]:=If[
-	Length[mask]==0,
-	Mean[residuals/longData[[All,3]]],
-	meanRelativeError[
-		Pick[residuals,mask],
-		Pick[longData,mask]]];
+  Length[mask]==0,
+  Mean[residuals/longData[[All,3]]],
+  meanRelativeError[
+    Pick[residuals,mask],
+    Pick[longData,mask]]];
 chiSquared[residuals_,longData_,mask_:{}]:=If[
-	Length[mask]==0,
-	Mean[residuals^2/longData[[All,3]]],
-	chiSquared[
-		Pick[residuals,mask],
-		Pick[longData,mask]]];
+  Length[mask]==0,
+  Mean[residuals^2/longData[[All,3]]],
+  chiSquared[
+    Pick[residuals,mask],
+    Pick[longData,mask]]];
 rSquared[residuals_,longData_,mask_:{}]:=If[
-	Length[mask]==0,
-	Total[residuals^2]/Total[(#-Mean[#])^2]&[longData[[All,3]]],
-	rSquared[
-		Pick[residuals,mask],
-		Pick[longData,mask]]];
+  Length[mask]==0,
+  Total[residuals^2]/Total[(#-Mean[#])^2]&[longData[[All,3]]],
+  rSquared[
+    Pick[residuals,mask],
+    Pick[longData,mask]]];
 
 
 goodnessOfFitMetrics[residuals_,longData_,population_]:=Module[{RmsRelativeError,MeanRelativeError,ChiSquared,RSquared,deathsMask,positivePcrMask,deathDataLength},
@@ -79,32 +79,32 @@ exportAllStatesGoodnessOfFitMetricsCsv[file_,allStateData_]:=Module[{columnOrder
 
 
 exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{n,data,plot,domain},
-	n=Length[allStateData];
-	data=KeyValueMap[{
-			#1,
-			#2["goodnessOfFitMetrics"]["meanRelativeErrorDeaths"],
-			#2["goodnessOfFitMetrics"]["rmsRelativeErrorDeaths"],
-			#2["goodnessOfFitMetrics"]["meanRelativeErrorPcr"],
-			#2["goodnessOfFitMetrics"]["rmsRelativeErrorPcr"]}&,
-		allStateData];
-	data=Sort[data,(AlphabeticOrder[First[#1],First[#2]])&];
-	data=MapIndexed[Join[n+1-#2,#1]&,data];
-	domain=Max[
-		data[[All,3]]+data[[All,4]],
-		data[[All,5]]+data[[All,6]],
-		Abs[data[[All,3]]-data[[All,4]]],
-		Abs[data[[All,5]]-data[[All,6]]]];
-	plot=ListPlot[
-		{
-			Map[{Around[#[[3]],#[[4]]],#[[1]]+.1}&,data],
-			Map[{Around[#[[5]],#[[6]]],#[[1]]-.1}&,data]},
-		Ticks->{Automatic,data[[All,{1,2}]]},
-		PlotLegends->Placed[{"Deaths","Positive tests"},Below],
-		PlotLabel->"Mean and RMS relative error",
-		PlotRange->{{-domain,domain},{0,n+1}},
-		PlotStyle->{{RGBColor["#88bbfe"]},{RGBColor["#aff1b6"]}},
-		AspectRatio->n/12/GoldenRatio,
-		ImageSize->400];
-	Export[file, plot, "SVG"];
-	plot
+  n=Length[allStateData];
+  data=KeyValueMap[{
+      #1,
+      #2["goodnessOfFitMetrics"]["meanRelativeErrorDeaths"],
+      #2["goodnessOfFitMetrics"]["rmsRelativeErrorDeaths"],
+      #2["goodnessOfFitMetrics"]["meanRelativeErrorPcr"],
+      #2["goodnessOfFitMetrics"]["rmsRelativeErrorPcr"]}&,
+    allStateData];
+  data=Sort[data,(AlphabeticOrder[First[#1],First[#2]])&];
+  data=MapIndexed[Join[n+1-#2,#1]&,data];
+  domain=Max[
+    data[[All,3]]+data[[All,4]],
+    data[[All,5]]+data[[All,6]],
+    Abs[data[[All,3]]-data[[All,4]]],
+    Abs[data[[All,5]]-data[[All,6]]]];
+  plot=ListPlot[
+    {
+      Map[{Around[#[[3]],#[[4]]],#[[1]]+.1}&,data],
+      Map[{Around[#[[5]],#[[6]]],#[[1]]-.1}&,data]},
+    Ticks->{Automatic,data[[All,{1,2}]]},
+    PlotLegends->Placed[{"Deaths","Positive tests"},Below],
+    PlotLabel->"Mean and RMS relative error",
+    PlotRange->{{-domain,domain},{0,n+1}},
+    PlotStyle->{{RGBColor["#88bbfe"]},{RGBColor["#aff1b6"]}},
+    AspectRatio->n/12/GoldenRatio,
+    ImageSize->400];
+  Export[file, plot, "SVG"];
+  plot
 ];

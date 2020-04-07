@@ -97,8 +97,8 @@ stateHospitalizationData[state_]:=Select[Association[{"day"->#["State"], "hospit
 (* some states report differently, we need to toggle where to put the data *)
 hospitalizationsCurrentOrCumulative = <|
   "CA"->"current",
-  "CO"->"cumulative", 
-  "CT"->"current", 
+  "CO"->"cumulative",
+  "CT"->"current",
   "FL"->"cumulative",
   "GA"->"cumulative",
   "LA"->"current",
@@ -186,17 +186,17 @@ stateDistancingPrecompute = Module[{
     SlowJoin,
     ApplyWhere
   },
-  
+
   rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
-  
+
   dataDays = rawCsvTable[[1,2;;]];
   stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
-  
+
   totalDays = tmax0;
   fullDays = Range[totalDays];
-  
+
   smoothing = 3;
   SlowJoin := Fold[Module[{smoother},
       smoother=1-Exp[-Range[Length[#2]]/smoothing];
@@ -207,7 +207,7 @@ stateDistancingPrecompute = Module[{
     l[[i]]=func[list[[i]]];
     l
   ];
-  
+
   processScenario[scenario_, distancing_] := Module[{
       distancingLevel,
       fullDistancing,
@@ -216,10 +216,10 @@ stateDistancingPrecompute = Module[{
       distancingFunction,
       distancingDelay
     },
-    
+
     distancingLevel = If[
       scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
-    
+
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
       (* pre-policy distancing - constant at 1 *)
@@ -233,12 +233,12 @@ stateDistancingPrecompute = Module[{
       (* post-policy distancing - constant at 1 *)
       ConstantArray[1.,
         totalDays - scenario["distancingDays"] - today]];
-    
+
     smoothedDistancing = ApplyWhere[
       distancing,
       #<1&,
       GaussianFilter[#,smoothing]&];
-    
+
     smoothedFullDistancing = SlowJoin[{
         ConstantArray[1., Min[dataDays] - 1],
         smoothedDistancing,
@@ -246,21 +246,21 @@ stateDistancingPrecompute = Module[{
         ConstantArray[distancingLevel, scenario["distancingDays"]],
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
       }];
-    
+
     distancingDelay = 5;
     distancingFunction = Interpolation[Transpose[{
           fullDays + distancingDelay,
           smoothedFullDistancing}],InterpolationOrder->3];
-    
+
     scenario["id"]-><|
       "distancingLevel"->distancingLevel,
       "distancingData"->fullDistancing,
       "distancingFunction"->distancingFunction|>
   ];
-  
+
   processState[state_,distancing_] :=
   state->Association[Map[processScenario[#,distancing]&,scenarios]];
-  
+
   Association[MapThread[processState,{stateLabels,stateDistancings}]]
 ];
 
@@ -280,19 +280,19 @@ evalStatePosTest[state_]:=Module[{thisStateData, minDay, rollingAvg, valueOnEarl
     thisStateData=Select[statePositiveTestData,#[state]!=""&];
     onlyThisState=KeyDrop[#,stripOthers[#,state]]&/@thisStateData;
     rollingAvg=MovingMap[Mean, {#["day"],#[state]/100}&/@onlyThisState,{3,Right}];
-    
+
     maxDay=Max[#[[1]]&/@rollingAvg];
     valueOnLatestDay=Max[#[[2]]&/@Select[rollingAvg,#[[1]]==maxDay&]];
     filledFuturePositive=Table[{i,valueOnLatestDay},{i,maxDay+1,tmax0}];
-    
+
     minDay=Min[#[[1]]&/@rollingAvg];
     valueOnEarliestDay=Min[#[[2]]&/@Select[rollingAvg,#[[1]]==minDay&]];
-    
+
     filledPastZeroPositive={#-1, valueOnEarliestDay}&/@Range[Min[#["day"]&/@statePositiveTestData]+2];
-    
+
     fullPostTestData=Join[filledPastZeroPositive,rollingAvg,filledFuturePositive];
     Interpolation[fullPostTestData],
-    
+
     Interpolation[{{0,0.15},{365,0.15}},InterpolationOrder->1]]
 ];
 posInterpMap=Association[{#->evalStatePosTest[#]}&/@statesWith50CasesAnd5Deaths];
