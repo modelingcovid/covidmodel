@@ -94,6 +94,8 @@ hospitalizationsBody=hospitalizationsRawData[[2;;]];
 hospitalizationsParsedData=Thread[hospitalizationsHeader->#]&/@hospitalizationsBody//Map[Association];
 stateHospitalizationData[state_]:=Select[Association[{"day"->#["State"], "hospitalizations"->If[#[state]=="",0,#[state]]}]&/@hospitalizationsParsedData,#["hospitalizations"]>0&]
 
+
+
 (* some states report differently, we need to toggle where to put the data *)
 hospitalizationsCurrentOrCumulative = <|
   "CA"->"current",
