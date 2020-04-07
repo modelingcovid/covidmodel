@@ -38,7 +38,7 @@ export const Line = ({
         strokeWidth={strokeWidth}
         immediate={xMax !== xMaxPrev}
       />
-      {dot && <NearestCircle y={y} fill={stroke} />}
+      {dot && <NearestCircle y={y} fill={stroke} clipPath={clipPath} />}
     </>
   );
 };
