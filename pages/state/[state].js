@@ -20,6 +20,7 @@ import {useComponentId, useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate, today} from '../../lib/date';
+import {theme} from '../../styles';
 
 const {useCallback, useRef, useState} = React;
 
@@ -76,7 +77,6 @@ export default function StatePage({data, states}) {
           <div className="flex flex-col justify-center">
             <div className="controls-container">
               <Section>
-                <div ref={sizeRef} />
                 <div className="controls">
                   <Controls
                     state={state}
@@ -88,9 +88,21 @@ export default function StatePage({data, states}) {
               </Section>
             </div>
 
-            <Section className="margin-top-4">
-              <div className="text-jumbo margin-bottom-2">{stateName}</div>
-              <ModelInputs width={width} height={160} />
+            <Section className="margin-top-3">
+              <div ref={sizeRef} />
+              <div className="text-jumbo margin-bottom-1">
+                <span className="nowrap">Modeling COVID-19</span>{' '}
+                <span className="nowrap">in {stateName}</span>
+              </div>
+              <div className="dek margin-bottom-2">
+                Forecasting models trained to actual social distancing, testing,
+                and fatality data
+              </div>
+              <ModelInputs
+                width={width}
+                height={160}
+                className="margin-top-3"
+              />
               <div
                 className="text-title margin-top-4"
                 style={{marginBottom: '-64px'}}

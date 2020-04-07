@@ -48,16 +48,19 @@ export const {
       mono: "'IBM Plex Mono', monospace",
       text: "'IBM Plex Serif', serif",
     },
-    size: px({
-      micro: 13,
-      small: 14,
-      jumbo: 44,
-      title: 28,
-      dek: 22,
-      subtitle: 16,
-      section: 20,
-      body: 16,
-    }),
+    size: {
+      // TODO(koop): Define this in relation to other variables
+      jumbo: 'calc(var(--maxWidth) * 0.1)',
+      ...px({
+        micro: 13,
+        small: 14,
+        title: 28,
+        dek: 22,
+        subtitle: 16,
+        section: 20,
+        body: 16,
+      }),
+    },
   },
   spacing: px([8, 16, 32, 64, 96]),
   column: {

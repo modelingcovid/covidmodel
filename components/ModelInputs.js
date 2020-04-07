@@ -16,7 +16,7 @@ import {
 
 const getDistancing = ({distancing}) => distancing;
 
-export function ModelInputs({height, width}) {
+export function ModelInputs({height, width, ...remaining}) {
   const {
     model,
     scenarioData: {distancingDays, distancingLevel},
@@ -25,54 +25,52 @@ export function ModelInputs({height, width}) {
     x,
   } = useModelData();
   return (
-    <>
-      <div>
-        <MethodDisclaimer method="input" />
-        <div className="section-heading">Social distancing</div>
-        <p className="paragraph">
-          On the left axis social distance of 100% means no contact with others,
-          which yields an R₀ (basic reproduction number) for the virus of zero,
-          since it cannot find new hosts. The zero-percent distance is the
-          un-inhibited reproduction number which is thought to be around 3.1.
-        </p>
-        <Grid className="margin-bottom-2">
-          {distancingLevel != null && (
-            <MethodDefinition
-              icon={PeopleArrows}
-              value={formatPercent(1 - distancingLevel)}
-              label="Social distancing level"
-              method="input"
-            />
-          )}
+    <div {...remaining}>
+      <MethodDisclaimer method="input" />
+      <div className="section-heading">Social distancing</div>
+      <p className="paragraph">
+        On the left axis social distance of 100% means no contact with others,
+        which yields an R₀ (basic reproduction number) for the virus of zero,
+        since it cannot find new hosts. The zero-percent distance is the
+        un-inhibited reproduction number which is thought to be around 3.1.
+      </p>
+      <Grid className="margin-bottom-2">
+        {distancingLevel != null && (
           <MethodDefinition
-            icon={Clock}
-            value={`${formatNumber(daysToMonths(distancingDays))} months`}
-            label="Social distancing period"
+            icon={PeopleArrows}
+            value={formatPercent(1 - distancingLevel)}
+            label="Social distancing level"
             method="input"
           />
-        </Grid>
-        <Grid className="margin-bottom-2">
-          <MethodDefinition
-            icon={Viruses}
-            value={formatNumber2(model.r0)}
-            label="Basic reproduction number (R₀)"
-            method="fit"
-          />
-          <MethodDefinition
-            icon={CalendarDay}
-            value={formatShortDate(dayToDate(model.importtime))}
-            label="Import date of COVID-19"
-            method="fit"
-          />
-        </Grid>
-        <DistancingGraph
-          y={getDistancing}
-          leftLabel="distancing"
-          rightLabel="R₀"
-          width={width}
-          height={height}
+        )}
+        <MethodDefinition
+          icon={Clock}
+          value={`${formatNumber(daysToMonths(distancingDays))} months`}
+          label="Social distancing period"
+          method="input"
         />
-      </div>
-    </>
+      </Grid>
+      <Grid className="margin-bottom-2">
+        <MethodDefinition
+          icon={Viruses}
+          value={formatNumber2(model.r0)}
+          label="Basic reproduction number (R₀)"
+          method="fit"
+        />
+        <MethodDefinition
+          icon={CalendarDay}
+          value={formatShortDate(dayToDate(model.importtime))}
+          label="Import date of COVID-19"
+          method="fit"
+        />
+      </Grid>
+      <DistancingGraph
+        y={getDistancing}
+        leftLabel="distancing"
+        rightLabel="R₀"
+        width={width}
+        height={height}
+      />
+    </div>
   );
 }
