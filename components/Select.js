@@ -89,6 +89,9 @@ export const Select = React.memo(function Select({
           padding: 4px;
           margin: -4px;
         }
+        label {
+          display: block;
+        }
         ul {
           z-index: 100;
           position: absolute;
@@ -114,15 +117,12 @@ export const Select = React.memo(function Select({
         }
       `}</style>
       <div className="focus-within">
-        <label
-          {...getLabelProps()}
-          className="text-small text-gray-light block"
-        >
+        <label {...getLabelProps()} className="text-small text-gray-light">
           {label}
         </label>
         <button
           {...getToggleButtonProps()}
-          className="text-ui weight-600 text-gray text-medium"
+          className="text-ui weight-600 text-gray"
         >
           {itemText}
         </button>

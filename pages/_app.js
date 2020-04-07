@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Head from 'next/head';
+import 'normalize.css';
 
 import {globalStyles} from '../styles';
 

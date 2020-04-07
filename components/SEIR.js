@@ -96,7 +96,7 @@ export function SEIR({height, width}) {
         The model evaluated here is a standard epidemiological model called
         SEIR. It models the spread of a virus in four states:
       </p>
-      <ul className="paragraph list-disc m-4">
+      <ul className="paragraph list-disc list-inside">
         <li>Susceptible (healthy, non-immune people)</li>
         <li>Exposed (infected, but cannot infect others)</li>
         <li>Infectious</li>
