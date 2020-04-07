@@ -161,7 +161,7 @@ testingProbability = Module[{rawData,interpolatedData},
     {71.55097421808084, 0.724688328830152},
     {85,1},
     {tmax0,1}};
-  interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,tmax0]],14];
+  interpolatedData=GaussianFilter[Interpolation[rawData,InterpolationOrder->1][Range[1,tmax0]],4];
   Interpolation[interpolatedData]
 ];
 
@@ -247,7 +247,7 @@ stateDistancingPrecompute = Module[{
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
       }];
     
-    distancingDelay = 0;
+    distancingDelay = 5;
     distancingFunction = Interpolation[Transpose[{
           fullDays + distancingDelay,
           smoothedFullDistancing}],InterpolationOrder->3];
