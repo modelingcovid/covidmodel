@@ -29,6 +29,7 @@ rSquared[residuals_,longData_,mask_:{}]:=If[
 goodnessOfFitMetrics[residuals_,longData_,population_]:=Module[{RmsRelativeError,MeanRelativeError,ChiSquared,RSquared,deathsMask,positivePcrMask,deathDataLength},
   deathsMask=(#[[1]]==1)&/@longData;
   positivePcrMask=(#[[1]]==2)&/@longData;
+  deathDataLength=Length[Select[longData,#[[1]]==1&]];
   <|
     "chiSquared"->chiSquared[residuals,longData],
     "rmsRelativeError"->rmsRelativeError[residuals,longData],
