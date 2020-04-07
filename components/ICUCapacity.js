@@ -2,25 +2,41 @@ import * as React from 'react';
 import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
 import {Grid} from './content';
-import {Legend, Points} from './graph';
+import {Graph, Legend, Line} from './graph';
 import {Bed, Lungs, Poll} from './icon';
 import {
+  DistancingGradient,
   MethodDefinition,
   MethodDisclaimer,
+  PercentileLine,
   PercentileLegendRow,
   useModelData,
 } from './modeling';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 
+const {useMemo} = React;
+
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
+const getCumulativeCritical = ({cumulativeCritical}) => cumulativeCritical;
 
 export const ICUCapacity = ({width, height}) => {
   const {
+    allTimeSeriesData,
     model: {icuBeds, ventilators, pC},
     stateName,
     summary,
+    timeSeriesData,
+    x,
   } = useModelData();
   const {dateICUOverCapacity: capacityDate} = summary;
+
+  const cumulativeDomain = useMemo(
+    () =>
+      Math.max(
+        ...allTimeSeriesData.map((d) => getCumulativeCritical(d).expected)
+      ),
+    [allTimeSeriesData]
+  );
 
   const heading =
     capacityDate && capacityDate !== '-' ? (
@@ -82,6 +98,33 @@ export const ICUCapacity = ({width, height}) => {
           </Legend>
         }
       />
+
+      <div className="margin-top-4">
+        <Graph
+          data={timeSeriesData}
+          domain={cumulativeDomain}
+          initialScale="linear"
+          height={height}
+          width={width}
+          x={x}
+          xLabel="people"
+          after={
+            <Legend>
+              <PercentileLegendRow
+                title="Total cases that require intensive care"
+                y={getCumulativeCritical}
+                color="var(--color-blue2)"
+              />
+            </Legend>
+          }
+        >
+          <DistancingGradient />
+          <PercentileLine
+            y={getCumulativeCritical}
+            color="var(--color-blue2)"
+          />
+        </Graph>
+      </div>
     </div>
   );
 };

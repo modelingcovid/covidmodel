@@ -2,26 +2,49 @@ import * as React from 'react';
 import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
 import {Grid} from './content';
-import {Legend, Points} from './graph';
+import {Graph, Legend, Line} from './graph';
 import {Bed, HospitalUser, Poll} from './icon';
 import {
+  DistancingGradient,
   MethodDefinition,
   MethodDisclaimer,
   PercentileLegendRow,
+  PercentileLine,
   useModelData,
 } from './modeling';
 import {formatDate, formatPercent1, formatNumber} from '../lib/format';
 
+const {useMemo} = React;
+
+const getCurrentlyHospitalized = ({currentlyHospitalized}) =>
+  currentlyHospitalized;
 const getCurrentlyReportedHospitalized = ({currentlyReportedHospitalized}) =>
   currentlyReportedHospitalized;
+const getCumulativeHospitalized = ({cumulativeHospitalized}) =>
+  cumulativeHospitalized;
+const getCumulativeReportedHospitalized = ({cumulativeReportedHospitalized}) =>
+  cumulativeReportedHospitalized;
 
 export const HospitalCapacity = ({width, height}) => {
   const {
+    allTimeSeriesData,
     model: {bedUtilization, hospitalCapacity, pC, pH, staffedBeds},
     stateName,
     summary,
+    timeSeriesData,
+    x,
   } = useModelData();
   const {dateHospitalsOverCapacity: capacityDate} = summary;
+
+  const cumulativeDomain = useMemo(
+    () =>
+      Math.max(
+        ...allTimeSeriesData.map(
+          (d) => getCumulativeReportedHospitalized(d).expected
+        )
+      ),
+    [allTimeSeriesData]
+  );
 
   const hospitalCapacityHeading =
     capacityDate && capacityDate !== '-' ? (
@@ -82,9 +105,49 @@ export const HospitalCapacity = ({width, height}) => {
               y={getCurrentlyReportedHospitalized}
               color="var(--color-blue2)"
             />
+            <PercentileLegendRow
+              title="Currently hospitalized"
+              y={getCurrentlyHospitalized}
+              color="var(--color-yellow2)"
+            />
           </Legend>
         }
       />
+      <div className="margin-top-4">
+        <Graph
+          data={timeSeriesData}
+          domain={cumulativeDomain}
+          initialScale="linear"
+          height={height}
+          width={width}
+          x={x}
+          xLabel="people"
+          after={
+            <Legend>
+              <PercentileLegendRow
+                title="Total reported hospitalized"
+                y={getCumulativeReportedHospitalized}
+                color="var(--color-blue2)"
+              />
+              <PercentileLegendRow
+                title="Total cases that require hospitalization"
+                y={getCumulativeHospitalized}
+                color="var(--color-yellow2)"
+              />
+            </Legend>
+          }
+        >
+          <DistancingGradient />
+          <PercentileLine
+            y={getCumulativeReportedHospitalized}
+            color="var(--color-blue2)"
+          />
+          <PercentileLine
+            y={getCumulativeHospitalized}
+            color="var(--color-yellow2)"
+          />
+        </Graph>
+      </div>
     </div>
   );
 };
