@@ -70,7 +70,7 @@ export default function StatePage({data, states}) {
             .controls-container {
               position: sticky;
               z-index: 50;
-              top: 56px;
+              top: 52px;
               background: ${theme.color.background};
             }
             .controls {
