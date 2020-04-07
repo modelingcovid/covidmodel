@@ -20,16 +20,7 @@ export const ProjectedDeaths = ({width, height}) => {
   return (
     <div className="margin-top-5">
       <MethodDisclaimer />
-      <div className="section-heading">
-        COVID-19 will cause{' '}
-        <span className="text-blue maybe-nowrap">
-          {formatNumber(summary.totalProjectedDeaths)} deaths
-        </span>{' '}
-        in <span className="maybe-nowrap">{stateName}</span> by{' '}
-        <span className="nowrap">
-          {formatDate(getLastDate(timeSeriesData))}
-        </span>
-      </div>
+      <div className="section-heading">Projected fatalities</div>
       <p className="paragraph">
         We project the cumulative number of deaths on a logarithmic scale.
       </p>
