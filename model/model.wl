@@ -81,7 +81,7 @@ statesConvergeToValue0=4;
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
 (* we set this to target 60% infected at the end of 2021 were no intervention to happen *)
-k0 = 1.3*10^-3;
+k0 = 1*10^-2;
 
 (* Fraction of symptomatic cases *)
 fractionSymptomatic0 = 0.7;
@@ -109,22 +109,22 @@ fitStartingOverrides=<|
   "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->54,"replower"->1.5,"repupper"->2|>,
   "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.4,"repupper"->2|>,
   "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->56,"tupper"->60,"replower"->1.4,"repupper"->1.7|>,
-  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->1.5,"repupper"->2|>,
+  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->1.65,"repupper"->2|>,
   "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1.1,"repupper"->1.4|>,
-  "TX"-><|"rlower"->3.5,"rupper"->4.8,"tlower"->40,"tupper"->61,"replower"->1.3,"repupper"->2|>,
+  "TX"-><|"rlower"->3.5,"rupper"->4.8,"tlower"->40,"tupper"->61,"replower"->1.4,"repupper"->1.7|>,
   "WA"-><|"rlower"->2.3,"rupper"->2.6,"tlower"->27,"tupper"->37,"replower"->0.8,"repupper"->1.4|>,
-  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->47,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
+  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->52,"tupper"->57,"replower"->0.8,"repupper"->1.3|>,
   "OH"-><|"rlower"->3.8,"rupper"->4.6,"tlower"->53,"tupper"->62,"replower"->0.5,"repupper"->1.4|>,
   "NY"-><|"rlower"->5,"rupper"->6,"tlower"->48,"tupper"->60,"replower"->1,"repupper"->1.3|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->55,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
   "VT"-><|"rlower"->2.5,"rupper"->2.9,"tlower"->38,"tupper"->41,"replower"->0.8,"repupper"->1|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.5,"repupper"->1.4|>,
   "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->1.4|>,
-  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->54,"replower"->1.4,"repupper"->1.6|>,
-  "MA"-><|"rlower"->4.6,"rupper"->5.7,"tlower"->45,"tupper"->57,"replower"->1.4,"repupper"->1.6|>,
+  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->56,"replower"->1.4,"repupper"->1.6|>,
+  "MA"-><|"rlower"->4.6,"rupper"->5.7,"tlower"->45,"tupper"->57,"replower"->1.5,"repupper"->1.7|>,
   "MD"-><|"rlower"->3.7,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->1.4,"repupper"->1.6|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.4|>,
-  "NJ"-><|"rlower"->4.5,"rupper"->5.5,"tlower"->55,"tupper"->58,"replower"->0.5,"repupper"->1.3|>,
+  "NJ"-><|"rlower"->5.2,"rupper"->6,"tlower"->50,"tupper"->54,"replower"->0.5,"repupper"->1.6|>,
   "IL"-><|"rlower"->4,"rupper"->5,"tlower"->56,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
   "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
   "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->0.7,"repupper"->1.4|>,
@@ -303,6 +303,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   equationsDAE = {
     Sq'[t]==(- k * Log[1 + (distancing[t]^distpow*Iq[t]*r0natural)/(k*daysUntilNotInfectiousOrHospitalized )]*Sq[t])-est[t]*Sq[t],
     Eq'[t]==( k * Log[1 + (distancing[t]^distpow*Iq[t]*r0natural)/(k*daysUntilNotInfectiousOrHospitalized )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious,
+(*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
+    Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,*)
     (*Infectious total, not yet PCR confirmed,age indep*)
     ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Recovered without needing care*)
@@ -514,11 +516,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
             },First],
           "cumulativeHospitalized" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverHospitalizedQuantiles[t])]],
-              <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t]|>
+              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t])|>
             }, First],
           "cumulativeCritical" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverCriticalQuantiles[t])]],
-              <|"expected"-> stateParams["params"]["population"]*sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t]|>
+              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[HCq]]][t] + sol[[QP[RCq]]][t] + sol[[QP[Deaq]]][t])|>
             }, First],
           "currentlyCritical" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyCriticalQuantiles[t]]],
@@ -610,8 +612,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* a scoped copy of the ODEs, Thsese do not use heterogeneous susceptibility since they are fit on low I / early t and we fit *)
   (* the import time *)
   equationsODE={
-    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
-    Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
+    Sq'[t]==(- k0 * Log[1 + (distancing[t]^distpow*(ISq[t]+IHq[t]+ICq[t])*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized0 )]*Sq[t])-est[t]*Sq[t],
+    Eq'[t]==( k0 * Log[1 + (distancing[t]^distpow*(ISq[t]+IHq[t]+ICq[t])*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized0 )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
+(*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
+    Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,*)
     (*Infectious total, not yet PCR confirmed,age indep*)
     ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Recovered without needing care*)
@@ -681,7 +685,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     weekOverWeekWeight[factor_]:=Map[(factor^(-#[[2]]/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[.85] * boostDeathWeight[2]
+    poissonWeight * weekOverWeekWeight[.85] * boostDeathWeight[3]
   ];
   
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
