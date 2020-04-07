@@ -187,7 +187,8 @@ stateDistancingPrecompute = Module[{
     ApplyWhere
   },
 
-  rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];
+  (*rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];*)
+  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/export?format=csv&gid=1922212346","CSV"]];
 
   dataDays = rawCsvTable[[1,2;;]];
   stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
