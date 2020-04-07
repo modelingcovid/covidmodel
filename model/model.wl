@@ -73,10 +73,9 @@ pCritical80YearOld0=0.15;
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
 pHospitalized80YearOld0=0.20;
 
-midpoint=today+60;
-end=today+90;
-(*adjustlimit=3.1893054892883095;*)
-adjustlimit=4;
+midpointConvergeStateDifferences0=today+130;
+startConvergeStateDifferences0=today+102;
+statesConvergeToValue0=4;
 
 
 
@@ -116,7 +115,7 @@ fitStartingOverrides=<|
   "WA"-><|"rlower"->2.5,"rupper"->2.65,"tlower"->28,"tupper"->33,"replower"->1.25,"repupper"->2|>,
   "CT"-><|"rlower"->4,"rupper"->5,"tlower"->47,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
   "OH"-><|"rlower"->3.8,"rupper"->4.2,"tlower"->53,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
-  "NY"-><|"rlower"->4.6,"rupper"->5.2,"tlower"->44,"tupper"->53,"replower"->1,"repupper"->1.4|>,
+  "NY"-><|"rlower"->4.6,"rupper"->6,"tlower"->48,"tupper"->60,"replower"->1,"repupper"->2.4|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->47,"tupper"->60,"replower"->1.1,"repupper"->2|>,
   "VT"-><|"rlower"->2.7,"rupper"->3.1,"tlower"->38,"tupper"->47,"replower"->0.9,"repupper"->1.1|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.5,"repupper"->1.4|>,
@@ -320,7 +319,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
     (*pcr confirmation*)
-    PCR'[t] == stateAdjustmentForTestingDifferences * testingProbability[t] * adjustlimit/(1+Exp[-(1/(midpoint-march20))Log[adjustlimit/stateAdjustmentForTestingDifferences-1]*(t-midpoint)]) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
+    PCR'[t] ==testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
     (*Infected, will need critical care*)
     ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
     (*Hospitalized,
@@ -329,7 +328,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     (*Entering critical care*)
     CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,
     (*Dying*)
-    Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
+    Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
     (*Leaving critical care*)
     RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
     (* establishment *)
@@ -625,7 +624,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     (*Recovered after hospitalization*)
     RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
     (*pcr confirmation*)
-    PCR'[t] == stateAdjustmentForTestingDifferences *adjustlimit/(1+Exp[-(1/(midpoint-march20))Log[adjustlimit/stateAdjustmentForTestingDifferences-1]*(t-midpoint)]) * testingProbability[t] * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
+    PCR'[t] == testingProbability[t]* (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
     (*Infected, will need critical care*)
     ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Hospitalized,
@@ -634,7 +633,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     (*Entering critical care*)
     CCq'[t]==HCq[t]/daysTogoToCriticalCare0-CCq[t]/daysFromCriticalToRecoveredOrDeceased0,
     (*Dying*)
-    Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,2*fractionOfCriticalDeceased0,fractionOfCriticalDeceased0]/daysFromCriticalToRecoveredOrDeceased0,
+    Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased0,fractionOfCriticalDeceased0]/daysFromCriticalToRecoveredOrDeceased0,
     (*Leaving critical care*)
     RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased0)/daysFromCriticalToRecoveredOrDeceased0,
     est'[t]==0
@@ -703,7 +702,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences},
           fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
   
-  gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData];
+  gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
+  
+  Echo[gofMetrics];
   
   Echo[
     Column[{
