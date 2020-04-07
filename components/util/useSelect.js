@@ -3,7 +3,7 @@ import {useSelect as useSelectDownshift} from 'downshift';
 import {useComponentId} from './useComponentId';
 import {useComponentMounted} from './useComponentMounted';
 
-const {useEffect, useState} = React;
+const {useEffect, useState, useRef} = React;
 
 // A light wrapper around Downshift’s React hooks to fix synchronization.
 export const useSelect = ({
@@ -25,16 +25,29 @@ export const useSelect = ({
     onSelectedItemChange: ({selectedItem}) =>
       setInternalSelectedItem(selectedItem),
   });
+
+  const lastSelectedItem = useRef(selectedItem);
+  const didSelectedItemChange = lastSelectedItem.current !== selectedItem;
+  lastSelectedItem.current = selectedItem;
+
   const [internalSelectedItem, setInternalSelectedItem] = useState(
     result.selectedItem
   );
 
   const mounted = useComponentMounted();
   React.useEffect(() => {
-    if (mounted && selectedItem !== internalSelectedItem) {
+    if (mounted && didSelectedItemChange) {
+      setInternalSelectedItem(selectedItem);
+    } else if (mounted && selectedItem !== internalSelectedItem) {
       onSelectedItemChange({selectedItem: internalSelectedItem});
     }
-  }, [mounted, selectedItem, internalSelectedItem, onSelectedItemChange]);
+  }, [
+    didSelectedItemChange,
+    mounted,
+    selectedItem,
+    internalSelectedItem,
+    onSelectedItemChange,
+  ]);
 
   return result;
 };

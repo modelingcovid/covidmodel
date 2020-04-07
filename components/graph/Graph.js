@@ -114,6 +114,7 @@ export const Graph = React.memo(function Graph({
     (event) => {
       const point = localPoint(event);
       const x0 = xScale.invert(point.x - margin.left);
+      console.log('HI', x0);
       setNearestData(x0);
     },
     [setNearestData, xScale]

@@ -55,13 +55,15 @@ export const Select = React.memo(function Select({
     />
   );
   let itemText = selectedItemToString(selectedItem) || placeholder;
-  if (typeof itemText === 'string' && itemText.includes(' ')) {
+  if (typeof itemText === 'string') {
     const spaceIndex = itemText.lastIndexOf(' ');
+    const before = spaceIndex === -1 ? '' : itemText.slice(0, spaceIndex);
+    const after = spaceIndex === -1 ? itemText : itemText.slice(spaceIndex);
     itemText = (
       <>
-        {itemText.slice(0, spaceIndex)}
+        {before}
         <span style={{whiteSpace: 'nowrap'}}>
-          {itemText.slice(spaceIndex)}
+          {after}
           {icon}
         </span>
       </>

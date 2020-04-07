@@ -2,7 +2,7 @@ import * as React from 'react';
 import {theme} from '../styles';
 import {Grid} from './content';
 import {Area, Graph, Legend, Line} from './graph';
-import {People, SkullCrossbones, HeadSideMask} from './icon';
+import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
   DistancingGradient,
   MethodDefinition,
@@ -110,7 +110,7 @@ export function SEIR({height, width}) {
           method="input"
         />
         <MethodDefinition
-          icon={HeadSideMask}
+          icon={HeadSideCough}
           value={formatPercent1(
             summary.totalProjectedInfected / model.population
           )}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {bisector} from 'd3-array';
+import {findPoint} from '../../lib/transform';
 
 const {createContext, useCallback, useContext, useMemo, useState} = React;
 
@@ -20,15 +20,12 @@ export const NearestDataProvider = ({
   const [point, setPoint] = useState(initial);
 
   const [NearestDataContext, SetNearestDataContext] = contexts;
-  const bisectLeft = useMemo(() => bisector(x).left, [x]);
+  const findNearestPoint = useMemo(() => findPoint(data, x), [data, x]);
 
-  const nearestData = useMemo(() => {
-    const index = bisectLeft(data, point, 1);
-    const d0 = data[index - 1];
-    const d1 = data[index];
-    // Which is closest?
-    return d1 && point - x(d0) > x(d1) - point ? d1 : d0;
-  }, [bisectLeft, data, point, x]);
+  const nearestData = useMemo(() => findNearestPoint(point), [
+    findNearestPoint,
+    point,
+  ]);
 
   return (
     <SetNearestDataContext.Provider value={setPoint}>

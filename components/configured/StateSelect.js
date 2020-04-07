@@ -19,7 +19,7 @@ export function StateSelect({
     <Select
       label={label}
       placeholder={placeholder}
-      value={state || null}
+      value={state}
       values={states}
       valueToString={stateLabels}
       onChange={navigateToLocation}

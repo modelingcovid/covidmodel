@@ -68,13 +68,40 @@ export default function StatePage({data, states}) {
           </Head>
           <style jsx>{`
             .controls-container {
-              z-index: 2;
+              position: sticky;
+              z-index: 50;
+              top: 56px;
+              background: ${theme.color.background};
             }
             .controls {
               padding: var(--spacing1) 0;
+              box-shadow: 0 2px ${theme.color.shadow[0]};
             }
           `}</style>
           <div className="flex flex-col justify-center">
+            <Section className="margin-top-4">
+              <div ref={sizeRef} />
+              <div className="text-jumbo margin-bottom-1">
+                <span className="nowrap">Modeling COVID-19</span>{' '}
+                <span className="nowrap">in {stateName}</span>
+              </div>
+              <div className="dek margin-bottom-3">
+                Forecasting models trained to actual social distancing, testing,
+                and fatality data
+              </div>
+
+              <p className="paragraph">
+                Our model has two primary variables: <strong>location</strong>{' '}
+                and <strong>social distancing scenario</strong>. We use location
+                to determine the demographic data we use, including population,
+                existing data about the spread of COVID-19 in the region, and
+                historical social distancing levels. The social distancing
+                scenario models what the people and governments in the region
+                might do in the future: how socially distanced will they be, and
+                for how long?
+                {/* Every model makes assumptions: we’ve attempted to explain o */}
+              </p>
+            </Section>
             <div className="controls-container">
               <Section>
                 <div className="controls">
@@ -87,22 +114,8 @@ export default function StatePage({data, states}) {
                 </div>
               </Section>
             </div>
-
-            <Section className="margin-top-4">
-              <div ref={sizeRef} />
-              <div className="text-jumbo margin-bottom-1">
-                <span className="nowrap">Modeling COVID-19</span>{' '}
-                <span className="nowrap">in {stateName}</span>
-              </div>
-              <div className="dek margin-bottom-3">
-                Forecasting models trained to actual social distancing, testing,
-                and fatality data
-              </div>
-              <ModelInputs
-                width={width}
-                height={160}
-                className="margin-top-4"
-              />
+            <Section className="margin-top-3">
+              <ModelInputs width={width} height={160} />
               <div
                 className="text-title margin-top-5"
                 style={{marginBottom: '-64px'}}

@@ -1,17 +1,23 @@
-import {useCallback, useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {useRouter} from 'next/router';
 
 import {useCurrentLocation} from './useCurrentLocation';
 
 export function useNavigateToLocation() {
-  const {push} = useRouter();
+  const {events, push} = useRouter();
   const currentLocation = useCurrentLocation();
   const navigating = useRef({from: currentLocation});
 
   navigating.current.from = currentLocation;
-  if (currentLocation === navigating.current.to) {
-    navigating.current.to = null;
-  }
+
+  useEffect(() => {
+    const handler = (url) => {
+      // Probably should check current here.
+      navigating.current.to = null;
+    };
+    events.on('routeChangeComplete', handler);
+    return () => events.off('routeChangeComplete', handler);
+  }, [events, navigating]);
 
   return useCallback(
     (state) => {

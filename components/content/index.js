@@ -3,3 +3,4 @@ export * from './Grid';
 export * from './InlineData';
 export * from './Label';
 export * from './Section';
+export * from './Text';
