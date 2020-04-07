@@ -198,27 +198,29 @@ export const Graph = React.memo(function Graph({
             {children}
             <TodayMarker />
             <NearestMarker />
-            <GridRows
-              scale={yScale}
-              width={xMax}
-              height={yMax}
-              stroke={theme.color.shadow[0]}
-            />
-            <GridColumns
-              scale={xScale}
-              width={xMax}
-              height={yMax}
-              stroke={theme.color.shadow[0]}
-            />
-            <line
-              x1={xMax}
-              x2={xMax}
-              y1={0}
-              y2={yMax}
-              stroke={theme.color.shadow[0]}
-            />
-            <AxisBottom />
-            <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
+            <g pointerEvents="none">
+              <GridRows
+                scale={yScale}
+                width={xMax}
+                height={yMax}
+                stroke={theme.color.shadow[0]}
+              />
+              <GridColumns
+                scale={xScale}
+                width={xMax}
+                height={yMax}
+                stroke={theme.color.shadow[0]}
+              />
+              <line
+                x1={xMax}
+                x2={xMax}
+                y1={0}
+                y2={yMax}
+                stroke={theme.color.shadow[0]}
+              />
+              <AxisBottom />
+              <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
+            </g>
           </Group>
         </svg>
         <div className="graph-overlay">
