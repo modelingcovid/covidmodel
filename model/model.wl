@@ -675,12 +675,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (*   weekOverWeekWeight: weights later data more heavily *)
   (*   poissonWeight: weights data assuming its uncertainty is poisson *)
   (*   boostDeathWeight: increases the weighting of deaths by some factor *)
-  weekOverWeekWeight=.5;
   dataWeights=Module[{weekOverWeekWeight,poissonWeight,boostDeathWeight},
-    weekOverWeekWeight[factor_]:=Map[(factor^(#[[2]]/7))&,longData];
+    weekOverWeekWeight[factor_]:=Map[(factor^(-#[[2]]/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[.75] * boostDeathWeight[5]
+    poissonWeight * weekOverWeekWeight[.8] * boostDeathWeight[5]
   ];
   
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
