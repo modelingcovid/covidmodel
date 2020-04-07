@@ -85,7 +85,7 @@ export function ModelInputs({height, width, ...remaining}) {
 
       <Paragraph className="estimation">
         We estimate that COVID-19 reached {stateName} on{' '}
-        {formatDate(dayToDate(model.importtime))} has an uninhibited R₀ of{' '}
+        {formatDate(dayToDate(model.importtime))} and has an uninhibited R₀ of{' '}
         {formatNumber2(model.r0)}.
       </Paragraph>
 
