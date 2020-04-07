@@ -142,7 +142,7 @@ exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{n,data,plot
 ];
 
 
-plotStateHospitalization[stateData_]:=Module[{
+plotStateHospitalization[stateData_, state_]:=Module[{
     reportAs,
     key,
     timeSeries,
@@ -155,10 +155,12 @@ plotStateHospitalization[stateData_]:=Module[{
         {#["day"],#[key]["confirmed"],#[key]["expected"]}&,
         stateData["scenarios"]["scenario1"]["timeSeriesData"]],
       First];
+    Column[{
+    Text["Hospitalizations for "<>state],
     Show[
-      ListPlot[Select[timeSeries[[All,{1,2}]],#[[2]]>0&],PlotStyle->Red],
-      ListLinePlot[timeSeries[[All,{1,3}]]]
-    ]
+      ListPlot[Select[timeSeries[[All,{1,2}]],#[[2]]>0&],PlotStyle->Red, ImageSize->500],
+      ListLinePlot[timeSeries[[All,{1,3}]], ImageSize->500]
+    ]}]
   ]
 ];
 
