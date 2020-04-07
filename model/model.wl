@@ -776,7 +776,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "distpow"->fitParams["distpow"],
       "longData"->longData,
       "goodnessOfFitMetrics"->gofMetrics,
-      "hospitalizationsReportedAs"->If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative, Null]
+      "hospitalizationsReportedAs"->If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative[state], "-"]
     }, First]
 ]
 
@@ -822,6 +822,9 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
+    
+    Echo[Column[{plotStateHospitalization[stateData]}]];
+    
     Export["public/json/"<>state<>".json",stateData]; 
     stateData
   ];
@@ -832,6 +835,7 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPreco
   
   exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
   exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
+  exportAllStatesHospitalizationGoodnessOfFitMetricsSvg["tests/hospitalization-relative-fit-errors.svg",allStatesData];
   allStatesData
 ]
 
@@ -855,3 +859,6 @@ Module[{raw,pop,dist,buckets},
 
 (* helper to check that the parameter dists are centered *)
 (*Echo[(Mean[#]&/@Transpose[sims] - paramExpected)//N];*)
+
+
+
