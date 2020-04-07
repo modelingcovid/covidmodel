@@ -47,14 +47,14 @@ const styles = css`
   .location-menu {
     position: relative;
   }
-  .link {
+  .nav-link {
     margin-left: ${theme.spacing[3]};
     font-weight: 500;
   }
-  .link:hover {
+  .nav-link:hover {
     text-decoration: underline;
   }
-  .link:first-child {
+  .nav-link:first-child {
     margin-left: 0;
   }
 `;
@@ -75,9 +75,9 @@ export function Layout({children, states}) {
             </Link>
             <div className="pages text-small">
               <Link href="/">
-                <a className="focus link">Home</a>
+                <a className="focus nav-link">Home</a>
               </Link>
-              <div className="link location-menu">
+              <div className="nav-link location-menu">
                 <LocationMenu
                   states={states}
                   menuProps={{
@@ -86,7 +86,7 @@ export function Layout({children, states}) {
                 />
               </div>
               <Link href="/about">
-                <a className="focus link">About</a>
+                <a className="focus nav-link">About</a>
               </Link>
             </div>
           </nav>

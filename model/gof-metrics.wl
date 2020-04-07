@@ -65,16 +65,16 @@ exportAllStatesGoodnessOfFitMetricsCsv[file_,allStateData_]:=Module[{columnOrder
     "rSquaredPcr",
     "deathResidual7Day",
     "pcrResidual7Day"};
-  gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
-  csvData=Join[
-    {Join[{"state"},columnOrder]},
-    Sort[
-      KeyValueMap[
-        Join[{#1},gofAssociationToArray[#2["goodnessOfFitMetrics"]]]&,
-        allStateData],
-      (AlphabeticOrder[First[#1],First[#2]])&]];
-  Export[file,csvData,"CSV"];
-  csvData
+	gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
+	csvData=Join[
+		{Join[{"state"},columnOrder]},
+		Sort[
+			KeyValueMap[
+				Join[{#1},gofAssociationToArray[#2["goodnessOfFitMetrics"]]]&,
+				allStateData],
+			(AlphabeticOrder[First[#1],First[#2]])&]];
+	Export[file,csvData,"CSV"];
+	csvData
 ]
 
 
@@ -103,6 +103,133 @@ exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{n,data,plot
     PlotLabel->"Mean and RMS relative error",
     PlotRange->{{-domain,domain},{0,n+1}},
     PlotStyle->{{RGBColor["#88bbfe"]},{RGBColor["#aff1b6"]}},
+    AspectRatio->n/12/GoldenRatio,
+    ImageSize->400];
+  Export[file, plot, "SVG"];
+  plot
+];
+
+
+exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{n,data,plot,domain},
+  n=Length[allStateData];
+  data=KeyValueMap[{
+      #1,
+      #2["goodnessOfFitMetrics"]["meanRelativeErrorDeaths"],
+      #2["goodnessOfFitMetrics"]["rmsRelativeErrorDeaths"],
+      #2["goodnessOfFitMetrics"]["meanRelativeErrorPcr"],
+      #2["goodnessOfFitMetrics"]["rmsRelativeErrorPcr"]}&,
+    allStateData];
+  data=Sort[data,(AlphabeticOrder[First[#1],First[#2]])&];
+  data=MapIndexed[Join[n+1-#2,#1]&,data];
+  domain=Max[
+    data[[All,3]]+data[[All,4]],
+    data[[All,5]]+data[[All,6]],
+    Abs[data[[All,3]]-data[[All,4]]],
+    Abs[data[[All,5]]-data[[All,6]]]];
+  plot=ListPlot[
+    {
+      Map[{Around[#[[3]],#[[4]]],#[[1]]+.1}&,data],
+      Map[{Around[#[[5]],#[[6]]],#[[1]]-.1}&,data]},
+    Ticks->{Automatic,data[[All,{1,2}]]},
+    PlotLegends->Placed[{"Deaths","Positive tests"},Below],
+    PlotLabel->"Mean and RMS relative error",
+    PlotRange->{{-domain,domain},{0,n+1}},
+    PlotStyle->{{RGBColor["#88bbfe"]},{RGBColor["#aff1b6"]}},
+    AspectRatio->n/12/GoldenRatio,
+    ImageSize->400];
+  Export[file, plot, "SVG"];
+  plot
+];
+
+
+plotStateHospitalization[stateData_]:=Module[{
+    reportAs,
+    key,
+    timeSeries,
+    confirmed
+  },
+  reportAs = stateData["hospitalizationsReportedAs"];
+  If[reportAs!="-",
+    key = If[reportAs=="current","currentlyReportedHospitalized","cumulativeReportedHospitalized"];
+    timeSeries = SortBy[Map[
+        {#["day"],#[key]["confirmed"],#[key]["expected"]}&,
+        stateData["scenarios"]["scenario1"]["timeSeriesData"]],
+      First];
+    Show[
+      ListPlot[Select[timeSeries[[All,{1,2}]],#[[2]]>0&],PlotStyle->Red],
+      ListLinePlot[timeSeries[[All,{1,3}]]]
+    ]
+  ]
+];
+
+
+exportAllStatesHospitalizationGoodnessOfFitMetricsSvg[file_,allStatesData_]:=Module[{
+    states,
+    cumulativeStates,
+    currentStates,
+    processState,
+    n,
+    currentData,
+    currentX,
+    currentY,
+    cumulativeData,
+    cumulativeX,
+    cumulativeY,
+    data,
+    domain},
+  states=Sort[Keys[allStatesData], AlphabeticOrder];
+  
+  cumulativeStates=Pick[states,Map[allStatesData[#]["hospitalizationsReportedAs"]=="cumulative"&,states]];
+  currentStates=Pick[states,Map[allStatesData[#]["hospitalizationsReportedAs"]=="current"&,states]];
+  
+  processState[state_]:=Module[{reportedAs, key, raw},
+    reportedAs=allStatesData[state]["hospitalizationsReportedAs"];
+    key = If[
+      reportedAs=="cumulative",
+      "cumulativeReportedHospitalized",
+      "currentlyReportedHospitalized"];
+    raw = Map[
+      Pick[#,#[[2]]>0]&,
+      SortBy[
+        Map[
+          {#["day"],#[key]["confirmed"],#[key]["expected"]}&,
+          allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"]],
+        First]];
+    
+    <|
+      "reportedAs"->reportedAs,
+      "meanRelativeError"->Mean[Map[#[[3]]-#[[2]]&,raw]],
+      "rmsRelativeError"->Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,raw]]]
+    |>
+  ];
+  
+  n = Length[cumulativeStates]+Length[currentStates];
+  currentData = Map[processState,currentStates];
+  currentX = Map[Around[#["meanRelativeError"],#["rmsRelativeError"]]&,currentData];
+  currentY = Range[n,Length[cumulativeStates] + 1, -1];
+  
+  cumulativeData = Map[processState,cumulativeStates];
+  cumulativeX = Map[Around[#["meanRelativeError"],#["rmsRelativeError"]]&,cumulativeData];
+  cumulativeY = Range[Length[cumulativeStates],1,-1];
+  
+  domain = Max[
+    Abs[currentX/.Around->Plus],
+    Abs[cumulativeX/.Around->Plus],
+    Abs[currentX/.Around->Subtract],
+    Abs[cumulativeX/.Around->Subtract]
+  ];
+  
+  plot=ListPlot[
+    {
+      Transpose[{currentX,currentY}],
+      Transpose[{cumulativeX,cumulativeY}]},
+    Ticks->{
+      Automatic,
+      MapThread[{#1,#2}&,{Range[n,1,-1],Join[currentStates,cumulativeStates]}]},
+    PlotLegends->Placed[{"Current","Cumulative"},Below],
+    PlotLabel->"Mean and RMS relative error",
+    PlotRange->{{-domain,domain},{0,n+1}},
+    PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
     AspectRatio->n/12/GoldenRatio,
     ImageSize->400];
   Export[file, plot, "SVG"];
