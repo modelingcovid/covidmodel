@@ -607,8 +607,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* a scoped copy of the ODEs, Thsese do not use heterogeneous susceptibility since they are fit on low I / early t and we fit *)
   (* the import time *)
   equationsODE={
-    Sq'[t]==(-distancing[t]*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
-    Eq'[t]==(distancing[t]*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
+    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
+    Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
     (*Infectious total, not yet PCR confirmed,age indep*)
     ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
     (*Recovered without needing care*)
@@ -637,15 +637,15 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     (*Leaving critical care*)
     RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased0)/daysFromCriticalToRecoveredOrDeceased0,
     est'[t]==0
-  }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences}];
+  }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}];
   eventsODE = {
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse0]],
     WhenEvent[t>importtime+importlength0,est[t]->0]
-  }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences}];
+  }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}];
   initialConditions = {Sq[0]==1,Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0};
   outputODE = {Deaq, PCR};
   dependentVariablesODE = {Deaq, PCR, RSq,RHq, RCq, RepHq, Sq, Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est};
-  parameters = {logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences};
+  parameters = {logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences, logDistpow};
   {DeaqParametric,PCRParametric}= {Deaq, PCR}/.ParametricNDSolve[
     {equationsODE, eventsODE, initialConditions},
     outputODE,
@@ -665,10 +665,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     ],#[[3]]>0&];
   deathDataLength=Length[Select[longData,#[[1]]==1&]];
   
-  model[r0natural_,importtime_,stateAdjustmentForTestingDifferences_,c_][t_]:=Piecewise[{
-      {DeaqParametric[r0natural,importtime,stateAdjustmentForTestingDifferences][t],c==1},
-      {PCRParametric[r0natural,importtime,stateAdjustmentForTestingDifferences][t] ,c==2}}
-  ];
+  model[r0natural_,importtime_,stateAdjustmentForTestingDifferences_,distpow_,c_][t_]:=Piecewise[{
+      {DeaqParametric[r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t],c==1},
+      {PCRParametric[r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t] ,c==2}
+  }];
   
   (* Weight death and PCR test data appropriatly. Factors include: *)
   (*   weekOverWeekWeight: weights later data more heavily *)
@@ -684,10 +684,19 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
   fit=Quiet[NonlinearModelFit[
       longData,
-      {model[r0natural,importtime,stateAdjustmentForTestingDifferences,c][t],
+      {
+        model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
-        Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]},{{r0natural,Log[(rlower+rupper)/2]}, {importtime,Log[(tlower+tupper)/2]}, {stateAdjustmentForTestingDifferences,Log[(replower+repupper)/2]}},{c,t},
+        Log[1]<=distpow<= Log[2],
+        Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
+        },
+        {
+          {r0natural,Log[(rlower+rupper)/2]}, 
+          {importtime,Log[(tlower+tupper)/2]}, 
+          {stateAdjustmentForTestingDifferences,Log[(replower+repupper)/2]}, 
+          {distpow, 1}
+        },{c,t},
       Method->{"NMinimize",Method->{"SimulatedAnnealing", "RandomSeed"->111}},
       Weights->dataWeights(*,
       EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    stateAdjustmentForTestingDifferences=", Exp[stateAdjustmentForTestingDifferences]]*)
@@ -699,7 +708,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* quiet because of constraint boundary warning -- we have constraints so as to prevent certain local minima from happening
 	in the SimulatedAnnealing global search, but intentionally choose vallues of the constraint boundary so that the fit is unlikely to run into the boundary
 	and thus we feel okay about using the variance estimates *)
-  standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences},
+  standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
           fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
   
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
@@ -715,9 +724,15 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
               LogPlot[{
                   DeaqParametric[Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
-                    Log[fitParams["stateAdjustmentForTestingDifferences"]]][t],
-                  PCRParametric[Log[fitParams["r0natural"]],
-                    Log[fitParams["importtime"]],Log[fitParams["stateAdjustmentForTestingDifferences"]]][t]},
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t],
+                  PCRParametric[
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                    ][t]},
                 {t,40,150},ImageSize->500]],
             ListPlot[{
                 Thread[{#2,#1/#3}&[
@@ -751,6 +766,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
+      "distpow"->fitParams["distpow"],
       "longData"->longData,
       "goodnessOfFitMetrics"->gofMetrics,
       "hospitalizationsReportedAs"->If[KeyExistsQ[hospitalizationsCurrentOrCumulative, state], hospitalizationsCurrentOrCumulative, Null]
