@@ -303,7 +303,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   equationsDAE = {
     Sq'[t]==(- k * Log[1 + (distancing[t]^distpow*Iq[t]*r0natural)/(k*daysUntilNotInfectiousOrHospitalized )]*Sq[t])-est[t]*Sq[t],
     Eq'[t]==( k * Log[1 + (distancing[t]^distpow*Iq[t]*r0natural)/(k*daysUntilNotInfectiousOrHospitalized )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious,
-(*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
+    (*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
     Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,*)
     (*Infectious total, not yet PCR confirmed,age indep*)
     ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,
@@ -614,7 +614,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   equationsODE={
     Sq'[t]==(- k0 * Log[1 + (distancing[t]^distpow*(ISq[t]+IHq[t]+ICq[t])*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized0 )]*Sq[t])-est[t]*Sq[t],
     Eq'[t]==( k0 * Log[1 + (distancing[t]^distpow*(ISq[t]+IHq[t]+ICq[t])*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized0 )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
-(*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
+    (*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
     Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,*)
     (*Infectious total, not yet PCR confirmed,age indep*)
     ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
@@ -671,12 +671,12 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData
     ],#[[3]]>0&];
   deathDataLength=Length[Select[longData,#[[1]]==1&]];
-  
+
   model[r0natural_,importtime_,stateAdjustmentForTestingDifferences_,distpow_,c_][t_]:=Piecewise[{
       {DeaqParametric[r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t],c==1},
       {PCRParametric[r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t] ,c==2}
-  }];
-  
+    }];
+
   (* Weight death and PCR test data appropriatly. Factors include: *)
   (*   weekOverWeekWeight: weights later data more heavily *)
   (*   poissonWeight: weights data assuming its uncertainty is poisson *)
@@ -697,13 +697,13 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Log[tlower]<=importtime<=Log[tupper],
         Log[1]<=distpow<= Log[2],
         Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
-        },
-        {
-          {r0natural,Log[(rlower+rupper)/2]}, 
-          {importtime,Log[(tlower+tupper)/2]}, 
-          {stateAdjustmentForTestingDifferences,Log[(replower+repupper)/2]}, 
-          {distpow, 1}
-        },{c,t},
+      },
+      {
+        {r0natural,Log[(rlower+rupper)/2]},
+        {importtime,Log[(tlower+tupper)/2]},
+        {stateAdjustmentForTestingDifferences,Log[(replower+repupper)/2]},
+        {distpow, 1}
+      },{c,t},
       Method->{"NMinimize",Method->{"SimulatedAnnealing", "RandomSeed"->111}},
       Weights->dataWeights(*,
       EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    stateAdjustmentForTestingDifferences=", Exp[stateAdjustmentForTestingDifferences]]*)
@@ -718,7 +718,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
           fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
-  
+
   Echo[gofMetrics];
 
   Echo[
@@ -738,7 +738,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                     Log[fitParams["importtime"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
-                    ][t]},
+                  ][t]},
                 {t,40,150},ImageSize->500]],
             ListPlot[{
                 Thread[{#2,#1/#3}&[

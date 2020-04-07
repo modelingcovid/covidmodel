@@ -27,54 +27,54 @@ rSquared[residuals_,longData_,mask_:{}]:=If[
 
 
 goodnessOfFitMetrics[residuals_,longData_,population_]:=Module[{RmsRelativeError,MeanRelativeError,ChiSquared,RSquared,deathsMask,positivePcrMask,deathDataLength},
-	deathsMask=(#[[1]]==1)&/@longData;
-	positivePcrMask=(#[[1]]==2)&/@longData;
-	deathDataLength=Length[Select[longData,#[[1]]==1&]];
-	<|
-		"chiSquared"->chiSquared[residuals,longData],
-		"rmsRelativeError"->rmsRelativeError[residuals,longData],
-		"rmsRelativeErrorDeaths"->rmsRelativeError[residuals,longData,deathsMask],
-		"rmsRelativeErrorPcr"->rmsRelativeError[residuals,longData,positivePcrMask],
-		"meanRelativeErrorDeaths"->meanRelativeError[residuals,longData,deathsMask],
-		"meanRelativeErrorPcr"->meanRelativeError[residuals,longData,positivePcrMask],
-		"rSquaredDeaths"->rSquared[residuals,longData,deathsMask],
-		"rSquaredPcr"->rSquared[residuals,longData,positivePcrMask],
-		"deathResidual7Day"->population*#[[2]]&/@Thread[{#2,#1}&[
-                    residuals[[1;;deathDataLength]],
-                    (#[[2]]&/@longData[[1;;deathDataLength]]),
-                    (#[[3]]&/@longData[[1;;deathDataLength]])
-                  ]][[-7;;]],
-        "pcrResidual7Day"->population*#[[2]]&/@Thread[{#2,#1}&[
-                    residuals[[deathDataLength+1;;Length[longData]]],
-                    Reverse[(#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])],
-                    Reverse[(#[[3]]&/@longData[[deathDataLength+1;;Length[longData]]])]
-                  ]][[-7;;]]
-	|>/.InterpolatingFunction[___]->((0)&)
+  deathsMask=(#[[1]]==1)&/@longData;
+  positivePcrMask=(#[[1]]==2)&/@longData;
+  deathDataLength=Length[Select[longData,#[[1]]==1&]];
+  <|
+    "chiSquared"->chiSquared[residuals,longData],
+    "rmsRelativeError"->rmsRelativeError[residuals,longData],
+    "rmsRelativeErrorDeaths"->rmsRelativeError[residuals,longData,deathsMask],
+    "rmsRelativeErrorPcr"->rmsRelativeError[residuals,longData,positivePcrMask],
+    "meanRelativeErrorDeaths"->meanRelativeError[residuals,longData,deathsMask],
+    "meanRelativeErrorPcr"->meanRelativeError[residuals,longData,positivePcrMask],
+    "rSquaredDeaths"->rSquared[residuals,longData,deathsMask],
+    "rSquaredPcr"->rSquared[residuals,longData,positivePcrMask],
+    "deathResidual7Day"->population*#[[2]]&/@Thread[{#2,#1}&[
+        residuals[[1;;deathDataLength]],
+        (#[[2]]&/@longData[[1;;deathDataLength]]),
+        (#[[3]]&/@longData[[1;;deathDataLength]])
+      ]][[-7;;]],
+    "pcrResidual7Day"->population*#[[2]]&/@Thread[{#2,#1}&[
+        residuals[[deathDataLength+1;;Length[longData]]],
+        Reverse[(#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])],
+        Reverse[(#[[3]]&/@longData[[deathDataLength+1;;Length[longData]]])]
+      ]][[-7;;]]
+  |>/.InterpolatingFunction[___]->((0)&)
 ];
 
 
 exportAllStatesGoodnessOfFitMetricsCsv[file_,allStateData_]:=Module[{columnOrder,gofAssociationToArray,csvData},
-	columnOrder={
-		"chiSquared",
-		"rmsRelativeError",
-		"rmsRelativeErrorDeaths",
-		"rmsRelativeErrorPcr",
-		"meanRelativeErrorDeaths",
-		"meanRelativeErrorPcr",
-		"rSquaredDeaths",
-		"rSquaredPcr",
-		"deathResidual7Day",
-		"pcrResidual7Day"};
-	gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
-	csvData=Join[
-		{Join[{"state"},columnOrder]},
-		Sort[
-			KeyValueMap[
-				Join[{#1},gofAssociationToArray[#2["goodnessOfFitMetrics"]]]&,
-				allStateData],
-			(AlphabeticOrder[First[#1],First[#2]])&]];
-	Export[file,csvData,"CSV"];
-	csvData
+  columnOrder={
+    "chiSquared",
+    "rmsRelativeError",
+    "rmsRelativeErrorDeaths",
+    "rmsRelativeErrorPcr",
+    "meanRelativeErrorDeaths",
+    "meanRelativeErrorPcr",
+    "rSquaredDeaths",
+    "rSquaredPcr",
+    "deathResidual7Day",
+    "pcrResidual7Day"};
+  gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
+  csvData=Join[
+    {Join[{"state"},columnOrder]},
+    Sort[
+      KeyValueMap[
+        Join[{#1},gofAssociationToArray[#2["goodnessOfFitMetrics"]]]&,
+        allStateData],
+      (AlphabeticOrder[First[#1],First[#2]])&]];
+  Export[file,csvData,"CSV"];
+  csvData
 ]
 
 
