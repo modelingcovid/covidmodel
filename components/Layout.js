@@ -9,7 +9,7 @@ import {theme} from '../styles';
 
 const styles = css`
   .layout {
-    padding-bottom: ${theme.spacing[4]};
+    padding-bottom: ${theme.spacing[5]};
   }
   header {
     position: sticky;
@@ -48,7 +48,7 @@ const styles = css`
     position: relative;
   }
   .link {
-    margin-left: ${theme.spacing[2]};
+    margin-left: ${theme.spacing[3]};
     font-weight: 500;
   }
   .link:hover {

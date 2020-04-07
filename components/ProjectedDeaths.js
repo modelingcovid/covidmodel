@@ -18,7 +18,7 @@ const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 export const ProjectedDeaths = ({width, height}) => {
   const {model, stateName, summary, timeSeriesData, x} = useModelData();
   return (
-    <div className="margin-top-4">
+    <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">
         COVID-19 will cause{' '}
@@ -33,7 +33,7 @@ export const ProjectedDeaths = ({width, height}) => {
       <p className="paragraph">
         We project the cumulative number of deaths on a logarithmic scale.
       </p>
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}
           value={formatPercent1(

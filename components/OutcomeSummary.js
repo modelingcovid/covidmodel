@@ -6,7 +6,7 @@ import {MethodDisclaimer} from './modeling';
 
 export const OutcomeSummary = ({data}) => {
   return (
-    <div className="margin-top-4">
+    <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">Outcome summary</div>
       <p className="paragraph">

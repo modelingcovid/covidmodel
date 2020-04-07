@@ -88,23 +88,23 @@ export default function StatePage({data, states}) {
               </Section>
             </div>
 
-            <Section className="margin-top-3">
+            <Section className="margin-top-4">
               <div ref={sizeRef} />
               <div className="text-jumbo margin-bottom-1">
                 <span className="nowrap">Modeling COVID-19</span>{' '}
                 <span className="nowrap">in {stateName}</span>
               </div>
-              <div className="dek margin-bottom-2">
+              <div className="dek margin-bottom-3">
                 Forecasting models trained to actual social distancing, testing,
                 and fatality data
               </div>
               <ModelInputs
                 width={width}
                 height={160}
-                className="margin-top-3"
+                className="margin-top-4"
               />
               <div
-                className="text-title margin-top-4"
+                className="text-title margin-top-5"
                 style={{marginBottom: '-64px'}}
               >
                 Projections

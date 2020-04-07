@@ -36,7 +36,7 @@ export const ICUCapacity = ({width, height}) => {
     );
 
   return (
-    <div className="margin-top-4">
+    <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">{heading}</div>
       <p className="paragraph">
@@ -45,7 +45,7 @@ export const ICUCapacity = ({width, height}) => {
         fatality rate is substantially higher even controlling for the age
         distribution.
       </p>
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={Bed}
           value={formatNumber(icuBeds)}

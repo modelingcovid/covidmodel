@@ -39,7 +39,7 @@ export function ModelInputs({height, width, ...remaining}) {
         that we have. This data is usually reported with a three-day delay.
       </p>
       <MethodDisclaimer method="input" />
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         {distancingLevel != null && (
           <MethodDefinition
             icon={PeopleArrows}
@@ -55,7 +55,7 @@ export function ModelInputs({height, width, ...remaining}) {
           method="input"
         />
       </Grid>
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={Viruses}
           value={formatNumber2(model.r0)}

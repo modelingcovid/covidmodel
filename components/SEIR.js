@@ -89,7 +89,7 @@ export function SEIR({height, width}) {
 
   const percentInfected = summary.totalProjectedInfected / model.population;
   return (
-    <div className="margin-top-4">
+    <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">SEIR</div>
       <p className="paragraph">
@@ -102,7 +102,7 @@ export function SEIR({height, width}) {
         <li>Infectious</li>
         <li>Recovered (or deceased)</li>
       </ul>
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}
           value={formatNumber(model.population)}

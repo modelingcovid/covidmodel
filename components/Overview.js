@@ -55,11 +55,11 @@ export function Overview({overview, states, topo}) {
   return (
     <div>
       <style jsx>{styles}</style>
-      <div className="margin-top-4 map-heading">
+      <div className="margin-top-5 map-heading">
         <span>Modeled states in the U.S.</span>
       </div>
       <LocationMap states={states} topo={topo} />
-      <div className="location margin-top-3">
+      <div className="location margin-top-4">
         {ordered.map((state) => {
           const stateName = stateLabels[state];
           const model = overview[state];

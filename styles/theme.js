@@ -62,7 +62,7 @@ export const {
       }),
     },
   },
-  spacing: px([8, 16, 32, 64, 96]),
+  spacing: px([8, 16, 24, 32, 64, 96]),
   column: {
     count: 12,
     // TODO(koop): Define this in relation to other variables

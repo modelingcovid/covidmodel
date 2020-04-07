@@ -13,7 +13,7 @@ export const Grid = ({children, ...remaining}) => (
       @media (min-width: 600px) {
         div {
           grid-template-columns: repeat(3, 1fr);
-          grid-gap: ${theme.spacing[2]};
+          grid-gap: ${theme.spacing[3]};
         }
       }
     `}</style>

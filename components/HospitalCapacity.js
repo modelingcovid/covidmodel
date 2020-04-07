@@ -38,7 +38,7 @@ export const HospitalCapacity = ({width, height}) => {
     );
 
   return (
-    <div className="margin-top-4">
+    <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">{hospitalCapacityHeading}</div>
       <div style={{display: 'flex'}}>
@@ -48,7 +48,7 @@ export const HospitalCapacity = ({width, height}) => {
           typical occupancy rate.
         </p>
       </div>
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={Bed}
           value={formatNumber(staffedBeds)}

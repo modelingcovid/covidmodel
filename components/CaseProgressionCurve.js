@@ -30,7 +30,7 @@ const getCumulativeInfected = (d) => {
 export function CaseProgressionCurve({height, width}) {
   const {model, stateName, summary, x} = useModelData();
   return (
-    <div className="margin-top-4">
+    <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">Case progression curve</div>
       <p className="paragraph">
@@ -40,7 +40,7 @@ export function CaseProgressionCurve({height, width}) {
         infections is reduced to a small fraction of the population we consider
         the epidemic contained.
       </p>
-      <Grid className="margin-bottom-2">
+      <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}
           value={formatNumber(model.population)}
