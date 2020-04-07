@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {PopulationGraph} from './configured';
 import {Grid} from './content';
-import {Area, Graph, Legend} from './graph';
+import {Area, Graph, Legend, Line} from './graph';
 import {People, SkullCrossbones, HeadSideMask} from './icon';
 import {
   DistancingGradient,
@@ -36,16 +35,10 @@ const getCumulativeDeathsConfirmed = getConfirmed(getCumulativeDeaths);
 
 const config = [
   {
-    y: getSusceptible,
-    label: 'Susceptible',
-    description: 'People who have not yet contracted COVID-19',
-    color: theme.color.gray[1],
-  },
-  {
     y: getCumulativeRecoveries,
     label: 'Recovered',
     description: 'People who have recovered from COVID-19',
-    color: theme.color.gray[0],
+    color: theme.color.gray[3],
   },
   {
     y: getCurrentlyInfected,
@@ -58,20 +51,27 @@ const config = [
     y: getCurrentlyInfectious,
     label: 'Infectious',
     description: 'People who have COVID-19 and can infect others',
-    color: theme.color.yellow[1],
+    color: theme.color.blue[2],
   },
   {
     y: getCumulativeDeaths,
     label: 'Deceased',
     description: 'People who have died from COVID-19',
-    color: theme.color.red[2],
+    color: theme.color.magenta[1],
   },
 ];
 
 const accessors = stackAccessors(config.map(({y}) => getExpected(y)));
 config.forEach((c, i) => (c.area = accessors[i]));
 
-const midAccessor = accessors[2][1];
+const midAccessor = accessors[1][1];
+
+const susceptible = {
+  y: getSusceptible,
+  label: 'Susceptible',
+  description: 'People who have not yet contracted COVID-19',
+  color: 'transparent',
+};
 
 export function SEIR({height, width}) {
   const {
@@ -126,36 +126,21 @@ export function SEIR({height, width}) {
           method="modeled"
         />
       </Grid>
-      <PopulationGraph
-        data={timeSeriesData}
-        initialScale="linear"
-        height={height / 2}
-        width={width}
-        x={x}
-        xLabel="people"
-      >
-        <DistancingGradient />
-        {config.map(({area: [y0, y1], color}, i) => (
-          <Area
-            key={i}
-            y0={y0}
-            y1={y1}
-            fill={color}
-            stroke={theme.color.background}
-            strokeWidth={0.5}
-          />
-        ))}
-      </PopulationGraph>
       <Graph
         data={timeSeriesData}
         domain={midDomain}
         initialScale="linear"
-        height={height / 2}
+        height={height}
         width={width}
         x={x}
         xLabel="people"
         after={
           <Legend>
+            <PercentileLegendRow
+              y={susceptible.y}
+              title={susceptible.label}
+              description={susceptible.description}
+            />
             {config.map(({y, color, label, description}, i) => (
               <PercentileLegendRow
                 key={i}
@@ -170,14 +155,10 @@ export function SEIR({height, width}) {
       >
         <DistancingGradient />
         {config.map(({area: [y0, y1], color}, i) => (
-          <Area
-            key={i}
-            y0={y0}
-            y1={y1}
-            fill={color}
-            stroke={theme.color.background}
-            strokeWidth={1}
-          />
+          <Area key={`area-${i}`} y0={y0} y1={y1} fill={color} opacity="0.15" />
+        ))}
+        {config.map(({area: [y0, y1], color}, i) => (
+          <Line key={`line-${i}`} y={y1} stroke={color} />
         ))}
       </Graph>
     </div>
