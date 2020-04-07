@@ -26,14 +26,19 @@ export function ModelInputs({height, width, ...remaining}) {
   } = useModelData();
   return (
     <div {...remaining}>
-      <MethodDisclaimer method="input" />
-      <div className="section-heading">Social distancing</div>
+      <div className="section-heading">What will we do?</div>
       <p className="paragraph">
         On the left axis social distance of 100% means no contact with others,
         which yields an R₀ (basic reproduction number) for the virus of zero,
         since it cannot find new hosts. The zero-percent distance is the
         un-inhibited reproduction number which is thought to be around 3.1.
       </p>
+      <p className="paragraph">
+        The current distancing level is calculated based on the average of
+        mobility rates for {stateName} based on the past three days of the data
+        that we have. This data is usually reported with a three-day delay.
+      </p>
+      <MethodDisclaimer method="input" />
       <Grid className="margin-bottom-2">
         {distancingLevel != null && (
           <MethodDefinition

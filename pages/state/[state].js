@@ -19,7 +19,7 @@ import {ModelDataProvider} from '../../components/modeling';
 import {useComponentId, useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
 import {getStateData, getStatesWithData} from '../../lib/data';
-import {getDate, today} from '../../lib/date';
+import {getDate, initialTargetDate} from '../../lib/date';
 import {theme} from '../../styles';
 
 const {useCallback, useRef, useState} = React;
@@ -57,7 +57,7 @@ export default function StatePage({data, states}) {
         <NearestDataProvider
           x={getDate}
           data={data.scenarios[scenario].timeSeriesData}
-          initial={today}
+          initial={initialTargetDate}
         >
           <Head>
             <title>{stateName} COVID model forecast</title>
