@@ -8,7 +8,7 @@ export const applyDeep = (fn) => {
   const applyFn = (input) => {
     if (Array.isArray(input)) {
       return input.map(applyFn);
-    } else if (typeof input === 'object') {
+    } else if (input && typeof input === 'object') {
       const result = {};
       for (let [key, value] of Object.entries(input)) {
         result[key] = applyFn(value);
