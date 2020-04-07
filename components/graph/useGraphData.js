@@ -8,6 +8,7 @@ export const GraphDataProvider = ({
   children,
   clipPath,
   data,
+  margin,
   x,
   xScale,
   yScale,
@@ -15,8 +16,8 @@ export const GraphDataProvider = ({
   yMax,
 }) => {
   const context = useMemo(
-    () => ({data, clipPath, x, xScale, yScale, xMax, yMax}),
-    [data, clipPath, x, xScale, yScale, xMax, yMax]
+    () => ({data, clipPath, margin, x, xScale, yScale, xMax, yMax}),
+    [data, clipPath, margin, x, xScale, yScale, xMax, yMax]
   );
 
   return (

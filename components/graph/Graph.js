@@ -4,13 +4,11 @@ import {scaleLinear, scaleSymlog, scaleUtc} from '@vx/scale';
 import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
-import {localPoint} from '@vx/event';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
-import {NearestOverlay} from './NearestOverlay';
+import {Scrubber} from './Scrubber';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
-import {useSetNearestData} from './useNearestData';
 import {useComponentId} from '../util';
 import {getDate} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
@@ -109,16 +107,6 @@ export const Graph = React.memo(function Graph({
     }
   }, [domain, scale, yMax]);
 
-  const setNearestData = useSetNearestData();
-  const onMove = useCallback(
-    (event) => {
-      const point = localPoint(event);
-      const x0 = xScale.invert(point.x - margin.left);
-      setNearestData(x0);
-    },
-    [setNearestData, xScale]
-  );
-
   const xTicks = xScale.ticks(width > 600 ? 10 : 5);
   const xTickCount = xTicks.length;
   const dateTickLabelProps = useCallback(
@@ -160,6 +148,7 @@ export const Graph = React.memo(function Graph({
       yScale={yScale}
       xMax={xMax}
       yMax={yMax}
+      margin={margin}
       clipPath={`url(#${clipPathId})`}
     >
       <style jsx>{`
@@ -179,12 +168,7 @@ export const Graph = React.memo(function Graph({
       `}</style>
       {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph no-select">
-        <svg
-          width={width}
-          height={height}
-          onMouseMove={onMove}
-          onTouchMove={onMove}
-        >
+        <svg width={width} height={height}>
           <Group
             // Add 0.5 to snap centered strokes onto the pixel grid
             left={margin.left + 0.5}
@@ -224,22 +208,7 @@ export const Graph = React.memo(function Graph({
           </Group>
         </svg>
         <div className="graph-overlay">
-          <NearestOverlay
-            style={{
-              top: '100%',
-              transform: 'translateY(3px)',
-              background: 'var(--color-background)',
-              borderRadius: '99em',
-              padding: '6px 12px 5px',
-              boxShadow:
-                '0 2px 5px -1px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.15)',
-              fontSize: '12px',
-              lineHeight: '1',
-              fontWeight: 500,
-            }}
-          >
-            {(d) => formatShortDate(getDate(d))}
-          </NearestOverlay>
+          <Scrubber>{(d, active) => formatShortDate(getDate(d))}</Scrubber>
           {overlay}
         </div>
       </div>
