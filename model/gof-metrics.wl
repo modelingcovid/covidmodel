@@ -224,7 +224,6 @@ cumIData,
 
   states=Sort[Keys[allStatesData], AlphabeticOrder];
 
-
   processState[state_]:=Module[{icucurrent, hospcumulative, hospcurrent,icucumulative,hascurrhosp,hascumhosp,hascurricu,hascumicu},
     hospcurrent=Select[{#["day"],#["currentlyReportedHospitalized"]["confirmed"],#["currentlyReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     hospcumulative=Select[{#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
@@ -248,7 +247,6 @@ cumIData,
       "rmsRelativeErrorCumulativeCritical"->If[hascumicu,Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,icucumulative]]],0]
     |>
   ];
-  
 
   n = Length[states];
   allData=Map[processState,states];

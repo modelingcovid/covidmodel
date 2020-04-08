@@ -77,6 +77,20 @@ midpointConvergeStateDifferences0=today+130;
 startConvergeStateDifferences0=today+102;
 statesConvergeToValue0=4;
 
+susceptibilityBins=20;
+susceptibilityValues=Table[(i-1)/(susceptibilityBins - 1),{i,1,susceptibilityBins}];
+susceptibilityInitialPopulations=Module[{mean=.85, stdDev=.1, a, b, binSize,betaDist},
+  a = -mean(mean^2-mean-stdDev^2)/stdDev^2;
+  b = (mean-1)(mean^2-mean-stdDev^2)/stdDev^2;
+  binSize=1./susceptibilityBins;
+  betaDist=CDF[BetaDistribution[a,b]];
+  N[Table[betaDist[binSize*i]-betaDist[binSize*(i-1)],{i,1,susceptibilityBins}]]
+];
+
+(* use these values to turn off heterogeneous susceptibility *)
+(*susceptibilityBins=1;
+susceptibilityValues={1};
+susceptibilityInitialPopulations={1};*)
 
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
@@ -106,8 +120,8 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->54,"replower"->1.5,"repupper"->2|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.4,"repupper"->1.5|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->53,"replower"->1.55,"repupper"->2|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.6,"repupper"->2|>,
   "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->56,"tupper"->60,"replower"->1.4,"repupper"->1.7|>,
   "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->1.65,"repupper"->2|>,
   "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1.1,"repupper"->1.4|>,
@@ -117,15 +131,15 @@ fitStartingOverrides=<|
   "OH"-><|"rlower"->3.8,"rupper"->4.6,"tlower"->53,"tupper"->62,"replower"->0.5,"repupper"->1.4|>,
   "NY"-><|"rlower"->5,"rupper"->6,"tlower"->48,"tupper"->60,"replower"->1,"repupper"->1.3|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->55,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
-  "VT"-><|"rlower"->2.5,"rupper"->2.9,"tlower"->38,"tupper"->41,"replower"->0.8,"repupper"->1|>,
+  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->37,"tupper"->44,"replower"->0.8,"repupper"->2|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.5,"repupper"->1.4|>,
   "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->1.4|>,
-  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->49,"replower"->1.3,"repupper"->1.6|>,
+  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->44,"tupper"->47,"replower"->1.4,"repupper"->1.6|>,
   "MA"-><|"rlower"->4.6,"rupper"->5.7,"tlower"->45,"tupper"->57,"replower"->1.5,"repupper"->1.7|>,
   "MD"-><|"rlower"->3.7,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->1.4,"repupper"->1.6|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.4|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.2|>,
   "NJ"-><|"rlower"->5.2,"rupper"->6,"tlower"->50,"tupper"->54,"replower"->1.4,"repupper"->1.8|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->56,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->53,"tupper"->60,"replower"->1.4,"repupper"->2|>,
   "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
   "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->0.7,"repupper"->1.4|>,
   "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->60,"replower"->0.5,"repupper"->1.7|>,
@@ -326,41 +340,43 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   percentPositiveCase[t_]:=posInterpMap[state][t];
   Clear[Sq,Eq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
   Clear[r0natural,daysUntilNotInfectiousOrHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity,distpow];
-  equationsDAE = {
-    Sq'[t]==(- k * Log[1 + (distancing[t]^distpow*Iq[t]*r0natural)/(k*daysUntilNotInfectiousOrHospitalized )]*Sq[t])-est[t]*Sq[t],
-    Eq'[t]==( k * Log[1 + (distancing[t]^distpow*Iq[t]*r0natural)/(k*daysUntilNotInfectiousOrHospitalized )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious,
-    (*Infectious total, not yet PCR confirmed,age indep*)
-    ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,
-    (*Recovered without needing care*)
-    RSq'[t]==ISq[t]/daysUntilNotInfectiousOrHospitalized,
-    (*Infected and will need hospital, won't need critical care*)
-    IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious-IHq[t]/daysUntilNotInfectiousOrHospitalized,
-    (*Going to hospital*)
-    HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
-    (*Reported positive hospital cases*)
-    RepHq'[t]==testingProbability[t] * HHq'[t]/daysForHospitalsToReportCases0,
-    (*Cumulative hospitalized count*)
-    EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,
-    (*Recovered after hospitalization*)
-    RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
-    (*pcr confirmation*)
-    PCR'[t] ==testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
-    (*Infected, will need critical care*)
-    ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
-    (*Hospitalized,
-    need critical care*)
-    HCq'[t]==ICq[t]/daysUntilNotInfectiousOrHospitalized-HCq[t]/daysTogoToCriticalCare,
-    (*Entering critical care*)
-    CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,
-    (*Dying*)
-    Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
-    (*Leaving critical care*)
-    RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
-    (* establishment *)
-    est'[t]==0,
-    (* we should just drop this equation so we dont need the ODE conversion below *)
-    Iq[t]==ISq[t]+IHq[t]+ICq[t] (*Infected without needing care*)
-  };
+
+  equationsDAE = Flatten[{
+      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
+        {i,1,susceptibilityBins}],
+      Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
+      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      (*Infectious total, not yet PCR confirmed,age indep*)
+      ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,
+      (*Recovered without needing care*)
+      RSq'[t]==ISq[t]/daysUntilNotInfectiousOrHospitalized,
+      (*Infected and will need hospital, won't need critical care*)
+      IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious-IHq[t]/daysUntilNotInfectiousOrHospitalized,
+      (*Going to hospital*)
+      HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
+      (*Reported positive hospital cases*)
+      RepHq'[t]==testingProbability[t] * HHq'[t]/daysForHospitalsToReportCases0,
+      (*Cumulative hospitalized count*)
+      EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,
+      (*Recovered after hospitalization*)
+      RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
+      (*pcr confirmation*)
+      PCR'[t] ==testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
+      (*Infected, will need critical care*)
+      ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
+      (*Hospitalized, need critical care*)
+      HCq'[t]==ICq[t]/daysUntilNotInfectiousOrHospitalized-HCq[t]/daysTogoToCriticalCare,
+      (*Entering critical care*)
+      CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      (*Dying*)
+      Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
+      (*Leaving critical care*)
+      RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
+      (* establishment *)
+      est'[t]==0,
+      (* we should just drop this equation so we dont need the ODE conversion below *)
+      Iq[t]==ISq[t]+IHq[t]+ICq[t] (*Infected without needing care*)
+    }];
   events = {
     WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]],(*when the virus is contained without herd immunity extract the time*)
     WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
@@ -370,9 +386,16 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength,est[t]->0]
   };
-  initialConditions = {Sq[0]==1,Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0};
+
+  initialConditions = Flatten[{
+      Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
+      Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
   output = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
-  dependentVariables = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est,Iq};
+  dependentVariables = Flatten[{
+      Sq, Table[sSq[i],{i,1,susceptibilityBins}],
+      Deaq, PCR, RepHq,
+      Eq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est,Iq}];
+
   parameters = {
     r0natural,
     daysUntilNotInfectiousOrHospitalized,
@@ -644,50 +667,49 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   icuCurrentData = stateICUCurrentActualsData[state];
   icuCumulativeData = stateICUCumulativeActualsData[state];
 
-
   (* a scoped copy of the ODEs, Thsese do not use heterogeneous susceptibility since they are fit on low I / early t and we fit *)
   (* the import time *)
-  equationsODE={
-    Sq'[t]==(- k0 * Log[1 + (distancing[t]^distpow*(ISq[t]+IHq[t]+ICq[t])*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized0 )]*Sq[t])-est[t]*Sq[t],
-    Eq'[t]==( k0 * Log[1 + (distancing[t]^distpow*(ISq[t]+IHq[t]+ICq[t])*r0natural)/(k0*daysUntilNotInfectiousOrHospitalized0 )]*Sq[t])+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,
-    (*    Sq'[t]==(-distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0-est[t]*Sq[t],
-    Eq'[t]==(distancing[t]^distpow*r0natural*(ISq[t]+IHq[t]+ICq[t] )*Sq[t])/daysUntilNotInfectiousOrHospitalized0+est[t]*Sq[t]-Eq[t]/daysFromInfectedToInfectious0,*)
-    (*Infectious total, not yet PCR confirmed,age indep*)
-    ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
-    (*Recovered without needing care*)
-    RSq'[t]==ISq[t]/daysUntilNotInfectiousOrHospitalized0,
-    (*Infected and will need hospital, won't need critical care*)
-    IHq'[t]==params["pH"]*Eq[t]/daysFromInfectedToInfectious0-IHq[t]/daysUntilNotInfectiousOrHospitalized0,
-    (*Going to hospital*)
-    HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0-HHq[t]/daysToLeaveHosptialNonCritical0,
-    (*Reported positive hospital cases*)
-    RepHq'[t]==testingProbability[t] * (params["pPCRH"]*HHq[t])/daysForHospitalsToReportCases0,
-    (*Cumulative hospitalized count*)
-    EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0,
-    (*Recovered after hospitalization*)
-    RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
-    (*pcr confirmation*)
-    PCR'[t] == testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (params["pPCRNH"]*ISq[t] + params["pPCRH"]*(IHq[t]+ICq[t])) / (daysToGetTested0),
-    (*Infected, will need critical care*)
-    ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
-    (*Hospitalized,
-    need critical care*)
-    HCq'[t]==ICq[t]/daysUntilNotInfectiousOrHospitalized0-HCq[t]/daysTogoToCriticalCare0,
-    (*Entering critical care*)
-    CCq'[t]==HCq[t]/daysTogoToCriticalCare0-CCq[t]/daysFromCriticalToRecoveredOrDeceased0,
-    (*Dying*)
-    Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,params["fractionOfCriticalDeceased"],params["fractionOfCriticalDeceased"]]/daysFromCriticalToRecoveredOrDeceased0,
-    (*Leaving critical care*)
-    RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased0)/daysFromCriticalToRecoveredOrDeceased0,
-    est'[t]==0
-  }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}];
+  equationsODE=Flatten[{
+      Table[
+        sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
+        {i,1,susceptibilityBins}],
+      Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
+      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      (*Infectious total, not yet PCR confirmed,age indep*)
+      ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
+      (*Recovered without needing care*)
+      RSq'[t]==ISq[t]/daysUntilNotInfectiousOrHospitalized0,
+      (*Infected and will need hospital, won't need critical care*)
+      IHq'[t]==params["pH"]*Eq[t]/daysFromInfectedToInfectious0-IHq[t]/daysUntilNotInfectiousOrHospitalized0,
+      (*Going to hospital*)
+      HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0-HHq[t]/daysToLeaveHosptialNonCritical0,
+      (*Reported positive hospital cases*)
+      RepHq'[t]==testingProbability[t] * (pPCRH0*HHq[t])/daysForHospitalsToReportCases0,
+      (*Cumulative hospitalized count*)
+      EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0,
+      (*Recovered after hospitalization*)
+      RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
+      (*pcr confirmation*)
+      PCR'[t] == testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
+      (*Infected, will need critical care*)
+      ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
+      (*Hospitalized, need critical care*)
+      HCq'[t]==ICq[t]/daysUntilNotInfectiousOrHospitalized0-HCq[t]/daysTogoToCriticalCare0,
+      (*Entering critical care*)
+      CCq'[t]==HCq[t]/daysTogoToCriticalCare0-CCq[t]/daysFromCriticalToRecoveredOrDeceased0,
+      (*Dying*)
+      Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased0,fractionOfCriticalDeceased0]/daysFromCriticalToRecoveredOrDeceased0,
+      (*Leaving critical care*)
+      RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased0)/daysFromCriticalToRecoveredOrDeceased0,
+      est'[t]==0
+    }]/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}];
   eventsODE = {
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse0]],
     WhenEvent[t>importtime+importlength0,est[t]->0]
   }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}];
-  initialConditions = {Sq[0]==1,Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0};
+  initialConditions = Flatten[{Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
   outputODE = {Deaq, PCR};
-  dependentVariablesODE = {Deaq, PCR, RSq,RHq, RCq, RepHq, Sq, Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est};
+  dependentVariablesODE = Flatten[{Deaq, PCR, RSq,RHq, RCq, RepHq, Sq, Table[sSq[i],{i,1,susceptibilityBins}], Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est}];
   parameters = {logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences, logDistpow};
   {DeaqParametric,PCRParametric}= {Deaq, PCR}/.ParametricNDSolve[
     {equationsODE, eventsODE, initialConditions},
@@ -731,7 +753,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
-        Log[1]<=distpow<= Log[2],
+        Log[1.5]<=distpow<= Log[2],
         Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
       },
       {
@@ -863,7 +885,6 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-
     Export["public/json/"<>state<>".json",stateData];
     stateData
   ];
