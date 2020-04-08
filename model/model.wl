@@ -336,7 +336,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     eventsODE,
     lhs,
     rhs,
-    dependentVariablesODE
+    dependentVariablesODE,
+    summaryAug1,
+    aug1,
+    endOfEvalAug1
   },
 
   distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
@@ -477,11 +480,15 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   events=Association[Flatten[evts]];
   prettyEvents={#-><|"eventName" -> #, "day" -> events[#][[1]][[1]], "thresholdCrossed" -> events[#][[1]][[2]]|>}&/@Keys[events];
 
-  endOfYear = 365;
+  endOfYear = 730;
+  aug1 = 214;
   (* we  chop off the data here with one of either a containment or herd immunity events *)
   endOfEval = If[KeyExistsQ[events, "containment"], events["containment"][[1]][[1]],
     If[KeyExistsQ[events, "cutoff"], events["cutoff"][[1]][[1]],
       endOfYear]];
+  endOfEvalAug1 = If[KeyExistsQ[events, "containment"], events["containment"][[1]][[1]],
+    If[KeyExistsQ[events, "cutoff"], events["cutoff"][[1]][[1]],
+      aug1]];
 
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
 
@@ -641,6 +648,52 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       DateString[DatePlus[{2020,1,1},hospitalOverloadTime-1]],
       "-"]
   |>;
+  
+  
+  summaryAug1=<|
+    "totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],
+      DeathQuantiles[containmentTime][[5]],
+      DeathQuantiles[endOfEvalAug1][[5]]],
+    "totalProjectedPCRConfirmed"->If[KeyExistsQ[events, "containment"],
+      PCRQuantiles[containmentTime][[5]],
+      PCRQuantiles[endOfEvalAug1][[5]]],
+    "totalProjectedInfected"->If[KeyExistsQ[events, "containment"],
+      CumulativeInfectionQuantiles[containmentTime][[5]],
+      CumulativeInfectionQuantiles[endOfEvalAug1][[5]]],
+    "totalInfectedFraction"->If[KeyExistsQ[events, "containment"],
+      CumulativeInfectionQuantiles[containmentTime][[5]] / stateParams["params"]["population"],
+      CumulativeInfectionQuantiles[endOfEvalAug1][[5]] / stateParams["params"]["population"]],
+    "fatalityRate"->If[KeyExistsQ[events, "containment"],
+      (DeathQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
+      DeathQuantiles[endOfEvalAug1][[5]]/(CumulativeInfectionQuantiles[endOfEvalAug1][[5]])],
+    "fatalityRateSymptomatic"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
+      (DeathQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
+      DeathQuantiles[endOfEvalAug1][[5]]/(CumulativeInfectionQuantiles[endOfEvalAug1][[5]])],
+    "fatalityRatePCR"->If[KeyExistsQ[events, "containment"],
+      DeathQuantiles[containmentTime][[5]]/PCRQuantiles[containmentTime][[5]],
+      DeathQuantiles[endOfEvalAug1][[5]]/PCRQuantiles[endOfEvalAug1][[5]]],
+    "fractionOfSymptomaticHospitalized"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
+      (CumulativeEverHospitalizedQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
+      CumulativeEverHospitalizedQuantiles[endOfEvalAug1][[5]]/(CumulativeInfectionQuantiles[endOfEvalAug1][[5]])],
+    "fractionOfPCRHospitalized"-> If[KeyExistsQ[events, "containment"],
+      CumulativeEverHospitalizedQuantiles[containmentTime][[5]]/PCRQuantiles[containmentTime][[5]],
+      CumulativeEverHospitalizedQuantiles[endOfEvalAug1][[5]]/PCRQuantiles[endOfEvalAug1][[5]]],
+    "fractionHospitalizedInICU"-> If[KeyExistsQ[events, "containment"],
+      CumulativeEverCriticalQuantiles[containmentTime][[5]]/(CumulativeEverHospitalizedQuantiles[containmentTime][[5]] + CumulativeEverCriticalQuantiles[containmentTime][[5]]),
+      CumulativeEverCriticalQuantiles[endOfEvalAug1][[5]]/(CumulativeEverHospitalizedQuantiles[endOfEval][[5]] + CumulativeEverCriticalQuantiles[endOfEval][[5]] )],
+    "fractionOfInfectionsPCRConfirmed"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
+      (PCRQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
+      PCRQuantiles[endOfEvalAug1][[5]]/(CumulativeInfectionQuantiles[endOfEvalAug1][[5]])],
+    "dateContained"->If[KeyExistsQ[events, "containment"],
+      DateString[DatePlus[{2020,1,1},containmentTime-1]],
+      "-"],
+    "dateICUOverCapacity"->If[KeyExistsQ[events, "icu"]&&(!KeyExistsQ[events, "containment"]||(icuOverloadTime - containmentTime)<=0),
+      DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
+      "-"],
+    "dateHospitalsOverCapacity"->If[KeyExistsQ[events, "hospital"]&&(!KeyExistsQ[events, "containment"]||(hospitalOverloadTime - containmentTime)<=0),
+      DateString[DatePlus[{2020,1,1},hospitalOverloadTime-1]],
+      "-"]
+  |>;
 
   (* Echo[Column[{Text["Summary of simulatons for "<>state<>" in the "<>scenario["name"]<>" scenario."],summary}]];*)
 
@@ -650,7 +703,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       Association[{
           "timeSeriesData"->timeSeriesData,
           "events"->prettyEvents,
-          "summary"->summary
+          "summary"->summary,
+          "summaryAug1"->summaryAug1
         }]}, First]
 ];
 
@@ -875,6 +929,19 @@ generateSummaryForState[data_, state_]:= Module[{},
   ]&/@Keys[data["scenarios"]]
 ];
 
+generateAugSummaryForState[data_, state_]:= Module[{},
+  Join[{state},Values[Association[Join[
+          KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summaryAug1"],
+          data["scenarios"][#]["summaryAug1"]
+        ]]],
+    {
+      data["r0"],
+      data["importtime"],
+      data["stateAdjustmentForTestingDifferences"]
+    }
+  ]&/@Keys[data["scenarios"]]
+];
+
 
 exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
   header = {Append[Prepend[Keys[
@@ -886,8 +953,20 @@ exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
 
   table = Flatten[Join[{header}, rows],1];
 
-
   Export["tests/summary.csv", table];
+]
+
+exportAllStatesSummaryAug1[allStates_]:=Module[{header, rows, table},
+  header = {Append[Prepend[Keys[
+          Association[Join[
+              KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summaryAug1"],
+              allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summaryAug1"]
+            ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences"}]};
+  rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
+
+  table = Flatten[Join[{header}, rows],1];
+
+  Export["tests/summaryAug1.csv", table];
 ]
 
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
@@ -904,9 +983,10 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPreco
   allStatesData=Association[Parallelize[Map[(#->loopBody[#])&,states]]];
 
   exportAllStatesSummary[allStatesData];
+  exportAllStatesSummaryAug1[allStatesData];
 
   exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
-  exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
+  exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData]; 
   exportAllStatesHospitalizationGoodnessOfFitMetricsSvg["tests/hospitalization-relative-fit-errors.svg",allStatesData];
   allStatesData
 ]
