@@ -13,6 +13,7 @@ export const GraphControls = ({scale, setScale}) => (
       div {
         display: flex;
         justify-content: flex-end;
+        clear: both;
       }
       a {
         display: block;

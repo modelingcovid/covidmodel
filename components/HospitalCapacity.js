@@ -118,6 +118,7 @@ export const HospitalCapacity = ({width, height}) => {
           data={timeSeriesData}
           domain={cumulativeDomain}
           initialScale="linear"
+          controls
           height={height}
           width={width}
           x={x}
