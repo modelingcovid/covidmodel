@@ -242,7 +242,13 @@ export function SEIR({height, width}) {
           after={
             <Legend>
               {config.map(({y, fill, label, description}, i) => (
-                <PercentileLegendRow key={i} y={y} color={fill} title={label} />
+                <PercentileLegendRow
+                  key={i}
+                  y={y}
+                  color={fill}
+                  title={label}
+                  compact
+                />
               ))}
             </Legend>
           }

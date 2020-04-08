@@ -12,6 +12,7 @@ export const PercentileLegendRow = ({
   color,
   title,
   y,
+  compact = false,
 }) => {
   const {data} = useGraphData();
   const hasConfirmed = useMemo(() => data.some((d) => !!y(d).confirmed), [
@@ -23,15 +24,26 @@ export const PercentileLegendRow = ({
   if (!d) {
     return null;
   }
-  if (hasConfirmed) {
+  if (compact && !hasConfirmed) {
     return (
-      <LegendRow label={title}>
-        <LegendEntry
-          label="Modeled"
-          color={color}
-          format={format}
-          y={(d) => getExpectedOr50(y(d))}
-        />
+      <LegendRow
+        label={title}
+        color={color}
+        format={format}
+        y={(d) => getExpectedOr50(y(d))}
+      />
+    );
+  }
+  return (
+    <LegendRow label={title}>
+      <LegendEntry
+        label="Modeled"
+        color={color}
+        format={format}
+        y={(d) => getExpectedOr50(y(d))}
+      />
+
+      {hasConfirmed && (
         <LegendEntry
           label="Confirmed"
           color={color}
@@ -39,15 +51,7 @@ export const PercentileLegendRow = ({
           y={(d) => y(d).confirmed}
           format={formatNA(format)}
         />
-      </LegendRow>
-    );
-  }
-  return (
-    <LegendRow
-      label={title}
-      color={color}
-      format={format}
-      y={(d) => getExpectedOr50(y(d))}
-    />
+      )}
+    </LegendRow>
   );
 };

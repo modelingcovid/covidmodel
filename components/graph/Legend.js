@@ -35,6 +35,7 @@ const entryStyles = css`
     margin-left: ${theme.spacing[0]};
   }
   .entry-label {
+    justify-self: flex-start;
     flex-grow: 6;
     text-align: left;
   }
@@ -78,6 +79,7 @@ export const LegendEntry = ({
         .entry-label {
           font-weight: ${kind === 'minor' ? 400 : 500};
           color: ${theme.color.gray[kind === 'minor' ? 3 : 5]};
+          max-width: ${y ? '60%' : '100%'};
         }
         .entry-symbol {
           background-color: ${isStroke ? 'transparent' : color};
