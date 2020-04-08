@@ -87,8 +87,8 @@ const config = [
   },
 ];
 
-const byLabel = config.reduce((o, c) => {
-  o[c.label.toLowerCase()] = c;
+const byLabel = config.reduce((o, {label, fill, color}) => {
+  o[label.toLowerCase()] = {fill, color};
   return o;
 }, {});
 
