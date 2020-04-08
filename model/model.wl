@@ -120,8 +120,8 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->54,"replower"->1.5,"repupper"->2|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.4,"repupper"->1.5|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->53,"replower"->1.55,"repupper"->2|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.6,"repupper"->2|>,
   "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->56,"tupper"->60,"replower"->1.4,"repupper"->1.7|>,
   "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->1.65,"repupper"->2|>,
   "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1.1,"repupper"->1.4|>,
@@ -131,15 +131,15 @@ fitStartingOverrides=<|
   "OH"-><|"rlower"->3.8,"rupper"->4.6,"tlower"->53,"tupper"->62,"replower"->0.5,"repupper"->1.4|>,
   "NY"-><|"rlower"->5,"rupper"->6,"tlower"->48,"tupper"->60,"replower"->1,"repupper"->1.3|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->55,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
-  "VT"-><|"rlower"->2.5,"rupper"->2.9,"tlower"->38,"tupper"->41,"replower"->0.8,"repupper"->1|>,
+  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->37,"tupper"->44,"replower"->0.8,"repupper"->2|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.5,"repupper"->1.4|>,
   "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->1.4|>,
-  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->46,"tupper"->49,"replower"->1.3,"repupper"->1.6|>,
+  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->44,"tupper"->47,"replower"->1.4,"repupper"->1.6|>,
   "MA"-><|"rlower"->4.6,"rupper"->5.7,"tlower"->45,"tupper"->57,"replower"->1.5,"repupper"->1.7|>,
   "MD"-><|"rlower"->3.7,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->1.4,"repupper"->1.6|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.4|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.2|>,
   "NJ"-><|"rlower"->5.2,"rupper"->6,"tlower"->50,"tupper"->54,"replower"->1.4,"repupper"->1.8|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->56,"tupper"->60,"replower"->0.5,"repupper"->1.4|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->53,"tupper"->60,"replower"->1.4,"repupper"->2|>,
   "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
   "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->0.7,"repupper"->1.4|>,
   "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->60,"replower"->0.5,"repupper"->1.7|>,
@@ -753,7 +753,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
-        Log[1]<=distpow<= Log[2],
+        Log[1.5]<=distpow<= Log[2],
         Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
       },
       {
@@ -885,7 +885,6 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    Echo[Column[{plotStateHospitalization[stateData]}]];
     Export["public/json/"<>state<>".json",stateData];
     stateData
   ];
