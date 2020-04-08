@@ -7,41 +7,36 @@ import {getDate} from '../../lib/date';
 import {formatShortDate, formatNumber} from '../../lib/format';
 
 const legendStyles = css`
-  tr {
+  .legend-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
     box-shadow: inset 0 1px var(--color-shadow0);
-  }
-  td {
-    color: ${theme.color.gray[4]};
     margin-top: 4px;
     padding-top: 4px;
-    padding-left: ${theme.spacing[1]};
-    text-align: right;
-    vertical-align: top;
-  }
-  td:first-child {
-    text-align: left;
-    padding-left: 0;
-    width: 60%;
-    line-height: 1.4;
   }
 `;
+
 const entryStyles = css`
   .entry {
     color: ${theme.color.gray[5]};
     display: flex;
-    flex-wrap: wrap-reverse;
     align-items: baseline;
     justify-content: flex-end;
     font-size: ${theme.font.size.micro};
     line-height: 1.2;
     margin-top: 3px;
+    width: 100%;
   }
   .entry-info {
     display: flex;
+    justify-content: flex-end;
+    flex-grow: 4;
     margin-left: ${theme.spacing[0]};
   }
   .entry-label {
-    color: ${theme.color.gray[3]};
+    flex-grow: 6;
+    text-align: left;
   }
   .entry-symbol {
     flex-shrink: 0;
@@ -64,6 +59,7 @@ export const LegendEntry = ({
   format = formatNumber,
   color,
   label,
+  kind = 'minor',
   symbol = 'fill',
   y,
 }) => {
@@ -79,6 +75,10 @@ export const LegendEntry = ({
     <div className="entry">
       <style jsx>{entryStyles}</style>
       <style jsx>{`
+        .entry-label {
+          font-weight: ${kind === 'minor' ? 400 : 500};
+          color: ${theme.color.gray[kind === 'minor' ? 3 : 5]};
+        }
         .entry-symbol {
           background-color: ${isStroke ? 'transparent' : color};
           border-color: ${borderColor};
@@ -93,22 +93,12 @@ export const LegendEntry = ({
   );
 };
 
-export const LegendRow = ({children, description, title}) => (
-  <tr>
+export const LegendRow = ({children, ...remaining}) => (
+  <div className="legend-row">
     <style jsx>{legendStyles}</style>
-    <td>
-      <div className="text-micro text-gray weight-500">{title}</div>
-      {description && (
-        <div
-          style={{paddingBottom: theme.spacing[1]}}
-          className="text-micro text-gray-light"
-        >
-          {description}
-        </div>
-      )}
-    </td>
-    <td>{children}</td>
-  </tr>
+    <LegendEntry {...remaining} kind="major" />
+    {children}
+  </div>
 );
 
 export const Legend = ({children}) => {
@@ -124,6 +114,7 @@ export const Legend = ({children}) => {
           margin-bottom: var(--spacing2);
           float: right;
           user-select: none;
+          width: 100%;
         }
         @media (min-width: 600px) {
           div {
@@ -131,25 +122,8 @@ export const Legend = ({children}) => {
             max-width: calc(var(--column-width) * 3);
           }
         }
-        table {
-          table-layout: fixed;
-          width: 100%;
-        }
-        th {
-          padding-left: var(--spacing1);
-          font-weight: 400;
-          text-align: right;
-          vertical-align: bottom;
-          width: 60%;
-        }
-        th:first-child {
-          text-align: left;
-          padding-left: 0;
-        }
       `}</style>
-      <table>
-        <tbody>{children}</tbody>
-      </table>
+      {children}
     </div>
   );
 };

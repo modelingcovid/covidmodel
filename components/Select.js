@@ -117,12 +117,12 @@ export const Select = React.memo(function Select({
         }
       `}</style>
       <div className="focus-within">
-        <label {...getLabelProps()} className="text-small text-gray-light">
+        <label {...getLabelProps()} className="text-micro text-gray-light">
           {label}
         </label>
         <button
           {...getToggleButtonProps()}
-          className="text-ui weight-600 text-gray"
+          className="text-ui text-small weight-600 text-gray"
         >
           {itemText}
         </button>

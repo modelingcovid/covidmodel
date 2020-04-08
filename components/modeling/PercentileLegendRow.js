@@ -24,13 +24,12 @@ export const PercentileLegendRow = ({
     return null;
   }
   return (
-    <LegendRow title={title} description={description}>
-      <LegendEntry
-        // label="Modeled"
-        color={color}
-        format={format}
-        y={(d) => getExpectedOr50(y(d))}
-      />
+    <LegendRow
+      label={title}
+      color={color}
+      format={format}
+      y={(d) => getExpectedOr50(y(d))}
+    >
       {hasConfirmed && (
         <LegendEntry
           label="Confirmed"
