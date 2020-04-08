@@ -7,7 +7,13 @@ import {getDate} from '../../lib/date';
 import {formatShortDate, formatNumber} from '../../lib/format';
 
 const legendStyles = css`
+  tr {
+    box-shadow: inset 0 1px var(--color-shadow0);
+  }
   td {
+    color: ${theme.color.gray[4]};
+    margin-top: 4px;
+    padding-top: 4px;
     padding-left: ${theme.spacing[1]};
     text-align: right;
     vertical-align: top;
@@ -15,19 +21,27 @@ const legendStyles = css`
   td:first-child {
     text-align: left;
     padding-left: 0;
+    width: 60%;
+    line-height: 1.4;
   }
 `;
 const entryStyles = css`
   .entry {
+    color: ${theme.color.gray[5]};
     display: flex;
+    flex-wrap: wrap-reverse;
     align-items: baseline;
     justify-content: flex-end;
     font-size: ${theme.font.size.micro};
-    padding-bottom: 4px;
+    line-height: 1.2;
+    margin-top: 3px;
+  }
+  .entry-info {
+    display: flex;
+    margin-left: ${theme.spacing[0]};
   }
   .entry-label {
-    margin-right: ${theme.spacing[0]};
-    color: ${theme.color.gray[4]};
+    color: ${theme.color.gray[3]};
   }
   .entry-symbol {
     flex-shrink: 0;
@@ -41,7 +55,7 @@ const entryStyles = css`
   .entry-data {
     font-family: ${theme.font.family.mono};
     font-weight: 500;
-    font-size: ${theme.font.size.micro};
+    font-size: ${theme.font.size.tiny};
   }
 `;
 
@@ -66,13 +80,15 @@ export const LegendEntry = ({
       <style jsx>{entryStyles}</style>
       <style jsx>{`
         .entry-symbol {
-          background-color: ${isStroke ? theme.color.background : color};
+          background-color: ${isStroke ? 'transparent' : color};
           border-color: ${borderColor};
         }
       `}</style>
       <div className="entry-label">{label}</div>
-      {color && <div className="entry-symbol" />}
-      <div className="entry-data">{format(y(d))}</div>
+      <div className="entry-info">
+        {color && <div className="entry-symbol" />}
+        <div className="entry-data">{format(y(d))}</div>
+      </div>
     </div>
   );
 };
@@ -81,11 +97,11 @@ export const LegendRow = ({children, description, title}) => (
   <tr>
     <style jsx>{legendStyles}</style>
     <td>
-      <div className="text-small text-gray-dark weight-600">{title}</div>
+      <div className="text-micro text-gray weight-500">{title}</div>
       {description && (
         <div
           style={{paddingBottom: theme.spacing[1]}}
-          className="text-small text-gray-light"
+          className="text-micro text-gray-light"
         >
           {description}
         </div>
@@ -105,13 +121,14 @@ export const Legend = ({children}) => {
       <style jsx>{`
         div {
           margin-top: var(--spacing1);
+          margin-bottom: var(--spacing2);
+          float: right;
+          user-select: none;
         }
         @media (min-width: 600px) {
           div {
-            margin-left: calc(var(--column-width) * 3);
-            padding-left: calc(var(--column-width) / 2);
-            box-shadow: inset 1px 0 0 var(--color-gray0);
-            max-width: calc(var(--column-width) * 9);
+            padding-left: var(--spacing1);
+            max-width: calc(var(--column-width) * 3);
           }
         }
         table {
@@ -123,6 +140,7 @@ export const Legend = ({children}) => {
           font-weight: 400;
           text-align: right;
           vertical-align: bottom;
+          width: 60%;
         }
         th:first-child {
           text-align: left;
@@ -130,11 +148,6 @@ export const Legend = ({children}) => {
         }
       `}</style>
       <table>
-        <thead className="text-small text-gray-light">
-          <tr>
-            <th>{formatShortDate(getDate(d))}</th>
-          </tr>
-        </thead>
         <tbody>{children}</tbody>
       </table>
     </div>

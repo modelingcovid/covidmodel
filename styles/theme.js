@@ -25,7 +25,7 @@ export const {
         '#2d3146',
         '#181b2c',
       ],
-      bg: '#f6f8fa',
+      bg: '#e8eaed',
       muted: '#515a70',
     },
     blue: {
@@ -52,6 +52,7 @@ export const {
       // TODO(koop): Define this in relation to other variables
       jumbo: 'calc(var(--maxWidth) * 0.1)',
       ...px({
+        tiny: 12,
         micro: 13,
         small: 14,
         title: 28,
@@ -100,7 +101,7 @@ export const darkMode = setProperties({
         '#e0e6eb',
         '#f6f8fa',
       ],
-      bg: '#2d3146',
+      bg: '#1d2135',
       muted: '#c0c8d2',
     },
     red: ['#ffa8a8', '#ff0a33', '#f00028'],

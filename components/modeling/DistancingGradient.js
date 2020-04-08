@@ -26,7 +26,7 @@ const darkColor = (n) => {
   return darkSource.toString();
 };
 
-export const DistancingGradient = () => {
+export const DistancingGradient = React.memo(function DistancingGradient() {
   const isDarkMode = useMatchMedia(mediaQuery.darkMode);
   return (
     <ScaleGradientLayer
@@ -38,4 +38,4 @@ export const DistancingGradient = () => {
       }}
     />
   );
-};
+});

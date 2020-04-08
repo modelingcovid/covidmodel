@@ -2,7 +2,14 @@ import * as React from 'react';
 import {theme} from '../styles';
 import {PopulationGraph} from './configured';
 import {Grid, Heading, Paragraph, Title, UnorderedList} from './content';
-import {Area, Graph, Legend, Line, WithGraphData} from './graph';
+import {
+  Area,
+  Graph,
+  Legend,
+  Line,
+  WithGraphData,
+  WithNearestData,
+} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
   DistancingGradient,
@@ -222,7 +229,6 @@ export function SEIR({height, width}) {
                     y={midY}
                     width={xMax - strokeWidth}
                     height={yMax - midY - strokeWidth}
-                    // fill="transparent"
                     fill={theme.color.shadow[1]}
                     stroke={theme.color.gray[4]}
                     strokeWidth={strokeWidth}
@@ -262,6 +268,28 @@ export function SEIR({height, width}) {
             <Line key={`line-${i}`} y={y1} stroke={fill} />
           ))}
         </Graph>
+        <Paragraph className="margin-top-2">
+          This graph shows how COVID-19 affects the population of {stateName}{' '}
+          over time. While only a small portion of the population actively has
+          COVID-19 at any given time, it can quickly spread. The graph in the
+          top right shows how small changes compound to impact the population as
+          a whole.
+        </Paragraph>
+        <WithNearestData>
+          {(d) => (
+            <Paragraph className="estimation">
+              The model estimates that{' '}
+              <strong>
+                {formatPercent1(
+                  (model.population - getSusceptible(d).expected) /
+                    model.population
+                )}
+              </strong>{' '}
+              of the {stateName} population will have contracted COVID-19 by{' '}
+              {formatDate(x(d))}.
+            </Paragraph>
+          )}
+        </WithNearestData>
       </div>
     </div>
   );

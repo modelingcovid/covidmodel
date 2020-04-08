@@ -33,7 +33,9 @@ export function Scrubber({children, ...remaining}) {
           className="hitbox"
           style={{
             cursor: active ? 'grabbing' : 'grab',
-            transform: `translate(-50%, 0) scale(${active ? 1.1 : 1})`,
+            // Can't scale here, it makes anything that uses mix-blend-mode sad.
+            // https://stackoverflow.com/questions/32932966/mix-blend-mode-is-broken-by-3d-transformations-on-page
+            transform: `translate(-50%, 3px)`,
           }}
         >
           <style jsx>{styles}</style>

@@ -11,6 +11,7 @@ const styles = css`
     font-size: ${theme.font.size.micro};
     font-weight: 400;
     margin-bottom: 12px;
+    clear: both;
   }
   .distancing-info {
     padding-left: 24px;

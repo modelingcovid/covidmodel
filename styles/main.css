@@ -144,8 +144,10 @@ text {
   letter-spacing: -0.02em;
 }
 .estimation {
+  padding: var(--spacing1);
   padding-left: var(--spacing2);
   box-shadow: inset 3px 0 var(--color-yellow2);
+  background: var(--color-gray-bg);
 }
 .block {
   display: block;
