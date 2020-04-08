@@ -5,22 +5,35 @@ const addHairspacesAroundEmDashes = (str) =>
 
 const preventWidows = (str) => str.replace(/ ([^\s]+)$/g, ' $1');
 
-const applyTypography = (str) =>
-  [addHairspacesAroundEmDashes, preventWidows].reduce((s, fn) => fn(s), str);
+const corrections = {
+  block: [addHairspacesAroundEmDashes, preventWidows],
+  inline: [addHairspacesAroundEmDashes],
+};
 
-export function formatText(children) {
+const applyTypography = (str, kind = 'block') => {
+  return corrections[kind].reduce((s, fn) => fn(s), str);
+};
+
+export function formatText(children, kind) {
   return React.Children.map(children, (child) => {
     if (typeof child !== 'string') {
       return child;
     }
-    return applyTypography(child);
+    return applyTypography(child, kind);
   });
 }
 
-export function Paragraph({children, className, ...remaining}) {
-  return (
-    <p {...remaining} className={`paragraph ${className}`}>
-      {formatText(children)}
-    </p>
-  );
-}
+export const createTextComponent = (Tag, boundClassName, kind) => ({
+  children,
+  className,
+  ...props
+}) => (
+  <Tag
+    {...props}
+    className={[boundClassName, className].filter(Boolean).join(' ')}
+  >
+    {formatText(children, kind)}
+  </Tag>
+);
+
+export const Paragraph = createTextComponent('p', 'paragraph');

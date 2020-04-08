@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {Grid} from './content';
+import {Grid, Paragraph} from './content';
 import {Area, Graph, Legend, Line} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
@@ -90,12 +90,11 @@ export function SEIR({height, width}) {
   const percentInfected = summary.totalProjectedInfected / model.population;
   return (
     <div className="margin-top-5">
-      <MethodDisclaimer />
       <div className="section-heading">SEIR</div>
-      <p className="paragraph">
+      <Paragraph>
         The model evaluated here is a standard epidemiological model called
         SEIR. It models the spread of a virus in four states:
-      </p>
+      </Paragraph>
       <ul className="paragraph list-disc list-inside">
         <li>Susceptible (healthy, non-immune people)</li>
         <li>Exposed (infected, but cannot infect others)</li>

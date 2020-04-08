@@ -1,36 +1,30 @@
 import React from 'react';
 import Link from 'next/link';
 import {MDXProvider} from '@mdx-js/react';
-import {Section, formatText} from './content';
-
-const tagWithClassName = (Tag, className) => ({children, ...props}) => (
-  <Tag {...props} className={className}>
-    {formatText(children)}
-  </Tag>
-);
+import {Section, createTextComponent} from './content';
 
 export const MDXComponents = ({children}) => {
   return (
     <MDXProvider
       components={{
         wrapper: Section,
-        h1: tagWithClassName('h1', 'text-jumbo margin-top-4 margin-bottom-1'),
-        h2: tagWithClassName('h2', 'section-heading margin-top-4'),
-        h3: tagWithClassName('h3', ''),
-        h4: tagWithClassName('h4', ''),
-        h5: tagWithClassName('h5', ''),
-        h6: tagWithClassName('h6', ''),
-        p: tagWithClassName('p', 'paragraph'),
-        a: tagWithClassName('a', 'link'),
-        blockquote: tagWithClassName(
-          'blockquote',
-          'border-solid border-l-4 border-gray-300 pl-4'
+        h1: createTextComponent(
+          'h1',
+          'text-jumbo margin-top-4 margin-bottom-1'
         ),
-        ul: tagWithClassName('ul', 'list-disc list-inside'),
-        ol: tagWithClassName('ol', 'list-decimal list-inside'),
-        li: tagWithClassName('li', 'text-body'),
-        strong: tagWithClassName('strong', 'weight-600'),
-        em: tagWithClassName('em', 'italic'),
+        h2: createTextComponent('h2', 'section-heading margin-top-4'),
+        h3: createTextComponent('h3', ''),
+        h4: createTextComponent('h4', ''),
+        h5: createTextComponent('h5', ''),
+        h6: createTextComponent('h6', ''),
+        p: createTextComponent('p', 'paragraph'),
+        a: createTextComponent('a', 'link', 'inline'),
+        blockquote: createTextComponent('blockquote', ''),
+        ul: createTextComponent('ul', 'list-disc list-inside'),
+        ol: createTextComponent('ol', 'list-decimal list-inside'),
+        li: createTextComponent('li', 'text-body'),
+        strong: createTextComponent('strong', 'weight-600', 'inline'),
+        em: createTextComponent('em', 'italic', 'inline'),
       }}
     >
       {children}
