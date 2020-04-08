@@ -77,20 +77,23 @@ midpointConvergeStateDifferences0=today+130;
 startConvergeStateDifferences0=today+102;
 statesConvergeToValue0=4;
 
+(* TODO replace with better distribution (we actually want positive extent, not [0,1])*)
 susceptibilityBins=20;
 susceptibilityValues=Table[(i-1)/(susceptibilityBins - 1),{i,1,susceptibilityBins}];
-susceptibilityInitialPopulations=Module[{mean=.85, stdDev=.1, a, b, binSize,betaDist},
-  a = -mean(mean^2-mean-stdDev^2)/stdDev^2;
+susceptibilityInitialPopulations=Module[{mean=.15, stdDev=.1, a, b, binSize,betaDist},
+  a = mean (mean-mean^2+stdDev^2)/stdDev^2;
   b = (mean-1)(mean^2-mean-stdDev^2)/stdDev^2;
   binSize=1./susceptibilityBins;
   betaDist=CDF[BetaDistribution[a,b]];
   N[Table[betaDist[binSize*i]-betaDist[binSize*(i-1)],{i,1,susceptibilityBins}]]
 ];
+susceptibilityCoefficient=1./Total[susceptibilityValues*susceptibilityInitialPopulations];
 
 (* use these values to turn off heterogeneous susceptibility *)
 (*susceptibilityBins=1;
 susceptibilityValues={1};
-susceptibilityInitialPopulations={1};*)
+susceptibilityInitialPopulations={1};
+susceptibilityCoefficient=1;*)
 
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
@@ -342,10 +345,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   Clear[r0natural,daysUntilNotInfectiousOrHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity,distpow];
 
   equationsDAE = Flatten[{
-      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
+      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
-      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * Sum[susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,
       (*Recovered without needing care*)
@@ -671,10 +674,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* the import time *)
   equationsODE=Flatten[{
       Table[
-        sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
+        sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
-      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
       (*Recovered without needing care*)
