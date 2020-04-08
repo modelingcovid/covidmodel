@@ -23,14 +23,15 @@ export const PercentileLegendRow = ({
   if (!d) {
     return null;
   }
-  return (
-    <LegendRow
-      label={title}
-      color={color}
-      format={format}
-      y={(d) => getExpectedOr50(y(d))}
-    >
-      {hasConfirmed && (
+  if (hasConfirmed) {
+    return (
+      <LegendRow label={title}>
+        <LegendEntry
+          label="Modeled"
+          color={color}
+          format={format}
+          y={(d) => getExpectedOr50(y(d))}
+        />
         <LegendEntry
           label="Confirmed"
           color={color}
@@ -38,7 +39,15 @@ export const PercentileLegendRow = ({
           y={(d) => y(d).confirmed}
           format={formatNA(format)}
         />
-      )}
-    </LegendRow>
+      </LegendRow>
+    );
+  }
+  return (
+    <LegendRow
+      label={title}
+      color={color}
+      format={format}
+      y={(d) => getExpectedOr50(y(d))}
+    />
   );
 };

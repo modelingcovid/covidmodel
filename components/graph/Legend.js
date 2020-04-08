@@ -85,10 +85,12 @@ export const LegendEntry = ({
         }
       `}</style>
       <div className="entry-label">{label}</div>
-      <div className="entry-info">
-        {color && <div className="entry-symbol" />}
-        <div className="entry-data">{format(y(d))}</div>
-      </div>
+      {y && (
+        <div className="entry-info">
+          {color && <div className="entry-symbol" />}
+          <div className="entry-data">{format(y(d))}</div>
+        </div>
+      )}
     </div>
   );
 };
