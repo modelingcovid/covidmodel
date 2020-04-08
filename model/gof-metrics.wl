@@ -65,16 +65,16 @@ exportAllStatesGoodnessOfFitMetricsCsv[file_,allStateData_]:=Module[{columnOrder
     "rSquaredPcr",
     "deathResidual7Day",
     "pcrResidual7Day"};
-	gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
-	csvData=Join[
-		{Join[{"state"},columnOrder]},
-		Sort[
-			KeyValueMap[
-				Join[{#1},gofAssociationToArray[#2["goodnessOfFitMetrics"]]]&,
-				allStateData],
-			(AlphabeticOrder[First[#1],First[#2]])&]];
-	Export[file,csvData,"CSV"];
-	csvData
+  gofAssociationToArray[gofMetrics_]:=Map[gofMetrics[#]&,columnOrder];
+  csvData=Join[
+    {Join[{"state"},columnOrder]},
+    Sort[
+      KeyValueMap[
+        Join[{#1},gofAssociationToArray[#2["goodnessOfFitMetrics"]]]&,
+        allStateData],
+      (AlphabeticOrder[First[#1],First[#2]])&]];
+  Export[file,csvData,"CSV"];
+  csvData
 ]
 
 
@@ -143,48 +143,45 @@ exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{n,data,plot
 
 
 plotStateHospitalization[stateData_, state_]:=Module[{hospcurrent, hospcumulative, icucurrent, icucumulative},
-     
-    hospcurrent={#["day"],#["currentlyReportedHospitalized"]["confirmed"],#["currentlyReportedHospitalized"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
-    hospcumulative={#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
-    icucurrent={#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
-    icucumulative={#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
-     
-    Column[{
-    Row[{
-    Column[{
-    Text["Current Hospitalizations for "<>state],
-    Show[
-        ListPlot[Select[{#[[1]],#[[2]]}&/@hospcurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
-        ListLinePlot[{#[[1]],#[[3]]}&/@hospcurrent, ImageSize->300]
-     ]
-     }],
-     Column[{
-    Text["Cumulative Hospitalizations for "<>state],
-    Show[
-        ListPlot[Select[{#[[1]],#[[2]]}&/@hospcumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
-        ListLinePlot[{#[[1]],#[[3]]}&/@hospcumulative, ImageSize->300]
-     ]
-     }]
-    }],
-    Row[{
-    Column[{
-    Text["Current ICU for "<>state],
-    Show[
-        ListPlot[Select[{#[[1]],#[[2]]}&/@icucurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
-        ListLinePlot[{#[[1]],#[[3]]}&/@icucurrent, ImageSize->300]
-     ]
-     }],
-     Column[{
-    Text["Cumulative ICU for "<>state],
-    Show[
-        ListPlot[Select[{#[[1]],#[[2]]}&/@icucumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
-        ListLinePlot[{#[[1]],#[[3]]}&/@icucumulative, ImageSize->300]
-     ]
-     }]
+
+  hospcurrent={#["day"],#["currentlyReportedHospitalized"]["confirmed"],#["currentlyReportedHospitalized"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+  hospcumulative={#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+  icucurrent={#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+  icucumulative={#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+
+  Column[{
+      Row[{
+          Column[{
+              Text["Current Hospitalizations for "<>state],
+              Show[
+                ListPlot[Select[{#[[1]],#[[2]]}&/@hospcurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
+                ListLinePlot[{#[[1]],#[[3]]}&/@hospcurrent, ImageSize->300]
+              ]
+            }],
+          Column[{
+              Text["Cumulative Hospitalizations for "<>state],
+              Show[
+                ListPlot[Select[{#[[1]],#[[2]]}&/@hospcumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
+                ListLinePlot[{#[[1]],#[[3]]}&/@hospcumulative, ImageSize->300]
+              ]
+            }],
+          Column[{
+              Text["Current ICU for "<>state],
+              Show[
+                ListPlot[Select[{#[[1]],#[[2]]}&/@icucurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
+                ListLinePlot[{#[[1]],#[[3]]}&/@icucurrent, ImageSize->300]
+              ]
+            }],
+          Column[{
+              Text["Cumulative ICU for "<>state],
+              Show[
+                ListPlot[Select[{#[[1]],#[[2]]}&/@icucumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
+                ListLinePlot[{#[[1]],#[[3]]}&/@icucumulative, ImageSize->300]
+              ]
+            }]
+            }]
     }]
-    
-    }]
-    
+
 ];
 
 
@@ -200,63 +197,140 @@ exportAllStatesHospitalizationGoodnessOfFitMetricsSvg[file_,allStatesData_]:=Mod
     cumulativeData,
     cumulativeX,
     cumulativeY,
+    currentXH,
+    currentYH,
+    currentXI,
+    currentYI,
+    cumulativeXH,
+    cumulativeYH,
+    cumulativeXI,
+    cumulativeYI,
     data,
-    domain},
+  allData,
+currentHData,
+cumHData,
+plot,
+currentIData,
+cumIData,
+    domainCurrH,
+    domainCurrI,
+    domainCumH,
+      currentHStates,
+  cumulativeHStates,
+  currentIStates,
+  cumulativeIStates,
+    domainCumI},
+
+
   states=Sort[Keys[allStatesData], AlphabeticOrder];
-  
-  cumulativeStates=Pick[states,Map[allStatesData[#]["hospitalizationsReportedAs"]=="cumulative"&,states]];
-  currentStates=Pick[states,Map[allStatesData[#]["hospitalizationsReportedAs"]=="current"&,states]];
-  
-  processState[state_]:=Module[{reportedAs, key, raw},
-    reportedAs=allStatesData[state]["hospitalizationsReportedAs"];
-    key = If[
-      reportedAs=="cumulative",
-      "cumulativeReportedHospitalized",
-      "currentlyReportedHospitalized"];
-    raw = Map[
-      Pick[#,#[[2]]>0]&,
-      SortBy[
-        Map[
-          {#["day"],#[key]["confirmed"],#[key]["expected"]}&,
-          allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"]],
-        First]];
+
+
+  processState[state_]:=Module[{icucurrent, hospcumulative, hospcurrent,icucumulative,hascurrhosp,hascumhosp,hascurricu,hascumicu},
+    hospcurrent=Select[{#["day"],#["currentlyReportedHospitalized"]["confirmed"],#["currentlyReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
+    hospcumulative=Select[{#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
+    icucurrent=Select[{#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
+    icucumulative=Select[{#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     
+    hascurrhosp=Length[Select[hospcurrent,#[[2]]>0&]]>0;
+    hascumhosp=Length[Select[hospcumulative,#[[2]]>0&]]>0;
+    hascurricu=Length[Select[icucurrent,#[[2]]>0&]]>0;
+    hascumicu=Length[Select[icucumulative,#[[2]]>0&]]>0;
+
     <|
-      "reportedAs"->reportedAs,
-      "meanRelativeError"->Mean[Map[#[[3]]-#[[2]]&,raw]],
-      "rmsRelativeError"->Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,raw]]]
+      "state"->state,
+      "meanRelativeErrorCurrentlyReportedHospitalized"->If[hascurrhosp,Mean[Map[#[[3]]-#[[2]]&,hospcurrent]],0],
+      "rmsRelativeErrorCurrentlyReportedHospitalized"->If[hascurrhosp,Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,hospcurrent]]],0],
+      "meanRelativeErrorCumulativeReportedHospitalized"->If[hascumhosp,Mean[Map[#[[3]]-#[[2]]&,hospcumulative]],0],
+      "rmsRelativeErrorCumulativeReportedHospitalized"->If[hascumhosp,Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,hospcumulative]]],0],
+      "meanRelativeErrorCurrentlyCritical"->If[hascurricu,Mean[Map[#[[3]]-#[[2]]&,icucurrent]],0],
+      "rmsRelativeErrorCurrentlyCritical"->If[hascurricu,Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,icucurrent]]],0],
+      "meanRelativeErrorCumulativeCritical"->If[hascumicu,Mean[Map[#[[3]]-#[[2]]&,icucumulative]],0],
+      "rmsRelativeErrorCumulativeCritical"->If[hascumicu,Sqrt[Mean[Map[(#[[3]]-#[[2]])^2&,icucumulative]]],0]
     |>
   ];
   
-  n = Length[cumulativeStates]+Length[currentStates];
-  currentData = Map[processState,currentStates];
-  currentX = Map[Around[#["meanRelativeError"],#["rmsRelativeError"]]&,currentData];
-  currentY = Range[n,Length[cumulativeStates] + 1, -1];
+
+  n = Length[states];
+  allData=Map[processState,states];
   
-  cumulativeData = Map[processState,cumulativeStates];
-  cumulativeX = Map[Around[#["meanRelativeError"],#["rmsRelativeError"]]&,cumulativeData];
-  cumulativeY = Range[Length[cumulativeStates],1,-1];
+  currentHData = Select[allData,#["meanRelativeErrorCurrentlyReportedHospitalized"]!=0&];
+  cumHData = Select[allData,#["meanRelativeErrorCumulativeReportedHospitalized"]!=0&];
+  currentIData = Select[allData,#["meanRelativeErrorCurrentlyCritical"]!=0&];
+  cumIData = Select[allData,#["meanRelativeErrorCumulativeCritical"]!=0&];
+  currentHStates = #["state"]&/@currentHData;
+  cumulativeHStates = #["state"]&/@cumHData;
+  currentIStates = #["state"]&/@currentIData;
+  cumulativeIStates = #["state"]&/@cumIData;
   
-  domain = Max[
-    Abs[currentX/.Around->Plus],
-    Abs[cumulativeX/.Around->Plus],
-    Abs[currentX/.Around->Subtract],
-    Abs[cumulativeX/.Around->Subtract]
-  ];
-  
-  plot=ListPlot[
-    {
-      Transpose[{currentX,currentY}],
-      Transpose[{cumulativeX,cumulativeY}]},
-    Ticks->{
-      Automatic,
-      MapThread[{#1,#2}&,{Range[n,1,-1],Join[currentStates,cumulativeStates]}]},
-    PlotLegends->Placed[{"Current","Cumulative"},Below],
-    PlotLabel->"Mean and RMS relative error",
-    PlotRange->{{-domain,domain},{0,n+1}},
-    PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
-    AspectRatio->n/12/GoldenRatio,
-    ImageSize->400];
+  currentXH = Map[Around[#["meanRelativeErrorCurrentlyReportedHospitalized"],#["rmsRelativeErrorCurrentlyReportedHospitalized"]]&,currentHData];
+  currentYH = Range[Length[currentHData]];
+  cumulativeXH = Map[Around[#["meanRelativeErrorCumulativeReportedHospitalized"],#["rmsRelativeErrorCumulativeReportedHospitalized"]]&,cumHData];
+  cumulativeYH = Range[Length[cumHData]];
+  currentXI = Map[Around[#["meanRelativeErrorCurrentlyCritical"],#["rmsRelativeErrorCurrentlyCritical"]]&,currentIData];
+  currentYI = Range[Length[currentIData]];
+  cumulativeXI = Map[Around[#["meanRelativeErrorCumulativeCritical"],#["rmsRelativeErrorCumulativeCritical"]]&,cumIData];
+  cumulativeYI = Range[Length[cumIData]];
+
+  plot=
+  Grid[Partition[{
+        Column[{
+            Text["Currently Hospitalized"],
+            ListPlot[{
+                Transpose[{currentXH,currentYH}]
+              },
+              Ticks->{
+                Automatic,
+                MapThread[{#1,#2}&,{Range[Length[currentHData],1,-1],currentHStates}]},
+              PlotLegends->Placed[{"Current"},Below],
+              PlotLabel->"Mean and RMS relative error",
+              PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
+              AspectRatio->n/12/GoldenRatio,
+              ImageSize->400]
+          }],
+        Column[{
+            Text["Cumulative Hospitalized"],
+            ListPlot[{
+                Transpose[{cumulativeXH,cumulativeYH}]
+              },
+              Ticks->{
+                Automatic,
+                MapThread[{#1,#2}&,{Range[Length[cumHData],1,-1],cumulativeHStates}]},
+              PlotLegends->Placed[{"Cumulative"},Below],
+              PlotLabel->"Mean and RMS relative error",
+              PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
+              AspectRatio->n/12/GoldenRatio,
+              ImageSize->400]
+          }],
+        Column[{
+            Text["Currently ICU"],
+            ListPlot[{
+                Transpose[{currentXI,currentYI}]
+              },
+              Ticks->{
+                Automatic,
+                MapThread[{#1,#2}&,{Range[Length[currentIData],1,-1],currentIStates}]},
+              PlotLegends->Placed[{"Current"},Below],
+              PlotLabel->"Mean and RMS relative error",
+              PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
+              AspectRatio->n/12/GoldenRatio,
+              ImageSize->400]
+          }],
+        Column[{
+            Text["Cumulative ICU"],
+            ListPlot[{
+                Transpose[{cumulativeXI,cumulativeYI}]
+              },
+              Ticks->{
+                Automatic,
+                MapThread[{#1,#2}&,{Range[Length[cumIData],1,-1],cumulativeIStates}]},
+              PlotLegends->Placed[{"Cumulative"},Below],
+              PlotLabel->"Mean and RMS relative error",
+              PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
+              AspectRatio->n/12/GoldenRatio,
+              ImageSize->400]
+          }]}
+      ,4]];
   Export[file, plot, "SVG"];
+  Echo[plot];
   plot
 ];
