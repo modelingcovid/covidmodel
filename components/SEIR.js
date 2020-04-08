@@ -1,7 +1,14 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {PopulationGraph} from './configured';
-import {Grid, Heading, Paragraph, Title, UnorderedList} from './content';
+import {
+  Grid,
+  InlineLabel,
+  Heading,
+  Paragraph,
+  Title,
+  UnorderedList,
+} from './content';
 import {
   Area,
   Graph,
@@ -21,7 +28,7 @@ import {
 } from './modeling';
 import {getLastDate} from '../lib/date';
 import {
-  formatDate,
+  formatShortDate,
   formatNumber,
   formatLargeNumber,
   formatPercent1,
@@ -90,31 +97,6 @@ config.forEach((c, i) => (c.area = accessors[i]));
 
 const midAccessor = accessors[2][1];
 
-function Inline({children, color, fill}) {
-  return (
-    <span
-      style={{
-        fontFamily: theme.font.family.ui,
-        fontWeight: 500,
-        color,
-      }}
-    >
-      {children}
-      <span
-        style={{
-          display: 'inline-block',
-          background: fill,
-          height: 8,
-          width: 8,
-          margin: `0 ${theme.spacing[0]}`,
-          borderRadius: 8,
-          verticalAlign: 'middle',
-        }}
-      />
-    </span>
-  );
-}
-
 export function SEIR({height, width}) {
   const {
     allTimeSeriesData,
@@ -139,26 +121,37 @@ export function SEIR({height, width}) {
         <strong>compartmental model</strong>, which estimates the spread of a
         virus by dividing the population into different groups:
       </Paragraph>
-      <UnorderedList>
+      <UnorderedList className="list-style-none">
         <li>
-          <Inline {...byLabel.susceptible}>Susceptible people</Inline> are
-          healthy and at risk for contracting COVID-19.
+          <InlineLabel list {...byLabel.susceptible}>
+            Susceptible people
+          </InlineLabel>{' '}
+          are healthy and at risk for contracting COVID-19.
         </li>
         <li>
-          <Inline {...byLabel.exposed}>Exposed people</Inline> have COVID-19 and
-          are in the incubation period; they cannot infect others.
+          <InlineLabel list {...byLabel.exposed}>
+            Exposed people
+          </InlineLabel>{' '}
+          have COVID-19 and are in the incubation period; they cannot infect
+          others.
         </li>
         <li>
-          <Inline {...byLabel.infectious}>Infectious people</Inline> have
-          COVID-19 and can infect others.
+          <InlineLabel list {...byLabel.infectious}>
+            Infectious people
+          </InlineLabel>{' '}
+          have COVID-19 and can infect others.
         </li>
         <li>
-          <Inline {...byLabel.recovered}>Recovered people</Inline> have had
-          COVID-19 and are immune to re-infection.
+          <InlineLabel list {...byLabel.recovered}>
+            Recovered people
+          </InlineLabel>{' '}
+          have had COVID-19 and are immune to re-infection.
         </li>
         <li>
-          <Inline {...byLabel.deceased}>Deceased people</Inline> have passed
-          away due to COVID-19.
+          <InlineLabel list {...byLabel.deceased}>
+            Deceased people
+          </InlineLabel>{' '}
+          have passed away due to COVID-19.
         </li>
       </UnorderedList>
       {/* <Grid className="margin-bottom-3">
@@ -286,7 +279,7 @@ export function SEIR({height, width}) {
                 )}
               </strong>{' '}
               of the {stateName} population will have contracted COVID-19 by{' '}
-              {formatDate(x(d))}.
+              <span className="nowrap">{formatShortDate(x(d))}</span>.
             </Paragraph>
           )}
         </WithNearestData>
