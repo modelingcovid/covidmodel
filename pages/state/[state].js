@@ -116,12 +116,6 @@ export default function StatePage({data, states}) {
             </div>
             <Section className="margin-top-3">
               <ModelInputs width={width} height={160} />
-              <div
-                className="text-title margin-top-5"
-                style={{marginBottom: '-64px'}}
-              >
-                Projections
-              </div>
               <SEIR width={width} height={height} />
               <CaseProgressionCurve width={width} height={height} />
               <ProjectedDeaths width={width} height={height} />

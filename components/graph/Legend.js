@@ -23,6 +23,7 @@ const entryStyles = css`
     align-items: baseline;
     justify-content: flex-end;
     font-size: ${theme.font.size.micro};
+    padding-bottom: 4px;
   }
   .entry-label {
     margin-right: ${theme.spacing[0]};
@@ -107,6 +108,7 @@ export const Legend = ({children}) => {
         }
         @media (min-width: 600px) {
           div {
+            margin-left: calc(var(--column-width) * 3);
             padding-left: calc(var(--column-width) / 2);
             box-shadow: inset 1px 0 0 var(--color-gray0);
             max-width: calc(var(--column-width) * 9);

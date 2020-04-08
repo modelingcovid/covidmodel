@@ -8,7 +8,7 @@ export const TodayMarker = ({anchor = 'start'}) => {
     <VMarker
       anchor={anchor}
       value={today}
-      label="Today"
+      // label="Today"
       labelAnchor="middle"
       labelStroke="none"
       strokeDasharray="4,2"

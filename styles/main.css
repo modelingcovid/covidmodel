@@ -147,26 +147,33 @@ text {
   padding-left: var(--spacing2);
   box-shadow: inset 3px 0 var(--color-yellow2);
 }
+.block {
+  display: block;
+}
+.relative {
+  position: relative;
+}
 .nowrap {
   white-space: nowrap;
 }
 .no-select {
   user-select: none;
 }
-.list-inside {
-  list-style-position: inside;
-}
-.list-outside {
-  list-style-position: outside;
-}
-.list-none {
-  list-style-type: none;
-}
-.list-disc {
+.unordered-list {
   list-style-type: disc;
+  margin-left: var(--spacing1);
 }
-.list-decimal {
+.ordered-list {
   list-style-type: decimal;
+  margin-left: var(--spacing1);
+}
+.unordered-list li,
+.ordered-list li {
+  margin-bottom: var(--spacing0);
+}
+.unordered-list li:last-child,
+.ordered-list li:last-child {
+  margin-bottom: 0;
 }
 .margin-bottom-0 {
   margin-bottom: var(--spacing0);

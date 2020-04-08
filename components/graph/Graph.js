@@ -46,9 +46,13 @@ export const Graph = React.memo(function Graph({
   tickFormat = formatLargeNumber,
   tickLabelProps = valueTickLabelProps,
   controls = false,
+  decoration = true,
+  scrubber = true,
 }) {
   const [scale, setScale] = useState(initialScale);
-  const margin = {top: 16, left: 16, right: 16, bottom: 32};
+  const margin = decoration
+    ? {top: 16, left: 16, right: 16, bottom: 32}
+    : {top: 0, left: 0, right: 0, bottom: 0};
   const width = propWidth + margin.left + margin.right;
 
   // bounds
@@ -168,7 +172,7 @@ export const Graph = React.memo(function Graph({
       `}</style>
       {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph no-select">
-        <svg width={width} height={height}>
+        <svg className="block" width={width} height={height}>
           <Group
             // Add 0.5 to snap centered strokes onto the pixel grid
             left={margin.left + 0.5}
@@ -180,35 +184,56 @@ export const Graph = React.memo(function Graph({
               </clipPath>
             </defs>
             {children}
-            <TodayMarker />
-            <NearestMarker />
             <g pointerEvents="none">
-              <GridRows
-                scale={yScale}
-                width={xMax}
-                height={yMax}
-                stroke={theme.color.shadow[0]}
-              />
-              <GridColumns
-                scale={xScale}
-                width={xMax}
-                height={yMax}
-                stroke={theme.color.shadow[0]}
-              />
-              <line
-                x1={xMax}
-                x2={xMax}
-                y1={0}
-                y2={yMax}
-                stroke={theme.color.shadow[0]}
-              />
-              <AxisBottom />
-              <AxisLeft tickFormat={tickFormatWithLabel} tickValues={yTicks} />
+              {decoration && (
+                <>
+                  <NearestMarker />
+                  <TodayMarker />
+                  <GridRows
+                    scale={yScale}
+                    width={xMax}
+                    height={yMax}
+                    stroke={theme.color.shadow[0]}
+                  />
+                  <GridColumns
+                    scale={xScale}
+                    width={xMax}
+                    height={yMax}
+                    stroke={theme.color.shadow[0]}
+                  />
+                  <line
+                    x1={xMax}
+                    x2={xMax}
+                    y1={0}
+                    y2={yMax}
+                    stroke={theme.color.shadow[0]}
+                  />
+                  <AxisBottom />
+                  <AxisLeft
+                    tickFormat={tickFormatWithLabel}
+                    tickValues={yTicks}
+                  />
+                </>
+              )}
+              {!decoration && (
+                <>
+                  <rect
+                    x={0}
+                    y={0}
+                    width={xMax - 1}
+                    height={yMax - 1}
+                    stroke={theme.color.shadow[0]}
+                    fill="transparent"
+                  />
+                </>
+              )}
             </g>
           </Group>
         </svg>
         <div className="graph-overlay">
-          <Scrubber>{(d, active) => formatShortDate(getDate(d))}</Scrubber>
+          {scrubber && (
+            <Scrubber>{(d, active) => formatShortDate(getDate(d))}</Scrubber>
+          )}
           {overlay}
         </div>
       </div>
