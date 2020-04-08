@@ -142,26 +142,49 @@ exportAllStatesGoodnessOfFitMetricsSvg[file_,allStateData_]:=Module[{n,data,plot
 ];
 
 
-plotStateHospitalization[stateData_, state_]:=Module[{
-    reportAs,
-    key,
-    timeSeries,
-    confirmed
-  },
-  reportAs = stateData["hospitalizationsReportedAs"];
-  If[reportAs!="-",
-    key = If[reportAs=="current","currentlyReportedHospitalized","cumulativeReportedHospitalized"];
-    timeSeries = SortBy[Map[
-        {#["day"],#[key]["confirmed"],#[key]["expected"]}&,
-        stateData["scenarios"]["scenario1"]["timeSeriesData"]],
-      First];
+plotStateHospitalization[stateData_, state_]:=Module[{hospcurrent, hospcumulative, icucurrent, icucumulative},
+     
+    hospcurrent={#["day"],#["currentlyReportedHospitalized"]["confirmed"],#["currentlyReportedHospitalized"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+    hospcumulative={#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+    icucurrent={#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+    icucumulative={#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+     
     Column[{
-    Text["Hospitalizations for "<>state],
+    Row[{
+    Column[{
+    Text["Current Hospitalizations for "<>state],
     Show[
-      ListPlot[Select[timeSeries[[All,{1,2}]],#[[2]]>0&],PlotStyle->Red, ImageSize->500],
-      ListLinePlot[timeSeries[[All,{1,3}]], ImageSize->500]
-    ]}]
-  ]
+        ListPlot[Select[{#[[1]],#[[2]]}&/@hospcurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
+        ListLinePlot[{#[[1]],#[[3]]}&/@hospcurrent, ImageSize->300]
+     ]
+     }],
+     Column[{
+    Text["Cumulative Hospitalizations for "<>state],
+    Show[
+        ListPlot[Select[{#[[1]],#[[2]]}&/@hospcumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
+        ListLinePlot[{#[[1]],#[[3]]}&/@hospcumulative, ImageSize->300]
+     ]
+     }]
+    }],
+    Row[{
+    Column[{
+    Text["Current ICU for "<>state],
+    Show[
+        ListPlot[Select[{#[[1]],#[[2]]}&/@icucurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
+        ListLinePlot[{#[[1]],#[[3]]}&/@icucurrent, ImageSize->300]
+     ]
+     }],
+     Column[{
+    Text["Cumulative ICU for "<>state],
+    Show[
+        ListPlot[Select[{#[[1]],#[[2]]}&/@icucumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->500],
+        ListLinePlot[{#[[1]],#[[3]]}&/@icucumulative, ImageSize->300]
+     ]
+     }]
+    }]
+    
+    }]
+    
 ];
 
 
