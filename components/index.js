@@ -6,5 +6,6 @@ export * from './MDXComponents';
 export * from './ModelInputs';
 export * from './OutcomeSummary';
 export * from './Overview';
+export * from './ParameterTable';
 export * from './ProjectedDeaths';
 export * from './SEIR';

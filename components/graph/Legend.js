@@ -62,6 +62,9 @@ export const LegendEntry = ({
   kind = 'minor',
   symbol = 'fill',
   y,
+  className,
+  width = '60%',
+  ...remaining
 }) => {
   const d = useNearestData();
   if (!d) {
@@ -70,15 +73,19 @@ export const LegendEntry = ({
 
   const isStroke = symbol === 'stroke';
   const borderColor = isStroke ? color : 'transparent';
+  const value = y ? y(...d) : null;
 
   return (
-    <div className="entry">
+    <div
+      {...remaining}
+      className={['entry', className].filter(Boolean).join(' ')}
+    >
       <style jsx>{entryStyles}</style>
       <style jsx>{`
         .entry-label {
           font-weight: ${kind === 'minor' ? 400 : 500};
           color: ${theme.color.gray[kind === 'minor' ? 3 : 5]};
-          max-width: ${y ? '60%' : '100%'};
+          max-width: ${y ? width : '100%'};
         }
         .entry-symbol {
           background-color: ${isStroke ? 'transparent' : color};
@@ -89,7 +96,9 @@ export const LegendEntry = ({
       {y && (
         <div className="entry-info">
           {color && <div className="entry-symbol" />}
-          <div className="entry-data">{format(y(...d))}</div>
+          <div className="entry-data">
+            {format ? format(value) : value.toString()}
+          </div>
         </div>
       )}
     </div>

@@ -55,7 +55,6 @@ text {
 .text-mono {
   font-family: var(--font-family-mono);
   font-weight: 500;
-  font-size: 0.9em;
 }
 .text-gray-faint {
   color: var(--color-gray2);
@@ -207,6 +206,15 @@ text {
 }
 .no-select {
   user-select: none;
+}
+.clear {
+  clear: both;
+}
+.ellipsis {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .unordered-list {
   list-style-type: disc;

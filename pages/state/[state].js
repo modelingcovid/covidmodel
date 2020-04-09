@@ -9,11 +9,12 @@ import {
   Layout,
   ModelInputs,
   OutcomeSummary,
+  ParameterTable,
   ProjectedDeaths,
   SEIR,
 } from '../../components';
 import {Controls} from '../../components/configured';
-import {Section} from '../../components/content';
+import {Section, Title} from '../../components/content';
 import {NearestDataProvider} from '../../components/graph';
 import {ModelDataProvider} from '../../components/modeling';
 import {useContentRect} from '../../components/util';
@@ -113,6 +114,13 @@ export default function StatePage({data, states}) {
               <SEIR width={width} height={height} />
               <CaseProgressionCurve width={width} height={height} />
               <ProjectedDeaths width={width} height={height} />
+              <ParameterTable />
+            </Section>
+            <Section style={{marginTop: '300px'}}>
+              <Title>
+                Work in progress: these sections are being converted to match
+                the format above
+              </Title>
               <HospitalCapacity width={width} height={height} />
               <ICUCapacity width={width} height={height} />
             </Section>
