@@ -48,6 +48,7 @@ export default function StatePage({data, states}) {
       <ModelDataProvider
         model={data}
         scenario={scenario}
+        setScenario={setScenario}
         state={state}
         states={states}
         x={getDate}
@@ -103,12 +104,7 @@ export default function StatePage({data, states}) {
             <div className="controls-container">
               <Section>
                 <div className="controls">
-                  <Controls
-                    state={state}
-                    states={states}
-                    scenario={scenario}
-                    setScenario={setScenario}
-                  />
+                  <Controls />
                 </div>
               </Section>
             </div>

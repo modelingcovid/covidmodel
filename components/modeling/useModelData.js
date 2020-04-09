@@ -10,6 +10,7 @@ export const ModelDataProvider = ({
   children,
   model,
   scenario,
+  setScenario,
   state,
   states,
   x,
@@ -26,6 +27,7 @@ export const ModelDataProvider = ({
     return {
       model,
       scenario,
+      setScenario,
       state,
       states,
       x,
@@ -37,7 +39,7 @@ export const ModelDataProvider = ({
       stateName: stateLabels[state],
       allTimeSeriesData,
     };
-  }, [model, scenario, state, states, x]);
+  }, [model, scenario, setScenario, state, states, x]);
 
   return (
     <ModelDataContext.Provider value={context}>
