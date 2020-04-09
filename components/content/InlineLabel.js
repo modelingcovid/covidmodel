@@ -57,6 +57,7 @@ export function InlineLabel({
           }}
         />
       </span>
+      &#xfeff;
       {children}
     </span>
   );

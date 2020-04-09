@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Grid, Gutter, Paragraph} from './content';
+import {theme} from '../styles';
+import {Grid, Gutter, InlineLabel, Paragraph} from './content';
 import {Graph} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   MethodDefinition,
-  MethodDisclaimer,
   PercentileLegendRow,
   PercentileLine,
   useModelData,
@@ -43,6 +43,8 @@ const getFatalitiesPerDay = ({cumulativeDeaths}, i, data) => {
   return result;
 };
 
+const color = theme.color.red[2];
+
 export const ProjectedDeaths = ({width, height}) => {
   const {
     model,
@@ -78,12 +80,16 @@ export const ProjectedDeaths = ({width, height}) => {
   );
   return (
     <div className="margin-top-5">
-      <MethodDisclaimer />
-      <div className="section-heading">Projected fatalities</div>
       <Paragraph>
-        We project the cumulative number of deaths on a logarithmic scale.
+        However, logarithmic scales and cumulative numbers are difficult to
+        internalize. We can get a better sense of the severity at any given
+        point in time by looking at the{' '}
+        <InlineLabel color={color} fill={color}>
+          fatalities per day
+        </InlineLabel>
+        .
       </Paragraph>
-      <Grid className="margin-bottom-3">
+      {/* <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}
           value={formatPercent1(
@@ -104,7 +110,7 @@ export const ProjectedDeaths = ({width, height}) => {
           label="Fatality rate of COVID-19 cases that have tested positive"
           method="modeled"
         />
-      </Grid>
+      </Grid> */}
       <Graph
         data={timeSeriesData}
         domain={domain}
@@ -119,13 +125,13 @@ export const ProjectedDeaths = ({width, height}) => {
             <PercentileLegendRow
               title="Fatalities per day"
               y={y}
-              color="var(--color-red2)"
+              color={color}
               format={formatNumber2}
             />
           </Gutter>
         }
       >
-        <PercentileLine y={y} color="var(--color-red2)" />
+        <PercentileLine y={y} color={color} />
       </Graph>
     </div>
   );
