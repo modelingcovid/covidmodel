@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Grid, Gutter} from './content';
+import {Graph} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   MethodDefinition,
@@ -8,14 +9,73 @@ import {
   PercentileLine,
   useModelData,
 } from './modeling';
-import {PopulationGraph} from './configured';
-import {formatDate, formatNumber, formatPercent1} from '../lib/format';
+import {
+  formatDate,
+  formatNumber,
+  formatPercent1,
+  formatNumber2,
+} from '../lib/format';
 import {getLastDate} from '../lib/date';
 
-const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
+const {useCallback, useMemo} = React;
+
+const getFatalitiesPerDay = ({cumulativeDeaths}, i, data) => {
+  const prevCumulativeDeaths = data[i - 1]?.cumulativeDeaths || {};
+  const result = {};
+  for (let key of Object.keys(cumulativeDeaths)) {
+    result[key] = Math.max(
+      0,
+      cumulativeDeaths[key] - (prevCumulativeDeaths[key] || 0)
+    );
+  }
+
+  const percentiles = Object.entries(result).filter(([key]) =>
+    key.startsWith('percentile')
+  );
+  const percentileKeys = percentiles.map(([key]) => key).sort();
+  const percentileValues = percentiles
+    .map(([key, value]) => value)
+    .sort((a, b) => a - b);
+
+  percentileKeys.forEach((key, i) => {
+    result[key] = percentileValues[i];
+  });
+  return result;
+};
 
 export const ProjectedDeaths = ({width, height}) => {
-  const {model, stateName, summary, timeSeriesData, x} = useModelData();
+  const {
+    model,
+    stateName,
+    summary,
+    timeSeriesData,
+    x,
+    allTimeSeriesData,
+  } = useModelData();
+
+  const {population} = model;
+  const getFatalitiesPerDayPer100K = useCallback(
+    (...d) => {
+      const perDay = getFatalitiesPerDay(...d);
+      const result = {};
+      for (let key of Object.keys(perDay)) {
+        result[key] = (perDay[key] * 100000) / population;
+      }
+      return result;
+    },
+    [population]
+  );
+
+  const y = getFatalitiesPerDay;
+
+  const domain = useMemo(
+    () =>
+      Math.max(
+        // Note: Ideally we should split allTimeSeriesData so we don't get a previous point from another dataset
+        ...allTimeSeriesData.map((d, i) => y(d, i, allTimeSeriesData).expected)
+      ),
+    [allTimeSeriesData, y]
+  );
   return (
     <div className="margin-top-5">
       <MethodDisclaimer />
@@ -45,27 +105,28 @@ export const ProjectedDeaths = ({width, height}) => {
           method="modeled"
         />
       </Grid>
-      <PopulationGraph
+      <Graph
+        data={timeSeriesData}
+        domain={domain}
+        initialScale="linear"
         x={x}
         xLabel="people"
+        controls
         width={width}
         height={height}
         after={
           <Gutter>
             <PercentileLegendRow
-              title="Cumulative deaths"
-              y={getCumulativeDeaths}
-              color="var(--color-blue2)"
+              title="Fatalities per day"
+              y={y}
+              color="var(--color-red2)"
+              format={formatNumber2}
             />
           </Gutter>
         }
       >
-        <PercentileLine
-          y={getCumulativeDeaths}
-          color="var(--color-blue2)"
-          gradient
-        />
-      </PopulationGraph>
+        <PercentileLine y={y} color="var(--color-red2)" />
+      </Graph>
     </div>
   );
 };

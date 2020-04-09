@@ -90,7 +90,7 @@ export const LegendEntry = ({
       {y && (
         <div className="entry-info">
           {color && <div className="entry-symbol" />}
-          <div className="entry-data">{format(y(d))}</div>
+          <div className="entry-data">{format(y(...d))}</div>
         </div>
       )}
     </div>

@@ -7,9 +7,9 @@ const {useCallback} = React;
 
 export const Area = ({y0, y1, ...remaining}) => {
   const {clipPath, data, x, xScale, yScale} = useGraphData();
-  const xFn = useCallback((d) => xScale(x(d)), [x, xScale]);
-  const y0Fn = useCallback((d) => yScale(y0(d)), [y0, yScale]);
-  const y1Fn = useCallback((d) => yScale(y1(d)), [y1, yScale]);
+  const xFn = useCallback((...d) => xScale(x(...d)), [x, xScale]);
+  const y0Fn = useCallback((...d) => yScale(y0(...d)), [y0, yScale]);
+  const y1Fn = useCallback((...d) => yScale(y1(...d)), [y1, yScale]);
 
   return (
     <VxArea

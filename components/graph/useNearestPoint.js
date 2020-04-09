@@ -13,8 +13,8 @@ export const useNearestPoint = (y) => {
     }
     return {
       data: nearest,
-      x: xScale(x(nearest)),
-      y: y ? yScale(y(nearest)) : 0,
+      x: xScale(x(...nearest)),
+      y: y ? yScale(y(...nearest)) : 0,
     };
   }, [nearest, x, y, xScale, yScale]);
 };

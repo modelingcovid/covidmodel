@@ -30,7 +30,9 @@ export const OccupancyGraph = ({
         // This cap prevents the axis from being too distorted.
         cutoff * 20,
         Math.max(
-          ...allTimeSeriesData.map((d) => Math.max(y(d).percentile50, cutoff))
+          ...allTimeSeriesData.map((...d) =>
+            Math.max(y(...d).percentile50, cutoff)
+          )
         )
       ),
     [allTimeSeriesData, y, cutoff]

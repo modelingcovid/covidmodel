@@ -234,7 +234,7 @@ export const Graph = React.memo(function Graph({
         </svg>
         <div className="graph-overlay">
           {scrubber && (
-            <Scrubber>{(d, active) => formatShortDate(getDate(d))}</Scrubber>
+            <Scrubber>{([d], active) => formatShortDate(getDate(d))}</Scrubber>
           )}
           {overlay}
         </div>

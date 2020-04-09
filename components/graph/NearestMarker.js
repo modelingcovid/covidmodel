@@ -5,7 +5,7 @@ import {useNearestData} from './useNearestData';
 
 export const NearestMarker = () => {
   const {x} = useGraphData();
-  const nearest = useNearestData();
+  const [nearest] = useNearestData();
   if (!nearest) {
     return null;
   }

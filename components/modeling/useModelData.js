@@ -16,6 +16,8 @@ export const ModelDataProvider = ({
 }) => {
   const context = useMemo(() => {
     const scenarioData = model.scenarios[scenario];
+    const {summary} = scenarioData;
+
     const allTimeSeriesData = flattenData(
       Object.values(model.scenarios),
       (s) => s.timeSeriesData

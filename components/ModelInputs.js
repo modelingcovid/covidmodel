@@ -31,7 +31,7 @@ export function ModelInputs({height, width, ...remaining}) {
     x,
   } = useModelData();
   const findPoint = useFindPoint();
-  const todayData = findPoint(today);
+  const [todayData] = findPoint(today);
   return (
     <div {...remaining}>
       <DistancingGraph

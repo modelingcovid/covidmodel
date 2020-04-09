@@ -23,8 +23,8 @@ export const Line = ({
   const {clipPath, data, x, xMax, xScale, yScale} = useGraphData();
   const xMaxPrev = usePreviousValue(xMax);
 
-  const xFn = useCallback((d) => xScale(x(d)), [x, xScale]);
-  const yFn = useCallback((d) => yScale(y(d)), [y, yScale]);
+  const xFn = useCallback((...d) => xScale(x(...d)), [x, xScale]);
+  const yFn = useCallback((...d) => yScale(y(...d)), [y, yScale]);
 
   return (
     <>

@@ -38,8 +38,8 @@ const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 const getCumulativeRecoveries = ({cumulativeRecoveries}) =>
   cumulativeRecoveries;
 
-const getExpected = (y) => (d) => y(d).expected;
-const getConfirmed = (y) => (d) => y(d).confirmed;
+const getExpected = (y) => (...d) => y(...d).expected;
+const getConfirmed = (y) => (...d) => y(...d).confirmed;
 const getCumulativeDeathsConfirmed = getConfirmed(getCumulativeDeaths);
 
 const config = [
@@ -269,7 +269,7 @@ export function SEIR({height, width}) {
           a whole.
         </Paragraph>
         <WithNearestData>
-          {(d) => (
+          {([d]) => (
             <Paragraph className="estimation">
               The model estimates that{' '}
               <strong>
