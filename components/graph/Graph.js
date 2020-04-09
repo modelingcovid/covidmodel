@@ -5,6 +5,7 @@ import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {DistancingGradient} from './DistancingGradient';
+import {DistancingMarker} from './DistancingMarker';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
@@ -193,6 +194,7 @@ export const Graph = React.memo(function Graph({
                 <>
                   <NearestMarker />
                   <TodayMarker />
+                  <DistancingMarker />
                   <GridRows
                     scale={yScale}
                     width={xMax}
