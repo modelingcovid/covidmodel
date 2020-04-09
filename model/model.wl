@@ -26,6 +26,11 @@ daysTogoToCriticalCare0 = 4;
 (*Rate of leaving critical care, weeks*)
 daysFromCriticalToRecoveredOrDeceased0 = 10;
 
+(* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
+pPCRH0 = 0.8;
+pPCRNH0 = 0.05;
+
+
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
 (* days to get tested after infectious *)
@@ -65,8 +70,8 @@ pCritical80YearOld0=0.15;
 pHospitalized80YearOld0=0.25;
 
 statesConvergeToValue=4;
-convergenceMidpoint=214 (*Aug 1*)
-convergencePeriod=60 (* 90% of convergence occurs over this many days *)
+convergenceMidpoint=214; (*Aug 1*)
+convergencePeriod=60; (* 90% of convergence occurs over this many days *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
 
 (* Set heterogeneous susceptibility using gamma function with bins of constant population size *)
@@ -118,10 +123,10 @@ scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Cur
 scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy"|>;
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan"|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal"|>;
-(*scenario5=<|"id"->"scenario5","distancingDays"->700,"maintain"->True,"name"->"Current Indefinite"|>;*)
+scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite"|>;
 (*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
 
-scenarios={scenario1,scenario2,scenario3,scenario4(*,scenario5*)};
+scenarios={scenario1,scenario2,scenario3,scenario4,scenario5};
 
 (* helper to get the scenario for a given id *)
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
@@ -544,6 +549,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     Table[Association[{
           "day"->t,
           "distancing"->distancing[t],
+          "dailyPcr" -> Merge[{
+             <|"expected"-> stateParams["params"]["population"]*(sol[[QP[PCR]]][t] - sol[[QP[PCR]]][t-1])|>,
+             Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,(PCRQuantiles[t] - PCRQuantiles[t-1])]]
+             },First],
+          "dailyTestsRequiredForContainment" -> <|"expected"-> stateParams["params"]["population"]*(sol[[QP[Eq]]][t] + sol[[QP[ISq]]][t] + sol[[QP[IHq]]][t] + sol[[QP[ICq]]][t])|>,
           "cumulativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[PCR]]][t]|>,
@@ -660,9 +670,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     "fractionOfInfectionsPCRConfirmed"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
       (PCRQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
       PCRQuantiles[endOfEval][[5]]/(CumulativeInfectionQuantiles[endOfEval][[5]])],
-    "dateContained"->If[KeyExistsQ[events, "containment"],
-      DateString[DatePlus[{2020,1,1},containmentTime-1]],
-      ""],
+    "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/vas["VA"]["population"]}&/@vas["VA"]["scenarios"]["scenario1"]["timeSeriesData"],#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
     "dateICUOverCapacity"->If[KeyExistsQ[events, "icu"]&&(!KeyExistsQ[events, "containment"]||(icuOverloadTime - containmentTime)<=0),
       DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
       ""],
@@ -706,9 +714,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     "fractionOfInfectionsPCRConfirmed"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
       (PCRQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
       PCRQuantiles[endOfEvalAug1][[5]]/(CumulativeInfectionQuantiles[endOfEvalAug1][[5]])],
-    "dateContained"->If[KeyExistsQ[events, "containment"],
-      DateString[DatePlus[{2020,1,1},containmentTime-1]],
-      ""],
+    "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/vas["VA"]["population"]}&/@vas["VA"]["scenarios"]["scenario1"]["timeSeriesData"],#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
     "dateICUOverCapacity"->If[KeyExistsQ[events, "icu"]&&(!KeyExistsQ[events, "containment"]||(icuOverloadTime - containmentTime)<=0),
       DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
       ""],
