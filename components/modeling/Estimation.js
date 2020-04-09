@@ -7,8 +7,8 @@ import {CurrentStatus} from './CurrentStatus';
 const styles = css`
   div {
     color: ${theme.color.gray[2]};
-    font-family: ${theme.font.family.ui};
-    font-size: ${theme.font.size.micro};
+    font-family: ${theme.font.family.mono};
+    font-size: ${theme.font.size.tiny};
     margin-bottom: ${theme.spacing[1]};
   }
 `;

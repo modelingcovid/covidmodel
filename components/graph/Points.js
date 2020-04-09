@@ -39,8 +39,8 @@ const NearestPoint = ({nearestProps, ...remaining}) => {
   if (!nearest) {
     return null;
   }
-  const nearestIndex = data.indexOf(nearest);
-  if (nearestIndex === -1) {
+  const [d, i, nearestData] = nearest;
+  if (data !== nearestData) {
     return null;
   }
   const props = nearestProps ? nearestProps(nearest) : {};

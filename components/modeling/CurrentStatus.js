@@ -4,7 +4,7 @@ import {theme} from '../../styles';
 import {useNearestData} from '../graph';
 import {useModelData} from './useModelData';
 import {daysToMonths} from '../../lib/date';
-import {formatShortDate, formatNumber, formatPercent} from '../../lib/format';
+import {formatFixedDate, formatNumber, formatPercent} from '../../lib/format';
 
 export const CurrentStatus = () => {
   const {
@@ -22,7 +22,7 @@ export const CurrentStatus = () => {
 
   return (
     <span>
-      Projection for {formatShortDate(x(nearest))} in {stateName} with{' '}
+      Projection for {formatFixedDate(x(nearest))} in {stateName} with{' '}
       {distancing}
     </span>
   );
