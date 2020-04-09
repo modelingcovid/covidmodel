@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
-import {Grid} from './content';
-import {Graph, Legend, Line} from './graph';
+import {Grid, Gutter} from './content';
+import {Graph, Line} from './graph';
 import {Bed, Lungs, Poll} from './icon';
 import {
   DistancingGradient,
@@ -89,13 +89,13 @@ export const ICUCapacity = ({width, height}) => {
         width={width}
         height={height}
         after={
-          <Legend>
+          <Gutter>
             <PercentileLegendRow
               title="Currently require intensive care"
               y={getCurrentlyCritical}
               color="var(--color-blue2)"
             />
-          </Legend>
+          </Gutter>
         }
       />
 
@@ -110,13 +110,13 @@ export const ICUCapacity = ({width, height}) => {
           x={x}
           xLabel="people"
           after={
-            <Legend>
+            <Gutter>
               <PercentileLegendRow
                 title="Total cases that require intensive care"
                 y={getCumulativeCritical}
                 color="var(--color-blue2)"
               />
-            </Legend>
+            </Gutter>
           }
         >
           <DistancingGradient />

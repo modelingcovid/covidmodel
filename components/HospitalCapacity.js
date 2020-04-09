@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {OccupancyGraph} from './configured';
-import {Grid} from './content';
-import {Graph, Legend, Line} from './graph';
+import {Grid, Gutter} from './content';
+import {Graph, Line} from './graph';
 import {Bed, HospitalUser, Poll} from './icon';
 import {
   DistancingGradient,
@@ -99,7 +99,7 @@ export const HospitalCapacity = ({width, height}) => {
         width={width}
         height={height}
         after={
-          <Legend>
+          <Gutter>
             <PercentileLegendRow
               title="Currently reported hospitalized"
               y={getCurrentlyReportedHospitalized}
@@ -110,7 +110,7 @@ export const HospitalCapacity = ({width, height}) => {
               y={getCurrentlyHospitalized}
               color="var(--color-yellow2)"
             />
-          </Legend>
+          </Gutter>
         }
       />
       <div className="margin-top-4">
@@ -124,7 +124,7 @@ export const HospitalCapacity = ({width, height}) => {
           x={x}
           xLabel="people"
           after={
-            <Legend>
+            <Gutter>
               <PercentileLegendRow
                 title="Total reported hospitalized"
                 y={getCumulativeReportedHospitalized}
@@ -135,7 +135,7 @@ export const HospitalCapacity = ({width, height}) => {
                 y={getCumulativeHospitalized}
                 color="var(--color-yellow2)"
               />
-            </Legend>
+            </Gutter>
           }
         >
           <DistancingGradient />

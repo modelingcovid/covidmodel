@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {Grid} from './content';
-import {Legend} from './graph';
+import {Grid, Gutter} from './content';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   MethodDefinition,
@@ -52,13 +51,13 @@ export const ProjectedDeaths = ({width, height}) => {
         width={width}
         height={height}
         after={
-          <Legend>
+          <Gutter>
             <PercentileLegendRow
               title="Cumulative deaths"
               y={getCumulativeDeaths}
               color="var(--color-blue2)"
             />
-          </Legend>
+          </Gutter>
         }
       >
         <PercentileLine

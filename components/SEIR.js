@@ -3,20 +3,14 @@ import {theme} from '../styles';
 import {PopulationGraph} from './configured';
 import {
   Grid,
+  Gutter,
   InlineLabel,
   Heading,
   Paragraph,
   Title,
   UnorderedList,
 } from './content';
-import {
-  Area,
-  Graph,
-  Legend,
-  Line,
-  WithGraphData,
-  WithNearestData,
-} from './graph';
+import {Area, Graph, Line, WithGraphData, WithNearestData} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
   DistancingGradient,
@@ -240,7 +234,7 @@ export function SEIR({height, width}) {
           x={x}
           xLabel="people"
           after={
-            <Legend>
+            <Gutter>
               {config.map(({y, fill, label, description}, i) => (
                 <PercentileLegendRow
                   key={i}
@@ -250,7 +244,7 @@ export function SEIR({height, width}) {
                   compact
                 />
               ))}
-            </Legend>
+            </Gutter>
           }
         >
           <DistancingGradient />

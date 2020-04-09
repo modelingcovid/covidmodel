@@ -104,30 +104,3 @@ export const LegendRow = ({children, ...remaining}) => (
     {children}
   </div>
 );
-
-export const Legend = ({children}) => {
-  const d = useNearestData();
-  if (!d) {
-    return null;
-  }
-  return (
-    <div>
-      <style jsx>{`
-        div {
-          margin-top: var(--spacing1);
-          margin-bottom: var(--spacing2);
-          float: right;
-          user-select: none;
-          width: 100%;
-        }
-        @media (min-width: 600px) {
-          div {
-            padding-left: var(--spacing1);
-            max-width: calc(var(--column-width) * 3);
-          }
-        }
-      `}</style>
-      {children}
-    </div>
-  );
-};

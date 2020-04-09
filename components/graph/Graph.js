@@ -36,6 +36,7 @@ export const Graph = React.memo(function Graph({
   children,
   overlay,
   after,
+  before,
   data,
   x,
   xLabel = '',
@@ -170,6 +171,7 @@ export const Graph = React.memo(function Graph({
           right: ${margin.right}px;
         }
       `}</style>
+      {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph no-select">
         <svg className="block" width={width} height={height}>

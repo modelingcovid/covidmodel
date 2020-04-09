@@ -1,8 +1,15 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {PopulationGraph} from './configured';
-import {Grid, Heading, InlineLabel, Paragraph, UnorderedList} from './content';
-import {Legend} from './graph';
+import {
+  Grid,
+  Gutter,
+  Heading,
+  InlineLabel,
+  Paragraph,
+  Title,
+  UnorderedList,
+} from './content';
 import {People, Vial, HeadSideCough} from './icon';
 import {
   MethodDefinition,
@@ -33,46 +40,47 @@ export function CaseProgressionCurve({height, width}) {
   return (
     <div className="margin-top-5">
       {/* <MethodDisclaimer /> */}
-      <Heading>How does the model compare with real data?</Heading>
+      {/* <Heading>How does the model compare with real data?</Heading> */}
+      <Title>Comparing the model with verified data</Title>
+      <Paragraph>
+        We use two primary data sources to calibrate the curves for each state:{' '}
+        <InlineLabel
+          color={theme.color.yellow[3]}
+          stroke={theme.color.yellow[3]}
+          strokeWidth={2}
+        >
+          confirmed positive tests
+        </InlineLabel>{' '}
+        and{' '}
+        <InlineLabel
+          color={theme.color.red[2]}
+          stroke={theme.color.red[2]}
+          strokeWidth={2}
+        >
+          confirmed fatalities
+        </InlineLabel>
+        . The model takes these data points alongside the distancing data and
+        computes the set of curves that satisfy the necessary epidemiological
+        constraints of the SEIR model and have the closest fit to the verified
+        data.
+      </Paragraph>
+
       <Paragraph>
         If we look at this data on a logarithmic scale, we can see how the
         actual data aligns with the model’s predictions:
+        <InlineLabel color={theme.color.yellow[3]} fill={theme.color.yellow[3]}>
+          positive tests
+        </InlineLabel>{' '}
+        and
+        <InlineLabel color={theme.color.red[2]} fill={theme.color.red[2]}>
+          fatalities
+        </InlineLabel>
+        , and how they compare to the predicted number of
+        <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue[2]}>
+          total COVID-19 cases
+        </InlineLabel>{' '}
+        in {stateName}.
       </Paragraph>
-      <UnorderedList>
-        <li>
-          How do the modeled number of
-          <InlineLabel
-            color={theme.color.yellow[3]}
-            fill={theme.color.yellow[3]}
-          >
-            reported positive COVID-19 tests
-          </InlineLabel>{' '}
-          compare with the
-          <InlineLabel
-            color={theme.color.yellow[3]}
-            stroke={theme.color.yellow[3]}
-            strokeWidth={2}
-          >
-            confirmed testing data
-          </InlineLabel>
-          ?
-        </li>
-        <li>
-          How do the modeled number of
-          <InlineLabel color={theme.color.red[2]} fill={theme.color.red[2]}>
-            fatalities
-          </InlineLabel>{' '}
-          compare with the
-          <InlineLabel
-            color={theme.color.red[2]}
-            stroke={theme.color.red[2]}
-            strokeWidth={2}
-          >
-            confirmed fatality data
-          </InlineLabel>
-          ?
-        </li>
-      </UnorderedList>
       {/* <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}
@@ -102,7 +110,7 @@ export function CaseProgressionCurve({height, width}) {
         width={width}
         height={height}
         after={
-          <Legend>
+          <Grid mobile={1}>
             <PercentileLegendRow
               y={getCumulativeInfected}
               color="var(--color-blue2)"
@@ -121,7 +129,7 @@ export function CaseProgressionCurve({height, width}) {
               title="Deceased"
               description="People who have died from COVID-19"
             />
-          </Legend>
+          </Grid>
         }
       >
         <PercentileLine
