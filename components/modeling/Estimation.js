@@ -4,7 +4,7 @@ import {theme} from '../../styles';
 import {Paragraph} from '../content';
 import {CurrentStatus} from './CurrentStatus';
 
-export function Estimation({children, className, ...remaining}) {
+export function Estimation({children, className, date, ...remaining}) {
   return (
     <>
       <Paragraph
@@ -16,7 +16,7 @@ export function Estimation({children, className, ...remaining}) {
         {children}
       </Paragraph>
       <div className="caption margin-bottom-1">
-        <CurrentStatus />
+        <CurrentStatus date={date} />
       </div>
     </>
   );

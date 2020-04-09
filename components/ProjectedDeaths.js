@@ -4,16 +4,19 @@ import {Grid, Gutter, InlineLabel, Paragraph, Title} from './content';
 import {Graph} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
+  Estimation,
   MethodDefinition,
   PercentileLegendRow,
   PercentileLine,
   useModelData,
 } from './modeling';
 import {
+  formatShortDate,
   formatDate,
+  formatMonths,
   formatNumber,
-  formatPercent1,
   formatNumber2,
+  formatPercent1,
 } from '../lib/format';
 import {getLastDate} from '../lib/date';
 
@@ -51,7 +54,9 @@ export const ProjectedDeaths = ({width, height}) => {
     model,
     stateName,
     summary,
+    scenarioData: {distancingDays, distancingLevel},
     timeSeriesData,
+    distancingTimeSeriesData,
     x,
     allTimeSeriesData,
   } = useModelData();
@@ -79,6 +84,16 @@ export const ProjectedDeaths = ({width, height}) => {
       ),
     [allTimeSeriesData, y]
   );
+
+  const peakWithinDistancing = useMemo(
+    () =>
+      distancingLevel !== 1 &&
+      distancingTimeSeriesData.reduce((prev, ...d) => {
+        return prev && y(...prev).expected >= y(...d).expected ? prev : d;
+      }, null),
+    [distancingLevel, distancingTimeSeriesData, y]
+  );
+
   return (
     <div className="margin-top-5">
       <Title>Finding the peak of the curve</Title>
@@ -91,6 +106,17 @@ export const ProjectedDeaths = ({width, height}) => {
         </InlineLabel>{' '}
         on a linear scale.
       </Paragraph>
+      {peakWithinDistancing && (
+        <Estimation date={false}>
+          The peak number of fatalities per day before the end of the{' '}
+          {formatMonths(distancingDays)}-month social distancing period in{' '}
+          {stateName} is projected to occur on{' '}
+          <strong className="nowrap">
+            {formatShortDate(x(...peakWithinDistancing))}
+          </strong>
+          .
+        </Estimation>
+      )}
       {/* <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}

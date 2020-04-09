@@ -6,7 +6,7 @@ import {useModelData} from './useModelData';
 import {daysToMonths} from '../../lib/date';
 import {formatFixedDate, formatNumber, formatPercent} from '../../lib/format';
 
-export const CurrentStatus = () => {
+export const CurrentStatus = ({date = true}) => {
   const {
     scenarioData: {distancingDays, distancingLevel},
     stateName,
@@ -22,8 +22,8 @@ export const CurrentStatus = () => {
 
   return (
     <span>
-      Projection for {formatFixedDate(x(nearest))} in {stateName} with{' '}
-      {distancing}
+      Projection for {date ? `${formatFixedDate(x(nearest))} in ` : ''}
+      {stateName} with {distancing}
     </span>
   );
 };

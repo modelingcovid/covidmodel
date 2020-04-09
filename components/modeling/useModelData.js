@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {stateLabels} from '../../lib/controls';
+import {addDays, today} from '../../lib/date';
 import {flattenData} from '../../lib/transform';
 
 const {createContext, useContext, useMemo} = React;
@@ -24,6 +25,12 @@ export const ModelDataProvider = ({
       (s) => s.timeSeriesData
     );
 
+    const distancingEnds = addDays(today, scenarioData.distancingDays);
+    const distancingTimeSeriesData = scenarioData.timeSeriesData.filter((d) => {
+      const date = x(d);
+      return date <= distancingEnds;
+    });
+
     return {
       model,
       scenario,
@@ -38,6 +45,7 @@ export const ModelDataProvider = ({
       // Computed properties:
       stateName: stateLabels[state],
       allTimeSeriesData,
+      distancingTimeSeriesData,
     };
   }, [model, scenario, setScenario, state, states, x]);
 
