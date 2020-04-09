@@ -20,7 +20,7 @@ const lightColor = (n) => {
   return lightSource.toString();
 };
 
-const darkSource = hcl(darkMode[properties.color.gray[6]]);
+const darkSource = hcl('#272d4a');
 const darkColor = (n) => {
   darkSource.opacity = n * 0.8;
   return darkSource.toString();
@@ -33,9 +33,6 @@ export const DistancingGradient = React.memo(function DistancingGradient() {
       color={isDarkMode ? darkColor : lightColor}
       y={getDistancing}
       yScale={distancingScale}
-      style={{
-        mixBlendMode: isDarkMode ? 'overlay' : 'normal',
-      }}
     />
   );
 });
