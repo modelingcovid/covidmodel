@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {Grid, Gutter, InlineLabel, Paragraph} from './content';
+import {Grid, Gutter, InlineLabel, Paragraph, Title} from './content';
 import {Graph} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
@@ -81,14 +81,15 @@ export const ProjectedDeaths = ({width, height}) => {
   );
   return (
     <div className="margin-top-5">
+      <Title>Finding the peak of the curve</Title>
       <Paragraph>
-        However, logarithmic scales and cumulative numbers are difficult to
-        internalize. We can get a better sense of the severity at any given
-        point in time by looking at the{' '}
+        Logarithmic scales and cumulative numbers can be difficult to observe by
+        eye. We can get a better sense of the severity at any given point in
+        time by looking at the{' '}
         <InlineLabel color={textColor} fill={color}>
           fatalities per day
-        </InlineLabel>
-        .
+        </InlineLabel>{' '}
+        on a linear scale.
       </Paragraph>
       {/* <Grid className="margin-bottom-3">
         <MethodDefinition
