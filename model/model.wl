@@ -62,19 +62,20 @@ medianHospitalizationAge0 = 61;
 
 (* interpret as: steepness of age depencence*)
 ageCriticalDependence0 = 3;
-ageHospitalizedDependence0 = 5;
+ageHospitalizedDependence0 = 15;
 
 (* percent positive test delay *)
 percentPositiveTestDelay0 = 11;
 
 (* probability that an infected 80 year old will require critical care *)
-pCritical80YearOld0=0.1;
+pCritical80YearOld0=0.15;
 
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
-pHospitalized80YearOld0=0.20;
+pHospitalized80YearOld0=0.25;
 
 midpointConvergeStateDifferences0=today+130;
 startConvergeStateDifferences0=today+102;
+(* TODO: possibly compute this out of the fit as the average and then only use it in the simulated version *)
 statesConvergeToValue0=4;
 
 (* TODO replace with better distribution (we actually want positive extent, not [0,1])*)
@@ -124,8 +125,8 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->53,"replower"->1.55,"repupper"->2|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.6,"repupper"->2|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->50,"tupper"->53,"replower"->1.3,"repupper"->2|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4,"tlower"->46,"tupper"->54,"replower"->1.3,"repupper"->1.5|>,
   "FL"-><|"rlower"->2.9,"rupper"->4.2,"tlower"->56,"tupper"->60,"replower"->1.4,"repupper"->1.7|>,
   "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->57,"tupper"->60,"replower"->1.65,"repupper"->2|>,
   "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->45,"tupper"->60,"replower"->1.1,"repupper"->1.4|>,
@@ -133,23 +134,23 @@ fitStartingOverrides=<|
   "WA"-><|"rlower"->2.3,"rupper"->2.6,"tlower"->27,"tupper"->37,"replower"->0.8,"repupper"->1.4|>,
   "CT"-><|"rlower"->4,"rupper"->5,"tlower"->52,"tupper"->57,"replower"->0.8,"repupper"->1.3|>,
   "OH"-><|"rlower"->3.8,"rupper"->4.6,"tlower"->53,"tupper"->62,"replower"->0.5,"repupper"->1.4|>,
-  "NY"-><|"rlower"->5,"rupper"->6,"tlower"->48,"tupper"->60,"replower"->1,"repupper"->1.3|>,
+  "NY"-><|"rlower"->5,"rupper"->6,"tlower"->48,"tupper"->50,"replower"->1,"repupper"->1.2|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->55,"tupper"->60,"replower"->0.5,"repupper"->1.5|>,
   "VT"-><|"rlower"->3,"rupper"->4,"tlower"->37,"tupper"->44,"replower"->0.8,"repupper"->2|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.5,"repupper"->1.4|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->45,"tupper"->50,"replower"->0.6,"repupper"->1.4|>,
   "MI"-><|"rlower"->4.7,"rupper"->5.4,"tlower"->52,"tupper"->56,"replower"->0.5,"repupper"->1.4|>,
-  "MS"-><|"rlower"->2.5,"rupper"->5,"tlower"->44,"tupper"->47,"replower"->1.4,"repupper"->1.6|>,
-  "MA"-><|"rlower"->4.6,"rupper"->5.7,"tlower"->45,"tupper"->57,"replower"->1.5,"repupper"->1.7|>,
-  "MD"-><|"rlower"->3.7,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->1.4,"repupper"->1.6|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->1,"repupper"->1.2|>,
-  "NJ"-><|"rlower"->5.2,"rupper"->6,"tlower"->50,"tupper"->54,"replower"->1.4,"repupper"->1.8|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->53,"tupper"->60,"replower"->1.4,"repupper"->2|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->42,"tupper"->47,"replower"->1,"repupper"->1.6|>,
+  "MA"-><|"rlower"->4.8,"rupper"->5.7,"tlower"->45,"tupper"->56,"replower"->1.2,"repupper"->1.7|>,
+  "MD"-><|"rlower"->3.7,"rupper"->4.8,"tlower"->40,"tupper"->60,"replower"->1,"repupper"->1.5|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->0.7,"repupper"->1.4|>,
+  "NJ"-><|"rlower"->5.2,"rupper"->6,"tlower"->50,"tupper"->55,"replower"->1.2,"repupper"->1.8|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->53,"tupper"->60,"replower"->1.1,"repupper"->1.35|>,
   "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->45,"tupper"->58,"replower"->0.5,"repupper"->1.4|>,
-  "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->55,"replower"->0.7,"repupper"->1.4|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->50,"tupper"->60,"replower"->0.5,"repupper"->1.7|>,
+  "OK"-><|"rlower"->3.5,"rupper"->4,"tlower"->45,"tupper"->60,"replower"->0.7,"repupper"->1.4|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->1.7|>,
   "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->1.4|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->48,"tupper"->54,"replower"->0.5,"repupper"->1.4|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->48,"tupper"->60,"replower"->1.3,"repupper"->2|>
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->48,"tupper"->60,"replower"->1.1,"repupper"->1.5|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -195,12 +196,19 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
 infectedCritical[a_,medianHospitalizationAge_,pC80_,ageCriticalDependence_] :=
 pC80(1+E^((-80+medianHospitalizationAge)/ageCriticalDependence)) 1/(1+Exp[-((a-medianHospitalizationAge)/ageCriticalDependence)]);
 
+(* distribution from CDC scaled to our PCR rate 
+https://docs.google.com/spreadsheets/d/1N4cMGvi1y7nRJP_dvov2iaAnJlXcr2shWhHZhhI4_qA/edit#gid=0 *)
+hospdist={{10,32,50,60,70,80,87}, {0.007,0.05824,0.07924,0.08428,0.1218,0.16436,0.19684}};
+hospAgeModel=NonlinearModelFit[Transpose@{hospdist[[1]],hospdist[[2]]},0.25/(1+Exp[-(x-x0)/k]),{k,x0},x];
+hospAgeModel["BestFitParameters"];
+infectedHospitalized[a_]:=hospAgeModel[a]/fractionSymptomatic0;
+(*
 infectedHospitalized[a_,medianHospitalizationAge_,pH80_,ageHospitalizedDependence_] :=
 pH80(1+E^((-80+medianHospitalizationAge)/ageHospitalizedDependence)) 1/(1+Exp[-((a-medianHospitalizationAge)/ageHospitalizedDependence)]);
+*)
 
 noCare[a_,medianHospitalizationAge_,pC80_, pH80_,ageCriticalDependence_,ageHospitalizedDependence_] :=
-1-infectedCritical[a, medianHospitalizationAge, pC80,ageCriticalDependence]-
-infectedHospitalized[a, medianHospitalizationAge,pH80, ageHospitalizedDependence];
+1-infectedCritical[a, medianHospitalizationAge, pC80,ageCriticalDependence]-infectedHospitalized[a];
 
 (* test for the overall fraction that end up in the ICU out of all hospitalized *)
 (*1/Sum[stateParams[state]["population"],{state,statesWithRates}]Sum[stateParams[state]["pC"]/(stateParams[state]["pH"]+stateParams[state]["pC"])*stateParams[state]["population"],{state,statesWithRates}]*)
@@ -240,7 +248,7 @@ stateParams[state_]:=Module[{raw,pop,dist,buckets},
     "bedUtilization"->stateICUData[state]["bedUtilization"],
     "hospitalCapacity"->(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],
     "pS"->Sum[noCare[a, medianHospitalizationAge0, pCritical80YearOld0 ,pHospitalized80YearOld0,ageCriticalDependence0,ageHospitalizedDependence0 ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
-    "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge0, pHospitalized80YearOld0,ageHospitalizedDependence0]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+    "pH"->Sum[infectedHospitalized[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pC"->Sum[infectedCritical[a, medianHospitalizationAge0, pCritical80YearOld0,ageCriticalDependence0]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pPCRNH"->pPCRNH0State[state],
     "pPCRH"->pPCRH0State[state],
@@ -1007,7 +1015,7 @@ Module[{raw,pop,dist,buckets},
     "importtime0"->countryImportTime[country],
     "ventilators"->countryVentilators[country],
     "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
-    "pH"->Sum[infectedHospitalized[a, medianHospitalizationAge, pHLimit,ageHospitalizedDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+    "pH"->Sum[infectedHospitalized[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]
   |>
 ];
