@@ -77,23 +77,41 @@ midpointConvergeStateDifferences0=today+130;
 startConvergeStateDifferences0=today+102;
 statesConvergeToValue0=4;
 
-(* TODO replace with better distribution (we actually want positive extent, not [0,1])*)
+(* Set heterogeneous susceptibility using gamma function with bins of constant population size *)
+susceptibilityBins=20;
+susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
+m=-stdDev^2/2;
+s=Sqrt[Log[stdDev^2+1]];
+dist=LogNormalDistribution[m,s];
+Echo[Plot[PDF[dist,x],{x,0,8},PlotRange->All]];
+binEdges=InverseCDF[dist,Range[0,binCount]/binCount];
+Table[
+ NIntegrate[x PDF[dist,x],{x,binEdges[[i]],binEdges[[i+1]]}],{i,1,binCount}]//(binCount #/Total[#])&
+];
+susceptibilityValues=susceptibilityValuesLogNormal[susceptibilityBins,1]
+susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibilityBins];
+
+(* Set heterogeneous susceptibility using beta function with bins of constant width in susceptibility value *)
+(*
 susceptibilityBins=20;
 susceptibilityValues=Table[(i-1)/(susceptibilityBins - 1),{i,1,susceptibilityBins}];
 susceptibilityInitialPopulations=Module[{mean=.15, stdDev=.1, a, b, binSize,betaDist},
-  a = mean (mean-mean^2+stdDev^2)/stdDev^2;
-  b = (mean-1)(mean^2-mean-stdDev^2)/stdDev^2;
+  a = mean(mean-mean^2+stdDev^2)/stdDev^2;
+  b = (1-mean)(mean-mean^2+stdDev^2)/stdDev^2;
   binSize=1./susceptibilityBins;
   betaDist=CDF[BetaDistribution[a,b]];
   N[Table[betaDist[binSize*i]-betaDist[binSize*(i-1)],{i,1,susceptibilityBins}]]
 ];
-susceptibilityCoefficient=1./Total[susceptibilityValues*susceptibilityInitialPopulations];
+susceptibilityValues=susceptibilityValues/Total[susceptibilityValues*susceptibilityInitialPopulations];
+*)
 
 (* use these values to turn off heterogeneous susceptibility *)
-(*susceptibilityBins=1;
+(*
+susceptibilityBins=1;
 susceptibilityValues={1};
 susceptibilityInitialPopulations={1};
-susceptibilityCoefficient=1;*)
+susceptibilityCoefficient=1;
+*)
 
 
 (* Heterogeneity level, determines percent of population infected at equilibrium *)
@@ -349,10 +367,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   Clear[r0natural,daysUntilNotInfectiousOrHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity,distpow];
 
   equationsDAE = Flatten[{
-      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
+      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
-      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * Sum[susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectiousOrHospitalized,
       (*Recovered without needing care*)
@@ -738,10 +756,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* the import time *)
   equationsODE=Flatten[{
       Table[
-        sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
+        sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t]) * susceptibilityValues[[i]]*sSq[i][t]/daysUntilNotInfectiousOrHospitalized0 - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
-      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityCoefficient*susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      Eq'[t]==distancing[t]^distpow * r0natural * (ISq[t]+IHq[t]+ICq[t])*Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}]/daysUntilNotInfectiousOrHospitalized0 + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==params["pS"]*Eq[t]/daysFromInfectedToInfectious0-ISq[t]/daysUntilNotInfectiousOrHospitalized0,
       (*Recovered without needing care*)
@@ -757,7 +775,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       (*Recovered after hospitalization*)
       RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
       (*pcr confirmation*)
-      PCR'[t] == testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
+      PCR'[t] == testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)]) + stateAdjustmentForTestingDifferences) * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
       (*Infected, will need critical care*)
       ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
       (*Hospitalized, need critical care*)
