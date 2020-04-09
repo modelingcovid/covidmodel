@@ -10,8 +10,10 @@ import {
   Title,
   UnorderedList,
 } from './content';
+import {WithNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
 import {
+  Estimation,
   MethodDefinition,
   MethodDisclaimer,
   PercentileLegendRow,
@@ -19,6 +21,8 @@ import {
   useModelData,
 } from './modeling';
 import {formatNumber, formatPercent1} from '../lib/format';
+
+const {useCallback} = React;
 
 const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
@@ -37,6 +41,22 @@ const getCumulativeInfected = (d) => {
 
 export function CaseProgressionCurve({height, width}) {
   const {model, stateName, summary, x} = useModelData();
+
+  // Can we get this from the model?
+  const symptomaticRate = 0.7;
+
+  const getCumulativeSymptomatic = useCallback(
+    (...d) => {
+      const source = getCumulativeInfected(...d);
+      const result = {};
+      for (let [key, value] of Object.entries(source)) {
+        result[key] = value * symptomaticRate;
+      }
+      return result;
+    },
+    [symptomaticRate]
+  );
+
   return (
     <div className="margin-top-5">
       {/* <MethodDisclaimer /> */}
@@ -148,6 +168,20 @@ export function CaseProgressionCurve({height, width}) {
           gradient
         />
       </PopulationGraph>
+      <WithNearestData>
+        {(d) => (
+          <Estimation>
+            Fatality rate of symptomatic COVID-19 cases{' '}
+            <strong>
+              {formatPercent1(
+                getCumulativeDeaths(...d).expected /
+                  getCumulativeSymptomatic(...d).expected
+              )}
+            </strong>
+            .
+          </Estimation>
+        )}
+      </WithNearestData>
     </div>
   );
 }

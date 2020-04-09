@@ -14,6 +14,7 @@ import {Area, Graph, Line, WithGraphData, WithNearestData} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
   DistancingGradient,
+  Estimation,
   MethodDefinition,
   MethodDisclaimer,
   PercentileLegendRow,
@@ -270,7 +271,7 @@ export function SEIR({height, width}) {
         </Paragraph>
         <WithNearestData>
           {([d]) => (
-            <Paragraph className="estimation">
+            <Estimation>
               The model estimates that{' '}
               <strong>
                 {formatPercent1(
@@ -280,7 +281,7 @@ export function SEIR({height, width}) {
               </strong>{' '}
               of the {stateName} population will have contracted COVID-19 by{' '}
               <span className="nowrap">{formatShortDate(x(d))}</span>.
-            </Paragraph>
+            </Estimation>
           )}
         </WithNearestData>
       </div>

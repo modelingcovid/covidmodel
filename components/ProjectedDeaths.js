@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Grid, Gutter} from './content';
+import {Grid, Gutter, Paragraph} from './content';
 import {Graph} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
@@ -80,9 +80,9 @@ export const ProjectedDeaths = ({width, height}) => {
     <div className="margin-top-5">
       <MethodDisclaimer />
       <div className="section-heading">Projected fatalities</div>
-      <p className="paragraph">
+      <Paragraph>
         We project the cumulative number of deaths on a logarithmic scale.
-      </p>
+      </Paragraph>
       <Grid className="margin-bottom-3">
         <MethodDefinition
           icon={People}

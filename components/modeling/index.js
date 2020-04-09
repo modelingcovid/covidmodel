@@ -1,5 +1,7 @@
+export * from './CurrentStatus';
 export * from './DistancingGradient';
 export * from './DistancingInfo';
+export * from './Estimation';
 export * from './MethodDefinition';
 export * from './PercentileLegendRow';
 export * from './PercentileLine';
