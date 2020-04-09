@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {Group} from '@vx/group';
-import {scaleLinear, scaleSymlog, scaleUtc} from '@vx/scale';
+import {scaleLinear, scaleSymlog} from '@vx/scale';
 import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
-import {DistancingGradient} from './DistancingGradient';
+import {useDistancingId} from './DistancingGradient';
 import {DistancingMarker} from './DistancingMarker';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
@@ -12,7 +12,7 @@ import {Scrubber} from './Scrubber';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
 import {useComponentId} from '../util';
-import {getDate} from '../../lib/date';
+import {createDateScale, getDate} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 import {theme} from '../../styles';
 
@@ -62,17 +62,7 @@ export const Graph = React.memo(function Graph({
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  const xScale = useMemo(
-    () =>
-      scaleUtc({
-        domain: [
-          new Date('2020-01-01').getTime(),
-          new Date('2021-01-01').getTime(),
-        ],
-        range: [0, xMax],
-      }),
-    [data, x, xMax]
-  );
+  const xScale = useMemo(() => createDateScale(xMax), [data, x, xMax]);
 
   const yScale = useMemo(() => {
     const yDomain = typeof domain === 'number' ? [0, domain] : domain;
@@ -145,6 +135,7 @@ export const Graph = React.memo(function Graph({
     [tickFormat, xLabel, yTickCount]
   );
 
+  const distancingId = useDistancingId();
   const clipPathId = useComponentId('graphClipPath');
 
   return (
@@ -187,7 +178,15 @@ export const Graph = React.memo(function Graph({
                 <rect x="0" y="0" width={xMax} height={yMax} />
               </clipPath>
             </defs>
-            {decoration && <DistancingGradient />}
+            {decoration && (
+              <rect
+                x="0"
+                y="0"
+                width={xMax}
+                height={yMax}
+                fill={`url(#${distancingId})`}
+              />
+            )}
             {children}
             <g pointerEvents="none">
               {decoration && (

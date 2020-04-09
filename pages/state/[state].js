@@ -15,7 +15,7 @@ import {
 } from '../../components';
 import {Controls} from '../../components/configured';
 import {Section, Title} from '../../components/content';
-import {NearestDataProvider} from '../../components/graph';
+import {NearestDataProvider, DistancingGradient} from '../../components/graph';
 import {ModelDataProvider} from '../../components/modeling';
 import {useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
@@ -78,6 +78,16 @@ export default function StatePage({data, states}) {
               box-shadow: 0 2px ${theme.color.shadow[0]};
             }
           `}</style>
+          <svg
+            viewBox={`0 0 ${width} 0`}
+            style={{
+              position: 'absolute',
+              pointerEvents: 'none',
+              zIndex: -1,
+            }}
+          >
+            <DistancingGradient size={width} />
+          </svg>
           <div className="flex flex-col justify-center">
             <Section className="margin-top-4">
               <div ref={sizeRef} />

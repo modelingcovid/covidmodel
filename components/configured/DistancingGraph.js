@@ -10,12 +10,13 @@ import {
 } from '../graph';
 import {useModelData} from '../modeling';
 import {WithComponentId} from '../util';
-import {today} from '../../lib/date';
+import {dateScale, today} from '../../lib/date';
 import {formatNumber2, formatPercent} from '../../lib/format';
 
 const formatPercentInverted = (n) => formatPercent(1 - n);
 
 const {useCallback, useMemo} = React;
+const todayOffset = dateScale(today);
 
 export const DistancingGraph = ({
   children,
@@ -67,9 +68,19 @@ export const DistancingGraph = ({
               <WithComponentId prefix="linearGradient">
                 {(gradientId) => (
                   <>
-                    <LinearGradient direction="right" id={gradientId}>
-                      <Stop offset={today} stopColor="var(--color-blue2)" />
-                      <Stop offset={today} stopColor="var(--color-yellow3)" />
+                    <LinearGradient
+                      size={xMax}
+                      direction="right"
+                      id={gradientId}
+                    >
+                      <Stop
+                        offset={todayOffset}
+                        stopColor="var(--color-blue2)"
+                      />
+                      <Stop
+                        offset={todayOffset}
+                        stopColor="var(--color-yellow3)"
+                      />
                     </LinearGradient>
                     <Line
                       y={y}

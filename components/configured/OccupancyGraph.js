@@ -6,8 +6,9 @@ import {
   HMarker,
   LinearGradient,
   Stop,
+  WithGraphData,
 } from '../graph';
-import {PercentileLine, useModelData} from '../modeling';
+import {PercentileLine, useModelData, WithModelData} from '../modeling';
 import {WithComponentId} from '../util';
 
 const {useMemo} = React;
@@ -61,22 +62,34 @@ export const OccupancyGraph = ({
         labelDx={-20}
         labelDy={-6}
       />
-      <WithComponentId prefix="linearGradient">
-        {(gradientId) => (
-          <>
-            <LinearGradient
-              direction="up"
-              id={gradientId}
-              from="var(--color-blue2)"
-              to="var(--color-red1)"
-            >
-              <Stop offset={cutoff} stopColor="var(--color-blue2)" />
-              <Stop offset={cutoff} stopColor="var(--color-red1)" />
-            </LinearGradient>
-            <PercentileLine y={y} color={`url(#${gradientId})`} gradient />
-          </>
-        )}
-      </WithComponentId>
+      <WithGraphData>
+        {({yScale, yMax}) => {
+          const offset = yScale(cutoff) / yMax;
+          return (
+            <WithComponentId prefix="linearGradient">
+              {(gradientId) => (
+                <>
+                  <LinearGradient
+                    size={yMax}
+                    direction="up"
+                    id={gradientId}
+                    from="var(--color-blue2)"
+                    to="var(--color-red1)"
+                  >
+                    <Stop offset={offset} stopColor="var(--color-blue2)" />
+                    <Stop offset={offset} stopColor="var(--color-red1)" />
+                  </LinearGradient>
+                  <PercentileLine
+                    y={y}
+                    color={`url(#${gradientId})`}
+                    gradient
+                  />
+                </>
+              )}
+            </WithComponentId>
+          );
+        }}
+      </WithGraphData>
       {children}
     </Graph>
   );

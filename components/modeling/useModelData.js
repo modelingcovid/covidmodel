@@ -2,6 +2,7 @@ import * as React from 'react';
 import {stateLabels} from '../../lib/controls';
 import {addDays, today} from '../../lib/date';
 import {flattenData} from '../../lib/transform';
+import {useComponentId} from '../util';
 
 const {createContext, useContext, useMemo} = React;
 
@@ -16,6 +17,7 @@ export const ModelDataProvider = ({
   states,
   x,
 }) => {
+  const id = useComponentId('model');
   const context = useMemo(() => {
     const scenarioData = model.scenarios[scenario];
     const {summary} = scenarioData;
@@ -43,11 +45,12 @@ export const ModelDataProvider = ({
       summary: scenarioData.summary,
       timeSeriesData: scenarioData.timeSeriesData,
       // Computed properties:
+      id,
       stateName: stateLabels[state],
       allTimeSeriesData,
       distancingTimeSeriesData,
     };
-  }, [model, scenario, setScenario, state, states, x]);
+  }, [id, model, scenario, setScenario, state, states, x]);
 
   return (
     <ModelDataContext.Provider value={context}>
