@@ -5,7 +5,6 @@ import {Grid, Gutter} from './content';
 import {Graph, Line} from './graph';
 import {Bed, Lungs, Poll} from './icon';
 import {
-  DistancingGradient,
   MethodDefinition,
   MethodDisclaimer,
   PercentileLine,
@@ -119,7 +118,6 @@ export const ICUCapacity = ({width, height}) => {
             </Gutter>
           }
         >
-          <DistancingGradient />
           <PercentileLine
             y={getCumulativeCritical}
             color="var(--color-blue2)"

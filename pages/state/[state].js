@@ -16,7 +16,7 @@ import {Controls} from '../../components/configured';
 import {Section} from '../../components/content';
 import {NearestDataProvider} from '../../components/graph';
 import {ModelDataProvider} from '../../components/modeling';
-import {useComponentId, useContentRect} from '../../components/util';
+import {useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
 import {getStateData, getStatesWithData} from '../../lib/data';
 import {getDate, initialTargetDate} from '../../lib/date';
@@ -41,8 +41,6 @@ export default function StatePage({data, states}) {
   }
 
   const scenarioSummary = data.scenarios[scenario].summary;
-
-  const socialDistancingGradientId = useComponentId('socialDistancingGradient');
   const stateName = stateLabels[state];
 
   return (

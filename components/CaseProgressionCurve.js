@@ -10,6 +10,7 @@ import {
   Title,
   OrderedList,
   UnorderedList,
+  WithCitation,
 } from './content';
 import {WithNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
@@ -21,9 +22,9 @@ import {
   PercentileLine,
   useModelData,
 } from './modeling';
-import {formatNumber, formatPercent1} from '../lib/format';
+import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
-const {useCallback} = React;
+const {useCallback, useState} = React;
 
 const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
@@ -43,21 +44,12 @@ const getCumulativeInfected = (d) => {
 export function CaseProgressionCurve({height, width}) {
   const {model, stateName, summary, x} = useModelData();
 
-  // Can we get these from the model?
-  const symptomaticRate = 0.7;
-  const fatalityWeight = 3;
-
-  const getCumulativeSymptomatic = useCallback(
-    (...d) => {
-      const source = getCumulativeInfected(...d);
-      const result = {};
-      for (let [key, value] of Object.entries(source)) {
-        result[key] = value * symptomaticRate;
-      }
-      return result;
-    },
-    [symptomaticRate]
+  const defaultAsymptomaticRate = 0.3;
+  const [asymptomaticRate, setAsymptomaticRate] = useState(
+    defaultAsymptomaticRate
   );
+  // Can we get these from the model?
+  const fatalityWeight = 3;
 
   return (
     <div className="margin-top-5">
@@ -179,20 +171,59 @@ export function CaseProgressionCurve({height, width}) {
         Reported fatalities and confirmed positive cases are weighed at a 3:1
         ratio during the fitting process.
       </Paragraph>
-      <WithNearestData>
-        {(d) => (
-          <Estimation className="margin-top-5">
-            Fatality rate of symptomatic COVID-19 cases{' '}
-            <strong>
-              {formatPercent1(
-                getCumulativeDeaths(...d).expected /
-                  getCumulativeSymptomatic(...d).expected
-              )}
-            </strong>
+      <Heading className="margin-top-4">
+        Determining symptomatic statistics
+      </Heading>
+      <WithCitation
+        citation={
+          <>
+            Observed as 32% on the{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.03.18.20038125v1.full.pdf">
+              Diamond Princess
+            </a>
+            , 31% for{' '}
+            <a href="https://www.ijidonline.com/article/S1201-9712(20)30139-9/pdf">
+              Japanese citizens evacuated from Wuhan
+            </a>
+            , 29% in{' '}
+            <a href="https://link.springer.com/content/pdf/10.1007/s11427-020-1661-4.pdf">
+              China
+            </a>
+            , and 34% in{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.03.26.20044446v1.full.pdf">
+              Iceland
+            </a>
             .
-          </Estimation>
-        )}
-      </WithNearestData>
+          </>
+        }
+      >
+        <Paragraph>
+          While the rate of asymptomatic cases of COVID-19 don’t influence the
+          results of the COSMC model, they’re useful for generating statistics
+          to compare with other models.{' '}
+          <span className="footnote">
+            By default, we set the <strong>asymptomatic rate</strong> to{' '}
+            <strong>{formatPercent(defaultAsymptomaticRate)}</strong>.
+          </span>
+        </Paragraph>
+        <WithNearestData>
+          {(d) => (
+            <Estimation>
+              Based on an asymptomatic rate of{' '}
+              {formatPercent(defaultAsymptomaticRate)}, the model projects the
+              fatality rate of symptomatic COVID-19 cases to be{' '}
+              <strong>
+                {formatPercent1(
+                  (getCumulativeDeaths(...d).expected /
+                    getCumulativeInfected(...d).expected) *
+                    (1 - asymptomaticRate)
+                )}
+              </strong>
+              .
+            </Estimation>
+          )}
+        </WithNearestData>
+      </WithCitation>
     </div>
   );
 }

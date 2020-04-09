@@ -127,7 +127,9 @@ export const ProjectedDeaths = ({width, height}) => {
               title="Fatalities per day"
               y={y}
               color={color}
-              format={formatNumber2}
+              format={
+                y === getFatalitiesPerDayPer100K ? formatNumber2 : formatNumber
+              }
             />
           </Gutter>
         }

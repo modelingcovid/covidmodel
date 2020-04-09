@@ -23,13 +23,23 @@ export function Gutter({children, ...remaining}) {
   );
 }
 
-export function WithGutter({children}) {
+export function WithGutter({
+  children,
+  alignItems = 'flex-start',
+  ...remaining
+}) {
   return (
-    <div>
+    <div {...remaining}>
       <style jsx>{`
         div {
           display: flex;
-          align-items: flex-end;
+          flex-direction: column;
+        }
+        @media (min-width: 600px) {
+          div {
+            flex-direction: row;
+            align-items: ${alignItems};
+          }
         }
       `}</style>
       {children}

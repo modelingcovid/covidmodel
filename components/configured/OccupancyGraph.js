@@ -7,7 +7,7 @@ import {
   LinearGradient,
   Stop,
 } from '../graph';
-import {DistancingGradient, PercentileLine, useModelData} from '../modeling';
+import {PercentileLine, useModelData} from '../modeling';
 import {WithComponentId} from '../util';
 
 const {useMemo} = React;
@@ -49,7 +49,6 @@ export const OccupancyGraph = ({
       xLabel={xLabel}
       controls
     >
-      <DistancingGradient />
       <HMarker
         anchor="end"
         value={cutoff}

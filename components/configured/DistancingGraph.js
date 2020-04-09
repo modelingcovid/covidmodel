@@ -8,7 +8,7 @@ import {
   Stop,
   WithGraphData,
 } from '../graph';
-import {DistancingGradient, useModelData} from '../modeling';
+import {useModelData} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
 import {formatNumber2, formatPercent} from '../../lib/format';
@@ -63,7 +63,6 @@ export const DistancingGraph = ({
           };
           return (
             <>
-              <DistancingGradient />
               {children}
               <WithComponentId prefix="linearGradient">
                 {(gradientId) => (

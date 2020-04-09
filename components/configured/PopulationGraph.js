@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Graph, HMarker, NearestMarker} from '../graph';
-import {DistancingGradient, useModelData} from '../modeling';
+import {useModelData} from '../modeling';
 import {formatLargeNumber} from '../../lib/format';
 
 export const PopulationGraph = ({
@@ -27,7 +27,6 @@ export const PopulationGraph = ({
       x={x}
       xLabel={xLabel}
     >
-      <DistancingGradient />
       {children}
       <HMarker
         value={population}

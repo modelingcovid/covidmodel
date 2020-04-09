@@ -5,7 +5,6 @@ import {Grid, Gutter} from './content';
 import {Graph, Line} from './graph';
 import {Bed, HospitalUser, Poll} from './icon';
 import {
-  DistancingGradient,
   MethodDefinition,
   MethodDisclaimer,
   PercentileLegendRow,
@@ -138,7 +137,6 @@ export const HospitalCapacity = ({width, height}) => {
             </Gutter>
           }
         >
-          <DistancingGradient />
           <PercentileLine
             y={getCumulativeReportedHospitalized}
             color="var(--color-blue2)"

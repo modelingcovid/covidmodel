@@ -13,7 +13,6 @@ import {
 import {Area, Graph, Line, WithGraphData, WithNearestData} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
-  DistancingGradient,
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
@@ -248,7 +247,6 @@ export function SEIR({height, width}) {
             </Gutter>
           }
         >
-          <DistancingGradient />
           {config.map(({area: [y0, y1], fill}, i) => (
             <Area
               key={`area-${i}`}

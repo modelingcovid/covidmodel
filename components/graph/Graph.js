@@ -4,6 +4,7 @@ import {scaleLinear, scaleSymlog, scaleUtc} from '@vx/scale';
 import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
+import {DistancingGradient} from './DistancingGradient';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
@@ -185,6 +186,7 @@ export const Graph = React.memo(function Graph({
                 <rect x="0" y="0" width={xMax} height={yMax} />
               </clipPath>
             </defs>
+            {decoration && <DistancingGradient />}
             {children}
             <g pointerEvents="none">
               {decoration && (

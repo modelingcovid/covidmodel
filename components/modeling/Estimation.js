@@ -4,15 +4,6 @@ import {theme} from '../../styles';
 import {Paragraph} from '../content';
 import {CurrentStatus} from './CurrentStatus';
 
-const styles = css`
-  div {
-    color: ${theme.color.gray[2]};
-    font-family: ${theme.font.family.mono};
-    font-size: ${theme.font.size.tiny};
-    margin-bottom: ${theme.spacing[1]};
-  }
-`;
-
 export function Estimation({children, className, ...remaining}) {
   return (
     <>
@@ -24,8 +15,7 @@ export function Estimation({children, className, ...remaining}) {
       >
         {children}
       </Paragraph>
-      <div>
-        <style jsx>{styles}</style>
+      <div className="caption margin-bottom-1">
         <CurrentStatus />
       </div>
     </>

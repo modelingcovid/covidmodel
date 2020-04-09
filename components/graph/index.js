@@ -1,5 +1,6 @@
 export * from './Area';
 export * from './Axis';
+export * from './DistancingGradient';
 export * from './Graph';
 export * from './GraphControls';
 export * from './Legend';
