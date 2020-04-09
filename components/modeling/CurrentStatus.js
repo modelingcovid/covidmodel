@@ -3,27 +3,17 @@ import {theme} from '../../styles';
 
 import {useNearestData} from '../graph';
 import {useModelData} from './useModelData';
+import {getScenarioSummary} from '../../lib/controls';
 import {daysToMonths} from '../../lib/date';
 import {formatFixedDate, formatNumber, formatPercent} from '../../lib/format';
 
 export const CurrentStatus = ({date = true}) => {
-  const {
-    scenarioData: {distancingDays, distancingLevel},
-    stateName,
-    x,
-  } = useModelData();
+  const {scenarioData, stateName, x} = useModelData();
   const [nearest] = useNearestData();
-  const distancing =
-    distancingLevel === 1
-      ? 'no distancing'
-      : `${formatPercent(1 - distancingLevel)} distancing for ${formatNumber(
-          daysToMonths(distancingDays)
-        )} months`;
-
   return (
     <span>
       Projection for {date ? `${formatFixedDate(x(nearest))} in ` : ''}
-      {stateName} with {distancing}
+      {stateName} with {getScenarioSummary(scenarioData)}
     </span>
   );
 };
