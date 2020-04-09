@@ -28,7 +28,7 @@ const {useCallback, useState} = React;
 
 const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
 const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
-const getCumulativeInfected = (d) => {
+const getCumulativeExposed = (d) => {
   const result = {};
   for (let key of Object.keys(d.currentlyInfected)) {
     result[key] =
@@ -57,8 +57,8 @@ export function CaseProgressionCurve({height, width}) {
       <Paragraph>
         We use two primary data sources to calibrate the curves for each state:{' '}
         <InlineLabel
-          color={theme.color.yellow.text}
-          stroke={theme.color.yellow[3]}
+          color={theme.color.blue.text}
+          stroke={theme.color.blue[2]}
           strokeWidth={2}
         >
           confirmed positive tests
@@ -79,10 +79,7 @@ export function CaseProgressionCurve({height, width}) {
       <Paragraph>
         If we look at this data on a logarithmic scale, we can see how the
         actual data aligns with the model’s predictions:
-        <InlineLabel
-          color={theme.color.yellow.text}
-          fill={theme.color.yellow[3]}
-        >
+        <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
           positive tests
         </InlineLabel>{' '}
         and
@@ -90,10 +87,14 @@ export function CaseProgressionCurve({height, width}) {
           fatalities
         </InlineLabel>
         , and how they compare to the predicted number of
-        <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
+        <InlineLabel
+          color={theme.color.yellow.text}
+          fill={theme.color.yellow[3]}
+        >
           total COVID-19 cases
-        </InlineLabel>{' '}
-        in {stateName}.
+        </InlineLabel>
+        —the cumulative number of people who have been in the{' '}
+        <strong>exposed</strong> state—in {stateName}.
       </Paragraph>
       {/* <Grid className="margin-bottom-3">
         <MethodDefinition
@@ -126,14 +127,14 @@ export function CaseProgressionCurve({height, width}) {
         after={
           <Grid mobile={1}>
             <PercentileLegendRow
-              y={getCumulativeInfected}
-              color={theme.color.blue[2]}
+              y={getCumulativeExposed}
+              color={theme.color.yellow[3]}
               title="Total COVID-19 cases"
               description="People who have been infected with COVID-19"
             />
             <PercentileLegendRow
               y={getCumulativePcr}
-              color={theme.color.yellow[3]}
+              color={theme.color.blue[2]}
               title="Reported positive tests"
               description="Total number of COVID-19 tests projected to be positive"
             />
@@ -147,13 +148,13 @@ export function CaseProgressionCurve({height, width}) {
         }
       >
         <PercentileLine
-          y={getCumulativeInfected}
-          color={theme.color.blue[2]}
+          y={getCumulativeExposed}
+          color={theme.color.yellow[3]}
           gradient
         />
         <PercentileLine
           y={getCumulativePcr}
-          color={theme.color.yellow[3]}
+          color={theme.color.blue[2]}
           gradient
         />
         <PercentileLine
@@ -215,7 +216,7 @@ export function CaseProgressionCurve({height, width}) {
               <strong>
                 {formatPercent1(
                   (getCumulativeDeaths(...d).expected /
-                    getCumulativeInfected(...d).expected) *
+                    getCumulativeExposed(...d).expected) *
                     (1 - asymptomaticRate)
                 )}
               </strong>
