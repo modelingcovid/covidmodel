@@ -173,7 +173,7 @@ export const Graph = React.memo(function Graph({
       `}</style>
       {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
-      <div className="graph no-select">
+      <div className="graph no-select margin-bottom-1">
         <svg className="block" width={width} height={height}>
           <Group
             // Add 0.5 to snap centered strokes onto the pixel grid

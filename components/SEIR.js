@@ -64,21 +64,21 @@ const config = [
     description:
       'People who have been infected with COVID-19 but cannot yet infect others',
     fill: theme.color.yellow[2],
-    color: theme.color.yellow[3],
+    color: theme.color.yellow.text,
   },
   {
     y: getCurrentlyInfectious,
     label: 'Infectious',
     description: 'People who have COVID-19 and can infect others',
     fill: theme.color.blue[2],
-    color: theme.color.blue[2],
+    color: theme.color.blue.text,
   },
   {
     y: getCumulativeDeaths,
     label: 'Deceased',
     description: 'People who have died from COVID-19',
-    fill: theme.color.red[2],
-    color: theme.color.red[2],
+    fill: theme.color.red[1],
+    color: theme.color.red.text,
   },
 ];
 

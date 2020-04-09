@@ -8,6 +8,7 @@ import {
   InlineLabel,
   Paragraph,
   Title,
+  OrderedList,
   UnorderedList,
 } from './content';
 import {WithNearestData} from './graph';
@@ -42,8 +43,9 @@ const getCumulativeInfected = (d) => {
 export function CaseProgressionCurve({height, width}) {
   const {model, stateName, summary, x} = useModelData();
 
-  // Can we get this from the model?
+  // Can we get these from the model?
   const symptomaticRate = 0.7;
+  const fatalityWeight = 3;
 
   const getCumulativeSymptomatic = useCallback(
     (...d) => {
@@ -59,13 +61,11 @@ export function CaseProgressionCurve({height, width}) {
 
   return (
     <div className="margin-top-5">
-      {/* <MethodDisclaimer /> */}
-      {/* <Heading>How does the model compare with real data?</Heading> */}
       <Title>Comparing the model with verified data</Title>
       <Paragraph>
         We use two primary data sources to calibrate the curves for each state:{' '}
         <InlineLabel
-          color={theme.color.yellow[3]}
+          color={theme.color.yellow.text}
           stroke={theme.color.yellow[3]}
           strokeWidth={2}
         >
@@ -73,30 +73,32 @@ export function CaseProgressionCurve({height, width}) {
         </InlineLabel>{' '}
         and{' '}
         <InlineLabel
-          color={theme.color.red[2]}
-          stroke={theme.color.red[2]}
+          color={theme.color.red.text}
+          stroke={theme.color.red[1]}
           strokeWidth={2}
         >
           confirmed fatalities
         </InlineLabel>
         . The model takes these data points alongside the distancing data and
-        computes the set of curves that satisfy the necessary epidemiological
-        constraints of the SEIR model and have the closest fit to the verified
-        data.
+        computes a set of curves that satisfy the epidemiological constraints of
+        the SEIR model.
       </Paragraph>
 
       <Paragraph>
         If we look at this data on a logarithmic scale, we can see how the
         actual data aligns with the model’s predictions:
-        <InlineLabel color={theme.color.yellow[3]} fill={theme.color.yellow[3]}>
+        <InlineLabel
+          color={theme.color.yellow.text}
+          fill={theme.color.yellow[3]}
+        >
           positive tests
         </InlineLabel>{' '}
         and
-        <InlineLabel color={theme.color.red[2]} fill={theme.color.red[2]}>
+        <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
           fatalities
         </InlineLabel>
         , and how they compare to the predicted number of
-        <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue[2]}>
+        <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
           total COVID-19 cases
         </InlineLabel>{' '}
         in {stateName}.
@@ -133,19 +135,19 @@ export function CaseProgressionCurve({height, width}) {
           <Grid mobile={1}>
             <PercentileLegendRow
               y={getCumulativeInfected}
-              color="var(--color-blue2)"
+              color={theme.color.blue[2]}
               title="Total COVID-19 cases"
               description="People who have been infected with COVID-19"
             />
             <PercentileLegendRow
               y={getCumulativePcr}
-              color="var(--color-yellow3)"
+              color={theme.color.yellow[3]}
               title="Reported positive tests"
               description="Total number of COVID-19 tests projected to be positive"
             />
             <PercentileLegendRow
               y={getCumulativeDeaths}
-              color="var(--color-red2)"
+              color={theme.color.red[1]}
               title="Deceased"
               description="People who have died from COVID-19"
             />
@@ -154,23 +156,32 @@ export function CaseProgressionCurve({height, width}) {
       >
         <PercentileLine
           y={getCumulativeInfected}
-          color="var(--color-blue2)"
+          color={theme.color.blue[2]}
           gradient
         />
         <PercentileLine
           y={getCumulativePcr}
-          color="var(--color-yellow3)"
+          color={theme.color.yellow[3]}
           gradient
         />
         <PercentileLine
           y={getCumulativeDeaths}
-          color="var(--color-red2)"
+          color={theme.color.red[1]}
           gradient
         />
       </PopulationGraph>
+      <Heading className="margin-top-4">Finding the best fit</Heading>
+      <Paragraph>
+        The model adjusts three values to find a set of curves with the best fit
+        for {stateName}: the <strong>date COVID-19 arrived</strong>, the{' '}
+        <strong>R₀</strong> (basic reproduction number), and{' '}
+        <strong>fraction of cases being detected</strong> in {stateName}.
+        Reported fatalities and confirmed positive cases are weighed at a 3:1
+        ratio during the fitting process.
+      </Paragraph>
       <WithNearestData>
         {(d) => (
-          <Estimation>
+          <Estimation className="margin-top-5">
             Fatality rate of symptomatic COVID-19 cases{' '}
             <strong>
               {formatPercent1(

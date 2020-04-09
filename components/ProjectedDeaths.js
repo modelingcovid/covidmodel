@@ -43,7 +43,8 @@ const getFatalitiesPerDay = ({cumulativeDeaths}, i, data) => {
   return result;
 };
 
-const color = theme.color.red[2];
+const color = theme.color.red[1];
+const textColor = theme.color.red.text;
 
 export const ProjectedDeaths = ({width, height}) => {
   const {
@@ -84,7 +85,7 @@ export const ProjectedDeaths = ({width, height}) => {
         However, logarithmic scales and cumulative numbers are difficult to
         internalize. We can get a better sense of the severity at any given
         point in time by looking at the{' '}
-        <InlineLabel color={color} fill={color}>
+        <InlineLabel color={textColor} fill={color}>
           fatalities per day
         </InlineLabel>
         .
@@ -117,9 +118,9 @@ export const ProjectedDeaths = ({width, height}) => {
         initialScale="linear"
         x={x}
         xLabel="people"
-        controls
         width={width}
         height={height}
+        controls
         after={
           <Gutter>
             <PercentileLegendRow

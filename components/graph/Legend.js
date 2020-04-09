@@ -12,8 +12,7 @@ const legendStyles = css`
     align-items: flex-start;
     flex-wrap: wrap;
     box-shadow: inset 0 1px var(--color-shadow0);
-    margin-top: 4px;
-    padding-top: 4px;
+    padding: 4px 0;
   }
 `;
 

@@ -6,7 +6,6 @@ export function Gutter({children, ...remaining}) {
     <div {...remaining}>
       <style jsx>{`
         div {
-          margin-top: ${theme.spacing[1]};
           margin-bottom: ${theme.spacing[2]};
           float: right;
           user-select: none;
@@ -17,6 +16,20 @@ export function Gutter({children, ...remaining}) {
             padding-left: ${theme.spacing[1]};
             max-width: calc(${theme.column.width} * 3);
           }
+        }
+      `}</style>
+      {children}
+    </div>
+  );
+}
+
+export function WithGutter({children}) {
+  return (
+    <div>
+      <style jsx>{`
+        div {
+          display: flex;
+          align-items: flex-end;
         }
       `}</style>
       {children}
