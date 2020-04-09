@@ -73,10 +73,10 @@ pCritical80YearOld0=0.15;
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
 pHospitalized80YearOld0=0.25;
 
-midpointConvergeStateDifferences0=today+130;
-startConvergeStateDifferences0=today+102;
-(* TODO: possibly compute this out of the fit as the average and then only use it in the simulated version *)
-statesConvergeToValue0=4;
+statesConvergeToValue=4;
+convergenceMidpoint=214 (*Aug 1*)
+convergencePeriod=60 (* 90% of convergence occurs over this many days *)
+convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
 
 (* Set heterogeneous susceptibility using gamma function with bins of constant population size *)
 susceptibilityBins=20;
@@ -84,7 +84,6 @@ susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
 m=-stdDev^2/2;
 s=Sqrt[Log[stdDev^2+1]];
 dist=LogNormalDistribution[m,s];
-Echo[Plot[PDF[dist,x],{x,0,8},PlotRange->All]];
 binEdges=InverseCDF[dist,Range[0,binCount]/binCount];
 Table[
  NIntegrate[x PDF[dist,x],{x,binEdges[[i]],binEdges[[i+1]]}],{i,1,binCount}]//(binCount #/Total[#])&
@@ -111,7 +110,6 @@ susceptibilityValues=susceptibilityValues/Total[susceptibilityValues*susceptibil
 susceptibilityBins=1;
 susceptibilityValues={1};
 susceptibilityInitialPopulations={1};
-susceptibilityCoefficient=1;
 *)
 
 
@@ -394,7 +392,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       (*Recovered after hospitalization*)
       RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
       (*pcr confirmation*)
-      PCR'[t] ==testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)])+  stateAdjustmentForTestingDifferences) * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
+      PCR'[t] ==testingProbability[t] * convergenceFunction[stateAdjustmentForTestingDifferences,t] * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
       (*Infected, will need critical care*)
       ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilNotInfectiousOrHospitalized,
       (*Hospitalized, need critical care*)
@@ -783,7 +781,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       (*Recovered after hospitalization*)
       RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
       (*pcr confirmation*)
-      PCR'[t] == testingProbability[t] * (statesConvergeToValue0/(1+Exp[-(1/(midpointConvergeStateDifferences0-startConvergeStateDifferences0))Log[statesConvergeToValue0/stateAdjustmentForTestingDifferences-1]*(t-midpointConvergeStateDifferences0)]) + stateAdjustmentForTestingDifferences) * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
+      PCR'[t] == testingProbability[t] * convergenceFunction[stateAdjustmentForTestingDifferences,t] * (pPCRNH0*ISq[t] + pPCRH0*(IHq[t]+ICq[t])) / (daysToGetTested0),
       (*Infected, will need critical care*)
       ICq'[t]==params["pC"]*Eq[t]/daysFromInfectedToInfectious0-ICq[t]/daysUntilNotInfectiousOrHospitalized0,
       (*Hospitalized, need critical care*)
