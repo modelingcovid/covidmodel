@@ -68,7 +68,7 @@ ageHospitalizedDependence0 = 5;
 percentPositiveTestDelay0 = 11;
 
 (* probability that an infected 80 year old will require critical care *)
-pCritical80YearOld0=0.15;
+pCritical80YearOld0=0.1;
 
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
 pHospitalized80YearOld0=0.20;
@@ -110,9 +110,10 @@ scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Cur
 scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy"|>;
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan"|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal"|>;
+(*scenario5=<|"id"->"scenario5","distancingDays"->700,"maintain"->True,"name"->"Current Indefinite"|>;*)
 (*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
 
-scenarios={scenario1,scenario2,scenario3,scenario4};
+scenarios={scenario1,scenario2,scenario3,scenario4(*,scenario5*)};
 
 (* helper to get the scenario for a given id *)
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];

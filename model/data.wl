@@ -240,6 +240,7 @@ stateDistancingPrecompute = Module[{
 
     distancingLevel = If[
       scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
+     
 
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
@@ -254,6 +255,8 @@ stateDistancingPrecompute = Module[{
       (* post-policy distancing - constant at 1 *)
       ConstantArray[1.,
         totalDays - scenario["distancingDays"] - today]];
+        
+    
 
     smoothedDistancing = ApplyWhere[
       distancing,
