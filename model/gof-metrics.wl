@@ -219,6 +219,8 @@ cumIData,
   cumulativeHStates,
   currentIStates,
   cumulativeIStates,
+  columnOrder,
+  csvData,
     domainCumI},
 
 
@@ -251,6 +253,19 @@ cumIData,
   n = Length[states];
   allData=Map[processState,states];
   
+  columnOrder={
+    "state",
+    "meanRelativeErrorCurrentlyReportedHospitalized",
+    "rmsRelativeErrorCurrentlyReportedHospitalized",
+    "meanRelativeErrorCumulativeReportedHospitalized",
+    "rmsRelativeErrorCumulativeReportedHospitalized",
+    "meanRelativeErrorCurrentlyCritical",
+    "rmsRelativeErrorCurrentlyCritical",
+    "meanRelativeErrorCumulativeCritical",
+    "rmsRelativeErrorCumulativeCritical"};
+  csvData=Join[{columnOrder},Values[#]&/@allData];
+  Export["tests/hospitalization-gof-metrics.csv",csvData,"CSV"];
+    
   currentHData = Select[allData,#["meanRelativeErrorCurrentlyReportedHospitalized"]!=0&];
   cumHData = Select[allData,#["meanRelativeErrorCumulativeReportedHospitalized"]!=0&];
   currentIData = Select[allData,#["meanRelativeErrorCurrentlyCritical"]!=0&];
