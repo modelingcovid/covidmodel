@@ -81,12 +81,12 @@ convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)L
 (* Set heterogeneous susceptibility using gamma function with bins of constant population size *)
 susceptibilityBins=20;
 susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
-m=-stdDev^2/2;
-s=Sqrt[Log[stdDev^2+1]];
-dist=LogNormalDistribution[m,s];
-binEdges=InverseCDF[dist,Range[0,binCount]/binCount];
-Table[
- NIntegrate[x PDF[dist,x],{x,binEdges[[i]],binEdges[[i+1]]}],{i,1,binCount}]//(binCount #/Total[#])&
+  m=-stdDev^2/2;
+  s=Sqrt[Log[stdDev^2+1]];
+  dist=LogNormalDistribution[m,s];
+  binEdges=InverseCDF[dist,Range[0,binCount]/binCount];
+  Table[
+    NIntegrate[x PDF[dist,x],{x,binEdges[[i]],binEdges[[i+1]]}],{i,1,binCount}]//(binCount #/Total[#])&
 ];
 susceptibilityValues=susceptibilityValuesLogNormal[susceptibilityBins,1]
 susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibilityBins];
@@ -385,8 +385,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious-IHq[t]/daysUntilNotInfectiousOrHospitalized,
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
-      (*Reported positive hospital cases*)
-      RepHq'[t]==testingProbability[t] * HHq'[t]/daysForHospitalsToReportCases0,
+      (*Cumulative reported positive hospital cases*)
+      RepHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilNotInfectiousOrHospitalized,
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized,
       (*Recovered after hospitalization*)
@@ -591,11 +591,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
                 ]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeReportedHospitalizedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[RepHq]]][t] + sol[[QP[RHq]]][t])|>
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[RepHq]]][t]|>
             },First],
           "cumulativeHospitalized" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverHospitalizedQuantiles[t])]],
-              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[HHq]]][t] + sol[[QP[RHq]]][t])|>
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[EHq]]][t]|>
             }, First],
           "cumulativeCritical" -> Merge[{
               <|"confirmed"->If[
@@ -673,8 +673,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       DateString[DatePlus[{2020,1,1},hospitalOverloadTime-1]],
       "-"]
   |>;
-  
-  
+
+
   summaryAug1=<|
     "totalProjectedDeaths"->If[KeyExistsQ[events, "containment"],
       DeathQuantiles[containmentTime][[5]],
@@ -774,9 +774,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       IHq'[t]==params["pH"]*Eq[t]/daysFromInfectedToInfectious0-IHq[t]/daysUntilNotInfectiousOrHospitalized0,
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0-HHq[t]/daysToLeaveHosptialNonCritical0,
-      (*Reported positive hospital cases*)
-      RepHq'[t]==testingProbability[t] * (pPCRH0*HHq[t])/daysForHospitalsToReportCases0,
-      (*Cumulative hospitalized count*)
+      (*Cumulative reported positive hospital cases*)
+      RepHq'[t]==testingProbability[t] * pPCRH0 * IHq[t]/daysUntilNotInfectiousOrHospitalized0,
+      (*Cumulative hospitalized cases*)
       EHq'[t]==IHq[t]/daysUntilNotInfectiousOrHospitalized0,
       (*Recovered after hospitalization*)
       RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical0,
@@ -941,58 +941,33 @@ evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
   evaluateState[state, simulationsPerCombo]
 ];
 
-generateSummaryForState[data_, state_]:= Module[{},
-  Join[{state},Values[Association[Join[
-          KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],
-          data["scenarios"][#]["summary"]
-        ]]],
+generateSummaryForState[data_, state_,summaryKey_]:= Module[{},
+  Join[
+    {state},
+    Values[Fold[KeyDrop, #,{"timeSeriesData","events","summary","summaryAug1"}]],
+    Values[#[summaryKey]],
     {
       data["r0"],
       data["importtime"],
       data["stateAdjustmentForTestingDifferences"]
     }
-  ]&/@Keys[data["scenarios"]]
+  ]&/@Values[data["scenarios"]]
 ];
 
-generateAugSummaryForState[data_, state_]:= Module[{},
-  Join[{state},Values[Association[Join[
-          KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summaryAug1"],
-          data["scenarios"][#]["summaryAug1"]
-        ]]],
-    {
-      data["r0"],
-      data["importtime"],
-      data["stateAdjustmentForTestingDifferences"]
-    }
-  ]&/@Keys[data["scenarios"]]
-];
+exportAllStatesSummary[allStates_,summaryKey_]:=Module[{header, rows, table},
+  header = Join[
+    {"state"},
+    Keys[
+      Fold[KeyDrop, allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"], {"timeSeriesData","events","summary","summaryAug1"}]],
+    Keys[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"][summaryKey]],
+    {"r0natural","importtime","stateAdjustmentForTestingDifferences"}];
 
+  rows = Flatten[generateSummaryForState[allStates[#],#,summaryKey]&/@Keys[allStates],1];
+  table = Join[{header}, rows];
 
-exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
-  header = {Append[Prepend[Keys[
-          Association[Join[
-              KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
-              allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summary"]
-            ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences"}]};
-  rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
-
-  table = Flatten[Join[{header}, rows],1];
-
-  Export["tests/summary.csv", table];
+  Export["tests/"<>summaryKey<>".csv", table];
 ]
 
-exportAllStatesSummaryAug1[allStates_]:=Module[{header, rows, table},
-  header = {Append[Prepend[Keys[
-          Association[Join[
-              KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summaryAug1"],
-              allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summaryAug1"]
-            ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences"}]};
-  rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
-
-  table = Flatten[Join[{header}, rows],1];
-
-  Export["tests/summaryAug1.csv", table];
-]
 
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
 argument and an array of two letter state code strings to the second *)
@@ -1007,11 +982,11 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPreco
 
   allStatesData=Association[Parallelize[Map[(#->loopBody[#])&,states]]];
 
-  exportAllStatesSummary[allStatesData];
-  exportAllStatesSummaryAug1[allStatesData];
+  exportAllStatesSummary[allStatesData,"summary"];
+  exportAllStatesSummary[allStatesData,"summaryAug1"];
 
   exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
-  exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData]; 
+  exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
   exportAllStatesHospitalizationGoodnessOfFitMetricsSvg["tests/hospitalization-relative-fit-errors.svg",allStatesData];
   allStatesData
 ]

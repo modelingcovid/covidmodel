@@ -179,7 +179,7 @@ plotStateHospitalization[stateData_, state_]:=Module[{hospcurrent, hospcumulativ
                 ListLinePlot[{#[[1]],#[[3]]}&/@icucumulative, ImageSize->300]
               ]
             }]
-            }]
+        }]
     }]
 
 ];
@@ -206,21 +206,21 @@ exportAllStatesHospitalizationGoodnessOfFitMetricsSvg[file_,allStatesData_]:=Mod
     cumulativeXI,
     cumulativeYI,
     data,
-  allData,
-currentHData,
-cumHData,
-plot,
-currentIData,
-cumIData,
+    allData,
+    currentHData,
+    cumHData,
+    plot,
+    currentIData,
+    cumIData,
     domainCurrH,
     domainCurrI,
     domainCumH,
-      currentHStates,
-  cumulativeHStates,
-  currentIStates,
-  cumulativeIStates,
-  columnOrder,
-  csvData,
+    currentHStates,
+    cumulativeHStates,
+    currentIStates,
+    cumulativeIStates,
+    columnOrder,
+    csvData,
     domainCumI},
 
 
@@ -231,7 +231,7 @@ cumIData,
     hospcumulative=Select[{#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     icucurrent=Select[{#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     icucumulative=Select[{#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
-    
+
     hascurrhosp=Length[Select[hospcurrent,#[[2]]>0&]]>0;
     hascumhosp=Length[Select[hospcumulative,#[[2]]>0&]]>0;
     hascurricu=Length[Select[icucurrent,#[[2]]>0&]]>0;
@@ -252,7 +252,7 @@ cumIData,
 
   n = Length[states];
   allData=Map[processState,states];
-  
+
   columnOrder={
     "state",
     "meanRelativeErrorCurrentlyReportedHospitalized",
@@ -265,7 +265,7 @@ cumIData,
     "rmsRelativeErrorCumulativeCritical"};
   csvData=Join[{columnOrder},Values[#]&/@allData];
   Export["tests/hospitalization-gof-metrics.csv",csvData,"CSV"];
-    
+
   currentHData = Select[allData,#["meanRelativeErrorCurrentlyReportedHospitalized"]!=0&];
   cumHData = Select[allData,#["meanRelativeErrorCumulativeReportedHospitalized"]!=0&];
   currentIData = Select[allData,#["meanRelativeErrorCurrentlyCritical"]!=0&];
@@ -274,7 +274,7 @@ cumIData,
   cumulativeHStates = #["state"]&/@cumHData;
   currentIStates = #["state"]&/@currentIData;
   cumulativeIStates = #["state"]&/@cumIData;
-  
+
   currentXH = Map[Around[#["meanRelativeErrorCurrentlyReportedHospitalized"],#["rmsRelativeErrorCurrentlyReportedHospitalized"]]&,currentHData];
   currentYH = Range[Length[currentHData]];
   cumulativeXH = Map[Around[#["meanRelativeErrorCumulativeReportedHospitalized"],#["rmsRelativeErrorCumulativeReportedHospitalized"]]&,cumHData];

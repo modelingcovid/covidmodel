@@ -96,7 +96,7 @@ icuCurrentActualsBody=icuCurrentActualsRaw[[2;;]];
 icuCurrentActualsParsedData=Thread[icuCurrentActualsHeader->#]&/@icuCurrentActualsBody//Map[Association];
 stateICUCurrentActualsData[state_]:=Module[{data},
   data = Select[Association[{"day"->#["State"], "icu"->If[#[state]=="",0,#[state]]}]&/@icuCurrentActualsParsedData,#["icu"]>0&];
-    If[Length[data]<=1,{},data]
+  If[Length[data]<=1,{},data]
 ];
 
 icuCumulativeActualsRaw=Transpose[Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=460657503","CSV"][[2;;28]]];
@@ -117,17 +117,16 @@ hospitalizatonsCurrentActualsParsedData =
 Thread[hospitalizatonsCurrentActualsHeader -> #]&/@hospitalizatonsCurrentActualsBody//Map[Association];
 stateHospitalizationCurrentActualsData[state_] := Module[{data},
   data = Select[Association[{"day" -> #["State"],
-      "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCurrentActualsParsedData, #["hospitalizations"] > 0 &];
+        "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCurrentActualsParsedData, #["hospitalizations"] > 0 &];
   If[Length[data]<=1,{},data]
 ]
-      
-hospitalizatonsCumulativeActualsRaw =
-Transpose[
+
+hospitalizatonsCumulativeActualsRaw = Transpose[
   Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=1062475929", "CSV"][[2 ;; 28]]];
 hospitalizatonsCumulativeActualsHeader = hospitalizatonsCumulativeActualsRaw[[1]];
 hospitalizatonsCumulativeActualsBody = hospitalizatonsCumulativeActualsRaw[[2 ;;]];
-hospitalizatonsCumulativeActualsParsedData =
-Thread[hospitalizatonsCumulativeActualsHeader -> #] & /@
+hospitalizatonsCumulativeActualsParsedData = Thread[
+  hospitalizatonsCumulativeActualsHeader -> #] & /@
 hospitalizatonsCumulativeActualsBody // Map[Association];
 stateHospitalizationCumulativeActualsData[state_] := Module[{data},
   data = Select[Association[{"day" -> #["State"], "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCumulativeActualsParsedData, #["hospitalizations"] > 0 &];
@@ -240,7 +239,7 @@ stateDistancingPrecompute = Module[{
 
     distancingLevel = If[
       scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
-     
+
 
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
@@ -255,8 +254,8 @@ stateDistancingPrecompute = Module[{
       (* post-policy distancing - constant at 1 *)
       ConstantArray[1.,
         totalDays - scenario["distancingDays"] - today]];
-        
-    
+
+
 
     smoothedDistancing = ApplyWhere[
       distancing,
