@@ -2,13 +2,31 @@ import * as React from 'react';
 import {StateSelect} from './StateSelect';
 import {Select} from '../Select';
 import {useModelData} from '../modeling';
-import {scenarioLabels, scenarios} from '../../lib/controls';
+import {getScenarioLabel} from '../../lib/controls';
 import {theme} from '../../styles';
 
-const {useCallback} = React;
+const {useMemo} = React;
 
 export function Controls({children, ...props}) {
-  const {scenario, setScenario, state, states} = useModelData();
+  const {model, scenario, setScenario, state, states} = useModelData();
+
+  const scenarioIds = Object.keys(model.scenarios);
+  const scenarios = Object.values(model.scenarios);
+
+  const currentScenario = useMemo(
+    () => scenarios.find(({name}) => name === 'Current'),
+    [scenarios]
+  );
+  const currentDistancingLevel = currentScenario.distancingLevel;
+
+  const scenarioLabels = useMemo(() => {
+    const result = {};
+    scenarios.forEach((scenario) => {
+      result[scenario.id] = getScenarioLabel(scenario, currentDistancingLevel);
+    });
+    return result;
+  }, [currentDistancingLevel, scenarios]);
+
   return (
     <div style={{display: 'flex'}} {...props}>
       <StateSelect states={states} />
@@ -17,7 +35,7 @@ export function Controls({children, ...props}) {
         label="Scenario"
         placeholder="Select a scenario…"
         value={scenario}
-        values={scenarios}
+        values={scenarioIds}
         valueToString={scenarioLabels}
         onChange={setScenario}
       />

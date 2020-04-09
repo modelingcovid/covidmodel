@@ -3,8 +3,7 @@ import {theme} from '../../styles';
 
 import {Clock, MapMarker, PeopleArrows} from '../icon';
 import {useModelData} from './useModelData';
-import {daysToMonths} from '../../lib/date';
-import {formatNumber, formatPercent} from '../../lib/format';
+import {formatMonths, formatPercent} from '../../lib/format';
 
 export const DistancingInfo = () => {
   const {
@@ -29,7 +28,7 @@ export const DistancingInfo = () => {
           marginRight: theme.spacing[0],
         }}
       />
-      {formatNumber(daysToMonths(distancingDays))} months
+      {formatMonths(distancingDays)} months
     </span>
   );
 };
