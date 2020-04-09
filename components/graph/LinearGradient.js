@@ -22,7 +22,7 @@ export const LinearGradient = ({
   return (
     <GradientContext.Provider value={direction}>
       <defs>
-        <lineargradient
+        <linearGradient
           id={id}
           x1={x1}
           y1={y1}
@@ -33,7 +33,7 @@ export const LinearGradient = ({
           {from && <stop offset={0} stopColor={from} />}
           {children}
           {to && <stop offset={1} stopColor={to} />}
-        </lineargradient>
+        </linearGradient>
       </defs>
     </GradientContext.Provider>
   );
