@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-micro';
 import {getLocations, getLocation} from './data';
 import {stateLabels} from './format/location';
 
-export * from './DataSource';
+export * from './LocationDataSource';
 
 export const typeDefs = gql`
   type Query {
@@ -75,23 +75,23 @@ const Location = {
   name(parent, args, context) {
     return stateLabels[parent.id] || parent.id;
   },
-  async scenarios(parent, args, {dataSources: {json}}) {
-    const {scenarios} = await json.getLocation(parent.id);
+  async scenarios(parent, args, {dataSources: {location}}) {
+    const {scenarios} = await location.get(parent.id);
     return Object.values(scenarios);
   },
-  async scenario(parent, args, {dataSources: {json}}) {
-    const {scenarios} = await json.getLocation(parent.id);
+  async scenario(parent, args, {dataSources: {location}}) {
+    const {scenarios} = await location.get(parent.id);
     return scenarios[args.id];
   },
-  async parameters(parent, args, {dataSources: {json}}) {
-    const {parameters} = await json.getLocation(parent.id);
+  async parameters(parent, args, {dataSources: {location}}) {
+    const {parameters} = await location.get(parent.id);
     return Object.entries(parameters).map(([id, parameter]) => {
       parameter.id = id;
       return parameter;
     });
   },
-  async parameter(parent, args, {dataSources: {json}}) {
-    const {parameters} = await json.getLocation(parent.id);
+  async parameter(parent, args, {dataSources: {location}}) {
+    const {parameters} = await location.get(parent.id);
     return parameters[args.id];
   },
 };

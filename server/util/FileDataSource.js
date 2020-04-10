@@ -1,16 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import {DataSource as ApolloDataSource} from 'apollo-datasource';
+import {DataSource} from 'apollo-datasource';
 import {InMemoryLRUCache} from 'apollo-server-caching';
-import {decorateLocation} from './data';
 
 const {DEBUG} = process.env;
 
 const log = (...args) =>
   DEBUG && console.log(`[ ${chalk.yellow('cache')} ]`, ...args);
 
-export class DataSource extends ApolloDataSource {
+export class FileDataSource extends DataSource {
   constructor() {
     super();
 
@@ -24,27 +23,27 @@ export class DataSource extends ApolloDataSource {
     this.promises = {};
   }
 
-  get(filename, {decorate, ttl = 360} = {}) {
+  getFile(filename, {decorate, ttl = 360} = {}) {
     return this.cache.get(filename).then((entry) => {
       if (entry) {
-        log('hit', filename);
+        log('hit:', filename);
         return Promise.resolve(entry);
       }
 
       const inFlight = this.promises[filename];
       if (inFlight) {
-        log('in flight', filename);
+        log('in flight:', filename);
         return inFlight;
       }
 
-      log('miss', filename);
+      log('miss:', filename);
       const jsonPath = path.join(process.cwd(), `public/json/${filename}.json`);
       const promise = new Promise((resolve, reject) => {
         fs.readFile(jsonPath, (err, str) => {
           delete this.promises[filename];
 
           if (err) {
-            log('error', filename);
+            log('error:', filename);
             return reject(err);
           }
           const result = JSON.parse(str);
@@ -53,7 +52,7 @@ export class DataSource extends ApolloDataSource {
           }
 
           if (result) {
-            log('set', filename);
+            log('set:', filename);
             this.cache.set(filename, result, {ttl});
           }
 
@@ -62,12 +61,6 @@ export class DataSource extends ApolloDataSource {
       });
       this.promises[filename] = promise;
       return promise;
-    });
-  }
-
-  getLocation(filename) {
-    return this.get(filename, {
-      decorate: decorateLocation,
     });
   }
 }

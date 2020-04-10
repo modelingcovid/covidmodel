@@ -1,11 +1,11 @@
 import {ApolloServer} from 'apollo-server-micro';
-import {DataSource, typeDefs, resolvers} from '../../server';
+import {LocationDataSource, typeDefs, resolvers} from '../../server';
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({
-    json: new DataSource(),
+    location: new LocationDataSource(),
   }),
   cacheControl: {defaultMaxAge: 60 * 60},
 });
