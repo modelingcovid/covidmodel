@@ -19,7 +19,9 @@ export const decorateLocation = (data, location) => {
 
   Object.values(data.scenarios).forEach((scenario) => {
     const {timeSeriesData} = scenario;
-    timeSeriesData.map((d) => {
+
+    // Derive data from existing data.
+    timeSeriesData.forEach((d) => {
       d.cumulativeExposed = {};
       Object.keys(d.currentlyInfected).forEach((key) => {
         d.cumulativeExposed[key] =
@@ -29,6 +31,13 @@ export const decorateLocation = (data, location) => {
           d.cumulativeDeaths[key];
       });
     });
+
+    // Omit empty time series.
+    if (timeSeriesData.length) {
+      Object.keys(timeSeriesData[0])
+        .filter((key) => timeSeriesData.every((d) => !d[key]))
+        .forEach((key) => timeSeriesData.forEach((d) => delete d[key]));
+    }
   });
 
   roundData(data);
