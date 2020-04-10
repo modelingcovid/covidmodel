@@ -26,9 +26,12 @@ export function ParameterTable() {
     } } }`
   );
 
+  console.log('Fetched parameter data', data, error);
+
   if (error) return null;
   if (!data) return null;
 
+  return null;
   const {
     location: {parameters},
   } = data;

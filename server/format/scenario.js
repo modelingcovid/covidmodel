@@ -1,4 +1,4 @@
-import {formatMonths, formatPercent} from './format';
+import {formatMonths, formatPercent} from '../../lib/format';
 
 export function getScenarioLabel(
   {distancingDays, distancingLevel, name},

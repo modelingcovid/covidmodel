@@ -21,6 +21,7 @@ export class FileDataSource extends DataSource {
     this.context = config.context;
     this.cache = config.cache || new InMemoryLRUCache();
     this.promises = {};
+    this.rootPath = config.rootPath;
   }
 
   getFile(filename, {decorate, ttl = 360} = {}) {
@@ -37,7 +38,8 @@ export class FileDataSource extends DataSource {
       }
 
       log('miss:', filename);
-      const jsonPath = path.join(process.cwd(), `public/json/${filename}.json`);
+
+      const jsonPath = path.join(this.rootPath, `${filename}.json`);
       const promise = new Promise((resolve, reject) => {
         fs.readFile(jsonPath, (err, str) => {
           delete this.promises[filename];
@@ -59,6 +61,7 @@ export class FileDataSource extends DataSource {
           return resolve(result);
         });
       });
+
       this.promises[filename] = promise;
       return promise;
     });

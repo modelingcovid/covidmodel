@@ -31,6 +31,7 @@
     "d3-interpolate": "^1.4.0",
     "d3-time-format": "^2.2.3",
     "downshift": "^5.0.5",
+    "graphql": "^14.0.0",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.3.2",
     "normalize.css": "^8.0.1",
@@ -42,8 +43,11 @@
     "topojson-client": "^3.1.0"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "NODE_OPTIONS=--max_old_space_size=8192 next",
     "build": "next build",
     "start": "next start"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }

@@ -12,6 +12,7 @@ export const typeDefs = gql`
   type Location {
     id: String!
     name: String!
+    path: String
     scenarios: [Scenario!]!
     scenario(id: ID!): Scenario
     parameters: [Parameter!]!
@@ -64,7 +65,8 @@ export const typeDefs = gql`
 
 const Query = {
   locations(parent, args) {
-    return getLocations().map((id) => ({id}));
+    return [{id: 'CA'}, {id: 'NY'}];
+    // return getLocations().map((id) => ({id}));
   },
   location(parent, {id}) {
     return {id};
@@ -74,6 +76,10 @@ const Query = {
 const Location = {
   name(parent, args, context) {
     return stateLabels[parent.id] || parent.id;
+  },
+  async path(parent, args, {dataSources: {location}}) {
+    const {path} = await location.get(parent.id);
+    return path;
   },
   async scenarios(parent, args, {dataSources: {location}}) {
     const {scenarios} = await location.get(parent.id);

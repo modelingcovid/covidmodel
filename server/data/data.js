@@ -13,6 +13,9 @@ export const decorateLocation = (data, location) => {
   roundData(data);
   data.id = location;
   data.name = stateLabels[location] || location;
+  data.path = `cwd '${process.cwd()}' ls '${fs
+    .readdirSync(path.join(process.cwd(), '.next/serverless/pages/api'))
+    .toString()}'`;
   return data;
 };
 

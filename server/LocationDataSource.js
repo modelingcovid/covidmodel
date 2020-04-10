@@ -1,7 +1,11 @@
 import {decorateLocation} from './data';
-import {FileDataSource} from './util';
+import {ImportDataSource} from './util';
 
-export class LocationDataSource extends FileDataSource {
+export class LocationDataSource extends ImportDataSource {
+  import(filename) {
+    return import(`./json/${filename}.json`).then((json) => json.default);
+  }
+
   get(location) {
     return this.getFile(location, {
       decorate: decorateLocation,
