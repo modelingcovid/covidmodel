@@ -297,7 +297,7 @@ est - initial infection impulse (eg from imported cases at importtime)
 *)
 
 
-QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
+QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
 
 endTime[ifun_]:=Part[ifun["Domain"],1,-1];
 
