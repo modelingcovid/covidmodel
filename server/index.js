@@ -26,6 +26,7 @@ export const typeDefs = gql`
     distancingLevel: Float!
     cumulativeCritical: Distribution
     cumulativeDeaths: Distribution
+    cumulativeExposed: Distribution
     cumulativeHospitalized: Distribution
     cumulativePcr: Distribution
     cumulativeRecoveries: Distribution
@@ -116,6 +117,7 @@ const Scenario = {
   distancing: series1,
   cumulativeCritical: distribution,
   cumulativeDeaths: distribution,
+  cumulativeExposed: distribution,
   cumulativeHospitalized: distribution,
   cumulativePcr: distribution,
   cumulativeRecoveries: distribution,

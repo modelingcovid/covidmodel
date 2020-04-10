@@ -9,10 +9,29 @@ const roundData = applyDeep(
   true
 );
 
+const distribution = (d) => {
+  Object.keys();
+};
+
 export const decorateLocation = (data, location) => {
-  roundData(data);
   data.id = location;
   data.name = stateLabels[location] || location;
+
+  Object.values(data.scenarios).forEach((scenario) => {
+    const {timeSeriesData} = scenario;
+    timeSeriesData.map((d) => {
+      d.cumulativeExposed = {};
+      Object.keys(d.currentlyInfected).forEach((key) => {
+        d.cumulativeExposed[key] =
+          d.currentlyInfected[key] +
+          d.currentlyInfectious[key] +
+          d.cumulativeRecoveries[key] +
+          d.cumulativeDeaths[key];
+      });
+    });
+  });
+
+  roundData(data);
   return data;
 };
 

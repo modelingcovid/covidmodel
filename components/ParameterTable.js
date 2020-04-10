@@ -25,16 +25,10 @@ export function ParameterTable() {
       id, name, value, description, type
     } } }`
   );
-
-  console.log('Fetched parameter data', data, error);
+  const parameters = data?.location?.parameters;
 
   if (error) return null;
-  if (!data) return null;
-
-  return null;
-  const {
-    location: {parameters},
-  } = data;
+  if (!parameters) return null;
 
   return (
     <div className="margin-top-5">
