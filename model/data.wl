@@ -276,7 +276,7 @@ stateDistancingPrecompute = Module[{
       distancingDelay<0,
       smoothedFullDistancing=Join[smoothedFullDistancing[[distancingDelay+1;;]], ConstantArray[1,Abs[distancingDelay]]];
     ];
-    
+
     distancingFunction = Interpolation[
       Transpose[{
           fullDays,
