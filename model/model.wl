@@ -296,6 +296,110 @@ Deaq - passed after critical care
 est - initial infection impulse (eg from imported cases at importtime)
 *)
 
+integrateModel[distancing_]:=Module[{
+equationsODE,
+eventsODE,
+initialConditions,
+outputODE,
+dependentVariables,
+parameters
+},
+  equationsODE = Flatten[{
+      (* susceptible, binned by susceptibility; the sum of all sSq[i]'s would be Sq, the full susceptible population *)
+      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * susceptibilityValues[[i]]*sSq[i][t] - est[t]*sSq[i][t],
+        {i,1,susceptibilityBins}],
+      (* Exposed *)
+      Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious0,
+      (* inflow to exposed, used to determine number of tests required for containment *)
+      EInq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}],
+      (*Infectious total, not yet PCR confirmed,age indep*)
+      ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectious,
+      (*Recovered without needing care*)
+      RSq'[t]==ISq[t]/daysUntilNotInfectious,
+      (*Infected and will need hospital, won't need critical care*)
+      IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious-IHq[t]/daysUntilHospitalized,
+      (*Going to hospital*)
+      HHq'[t]==IHq[t]/daysUntilHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
+      (*Reported positive hospital cases*)
+      RepHq'[t]==testingProbability[t] * IHq[t]/(daysUntilHospitalized),
+      (*Cumulative hospitalized count*)
+      EHq'[t]==IHq[t]/daysUntilHospitalized,
+      (*Recovered after hospitalization*)
+      RHq'[t]==HHq[t]/daysToLeaveHosptialNonCritical,
+      (*pcr confirmation*)
+      PCR'[t] ==testingProbability[t] * convergenceFunction[stateAdjustmentForTestingDifferences,t] * (pPCRNH*ISq[t] + pPCRH*(IHq[t]+ICq[t])) / (daysToGetTested0),
+      (*Infected, will need critical care*)
+      ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious-ICq[t]/daysUntilHospitalized,
+      (*Hospitalized, need critical care*)
+      HCq'[t]==ICq[t]/daysUntilHospitalized-HCq[t]/daysTogoToCriticalCare,
+      (*Entering critical care*)
+      CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      (*Dying*)
+      Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
+      (*Leaving critical care*)
+      RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
+      (* establishment *)
+      est'[t]==0(*Infected without needing care*)
+    }];
+  eventsODE = {
+    WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
+    WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
+    WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
+    WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
+    WhenEvent[t>importtime+importlength,est[t]->0]
+  };
+
+  initialConditions = Flatten[{
+      Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
+      Eq[0]==0,EInq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
+  outputODE = {
+      Table[sSq[i],{i,1,susceptibilityBins}],
+      Deaq, PCR, RepHq, Eq, EInq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, HCq, CCq, RCq, est};
+  dependentVariables = Flatten[{
+      Table[sSq[i],{i,1,susceptibilityBins}],
+      Deaq, PCR, RepHq, Eq, EInq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est}];
+
+  parameters = {
+    r0natural,
+    daysUntilNotInfectious,
+    daysUntilHospitalized,
+    daysFromInfectedToInfectious,
+    daysToLeaveHosptialNonCritical,
+    pPCRNH,
+    pPCRH,
+    daysTogoToCriticalCare,
+    daysFromCriticalToRecoveredOrDeceased,
+    fractionOfCriticalDeceased,
+    importtime,
+    importlength,
+    initialInfectionImpulse,
+    tmax,
+    pS,
+    pH,
+    pC,
+    icuCapacity,
+    hospitalCapacity,
+    stateAdjustmentForTestingDifferences,
+    distpow
+  };
+
+  sol = ParametricNDSolveValue[{
+      equationsODE,
+      eventsODE,
+      initialConditions
+    },
+    outputODE,
+    {t,tmin0,tmax},
+    parameters,
+    DependentVariables->dependentVariables,
+    Method->{"DiscontinuityProcessing"->False}
+  ];
+  
+  (* replace the list of sSq's functions with its sum *)
+  sol[[1]] = Sum[s[#],{s,sol[[1]]}]&;
+  sol
+];
+
 
 QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
 
@@ -476,7 +580,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     fitParams["stateAdjustmentForTestingDifferences"],
     fitParams["distpow"]
   };
-
+  Echo[scenario["id"]];
+  Echo[paramExpected];
+  tempParams = paramExpected;
+  
   (* do one solution with the mean param values for the estimate *)
   (* Quiet because the it tries to evaluate the interpolating function at zero when it should hold the evaluation (and not evaluate there) *)
   {sol,evts} = Quiet[Reap[Apply[pfunODE2,paramExpected],{"containment","herd","icu","hospital","cutoff"},Rule],{InterpolatingFunction::dmval}];
