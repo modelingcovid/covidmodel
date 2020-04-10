@@ -3,11 +3,13 @@ import {getOverviewData, getStatesWithData, getTopoJsonUS} from '../lib/data';
 import {Layout, Overview} from '../components';
 import {Section} from '../components/content';
 import {Home} from '../md';
+import {Test} from '../components/Test';
 
 export default function Index(props) {
   return (
     <Layout states={props.states}>
       <Home />
+      <Test />
       <Section>
         <Overview {...props} />
       </Section>
