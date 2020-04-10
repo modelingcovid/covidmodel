@@ -88,27 +88,6 @@ Table[
 susceptibilityValues=susceptibilityValuesLogNormal[susceptibilityBins,1];
 susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibilityBins];
 
-(* Set heterogeneous susceptibility using beta function with bins of constant width in susceptibility value *)
-(*
-susceptibilityBins=20;
-susceptibilityValues=Table[(i-1)/(susceptibilityBins - 1),{i,1,susceptibilityBins}];
-susceptibilityInitialPopulations=Module[{mean=.15, stdDev=.1, a, b, binSize,betaDist},
-  a = mean(mean-mean^2+stdDev^2)/stdDev^2;
-  b = (1-mean)(mean-mean^2+stdDev^2)/stdDev^2;
-  binSize=1./susceptibilityBins;
-  betaDist=CDF[BetaDistribution[a,b]];
-  N[Table[betaDist[binSize*i]-betaDist[binSize*(i-1)],{i,1,susceptibilityBins}]]
-];
-susceptibilityValues=susceptibilityValues/Total[susceptibilityValues*susceptibilityInitialPopulations];
-*)
-
-(* use these values to turn off heterogeneous susceptibility *)
-(*
-susceptibilityBins=1;
-susceptibilityValues={1};
-susceptibilityInitialPopulations={1};
-*)
-
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
@@ -118,7 +97,7 @@ scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maint
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan"|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal"|>;
 scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite"|>;
-(*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
+(*scenario6=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
 
 scenarios={scenario5,scenario1,scenario2,scenario3,scenario4};
 
@@ -297,7 +276,7 @@ est - initial infection impulse (eg from imported cases at importtime)
 *)
 
 
-QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
+QP[symb_]:=Position[{Deaq,PCR,RepHq,RepHCq,Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
 
 endTime[ifun_]:=Part[ifun["Domain"],1,-1];
 
@@ -359,7 +338,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
   percentPositiveCase[t_]:=posInterpMap[state][t];
-  Clear[Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
+  Clear[Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,RepHq,RepHCq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
   Clear[r0natural,daysUntilNotInfectious,daysUntilHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity,distpow];
 
   equationsODE = Flatten[{
@@ -379,7 +358,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
       (*Reported positive hospital cases*)
-      RepHq'[t]==testingProbability[t] * IHq[t]/(daysUntilHospitalized),
+      RepHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized,
+      (* Reported ICU cases *)
+      RepHCq'[t]==testingProbability[t] * (pPCRH * HCq[t])/daysTogoToCriticalCare,
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t]/daysUntilHospitalized,
       (*Recovered after hospitalization*)
@@ -409,11 +390,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   initialConditions = Flatten[{
       Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
-      Eq[0]==0,EInq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
-  outputODE = {Deaq, PCR, RepHq, Sq, Eq, EInq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, HCq, CCq, RCq, est};
+      Eq[0]==0,EInq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,RepHCq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
+  outputODE = {Deaq, PCR, RepHq, RepHCq, Sq, Eq, EInq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, HCq, CCq, RCq, est};
   dependentVariables = Flatten[{
       Sq, Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, PCR, RepHq,
+      Deaq, PCR, RepHq, RepHCq,
       Eq, EInq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est}];
 
   parameters = {
@@ -489,13 +470,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   
   endOfEval = endOfYear;
   endOfEvalAug1 = aug1;
-  (* we can chop off the data here with one of either a containment or herd immunity events *)
- (* If[KeyExistsQ[events, "containment"], events["containment"][[1]][[1]],
-    If[KeyExistsQ[events, "cutoff"], events["cutoff"][[1]][[1]],
-      endOfYear]];
-  endOfEvalAug1 = If[KeyExistsQ[events, "containment"], events["containment"][[1]][[1]],
-    If[KeyExistsQ[events, "cutoff"], events["cutoff"][[1]][[1]],
-      aug1]];*)
 
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
 
@@ -565,7 +539,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
                 ]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyReportedHospitalizedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[[QP[RepHq]]][t]|>
+              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[HHq]]][t - stateParams["currentHospitalDelay"]])|>
             },First],
           "currentlyHospitalized" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyHospitalizedQuantiles[t]]],
@@ -579,7 +553,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
                 ]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeReportedHospitalizedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[RepHq]]][t] + sol[[QP[RHq]]][t])|>
+              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[RepHq]]][t - stateParams["cumulativeHospitalDelay"]])|>
             },First],
           "cumulativeHospitalized" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverHospitalizedQuantiles[t])]],
@@ -593,7 +567,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
                 ]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverCriticalQuantiles[t])]],
-              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[HCq]]][t] + sol[[QP[RCq]]][t] + sol[[QP[Deaq]]][t])|>
+              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[RepHCq]]][t - stateParams["cumulativeICUDelay"]])|>
             }, First],
           "currentlyCritical" -> Merge[{
               <|"confirmed"->If[
@@ -603,7 +577,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
                 ]|>,
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyCriticalQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[[QP[CCq]]][t]|>
+              <|"expected"-> stateParams["params"]["population"]*sol[[QP[CCq]]][t - stateParams["currentICUDelay"]]|>
             },First],
           "susceptible" -> Merge[{
               Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,SuseptibleQuantiles[t]]],
@@ -727,8 +701,9 @@ Clear[equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,p
 evaluateState[state_, numberOfSimulations_:100]:= Module[{
     distancing,params,percentPositiveCase,longData,thisStateData,model,fit,
     fitParams,icuCapacity,dataWeights,standardErrors,hospitalizationCurrentData,icuCurrentData,hospitalizationCumulativeData,icuCumulativeData,hospitalCapacity,gofMetrics,
-    equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric,
-    rlower, rupper, tlower, tupper, replower, repupper, deathDataLength,output, paramExpected
+    equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric,RepHqParametric,HHqParametric,
+    rlower, rupper, tlower, tupper, replower, repupper, deathDataLength,output, paramExpected,cumulativeHospitalDelay,currentHospitalDelay,
+    cumulativeICUDelay, currentICUDelay, RepHCqParametric, CCqParametric
   },
 
   distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
@@ -759,7 +734,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilHospitalized0-HHq[t]/daysToLeaveHosptialNonCritical0,
       (*Reported positive hospital cases*)
-      RepHq'[t]==testingProbability[t] * (params["pPCRH"]*HHq[t])/daysForHospitalsToReportCases0,
+      RepHq'[t]==testingProbability[t] * (params["pPCRH"]*IHq[t])/daysUntilHospitalized0,
+      (* Reported ICU cases *)
+      RepHCq'[t]==testingProbability[t] * (params["pPCRH"]*HCq[t])/daysTogoToCriticalCare0,
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t]/daysUntilHospitalized0,
       (*Recovered after hospitalization*)
@@ -782,11 +759,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse0]],
     WhenEvent[t>importtime+importlength0,est[t]->0]
   }/.Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->fromLog/@{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}];
-  initialConditions = Flatten[{Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
-  outputODE = {Deaq, PCR};
-  dependentVariablesODE = Flatten[{Deaq, PCR, RSq,RHq, RCq, RepHq, Sq, Table[sSq[i],{i,1,susceptibilityBins}], Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est}];
+  initialConditions = Flatten[{Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RepHCq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
+  outputODE = {Deaq, PCR, RepHq, HHq, RepHCq, CCq};
+  dependentVariablesODE = Flatten[{Deaq, PCR, RepHq, RSq,RHq, RepHCq, RCq, Sq, Table[sSq[i],{i,1,susceptibilityBins}], Eq, ISq, IHq, HHq, ICq, EHq, HCq, CCq, est}];
   parameters = {logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences, logDistpow};
-  {DeaqParametric,PCRParametric}= {Deaq, PCR}/.ParametricNDSolve[
+  {DeaqParametric,PCRParametric,RepHqParametric, HHqParametric, RepHCqParametric, CCqParametric}= {Deaq, PCR, RepHq, HHq, RepHCq, CCq}/.ParametricNDSolve[
     {equationsODE, eventsODE, initialConditions},
     outputODE,
     {t,tmin0,tmax0},
@@ -852,6 +829,53 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
           fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
   
+  cumulativeHospitalDelay = Module[{hospitalDelay, hospitalDelayFit},
+    If[Length[hospitalizationCumulativeData] > 0, 
+      hospitalDelayFit=Quiet[NonlinearModelFit[{#["day"],#["hospitalizations"]}&/@hospitalizationCumulativeData, {params["population"]*RepHqParametric[
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]][t-t0], -1 <= t0 <= 8},{t0}, t], {InterpolatingFunction::dmval}];
+      hospitalDelay=#&/@KeyMap[ToString[#]&, Association[hospitalDelayFit["BestFitParameters"]]];
+      hospitalDelay["t0"]
+    , 6]
+  ];
+  currentHospitalDelay = Module[{hospitalDelay, hospitalDelayFit},
+    If[Length[hospitalizationCurrentData] > 0, 
+      hospitalDelayFit=Quiet[NonlinearModelFit[{#["day"],#["hospitalizations"]}&/@hospitalizationCurrentData, {params["population"]*(
+            HHqParametric[
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]][t-t0]), -1 <= t0 <= 8},{t0}, t], {InterpolatingFunction::dmval}];
+      hospitalDelay=#&/@KeyMap[ToString[#]&, Association[hospitalDelayFit["BestFitParameters"]]];
+      hospitalDelay["t0"]
+    , 6]
+  ];
+  cumulativeICUDelay = Module[{icuDelay, icuDelayFit},
+    If[Length[icuCumulativeData] > 0, 
+      icuDelayFit=Quiet[NonlinearModelFit[{#["day"],#["icu"]}&/@icuCumulativeData, {params["population"]*RepHCqParametric[
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]][t-t0], -10 <= t0 <= 10},{t0}, t], {InterpolatingFunction::dmval}];
+      icuDelay=#&/@KeyMap[ToString[#]&, Association[icuDelayFit["BestFitParameters"]]];
+      icuDelay["t0"]
+    , 6]
+  ];
+  currentICUDelay = Module[{icuDelay, icuDelayFit},
+    If[Length[icuCurrentData] > 0, 
+      icuDelayFit=Quiet[NonlinearModelFit[{#["day"],#["icu"]}&/@icuCurrentData, {params["population"]*(
+            CCqParametric[
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]][t-t0]), -10 <= t0 <= 10},{t0}, t], {InterpolatingFunction::dmval}];
+      icuDelay=#&/@KeyMap[ToString[#]&, Association[icuDelayFit["BestFitParameters"]]];
+      icuDelay["t0"]
+    , 6]
+  ];
+  
   
   paramExpected = <|
     "r0"-> <|"value"-> fitParams["r0natural"], "name"->"Basic reproduction number", "description"-> "The basic reproduction number.", "type"->"fit"|>,
@@ -871,7 +895,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     "pH"-><|"value"-> params["pH"], "name"-> "Probability of getting a case bad enough to require hospitalization.", "description"-> "An age-adjusted probability that you get a case requiring hospitalization.", "type"->"literature"|>,
     "pC"-><|"value"-> params["pC"], "name"-> "Probability of getting a case bad enough to require ICU admission", "description"-> "An age-adjusted probability get a severe case requiring ICU admission.", "type"->"literature"|>,
     "stateAdjustmentForTestingDifferences"-><|"value"-> fitParams["stateAdjustmentForTestingDifferences"], "name"-> "State adjustment for differences in PCR / death testing and reporting.", "description"-> "A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis", "type"->"fit"|>,
-    "distancePower"-><|"value"-> fitParams["distpow"], "name"-> "Power of the distancing function", "description"-> "Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.", "type"->"fit"|>
+    "distancePower"-><|"value"-> fitParams["distpow"], "name"-> "Power of the distancing function", "description"-> "Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.", "type"->"fit"|>,
+    "currentHospitalDelay"-><|"value"->currentHospitalDelay, "name"->"Hospital reporting delay", "description"-> "Delay in reporting current hospital occpancy from the true occupancy", "type"->"fit"|>,
+    "cumulativeHospitalDelay"-><|"value"->cumulativeHospitalDelay, "name"->"Cumulative hospital reporting delay", "description"-> "Delay in reporting cumulative hospitalizations from the true total", "type"->"fit"|>,
+    "currentICUDelay"-><|"value"->currentICUDelay, "name"->"ICU reporting delay", "description"-> "Delay in reporting current ICU occpancy from the true occupancy", "type"->"fit"|>,
+    "cumulativeICUDelay"-><|"value"->cumulativeICUDelay, "name"->"Cumulative ICU reporting delay", "description"-> "Delay in reporting cumulative ICU admissions from the true total", "type"->"fit"|>
   |>;
 
   Echo[gofMetrics];
@@ -893,8 +921,15 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                     Log[fitParams["importtime"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
-                  ][t]},
-                {t,40,150},ImageSize->500]],
+                  ][t],
+                  RepHqParametric[
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]][t]
+                  },
+                {t,40,150},ImageSize->500]
+            ],
             ListPlot[{
                 Thread[{#2,#1/#3}&[
                     fit["FitResiduals"][[1;;deathDataLength]],
@@ -917,6 +952,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       <|"scenarios"->
         Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
               <|"params"->params,
+                "cumulativeHospitalDelay"->cumulativeHospitalDelay,
+                "currentHospitalDelay"->currentHospitalDelay,
+                "cumulativeICUDelay"->cumulativeICUDelay,
+                "currentICUDelay"->currentICUDelay,
                 "thisStateData"->thisStateData,
                 "icuCapacity"->icuCapacity,
                 "hospitalCapacity"->hospitalCapacity,
