@@ -7,8 +7,9 @@ Import["model/data.wl"];
 Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
-(* to do a quick run GenerateModelExport[100,testCaseStates] *)
+(* to do a quick run GenerateModelExport[100, testCaseStates] *)
 testCaseStates={"CA","VA","FL","CO", "MD","TX","WA","OR", "PA", "CT", "OH", "VT"};
+
 
 (*Rate of progressing to infectiousness, days*)
 daysFromInfectedToInfectious0 = 4;
@@ -30,7 +31,6 @@ daysFromCriticalToRecoveredOrDeceased0 = 10;
 pPCRH0 = 0.8;
 pPCRNH0 = 0.05;
 
-
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1;
 (* days to get tested after infectious *)
@@ -47,11 +47,6 @@ importlength0 = 3;
 
 (*Fraction of critical patents who pass *)
 fractionOfCriticalDeceased0 = 0.4;
-
-USAPopulation = (327.2*10^6);
-
-(* less than 3000 cases in a country the size of the US *)
-containmentThresholdRatio0 = 3000/USAPopulation;
 
 (* interpret as: steepness of age depencence*)
 medianHospitalizationAge0 = 61;
@@ -74,7 +69,13 @@ convergenceMidpoint=214; (*Aug 1*)
 convergencePeriod=60; (* 90% of convergence occurs over this many days *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
 
-(* Set heterogeneous susceptibility using gamma function with bins of constant population size *)
+(* not used in model only for output *)
+testToAllCaseRatio0=100;
+
+(* Fraction of symptomatic cases *)
+fractionSymptomatic0 = 0.7;
+
+(* Set heterogeneous susceptibility using lognormal function with bins of constant population size *)
 susceptibilityBins=20;
 susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
 m=-stdDev^2/2;
@@ -108,13 +109,6 @@ susceptibilityValues={1};
 susceptibilityInitialPopulations={1};
 *)
 
-
-(* Heterogeneity level, determines percent of population infected at equilibrium *)
-(* we set this to target 60% infected at the end of 2021 were no intervention to happen *)
-k0 = 1*10^-2;
-
-(* Fraction of symptomatic cases *)
-fractionSymptomatic0 = 0.7;
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
@@ -196,13 +190,13 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
     stateParams["params"]["pC"],
-    containmentThresholdRatio0,
     stateParams["icuCapacity"],
     stateParams["hospitalCapacity"],
     RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
-    RandomVariate[PosNormal[k0,k0*0.05]],
     RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]]
   }&/@Range[numberOfSimulations]]
+
+
 
 (* Assumption here is that age dependence follows a logistic curve -- zero year olds dont require any care, 
 100 year olds require significant case, midpoint is the medianHospitalization age *)
@@ -218,7 +212,6 @@ infectedHospitalized[a_]:=hospAgeModel[a]/fractionSymptomatic0;*)
 
 infectedHospitalized[a_] :=
 pHospitalized80YearOld0(1+E^((-80+medianHospitalizationAge0)/ageHospitalizedDependence0)) 1/(1+Exp[-((a-medianHospitalizationAge0)/ageHospitalizedDependence0)]);
-
 
 noCare[a_,medianHospitalizationAge_,pC80_, pH80_,ageCriticalDependence_,ageHospitalizedDependence_] :=
 1-infectedCritical[a, medianHospitalizationAge, pC80,ageCriticalDependence]-infectedHospitalized[a];
@@ -373,7 +366,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * susceptibilityValues[[i]]*sSq[i][t] - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
+      (* Exposed *)
       Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
+      (*(* inflow to exposed, used to determine number of tests required for containment *)
+      EInq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}],*)
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectious,
       (*Recovered without needing care*)
@@ -446,7 +442,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     icuCapacity,
     hospitalCapacity,
     stateAdjustmentForTestingDifferences,
-    k,
     distpow
   };
   equationsODE = Drop[equationsDAE /. Iq[t]->ISq[t]+IHq[t]+ICq[t], -1];
@@ -489,17 +484,17 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
     stateParams["params"]["pC"],
-    containmentThresholdRatio0,
     stateParams["icuCapacity"],
     stateParams["hospitalCapacity"],
     fitParams["stateAdjustmentForTestingDifferences"],
-    k0,
     fitParams["distpow"]
   };
 
   (* do one solution with the mean param values for the estimate *)
   (* Quiet because the it tries to evaluate the interpolating function at zero when it should hold the evaluation (and not evaluate there) *)
   {sol,evts} = Quiet[Reap[Apply[pfunODE2,paramExpected],{"containment","herd","icu","hospital","cutoff"},Rule],{InterpolatingFunction::dmval}];
+  
+  Echo[sol];
 
   events=Association[Flatten[evts]];
   prettyEvents={#-><|"eventName" -> #, "day" -> events[#][[1]][[1]], "thresholdCrossed" -> events[#][[1]][[2]]|>}&/@Keys[events];
@@ -553,7 +548,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[PCR]]][t] - sol[[QP[PCR]]][t-1])|>,
              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,(PCRQuantiles[t] - PCRQuantiles[t-1])]]
              },First],
-          "dailyTestsRequiredForContainment" -> <|"expected"-> stateParams["params"]["population"]*(sol[[QP[Eq]]][t] + sol[[QP[ISq]]][t] + sol[[QP[IHq]]][t] + sol[[QP[ICq]]][t])|>,
+          "dailyTestsRequiredForContainment" -> <|"expected"-> stateParams["params"]["population"]*testToAllCaseRatio0*(sol[[QP[Eq]]][t])|>,
           "cumulativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[PCR]]][t]|>,
@@ -878,7 +873,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     "daysUntilHospitalized"-><|"value"-> daysUntilHospitalized0, "name"-> "Days until hospitalized", "description"-> "The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.", "type"->"literature"|>,
     "daysFromInfectedToInfectious"-><|"value"-> daysFromInfectedToInfectious0, "name"-> "Days from infected to infectious", "description"-> "The number of days it takes to become infectious after being infected on average", "type"->"literature"|>,
     "daysToLeaveHosptialNonCritical"-><|"value"-> daysToLeaveHosptialNonCritical0, "name"-> "Days to leave the hospital in a non-critical case", "description"-> "The number of days it takes to leave the hospital if you are not a critical case", "type"->"literature"|>,
-    "pPCRNH"-><|"value"-> params["pPCRNH"], "name"-> "Probability of getting a positive PCR test if you are not in the hospital,", "description"-> "An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.", "type"->"literature"|>,
+    "pPCRNH"-><|"value"-> params["pPCRNH"], "name"-> "Probability of getting a positive PCR test if you are not in the hospital", "description"-> "An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.", "type"->"literature"|>,
     "pPCRH"-><|"value"-> params["pPCRH"], "name"-> "Probability of getting a positive PCR test if you are not in the hospital or ICU,", "description"-> "An age-adjusted probability that you get a positive PCR test in cases that require hospitalization or critical care", "type"->"literature"|>,
     "daysTogoToCriticalCare"-><|"value"-> daysTogoToCriticalCare0, "name"-> "Days to go to critical care after arriving in the hospital", "description"-> "The number of days it takes to go to critical care after arriving in the hospital in a serious case.", "type"->"literature"|>,
     "daysFromCriticalToRecoveredOrDeceased"-><|"value"-> daysFromCriticalToRecoveredOrDeceased0, "name"-> "Days from an ICU admission to recovery or fatality", "description"-> "The number of days it takes on average to resolve an ICU admission on average", "type"->"literature"|>,
