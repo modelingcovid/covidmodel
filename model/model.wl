@@ -120,7 +120,7 @@ scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintai
 scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite"|>;
 (*scenario5=<|"id"->"scenario5","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
 
-scenarios={scenario1,scenario2,scenario3,scenario4,scenario5};
+scenarios={scenario5,scenario1,scenario2,scenario3,scenario4};
 
 (* helper to get the scenario for a given id *)
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
@@ -297,7 +297,7 @@ est - initial infection impulse (eg from imported cases at importtime)
 *)
 
 
-QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
+QP[symb_]:=Position[{Deaq,PCR,RepHq,Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,Iq,ICq,EHq,HCq,CCq,RCq,est},symb][[1]][[1]];
 
 endTime[ifun_]:=Part[ifun["Domain"],1,-1];
 
@@ -359,17 +359,17 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
   percentPositiveCase[t_]:=posInterpMap[state][t];
-  Clear[Sq,Eq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
+  Clear[Sq,Eq,EInq,ISq,RSq,IHq,HHq,RHq,RepHq,Iq,ICq,EHq,HCq,CCq,RCq,Deaq,PCR,est];
   Clear[r0natural,daysUntilNotInfectious,daysUntilHospitalized,daysFromInfectedToInfectious,daysToLeaveHosptialNonCritical,pPCRNH,pPCRH,daysTogoToCriticalCare,daysFromCriticalToRecoveredOrDeceased,fractionOfCriticalDeceased,importtime,importlength,initialInfectionImpulse,tmax,pS,pH,pC,containmentThresholdCases,icuCapacity,hospitalCapacity,distpow];
 
-  equationsDAE = Flatten[{
+  equationsODE = Flatten[{
       Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * susceptibilityValues[[i]]*sSq[i][t] - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       Sq[t]==Sum[sSq[i][t],{i,1,susceptibilityBins}],
       (* Exposed *)
       Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sq[t] - Eq[t]/daysFromInfectedToInfectious0,
-      (*(* inflow to exposed, used to determine number of tests required for containment *)
-      EInq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}],*)
+      (* inflow to exposed, used to determine number of tests required for containment *)
+      EInq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}],
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectious,
       (*Recovered without needing care*)
@@ -379,7 +379,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
       (*Reported positive hospital cases*)
-      RepHq'[t]==testingProbability[t] * HHq'[t]/daysForHospitalsToReportCases0,
+      RepHq'[t]==testingProbability[t] * IHq[t]/(daysUntilHospitalized),
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t]/daysUntilHospitalized,
       (*Recovered after hospitalization*)
@@ -397,15 +397,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       (*Leaving critical care*)
       RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
       (* establishment *)
-      est'[t]==0,
-      (* we should just drop this equation so we dont need the ODE conversion below *)
-      Iq[t]==ISq[t]+IHq[t]+ICq[t] (*Infected without needing care*)
+      est'[t]==0(*Infected without needing care*)
     }];
-  events = {
-    WhenEvent[Iq[t]<=containmentThresholdCases&&PCR[t]<=0.1,Sow[{t,Iq[t]},"containment"]],(*when the virus is contained without herd immunity extract the time*)
+  eventsODE = {
     WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
     WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
-    WhenEvent[Iq[t]<=1,Sow[{t,Iq[t]},"cutoff"]] (*dont bother running when active infections less than 100 it can lead to evaluation issues in long tail simulations*),
     WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength,est[t]->0]
@@ -413,12 +409,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   initialConditions = Flatten[{
       Table[sSq[i][0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
-      Eq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
-  output = {Deaq, PCR, RepHq, Sq, Eq, ISq, RSq, IHq, HHq, RHq, Iq,ICq, EHq, HCq, CCq, RCq, est};
+      Eq[0]==0,EInq[0]==0,ISq[0]==0,RSq[0]==0,IHq[0]==0,HHq[0]==0,RepHq[0]==0,RHq[0]==0,ICq[0]==0,HCq[0]==0,CCq[0]==0,RCq[0]==0,Deaq[0]==0,est[0]==0,PCR[0]==0,EHq[0]==0}];
+  outputODE = {Deaq, PCR, RepHq, Sq, Eq, EInq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, HCq, CCq, RCq, est};
   dependentVariables = Flatten[{
       Sq, Table[sSq[i],{i,1,susceptibilityBins}],
       Deaq, PCR, RepHq,
-      Eq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est,Iq}];
+      Eq, EInq, ISq, RSq, IHq, HHq, RHq,ICq, EHq, HCq, CCq, RCq, est}];
 
   parameters = {
     r0natural,
@@ -438,20 +434,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     pS,
     pH,
     pC,
-    containmentThresholdCases,
     icuCapacity,
     hospitalCapacity,
     stateAdjustmentForTestingDifferences,
     distpow
   };
-  equationsODE = Drop[equationsDAE /. Iq[t]->ISq[t]+IHq[t]+ICq[t], -1];
-  outputODE = output /. Iq[t]->ISq[t]+IHq[t]+ICq[t];
-  eventsODE = events /. Iq[t]->ISq[t]+IHq[t]+ICq[t];
-  lhs = equationsODE[[All,1]];
-  rhs = equationsODE[[All,2]];
-  rhs = rhs /. Thread[lhs->rhs];
-  equationsODE = Thread[lhs==rhs];
-  dependentVariablesODE = Drop[dependentVariables, -1];
 
   pfunODE2 = ParametricNDSolveValue[{
       equationsODE,
@@ -461,7 +448,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     outputODE,
     {t,tmin0,tmax},
     parameters,
-    DependentVariables->dependentVariablesODE,
+    DependentVariables->dependentVariables,
     Method->{"DiscontinuityProcessing"->False}
   ];
 
@@ -493,8 +480,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   (* do one solution with the mean param values for the estimate *)
   (* Quiet because the it tries to evaluate the interpolating function at zero when it should hold the evaluation (and not evaluate there) *)
   {sol,evts} = Quiet[Reap[Apply[pfunODE2,paramExpected],{"containment","herd","icu","hospital","cutoff"},Rule],{InterpolatingFunction::dmval}];
-  
-  Echo[sol];
 
   events=Association[Flatten[evts]];
   prettyEvents={#-><|"eventName" -> #, "day" -> events[#][[1]][[1]], "thresholdCrossed" -> events[#][[1]][[2]]|>}&/@Keys[events];
@@ -544,11 +529,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     Table[Association[{
           "day"->t,
           "distancing"->distancing[t],
+          "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(0.5-1)/(100-30)*(distancing[t]-30)+1,1])*stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
           "dailyPcr" -> Merge[{
              <|"expected"-> stateParams["params"]["population"]*(sol[[QP[PCR]]][t] - sol[[QP[PCR]]][t-1])|>,
              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,(PCRQuantiles[t] - PCRQuantiles[t-1])]]
              },First],
-          "dailyTestsRequiredForContainment" -> <|"expected"-> stateParams["params"]["population"]*testToAllCaseRatio0*(sol[[QP[Eq]]][t])|>,
+          "dailyTestsRequiredForContainment" -> <|"expected"-> stateParams["params"]["population"]*testToAllCaseRatio0*(sol[[QP[EInq]]][t])|>,
           "cumulativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
               <|"expected"-> stateParams["params"]["population"]*sol[[QP[PCR]]][t]|>,
@@ -665,7 +651,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     "fractionOfInfectionsPCRConfirmed"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
       (PCRQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
       PCRQuantiles[endOfEval][[5]]/(CumulativeInfectionQuantiles[endOfEval][[5]])],
-    "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/vas["VA"]["population"]}&/@vas["VA"]["scenarios"]["scenario1"]["timeSeriesData"],#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
+    "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/stateParams["params"]["population"]}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
     "dateICUOverCapacity"->If[KeyExistsQ[events, "icu"]&&(!KeyExistsQ[events, "containment"]||(icuOverloadTime - containmentTime)<=0),
       DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
       ""],
@@ -709,7 +695,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     "fractionOfInfectionsPCRConfirmed"-> (1/fractionSymptomatic0)*If[KeyExistsQ[events, "containment"],
       (PCRQuantiles[containmentTime][[5]]/(CumulativeInfectionQuantiles[containmentTime][[5]])),
       PCRQuantiles[endOfEvalAug1][[5]]/(CumulativeInfectionQuantiles[endOfEvalAug1][[5]])],
-    "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/vas["VA"]["population"]}&/@vas["VA"]["scenarios"]["scenario1"]["timeSeriesData"],#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
+    "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/stateParams["params"]["population"]}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
     "dateICUOverCapacity"->If[KeyExistsQ[events, "icu"]&&(!KeyExistsQ[events, "containment"]||(icuOverloadTime - containmentTime)<=0),
       DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
       ""],
