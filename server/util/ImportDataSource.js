@@ -25,7 +25,7 @@ export class ImportDataSource extends DataSource {
     this.decorated = new WeakMap();
   }
 
-  getFile(filename, {decorate, ttl = 360} = {}) {
+  getModule(filename, {decorate, ttl = 360} = {}) {
     return this.cache.get(filename).then((entry) => {
       if (entry) {
         log('hit:', filename);
@@ -48,7 +48,7 @@ export class ImportDataSource extends DataSource {
             decorate(result, filename);
 
             if (isObject) {
-              this.decorated.set(result, true);
+              this.decorated.add(result, true);
             }
           }
         }

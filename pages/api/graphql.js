@@ -1,11 +1,24 @@
 import {ApolloServer} from 'apollo-server-micro';
-import {LocationDataSource, typeDefs, resolvers} from '../../server';
+import {
+  JsonDataSource,
+  CoreDataSource,
+  typeDefs,
+  resolvers,
+} from '../../server';
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({req}) => {
+    const host = req.headers.host;
+    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+    return {
+      origin: `${protocol}://${host}`,
+      headers: JSON.stringify(req.headers),
+    };
+  },
   dataSources: () => ({
-    location: new LocationDataSource(),
+    get: new CoreDataSource(),
   }),
   cacheControl: {defaultMaxAge: 60 * 60},
 });

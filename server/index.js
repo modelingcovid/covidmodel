@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-micro';
 import {getLocations, getLocation} from './data';
 import {stateLabels} from './format/location';
 
-export * from './LocationDataSource';
+export * from './CoreDataSource';
 
 export const typeDefs = gql`
   type Query {
@@ -12,7 +12,6 @@ export const typeDefs = gql`
   type Location {
     id: String!
     name: String!
-    path: String
     scenarios: [Scenario!]!
     scenario(id: ID!): Scenario
     parameters: [Parameter!]!
@@ -64,9 +63,9 @@ export const typeDefs = gql`
 `;
 
 const Query = {
-  locations(parent, args) {
-    return [{id: 'CA'}, {id: 'NY'}];
-    // return getLocations().map((id) => ({id}));
+  async locations(parent, args, {dataSources: {get}}) {
+    const locations = await get.json('locations');
+    return locations.map((id) => ({id}));
   },
   location(parent, {id}) {
     return {id};
@@ -77,34 +76,29 @@ const Location = {
   name(parent, args, context) {
     return stateLabels[parent.id] || parent.id;
   },
-  async path(parent, args, {dataSources: {location}}) {
-    const {path} = await location.get(parent.id);
-    return path;
-  },
-  async scenarios(parent, args, {dataSources: {location}}) {
-    const {scenarios} = await location.get(parent.id);
+  async scenarios(parent, args, {dataSources: {get}}) {
+    const {scenarios} = await get.location(parent.id);
     return Object.values(scenarios);
   },
-  async scenario(parent, args, {dataSources: {location}}) {
-    const {scenarios} = await location.get(parent.id);
+  async scenario(parent, args, {dataSources: {get}}) {
+    const {scenarios} = await get.location(parent.id);
     return scenarios[args.id];
   },
-  async parameters(parent, args, {dataSources: {location}}) {
-    const {parameters} = await location.get(parent.id);
+  async parameters(parent, args, {dataSources: {get}}) {
+    const {parameters} = await get.location(parent.id);
     return Object.entries(parameters).map(([id, parameter]) => {
       parameter.id = id;
       return parameter;
     });
   },
-  async parameter(parent, args, {dataSources: {location}}) {
-    const {parameters} = await location.get(parent.id);
+  async parameter(parent, args, {dataSources: {get}}) {
+    const {parameters} = await get.location(parent.id);
     return parameters[args.id];
   },
 };
 
 const series1 = (parent, args, context, {fieldName}) => {
   const {timeSeriesData} = parent;
-  console.log(Object.keys(timeSeriesData[0]).sort());
   return timeSeriesData.map((d) => d[fieldName]);
 };
 
