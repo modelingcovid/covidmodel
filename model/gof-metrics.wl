@@ -43,12 +43,12 @@ goodnessOfFitMetrics[residuals_,longData_,population_]:=Module[{RmsRelativeError
         residuals[[1;;deathDataLength]],
         (#[[2]]&/@longData[[1;;deathDataLength]]),
         (#[[3]]&/@longData[[1;;deathDataLength]])
-      ]][[-7;;]],
+    ]][[-7;;]],
     "pcrResidual7Day"->population*#[[2]]&/@Thread[{#2,#1}&[
         residuals[[deathDataLength+1;;Length[longData]]],
         Reverse[(#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])],
         Reverse[(#[[3]]&/@longData[[deathDataLength+1;;Length[longData]]])]
-      ]][[-7;;]]
+    ]][[-7;;]]
   |>/.InterpolatingFunction[___]->((0)&)
 ];
 
@@ -157,30 +157,30 @@ plotStateHospitalization[stateData_, state_]:=Module[{hospcurrent, hospcumulativ
                 ListPlot[Select[{#[[1]],#[[2]]}&/@hospcurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
                 ListLinePlot[{#[[1]],#[[3]]}&/@hospcurrent, ImageSize->300]
               ]
-            }],
+          }],
           Column[{
               Text["Cumulative Hospitalizations for "<>state],
               Show[
                 ListPlot[Select[{#[[1]],#[[2]]}&/@hospcumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
                 ListLinePlot[{#[[1]],#[[3]]}&/@hospcumulative, ImageSize->300]
               ]
-            }],
+          }],
           Column[{
               Text["Current ICU for "<>state],
               Show[
                 ListPlot[Select[{#[[1]],#[[2]]}&/@icucurrent, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
                 ListLinePlot[{#[[1]],#[[3]]}&/@icucurrent, ImageSize->300]
               ]
-            }],
+          }],
           Column[{
               Text["Cumulative ICU for "<>state],
               Show[
                 ListPlot[Select[{#[[1]],#[[2]]}&/@icucumulative, #[[2]]>0&],PlotStyle->Red, ImageSize->250],
                 ListLinePlot[{#[[1]],#[[3]]}&/@icucumulative, ImageSize->300]
               ]
-            }]
-            }]
-    }]
+          }]
+      }]
+  }]
 
 ];
 
@@ -206,21 +206,21 @@ exportAllStatesHospitalizationGoodnessOfFitMetricsSvg[file_,allStatesData_]:=Mod
     cumulativeXI,
     cumulativeYI,
     data,
-  allData,
-currentHData,
-cumHData,
-plot,
-currentIData,
-cumIData,
+    allData,
+    currentHData,
+    cumHData,
+    plot,
+    currentIData,
+    cumIData,
     domainCurrH,
     domainCurrI,
     domainCumH,
-      currentHStates,
-  cumulativeHStates,
-  currentIStates,
-  cumulativeIStates,
-  columnOrder,
-  csvData,
+    currentHStates,
+    cumulativeHStates,
+    currentIStates,
+    cumulativeIStates,
+    columnOrder,
+    csvData,
     domainCumI},
 
 
@@ -231,7 +231,7 @@ cumIData,
     hospcumulative=Select[{#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     icucurrent=Select[{#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     icucumulative=Select[{#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
-    
+
     hascurrhosp=Length[Select[hospcurrent,#[[2]]>0&]]>0;
     hascumhosp=Length[Select[hospcumulative,#[[2]]>0&]]>0;
     hascurricu=Length[Select[icucurrent,#[[2]]>0&]]>0;
@@ -252,7 +252,7 @@ cumIData,
 
   n = Length[states];
   allData=Map[processState,states];
-  
+
   columnOrder={
     "state",
     "meanRelativeErrorCurrentlyReportedHospitalized",
@@ -265,7 +265,7 @@ cumIData,
     "rmsRelativeErrorCumulativeCritical"};
   csvData=Join[{columnOrder},Values[#]&/@allData];
   Export["tests/hospitalization-gof-metrics.csv",csvData,"CSV"];
-    
+
   currentHData = Select[allData,#["meanRelativeErrorCurrentlyReportedHospitalized"]!=0&];
   cumHData = Select[allData,#["meanRelativeErrorCumulativeReportedHospitalized"]!=0&];
   currentIData = Select[allData,#["meanRelativeErrorCurrentlyCritical"]!=0&];
@@ -274,7 +274,7 @@ cumIData,
   cumulativeHStates = #["state"]&/@cumHData;
   currentIStates = #["state"]&/@currentIData;
   cumulativeIStates = #["state"]&/@cumIData;
-  
+
   currentXH = Map[Around[#["meanRelativeErrorCurrentlyReportedHospitalized"],#["rmsRelativeErrorCurrentlyReportedHospitalized"]]&,currentHData];
   currentYH = Range[Length[currentHData]];
   cumulativeXH = Map[Around[#["meanRelativeErrorCumulativeReportedHospitalized"],#["rmsRelativeErrorCumulativeReportedHospitalized"]]&,cumHData];
@@ -299,7 +299,7 @@ cumIData,
               PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
               AspectRatio->n/12/GoldenRatio,
               ImageSize->400]
-          }],
+        }],
         Column[{
             Text["Cumulative Hospitalized"],
             ListPlot[{
@@ -313,7 +313,7 @@ cumIData,
               PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
               AspectRatio->n/12/GoldenRatio,
               ImageSize->400]
-          }],
+        }],
         Column[{
             Text["Currently ICU"],
             ListPlot[{
@@ -327,7 +327,7 @@ cumIData,
               PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
               AspectRatio->n/12/GoldenRatio,
               ImageSize->400]
-          }],
+        }],
         Column[{
             Text["Cumulative ICU"],
             ListPlot[{
@@ -341,7 +341,7 @@ cumIData,
               PlotStyle->{RGBColor["#88bbfe"],RGBColor["#aff1b6"]},
               AspectRatio->n/12/GoldenRatio,
               ImageSize->400]
-          }]}
+      }]}
       ,4]];
   Export[file, plot, "SVG"];
   Echo[plot];
