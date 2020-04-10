@@ -20,8 +20,38 @@ export const typeDefs = gql`
   type Scenario {
     id: ID!
     name: String!
-    distancingLevel: Float!
+    day: [Float]
+    distancing: [Float]
     distancingDays: Int!
+    distancingLevel: Float!
+    cumulativeCritical: Distribution
+    cumulativeDeaths: Distribution
+    cumulativeHospitalized: Distribution
+    cumulativePcr: Distribution
+    cumulativeRecoveries: Distribution
+    cumulativeReportedHospitalized: Distribution
+    currentlyCritical: Distribution
+    currentlyHospitalized: Distribution
+    currentlyInfected: Distribution
+    currentlyInfectious: Distribution
+    currentlyReportedHospitalized: Distribution
+    dailyPcr: Distribution
+    dailyTestsRequiredForContainment: Distribution
+    susceptible: Distribution
+  }
+  type Distribution {
+    confirmed: [Float]
+    expected: [Float]
+    percentile10: [Float]
+    percentile20: [Float]
+    percentile30: [Float]
+    percentile40: [Float]
+    percentile50: [Float]
+    percentile60: [Float]
+    percentile70: [Float]
+    percentile80: [Float]
+    percentile90: [Float]
+    percentile100: [Float]
   }
   type Parameter {
     id: String!
@@ -32,37 +62,92 @@ export const typeDefs = gql`
   }
 `;
 
+const Query = {
+  locations(parent, args) {
+    return getLocations().map((id) => ({id}));
+  },
+  location(parent, {id}) {
+    return {id};
+  },
+};
+
+const Location = {
+  name(parent, args, context) {
+    return stateLabels[parent.id] || parent.id;
+  },
+  async scenarios(parent, args, {dataSources: {json}}) {
+    const {scenarios} = await json.getLocation(parent.id);
+    return Object.values(scenarios);
+  },
+  async scenario(parent, args, {dataSources: {json}}) {
+    const {scenarios} = await json.getLocation(parent.id);
+    return scenarios[args.id];
+  },
+  async parameters(parent, args, {dataSources: {json}}) {
+    const {parameters} = await json.getLocation(parent.id);
+    return Object.entries(parameters).map(([id, parameter]) => {
+      parameter.id = id;
+      return parameter;
+    });
+  },
+  async parameter(parent, args, {dataSources: {json}}) {
+    const {parameters} = await json.getLocation(parent.id);
+    return parameters[args.id];
+  },
+};
+
+const series1 = (parent, args, context, {fieldName}) => {
+  const {timeSeriesData} = parent;
+  console.log(Object.keys(timeSeriesData[0]).sort());
+  return timeSeriesData.map((d) => d[fieldName]);
+};
+
+const series2 = (parent, args, context, {path}) => {
+  const {timeSeriesData} = parent;
+  const key1 = path.prev.key;
+  const key2 = path.key;
+  return timeSeriesData.map((d) => d[key1][key2]);
+};
+
+const distribution = (parent) => parent;
+
+const Scenario = {
+  day: series1,
+  distancing: series1,
+  cumulativeCritical: distribution,
+  cumulativeDeaths: distribution,
+  cumulativeHospitalized: distribution,
+  cumulativePcr: distribution,
+  cumulativeRecoveries: distribution,
+  cumulativeReportedHospitalized: distribution,
+  currentlyCritical: distribution,
+  currentlyHospitalized: distribution,
+  currentlyInfected: distribution,
+  currentlyInfectious: distribution,
+  currentlyReportedHospitalized: distribution,
+  dailyPcr: distribution,
+  dailyTestsRequiredForContainment: distribution,
+  susceptible: distribution,
+};
+
+const Distribution = {
+  expected: series2,
+  confirmed: series2,
+  percentile10: series2,
+  percentile20: series2,
+  percentile30: series2,
+  percentile40: series2,
+  percentile50: series2,
+  percentile60: series2,
+  percentile70: series2,
+  percentile80: series2,
+  percentile90: series2,
+  percentile100: series2,
+};
+
 export const resolvers = {
-  Query: {
-    locations(parent, args) {
-      return getLocations().map((id) => ({id}));
-    },
-    location(parent, {id}) {
-      return {id};
-    },
-  },
-  Location: {
-    name(parent, args, context) {
-      return stateLabels[parent.id] || parent.id;
-    },
-    async scenarios(parent, args, {dataSources: {json}}) {
-      const {scenarios} = await json.getLocation(parent.id);
-      return Object.values(scenarios);
-    },
-    async scenario(parent, args, {dataSources: {json}}) {
-      const {scenarios} = await json.getLocation(parent.id);
-      return scenarios[args.id];
-    },
-    async parameters(parent, args, {dataSources: {json}}) {
-      const {parameters} = await json.getLocation(parent.id);
-      return Object.entries(parameters).map(([id, parameter]) => {
-        parameter.id = id;
-        return parameter;
-      });
-    },
-    async parameter(parent, args, {dataSources: {json}}) {
-      const {parameters} = await json.getLocation(parent.id);
-      return parameters[args.id];
-    },
-  },
+  Query,
+  Location,
+  Scenario,
+  Distribution,
 };
