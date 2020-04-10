@@ -96,7 +96,7 @@ icuCurrentActualsBody=icuCurrentActualsRaw[[2;;]];
 icuCurrentActualsParsedData=Thread[icuCurrentActualsHeader->#]&/@icuCurrentActualsBody//Map[Association];
 stateICUCurrentActualsData[state_]:=Module[{data},
   data = Select[Association[{"day"->#["State"], "icu"->If[#[state]=="",0,#[state]]}]&/@icuCurrentActualsParsedData,#["icu"]>0&];
-    If[Length[data]<=1,{},data]
+  If[Length[data]<=1,{},data]
 ];
 
 icuCumulativeActualsRaw=Transpose[Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=460657503","CSV"][[2;;28]]];
@@ -117,10 +117,10 @@ hospitalizatonsCurrentActualsParsedData =
 Thread[hospitalizatonsCurrentActualsHeader -> #]&/@hospitalizatonsCurrentActualsBody//Map[Association];
 stateHospitalizationCurrentActualsData[state_] := Module[{data},
   data = Select[Association[{"day" -> #["State"],
-      "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCurrentActualsParsedData, #["hospitalizations"] > 0 &];
+        "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCurrentActualsParsedData, #["hospitalizations"] > 0 &];
   If[Length[data]<=1,{},data]
 ]
-      
+
 hospitalizatonsCumulativeActualsRaw =
 Transpose[
   Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=1062475929", "CSV"][[2 ;; 28]]];
@@ -216,7 +216,7 @@ stateDistancingPrecompute = Module[{
   countStates = Length[stateLabels];
 
   totalDays = tmax0;
-  fullDays = Range[totalDays];
+  fullDays = Range[0, totalDays];
 
   smoothing = 3;
   SlowJoin := Fold[Module[{smoother},
@@ -240,12 +240,12 @@ stateDistancingPrecompute = Module[{
 
     distancingLevel = If[
       scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
-     
+
 
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
       (* pre-policy distancing - constant at 1 *)
-      ConstantArray[1., Min[dataDays] - 1],
+      ConstantArray[1., Min[dataDays]],
       (* historical distancing data *)
       distancing,
       (* for any gap between the last day of data and today, fill in with the average of the last three days of data *)
@@ -255,8 +255,6 @@ stateDistancingPrecompute = Module[{
       (* post-policy distancing - constant at 1 *)
       ConstantArray[1.,
         totalDays - scenario["distancingDays"] - today]];
-        
-    
 
     smoothedDistancing = ApplyWhere[
       distancing,
@@ -264,19 +262,29 @@ stateDistancingPrecompute = Module[{
       GaussianFilter[#,smoothing]&];
 
     smoothedFullDistancing = SlowJoin[{
-        ConstantArray[1., Min[dataDays] - 1],
+        ConstantArray[1., Min[dataDays]],
         smoothedDistancing,
         ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - Max[dataDays]],
         ConstantArray[distancingLevel, scenario["distancingDays"]],
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
-      }];
+    }];
 
     distancingDelay = 5;
-    distancingFunction = Interpolation[Transpose[{
-          fullDays + distancingDelay,
-          smoothedFullDistancing}],InterpolationOrder->3];
+    Which[
+      distancingDelay>0,
+      smoothedFullDistancing=Join[ConstantArray[1,distancingDelay], smoothedFullDistancing[[;;-distancingDelay-1]]];,
+      distancingDelay<0,
+      smoothedFullDistancing=Join[smoothedFullDistancing[[distancingDelay+1;;]], ConstantArray[1,Abs[distancingDelay]]];
+    ];
+
+    distancingFunction = Interpolation[
+      Transpose[{
+          fullDays,
+          smoothedFullDistancing}],
+      InterpolationOrder->3];
 
     scenario["id"]-><|
+      "distancingDays"->fullDays,
       "distancingLevel"->distancingLevel,
       "distancingData"->fullDistancing,
       "distancingFunction"->distancingFunction|>
