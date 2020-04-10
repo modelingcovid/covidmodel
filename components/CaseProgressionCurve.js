@@ -19,7 +19,7 @@ import {
   MethodDefinition,
   MethodDisclaimer,
   PercentileLegendRow,
-  PercentileLine,
+  PercentileLine2,
   useModelData,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
@@ -96,28 +96,6 @@ export function CaseProgressionCurve({height, width}) {
         —the cumulative number of people who have been in the{' '}
         <strong>exposed</strong> state—in {stateName}.
       </Paragraph>
-      {/* <Grid className="margin-bottom-3">
-        <MethodDefinition
-          icon={People}
-          value={formatNumber(model.population)}
-          label="Total population"
-          method="input"
-        />
-        <MethodDefinition
-          icon={HeadSideCough}
-          value={formatPercent1(
-            summary.totalProjectedInfected / model.population
-          )}
-          label="Percentage of the population infected"
-          method="modeled"
-        />
-        <MethodDefinition
-          icon={Vial}
-          value={formatNumber(summary.totalProjectedPCRConfirmed)}
-          label="Reported positive tests"
-          method="modeled"
-        />
-      </Grid> */}
       <PopulationGraph
         controls
         x={x}
@@ -126,12 +104,12 @@ export function CaseProgressionCurve({height, width}) {
         height={height}
         after={
           <Grid mobile={1}>
-            <PercentileLegendRow
+            {/* <PercentileLegendRow
               y={getCumulativeExposed}
               color={theme.color.yellow[3]}
               title="Total COVID-19 cases"
               description="People who have been infected with COVID-19"
-            />
+            /> */}
             <PercentileLegendRow
               y={getCumulativePcr}
               color={theme.color.blue[2]}
@@ -147,18 +125,18 @@ export function CaseProgressionCurve({height, width}) {
           </Grid>
         }
       >
-        <PercentileLine
-          y={getCumulativeExposed}
+        <PercentileLine2
+          distribution="cumulativeExposed"
           color={theme.color.yellow[3]}
           gradient
         />
-        <PercentileLine
-          y={getCumulativePcr}
+        <PercentileLine2
+          distribution="cumulativePcr"
           color={theme.color.blue[2]}
           gradient
         />
-        <PercentileLine
-          y={getCumulativeDeaths}
+        <PercentileLine2
+          distribution="cumulativeDeaths"
           color={theme.color.red[1]}
           gradient
         />
@@ -207,7 +185,7 @@ export function CaseProgressionCurve({height, width}) {
             <strong>{formatPercent(defaultAsymptomaticRate)}</strong>.
           </span>
         </Paragraph>
-        <WithNearestData>
+        {/* <WithNearestData>
           {(d) => (
             <Estimation>
               Based on an asymptomatic rate of{' '}
@@ -223,7 +201,7 @@ export function CaseProgressionCurve({height, width}) {
               .
             </Estimation>
           )}
-        </WithNearestData>
+        </WithNearestData> */}
       </WithCitation>
     </div>
   );

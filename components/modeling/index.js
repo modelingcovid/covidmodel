@@ -4,6 +4,8 @@ export * from './Estimation';
 export * from './MethodDefinition';
 export * from './PercentileLegendRow';
 export * from './PercentileLine';
+export * from './PercentileLine2';
 export * from './MethodDisclaimer';
 export * from './useFindPoint';
 export * from './useModelData';
+export * from './query';
