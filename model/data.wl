@@ -241,7 +241,6 @@ stateDistancingPrecompute = Module[{
     distancingLevel = If[
       scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
 
-
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
       (* pre-policy distancing - constant at 1 *)
@@ -290,10 +289,10 @@ stateDistancingPrecompute = Module[{
       "distancingFunction"->distancingFunction|>
   ];
 
-  processState[state_,distancing_] :=
-  state->Association[Map[processScenario[#,distancing]&,scenarios]];
+  processState[state_,distancing_] := state->Association[
+    Map[processScenario[#, distancing]&, scenarios]];
 
-  Association[MapThread[processState,{stateLabels,stateDistancings}]]
+  Association[MapThread[processState, {stateLabels, stateDistancings}]]
 ];
 
 
