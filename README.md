@@ -1,4 +1,4 @@
-# COVID Modeling Project
+# COSMC - Covid Open Source Modeling Collaboration
 
 This model is intended to provide guidance on the efficiency of COVID-19 mitigation efforts.
 
