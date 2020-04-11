@@ -15,34 +15,20 @@ import {
 import {WithNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
 import {
+  DistributionLegendRow,
+  DistributionLine,
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
-  PercentileLegendRow,
-  PercentileLine2,
+  useDistribution,
   useModelData,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
 const {useCallback, useState} = React;
 
-const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
-const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
-const getCumulativeExposed = (d) => {
-  const result = {};
-  for (let key of Object.keys(d.currentlyInfected)) {
-    result[key] =
-      d.currentlyInfected[key] +
-      d.currentlyInfectious[key] +
-      d.cumulativeRecoveries[key] +
-      d.cumulativeDeaths[key];
-  }
-  result.confirmed = 0;
-  return result;
-};
-
 export function CaseProgressionCurve({height, width}) {
-  const {model, stateName, summary, x} = useModelData();
+  const {stateName, x} = useModelData();
 
   const defaultAsymptomaticRate = 0.3;
   const [asymptomaticRate, setAsymptomaticRate] = useState(
@@ -50,6 +36,10 @@ export function CaseProgressionCurve({height, width}) {
   );
   // Can we get these from the model?
   const fatalityWeight = 3;
+
+  const [cumulativeDeaths] = useDistribution('cumulativeDeaths');
+  const [cumulativeExposed] = useDistribution('cumulativeExposed');
+  const [cumulativePcr] = useDistribution('cumulativePcr');
 
   return (
     <div className="margin-top-5">
@@ -104,20 +94,20 @@ export function CaseProgressionCurve({height, width}) {
         height={height}
         after={
           <Grid mobile={1}>
-            {/* <PercentileLegendRow
-              y={getCumulativeExposed}
+            <DistributionLegendRow
+              y={cumulativeExposed}
               color={theme.color.yellow[3]}
               title="Total COVID-19 cases"
               description="People who have been infected with COVID-19"
-            /> */}
-            <PercentileLegendRow
-              y={getCumulativePcr}
+            />
+            <DistributionLegendRow
+              y={cumulativePcr}
               color={theme.color.blue[2]}
               title="Reported positive tests"
               description="Total number of COVID-19 tests projected to be positive"
             />
-            <PercentileLegendRow
-              y={getCumulativeDeaths}
+            <DistributionLegendRow
+              y={cumulativeDeaths}
               color={theme.color.red[1]}
               title="Deceased"
               description="People who have died from COVID-19"
@@ -125,18 +115,18 @@ export function CaseProgressionCurve({height, width}) {
           </Grid>
         }
       >
-        <PercentileLine2
-          distribution="cumulativeExposed"
+        <DistributionLine
+          y={cumulativeExposed}
           color={theme.color.yellow[3]}
           gradient
         />
-        <PercentileLine2
-          distribution="cumulativePcr"
+        <DistributionLine
+          y={cumulativePcr}
           color={theme.color.blue[2]}
           gradient
         />
-        <PercentileLine2
-          distribution="cumulativeDeaths"
+        <DistributionLine
+          y={cumulativeDeaths}
           color={theme.color.red[1]}
           gradient
         />
@@ -185,23 +175,25 @@ export function CaseProgressionCurve({height, width}) {
             <strong>{formatPercent(defaultAsymptomaticRate)}</strong>.
           </span>
         </Paragraph>
-        {/* <WithNearestData>
+        <WithNearestData>
           {(d) => (
             <Estimation>
               Based on an asymptomatic rate of{' '}
               {formatPercent(defaultAsymptomaticRate)}, the model projects the
               fatality rate of symptomatic COVID-19 cases to be{' '}
               <strong>
-                {formatPercent1(
-                  (getCumulativeDeaths(...d).expected /
-                    getCumulativeExposed(...d).expected) *
-                    (1 - asymptomaticRate)
-                )}
+                {cumulativeDeaths && cumulativeExposed
+                  ? formatPercent1(
+                      (cumulativeDeaths.expected(...d) /
+                        (cumulativeExposed.expected(...d) || 0.0001)) *
+                        (1 - asymptomaticRate)
+                    )
+                  : '…'}
               </strong>
               .
             </Estimation>
           )}
-        </WithNearestData> */}
+        </WithNearestData>
       </WithCitation>
     </div>
   );

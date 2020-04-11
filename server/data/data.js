@@ -30,14 +30,8 @@ export const decorateLocation = (data, location) => {
           d.cumulativeRecoveries[key] +
           d.cumulativeDeaths[key];
       });
+      d.cumulativeExposed.confirmed = 0;
     });
-
-    // Omit empty time series.
-    if (timeSeriesData.length) {
-      Object.keys(timeSeriesData[0])
-        .filter((key) => timeSeriesData.every((d) => !d[key]))
-        .forEach((key) => timeSeriesData.forEach((d) => delete d[key]));
-    }
   });
 
   roundData(data);
