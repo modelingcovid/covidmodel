@@ -428,12 +428,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     CumulativeHospitalizedQuantiles,
     CumulativeInfectionQuantiles,
     CumulativeRecoveredQuantiles,
-    CumulativeReportedHospitalizedQuantiles,
     CurrentlyCriticalQuantiles,
     CurrentlyHospitalizedQuantiles,
     CurrentlyInfectedQuantiles,
     CurrentlyInfectiousQuantiles,
-    CurrentlyReportedHospitalizedQuantiles,
     DeathQuantiles,
     deciles,
     distancing,
@@ -576,7 +574,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
               ]|>,
               <|"expected"-> population*sol[RepHq][t - daysForHospitalsToReportCases0]|>,
-              percentileMap[CurrentlyReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
+              percentileMap[CurrentlyHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             },First],
           "currentlyHospitalized" -> Merge[{
               <|"expected"-> population*sol[HHq][t]|>,
@@ -590,11 +588,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   0
               ]|>,
               <|"expected"-> population*sol[RepHq][t - daysForHospitalsToReportCases0]|>,
-              percentileMap[CumulativeReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
+              percentileMap[CumulativeHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             },First],
           "cumulativeHospitalized" -> Merge[{
               <|"expected"-> population*sol[EHq][t]|>,
-              percentileMap[CumulativeEverHospitalizedQuantiles[t]]
+              percentileMap[CumulativeHospitalizedQuantiles[t]]
             }, First],
             
           "cumulativeCritical" -> Merge[{
@@ -632,6 +630,16 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   hospitalOverloadTime = If[hasHospitalOverload,events["hospital"]["day"]];
   icuOverloadTime = If[hasIcuOverload,events["icu"]["day"]];
 
+  Echo[If[
+    (hasIcuOverload) || (icuOverloadTime <= endOfYear),
+    DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
+    ""]];
+    
+    Echo[If[
+    (hasIcuOverload) || (icuOverloadTime <= aug1),
+    DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
+    ""]];
+
   {summary, summaryAug1} = Map[
     Function[t, <|
        "totalProjectedDeaths"->sol[Deaq][t] * population,
@@ -646,14 +654,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 "fractionHospitalizedInICU"->(sol[ICq][t] + sol[RCq][t] + sol[Deaq][t]) / sol[EHq][t],
 "fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[Eq][t]+sol[Iq][t]+sol[Rq][t]+sol[Deaq][t]),
 "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
-"dateICUOverCapacity"->If[
+"dateICUOverCapacity"->If[icuOverloadTime != Null, If[
     (hasIcuOverload) || (icuOverloadTime <= t),
     DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
-    ""],
-"dateHospitalsOverCapacity"->If[
+    ""], ""],
+"dateHospitalsOverCapacity"->If[hospitalOverloadTime != Null, If[
     (hasHospitalOverload) || (hospitalOverloadTime <= t),
     DateString[DatePlus[{2020,1,1}, hospitalOverloadTime - 1]],
-    ""]|>],
+    ""], ""]|>],
     {
       If[hasContainment,containmentTime,endOfEval],
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
