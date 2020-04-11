@@ -2,7 +2,7 @@ import * as React from 'react';
 import useSWR from 'swr';
 import {createLocationQuery, createScenarioQuery, useLocations} from './query';
 import {stateLabels} from '../../lib/controls';
-import {addDays, today} from '../../lib/date';
+import {addDays, dayToDate, today} from '../../lib/date';
 import {flattenData} from '../../lib/transform';
 import {useComponentId} from '../util';
 
@@ -41,7 +41,7 @@ const useDays = (locationId, scenarioId) => {
       )
     )
   );
-  return [data?.location?.scenarios?.day?.data || [], error];
+  return [data?.location?.scenario?.day?.data || [], error];
 };
 
 export const ModelStateProvider = ({
@@ -52,7 +52,7 @@ export const ModelStateProvider = ({
 }) => {
   const [locations] = useLocations();
   const [scenarios] = useScenarios(locationId);
-  const [days] = useDays();
+  const [days] = useDays(locationId, scenarioId);
 
   const id = useComponentId('model');
   const context = useMemo(() => {
@@ -62,15 +62,18 @@ export const ModelStateProvider = ({
     const scenario = scenarios.find(({id}) => id === scenarioId) || {
       id: scenarioId,
     };
+    const x = (_, i) => dayToDate(days[i]);
 
     return {
       days,
       id,
+      indices: Object.keys(days),
       location,
       locations,
       scenario,
       scenarios,
       setScenario,
+      x,
     };
   }, [days, id, locationId, locations, scenarioId, scenarios, setScenario]);
 

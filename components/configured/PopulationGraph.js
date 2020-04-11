@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Graph, HMarker, NearestMarker} from '../graph';
-import {useModelData} from '../modeling';
+import {useModelState, useLocationQuery} from '../modeling';
 import {formatLargeNumber} from '../../lib/format';
 
 export const PopulationGraph = ({
@@ -11,15 +11,13 @@ export const PopulationGraph = ({
   initialScale = 'log',
   ...remaining
 }) => {
-  const {
-    model: {population},
-    timeSeriesData,
-    x,
-  } = useModelData();
+  const {days, x} = useModelState();
+  const [data] = useLocationQuery(`{ population }`);
+  const population = data?.population || 0;
   return (
     <Graph
       {...remaining}
-      data={timeSeriesData}
+      data={days}
       domain={population}
       initialScale={initialScale}
       height={height}

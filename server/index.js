@@ -16,6 +16,7 @@ export const typeDefs = gql`
     scenario(id: ID!): Scenario
     parameters: [Parameter!]!
     parameter(id: ID!): Parameter
+    population: Int!
   }
   type Scenario {
     id: ID!
@@ -101,6 +102,10 @@ const Location = {
   async parameter(parent, args, {dataSources: {get}}) {
     const {parameters} = await get.location(parent.id);
     return parameters[args.id];
+  },
+  async population(parent, args, {dataSources: {get}}) {
+    const {population} = await get.location(parent.id);
+    return population;
   },
 };
 
