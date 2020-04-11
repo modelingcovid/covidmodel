@@ -59,7 +59,7 @@ const styles = css`
   }
 `;
 
-export function Layout({children, states}) {
+export function Layout({children}) {
   return (
     <div className="layout">
       <style jsx>{styles}</style>
@@ -79,7 +79,6 @@ export function Layout({children, states}) {
               </Link>
               <div className="nav-link location-menu">
                 <LocationMenu
-                  states={states}
                   menuProps={{
                     style: {left: '50%', transform: 'translateX(-50%)'},
                   }}

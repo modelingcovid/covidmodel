@@ -7,7 +7,7 @@ import {Test} from '../components/Test';
 
 export default function Index(props) {
   return (
-    <Layout states={props.states}>
+    <Layout>
       <Home />
       <Test />
       <Section>

@@ -51,7 +51,7 @@ export const ModelStateProvider = ({
   setScenario,
 }) => {
   const [locations] = useLocations();
-  const [scenarios] = useScenarios();
+  const [scenarios] = useScenarios(locationId);
   const [days] = useDays();
 
   const id = useComponentId('model');
@@ -69,6 +69,7 @@ export const ModelStateProvider = ({
       location,
       locations,
       scenario,
+      scenarios,
       setScenario,
     };
   }, [days, id, locationId, locations, scenarioId, scenarios, setScenario]);

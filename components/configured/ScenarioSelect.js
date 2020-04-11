@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import {useNavigateToLocation} from './useNavigateToLocation';
 import {Select} from '../Select';
 import {useCurrentLocation} from './useCurrentLocation';
-import {useModelState, useLocationQuery} from '../modeling';
+import {useModelState} from '../modeling';
 import {getScenarioLabel} from '../../lib/controls';
 
 const {useMemo} = React;
@@ -13,17 +13,7 @@ export function ScenarioSelect({
   placeholder = 'Select a scenario…',
   ...props
 }) {
-  const {scenario, setScenario} = useModelState();
-  const [data] = useLocationQuery(`{
-    scenarios {
-      id
-      name
-      distancingLevel
-      distancingDays
-    }
-  }`);
-
-  const scenarios = data?.scenarios || [];
+  const {scenario, scenarios, setScenario} = useModelState();
   const scenarioIds = scenarios.map(({id}) => id);
 
   const currentScenario = useMemo(

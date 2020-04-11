@@ -45,7 +45,7 @@ export default function StatePage({data, states}) {
   const stateName = stateLabels[state];
 
   return (
-    <Layout states={states}>
+    <Layout>
       <ModelStateProvider
         locationId={state}
         scenarioId={scenario}
