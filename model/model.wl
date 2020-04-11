@@ -466,6 +466,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     hospitalOverloadTime,
     icuOverloadTime,
     paramExpected,
+    percentileMap,
     PCRQuantiles,
     percentPositiveCase,
     population,
@@ -556,38 +557,40 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CumulativeEverCriticalQuantiles[t_] := computeDeciles[#[HCq][t] + #[RCq][t] + #[Deaq][t]&] * population;
   SuseptibleQuantiles[t_] :=  computeDeciles[#[Sq][t]&] * population;
   
+  percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
+  
   (* TODO Revisit these defintions *)
   timeSeriesData = Module[{},
     Table[Association[{
           "day"->t,
           "distancing"->distancing[t],
-          "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(0.5-1)/(100-30)*(distancing[t]-30)+1,1])*stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
+          "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(0.5-1)/(100-30)*(distancing[t]-30)+1,1])*stateParams["params"]["staffedBeds"]/population,
           "dailyPcr" -> Merge[{
-              <|"expected"-> stateParams["params"]["population"]*(sol[PCR][t] - sol[PCR][t-1])|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,(PCRQuantiles[t] - PCRQuantiles[t-1])]]
+              <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
+              percentileMap[PCRQuantiles[t] - PCRQuantiles[t-1]]
             },First],
-          "dailyTestsRequiredForContainment" -> <|"expected"-> stateParams["params"]["population"]*testToAllCaseRatio0*(sol[EInq][t])|>,
+          "dailyTestsRequiredForContainment" -> <|"expected"-> population*testToAllCaseRatio0*(sol[EInq][t])|>,
           "cumulativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
-              <|"expected"-> stateParams["params"]["population"]*sol[PCR][t]|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,PCRQuantiles[t]]]
+              <|"expected"-> population*sol[PCR][t]|>,
+              percentileMap[PCRQuantiles[t]]
             },First],
           "cumulativeDeaths" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],0]]|>,
-              <|"expected"-> stateParams["params"]["population"]*sol[Deaq][t]|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,DeathQuantiles[t]]]
+              <|"expected"-> population*sol[Deaq][t]|>,
+              percentileMap[DeathQuantiles[t]]
             },First],
           "currentlyInfected" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[Eq][t]|>
+              <|"expected"-> population*sol[Eq][t]|>,
+              percentileMap[CurrentlyInfectedQuantiles[t]]
             }, First],
           "currentlyInfectious" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyInfectiousQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[Iq][t]|>
+              <|"expected"-> population*sol[Iq][t]|>,
+              percentileMap[CurrentlyInfectiousQuantiles[t]]
             }, First],
           "cumulativeRecoveries" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeRecoveredQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[Rq][t]|>
+              <|"expected"-> population*sol[Rq][t]|>,
+              percentileMap[CumulativeRecoveredQuantiles[t]]
             }, First],
           "currentlyReportedHospitalized" -> Merge[{
               <|"confirmed"->If[
@@ -596,12 +599,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["hospitalizationCurrentData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0
               ]|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyReportedHospitalizedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[RepHq][t]|>
+              <|"expected"-> population*sol[RepHq][t]|>,
+              percentileMap[CurrentlyReportedHospitalizedQuantiles[t]]
             },First],
           "currentlyHospitalized" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyHospitalizedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[HHq][t]|>
+              <|"expected"-> population*sol[HHq][t]|>,
+              percentileMap[CurrentlyHospitalizedQuantiles[t]]
             }, First],
           "cumulativeReportedHospitalized" -> Merge[{
               <|"confirmed"->If[
@@ -610,12 +613,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["hospitalizationCumulativeData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0
               ]|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CumulativeReportedHospitalizedQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[RepHq][t]|>
+              <|"expected"-> population*sol[RepHq][t]|>,
+              percentileMap[CumulativeReportedHospitalizedQuantiles[t]]
             },First],
           "cumulativeHospitalized" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverHospitalizedQuantiles[t])]],
-              <|"expected"-> stateParams["params"]["population"]*sol[EHq][t]|>
+              <|"expected"-> population*sol[EHq][t]|>,
+              percentileMap[CumulativeEverHospitalizedQuantiles[t]]
             }, First],
           "cumulativeCritical" -> Merge[{
               <|"confirmed"->If[
@@ -624,8 +627,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["icuCumulativeData"],(#["day"]==t)&][[1]]["icu"],
                   0
               ]|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&, (CumulativeEverCriticalQuantiles[t])]],
-              <|"expected"-> stateParams["params"]["population"]*(sol[HCq][t] + sol[RCq][t] + sol[Deaq][t])|>
+              <|"expected"-> population*(sol[HCq][t] + sol[RCq][t] + sol[Deaq][t])|>,
+              percentileMap[CumulativeEverCriticalQuantiles[t]]
             }, First],
           "currentlyCritical" -> Merge[{
               <|"confirmed"->If[
@@ -634,12 +637,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["icuCurrentData"],(#["day"]==t)&][[1]]["icu"],
                   0
               ]|>,
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,CurrentlyCriticalQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[CCq][t]|>
+              <|"expected"-> population*sol[CCq][t]|>,
+              percentileMap[CurrentlyCriticalQuantiles[t]]
             },First],
           "susceptible" -> Merge[{
-              Association[MapIndexed[{"percentile"<>ToString[#2[[1]]*10] ->#1}&,SuseptibleQuantiles[t]]],
-              <|"expected"-> stateParams["params"]["population"]*sol[Sq][t]|>
+              <|"expected"-> population*sol[Sq][t]|>,
+              percentileMap[SuseptibleQuantiles[t]]
             },First]
       }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
 
