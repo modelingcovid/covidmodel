@@ -9,4 +9,5 @@ export * from './PercentileLine';
 export * from './MethodDisclaimer';
 export * from './useFindPoint';
 export * from './useModelData';
+export * from './useModelState';
 export * from './query';

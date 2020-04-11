@@ -3,25 +3,34 @@ import {useRouter} from 'next/router';
 import {useNavigateToLocation} from './useNavigateToLocation';
 import {Select} from '../Select';
 import {useCurrentLocation} from './useCurrentLocation';
-import {stateLabels} from '../../lib/controls';
+import {useLocations} from '../modeling';
 
-const {useCallback} = React;
+const {useMemo} = React;
 
 export function StateSelect({
   label = 'Location',
-  states,
   placeholder = 'Choose a location…',
   ...props
 }) {
-  const state = useCurrentLocation();
+  const [locations] = useLocations();
+  const locationId = useCurrentLocation();
   const navigateToLocation = useNavigateToLocation();
+  const ids = useMemo(() => locations.map(({id}) => id), [locations]);
+  const nameMap = useMemo(
+    () =>
+      locations.reduce((o, {id, name}) => {
+        o[id] = name;
+        return o;
+      }, {}),
+    [locations]
+  );
   return (
     <Select
       label={label}
       placeholder={placeholder}
-      value={state}
-      values={states}
-      valueToString={stateLabels}
+      value={locationId}
+      values={ids}
+      valueToString={nameMap}
       onChange={navigateToLocation}
       {...props}
     />

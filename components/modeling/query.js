@@ -1,17 +1,34 @@
 import {useMemo} from 'react';
 import useSWR from 'swr';
-import {useModelData} from './useModelData';
+import {useModelState} from './useModelState';
+
+export const createLocationQuery = (location, query) =>
+  `{ location(id: "${location}") ${query} }`;
+
+export const createScenarioQuery = (scenario, query) =>
+  `{ scenario(id: "${scenario}") ${query} }`;
+
+export function useLocations(query = '') {
+  const {data, error} = useSWR(`{
+      locations {
+        id
+        name
+        ${query}
+      }
+    }`);
+  return [data?.locations || [], error];
+}
 
 export function useLocationQuery(query) {
-  const {state} = useModelData();
-  const {data, error} = useSWR(`{ location(id: "${state}") ${query} }`);
+  const {location} = useModelState();
+  const {data, error} = useSWR(createLocationQuery(location.id, query));
   return [data?.location, error];
 }
 
 export function useScenarioQuery(query) {
-  const {scenario} = useModelData();
+  const {scenario} = useModelState();
   const [data, error] = useLocationQuery(
-    `{ scenario(id: "${scenario}") ${query} }`
+    createScenarioQuery(scenario.id, query)
   );
   return [data?.scenario, error];
 }
