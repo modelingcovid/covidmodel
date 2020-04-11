@@ -58,9 +58,11 @@ export const ModelStateProvider = ({
   const context = useMemo(() => {
     const location = locations.find(({id}) => id === locationId) || {
       id: locationId,
+      name: '',
     };
     const scenario = scenarios.find(({id}) => id === scenarioId) || {
       id: scenarioId,
+      name: '',
     };
     const x = (_, i) => dayToDate(days[i]);
 

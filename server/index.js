@@ -22,7 +22,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     day: Series
-    distancing: [Float]
+    distancing: Series
     distancingDays: Int!
     distancingLevel: Float!
     cumulativeCritical: Distribution

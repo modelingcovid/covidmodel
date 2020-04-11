@@ -21,14 +21,14 @@ import {
   MethodDefinition,
   MethodDisclaimer,
   useDistribution,
-  useModelData,
+  useModelState,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
 const {useCallback, useState} = React;
 
 export function CaseProgressionCurve({height, width}) {
-  const {stateName, x} = useModelData();
+  const {location, x} = useModelState();
 
   const defaultAsymptomaticRate = 0.3;
   const [asymptomaticRate, setAsymptomaticRate] = useState(
@@ -84,7 +84,7 @@ export function CaseProgressionCurve({height, width}) {
           total COVID-19 cases
         </InlineLabel>
         —the cumulative number of people who have been in the{' '}
-        <strong>exposed</strong> state—in {stateName}.
+        <strong>exposed</strong> state—in {location.name}.
       </Paragraph>
       <PopulationGraph
         controls
@@ -134,9 +134,9 @@ export function CaseProgressionCurve({height, width}) {
       <Heading className="margin-top-4">Finding the best fit</Heading>
       <Paragraph>
         The model adjusts three values to find a set of curves with the best fit
-        for {stateName}: the <strong>date COVID-19 arrived</strong>, the{' '}
+        for {location.name}: the <strong>date COVID-19 arrived</strong>, the{' '}
         <strong>R₀</strong> (basic reproduction number), and{' '}
-        <strong>fraction of cases being detected</strong> in {stateName}.
+        <strong>fraction of cases being detected</strong> in {location.name}.
         Reported fatalities and confirmed positive cases are weighed at a 3:1
         ratio during the fitting process.
       </Paragraph>

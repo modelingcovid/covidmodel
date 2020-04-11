@@ -4,7 +4,7 @@ import css from 'styled-jsx/css';
 import {theme} from '../styles';
 import {Grid, Title, Paragraph} from './content';
 import {LegendRow, LegendEntry} from './graph';
-import {useModelData} from './modeling';
+import {useLocationQuery} from './modeling';
 
 const styles = css`
   .parameter-description {
@@ -18,14 +18,16 @@ const styles = css`
 `;
 
 export function ParameterTable() {
-  const {state} = useModelData();
-
-  const {data, error} = useSWR(
-    `{ location(id: "${state}") { parameters {
-      id, name, value, description, type
-    } } }`
-  );
-  const parameters = data?.location?.parameters;
+  const [location, error] = useLocationQuery(`{
+    parameters {
+      id
+      name
+      value
+      description
+      type
+    }
+  }`);
+  const parameters = location?.parameters;
 
   if (error) return null;
   if (!parameters) return null;
