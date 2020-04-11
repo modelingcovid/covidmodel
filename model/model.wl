@@ -558,11 +558,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   PCRQuantiles[t_] := simDeciles[#[PCR][t]&] * population;
   DeathQuantiles[t_] := simDeciles[#[Deaq][t]&] * population;
-  (* TODO figure out how to compute currently reported hospitalized *)
-  CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]&] * population;
-  CumulativeReportedHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]&] * population;
   CurrentlyInfectedQuantiles[t_] := simDeciles[#[Eq][t]&] * population;
   CurrentlyInfectiousQuantiles[t_] := simDeciles[#[Iq][t]&] * population;
+  CumulativeHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]&] * population;
+  CumulativeCriticalQuantiles[t_] := simDeciles[#[RepHCq][t]&] * population;
   (* TODO why does this not include people who are exposed or infectious? *)
   (* it looks like this used later on to mock up the number of people who are symptomatic; we cannot compute this quantity with the current model *)
   CumulativeInfectionQuantiles[t_] := simDeciles[#[Deaq][t] + #[Rq][t]&] * population;
@@ -571,9 +570,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   RecoveredCriticalQuantiles[t_] := simDeciles[#[RCq][t]&] * population;
   CurrentlyHospitalizedQuantiles[t_] := simDeciles[#[HHq][t]&] * population;
   CurrentlyCriticalQuantiles[t_] := simDeciles[#[CCq][t]&] * population;
-  CumulativeEverHospitalizedQuantiles[t_] := simDeciles[#[HHq][t] + #[RHq][t]&] * population;
-  CumulativeEverCriticalQuantiles[t_] := simDeciles[#[HCq][t] + #[RCq][t] + #[Deaq][t]&] * population;
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
+  
+  percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
 
   (* TODO Revisit these defintions *)
   (* TODO shift all percentiles down by 1 (since index 1 is now the zeroth percentile) *)
@@ -673,16 +672,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   containmentTime = If[hasContainment,events["containment"]["day"]];
   hospitalOverloadTime = If[hasHospitalOverload,events["hospital"]["day"]];
   icuOverloadTime = If[hasIcuOverload,events["icu"]["day"]];
-
-  Echo[If[
-    (hasIcuOverload) || (icuOverloadTime <= endOfYear),
-    DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
-    ""]];
-    
-    Echo[If[
-    (hasIcuOverload) || (icuOverloadTime <= aug1),
-    DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
-    ""]];
 
   {summary, summaryAug1} = Map[
     Function[t, <|
