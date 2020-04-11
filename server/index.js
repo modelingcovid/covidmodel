@@ -20,7 +20,7 @@ export const typeDefs = gql`
   type Scenario {
     id: ID!
     name: String!
-    day: [Float]
+    day: Series
     distancing: [Float]
     distancingDays: Int!
     distancingLevel: Float!
@@ -41,18 +41,24 @@ export const typeDefs = gql`
     susceptible: Distribution
   }
   type Distribution {
-    confirmed: [Float]
-    expected: [Float]
-    percentile10: [Float]
-    percentile20: [Float]
-    percentile30: [Float]
-    percentile40: [Float]
-    percentile50: [Float]
-    percentile60: [Float]
-    percentile70: [Float]
-    percentile80: [Float]
-    percentile90: [Float]
-    percentile100: [Float]
+    confirmed: Series
+    expected: Series
+    percentile10: Series
+    percentile20: Series
+    percentile30: Series
+    percentile40: Series
+    percentile50: Series
+    percentile60: Series
+    percentile70: Series
+    percentile80: Series
+    percentile90: Series
+    percentile100: Series
+  }
+  type Series {
+    data: [Float]
+    empty: Boolean
+    max: Float!
+    min: Float!
   }
   type Parameter {
     id: String!
@@ -147,9 +153,17 @@ const Distribution = {
   percentile100: series2,
 };
 
+const Series = {
+  data: (parent) => parent,
+  empty: (parent) => parent.some((n) => !!n),
+  min: (parent) => Math.min(...parent),
+  max: (parent) => Math.max(...parent),
+};
+
 export const resolvers = {
   Query,
   Location,
   Scenario,
   Distribution,
+  Series,
 };

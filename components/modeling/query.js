@@ -42,7 +42,16 @@ const fullSeries = [
 export function useDistribution(distribution, series = fullSeries) {
   const [data, error] = useDistributionQuery(
     distribution,
-    `{ ${series.join('\n')} }`
+    `{ ${series
+      .map(
+        (s) => `${s} {
+          max
+          min
+          data
+          empty
+        }`
+      )
+      .join('\n')} }`
   );
   const fns = useMemo(() => {
     if (!data) {
@@ -50,7 +59,8 @@ export function useDistribution(distribution, series = fullSeries) {
     }
     const result = {};
     for (let [key, series] of Object.entries(data)) {
-      result[key] = (_, i) => series[i];
+      result[key] = (_, i) => series.data[i];
+      Object.assign(result[key], series);
     }
     return result;
   }, [data]);
