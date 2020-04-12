@@ -68,7 +68,7 @@ pCritical80YearOld0=0.1125;
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
 pHospitalized80YearOld0=0.165;
 
-statesConvergeToValue=3.2;
+statesConvergeToValue=4.48;
 convergenceMidpoint=100+30; (*30 days from now *)
 convergencePeriod=100+60; (* 90% 2 months from now *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
@@ -692,20 +692,19 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 "fractionOfPCRHospitalized"-> sol[RepHq][t] / sol[PCR][t],
 "fractionHospitalizedInICU"->(sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]),
 "fractionDeathOfHospitalized"->(sol[Deaq][t] / (sol[RepHq][t] + sol[RepHCq][t])),
-"fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t])|>],(*
-"dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],*)
-(*"dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
+"fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
+"dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
+"dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
     DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
     ""],
-"dateHospitalsOverCapacity"->If[!TrueQ[hospitalOverloadTime != Null],
+"dateHospitalsOverCapacity"->If[!TrueQ[hospitalOverloadTime == Null],
     DateString[DatePlus[{2020,1,1}, hospitalOverloadTime - 1]],
-    ""]|>],*)
+    ""]|>],
     {
       If[hasContainment,containmentTime,endOfEval],
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
  ];
- 
- Echo[summary];
+
  
  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
