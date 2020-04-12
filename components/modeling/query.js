@@ -92,3 +92,8 @@ export function useDistribution(distribution, series = fullSeries) {
   }, [data]);
   return [fns, error];
 }
+
+export function usePopulation() {
+  const [data, error] = useLocationQuery(`{ population }`);
+  return [data?.population, error];
+}

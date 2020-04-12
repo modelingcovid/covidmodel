@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Graph, HMarker, NearestMarker} from '../graph';
-import {useModelState, useLocationQuery} from '../modeling';
+import {useModelState, usePopulation} from '../modeling';
 import {formatLargeNumber} from '../../lib/format';
 
 export const PopulationGraph = ({
@@ -12,8 +12,7 @@ export const PopulationGraph = ({
   ...remaining
 }) => {
   const {indices, x} = useModelState();
-  const [data] = useLocationQuery(`{ population }`);
-  const population = data?.population || 0;
+  const [population = 9000000] = usePopulation();
   return (
     <Graph
       {...remaining}
