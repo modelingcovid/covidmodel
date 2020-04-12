@@ -17,31 +17,51 @@ export const typeDefs = gql`
     parameters: [Parameter!]!
     parameter(id: ID!): Parameter
     population: Int!
+    domain: LocationDomain
   }
   type Scenario {
     id: ID!
     name: String!
-    day: Series
-    distancing: Series
     distancingDays: Int!
     distancingLevel: Float!
-    cumulativeCritical: Distribution
-    cumulativeDeaths: Distribution
-    cumulativeExposed: Distribution
-    cumulativeHospitalized: Distribution
-    cumulativePcr: Distribution
-    cumulativeRecoveries: Distribution
-    cumulativeReportedHospitalized: Distribution
-    currentlyCritical: Distribution
-    currentlyHospitalized: Distribution
-    currentlyInfected: Distribution
-    currentlyInfectious: Distribution
-    currentlyReportedHospitalized: Distribution
-    dailyPcr: Distribution
-    dailyTestsRequiredForContainment: Distribution
-    susceptible: Distribution
+    day: Series
+    distancing: Series
+    cumulativeCritical: DistributionSeries
+    cumulativeDeaths: DistributionSeries
+    cumulativeExposed: DistributionSeries
+    cumulativeHospitalized: DistributionSeries
+    cumulativePcr: DistributionSeries
+    cumulativeRecoveries: DistributionSeries
+    cumulativeReportedHospitalized: DistributionSeries
+    currentlyCritical: DistributionSeries
+    currentlyHospitalized: DistributionSeries
+    currentlyInfected: DistributionSeries
+    currentlyInfectious: DistributionSeries
+    currentlyReportedHospitalized: DistributionSeries
+    dailyPcr: DistributionSeries
+    dailyTestsRequiredForContainment: DistributionSeries
+    susceptible: DistributionSeries
   }
-  type Distribution {
+  type LocationDomain {
+    day: Domain
+    distancing: Domain
+    cumulativeCritical: DistributionDomain
+    cumulativeDeaths: DistributionDomain
+    cumulativeExposed: DistributionDomain
+    cumulativeHospitalized: DistributionDomain
+    cumulativePcr: DistributionDomain
+    cumulativeRecoveries: DistributionDomain
+    cumulativeReportedHospitalized: DistributionDomain
+    currentlyCritical: DistributionDomain
+    currentlyHospitalized: DistributionDomain
+    currentlyInfected: DistributionDomain
+    currentlyInfectious: DistributionDomain
+    currentlyReportedHospitalized: DistributionDomain
+    dailyPcr: DistributionDomain
+    dailyTestsRequiredForContainment: DistributionDomain
+    susceptible: DistributionDomain
+  }
+  type DistributionSeries {
     confirmed: Series
     expected: Series
     percentile10: Series
@@ -54,6 +74,24 @@ export const typeDefs = gql`
     percentile80: Series
     percentile90: Series
     percentile100: Series
+  }
+  type Domain {
+    max: Float!
+    min: Float!
+  }
+  type DistributionDomain {
+    confirmed: Domain
+    expected: Domain
+    percentile10: Domain
+    percentile20: Domain
+    percentile30: Domain
+    percentile40: Domain
+    percentile50: Domain
+    percentile60: Domain
+    percentile70: Domain
+    percentile80: Domain
+    percentile90: Domain
+    percentile100: Domain
   }
   type Series {
     data: [Float]
@@ -106,6 +144,10 @@ const Location = {
   async population(parent, args, {dataSources: {get}}) {
     const {population} = await get.location(parent.id);
     return population;
+  },
+  async domain(parent, args, {dataSources: {get}}) {
+    const {domain} = await get.location(parent.id);
+    return domain;
   },
 };
 

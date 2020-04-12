@@ -20,7 +20,10 @@ export const decorateLocation = (data, location) => {
   data.id = location;
   data.name = stateLabels[location] || location;
 
-  Object.values(data.scenarios).forEach((scenario) => {
+  const scenarios = Object.values(data.scenarios);
+  data.domain = {};
+
+  scenarios.forEach((scenario) => {
     const {timeSeriesData} = scenario;
 
     // Derive data from existing data.
@@ -35,35 +38,46 @@ export const decorateLocation = (data, location) => {
       });
       d.cumulativeExposed.confirmed = 0;
     });
+  });
 
-    ['day', 'distancing'].forEach((key) => {
-      scenario[key] = series(timeSeriesData.map((d) => d[key]));
+  ['day', 'distancing'].forEach((key) => {
+    scenarios.forEach((scenario) => {
+      scenario[key] = series(scenario.timeSeriesData.map((d) => d[key]));
     });
-    [
-      'cumulativeCritical',
-      'cumulativeDeaths',
-      'cumulativeExposed',
-      'cumulativeHospitalized',
-      'cumulativePcr',
-      'cumulativeRecoveries',
-      'cumulativeReportedHospitalized',
-      'currentlyCritical',
-      'currentlyHospitalized',
-      'currentlyInfected',
-      'currentlyInfectious',
-      'currentlyReportedHospitalized',
-      'dailyPcr',
-      'dailyTestsRequiredForContainment',
-      'susceptible',
-    ].forEach((distribution) => {
-      scenario[distribution] = {};
-      for (let [key, value] of Object.entries(
-        timeSeriesData[0][distribution]
-      )) {
-        scenario[distribution][key] = series(
-          timeSeriesData.map((d) => d[distribution][key])
+    const min = Math.min(...scenarios.map((s) => s[key].min));
+    const max = Math.max(...scenarios.map((s) => s[key].max));
+    data.domain[key] = {min, max};
+  });
+  [
+    'cumulativeCritical',
+    'cumulativeDeaths',
+    'cumulativeExposed',
+    'cumulativeHospitalized',
+    'cumulativePcr',
+    'cumulativeRecoveries',
+    'cumulativeReportedHospitalized',
+    'currentlyCritical',
+    'currentlyHospitalized',
+    'currentlyInfected',
+    'currentlyInfectious',
+    'currentlyReportedHospitalized',
+    'dailyPcr',
+    'dailyTestsRequiredForContainment',
+    'susceptible',
+  ].forEach((key) => {
+    const percentiles = Object.keys(scenarios[0].timeSeriesData[0][key]);
+    percentiles.forEach((percentile) => {
+      scenarios.forEach((scenario) => {
+        scenario[key] = scenario[key] ?? {};
+        scenario[key][percentile] = series(
+          scenario.timeSeriesData.map((d) => d[key][percentile])
         );
-      }
+      });
+
+      const min = Math.min(...scenarios.map((s) => s[key][percentile].min));
+      const max = Math.max(...scenarios.map((s) => s[key][percentile].max));
+      data.domain[key] = data.domain[key] ?? {};
+      data.domain[key][percentile] = {min, max};
     });
   });
 
