@@ -7,8 +7,11 @@ import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   MethodDisclaimer,
   MethodDefinition,
+  createSeries,
   useFindPoint,
-  useModelData,
+  useModelState,
+  useLocationQuery,
+  useScenarioQuery,
 } from './modeling';
 import {dayToDate, daysToMonths, today} from '../lib/date';
 import {
@@ -20,22 +23,38 @@ import {
   formatPercent2,
 } from '../lib/format';
 
-const getDistancing = ({distancing}) => distancing;
+const {useMemo} = React;
+
+const useDistancing = () => {
+  const [scenario, error] = useScenarioQuery(`{
+    distancing {
+      data
+    }
+  }`);
+
+  return [createSeries(scenario?.distancing), error];
+};
 
 export function ModelInputs({height, width, ...remaining}) {
-  const {
-    model,
-    scenarioData: {distancingDays, distancingLevel},
-    stateName,
-    summary,
-    x,
-  } = useModelData();
+  const {location} = useModelState();
+
+  const [data] = useLocationQuery(`{
+    importtime
+    r0
+  }`);
+  const importtime = data?.importtime;
+  const r0 = data?.r0;
+
+  const [distancing] = useDistancing();
+
   const findPoint = useFindPoint();
-  const [todayData] = findPoint(today);
+  const [todayIndex] = findPoint(today);
+  const todayDistancing = distancing(todayIndex);
   return (
     <div {...remaining}>
       <DistancingGraph
-        y={getDistancing}
+        r0={r0}
+        y={distancing}
         leftLabel="distancing"
         rightLabel="R₀"
         width={width}
@@ -66,9 +85,9 @@ export function ModelInputs({height, width, ...remaining}) {
       </Paragraph>
 
       <Paragraph>
-        The current distancing level, {formatPercent(1 - todayData.distancing)},
-        is calculated based on the average the past three days of available
-        mobility data for {stateName}, which is usually reported with a
+        The current distancing level, {formatPercent(1 - todayDistancing)}, is
+        calculated based on the average the past three days of available
+        mobility data for {location.name}, which is usually reported with a
         three-day delay.
       </Paragraph>
 
@@ -84,9 +103,9 @@ export function ModelInputs({height, width, ...remaining}) {
       </Paragraph>
 
       <Paragraph className="estimation">
-        We estimate that COVID-19 reached {stateName} on{' '}
-        {formatDate(dayToDate(model.importtime))} and has an uninhibited R₀ of{' '}
-        {formatNumber2(model.r0)}.
+        We estimate that COVID-19 reached {location.name} on{' '}
+        {formatDate(dayToDate(importtime))} and has an uninhibited R₀ of{' '}
+        {formatNumber2(r0)}.
       </Paragraph>
 
       {/* <MethodDisclaimer method="input" />

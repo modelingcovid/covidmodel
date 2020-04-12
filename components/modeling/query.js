@@ -56,6 +56,15 @@ const fullSeries = [
   'percentile80',
 ];
 
+export function createSeries(series) {
+  if (!series) {
+    return () => null;
+  }
+  const result = (i) => series.data[i];
+  Object.assign(result, series);
+  return result;
+}
+
 export function useDistribution(distribution, series = fullSeries) {
   const seriesQuery = series
     .map(
@@ -77,8 +86,7 @@ export function useDistribution(distribution, series = fullSeries) {
     }
     const result = {};
     for (let [key, series] of Object.entries(data)) {
-      result[key] = (_, i) => series.data[i];
-      Object.assign(result[key], series);
+      result[key] = createSeries(series);
     }
     return result;
   }, [data]);

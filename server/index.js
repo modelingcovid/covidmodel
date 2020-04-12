@@ -12,11 +12,13 @@ export const typeDefs = gql`
   type Location {
     id: String!
     name: String!
+    population: Int!
+    importtime: Float!
+    r0: Float!
     scenarios: [Scenario!]!
     scenario(id: ID!): Scenario
     parameters: [Parameter!]!
     parameter(id: ID!): Parameter
-    population: Int!
     domain: LocationDomain
   }
   type Scenario {
@@ -118,6 +120,12 @@ const Query = {
   },
 };
 
+const locationProp = (prop) =>
+  async function locationProp(parent, args, {dataSources: {get}}) {
+    const location = await get.location(parent.id);
+    return location[prop];
+  };
+
 const Location = {
   name(parent, args, context) {
     return stateLabels[parent.id] || parent.id;
@@ -145,10 +153,10 @@ const Location = {
     const {population} = await get.location(parent.id);
     return population;
   },
-  async domain(parent, args, {dataSources: {get}}) {
-    const {domain} = await get.location(parent.id);
-    return domain;
-  },
+  population: locationProp('population'),
+  domain: locationProp('domain'),
+  importtime: locationProp('importtime'),
+  r0: locationProp('r0'),
 };
 
 export const resolvers = {
