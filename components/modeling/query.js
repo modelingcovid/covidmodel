@@ -57,18 +57,19 @@ const fullSeries = [
 ];
 
 export function useDistribution(distribution, series = fullSeries) {
+  const seriesQuery = series
+    .map(
+      (s) => `${s} {
+      max
+      min
+      data
+      empty
+    }`
+    )
+    .join('\n');
   const [data, error] = useDistributionQuery(
     distribution,
-    `{ ${series
-      .map(
-        (s) => `${s} {
-          max
-          min
-          data
-          empty
-        }`
-      )
-      .join('\n')} }`
+    `{ ${seriesQuery} }`
   );
   const fns = useMemo(() => {
     if (!data) {

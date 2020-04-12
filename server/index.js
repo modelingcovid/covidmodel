@@ -109,66 +109,7 @@ const Location = {
   },
 };
 
-const series1 = (parent, args, context, {fieldName}) => {
-  const {timeSeriesData} = parent;
-  return timeSeriesData.map((d) => d[fieldName]);
-};
-
-const series2 = (parent, args, context, {path}) => {
-  const {timeSeriesData} = parent;
-  const key1 = path.prev.key;
-  const key2 = path.key;
-  return timeSeriesData.map((d) => d[key1][key2]);
-};
-
-const distribution = (parent) => parent;
-
-const Scenario = {
-  day: series1,
-  distancing: series1,
-  cumulativeCritical: distribution,
-  cumulativeDeaths: distribution,
-  cumulativeExposed: distribution,
-  cumulativeHospitalized: distribution,
-  cumulativePcr: distribution,
-  cumulativeRecoveries: distribution,
-  cumulativeReportedHospitalized: distribution,
-  currentlyCritical: distribution,
-  currentlyHospitalized: distribution,
-  currentlyInfected: distribution,
-  currentlyInfectious: distribution,
-  currentlyReportedHospitalized: distribution,
-  dailyPcr: distribution,
-  dailyTestsRequiredForContainment: distribution,
-  susceptible: distribution,
-};
-
-const Distribution = {
-  expected: series2,
-  confirmed: series2,
-  percentile10: series2,
-  percentile20: series2,
-  percentile30: series2,
-  percentile40: series2,
-  percentile50: series2,
-  percentile60: series2,
-  percentile70: series2,
-  percentile80: series2,
-  percentile90: series2,
-  percentile100: series2,
-};
-
-const Series = {
-  data: (parent) => parent,
-  empty: (parent) => parent.some((n) => !!n),
-  min: (parent) => Math.min(...parent),
-  max: (parent) => Math.max(...parent),
-};
-
 export const resolvers = {
   Query,
   Location,
-  Scenario,
-  Distribution,
-  Series,
 };

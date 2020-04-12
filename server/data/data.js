@@ -9,9 +9,12 @@ const roundData = applyDeep(
   true
 );
 
-const distribution = (d) => {
-  Object.keys();
-};
+const series = (data) => ({
+  data,
+  empty: data.every((n) => !n),
+  min: Math.min(...data),
+  max: Math.max(...data),
+});
 
 export const decorateLocation = (data, location) => {
   data.id = location;
@@ -31,6 +34,36 @@ export const decorateLocation = (data, location) => {
           d.cumulativeDeaths[key];
       });
       d.cumulativeExposed.confirmed = 0;
+    });
+
+    ['day', 'distancing'].forEach((key) => {
+      scenario[key] = series(timeSeriesData.map((d) => d[key]));
+    });
+    [
+      'cumulativeCritical',
+      'cumulativeDeaths',
+      'cumulativeExposed',
+      'cumulativeHospitalized',
+      'cumulativePcr',
+      'cumulativeRecoveries',
+      'cumulativeReportedHospitalized',
+      'currentlyCritical',
+      'currentlyHospitalized',
+      'currentlyInfected',
+      'currentlyInfectious',
+      'currentlyReportedHospitalized',
+      'dailyPcr',
+      'dailyTestsRequiredForContainment',
+      'susceptible',
+    ].forEach((distribution) => {
+      scenario[distribution] = {};
+      for (let [key, value] of Object.entries(
+        timeSeriesData[0][distribution]
+      )) {
+        scenario[distribution][key] = series(
+          timeSeriesData.map((d) => d[distribution][key])
+        );
+      }
     });
   });
 
