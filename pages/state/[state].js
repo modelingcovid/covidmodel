@@ -19,7 +19,7 @@ import {DistancingGradient} from '../../components/graph';
 import {ModelDataProvider, ModelStateProvider} from '../../components/modeling';
 import {useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
-import {getStateData, getStatesWithData} from '../../lib/data';
+import {getStatesWithData} from '../../lib/data';
 import {initialTargetDate} from '../../lib/date';
 import {theme} from '../../styles';
 
@@ -27,7 +27,7 @@ const {useCallback, useRef, useState} = React;
 
 const getCurrentlyCritical = ({currentlyCritical}) => currentlyCritical;
 
-export default function StatePage({data, states}) {
+export default function StatePage() {
   const {
     query: {state},
   } = useRouter();
@@ -37,11 +37,6 @@ export default function StatePage({data, states}) {
   const {width} = useContentRect(sizeRef, {width: 896, height: 360});
   const height = width > 600 ? 360 : 256;
 
-  if (!data) {
-    return <>Missing data for {state}</>;
-  }
-
-  const scenarioSummary = data.scenarios[scenario].summary;
   const stateName = stateLabels[state];
 
   return (
@@ -133,13 +128,8 @@ export default function StatePage({data, states}) {
 }
 
 export const getStaticProps = ({params: {state}}) => {
-  const data = getStateData(state);
-
   return {
-    props: {
-      data,
-      states: getStatesWithData(),
-    },
+    props: {},
   };
 };
 
