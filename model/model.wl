@@ -69,8 +69,8 @@ pCritical80YearOld0=0.1125;
 pHospitalized80YearOld0=0.165;
 
 statesConvergeToValue=4.48;
-convergenceMidpoint=100+30; (*30 days from now *)
-convergencePeriod=100+60; (* 90% 2 months from now *)
+convergenceMidpoint=today+30; (*30 days from now *)
+convergencePeriod=30; (* 90% of the convergence transition occurs over this window. This is NOT a date, it is a diameter around convergenceMidpoint *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
 
 (* not used in model only for output *)
@@ -287,7 +287,7 @@ generateModelComponents[distancing_] := <|
       Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * susceptibilityValues[[i]]*sSq[i][t] - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       (* Exposed *)
-      Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious0,
+      Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectious,
       (*Recovered without needing care*)
@@ -297,15 +297,15 @@ generateModelComponents[distancing_] := <|
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
       (*Cumulative Total *)
-      cumEq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}],
+      cumEq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}],
       (*Cumulative reported positive hospital cases*)
-      RepHq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pH * Eq[t] /(daysFromInfectedToInfectious + daysUntilHospitalized), (* (IHq[t]) / daysUntilHospitalized,*)
-      (*Cumulative reported ICU cases *)
-      RepHCq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * (HCq[t]) / daysTogoToCriticalCare,
+      RepHq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * IHq[t] / daysUntilHospitalized,
+      (*Cumulative reported positive ICU cases *)
+      RepHCq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * ICq[t] / daysUntilHospitalized,
       (*Cumulative hospitalized count*)
-      EHq'[t]==(IHq[t]) / daysUntilHospitalized,
-      (*Cumulative critical count*)
-      EHCq'[t]==(ICq[t]) / daysUntilHospitalized,
+      EHq'[t]==IHq[t] / daysUntilHospitalized,
+      (*Cumulative ICU count*)
+      EHCq'[t]==ICq[t] / daysUntilHospitalized,
       (*Recovered after hospitalization*)
       RHq'[t]==HHq[t]*(1-fractionOfHospitalizedNonCriticalDeceased0)/daysToLeaveHosptialNonCritical,
       (*pcr confirmation*)
