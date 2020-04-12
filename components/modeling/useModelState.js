@@ -2,8 +2,9 @@ import * as React from 'react';
 import useSWR from 'swr';
 import {createLocationQuery, createScenarioQuery, useLocations} from './query';
 import {stateLabels} from '../../lib/controls';
-import {addDays, dayToDate, today} from '../../lib/date';
+import {addDays, dayToDate, initialTargetDate, today} from '../../lib/date';
 import {flattenData} from '../../lib/transform';
+import {NearestDataProvider} from '../graph';
 import {useComponentId} from '../util';
 
 const {createContext, useContext, useMemo} = React;
@@ -64,8 +65,7 @@ export const ModelStateProvider = ({
       id: scenarioId,
       name: '',
     };
-    const x = (_, i) => dayToDate(days[i]);
-
+    const x = (i) => dayToDate(days[i]);
     return {
       days,
       id,
@@ -81,7 +81,13 @@ export const ModelStateProvider = ({
 
   return (
     <ModelStateContext.Provider value={context}>
-      {children}
+      <NearestDataProvider
+        x={context.x}
+        data={context.indices}
+        initial={initialTargetDate}
+      >
+        {children}
+      </NearestDataProvider>
     </ModelStateContext.Provider>
   );
 };

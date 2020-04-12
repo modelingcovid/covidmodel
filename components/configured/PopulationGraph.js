@@ -11,13 +11,13 @@ export const PopulationGraph = ({
   initialScale = 'log',
   ...remaining
 }) => {
-  const {days, x} = useModelState();
+  const {indices, x} = useModelState();
   const [data] = useLocationQuery(`{ population }`);
   const population = data?.population || 0;
   return (
     <Graph
       {...remaining}
-      data={days}
+      data={indices}
       domain={population}
       initialScale={initialScale}
       height={height}
