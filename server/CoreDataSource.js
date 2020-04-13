@@ -2,7 +2,7 @@ import {decorateLocation} from './data';
 import {ObjectDataSource} from './util';
 
 export class CoreDataSource extends ObjectDataSource {
-  defaultTtl = 360;
+  defaultTtl = 3600;
 
   _get(filename, options) {
     const origin = this.context.origin;
