@@ -15,17 +15,28 @@ import {
 import {WithNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
 import {
+  DistributionSeriesFullFragment,
   DistributionLegendRow,
   DistributionLine,
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
-  useDistribution,
+  createDistributionSeries,
+  useScenarioQuery,
   useModelState,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
-const {useCallback, useState} = React;
+const {useCallback, useMemo, useState} = React;
+
+const CaseProgressionScenarioFragment = [
+  ...DistributionSeriesFullFragment,
+  `fragment CaseProgressionScenario on Scenario {
+    cumulativeDeaths { ...DistributionSeriesFull }
+    cumulativeExposed { ...DistributionSeriesFull }
+    cumulativePcr { ...DistributionSeriesFull }
+  }`,
+];
 
 export function CaseProgressionCurve({height, width}) {
   const {location, x} = useModelState();
@@ -37,9 +48,18 @@ export function CaseProgressionCurve({height, width}) {
   // Can we get these from the model?
   const fatalityWeight = 3;
 
-  const [cumulativeDeaths] = useDistribution('cumulativeDeaths');
-  const [cumulativeExposed] = useDistribution('cumulativeExposed');
-  const [cumulativePcr] = useDistribution('cumulativePcr');
+  const [scenario] = useScenarioQuery(
+    `{ ...CaseProgressionScenario }`,
+    CaseProgressionScenarioFragment
+  );
+
+  const [cumulativeDeaths, cumulativeExposed, cumulativePcr] = useMemo(() => {
+    return [
+      createDistributionSeries(scenario?.cumulativeDeaths),
+      createDistributionSeries(scenario?.cumulativeExposed),
+      createDistributionSeries(scenario?.cumulativePcr),
+    ];
+  }, [scenario]);
 
   return (
     <div className="margin-top-5">

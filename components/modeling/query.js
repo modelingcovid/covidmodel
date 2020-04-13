@@ -19,16 +19,19 @@ export function useLocations(query = '') {
   return [data?.locations || [], error];
 }
 
-export function useLocationQuery(query) {
+export function useLocationQuery(query, fragments = []) {
   const {location} = useModelState();
-  const {data, error} = useSWR(createLocationQuery(location.id, query));
+  const {data, error} = useSWR(
+    [...fragments, createLocationQuery(location.id, query)].join('\n')
+  );
   return [data?.location, error];
 }
 
-export function useScenarioQuery(query) {
+export function useScenarioQuery(query, fragments = []) {
   const {scenario} = useModelState();
   const [data, error] = useLocationQuery(
-    createScenarioQuery(scenario.id, query)
+    createScenarioQuery(scenario.id, query),
+    fragments
   );
   return [data?.scenario, error];
 }
@@ -38,7 +41,7 @@ export function useDistributionQuery(distribution, query) {
   return [(data && data[distribution]) || null, error];
 }
 
-const compactSeries = [
+export const compactDistributionProps = [
   'expected',
   'confirmed',
   'percentile10',
@@ -46,8 +49,8 @@ const compactSeries = [
   'percentile90',
 ];
 
-const fullSeries = [
-  ...compactSeries,
+export const fullDistributionProps = [
+  ...compactDistributionProps,
   'percentile20',
   'percentile30',
   'percentile40',
@@ -65,7 +68,47 @@ export function createSeries(series) {
   return result;
 }
 
-export function useDistribution(distribution, series = fullSeries) {
+export function createDistributionSeries(distribution) {
+  const result = {};
+  fullDistributionProps.forEach((propName) => {
+    result[propName] = createSeries(distribution && distribution[propName]);
+  });
+  return result;
+}
+
+export const SeriesFullFragment = [
+  `fragment SeriesFull on Series {
+    data
+    empty
+    max
+    min
+  }`,
+];
+
+export function mapBlock(propNames, block) {
+  return propNames
+    .map(
+      (propName) => `${propName} {
+        ${block}
+      }`
+    )
+    .join('\n');
+}
+
+export const DistributionSeriesFullFragment = [
+  ...SeriesFullFragment,
+  `fragment DistributionSeriesFull on DistributionSeries {
+    ${mapBlock(fullDistributionProps, '...SeriesFull')}
+  }`,
+];
+
+export const PopulationFragment = [
+  `fragment Population on Location {
+    population
+  }`,
+];
+
+export function useDistribution(distribution, series = fullDistributionProps) {
   const seriesQuery = series
     .map(
       (s) => `${s} {
