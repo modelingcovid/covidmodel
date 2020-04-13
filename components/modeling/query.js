@@ -36,11 +36,6 @@ export function useScenarioQuery(query, fragments = []) {
   return [data?.scenario, error];
 }
 
-export function useDistributionQuery(distribution, query) {
-  const [data, error] = useScenarioQuery(`{ ${distribution} ${query} }`);
-  return [(data && data[distribution]) || null, error];
-}
-
 export const compactDistributionProps = [
   'expected',
   'confirmed',
@@ -107,34 +102,6 @@ export const PopulationFragment = [
     population
   }`,
 ];
-
-export function useDistribution(distribution, series = fullDistributionProps) {
-  const seriesQuery = series
-    .map(
-      (s) => `${s} {
-      max
-      min
-      data
-      empty
-    }`
-    )
-    .join('\n');
-  const [data, error] = useDistributionQuery(
-    distribution,
-    `{ ${seriesQuery} }`
-  );
-  const fns = useMemo(() => {
-    if (!data) {
-      return;
-    }
-    const result = {};
-    for (let [key, series] of Object.entries(data)) {
-      result[key] = createSeries(series);
-    }
-    return result;
-  }, [data]);
-  return [fns, error];
-}
 
 export function usePopulation() {
   const [data, error] = useLocationQuery(`{ population }`);

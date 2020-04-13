@@ -15,15 +15,15 @@ import {
 import {WithNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
 import {
-  DistributionSeriesFullFragment,
   DistributionLegendRow,
   DistributionLine,
+  DistributionSeriesFullFragment,
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
   createDistributionSeries,
-  useScenarioQuery,
   useModelState,
+  useScenarioQuery,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
