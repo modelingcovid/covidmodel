@@ -124,7 +124,7 @@ fitStartingOverrides=<|
   "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->75,"replower"->0.6,"repupper"->1.4|>,
   "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6|>,
   "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->49,"tupper"->75,"replower"->0.1,"repupper"->0.6|>,
-  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.8|>,
+  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->30,"tupper"->35,"replower"->0.25,"repupper"->0.5|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1.5|>,
   "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->1|>,
