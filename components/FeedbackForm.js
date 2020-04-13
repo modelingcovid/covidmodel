@@ -4,7 +4,8 @@ import {theme} from '../styles';
 
 const {useState} = React;
 
-const googleScriptURL = "https://script.google.com/macros/s/AKfycby5j8Vkhn6fuOgta11uHXDm_4ysCOA3i1JqcR_Wd592mJl-8wvJ/exec";
+const googleScriptURL =
+  'https://script.google.com/macros/s/AKfycby5j8Vkhn6fuOgta11uHXDm_4ysCOA3i1JqcR_Wd592mJl-8wvJ/exec';
 
 const styles = css`
   .form {
@@ -45,18 +46,32 @@ const styles = css`
 export function FeedbackForm() {
   const [isOpen, setOpen] = useState(false);
 
-    return !isOpen ? <button onClick={_ => setOpen(true)}>Leave us feedback</button> : <form className="form" method="post" action={googleScriptURL}>
+  return !isOpen ? (
+    <button onClick={(_) => setOpen(true)}>Leave us feedback</button>
+  ) : (
+    <form className="form" method="post" action={googleScriptURL}>
       <style jsx>{styles}</style>
       <h3>Leave us feedback</h3>
       <label for="email">Email</label>
-      <input type="email" className="input" name="email" placeholder="Optional" />
+      <input
+        type="email"
+        className="input"
+        name="email"
+        placeholder="Optional"
+      />
       <label for="feedback_text">How could this site improve?</label>
       <textarea className="input" name="feedback_text" />
-      { (typeof window !== 'undefined') ? <input type="hidden" name="url" value={window.location.pathname} /> : null}
+      {typeof window !== 'undefined' ? (
+        <input type="hidden" name="url" value={window.location.pathname} />
+      ) : null}
       <div className="right">
-        <button className="close" onClick={_ => setOpen(false)}>Cancel</button>
-        <button className="button" type="submit">Send</button>
+        <button className="close" onClick={(_) => setOpen(false)}>
+          Cancel
+        </button>
+        <button className="button" type="submit">
+          Send
+        </button>
       </div>
     </form>
-  ;
+  );
 }
