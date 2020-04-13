@@ -14,13 +14,15 @@ import {Area, Graph, Line, WithGraphData, WithNearestData} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
   DistributionLegendRow,
+  DistributionSeriesFullFragment,
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
   PercentileLine,
-  useDistribution,
+  createDistributionSeries,
   useModelState,
   usePopulation,
+  useScenarioQuery,
 } from './modeling';
 import {getLastDate} from '../lib/date';
 import {
@@ -33,83 +35,87 @@ import {stackAccessors} from '../lib/stack';
 
 const {useMemo} = React;
 
+const SEIRScenarioFragment = [
+  ...DistributionSeriesFullFragment,
+  `fragment SEIRScenario on Scenario {
+    cumulativeDeaths { ...DistributionSeriesFull }
+    cumulativeRecoveries { ...DistributionSeriesFull }
+    currentlyInfected { ...DistributionSeriesFull }
+    currentlyInfectious { ...DistributionSeriesFull }
+    susceptible { ...DistributionSeriesFull }
+  }`,
+];
+
 export function SEIR({height, width}) {
   const {location, indices, x} = useModelState();
 
-  const [susceptible] = useDistribution('susceptible');
-  const [currentlyInfected] = useDistribution('currentlyInfected');
-  const [currentlyInfectious] = useDistribution('currentlyInfectious');
-  const [cumulativeDeaths] = useDistribution('cumulativeDeaths');
-  const [cumulativeRecoveries] = useDistribution('cumulativeRecoveries');
-
   const [population = 9000000] = usePopulation();
 
-  const [config, byLabel, accessors] = useMemo(() => {
-    const config = [
-      {
-        y: susceptible,
+  const [scenario] = useScenarioQuery(
+    `{ ...SEIRScenario }`,
+    SEIRScenarioFragment
+  );
+
+  const [config, configValues, label] = useMemo(() => {
+    const config = {
+      susceptible: {
+        y: createDistributionSeries(scenario?.susceptible),
         label: 'Susceptible',
         description: 'People who have not yet contracted COVID-19',
         fill: theme.color.magenta[1],
         color: theme.color.magenta[1],
       },
-      {
-        y: cumulativeRecoveries,
+      recovered: {
+        y: createDistributionSeries(scenario?.cumulativeRecoveries),
         label: 'Recovered',
         description: 'People who have recovered from COVID-19',
         fill: theme.color.gray[3],
         color: theme.color.gray[5],
       },
-      {
-        y: currentlyInfected,
+      exposed: {
+        y: createDistributionSeries(scenario?.currentlyInfected),
         label: 'Exposed',
         description:
           'People who have been infected with COVID-19 but cannot yet infect others',
         fill: theme.color.yellow[2],
         color: theme.color.yellow.text,
       },
-      {
-        y: currentlyInfectious,
+      infectious: {
+        y: createDistributionSeries(scenario?.currentlyInfectious),
         label: 'Infectious',
         description: 'People who have COVID-19 and can infect others',
         fill: theme.color.blue[2],
         color: theme.color.blue.text,
       },
-      {
-        y: cumulativeDeaths,
+      deceased: {
+        y: createDistributionSeries(scenario?.cumulativeDeaths),
         label: 'Deceased',
         description: 'People who have died from COVID-19',
         fill: theme.color.red[1],
         color: theme.color.red.text,
       },
-    ];
+    };
 
-    const byLabel = config.reduce((o, {label, fill, color}) => {
+    const configValues = Object.values(config);
+    const label = configValues.reduce((o, {label, fill, color}) => {
       o[label.toLowerCase()] = {fill, color};
       return o;
     }, {});
 
     const accessors = stackAccessors(
-      config.map(({y}) => y?.expected ?? (() => 0))
+      configValues.map(({y}) => y?.expected ?? (() => 0))
     );
-    config.forEach((c, i) => (c.area = accessors[i]));
-    // const midAccessor = accessors[2][1];
+    configValues.forEach((c, i) => (c.area = accessors[i]));
+    return [config, configValues, label];
+  }, [scenario]);
 
-    return [config, byLabel, accessors];
-  }, [
-    susceptible,
-    currentlyInfected,
-    currentlyInfectious,
-    cumulativeDeaths,
-    cumulativeRecoveries,
+  const midAccessor = config.exposed.area[1];
+  const midDomain = useMemo(() => Math.max(...indices.map(midAccessor)), [
+    indices,
+    midAccessor,
   ]);
 
-  const midDomain =
-    currentlyInfected && currentlyInfectious && cumulativeDeaths
-      ? currentlyInfected?.expected?.max +
-        currentlyInfectious?.expected?.max +
-        cumulativeDeaths?.expected?.max
-      : 1000000;
+  const expectedSusceptible = config.susceptible.y?.expected;
 
   return (
     <div className="margin-top-5">
@@ -122,32 +128,32 @@ export function SEIR({height, width}) {
       </Paragraph>
       <UnorderedList className="list-style-none">
         <li>
-          <InlineLabel list {...byLabel.susceptible}>
+          <InlineLabel list {...label.susceptible}>
             Susceptible people
           </InlineLabel>{' '}
           are healthy and at risk for contracting COVID-19.
         </li>
         <li>
-          <InlineLabel list {...byLabel.exposed}>
+          <InlineLabel list {...label.exposed}>
             Exposed people
           </InlineLabel>{' '}
           have COVID-19 and are in the incubation period; they cannot infect
           others.
         </li>
         <li>
-          <InlineLabel list {...byLabel.infectious}>
+          <InlineLabel list {...label.infectious}>
             Infectious people
           </InlineLabel>{' '}
           have COVID-19 and can infect others.
         </li>
         <li>
-          <InlineLabel list {...byLabel.recovered}>
+          <InlineLabel list {...label.recovered}>
             Recovered people
           </InlineLabel>{' '}
           have had COVID-19 and are immune to re-infection.
         </li>
         <li>
-          <InlineLabel list {...byLabel.deceased}>
+          <InlineLabel list {...label.deceased}>
             Deceased people
           </InlineLabel>{' '}
           have passed away due to COVID-19.
@@ -175,7 +181,7 @@ export function SEIR({height, width}) {
             scrubber={false}
             decoration={false}
           >
-            {config.map(({area: [y0, y1], fill}, i) => (
+            {configValues.map(({area: [y0, y1], fill}, i) => (
               <Area
                 key={`area-${i}`}
                 y0={y0}
@@ -184,7 +190,7 @@ export function SEIR({height, width}) {
                 opacity="0.15"
               />
             ))}
-            {config.map(({area: [y0, y1], fill}, i) => (
+            {configValues.map(({area: [y0, y1], fill}, i) => (
               <Line key={`line-${i}`} y={y1} stroke={fill} />
             ))}
             <WithGraphData>
@@ -216,7 +222,7 @@ export function SEIR({height, width}) {
           xLabel="people"
           after={
             <Gutter>
-              {config.map(({y, fill, label, description}, i) => (
+              {configValues.map(({y, fill, label, description}, i) => (
                 <DistributionLegendRow
                   key={i}
                   y={y}
@@ -228,7 +234,7 @@ export function SEIR({height, width}) {
             </Gutter>
           }
         >
-          {config.map(({area: [y0, y1], fill}, i) => (
+          {configValues.map(({area: [y0, y1], fill}, i) => (
             <Area
               key={`area-${i}`}
               y0={y0}
@@ -237,7 +243,7 @@ export function SEIR({height, width}) {
               opacity="0.15"
             />
           ))}
-          {config.map(({area: [y0, y1], fill}, i) => (
+          {configValues.map(({area: [y0, y1], fill}, i) => (
             <Line key={`line-${i}`} y={y1} stroke={fill} />
           ))}
         </Graph>
@@ -253,9 +259,9 @@ export function SEIR({height, width}) {
             <Estimation>
               The model estimates that{' '}
               <strong>
-                {susceptible?.expected &&
+                {expectedSusceptible &&
                   formatPercent1(
-                    (population - susceptible?.expected(d)) / population
+                    (population - expectedSusceptible(d)) / population
                   )}
               </strong>{' '}
               of the {location.name} population will have contracted COVID-19 by{' '}
