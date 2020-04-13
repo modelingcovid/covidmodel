@@ -94,48 +94,33 @@ susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibili
 
 
 
-(* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
-(* maintain takes the last day of data from the historicals and uses that as the distancing level *)
-(* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
-scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Current"|>;
-scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy"|>;
-scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan"|>;
-scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal"|>;
-scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite"|>;
-(*scenario6=<|"id"->"scenario6","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
-
-scenarios={scenario5,scenario1,scenario2,scenario3,scenario4};
-
-(* helper to get the scenario for a given id *)
-scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
-
 (* to help the numerical optimizer we give slightly different problem bounds depening on state
 based on eg their epidemics starting earlier or having different hospital systems and thus a different
 gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.8|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.8|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.7|>,
-  "FL"-><|"rlower"->2.5,"rupper"->4.2,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1|>,
-  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1.7|>,
-  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.65|>,
-  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.6|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->75,"replower"->0.6,"repupper"->1.4|>,
+  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.9,"repupper"->1.2|>,
+  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1|>,
+  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.6|>,
+  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.8|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.5,"repupper"->0.75|>,
   "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6|>,
-  "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->49,"tupper"->75,"replower"->0.1,"repupper"->0.6|>,
+  "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.1,"repupper"->0.5|>,
   "NY"-><|"rlower"->4,"rupper"->5,"tlower"->30,"tupper"->35,"replower"->0.25,"repupper"->0.5|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1.5|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1|>,
   "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->1|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.45|>,
   "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.9|>,
   "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.8|>,
-  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.2|>,
-  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1|>,
+  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1|>,
+  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->1|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.6|>,
-  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->1|>,
+  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->1|>,
   "IL"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.5|>,
-  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.1,"repupper"->0.4|>,
+  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.25,"repupper"->0.45|>,
   "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
   "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.8|>,
   "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.2|>,
@@ -146,7 +131,7 @@ fitStartingOverrides=<|
 getBounds[state_]:=Module[{},
   If[MemberQ[Keys[fitStartingOverrides],state],
     {fitStartingOverrides[state]["rlower"],fitStartingOverrides[state]["rupper"],fitStartingOverrides[state]["tlower"],fitStartingOverrides[state]["tupper"],fitStartingOverrides[state]["replower"],fitStartingOverrides[state]["repupper"]},
-    {2.5,3.8,40,60,4,6}]
+    {2.5,5,35,75,0.1,2}]
 ];
 
 (* define some helper distributions and set up all the parameters that need to be simulated *)
@@ -663,7 +648,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["icuCurrentData"],(#["day"]==t)&][[1]]["icu"],
                   0
               ]|>,
-              <|"expected"-> (*stateParams["params"]["pPCRH"]*population**)sol[CCq][t - daysForHospitalsToReportCases0]|>,
+              <|"expected"-> (*stateParams["params"]["pPCRH"]**)population*sol[CCq][t - daysForHospitalsToReportCases0]|>,
               percentileMap[CurrentlyCriticalQuantiles[t]]
             },First],
           "susceptible" -> Merge[{
@@ -710,8 +695,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
       scenario,
-      Association[{
-          "timeSeriesData"->timeSeriesData,
+      Association[{(*
+          "timeSeriesData"->timeSeriesData,*)
           "events"->events,
           "summary"->summary,
           "summaryAug1"->summaryAug1
@@ -1007,7 +992,7 @@ exportAllStatesSummaryAug1[allStates_]:=Module[{header, rows, table},
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
 when running the web server *)
-GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[stateDistancingPrecompute]] := Module[{},
+GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
     Export["public/json/"<>state<>".json",stateData];
