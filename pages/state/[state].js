@@ -12,6 +12,7 @@ import {
   ParameterTable,
   ProjectedDeaths,
   SEIR,
+  FeedbackForm,
 } from '../../components';
 import {Controls} from '../../components/configured';
 import {Section, Title} from '../../components/content';
@@ -137,6 +138,7 @@ export default function StatePage({data, states}) {
           </div>
         </NearestDataProvider>
       </ModelDataProvider>
+      <FeedbackForm />
     </Layout>
   );
 }
