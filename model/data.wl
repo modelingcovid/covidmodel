@@ -10,6 +10,22 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 tmax0 = 365 * 2;
 tmin0 = 1;
 
+(* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
+(* maintain takes the last day of data from the historicals and uses that as the distancing level *)
+(* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
+scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Current"|>;
+scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy"|>;
+scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan"|>;
+scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal"|>;
+scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite"|>;
+(*scenario6=<|"id"->"scenario6","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
+
+scenarios={scenario5,scenario1,scenario2,scenario3,scenario4};
+
+(* helper to get the scenario for a given id *)
+scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
+
+
 (* get data for age distribution and cache it in a json file *)
 queryAlphaForDistribution[place_] :=
 Which[
@@ -206,12 +222,11 @@ stateDistancingPrecompute = Module[{
     SlowJoin,
     ApplyWhere
   },
-
-  (*rawCsvTable = Transpose[Import[dataFile["state-distancing.csv"]]];*)
-  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/export?format=csv&gid=1922212346","CSV"]];
+  
+  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = 1-rawCsvTable[[2;;,2;;]]/100;
+  stateDistancings = 1-rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
 
@@ -244,11 +259,11 @@ stateDistancingPrecompute = Module[{
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
       (* pre-policy distancing - constant at 1 *)
-      ConstantArray[1., Min[dataDays]],
+      ConstantArray[1., IntegerPart[Min[dataDays]]],
       (* historical distancing data *)
       distancing,
       (* for any gap between the last day of data and today, fill in with the average of the last three days of data *)
-      ConstantArray[Mean[distancing[[-3;;]]], today - Max[dataDays]],
+      ConstantArray[Mean[distancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
       (* moving average going forward in the scenario *)
       ConstantArray[distancingLevel, scenario["distancingDays"]],
       (* post-policy distancing - constant at 1 *)
@@ -261,9 +276,9 @@ stateDistancingPrecompute = Module[{
       GaussianFilter[#,smoothing]&];
 
     smoothedFullDistancing = SlowJoin[{
-        ConstantArray[1., Min[dataDays]],
+        ConstantArray[1., IntegerPart[Min[dataDays]]],
         smoothedDistancing,
-        ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - Max[dataDays]],
+        ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
         ConstantArray[distancingLevel, scenario["distancingDays"]],
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
     }];
