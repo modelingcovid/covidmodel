@@ -116,31 +116,31 @@ gap between PCR and death *)
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
   "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.8|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.6,"repupper"->1.1|>,
-  "FL"-><|"rlower"->2.5,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->2|>,
-  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->1.2,"repupper"->1.7|>,
-  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.85|>,
-  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->1.4,"repupper"->1.7|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1.4|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.7|>,
+  "FL"-><|"rlower"->2.5,"rupper"->4.2,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1|>,
+  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1.7|>,
+  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.65|>,
+  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.6|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->75,"replower"->0.6,"repupper"->1.4|>,
   "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6|>,
-  "OH"-><|"rlower"->3.5,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.1,"repupper"->0.8|>,
-  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.5|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1.5|>,
-  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.8|>,
+  "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->49,"tupper"->75,"replower"->0.1,"repupper"->0.6|>,
+  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.8|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1.5|>,
+  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->1|>,
   "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.9|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->2|>,
-  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->1.1,"repupper"->1.75|>,
-  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->1.4|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.95|>,
-  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->1.8|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->1|>,
-  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.8|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.8|>,
+  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.2|>,
+  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.6|>,
+  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->1|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.5|>,
+  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.1,"repupper"->0.4|>,
   "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.7|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->1.2|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.8|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.2|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->72,"replower"->0.5,"repupper"->1.1|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->1.3|>
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -706,8 +706,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
  ];
  
- Echo[summary];
-
  
  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
