@@ -30,7 +30,7 @@ daysFromCriticalToRecoveredOrDeceased0 = 10;
 
 (* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
 pPCRH0 = 0.8;
-pPCRNH0 = 0.05;
+pPCRNH0 = 0.13;
 
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1.5;
@@ -41,7 +41,7 @@ daysToGetTested0 = 7.5;
 icuOverloadDeathPenalty0 = 1;
 
 (* virus start parameters *)
-initialInfectionImpulse0 = 9;
+initialInfectionPeople0 = 10;
 
 (*Duration of pulse in force of infection for establishment, days*)
 importlength0 = 3;
@@ -68,9 +68,9 @@ pCritical80YearOld0=0.1125;
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
 pHospitalized80YearOld0=0.165;
 
-statesConvergeToValue=4.48;
+statesConvergeToValue=1.8;
 convergenceMidpoint=100+30; (*30 days from now *)
-convergencePeriod=100+60; (* 90% 2 months from now *)
+convergencePeriod=60; (* 90% 2 months from now *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
 
 (* not used in model only for output *)
@@ -115,32 +115,32 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->55,"tupper"->75,"replower"->0.4,"repupper"->0.8|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->55,"tupper"->75,"replower"->1,"repupper"->1.6|>,
-  "FL"-><|"rlower"->2.5,"rupper"->4.2,"tlower"->55,"tupper"->75,"replower"->0.5,"repupper"->2|>,
-  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->1.2,"repupper"->1.7|>,
-  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->55,"tupper"->75,"replower"->0.6,"repupper"->0.85|>,
-  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->55,"tupper"->75,"replower"->1.4,"repupper"->1.7|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.4|>,
-  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->0.3,"repupper"->0.6|>,
-  "OH"-><|"rlower"->3.5,"rupper"->4,"tlower"->55,"tupper"->75,"replower"->0.1,"repupper"->1.2|>,
-  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->0.5,"repupper"->1.5|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->55,"tupper"->75,"replower"->0.8,"repupper"->1.5|>,
-  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->55,"tupper"->75,"replower"->0.3,"repupper"->0.8|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->55,"tupper"->75,"replower"->0.3,"repupper"->1|>,
-  "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->0.3,"repupper"->0.9|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->1,"repupper"->2|>,
-  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->1.1,"repupper"->1.75|>,
-  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->55,"tupper"->75,"replower"->1,"repupper"->1.4|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->55,"tupper"->75,"replower"->0.3,"repupper"->0.95|>,
-  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->65,"tupper"->75,"replower"->0.7,"repupper"->1.8|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->0.3,"repupper"->1|>,
-  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->55,"tupper"->75,"replower"->0.2,"repupper"->0.8|>,
-  "OK"-><|"rlower"->3,"rupper"->4,"tlower"->55,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->55,"tupper"->75,"replower"->0.5,"repupper"->1.7|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->55,"tupper"->75,"replower"->1,"repupper"->1.2|>,
-  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->55,"tupper"->72,"replower"->0.5,"repupper"->1.1|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->55,"tupper"->75,"replower"->1,"repupper"->1.3|>
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.8|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.6,"repupper"->1.1|>,
+  "FL"-><|"rlower"->2.5,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->2|>,
+  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->1.2,"repupper"->1.7|>,
+  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.85|>,
+  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->1.4,"repupper"->1.7|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1.4|>,
+  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6|>,
+  "OH"-><|"rlower"->3.5,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.1,"repupper"->0.8|>,
+  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.5|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1.5|>,
+  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.8|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->1|>,
+  "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.9|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->2|>,
+  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->1.1,"repupper"->1.75|>,
+  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->1.4|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.95|>,
+  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->1.8|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->1|>,
+  "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.8|>,
+  "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.7|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->1.2|>,
+  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->72,"replower"->0.5,"repupper"->1.1|>,
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->1,"repupper"->1.3|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -169,7 +169,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,fractionOfCriticalDeceased0*0.02]],
     RandomVariate[PosNormal[fitParams["importtime"],0.05*fitParams["importtime"]]],
     RandomVariate[PosNormal[importlength0,importlength0*0.05]],
-    RandomVariate[PosNormal[initialInfectionImpulse0,initialInfectionImpulse0*0.05]],
+    RandomVariate[PosNormal[stateParams["params"]["initialInfectionImpulse"],stateParams["params"]["initialInfectionImpulse"]*0.05]],
     cutoff,
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
@@ -242,7 +242,8 @@ stateParams[state_]:=Module[{raw,pop,dist,buckets},
     "pC"->Sum[infectedCritical[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pPCRNH"->pPCRNH0State[state],
     "pPCRH"->pPCRH0State[state],
-    "fractionOfCriticalDeceased"->criticalDeceasedState[state]
+    "fractionOfCriticalDeceased"->criticalDeceasedState[state],
+    "initialInfectionImpulse"->-Log[initialInfectionPeople0/(importlength0*pop)]//N
   |>
 ];
 
@@ -287,7 +288,7 @@ generateModelComponents[distancing_] := <|
       Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * susceptibilityValues[[i]]*sSq[i][t] - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       (* Exposed *)
-      Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious0,
+      Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
       (*Infectious total, not yet PCR confirmed,age indep*)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious-ISq[t]/daysUntilNotInfectious,
       (*Recovered without needing care*)
@@ -297,11 +298,11 @@ generateModelComponents[distancing_] := <|
       (*Going to hospital*)
       HHq'[t]==IHq[t]/daysUntilHospitalized-HHq[t]/daysToLeaveHosptialNonCritical,
       (*Cumulative Total *)
-      cumEq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}],
+      cumEq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}],
       (*Cumulative reported positive hospital cases*)
-      RepHq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pH * Eq[t] /(daysFromInfectedToInfectious + daysUntilHospitalized), (* (IHq[t]) / daysUntilHospitalized,*)
+      RepHq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * IHq[t]/daysUntilHospitalized,
       (*Cumulative reported ICU cases *)
-      RepHCq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * (HCq[t]) / daysTogoToCriticalCare,
+      RepHCq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * ICq[t] / daysUntilHospitalized,
       (*Cumulative hospitalized count*)
       EHq'[t]==(IHq[t]) / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -331,7 +332,7 @@ generateModelComponents[distancing_] := <|
     WhenEvent[t>importtime+importlength,est[t]->0]},
 
   "parametricFitEvents" -> {
-    WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse0]],
+    WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength0,est[t]->0]
   },
 
@@ -382,7 +383,7 @@ generateModelComponents[distancing_] := <|
       daysFromCriticalToRecoveredOrDeceased -> daysFromCriticalToRecoveredOrDeceased0,
       fractionOfCriticalDeceased -> fractionOfCriticalDeceased0,
       importlength -> importlength0,
-      initialInfectionImpulse -> initialInfectionImpulse0,
+      initialInfectionImpulse -> stateParams[state]["initialInfectionImpulse"],
       tmax -> tmax0,
       pS -> stateParams[state]["pS"],
       pH -> stateParams[state]["pH"],
@@ -528,7 +529,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     stateParams["params"]["fractionOfCriticalDeceased"],
     fitParams["importtime"],
     importlength0,
-    initialInfectionImpulse0,
+    stateParams["params"]["initialInfectionImpulse"],
     tmax0,
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
@@ -572,8 +573,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CumulativeRecoveredQuantiles[t_] := simDeciles[#[Rq][t]&] * population;
   RecoveredHospitalizedQuantiles[t_] := simDeciles[#[RHq][t]&] * population;
   RecoveredCriticalQuantiles[t_] := simDeciles[#[RCq][t]&] * population;
-  CurrentlyHospitalizedQuantiles[t_] := simDeciles[#[HHq][t]&] * population;
-  CurrentlyCriticalQuantiles[t_] := simDeciles[#[CCq][t]&] * population;
+  CurrentlyHospitalizedQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[HHq][t]&] * population;
+  CurrentlyCriticalQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[CCq][t]&] * population;
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
@@ -623,7 +624,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["hospitalizationCurrentData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0
               ]|>,
-              <|"expected"-> population*sol[HHq][t - daysForHospitalsToReportCases0]|>,
+              <|"expected"-> (*stateParams["params"]["pPCRH"]**)population*sol[HHq][t - daysForHospitalsToReportCases0]|>,
               percentileMap[CurrentlyHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             },First],
           "currentlyHospitalized" -> Merge[{
@@ -662,7 +663,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["icuCurrentData"],(#["day"]==t)&][[1]]["icu"],
                   0
               ]|>,
-              <|"expected"-> population*sol[CCq][t - daysForHospitalsToReportCases0]|>,
+              <|"expected"-> (*stateParams["params"]["pPCRH"]*population**)sol[CCq][t - daysForHospitalsToReportCases0]|>,
               percentileMap[CurrentlyCriticalQuantiles[t]]
             },First],
           "susceptible" -> Merge[{
@@ -704,6 +705,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       If[hasContainment,containmentTime,endOfEval],
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
  ];
+ 
+ Echo[summary];
 
  
  Merge[{
@@ -781,7 +784,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 
   logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
   equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
-  eventsODE = modelComponents["parametricFitEvents"]/.logTransform;
+  eventsODE = modelComponents["parametricFitEvents"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   initialConditions = modelComponents["initialConditions"];
   dependentVariablesODE = modelComponents["dependentVariables"];
   parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
@@ -867,7 +870,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     "fractionOfCriticalDeceased"-><|"value"-> params["fractionOfCriticalDeceased"], "name"-> "Fraction of ICU admissions deceased.", "description"-> "An age adjusted fraction of the ICU admissions that will be deceased.", "type"->"literature"|>,
     "importtime"-><|"value"-> fitParams["importtime"], "name"-> "Import Time", "description"-> "The day that COVID-19 was seeded into that state.", "type"->"fit"|>,
     "importlength"-><|"value"-> importlength0, "name"-> "Import duration", "description"-> "Duration of the covid seeding event -- together with the initial infection impulse gets the model kicked off starting at the import time.", "type"->"assumed"|>,
-    "initialInfectionImpulse"-><|"value"-> initialInfectionImpulse0, "name"-> "Size of initial infection impulse", "description"-> "Size of the initial infection impulse. The model is not very sensitive to the exact value, but it is needed in order to start the virus spreading.", "type"->"assumed"|>,
+    "initialInfectionImpulse"-><|"value"-> params["initialInfectionImpulse"], "name"-> "Size of initial infection impulse", "description"-> "Size of the initial infection impulse. The model is not very sensitive to the exact value, but it is needed in order to start the virus spreading.", "type"->"assumed"|>,
     "pS"-><|"value"-> params["pS"], "name"-> "Probability of getting a mild case.", "description"-> "An age-adjusted probability that you get a mild case.", "type"->"literature"|>,
     "pH"-><|"value"-> params["pH"], "name"-> "Probability of getting a case bad enough to require hospitalization.", "description"-> "An age-adjusted probability that you get a case requiring hospitalization.", "type"->"literature"|>,
     "pC"-><|"value"-> params["pC"], "name"-> "Probability of getting a case bad enough to require ICU admission", "description"-> "An age-adjusted probability get a severe case requiring ICU admission.", "type"->"literature"|>,
