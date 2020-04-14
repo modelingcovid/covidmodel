@@ -20,7 +20,11 @@ const apolloServer = new ApolloServer({
   dataSources: () => ({
     get: new CoreDataSource(),
   }),
-  cacheControl: {defaultMaxAge: 60 * 60},
+  cacheControl: {
+    // One year, the longest zeit.co supports:
+    // https://zeit.co/docs/v2/network/caching#limits
+    defaultMaxAge: 60 * 60 * 24 * 365,
+  },
 });
 
 export const config = {
