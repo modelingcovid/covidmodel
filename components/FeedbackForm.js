@@ -19,10 +19,13 @@ const styles = css`
   }
 
   .input {
-    margin-bottom: ${theme.spacing[1]};
+    margin-bottom: ${theme.spacing[0]};
     margin-top: ${theme.spacing[0]};
     padding: ${theme.spacing[0]};
     border: 1px solid var(--color-gray1);
+  }
+  .feedback-text {
+    min-height: 100px;
   }
 
   .button {
@@ -31,6 +34,9 @@ const styles = css`
   }
   .right {
     text-align: end;
+  }
+  .button-row {
+    margin-top: ${theme.spacing[0]};
   }
 
   .close {
@@ -54,6 +60,10 @@ const styles = css`
   button.subtle {
     color: var(--color-gray2);
   }
+  .title {
+    margin-top: ${theme.spacing[0]};
+    margin-bottom: ${theme.spacing[0]};
+  }
 `;
 
 const bottomRightStyles = css``;
@@ -70,20 +80,18 @@ export function FeedbackForm() {
         </button>
       ) : (
         <form className="form" method="post" action={googleScriptURL}>
-          <h3>Leave us feedback</h3>
-          <label for="email">Email</label>
+          <h3 className="title">Leave us feedback</h3>
           <input
             type="email"
             className="input"
             name="email"
-            placeholder="Optional"
+            placeholder="Email (Optional)"
           />
-          <label for="feedback_text">How could this site improve?</label>
-          <textarea className="input" name="feedback_text" />
+          <textarea className="input feedback-text" name="feedback_text" placeholder="How could we improve this site?" />
           {typeof window !== 'undefined' ? (
             <input type="hidden" name="url" value={window.location.pathname} />
           ) : null}
-          <div className="right">
+          <div className="button-row right">
             <button className="close" onClick={(_) => setOpen(false)}>
               Cancel
             </button>
