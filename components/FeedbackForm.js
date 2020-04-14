@@ -26,7 +26,8 @@ const styles = css`
   }
 
   .button {
-    border: none;
+    padding: 10px;
+    border: 1px solid;
   }
   .right {
     text-align: end;
@@ -40,6 +41,15 @@ const styles = css`
   .headers {
     display: flex;
     justify-content: space-between;
+  }
+`;
+
+const bottomRightStyles = css`
+  .bottom-right {
+    padding-top: 50px;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
   }
 `;
 
