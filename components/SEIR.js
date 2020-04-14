@@ -110,10 +110,10 @@ export function SEIR({height, width}) {
   }, [scenario]);
 
   const midAccessor = config.exposed.area[1];
-  const midDomain = useMemo(() => Math.max(...indices.map(midAccessor)), [
-    indices,
-    midAccessor,
-  ]);
+  const midDomain = useMemo(() => {
+    const max = Math.max(...indices.map(midAccessor));
+    return max === -Infinity ? 2000000 : max;
+  }, [indices, midAccessor]);
 
   const expectedSusceptible = config.susceptible.y?.expected;
 

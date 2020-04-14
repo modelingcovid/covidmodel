@@ -107,3 +107,13 @@ export function usePopulation() {
   const [data, error] = useLocationQuery(`{ population }`);
   return [data?.population, error];
 }
+
+export function useDistancing() {
+  const [scenario, error] = useScenarioQuery(`{
+    distancing {
+      data
+    }
+  }`);
+
+  return [createSeries(scenario?.distancing), error];
+}

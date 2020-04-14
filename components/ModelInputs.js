@@ -8,6 +8,7 @@ import {
   MethodDisclaimer,
   MethodDefinition,
   createSeries,
+  useDistancing,
   useFindPoint,
   useModelState,
   useLocationQuery,
@@ -24,16 +25,6 @@ import {
 } from '../lib/format';
 
 const {useMemo} = React;
-
-const useDistancing = () => {
-  const [scenario, error] = useScenarioQuery(`{
-    distancing {
-      data
-    }
-  }`);
-
-  return [createSeries(scenario?.distancing), error];
-};
 
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
