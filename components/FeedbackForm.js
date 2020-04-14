@@ -73,36 +73,88 @@ const styles = css`
 
 const bottomRightStyles = css``;
 
+function submitFeedback(email, text) {
+  const payload = {
+    email: email,
+    feedback_text: text,
+    url: window.location.pathname,
+  };
+  return fetch(googleScriptURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
 export function FeedbackForm() {
   const [isOpen, setOpen] = useState(false);
+  const [isPending, setPending] = useState(false);
+  const [isThankYou, setThankYou] = useState(false);
+
+  const closeAndThank = () => {
+      setPending(false);
+      setThankYou(true);
+      setTimeout((_) => {
+          setThankYou(false);
+      }, 2000);
+      setOpen(false);
+  };
+
+  const onSubmit = (e) => {
+    if (!isPending) {
+      setPending(true);
+      const email = document.getElementById('feedback-email').value;
+      const feedbackText = document.getElementById('feedback-text').value;
+      submitFeedback(email, feedbackText).then((_) => {
+          setPending(false);
+          closeAndThank();
+      }).catch((e) => {
+          console.log("POST to Google Script failed");
+          console.error(e);
+          setPending(false);
+          closeAndThank();
+      });
+    }
+  };
 
   return (
     <div className="hidden-in-narrow fixed-bottom-right overlayed">
       <style jsx>{styles}</style>
       {!isOpen ? (
         <button className="button subtle" onClick={(_) => setOpen(true)}>
-          Leave us feedback
+          {isThankYou ? "Thank you!" :  "Leave us feedback"}
         </button>
       ) : (
         <form className="form" method="post" action={googleScriptURL}>
           <h3 className="title">Leave us feedback</h3>
           <input
+            id="feedback-email"
             type="email"
             className="input"
             name="email"
             placeholder="Email (Optional)"
           />
-          <textarea className="input feedback-text" name="feedback_text" placeholder="How could we improve this site?" />
-          {typeof window !== 'undefined' ? (
-            <input type="hidden" name="url" value={window.location.pathname} />
-          ) : null}
+          <textarea
+            id="feedback-text"
+            className="input feedback-text"
+            name="feedback_text"
+            placeholder="How could we improve this site?"
+          />
           <div className="button-row right">
             <button className="close" onClick={(_) => setOpen(false)}>
               Cancel
             </button>
-            <button className="button" type="submit">
-              Send
-            </button>
+            {isPending ? (
+              <button className="button" type="button">
+                Sending...
+              </button>
+            ) : (
+              <button onClick={onSubmit} className="button" type="button">
+                Send
+              </button>
+            )}
           </div>
         </form>
       )}
