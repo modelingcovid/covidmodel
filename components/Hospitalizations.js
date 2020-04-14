@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {Grid, Gutter, InlineLabel, Paragraph, Title} from './content';
-import {Graph} from './graph';
+import {Graph, Line} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   DistributionLegendRow,
@@ -9,7 +9,9 @@ import {
   DistributionSeriesFullFragment,
   Estimation,
   MethodDefinition,
+  SeriesFullFragment,
   createDistributionSeries,
+  createSeries,
   useModelState,
   useLocationQuery,
   useScenarioQuery,
@@ -30,12 +32,14 @@ const color = theme.color.red[1];
 const textColor = theme.color.red.text;
 
 const HospitalizationsScenarioFragment = [
+  ...SeriesFullFragment,
   ...DistributionSeriesFullFragment,
   `fragment HospitalizationsScenario on Scenario {
     currentlyHospitalized { ...DistributionSeriesFull }
     currentlyReportedHospitalized { ...DistributionSeriesFull }
     cumulativeHospitalized { ...DistributionSeriesFull }
     cumulativeReportedHospitalized { ...DistributionSeriesFull }
+    hospitalCapacity {...SeriesFull}
   }`,
 ];
 
@@ -72,6 +76,7 @@ export const Hospitalizations = ({width, height}) => {
     `{ ...HospitalizationsScenario }`,
     HospitalizationsScenarioFragment
   );
+  const hospitalCapacity = createSeries(scenario?.hospitalCapacity);
   const currentlyHospitalized = createDistributionSeries(
     scenario?.currentlyHospitalized
   );
@@ -84,6 +89,7 @@ export const Hospitalizations = ({width, height}) => {
   const cumulativeReportedHospitalized = createDistributionSeries(
     scenario?.cumulativeReportedHospitalized
   );
+  console.log('hi', scenario);
 
   const [{currentDomain = 2000, cumulativeDomain = 1000000}] = useDomains();
 
@@ -121,6 +127,7 @@ export const Hospitalizations = ({width, height}) => {
           </Gutter>
         }
       >
+        <Line y={hospitalCapacity} stroke={color} strokeDasharray="6,3" />
         <DistributionLine y={currentlyHospitalized} color={color} />
         <DistributionLine y={currentlyReportedHospitalized} color={color} />
       </Graph>

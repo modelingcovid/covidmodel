@@ -28,6 +28,7 @@ export const typeDefs = gql`
     distancingLevel: Float!
     day: Series
     distancing: Series
+    hospitalCapacity: Series
     cumulativeCritical: DistributionSeries
     cumulativeDeaths: DistributionSeries
     cumulativeExposed: DistributionSeries
@@ -48,6 +49,7 @@ export const typeDefs = gql`
   type LocationDomain {
     day: Domain
     distancing: Domain
+    hospitalCapacity: Domain
     cumulativeCritical: DistributionDomain
     cumulativeDeaths: DistributionDomain
     cumulativeExposed: DistributionDomain

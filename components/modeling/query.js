@@ -22,7 +22,9 @@ export function useLocations(query = '') {
 export function useLocationQuery(query, fragments = []) {
   const {location} = useModelState();
   const {data, error} = useSWR(
-    [...fragments, createLocationQuery(location.id, query)].join('\n')
+    Array.from(
+      new Set([...fragments, createLocationQuery(location.id, query)])
+    ).join('\n')
   );
   return [data?.location, error];
 }

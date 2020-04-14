@@ -67,7 +67,7 @@ export const decorateLocation = (data, location) => {
     });
   });
 
-  ['day', 'distancing'].forEach((key) => {
+  ['day', 'distancing', 'hospitalCapacity'].forEach((key) => {
     scenarios.forEach((scenario) => {
       scenario[key] = series(scenario.timeSeriesData.map((d) => d[key]));
     });
