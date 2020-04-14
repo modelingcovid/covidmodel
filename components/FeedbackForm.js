@@ -43,10 +43,13 @@ const styles = css`
     justify-content: space-between;
   }
   .fixed-bottom-right {
-    padding-top: 50px;
     position: fixed;
     bottom: 15px;
     right: 15px;
+  }
+  .overlayed {
+    z-index: 51;
+    background-color: white;
   }
   button.subtle {
     color: var(--color-gray2);
@@ -59,7 +62,7 @@ export function FeedbackForm() {
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <div className="fixed-bottom-right">
+    <div className="fixed-bottom-right overlayed">
       <style jsx>{styles}</style>
       {!isOpen ? (
         <button className="button subtle" onClick={(_) => setOpen(true)}>
