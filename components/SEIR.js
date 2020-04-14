@@ -22,6 +22,7 @@ import {
   createDistributionSeries,
   useModelState,
   usePopulation,
+  useLocationQuery,
   useScenarioQuery,
 } from './modeling';
 import {getLastDate} from '../lib/date';
@@ -46,10 +47,32 @@ const SEIRScenarioFragment = [
   }`,
 ];
 
+const useDomain = () => {
+  const [data, error] = useLocationQuery(`{
+    domain {
+      cumulativeDeaths { expected { max } }
+      currentlyInfected { expected { max } }
+      currentlyInfectious { expected { max } }
+    }
+  }`);
+  if (!data) {
+    return [data, error];
+  }
+  const {domain} = data;
+  return [
+    domain.cumulativeDeaths.expected.max +
+      domain.currentlyInfected.expected.max +
+      domain.currentlyInfectious.expected.max,
+    error,
+  ];
+};
+
 export function SEIR({height, width}) {
   const {location, indices, x} = useModelState();
 
   const [population = 9000000] = usePopulation();
+
+  const [domain = 2000000] = useDomain();
 
   const [scenario] = useScenarioQuery(
     `{ ...SEIRScenario }`,
@@ -108,12 +131,6 @@ export function SEIR({height, width}) {
     configValues.forEach((c, i) => (c.area = accessors[i]));
     return [config, configValues, label];
   }, [scenario]);
-
-  const midAccessor = config.exposed.area[1];
-  const midDomain = useMemo(() => {
-    const max = Math.max(...indices.map(midAccessor));
-    return max === -Infinity ? 2000000 : max;
-  }, [indices, midAccessor]);
 
   const expectedSusceptible = config.susceptible.y?.expected;
 
@@ -195,7 +212,7 @@ export function SEIR({height, width}) {
             ))}
             <WithGraphData>
               {({xMax, yMax, yScale}) => {
-                const midY = yScale(midDomain);
+                const midY = yScale(domain);
                 const strokeWidth = 1;
                 return (
                   <rect
@@ -214,7 +231,7 @@ export function SEIR({height, width}) {
         </div>
         <Graph
           data={indices}
-          domain={midDomain}
+          domain={domain}
           initialScale="linear"
           height={height}
           width={width}
