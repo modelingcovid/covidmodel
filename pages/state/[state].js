@@ -110,7 +110,7 @@ export default function StatePage() {
             <ModelInputs width={width} height={160} />
             <SEIR width={width} height={height} />
             <CaseProgressionCurve width={width} height={height} />
-            {/* <ProjectedDeaths width={width} height={height} /> */}
+            <ProjectedDeaths width={width} height={height} />
             <ParameterTable />
           </Section>
           {/* <Section style={{marginTop: '300px'}}>

@@ -66,10 +66,18 @@ export const ModelStateProvider = ({
       name: '',
     };
     const x = (i) => dayToDate(days[i]);
+
+    const indices = Object.keys(days);
+
+    const distancingEnds = addDays(today, scenario.distancingDays);
+    const distancingIndices = indices.filter((d) => x(d) <= distancingEnds);
+
     return {
       days,
+      distancingEnds,
+      distancingIndices,
       id,
-      indices: Object.keys(days),
+      indices,
       location,
       locations,
       scenario,
