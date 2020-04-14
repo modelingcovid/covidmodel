@@ -3,25 +3,25 @@ import {useRouter} from 'next/router';
 import {useNavigateToLocation} from './useNavigateToLocation';
 import {Select} from '../Select';
 import {useCurrentLocation} from './useCurrentLocation';
-import {stateLabels} from '../../lib/controls';
+import {useLocationDropdownState} from './useLocationDropdownState';
 
-const {useCallback} = React;
+const {useMemo} = React;
 
 export function StateSelect({
   label = 'Location',
-  states,
   placeholder = 'Choose a location…',
   ...props
 }) {
-  const state = useCurrentLocation();
+  const [ids, nameMap] = useLocationDropdownState();
+  const locationId = useCurrentLocation();
   const navigateToLocation = useNavigateToLocation();
   return (
     <Select
       label={label}
       placeholder={placeholder}
-      value={state}
-      values={states}
-      valueToString={stateLabels}
+      value={locationId}
+      values={ids}
+      valueToString={nameMap}
       onChange={navigateToLocation}
       {...props}
     />

@@ -4,11 +4,15 @@ import {Grid, Gutter, InlineLabel, Paragraph, Title} from './content';
 import {Graph} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
+  DistributionLegendRow,
+  DistributionLine,
+  DistributionSeriesFullFragment,
   Estimation,
   MethodDefinition,
-  PercentileLegendRow,
-  PercentileLine,
-  useModelData,
+  createDistributionSeries,
+  useModelState,
+  useLocationQuery,
+  useScenarioQuery,
 } from './modeling';
 import {
   formatShortDate,
@@ -22,76 +26,55 @@ import {getLastDate} from '../lib/date';
 
 const {useCallback, useMemo} = React;
 
-const getFatalitiesPerDay = ({cumulativeDeaths}, i, data) => {
-  const prevCumulativeDeaths = data[i - 1]?.cumulativeDeaths || {};
-  const result = {};
-  for (let key of Object.keys(cumulativeDeaths)) {
-    result[key] = Math.max(
-      0,
-      cumulativeDeaths[key] - (prevCumulativeDeaths[key] || 0)
-    );
-  }
-
-  const percentiles = Object.entries(result).filter(([key]) =>
-    key.startsWith('percentile')
-  );
-  const percentileKeys = percentiles.map(([key]) => key).sort();
-  const percentileValues = percentiles
-    .map(([key, value]) => value)
-    .sort((a, b) => a - b);
-
-  percentileKeys.forEach((key, i) => {
-    result[key] = percentileValues[i];
-  });
-  return result;
-};
-
 const color = theme.color.red[1];
 const textColor = theme.color.red.text;
 
+const ProjectedDeathsScenarioFragment = [
+  ...DistributionSeriesFullFragment,
+  `fragment ProjectedDeathsScenario on Scenario {
+    dailyDeaths { ...DistributionSeriesFull }
+  }`,
+];
+
+const useDomain = () => {
+  const [data, error] = useLocationQuery(`{
+    domain {
+      dailyDeaths { expected { max } }
+    }
+  }`);
+  if (!data) {
+    return [data, error];
+  }
+  return [data.domain.dailyDeaths.expected.max, error];
+};
+
 export const ProjectedDeaths = ({width, height}) => {
   const {
-    model,
-    stateName,
-    summary,
-    scenarioData: {distancingDays, distancingLevel},
-    timeSeriesData,
-    distancingTimeSeriesData,
+    location,
+    scenario: {distancingDays, distancingLevel},
+    indices,
+    distancingIndices,
     x,
-    allTimeSeriesData,
-  } = useModelData();
+  } = useModelState();
 
-  const {population} = model;
-  const getFatalitiesPerDayPer100K = useCallback(
-    (...d) => {
-      const perDay = getFatalitiesPerDay(...d);
-      const result = {};
-      for (let key of Object.keys(perDay)) {
-        result[key] = (perDay[key] * 100000) / population;
-      }
-      return result;
-    },
-    [population]
+  const [scenario] = useScenarioQuery(
+    `{ ...ProjectedDeathsScenario }`,
+    ProjectedDeathsScenarioFragment
   );
+  const dailyDeaths = createDistributionSeries(scenario?.dailyDeaths);
 
-  const y = getFatalitiesPerDay;
-
-  const domain = useMemo(
-    () =>
-      Math.max(
-        // Note: Ideally we should split allTimeSeriesData so we don't get a previous point from another dataset
-        ...allTimeSeriesData.map((d, i) => y(d, i, allTimeSeriesData).expected)
-      ),
-    [allTimeSeriesData, y]
-  );
+  const [domain = 2000] = useDomain();
 
   const peakWithinDistancing = useMemo(
     () =>
       distancingLevel !== 1 &&
-      distancingTimeSeriesData.reduce((prev, ...d) => {
-        return prev && y(...prev).expected >= y(...d).expected ? prev : d;
+      distancingIndices.reduce((prev, d) => {
+        return prev != null &&
+          dailyDeaths.expected(prev) >= dailyDeaths.expected(d)
+          ? prev
+          : d;
       }, null),
-    [distancingLevel, distancingTimeSeriesData, y]
+    [distancingLevel, distancingIndices, dailyDeaths]
   );
 
   return (
@@ -110,37 +93,15 @@ export const ProjectedDeaths = ({width, height}) => {
         <Estimation date={false}>
           The peak number of fatalities per day before the end of the{' '}
           {formatMonths(distancingDays)}-month social distancing period in{' '}
-          {stateName} is projected to occur on{' '}
+          {location.name} is projected to occur on{' '}
           <strong className="nowrap">
-            {formatShortDate(x(...peakWithinDistancing))}
+            {formatShortDate(x(peakWithinDistancing))}
           </strong>
           .
         </Estimation>
       )}
-      {/* <Grid className="margin-bottom-3">
-        <MethodDefinition
-          icon={People}
-          value={formatPercent1(
-            summary.totalProjectedDeaths / model.population
-          )}
-          label="Fatality rate of the total population"
-          method="modeled"
-        />
-        <MethodDefinition
-          icon={HeadSideCough}
-          value={formatPercent1(summary.fatalityRate)}
-          label="Fatality rate of all COVID-19 cases"
-          method="modeled"
-        />
-        <MethodDefinition
-          icon={Vial}
-          value={formatPercent1(summary.fatalityRatePCR)}
-          label="Fatality rate of COVID-19 cases that have tested positive"
-          method="modeled"
-        />
-      </Grid> */}
       <Graph
-        data={timeSeriesData}
+        data={indices}
         domain={domain}
         initialScale="linear"
         x={x}
@@ -150,18 +111,16 @@ export const ProjectedDeaths = ({width, height}) => {
         controls
         after={
           <Gutter>
-            <PercentileLegendRow
+            <DistributionLegendRow
               title="Fatalities per day"
-              y={y}
+              y={dailyDeaths}
               color={color}
-              format={
-                y === getFatalitiesPerDayPer100K ? formatNumber2 : formatNumber
-              }
+              format={formatNumber}
             />
           </Gutter>
         }
       >
-        <PercentileLine y={y} color={color} />
+        <DistributionLine y={dailyDeaths} color={color} />
       </Graph>
     </div>
   );

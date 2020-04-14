@@ -3,12 +3,12 @@ import {hcl, rgb} from 'd3-color';
 import {interpolateHcl, piecewise} from 'd3-interpolate';
 import {scaleLinear} from '@vx/scale';
 import {ScaleGradient} from '../graph';
-import {useModelData} from '../modeling';
+import {useModelState, useDistancing} from '../modeling';
 import {useMatchMedia} from '../util';
 import {dateScale} from '../../lib/date';
 import {darkMode, mediaQuery, declarations, properties} from '../../styles';
 
-const getDistancing = ({distancing}) => 1 - distancing;
+const {useCallback} = React;
 
 const distancingScale = scaleLinear({
   domain: [0, 1],
@@ -29,24 +29,26 @@ const darkColor = (n) => {
 };
 
 export function useDistancingId() {
-  const {id} = useModelData();
+  const {id} = useModelState();
   return `${id}-distancing`;
 }
 
 export const DistancingGradient = React.memo(function DistancingGradient({
   size,
 }) {
-  const {timeSeriesData, x} = useModelData();
+  const {indices, x} = useModelState();
   const id = useDistancingId();
   const isDarkMode = useMatchMedia(mediaQuery.darkMode);
+  const [distancing] = useDistancing();
+  const inverted = useCallback((n) => 1 - distancing(n), [distancing]);
 
   return (
     <ScaleGradient
       color={isDarkMode ? darkColor : lightColor}
-      data={timeSeriesData}
+      data={indices}
       id={id}
       x={(...d) => dateScale(x(...d))}
-      y={getDistancing}
+      y={inverted}
       size={size}
     />
   );

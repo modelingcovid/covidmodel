@@ -12,7 +12,7 @@ import {Scrubber} from './Scrubber';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider} from './useGraphData';
 import {useComponentId} from '../util';
-import {createDateScale, getDate} from '../../lib/date';
+import {createDateScale} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 import {theme} from '../../styles';
 
@@ -237,7 +237,7 @@ export const Graph = React.memo(function Graph({
         </svg>
         <div className="graph-overlay">
           {scrubber && (
-            <Scrubber>{([d], active) => formatShortDate(getDate(d))}</Scrubber>
+            <Scrubber>{([d], active) => formatShortDate(x(d))}</Scrubber>
           )}
           {overlay}
         </div>

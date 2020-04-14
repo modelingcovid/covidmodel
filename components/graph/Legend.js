@@ -3,7 +3,6 @@ import css from 'styled-jsx/css';
 import {breakpoint, theme} from '../../styles';
 
 import {useNearestData} from './useNearestData';
-import {getDate} from '../../lib/date';
 import {formatShortDate, formatNumber} from '../../lib/format';
 
 const legendStyles = css`

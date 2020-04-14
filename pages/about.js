@@ -4,9 +4,9 @@ import {Layout} from '../components';
 import {Section} from '../components/content';
 import {About} from '../md';
 
-export default function Index({states}) {
+export default function Index() {
   return (
-    <Layout states={states}>
+    <Layout>
       <About />
     </Layout>
   );

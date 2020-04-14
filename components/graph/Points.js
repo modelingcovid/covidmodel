@@ -39,16 +39,12 @@ const NearestPoint = ({nearestProps, ...remaining}) => {
   if (!nearest) {
     return null;
   }
-  const [d, i, nearestData] = nearest;
-  if (data !== nearestData) {
-    return null;
-  }
   const props = nearestProps ? nearestProps(nearest) : {};
   return <Point {...remaining} {...props} d={nearest} key="nearest" />;
 };
 
 export const Points = ({nearestProps, ...remaining}) => {
-  const {data, x, xScale, yScale} = useGraphData();
+  const {data} = useGraphData();
 
   return (
     <>

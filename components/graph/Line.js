@@ -4,7 +4,7 @@ import {useGraphData} from './useGraphData';
 import {useNearestPoint} from './useNearestPoint';
 import {usePreviousValue} from '../util';
 
-const {useCallback} = React;
+const {useCallback, useMemo} = React;
 
 const NearestCircle = ({y, ...remaining}) => {
   const nearest = useNearestPoint(y);
