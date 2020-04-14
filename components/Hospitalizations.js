@@ -28,8 +28,9 @@ import {getLastDate} from '../lib/date';
 
 const {useCallback, useMemo} = React;
 
-const color = theme.color.red[1];
-const textColor = theme.color.red.text;
+const blue = theme.color.blue[2];
+const red = theme.color.red[1];
+const yellow = theme.color.yellow[3];
 
 const HospitalizationsScenarioFragment = [
   ...SeriesFullFragment,
@@ -64,13 +65,7 @@ const useDomains = () => {
 };
 
 export const Hospitalizations = ({width, height}) => {
-  const {
-    location,
-    scenario: {distancingDays, distancingLevel},
-    indices,
-    distancingIndices,
-    x,
-  } = useModelState();
+  const {location, indices, distancingIndices, x} = useModelState();
 
   const [scenario] = useScenarioQuery(
     `{ ...HospitalizationsScenario }`,
@@ -89,7 +84,6 @@ export const Hospitalizations = ({width, height}) => {
   const cumulativeReportedHospitalized = createDistributionSeries(
     scenario?.cumulativeReportedHospitalized
   );
-  console.log('hi', scenario);
 
   const [{currentDomain = 2000, cumulativeDomain = 1000000}] = useDomains();
 
@@ -115,21 +109,21 @@ export const Hospitalizations = ({width, height}) => {
             <DistributionLegendRow
               title="Currently hospitalized"
               y={currentlyHospitalized}
-              color={color}
+              color={blue}
               format={formatNumber}
             />
             <DistributionLegendRow
               title="Currently reported hospitalized"
               y={currentlyReportedHospitalized}
-              color={color}
+              color={yellow}
               format={formatNumber}
             />
           </Gutter>
         }
       >
-        <Line y={hospitalCapacity} stroke={color} strokeDasharray="6,3" />
-        <DistributionLine y={currentlyHospitalized} color={color} />
-        <DistributionLine y={currentlyReportedHospitalized} color={color} />
+        <Line y={hospitalCapacity} stroke={red} strokeDasharray="6,3" />
+        <DistributionLine y={currentlyHospitalized} color={blue} />
+        <DistributionLine y={currentlyReportedHospitalized} color={yellow} />
       </Graph>
       <Graph
         data={indices}
@@ -145,20 +139,20 @@ export const Hospitalizations = ({width, height}) => {
             <DistributionLegendRow
               title="Total hospitalized"
               y={cumulativeHospitalized}
-              color={color}
+              color={blue}
               format={formatNumber}
             />
             <DistributionLegendRow
               title="Total reported hospitalized"
               y={cumulativeReportedHospitalized}
-              color={color}
+              color={yellow}
               format={formatNumber}
             />
           </Gutter>
         }
       >
-        <DistributionLine y={cumulativeHospitalized} color={color} />
-        <DistributionLine y={cumulativeReportedHospitalized} color={color} />
+        <DistributionLine y={cumulativeHospitalized} color={blue} />
+        <DistributionLine y={cumulativeReportedHospitalized} color={yellow} />
       </Graph>
     </div>
   );

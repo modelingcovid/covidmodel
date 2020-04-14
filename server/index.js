@@ -13,8 +13,10 @@ export const typeDefs = gql`
     id: String!
     name: String!
     population: Int!
+    icuBeds: Int!
     importtime: Float!
     r0: Float!
+    ventilators: Int!
     scenarios: [Scenario!]!
     scenario(id: ID!): Scenario
     parameters: [Parameter!]!
@@ -159,8 +161,10 @@ const Location = {
   },
   population: locationProp('population'),
   domain: locationProp('domain'),
+  icuBeds: locationProp('icuBeds'),
   importtime: locationProp('importtime'),
   r0: locationProp('r0'),
+  ventilators: locationProp('ventilators'),
 };
 
 export const resolvers = {

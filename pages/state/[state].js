@@ -4,9 +4,8 @@ import {useRouter} from 'next/router';
 
 import {
   CaseProgressionCurve,
-  HospitalCapacity,
   Hospitalizations,
-  ICUCapacity,
+  ICU,
   Layout,
   ModelInputs,
   OutcomeSummary,
@@ -112,17 +111,16 @@ export default function StatePage() {
             <SEIR width={width} height={height} />
             <CaseProgressionCurve width={width} height={height} />
             <ProjectedDeaths width={width} height={height} />
-            <Hospitalizations width={width} height={height} />
             <ParameterTable />
           </Section>
-          {/* <Section style={{marginTop: '300px'}}>
-              <Title>
-                Work in progress: these sections are being converted to match
-                the format above
-              </Title>
-              <HospitalCapacity width={width} height={height} />
-              <ICUCapacity width={width} height={height} />
-            </Section> */}
+          <Section style={{marginTop: '300px'}}>
+            <div className="text-jumbo">Work in progress</div>
+            <div className="dek margin-top-1">
+              These sections are being converted to match the format&nbsp;above.
+            </div>
+            <Hospitalizations width={width} height={height} />
+            <ICU width={width} height={height} />
+          </Section>
         </div>
       </ModelStateProvider>
     </Layout>
