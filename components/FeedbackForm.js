@@ -42,46 +42,54 @@ const styles = css`
     display: flex;
     justify-content: space-between;
   }
-`;
-
-const bottomRightStyles = css`
-  .bottom-right {
+  .fixed-bottom-right {
     padding-top: 50px;
     position: fixed;
     bottom: 15px;
     right: 15px;
   }
+  button.subtle {
+    color: var(--color-gray2);
+  }
 `;
+
+const bottomRightStyles = css``;
 
 export function FeedbackForm() {
   const [isOpen, setOpen] = useState(false);
 
-  return !isOpen ? (
-    <button onClick={(_) => setOpen(true)}>Leave us feedback</button>
-  ) : (
-    <form className="form" method="post" action={googleScriptURL}>
+  return (
+    <div className="fixed-bottom-right">
       <style jsx>{styles}</style>
-      <h3>Leave us feedback</h3>
-      <label for="email">Email</label>
-      <input
-        type="email"
-        className="input"
-        name="email"
-        placeholder="Optional"
-      />
-      <label for="feedback_text">How could this site improve?</label>
-      <textarea className="input" name="feedback_text" />
-      {typeof window !== 'undefined' ? (
-        <input type="hidden" name="url" value={window.location.pathname} />
-      ) : null}
-      <div className="right">
-        <button className="close" onClick={(_) => setOpen(false)}>
-          Cancel
+      {!isOpen ? (
+        <button className="button subtle" onClick={(_) => setOpen(true)}>
+          Leave us feedback
         </button>
-        <button className="button" type="submit">
-          Send
-        </button>
-      </div>
-    </form>
+      ) : (
+        <form className="form" method="post" action={googleScriptURL}>
+          <h3>Leave us feedback</h3>
+          <label for="email">Email</label>
+          <input
+            type="email"
+            className="input"
+            name="email"
+            placeholder="Optional"
+          />
+          <label for="feedback_text">How could this site improve?</label>
+          <textarea className="input" name="feedback_text" />
+          {typeof window !== 'undefined' ? (
+            <input type="hidden" name="url" value={window.location.pathname} />
+          ) : null}
+          <div className="right">
+            <button className="close" onClick={(_) => setOpen(false)}>
+              Cancel
+            </button>
+            <button className="button" type="submit">
+              Send
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 }

@@ -127,11 +127,6 @@ export default function StatePage({data, states}) {
               <ProjectedDeaths width={width} height={height} />
               <ParameterTable />
             </Section>
-            <Section className="margin-top-3">
-              <div>
-                <FeedbackForm />
-              </div>
-            </Section>
             <Section style={{marginTop: '300px'}}>
               <Title>
                 Work in progress: these sections are being converted to match
@@ -143,6 +138,7 @@ export default function StatePage({data, states}) {
           </div>
         </NearestDataProvider>
       </ModelDataProvider>
+      <FeedbackForm />
     </Layout>
   );
 }
