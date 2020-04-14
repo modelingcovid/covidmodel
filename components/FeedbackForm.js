@@ -64,6 +64,11 @@ const styles = css`
     margin-top: ${theme.spacing[0]};
     margin-bottom: ${theme.spacing[0]};
   }
+  @media only screen and (max-width: 1300px) {
+    .hidden-in-narrow {
+      display: none;
+    }
+  }
 `;
 
 const bottomRightStyles = css``;
@@ -72,7 +77,7 @@ export function FeedbackForm() {
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <div className="fixed-bottom-right overlayed">
+    <div className="hidden-in-narrow fixed-bottom-right overlayed">
       <style jsx>{styles}</style>
       {!isOpen ? (
         <button className="button subtle" onClick={(_) => setOpen(true)}>
