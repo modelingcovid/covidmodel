@@ -40,6 +40,7 @@ export const typeDefs = gql`
     currentlyInfected: DistributionSeries
     currentlyInfectious: DistributionSeries
     currentlyReportedHospitalized: DistributionSeries
+    dailyDeaths: DistributionSeries
     dailyPcr: DistributionSeries
     dailyTestsRequiredForContainment: DistributionSeries
     susceptible: DistributionSeries
@@ -59,6 +60,7 @@ export const typeDefs = gql`
     currentlyInfected: DistributionDomain
     currentlyInfectious: DistributionDomain
     currentlyReportedHospitalized: DistributionDomain
+    dailyDeaths: DistributionDomain
     dailyPcr: DistributionDomain
     dailyTestsRequiredForContainment: DistributionDomain
     susceptible: DistributionDomain

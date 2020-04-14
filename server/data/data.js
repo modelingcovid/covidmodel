@@ -16,6 +16,20 @@ const series = (data) => ({
   max: Math.max(...data),
 });
 
+const sortPercentiles = (data) => {
+  const percentiles = Object.entries(data).filter(([key]) =>
+    key.startsWith('percentile')
+  );
+  const percentileKeys = percentiles.map(([key]) => key).sort();
+  const percentileValues = percentiles
+    .map(([key, value]) => value)
+    .sort((a, b) => a - b);
+
+  percentileKeys.forEach((key, i) => {
+    data[key] = percentileValues[i];
+  });
+};
+
 export const decorateLocation = (data, location) => {
   data.id = location;
   data.name = stateLabels[location] || location;
@@ -27,7 +41,10 @@ export const decorateLocation = (data, location) => {
     const {timeSeriesData} = scenario;
 
     // Derive data from existing data.
-    timeSeriesData.forEach((d) => {
+    timeSeriesData.forEach((d, i) => {
+      const prev = timeSeriesData[i - 1];
+
+      // Cumulative exposed
       d.cumulativeExposed = {};
       Object.keys(d.currentlyInfected).forEach((key) => {
         d.cumulativeExposed[key] =
@@ -37,6 +54,16 @@ export const decorateLocation = (data, location) => {
           d.cumulativeDeaths[key];
       });
       d.cumulativeExposed.confirmed = 0;
+
+      // Daily deaths
+      d.dailyDeaths = {};
+      Object.keys(d.cumulativeDeaths).forEach((key) => {
+        d.dailyDeaths[key] = Math.max(
+          0,
+          d.cumulativeDeaths[key] - (prev ? prev.cumulativeDeaths[key] : 0)
+        );
+      });
+      sortPercentiles(d.dailyDeaths);
     });
   });
 
@@ -61,6 +88,7 @@ export const decorateLocation = (data, location) => {
     'currentlyInfected',
     'currentlyInfectious',
     'currentlyReportedHospitalized',
+    'dailyDeaths',
     'dailyPcr',
     'dailyTestsRequiredForContainment',
     'susceptible',
