@@ -5,6 +5,7 @@ import {useRouter} from 'next/router';
 import {
   CaseProgressionCurve,
   HospitalCapacity,
+  Hospitalizations,
   ICUCapacity,
   Layout,
   ModelInputs,
@@ -111,6 +112,7 @@ export default function StatePage() {
             <SEIR width={width} height={height} />
             <CaseProgressionCurve width={width} height={height} />
             <ProjectedDeaths width={width} height={height} />
+            <Hospitalizations width={width} height={height} />
             <ParameterTable />
           </Section>
           {/* <Section style={{marginTop: '300px'}}>

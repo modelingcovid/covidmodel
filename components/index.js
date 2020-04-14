@@ -1,5 +1,6 @@
 export * from './CaseProgressionCurve';
 export * from './HospitalCapacity';
+export * from './Hospitalizations';
 export * from './ICUCapacity';
 export * from './Layout';
 export * from './MDXComponents';
