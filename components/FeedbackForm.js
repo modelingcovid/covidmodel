@@ -71,7 +71,12 @@ const styles = css`
   }
 `;
 
-const bottomRightStyles = css``;
+
+function queryParams(params) {
+  return Object.keys(params)
+          .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+          .join('&');
+}
 
 function submitFeedback(email, text) {
   const payload = {
@@ -79,14 +84,9 @@ function submitFeedback(email, text) {
     feedback_text: text,
     url: window.location.pathname,
   };
-  return fetch(googleScriptURL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  return fetch(googleScriptURL + '?' + queryParams(payload));
 }
+
 
 export function FeedbackForm() {
   const [isOpen, setOpen] = useState(false);
