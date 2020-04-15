@@ -771,9 +771,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
  ];
  
- Echo[ListPlot[{#["day"], #["distancing"]}&/@timeSeriesData]];
- 
- 
  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
       scenario,
@@ -1000,7 +997,6 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "importtime"->fitParams["importtime"],
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
-      "longData"->longData,
       "parameters"->paramExpected,
       "goodnessOfFitMetrics"->gofMetrics
     }, First];
@@ -1077,7 +1073,8 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides]] := Module[{},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    Export["public/json/"<>state<>".json",stateData];
+    Export["public/json/"<>state<>"/"<>#["id"]<>".json", stateData["scenarios"][#["id"]]]&/@scenarios;
+    Export["public/json/"<>state<>"/"<>state<>".json",KeyDrop[stateData, {"scenarios"}]];
     stateData
   ];
 
