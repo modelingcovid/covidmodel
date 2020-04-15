@@ -8,7 +8,7 @@ import {
   Stop,
   WithGraphData,
 } from '../graph';
-import {useModelData} from '../modeling';
+import {useModelState} from '../modeling';
 import {WithComponentId} from '../util';
 import {dateScale, today} from '../../lib/date';
 import {formatNumber2, formatPercent} from '../../lib/format';
@@ -20,6 +20,7 @@ const todayOffset = dateScale(today);
 
 export const DistancingGraph = ({
   children,
+  r0,
   y,
   leftLabel = '',
   rightLabel = '',
@@ -27,11 +28,7 @@ export const DistancingGraph = ({
   height = 400,
   ...remaining
 }) => {
-  const {
-    model: {r0},
-    timeSeriesData,
-    x,
-  } = useModelData();
+  const {indices, x} = useModelState();
 
   const formatR0 = useCallback((n) => formatNumber2(n * r0), [r0]);
 
@@ -45,7 +42,7 @@ export const DistancingGraph = ({
   return (
     <Graph
       {...remaining}
-      data={timeSeriesData}
+      data={indices}
       x={x}
       xLabel={leftLabel}
       height={height}

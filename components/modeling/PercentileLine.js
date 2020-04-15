@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Area, Line, Points} from '../graph';
-import {getDate} from '../../lib/date';
 
 const {useCallback} = React;
 

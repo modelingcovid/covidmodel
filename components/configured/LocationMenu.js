@@ -3,6 +3,7 @@ import {useRouter} from 'next/router';
 import {useNavigateToLocation} from './useNavigateToLocation';
 import {Menu} from '../Menu';
 import {useCurrentLocation} from './useCurrentLocation';
+import {useLocationDropdownState} from './useLocationDropdownState';
 import {DownArrow} from '../icon';
 import {stateLabels} from '../../lib/controls';
 
@@ -10,16 +11,16 @@ const {useCallback} = React;
 
 export const LocationMenu = React.memo(function LocationMenu({
   children,
-  states,
   ...props
 }) {
-  const state = useCurrentLocation();
+  const [ids, nameMap] = useLocationDropdownState();
+  const location = useCurrentLocation();
   const navigateToLocation = useNavigateToLocation();
   return (
     <Menu
-      value={state || null}
-      values={states}
-      valueToString={stateLabels}
+      value={location || null}
+      values={ids}
+      valueToString={nameMap}
       onChange={navigateToLocation}
       anchor="end"
       {...props}

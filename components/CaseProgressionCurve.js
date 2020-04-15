@@ -15,34 +15,31 @@ import {
 import {WithNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
 import {
+  DistributionLegendRow,
+  DistributionLine,
+  DistributionSeriesFullFragment,
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
-  PercentileLegendRow,
-  PercentileLine,
-  useModelData,
+  createDistributionSeries,
+  useModelState,
+  useScenarioQuery,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
-const {useCallback, useState} = React;
+const {useCallback, useMemo, useState} = React;
 
-const getCumulativeDeaths = ({cumulativeDeaths}) => cumulativeDeaths;
-const getCumulativePcr = ({cumulativePcr}) => cumulativePcr;
-const getCumulativeExposed = (d) => {
-  const result = {};
-  for (let key of Object.keys(d.currentlyInfected)) {
-    result[key] =
-      d.currentlyInfected[key] +
-      d.currentlyInfectious[key] +
-      d.cumulativeRecoveries[key] +
-      d.cumulativeDeaths[key];
-  }
-  result.confirmed = 0;
-  return result;
-};
+const CaseProgressionScenarioFragment = [
+  ...DistributionSeriesFullFragment,
+  `fragment CaseProgressionScenario on Scenario {
+    cumulativeDeaths { ...DistributionSeriesFull }
+    cumulativeExposed { ...DistributionSeriesFull }
+    cumulativePcr { ...DistributionSeriesFull }
+  }`,
+];
 
 export function CaseProgressionCurve({height, width}) {
-  const {model, stateName, summary, x} = useModelData();
+  const {location, x} = useModelState();
 
   const defaultAsymptomaticRate = 0.3;
   const [asymptomaticRate, setAsymptomaticRate] = useState(
@@ -50,6 +47,19 @@ export function CaseProgressionCurve({height, width}) {
   );
   // Can we get these from the model?
   const fatalityWeight = 3;
+
+  const [scenario] = useScenarioQuery(
+    `{ ...CaseProgressionScenario }`,
+    CaseProgressionScenarioFragment
+  );
+
+  const [cumulativeDeaths, cumulativeExposed, cumulativePcr] = useMemo(() => {
+    return [
+      createDistributionSeries(scenario?.cumulativeDeaths),
+      createDistributionSeries(scenario?.cumulativeExposed),
+      createDistributionSeries(scenario?.cumulativePcr),
+    ];
+  }, [scenario]);
 
   return (
     <div className="margin-top-5">
@@ -94,30 +104,8 @@ export function CaseProgressionCurve({height, width}) {
           total COVID-19 cases
         </InlineLabel>
         —the cumulative number of people who have been in the{' '}
-        <strong>exposed</strong> state—in {stateName}.
+        <strong>exposed</strong> state—in {location.name}.
       </Paragraph>
-      {/* <Grid className="margin-bottom-3">
-        <MethodDefinition
-          icon={People}
-          value={formatNumber(model.population)}
-          label="Total population"
-          method="input"
-        />
-        <MethodDefinition
-          icon={HeadSideCough}
-          value={formatPercent1(
-            summary.totalProjectedInfected / model.population
-          )}
-          label="Percentage of the population infected"
-          method="modeled"
-        />
-        <MethodDefinition
-          icon={Vial}
-          value={formatNumber(summary.totalProjectedPCRConfirmed)}
-          label="Reported positive tests"
-          method="modeled"
-        />
-      </Grid> */}
       <PopulationGraph
         controls
         x={x}
@@ -126,20 +114,20 @@ export function CaseProgressionCurve({height, width}) {
         height={height}
         after={
           <Grid mobile={1}>
-            <PercentileLegendRow
-              y={getCumulativeExposed}
+            <DistributionLegendRow
+              y={cumulativeExposed}
               color={theme.color.yellow[3]}
               title="Total COVID-19 cases"
               description="People who have been infected with COVID-19"
             />
-            <PercentileLegendRow
-              y={getCumulativePcr}
+            <DistributionLegendRow
+              y={cumulativePcr}
               color={theme.color.blue[2]}
               title="Reported positive tests"
               description="Total number of COVID-19 tests projected to be positive"
             />
-            <PercentileLegendRow
-              y={getCumulativeDeaths}
+            <DistributionLegendRow
+              y={cumulativeDeaths}
               color={theme.color.red[1]}
               title="Deceased"
               description="People who have died from COVID-19"
@@ -147,18 +135,18 @@ export function CaseProgressionCurve({height, width}) {
           </Grid>
         }
       >
-        <PercentileLine
-          y={getCumulativeExposed}
+        <DistributionLine
+          y={cumulativeExposed}
           color={theme.color.yellow[3]}
           gradient
         />
-        <PercentileLine
-          y={getCumulativePcr}
+        <DistributionLine
+          y={cumulativePcr}
           color={theme.color.blue[2]}
           gradient
         />
-        <PercentileLine
-          y={getCumulativeDeaths}
+        <DistributionLine
+          y={cumulativeDeaths}
           color={theme.color.red[1]}
           gradient
         />
@@ -166,9 +154,9 @@ export function CaseProgressionCurve({height, width}) {
       <Heading className="margin-top-4">Finding the best fit</Heading>
       <Paragraph>
         The model adjusts three values to find a set of curves with the best fit
-        for {stateName}: the <strong>date COVID-19 arrived</strong>, the{' '}
+        for {location.name}: the <strong>date COVID-19 arrived</strong>, the{' '}
         <strong>R₀</strong> (basic reproduction number), and{' '}
-        <strong>fraction of cases being detected</strong> in {stateName}.
+        <strong>fraction of cases being detected</strong> in {location.name}.
         Reported fatalities and confirmed positive cases are weighed at a 3:1
         ratio during the fitting process.
       </Paragraph>
@@ -214,11 +202,13 @@ export function CaseProgressionCurve({height, width}) {
               {formatPercent(defaultAsymptomaticRate)}, the model projects the
               fatality rate of symptomatic COVID-19 cases to be{' '}
               <strong>
-                {formatPercent1(
-                  (getCumulativeDeaths(...d).expected /
-                    getCumulativeExposed(...d).expected) *
-                    (1 - asymptomaticRate)
-                )}
+                {cumulativeDeaths && cumulativeExposed
+                  ? formatPercent1(
+                      (cumulativeDeaths.expected(...d) /
+                        (cumulativeExposed.expected(...d) || 0.0001)) *
+                        (1 - asymptomaticRate)
+                    )
+                  : '…'}
               </strong>
               .
             </Estimation>

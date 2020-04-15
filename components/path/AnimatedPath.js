@@ -2,6 +2,8 @@ import * as React from 'react';
 
 const {useCallback, useEffect, useRef, useState} = React;
 
+const FORCE_ANIMATIONS_OFF = true;
+
 export const AnimatedPath = ({
   d,
   duration = '400ms',
@@ -22,7 +24,7 @@ export const AnimatedPath = ({
       return;
     }
 
-    if (immediate || !el.beginElement) {
+    if (FORCE_ANIMATIONS_OFF || immediate || !el.beginElement) {
       onEnd();
       return;
     }

@@ -80,7 +80,7 @@ testToAllCaseRatio0=100;
 fractionSymptomatic0 = 0.7;
 
 (* Set heterogeneous susceptibility using lognormal function with bins of constant population size *)
-susceptibilityBins=20;
+susceptibilityBins=5;
 susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
   m=-stdDev^2/2;
   s=Sqrt[Log[stdDev^2+1]];
@@ -207,7 +207,7 @@ criticalDeceasedAge[a_,adj_]:=deathAgeModel[a]*adj*100/NIntegrate[deathAgeModel[
 deceasedAdjustWeight=(x/.Solve[Total[Sum[deathAgeModel[a]*x*100/NIntegrate[deathAgeModel[b],{b,0,100}]*stateRawDemographicData[#]["Distribution"][[Position[stateRawDemographicData[#]["Distribution"],a][[1]][[1]]]][[2]],{a, stateRawDemographicData[#]["Buckets"]}]&/@statesWithRates]/Length[statesWithRates]==fractionOfCriticalDeceased0,x])[[1]];
 criticalDeceasedState[state_]:=Sum[criticalDeceasedAge[a,deceasedAdjustWeight ]*stateRawDemographicData[state]["Distribution"][[Position[stateRawDemographicData[state]["Distribution"],a][[1]][[1]]]][[2]],{a, stateRawDemographicData[state]["Buckets"]}]
 
-stateParams[state_]:=Module[{raw,pop,dist,buckets},
+getStateParams[state_]:=Module[{raw,pop,dist,buckets},
   raw = stateRawDemographicData[state];
   pop = raw["Population"];
   dist = raw["Distribution"];
@@ -231,6 +231,8 @@ stateParams[state_]:=Module[{raw,pop,dist,buckets},
     "initialInfectionImpulse"->-Log[initialInfectionPeople0/(importlength0*pop)]//N
   |>
 ];
+
+stateParams = Association[{#->getStateParams[#]}&/@Keys[fitStartingOverrides]];
 
 
 (* Define the model to be evaulated in the simulations -- 
@@ -386,33 +388,18 @@ generateModelComponents[distancing_] := <|
     1.3130347650158096`,1.5775877732714718`}
 |>;
 
+getModelComponentsForState[state_] := Association[{#["id"]->generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]]}&/@scenarios];
+getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelComponents, equationsODE, initialConditions, outputODE, dependentVariables, eventsODE, parameters, parameterizedSolution},
+   modelComponents = generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]];
+   equationsODE = modelComponents["equationsODE"];
+   initialConditions = modelComponents["initialConditions"];
+   outputODE = modelComponents["outputFunctions"];
+   dependentVariables = modelComponents["dependentVariables"];
 
-integrateModel[distancing_, simulationParameters_]:=Module[{
-    modelComponents,
-    equationsODE,
-    eventsODE,
-    initialConditions,
-    outputODE,
-    dependentVariables,
-    parameters,
-    outputSolution,
-    outputSolutionRules,
-    outputEvents
-  },
-
-  modelComponents = generateModelComponents[distancing];
-
-  equationsODE = modelComponents["equationsODE"];
-  initialConditions = modelComponents["initialConditions"];
-  outputODE = modelComponents["outputFunctions"];
-  dependentVariables = modelComponents["dependentVariables"];
-
-  eventsODE = modelComponents["simulationEvents"];
-  parameters = modelComponents["simulationParameters"];
-
-  {outputSolution, outputEvents} = Reap[
-    Apply[
-      ParametricNDSolveValue[{
+   eventsODE = modelComponents["simulationEvents"];
+   parameters = modelComponents["simulationParameters"];
+  
+   parameterizedSolution = ParametricNDSolveValue[{
           equationsODE,
           eventsODE,
           initialConditions
@@ -422,10 +409,47 @@ integrateModel[distancing_, simulationParameters_]:=Module[{
         parameters,
         DependentVariables->dependentVariables,
         Method->{"DiscontinuityProcessing"->False}
-      ],
-      simulationParameters],
+      ];
+      
+      <|
+        "parameterizedSolution" -> parameterizedSolution,
+        "outputODE" -> outputODE
+      |>
+   
+   ]}&/@scenarios];
+
+
+modelPrecompute = Association[{#->getModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
+
+simModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
+
+
+integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
+    modelComponents,
+    equationsODE,
+    eventsODE,
+    initialConditions,
+    outputODE,
+    dependentVariables,
+    parameters,
+    outputSolution,
+    outputSolutionRules,
+    outputEvents,
+    time,
+    soln,
+    parameterizedSolution
+  },
+  
+  modelComponents = simModelPrecompute[state][scenarioId];
+  
+  outputODE = modelComponents["outputODE"];
+  parameterizedSolution = modelComponents["parameterizedSolution"];
+
+  {outputSolution, outputEvents} = Reap[
+    Apply[parameterizedSolution, simulationParameters],
     {"containment","herd","icu","hospital","cutoff"},
-    List];
+    List
+  ];
 
   outputSolution = Association[
     MapThread[#1->#2&,{outputODE,outputSolution}]];
@@ -435,7 +459,54 @@ integrateModel[distancing_, simulationParameters_]:=Module[{
     <|
       Sq->(Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&),
       Iq->(outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&),
-      Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)|>];
+      Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)
+     |>
+  ];
+
+  outputEvents = Association[Table[
+      event[[1]]-><|
+        "eventName"->event[[1]],
+        "day"->event[[2,1,1]],
+        "thresholdCrossed"->event[[2,1,2]]|>,
+      {event,Flatten[outputEvents,1]}]];
+
+  {outputSolution, outputEvents}
+];
+
+
+integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Module[{
+    modelComponents,
+    equationsODE,
+    eventsODE,
+    initialConditions,
+    dependentVariables,
+    parameters,
+    outputSolution,
+    outputSolutionRules,
+    outputEvents,
+    time,
+    soln,
+  },
+  
+  (*{time, soln} = AbsoluteTiming[Apply[parameterizedSolution, simulationParameters]];*)
+  (*Echo[time];*)
+  {outputSolution, outputEvents} = Reap[
+    Apply[parameterizedSolution, simulationParameters],
+    {"containment","herd","icu","hospital","cutoff"},
+    List
+  ];
+
+  outputSolution = Association[
+    MapThread[#1->#2&,{outputODE,outputSolution}]];
+
+  outputSolution = Join[
+    outputSolution,
+    <|
+      Sq->(Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&),
+      Iq->(outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&),
+      Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)
+     |>
+  ];
 
   outputEvents = Association[Table[
       event[[1]]-><|
@@ -496,10 +567,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     summaryAug1,
     SuseptibleQuantiles,
     testSim,
-    timeSeriesData
+    timeSeriesData,
+    rawSimTime,
+    modelComponents,
+    outputODE,
+    parameterizedSolution
   },
-
-  distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
 
   paramExpected = {
     fitParams["r0natural"],
@@ -525,7 +598,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     fitParams["distpow"]
   };
 
-  {sol, events} = integrateModel[distancing,paramExpected];
+  {sol, events} = integrateModel[state, scenario["id"], paramExpected];
 
   aug1 = 214;
   endOfYear = 730;
@@ -537,7 +610,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams];
 
   (* generate a solution for each simulation so we can get bands *)
-  rawSimResults=Map[integrateModel[distancing, #][[1]]&, sims];
+  modelComponents = simModelPrecompute[state][scenario["id"]];
+  
+  outputODE = modelComponents["outputODE"];
+  parameterizedSolution = modelComponents["parameterizedSolution"];
+
+  rawSimResults=Map[integrateModelSim[parameterizedSolution, outputODE, #][[1]]&, sims];
   simResults=Select[rawSimResults, endTime[#[Sq]]>=endOfEval&];
  
 
@@ -563,6 +641,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
+  
+  distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
 
   (* TODO Revisit these defintions *)
   (* TODO shift all percentiles down by 1 (since index 1 is now the zeroth percentile) *)
@@ -570,7 +650,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     Table[Association[{
           "day"->t,
           "distancing"->distancing[t],
-          "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(0.5-1)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"]/population,
+          "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
           "dailyPcr" -> Merge[{
               <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
               percentileMap[PCRQuantiles[t] - PCRQuantiles[t-1]]
@@ -691,12 +771,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
  ];
  
+ Echo[ListPlot[{#["day"], #["distancing"]}&/@timeSeriesData]];
+ 
  
  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
       scenario,
-      Association[{(*
-          "timeSeriesData"->timeSeriesData,*)
+      Association[{
+          "timeSeriesData"->timeSeriesData,
           "events"->events,
           "summary"->summary,
           "summaryAug1"->summaryAug1
@@ -711,7 +793,7 @@ then we generate a set of all the simulated parameters. Finally we call evaluate
 simulation results for each scenario *)
 Clear[equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric];
 evaluateState[state_, numberOfSimulations_:100]:= Module[{
-    distancing,
+    (*distancing,*)
     modelComponents,
     params,
     percentPositiveCase,
@@ -746,13 +828,11 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     repupper,
     deathDataLength,
     output,
-    paramExpected
+    paramExpected,
+    fittime
   },
 
-  distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
-
-  modelComponents = generateModelComponents[distancing];
-
+  modelComponents = modelPrecompute[state]["scenario1"];
 
   percentPositiveCase[t_]:=posInterpMap[state][t];
 
@@ -809,7 +889,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   ];
 
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
-  fit=Quiet[NonlinearModelFit[
+  {fittime,fit}=AbsoluteTiming[Quiet[NonlinearModelFit[
       longData,
       {
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
@@ -828,7 +908,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       Weights->dataWeights(*,
       EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    stateAdjustmentForTestingDifferences=", Exp[stateAdjustmentForTestingDifferences]]*)
     ], {InterpolatingFunction::dmval}
-  ];
+  ]];
+  
+  Echo[fittime];
 
   fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
   (* TODO: try using VarianceEstimatorFunction\[Rule](1&) *)
