@@ -1,38 +1,59 @@
 import * as React from 'react';
 import css from 'styled-jsx/css';
+import {theme} from '../../styles';
+import {Suspense} from '../util';
+import {formatText} from './Text';
 
 const styles = css`
-  .inline-data {
-    transition: ease background-color 300ms;
-  }
-  .inline-data-label {
-    transition: ease background-color 300ms, ease color 300ms;
+  span {
+    background-size: 200% 100%;
+    background-color: ${theme.color.gray[0]};
     background-image: linear-gradient(
       to right,
-      var(--color-gray0) 0%,
-      var(--color-gray0) 60%,
-      transparent 60%,
-      transparent 100%
+      ${theme.color.gray[0]} 50%,
+      ${theme.color.gray[1]} 80%,
+      ${theme.color.gray[0]} 100%
     );
-    background-size: 8px 1px;
-    background-repeat: repeat-x;
-    background-position: 0 100%;
+    border-radius: 999em;
+    display: inline-block;
+    height: 1em;
+    position: relative;
+    vertical-align: middle;
+    transform: translateY(-1px);
+    animation: placeholder 1s 800ms infinite ease-in-out both;
+    margin: 0 4px;
   }
-  .inline-data-value {
-    transition: ease color 300ms;
-    color: var(--color-gray2);
-    font-family: var(--font-family-mono);
-    font-weight: 500;
-    font-size: 0.9em;
-    padding: 0 2px;
+  @keyframes placeholder {
+    0% {
+      background-position: 200% center;
+    }
+    100% {
+      background-position: 0 center;
+    }
   }
 `;
 
-export const InlineData = ({label, value}) => (
-  <span className="inline-data">
-    <style jsx>{styles}</style>
-    <span className="inline-data-label">{label}</span>
-    &nbsp;
-    <span className="inline-data-value">{value}</span>
-  </span>
-);
+export function InlinePlaceholder({width = '3em'}) {
+  return (
+    <span
+      title="Loading…"
+      style={{
+        width,
+      }}
+    >
+      <style jsx>{styles}</style>
+    </span>
+  );
+}
+
+export function InlineDataInner({children}) {
+  return <span>{formatText(children(), 'inline')}</span>;
+}
+
+export function InlineData({children, width}) {
+  return (
+    <Suspense fallback={<InlinePlaceholder width={width} />}>
+      <InlineDataInner>{children}</InlineDataInner>
+    </Suspense>
+  );
+}

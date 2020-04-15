@@ -2,7 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
 import {DistancingGraph} from './configured';
-import {Grid, Paragraph} from './content';
+import {Grid, InlineData, Paragraph} from './content';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   MethodDisclaimer,
@@ -24,17 +24,19 @@ import {
   formatPercent2,
 } from '../lib/format';
 
-const {useMemo} = React;
+const {useCallback, useMemo} = React;
 
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
 
-  const [data] = useLocationQuery(`{
+  const [data, _, accessor] = useLocationQuery(`{
     importtime
     r0
   }`);
-  const importtime = data?.importtime;
-  const r0 = data?.r0;
+  const importtime = useCallback(() => accessor()?.location?.importtime, [
+    accessor,
+  ]);
+  const r0 = useCallback(() => accessor()?.location?.r0, [accessor]);
 
   const [distancing] = useDistancing();
 
@@ -76,7 +78,8 @@ export function ModelInputs({height, width, ...remaining}) {
       </Paragraph>
 
       <Paragraph>
-        The current distancing level, {formatPercent(1 - todayDistancing)}, is
+        The current distancing level,{' '}
+        <InlineData>{() => formatPercent(1 - todayDistancing)}</InlineData>, is
         calculated based on the average the past three days of available
         mobility data for {location.name}, which is usually reported with a
         three-day delay.
@@ -95,8 +98,11 @@ export function ModelInputs({height, width, ...remaining}) {
 
       <Paragraph className="estimation">
         We estimate that COVID-19 reached {location.name} on{' '}
-        {formatDate(dayToDate(importtime))} and has an uninhibited R₀ of{' '}
-        {formatNumber2(r0)}.
+        <InlineData width="130px">
+          {() => formatDate(dayToDate(importtime()))}
+        </InlineData>{' '}
+        and has an uninhibited R₀ of{' '}
+        <InlineData>{() => formatNumber2(r0())}</InlineData>.
       </Paragraph>
 
       {/* <MethodDisclaimer method="input" />

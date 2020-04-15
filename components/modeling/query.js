@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import useSWR from 'swr';
+import {useData} from '../util';
 import {useModelState} from './useModelState';
 
 export const createLocationQuery = (location, query) =>
@@ -21,12 +22,12 @@ export function useLocations(query = '') {
 
 export function useLocationQuery(query, fragments = []) {
   const {location} = useModelState();
-  const {data, error} = useSWR(
+  const [accessor, {data, error}] = useData(
     Array.from(
       new Set([...fragments, createLocationQuery(location.id, query)])
     ).join('\n')
   );
-  return [data?.location, error];
+  return [data?.location, error, accessor];
 }
 
 export function useScenarioQuery(query, fragments = []) {
