@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.6087476224142857,
+	"id":"scenario5",
+	"distancingDays":624,
+	"maintain":true,
+	"name":"Current Indefinite",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.94100091150328e2,
+			"thresholdCrossed":0.7
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.279455725182896e2,
+			"thresholdCrossed":2.125548977246553e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.4063795397629798e2,
+			"thresholdCrossed":1.3340159359733102e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":3.359819767621124e4,
+		"totalProjectedPCRConfirmed":8.338718186467875e5,
+		"totalProjectedInfected":2.7411033386998377e6,
+		"totalInfectedFraction":0.4756203590286185,
+		"fatalityRate":1.2257180239015565e-2,
+		"fatalityRateSymptomatic":1.7510257484307953e-2,
+		"fatalityRatePCR":4.029180135951183e-2,
+		"fractionOfSymptomaticHospitalized":7.667352354261878e-2,
+		"fractionOfPCRHospitalized":0.24178886462000185,
+		"fractionHospitalizedInICU":0.28449236892904844,
+		"fractionDeathOfHospitalized":0.11923250223964531,
+		"fractionOfInfectionsPCRConfirmed":0.30421028163145075,
+		"dateContained":"Fri 20 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 6 May 2020 22:41:37",
+		"dateHospitalsOverCapacity":"Tue 19 May 2020 15:18:39"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":2.770578279944497e4,
+		"totalProjectedPCRConfirmed":7.684664853713514e5,
+		"totalProjectedInfected":2.6046413548107953e6,
+		"totalInfectedFraction":0.4519422667601784,
+		"fatalityRate":1.063708166510992e-2,
+		"fatalityRateSymptomatic":1.5195830950157026e-2,
+		"fatalityRatePCR":3.6053339119996246e-2,
+		"fractionOfSymptomaticHospitalized":7.31254565223782e-2,
+		"fractionOfPCRHospitalized":0.23624206360062064,
+		"fractionHospitalizedInICU":0.28449236892904844,
+		"fractionDeathOfHospitalized":0.10919494552653584,
+		"fractionOfInfectionsPCRConfirmed":0.2950373509013005,
+		"dateContained":"Fri 20 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 6 May 2020 22:41:37",
+		"dateHospitalsOverCapacity":"Tue 19 May 2020 15:18:39"
+	}
+}

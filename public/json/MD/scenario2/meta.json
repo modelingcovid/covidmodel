@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.308911093129332e2,
+			"thresholdCrossed":0.7000000000000006
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.3304971786748985e2,
+			"thresholdCrossed":1.5393392915603684e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.1150947819464875e2,
+			"thresholdCrossed":5.889434527283118e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.402741283997629e4,
+		"totalProjectedPCRConfirmed":1.6137608930761465e6,
+		"totalProjectedInfected":5.137443699408962e6,
+		"totalInfectedFraction":0.8568005357182522,
+		"fatalityRate":1.0516399984333041e-2,
+		"fatalityRateSymptomatic":1.5023428549047205e-2,
+		"fatalityRatePCR":3.3479193275646545e-2,
+		"fractionOfSymptomaticHospitalized":7.381073220045982e-2,
+		"fractionOfPCRHospitalized":0.23313825788694012,
+		"fractionHospitalizedInICU":0.2747722959832424,
+		"fractionDeathOfHospitalized":0.10414437635287202,
+		"fractionOfInfectionsPCRConfirmed":0.3141174847836877,
+		"dateContained":"Fri 13 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 12 May 2020 01:11:35",
+		"dateHospitalsOverCapacity":"Wed 29 Jul 2020 12:13:38"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":5.137879396660507e3,
+		"totalProjectedPCRConfirmed":1.8771665667116054e5,
+		"totalProjectedInfected":9.253045292219232e5,
+		"totalInfectedFraction":0.1543182685254686,
+		"fatalityRate":5.552636169392671e-3,
+		"fatalityRateSymptomatic":7.932337384846673e-3,
+		"fatalityRatePCR":2.737039689376619e-2,
+		"fractionOfSymptomaticHospitalized":4.6478898450699475e-2,
+		"fractionOfPCRHospitalized":0.19777093292505435,
+		"fractionHospitalizedInICU":0.2747722959832422,
+		"fractionDeathOfHospitalized":0.10036747970853514,
+		"fractionOfInfectionsPCRConfirmed":0.20287013706612794,
+		"dateContained":"Fri 13 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 12 May 2020 01:11:35",
+		"dateHospitalsOverCapacity":"Wed 29 Jul 2020 12:13:38"
+	}
+}

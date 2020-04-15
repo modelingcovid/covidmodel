@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.11,
+	"id":"scenario3",
+	"distancingDays":60,
+	"maintain":false,
+	"name":"Wuhan",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.279254129540239e2,
+			"thresholdCrossed":0.6999999999999997
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1120704107413349e2,
+			"thresholdCrossed":1.801358869718745e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.1306039308887821e2,
+			"thresholdCrossed":9.144354072182797e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":7.231373952292118e4,
+		"totalProjectedPCRConfirmed":1.9275042985663873e6,
+		"totalProjectedInfected":5.943171856336541e6,
+		"totalInfectedFraction":0.8753708370952287,
+		"fatalityRate":1.2167532972451591e-2,
+		"fatalityRateSymptomatic":1.7382189960645132e-2,
+		"fatalityRatePCR":3.751677211651653e-2,
+		"fractionOfSymptomaticHospitalized":7.676225730556895e-2,
+		"fractionOfPCRHospitalized":0.23896796041717025,
+		"fractionHospitalizedInICU":0.28195639142174,
+		"fractionDeathOfHospitalized":0.1127292478277192,
+		"fractionOfInfectionsPCRConfirmed":0.3243224906093376,
+		"dateContained":"Sat 6 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 20 Apr 2020 04:58:08",
+		"dateHospitalsOverCapacity":"Fri 31 Jul 2020 01:26:57"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":4.034792865649206e3,
+		"totalProjectedPCRConfirmed":1.8413051969229642e5,
+		"totalProjectedInfected":1.188052938909392e6,
+		"totalInfectedFraction":0.17498852814389662,
+		"fatalityRate":3.396138954340757e-3,
+		"fatalityRateSymptomatic":4.851627077629653e-3,
+		"fatalityRatePCR":2.191267842176199e-2,
+		"fractionOfSymptomaticHospitalized":3.0972414158315396e-2,
+		"fractionOfPCRHospitalized":0.15654819638365658,
+		"fractionHospitalizedInICU":0.2819563914217401,
+		"fractionDeathOfHospitalized":0.10050744148477193,
+		"fractionOfInfectionsPCRConfirmed":0.15498511359378012,
+		"dateContained":"Sat 6 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 20 Apr 2020 04:58:08",
+		"dateHospitalsOverCapacity":"Fri 31 Jul 2020 01:26:57"
+	}
+}

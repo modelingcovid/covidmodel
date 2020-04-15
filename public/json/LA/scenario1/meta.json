@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5856209610428572,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.5730007590014043e2,
+			"thresholdCrossed":0.7000000000000002
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":9.557581409290098e1,
+			"thresholdCrossed":2.618227106434472e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.0845055645804364e2,
+			"thresholdCrossed":1.8822428978855989e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":3.310999605428463e4,
+		"totalProjectedPCRConfirmed":7.24009965478057e5,
+		"totalProjectedInfected":3.260216416053348e6,
+		"totalInfectedFraction":0.6990980338536869,
+		"fatalityRate":1.015576631393259e-2,
+		"fatalityRateSymptomatic":1.4508237591332272e-2,
+		"fatalityRatePCR":4.5731409280288585e-2,
+		"fractionOfSymptomaticHospitalized":7.178427765475477e-2,
+		"fractionOfPCRHospitalized":0.23752228478934007,
+		"fractionHospitalizedInICU":0.27829129096279415,
+		"fractionDeathOfHospitalized":0.13895435699181355,
+		"fractionOfInfectionsPCRConfirmed":0.22207420400468583,
+		"dateContained":"Sun 28 Feb 2021 00:00:00",
+		"dateICUOverCapacity":"Sat 4 Apr 2020 13:49:10",
+		"dateHospitalsOverCapacity":"Fri 17 Apr 2020 10:48:48"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":2.068582224837793e4,
+		"totalProjectedPCRConfirmed":3.622536053962616e5,
+		"totalProjectedInfected":2.1041420712498575e6,
+		"totalInfectedFraction":0.4511975271691685,
+		"fatalityRate":9.831000734703515e-3,
+		"fatalityRateSymptomatic":1.4044286763862166e-2,
+		"fatalityRatePCR":5.710315077678838e-2,
+		"fractionOfSymptomaticHospitalized":7.066705992372549e-2,
+		"fractionOfPCRHospitalized":0.24498981327976285,
+		"fractionHospitalizedInICU":0.2782912909627944,
+		"fractionDeathOfHospitalized":0.16821859112162976,
+		"fractionOfInfectionsPCRConfirmed":0.17216214168517785,
+		"dateContained":"Sun 28 Feb 2021 00:00:00",
+		"dateICUOverCapacity":"Sat 4 Apr 2020 13:49:10",
+		"dateHospitalsOverCapacity":"Fri 17 Apr 2020 10:48:48"
+	}
+}

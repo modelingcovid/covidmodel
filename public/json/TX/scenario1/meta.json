@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5855677142428571,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.7620055196342074e2,
+			"thresholdCrossed":0.7000000000001068
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.2621084865371384e2,
+			"thresholdCrossed":2.0507219431113765e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.360425246304814e2,
+			"thresholdCrossed":1.3567733664935145e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.526279190203539e5,
+		"totalProjectedPCRConfirmed":5.114892686405366e6,
+		"totalProjectedInfected":1.957114890758972e7,
+		"totalInfectedFraction":0.7137646188279294,
+		"fatalityRate":7.798618248781735e-3,
+		"fatalityRateSymptomatic":1.1140883212545336e-2,
+		"fatalityRatePCR":2.9839906402340854e-2,
+		"fractionOfSymptomaticHospitalized":6.554907872068977e-2,
+		"fractionOfPCRHospitalized":0.21763094646129155,
+		"fractionHospitalizedInICU":0.2619699150562409,
+		"fractionDeathOfHospitalized":0.10119309323846762,
+		"fractionOfInfectionsPCRConfirmed":0.2613486163002829,
+		"dateContained":"Thu 21 Jan 2021 00:00:00",
+		"dateICUOverCapacity":"Tue 5 May 2020 05:03:37",
+		"dateHospitalsOverCapacity":"Fri 15 May 2020 01:01:14"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.0009216584099423e5,
+		"totalProjectedPCRConfirmed":3.5726683351938305e6,
+		"totalProjectedInfected":1.4598271300839223e7,
+		"totalInfectedFraction":0.5324025482504721,
+		"fatalityRate":6.85643962756331e-3,
+		"fatalityRateSymptomatic":9.794913753661871e-3,
+		"fatalityRatePCR":2.8016081105262707e-2,
+		"fractionOfSymptomaticHospitalized":6.1879280142365364e-2,
+		"fractionOfPCRHospitalized":0.21333624748229796,
+		"fractionHospitalizedInICU":0.26196991505624123,
+		"fractionDeathOfHospitalized":9.692075754554537e-2,
+		"fractionOfInfectionsPCRConfirmed":0.24473228792428633,
+		"dateContained":"Thu 21 Jan 2021 00:00:00",
+		"dateICUOverCapacity":"Tue 5 May 2020 05:03:37",
+		"dateHospitalsOverCapacity":"Fri 15 May 2020 01:01:14"
+	}
+}

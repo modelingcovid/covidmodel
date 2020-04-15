@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.431622920289312e2,
+			"thresholdCrossed":0.6999999999999998
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1548207646453088e2,
+			"thresholdCrossed":2.2046834251694772e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.30301060839407e2,
+			"thresholdCrossed":1.829562888012849e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":3.289203489686693e4,
+		"totalProjectedPCRConfirmed":8.76622213470651e5,
+		"totalProjectedInfected":3.05785265094643e6,
+		"totalInfectedFraction":0.7848192149187591,
+		"fatalityRate":1.0756579420753509e-2,
+		"fatalityRateSymptomatic":1.536654202964787e-2,
+		"fatalityRatePCR":3.752133403811829e-2,
+		"fractionOfSymptomaticHospitalized":7.225993834738029e-2,
+		"fractionOfPCRHospitalized":0.23029770576639008,
+		"fractionHospitalizedInICU":0.28311909520628586,
+		"fractionDeathOfHospitalized":0.11679807145625076,
+		"fractionOfInfectionsPCRConfirmed":0.2866790239874146,
+		"dateContained":"Tue 8 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 24 Apr 2020 11:34:11",
+		"dateHospitalsOverCapacity":"Mon 17 Aug 2020 07:13:31"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":5.079089132581165e3,
+		"totalProjectedPCRConfirmed":9.330045934842869e4,
+		"totalProjectedInfected":5.392773678856435e5,
+		"totalInfectedFraction":0.1384092985502329,
+		"fatalityRate":9.41832428921477e-3,
+		"fatalityRateSymptomatic":1.345474898459253e-2,
+		"fatalityRatePCR":5.443798635131484e-2,
+		"fractionOfSymptomaticHospitalized":6.590263089228741e-2,
+		"fractionOfPCRHospitalized":0.23606728137549032,
+		"fractionHospitalizedInICU":0.28311909520628575,
+		"fractionDeathOfHospitalized":0.16531538247608368,
+		"fractionOfInfectionsPCRConfirmed":0.17301015192651942,
+		"dateContained":"Tue 8 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 24 Apr 2020 11:34:11",
+		"dateHospitalsOverCapacity":"Mon 17 Aug 2020 07:13:31"
+	}
+}

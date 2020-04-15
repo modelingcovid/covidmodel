@@ -1,0 +1,58 @@
+{
+	"distancingLevel":1,
+	"id":"scenario4",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Normal",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.448740606568056e2,
+			"thresholdCrossed":0.700000000000026
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.2239681918569768e2,
+			"thresholdCrossed":1.992461750865036e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.2642806956820152e2,
+			"thresholdCrossed":1.1685688563269037e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":4.7832371667580446e4,
+		"totalProjectedPCRConfirmed":1.0700094796259373e6,
+		"totalProjectedInfected":3.9377080240715183e6,
+		"totalInfectedFraction":0.8046905255422394,
+		"fatalityRate":1.214726215737109e-2,
+		"fatalityRateSymptomatic":1.7353231653387275e-2,
+		"fatalityRatePCR":4.47027550487703e-2,
+		"fractionOfSymptomaticHospitalized":7.65269572214133e-2,
+		"fractionOfPCRHospitalized":0.2482364222621643,
+		"fractionHospitalizedInICU":0.29013893576056293,
+		"fractionDeathOfHospitalized":0.12783275308343653,
+		"fractionOfInfectionsPCRConfirmed":0.2717340831480865,
+		"dateContained":"Sun 23 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 1 May 2020 09:31:25",
+		"dateHospitalsOverCapacity":"Tue 5 May 2020 10:16:25"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":4.733589028805654e4,
+		"totalProjectedPCRConfirmed":1.0691761409730741e6,
+		"totalProjectedInfected":3.936860778424882e6,
+		"totalInfectedFraction":0.8045173866145974,
+		"fatalityRate":1.2023765368455673e-2,
+		"fatalityRateSymptomatic":1.717680766922239e-2,
+		"fatalityRatePCR":4.4273238500230086e-2,
+		"fractionOfSymptomaticHospitalized":7.645072195112428e-2,
+		"fractionOfPCRHospitalized":0.24808307987033065,
+		"fractionHospitalizedInICU":0.29013893576056315,
+		"fractionDeathOfHospitalized":0.12668275569428838,
+		"fractionOfInfectionsPCRConfirmed":0.2715808866883137,
+		"dateContained":"Sun 23 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 1 May 2020 09:31:25",
+		"dateHospitalsOverCapacity":"Tue 5 May 2020 10:16:25"
+	}
+}

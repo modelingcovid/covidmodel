@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5770698515857143,
+	"id":"scenario5",
+	"distancingDays":624,
+	"maintain":true,
+	"name":"Current Indefinite",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.1914576452348652e2,
+			"thresholdCrossed":0.7000000000000008
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1084993530863866e2,
+			"thresholdCrossed":2.014076598390326e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.2744995284139175e2,
+			"thresholdCrossed":1.3066558979518482e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.51511104970123e4,
+		"totalProjectedPCRConfirmed":1.3010800124321424e6,
+		"totalProjectedInfected":5.109145140381233e6,
+		"totalInfectedFraction":0.39745885148789095,
+		"fatalityRate":1.0794586761905348e-2,
+		"fatalityRateSymptomatic":1.5420838231293357e-2,
+		"fatalityRatePCR":4.2388715505602845e-2,
+		"fractionOfSymptomaticHospitalized":7.334721824665277e-2,
+		"fractionOfPCRHospitalized":0.23955334749190146,
+		"fractionHospitalizedInICU":0.27767689581005284,
+		"fractionDeathOfHospitalized":0.12781432147453795,
+		"fractionOfInfectionsPCRConfirmed":0.2546570858104569,
+		"dateContained":"Tue 1 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 20:23:54",
+		"dateHospitalsOverCapacity":"Wed 6 May 2020 10:47:55"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":4.7729458405400896e4,
+		"totalProjectedPCRConfirmed":1.197964974680251e6,
+		"totalProjectedInfected":4.866765696692096e6,
+		"totalInfectedFraction":0.37860327924126463,
+		"fatalityRate":9.807223396401072e-3,
+		"fatalityRateSymptomatic":1.401031913771582e-2,
+		"fatalityRatePCR":3.984211509868256e-2,
+		"fractionOfSymptomaticHospitalized":7.09157329630084e-2,
+		"fractionOfPCRHospitalized":0.23557091473862882,
+		"fractionHospitalizedInICU":0.27767689581005317,
+		"fractionDeathOfHospitalized":0.12216652589520376,
+		"fractionOfInfectionsPCRConfirmed":0.24615217771722575,
+		"dateContained":"Tue 1 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 20:23:54",
+		"dateHospitalsOverCapacity":"Wed 6 May 2020 10:47:55"
+	}
+}

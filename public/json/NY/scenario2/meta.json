@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.3700859939249682e2,
+			"thresholdCrossed":0.7
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":8.430325540638762e1,
+			"thresholdCrossed":1.5703425579299317e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":8.753632626561851e1,
+			"thresholdCrossed":8.571121135744629e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.8568568045357e5,
+		"totalProjectedPCRConfirmed":3.9590352790054115e6,
+		"totalProjectedInfected":1.5803221580385875e7,
+		"totalInfectedFraction":0.7982139401761549,
+		"fatalityRate":1.1749862489053072e-2,
+		"fatalityRateSymptomatic":1.678551784150439e-2,
+		"fatalityRatePCR":4.690174938279861e-2,
+		"fractionOfSymptomaticHospitalized":7.542091918478437e-2,
+		"fractionOfPCRHospitalized":0.2408752721621468,
+		"fractionHospitalizedInICU":0.2812604177543196,
+		"fractionDeathOfHospitalized":0.13994854455334904,
+		"fractionOfInfectionsPCRConfirmed":0.2505207725441981,
+		"dateContained":"Sun 27 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":7.555819013013171e4,
+		"totalProjectedPCRConfirmed":9.445210433484397e5,
+		"totalProjectedInfected":6.595151800896276e6,
+		"totalInfectedFraction":0.33311828719702974,
+		"fatalityRate":1.1456626384227186e-2,
+		"fatalityRateSymptomatic":1.6366609120324553e-2,
+		"fatalityRatePCR":7.999630147176914e-2,
+		"fractionOfSymptomaticHospitalized":7.423984950868047e-2,
+		"fractionOfPCRHospitalized":0.2547066120134882,
+		"fractionHospitalizedInICU":0.28126041775431965,
+		"fractionDeathOfHospitalized":0.22573622194768173,
+		"fractionOfInfectionsPCRConfirmed":0.1432144508364584,
+		"dateContained":"Sun 27 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	}
+}

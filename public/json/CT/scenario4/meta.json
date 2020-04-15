@@ -1,0 +1,58 @@
+{
+	"distancingLevel":1,
+	"id":"scenario4",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Normal",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.304992745122797e2,
+			"thresholdCrossed":0.7000000000000003
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":9.721805506320756e1,
+			"thresholdCrossed":1.5913298120060824e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.0451026804935873e2,
+			"thresholdCrossed":8.771942643502758e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":4.082086214852689e4,
+		"totalProjectedPCRConfirmed":6.725457986276638e5,
+		"totalProjectedInfected":3.1389459289998873e6,
+		"totalInfectedFraction":0.8732689222189947,
+		"fatalityRate":1.3004640115458438e-2,
+		"fatalityRateSymptomatic":1.8578057307797772e-2,
+		"fatalityRatePCR":6.069603323940504e-2,
+		"fractionOfSymptomaticHospitalized":7.858673672404369e-2,
+		"fractionOfPCRHospitalized":0.26555345819523374,
+		"fractionHospitalizedInICU":0.2843358113810667,
+		"fractionDeathOfHospitalized":0.16357526531901231,
+		"fractionOfInfectionsPCRConfirmed":0.21425848480351056,
+		"dateContained":"Sun 2 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 6 Apr 2020 05:13:59",
+		"dateHospitalsOverCapacity":"Mon 13 Apr 2020 12:14:47"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":4.0720720444506434e4,
+		"totalProjectedPCRConfirmed":6.724808599772303e5,
+		"totalProjectedInfected":3.138900339835858e6,
+		"totalInfectedFraction":0.8732562391078365,
+		"fatalityRate":1.2972925558584583e-2,
+		"fatalityRateSymptomatic":1.8532750797977976e-2,
+		"fatalityRatePCR":6.0552980564956456e-2,
+		"fractionOfSymptomaticHospitalized":7.85777816554326e-2,
+		"fractionOfPCRHospitalized":0.2655299944134721,
+		"fractionHospitalizedInICU":0.2843358113810668,
+		"fractionDeathOfHospitalized":0.16320416004301655,
+		"fractionOfInfectionsPCRConfirmed":0.2142409083342851,
+		"dateContained":"Sun 2 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 6 Apr 2020 05:13:59",
+		"dateHospitalsOverCapacity":"Mon 13 Apr 2020 12:14:47"
+	}
+}

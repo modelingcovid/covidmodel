@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.5368899236657487e2,
+			"thresholdCrossed":0.7000000000000007
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.2805809337789808e2,
+			"thresholdCrossed":1.1046433442837114e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.319856618287696e2,
+			"thresholdCrossed":7.005190594202076e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":7.227195434340136e3,
+		"totalProjectedPCRConfirmed":1.733455061159396e5,
+		"totalProjectedInfected":4.986920578245658e5,
+		"totalInfectedFraction":0.7983722645261653,
+		"fatalityRate":1.4492301052210825e-2,
+		"fatalityRateSymptomatic":2.070328721744404e-2,
+		"fatalityRatePCR":4.169243031605521e-2,
+		"fractionOfSymptomaticHospitalized":8.241847957039514e-2,
+		"fractionOfPCRHospitalized":0.2501062824935244,
+		"fractionHospitalizedInICU":0.2942755497875235,
+		"fractionDeathOfHospitalized":0.11764345609183911,
+		"fractionOfInfectionsPCRConfirmed":0.3476002944023637,
+		"dateContained":"Sun 13 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Sat 15 Aug 2020 01:23:39",
+		"dateHospitalsOverCapacity":"Tue 18 Aug 2020 23:39:21"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":2.496396184170962e2,
+		"totalProjectedPCRConfirmed":3.1379890564019615e3,
+		"totalProjectedInfected":1.8987274580110483e4,
+		"totalInfectedFraction":3.0397342740588893e-2,
+		"fatalityRate":1.314773309691314e-2,
+		"fatalityRateSymptomatic":1.878247585273306e-2,
+		"fatalityRatePCR":7.95540117986691e-2,
+		"fractionOfSymptomaticHospitalized":7.672375706945238e-2,
+		"fractionOfPCRHospitalized":0.256664296069589,
+		"fractionHospitalizedInICU":0.2942755497875234,
+		"fractionDeathOfHospitalized":0.21874180436686289,
+		"fractionOfInfectionsPCRConfirmed":0.16526800848443315,
+		"dateContained":"Sun 13 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Sat 15 Aug 2020 01:23:39",
+		"dateHospitalsOverCapacity":"Tue 18 Aug 2020 23:39:21"
+	}
+}
