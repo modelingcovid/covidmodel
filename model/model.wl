@@ -1074,7 +1074,7 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
     Export["public/json/"<>state<>"/"<>#["id"]<>".json", stateData["scenarios"][#["id"]]]&/@scenarios;
-    Export["public/json/"<>state<>"/"<>state<>".json",KeyDrop[stateData, {"scenarios"}]];
+    Export["public/json/"<>state<>"/summary.json",KeyDrop[stateData, {"scenarios"}]];
     stateData
   ];
 
