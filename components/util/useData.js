@@ -2,21 +2,34 @@ import {useCallback, useMemo, useRef} from 'react';
 import useSWR from 'swr';
 
 export function useData(query) {
-  const promise = useRef(null);
+  const latest = useRef(null);
+
+  const reset = useCallback(() => {
+    const request = {};
+    request.promise = new Promise((resolve, reject) => {
+      request.resolve = resolve;
+      request.reject = reject;
+    });
+    latest.current = request;
+  }, []);
+
+  if (!latest.current) {
+    reset();
+  }
 
   const options = useMemo(
     () => ({
       onSuccess(data) {
-        if (promise.current) {
-          promise.current.resolve(data);
+        if (latest.current) {
+          latest.current.resolve(data);
         }
-        promise.current = null;
+        reset();
       },
       onError(err) {
-        if (promise.current) {
-          promise.current.reject(err);
+        if (latest.current) {
+          latest.current.reject(err);
         }
-        promise.current = null;
+        reset();
       },
     }),
     []
@@ -25,6 +38,7 @@ export function useData(query) {
   const result = useSWR(query, options);
   const {data, error} = result;
 
+  const request = latest.current;
   const accessor = useCallback(() => {
     if (typeof window === 'undefined') {
       return data;
@@ -33,17 +47,10 @@ export function useData(query) {
       if (error) {
         throw error;
       }
-      if (!promise.current) {
-        promise.current = {};
-        promise.current.promise = new Promise((resolve, reject) => {
-          promise.current.resolve = resolve;
-          promise.current.reject = reject;
-        });
-      }
-      throw promise.current.promise;
+      throw request.promise;
     }
     return data;
-  }, [data, error]);
+  }, [data, error, request]);
 
   return [accessor, result];
 }

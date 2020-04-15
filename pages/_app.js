@@ -3,7 +3,7 @@ import Head from 'next/head';
 import {SWRConfig} from 'swr';
 import 'normalize.css';
 
-import {fetch} from '../lib/fetch';
+import {fetchPromise} from '../lib/fetch';
 import {globalStyles} from '../styles';
 
 import '../styles/main.css';
@@ -28,7 +28,7 @@ export default function App({
   return (
     <SWRConfig
       value={{
-        fetcher: fetch,
+        fetcher: fetchPromise,
       }}
     >
       <ComponentIdProvider>

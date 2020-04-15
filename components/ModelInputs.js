@@ -46,7 +46,7 @@ export function ModelInputs({height, width, ...remaining}) {
   return (
     <div {...remaining}>
       <DistancingGraph
-        r0={r0}
+        r0={data?.r0}
         y={distancing}
         leftLabel="distancing"
         rightLabel="R₀"
@@ -78,8 +78,7 @@ export function ModelInputs({height, width, ...remaining}) {
       </Paragraph>
 
       <Paragraph>
-        The current distancing level,{' '}
-        <InlineData>{() => formatPercent(1 - todayDistancing)}</InlineData>, is
+        The current distancing level, {formatPercent(1 - todayDistancing)}, is
         calculated based on the average the past three days of available
         mobility data for {location.name}, which is usually reported with a
         three-day delay.

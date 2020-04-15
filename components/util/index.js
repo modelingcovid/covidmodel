@@ -3,6 +3,7 @@ export * from './useComponentId';
 export * from './useComponentMounted';
 export * from './useContentRect';
 export * from './useData';
+export * from './useFetch';
 export * from './useMatchMedia';
 export * from './usePreviousValue';
 export * from './useSelect';

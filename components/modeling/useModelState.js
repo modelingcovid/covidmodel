@@ -59,7 +59,8 @@ export const ModelStateProvider = ({
   const context = useMemo(() => {
     const location = locations.find(({id}) => id === locationId) || {
       id: locationId,
-      name: '',
+      // NOTE: This should be better... but c'est la vie
+      name: stateLabels[locationId],
     };
     const scenario = scenarios.find(({id}) => id === scenarioId) || {
       id: scenarioId,

@@ -11,7 +11,7 @@ import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider, useGraphData} from './useGraphData';
-import {useComponentId} from '../util';
+import {Suspense, useComponentId} from '../util';
 import {createDateScale} from '../../lib/date';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 import {theme} from '../../styles';
@@ -61,12 +61,14 @@ function GraphContents({
   const distancingId = useDistancingId();
 
   return (
-    <div className={`graph no-select${decoration ? ' margin-bottom-1' : ''}`}>
+    <div className="graph no-select">
       <style jsx>{`
         .graph {
           position: relative;
           margin-left: ${-1 * margin.left}px;
           margin-right: ${-1 * margin.right}px;
+          background: ${theme.color.background};
+          animation: fade-in 300ms ease-in both;
         }
         .graph-overlay {
           pointer-events: none;
@@ -75,6 +77,15 @@ function GraphContents({
           left: ${margin.left}px;
           bottom: ${margin.bottom}px;
           right: ${margin.right}px;
+        }
+        @keyframes fade-in {
+          from {
+            transform: translateY(-3px);
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
       `}</style>
       <svg className="block" width={width} height={height}>
@@ -156,6 +167,7 @@ function GraphContents({
 }
 
 export const Graph = React.memo(function Graph({
+  accessors,
   children,
   overlay,
   after,
@@ -238,36 +250,40 @@ export const Graph = React.memo(function Graph({
       margin={margin}
       clipPath={`url(#${clipPathId})`}
     >
-      <style jsx>{`
-        .graph {
-          position: relative;
-          margin-left: ${-1 * margin.left}px;
-          margin-right: ${-1 * margin.right}px;
-        }
-        .graph-overlay {
-          pointer-events: none;
-          position: absolute;
-          top: ${margin.top}px;
-          left: ${margin.left}px;
-          bottom: ${margin.bottom}px;
-          right: ${margin.right}px;
-        }
-      `}</style>
       {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
-      <GraphContents
-        clipPathId={clipPathId}
-        decoration={decoration}
-        height={height}
-        overlay={overlay}
-        scrubber={scrubber}
-        tickFormat={tickFormat}
-        tickLabelProps={tickLabelProps}
-        xLabel={xLabel}
-        width={width}
+      <figure
+        className={decoration ? 'margin-bottom-1' : ''}
+        style={{
+          background: theme.color.gray[0],
+        }}
       >
-        {children}
-      </GraphContents>
+        <Suspense
+          fallback={
+            <div
+              style={{
+                height: `${height}px`,
+                width: `${width}px`,
+              }}
+            />
+          }
+        >
+          <GraphContents
+            accessors={accessors}
+            clipPathId={clipPathId}
+            decoration={decoration}
+            height={height}
+            overlay={overlay}
+            scrubber={scrubber}
+            tickFormat={tickFormat}
+            tickLabelProps={tickLabelProps}
+            xLabel={xLabel}
+            width={width}
+          >
+            {children}
+          </GraphContents>
+        </Suspense>
+      </figure>
       {after}
     </GraphDataProvider>
   );
