@@ -1,3 +1,4 @@
+export * from './Suspense';
 export * from './useComponentId';
 export * from './useComponentMounted';
 export * from './useContentRect';
