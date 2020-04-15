@@ -1,0 +1,58 @@
+{
+	"distancingLevel":1,
+	"id":"scenario4",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Normal",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.279605857042209e2,
+			"thresholdCrossed":0.7000000000000101
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":8.430325540638762e1,
+			"thresholdCrossed":1.5703425579299317e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":8.753632626561851e1,
+			"thresholdCrossed":8.571121135744629e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.9882643517735254e5,
+		"totalProjectedPCRConfirmed":3.1277183013622877e6,
+		"totalProjectedInfected":1.6921596773235187e7,
+		"totalInfectedFraction":0.8547025912235775,
+		"fatalityRate":1.1749862488854209e-2,
+		"fatalityRateSymptomatic":1.6785517841220298e-2,
+		"fatalityRatePCR":6.356916321100689e-2,
+		"fractionOfSymptomaticHospitalized":7.54209191846632e-2,
+		"fractionOfPCRHospitalized":0.2596253399396069,
+		"fractionHospitalizedInICU":0.28126041775431965,
+		"fractionDeathOfHospitalized":0.17598310635092373,
+		"fractionOfInfectionsPCRConfirmed":0.18483588418259592,
+		"dateContained":"Thu 6 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.982855965545359e5,
+		"totalProjectedPCRConfirmed":3.12712625748966e6,
+		"totalProjectedInfected":1.6921041105730534e7,
+		"totalInfectedFraction":0.8546745246963785,
+		"fatalityRate":1.1718285849880944e-2,
+		"fatalityRateSymptomatic":1.674040835697278e-2,
+		"fatalityRatePCR":6.340824777369629e-2,
+		"fractionOfSymptomaticHospitalized":7.540740885689051e-2,
+		"fractionOfPCRHospitalized":0.2595866663452967,
+		"fractionHospitalizedInICU":0.28126041775431987,
+		"fractionDeathOfHospitalized":0.17556378437086395,
+		"fractionOfInfectionsPCRConfirmed":0.18480696536045985,
+		"dateContained":"Thu 6 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	}
+}

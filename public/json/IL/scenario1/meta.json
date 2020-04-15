@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5770698515857143,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.121929033911975e2,
+			"thresholdCrossed":0.6999999999999998
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1084993530863866e2,
+			"thresholdCrossed":2.014076598390326e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.2744995284139175e2,
+			"thresholdCrossed":1.3066558979518482e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.0559699064994622e5,
+		"totalProjectedPCRConfirmed":2.7764289500480667e6,
+		"totalProjectedInfected":9.78240232653951e6,
+		"totalInfectedFraction":0.761008404863743,
+		"fatalityRate":1.0794586761522082e-2,
+		"fatalityRateSymptomatic":1.5420838230745833e-2,
+		"fatalityRatePCR":3.8033384808250935e-2,
+		"fractionOfSymptomaticHospitalized":7.33472182460821e-2,
+		"fractionOfPCRHospitalized":0.2351397507216911,
+		"fractionHospitalizedInICU":0.2776768958100534,
+		"fractionDeathOfHospitalized":0.11683431871143982,
+		"fractionOfInfectionsPCRConfirmed":0.2838187244165635,
+		"dateContained":"Sun 20 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 20:23:54",
+		"dateHospitalsOverCapacity":"Wed 6 May 2020 10:47:55"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":4.798227355176861e4,
+		"totalProjectedPCRConfirmed":1.2748777751164183e6,
+		"totalProjectedInfected":5.371502998378281e6,
+		"totalInfectedFraction":0.41786861673299197,
+		"fatalityRate":8.932746303270242e-3,
+		"fatalityRateSymptomatic":1.2761066147528918e-2,
+		"fatalityRatePCR":3.763676368692442e-2,
+		"fractionOfSymptomaticHospitalized":6.589080336641114e-2,
+		"fractionOfPCRHospitalized":0.22822953239641655,
+		"fractionHospitalizedInICU":0.27767689581005345,
+		"fractionDeathOfHospitalized":0.11911650386586678,
+		"fractionOfInfectionsPCRConfirmed":0.23734097802818294,
+		"dateContained":"Sun 20 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 20:23:54",
+		"dateHospitalsOverCapacity":"Wed 6 May 2020 10:47:55"
+	}
+}

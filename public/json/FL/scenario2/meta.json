@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.388760255313106e2,
+			"thresholdCrossed":0.7
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.1944624468997154e2,
+			"thresholdCrossed":2.455316228111512e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.216265787890667e2,
+			"thresholdCrossed":1.1191896431429222e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":2.7589505850688124e5,
+		"totalProjectedPCRConfirmed":5.911243192608613e6,
+		"totalProjectedInfected":1.6812955198364727e7,
+		"totalInfectedFraction":0.8291046744538538,
+		"fatalityRate":1.6409670712363256e-2,
+		"fatalityRateSymptomatic":2.3442386731947512e-2,
+		"fatalityRatePCR":4.667293317450702e-2,
+		"fractionOfSymptomaticHospitalized":8.321480152682706e-2,
+		"fractionOfPCRHospitalized":0.2508005215195489,
+		"fractionHospitalizedInICU":0.30258246539405786,
+		"fractionDeathOfHospitalized":0.1297865004034906,
+		"fractionOfInfectionsPCRConfirmed":0.3515885888510281,
+		"dateContained":"Wed 25 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 6 Aug 2020 10:42:35",
+		"dateHospitalsOverCapacity":"Sat 8 Aug 2020 15:02:16"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.2741402728870062e4,
+		"totalProjectedPCRConfirmed":3.1133881470618106e5,
+		"totalProjectedInfected":1.2932576654644643e6,
+		"totalInfectedFraction":6.377498560242134e-2,
+		"fatalityRate":9.852176460360726e-3,
+		"fatalityRateSymptomatic":1.4074537800515324e-2,
+		"fatalityRatePCR":4.0924555908309956e-2,
+		"fractionOfSymptomaticHospitalized":5.732246442396188e-2,
+		"fractionOfPCRHospitalized":0.22287573471600433,
+		"fractionHospitalizedInICU":0.3025824653940578,
+		"fractionDeathOfHospitalized":0.12806016286512795,
+		"fractionOfInfectionsPCRConfirmed":0.2407399724125091,
+		"dateContained":"Wed 25 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 6 Aug 2020 10:42:35",
+		"dateHospitalsOverCapacity":"Sat 8 Aug 2020 15:02:16"
+	}
+}

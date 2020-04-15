@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4525254742285715,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.4465789760324256e2,
+			"thresholdCrossed":0.7000000000000002
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.182177708909511e2,
+			"thresholdCrossed":1.1046433442834423e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.2267584219084196e2,
+			"thresholdCrossed":7.005190594202078e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":7.2002423970712725e3,
+		"totalProjectedPCRConfirmed":1.7243282250104006e5,
+		"totalProjectedInfected":4.968322401691721e5,
+		"totalInfectedFraction":0.7953948222151335,
+		"fatalityRate":1.4492301052402675e-2,
+		"fatalityRateSymptomatic":2.0703287217718115e-2,
+		"fatalityRatePCR":4.1756797184177866e-2,
+		"fractionOfSymptomaticHospitalized":8.241847957042273e-2,
+		"fractionOfPCRHospitalized":0.2501872891224331,
+		"fractionHospitalizedInICU":0.29427554978752307,
+		"fractionDeathOfHospitalized":0.11778693009866219,
+		"fractionOfInfectionsPCRConfirmed":0.3470644788315799,
+		"dateContained":"Sat 5 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 5 Aug 2020 05:13:35",
+		"dateHospitalsOverCapacity":"Sun 9 Aug 2020 16:13:12"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":3.449136102528892e2,
+		"totalProjectedPCRConfirmed":6.390440060163549e3,
+		"totalProjectedInfected":3.274935858135821e4,
+		"totalInfectedFraction":5.2429508676026054e-2,
+		"fatalityRate":1.0531919560990215e-2,
+		"fatalityRateSymptomatic":1.5045599372843164e-2,
+		"fatalityRatePCR":5.3973373821780586e-2,
+		"fractionOfSymptomaticHospitalized":6.543932476480009e-2,
+		"fractionOfPCRHospitalized":0.23355896760454808,
+		"fractionHospitalizedInICU":0.2942755497875233,
+		"fractionDeathOfHospitalized":0.16308656420755147,
+		"fractionOfInfectionsPCRConfirmed":0.19513176248285835,
+		"dateContained":"Sat 5 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 5 Aug 2020 05:13:35",
+		"dateHospitalsOverCapacity":"Sun 9 Aug 2020 16:13:12"
+	}
+}

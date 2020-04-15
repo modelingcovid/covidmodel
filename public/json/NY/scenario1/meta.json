@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.44286931667142865,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.1474765553432272e2,
+			"thresholdCrossed":0.6999999999995462
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":8.430325540638762e1,
+			"thresholdCrossed":1.5703425579299317e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":8.753632626561851e1,
+			"thresholdCrossed":8.571121135744629e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.8140750514603243e5,
+		"totalProjectedPCRConfirmed":3.7812603560856963e6,
+		"totalProjectedInfected":1.5439116372663004e7,
+		"totalInfectedFraction":0.7798231423874401,
+		"fatalityRate":1.1749863189530613e-2,
+		"fatalityRateSymptomatic":1.678551884218659e-2,
+		"fatalityRatePCR":4.797540715599461e-2,
+		"fractionOfSymptomaticHospitalized":7.542091986920584e-2,
+		"fractionOfPCRHospitalized":0.2418827183050112,
+		"fractionHospitalizedInICU":0.2812604177543197,
+		"fractionDeathOfHospitalized":0.14255596405975898,
+		"fractionOfInfectionsPCRConfirmed":0.24491429851393035,
+		"dateContained":"Tue 5 Jan 2021 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":8.576992142013148e4,
+		"totalProjectedPCRConfirmed":1.187901094166807e6,
+		"totalProjectedInfected":7.560269425319675e6,
+		"totalInfectedFraction":0.3818659642327422,
+		"fatalityRate":1.1344823391198761e-2,
+		"fatalityRateSymptomatic":1.6206890558855377e-2,
+		"fatalityRatePCR":7.220291473869754e-2,
+		"fractionOfSymptomaticHospitalized":7.386323305544122e-2,
+		"fractionOfPCRHospitalized":0.25196319103185405,
+		"fractionHospitalizedInICU":0.28126041775431965,
+		"fractionDeathOfHospitalized":0.20596299230728188,
+		"fractionOfInfectionsPCRConfirmed":0.15712417472695797,
+		"dateContained":"Tue 5 Jan 2021 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	}
+}

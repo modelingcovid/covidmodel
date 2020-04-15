@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.44286931667142865,
+	"id":"scenario5",
+	"distancingDays":624,
+	"maintain":true,
+	"name":"Current Indefinite",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.459503061881295e2,
+			"thresholdCrossed":0.7000000000000027
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":8.430325540638762e1,
+			"thresholdCrossed":1.5703425579299317e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":8.753632626561851e1,
+			"thresholdCrossed":8.571121135744629e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":8.749336241482107e4,
+		"totalProjectedPCRConfirmed":1.1840889856445212e6,
+		"totalProjectedInfected":7.446330752476364e6,
+		"totalInfectedFraction":0.3761109707634625,
+		"fatalityRate":1.174986249243953e-2,
+		"fatalityRateSymptomatic":1.678551784634219e-2,
+		"fatalityRatePCR":7.38908675577257e-2,
+		"fractionOfSymptomaticHospitalized":7.542091919154065e-2,
+		"fractionOfPCRHospitalized":0.25550430828387394,
+		"fractionHospitalizedInICU":0.2812604177543194,
+		"fractionDeathOfHospitalized":0.20785673492912513,
+		"fractionOfInfectionsPCRConfirmed":0.1590164370889298,
+		"dateContained":"Sat 10 Oct 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":8.569117911931845e4,
+		"totalProjectedPCRConfirmed":1.1643181922378403e6,
+		"totalProjectedInfected":7.403167696515142e6,
+		"totalInfectedFraction":0.37393082333000416,
+		"fatalityRate":1.1574934221692082e-2,
+		"fatalityRateSymptomatic":1.6535620316702974e-2,
+		"fatalityRatePCR":7.359773272512256e-2,
+		"fractionOfSymptomaticHospitalized":7.507238485200676e-2,
+		"fractionOfPCRHospitalized":0.2547541335841683,
+		"fractionHospitalizedInICU":0.2812604177543195,
+		"fractionDeathOfHospitalized":0.2076417875104153,
+		"fractionOfInfectionsPCRConfirmed":0.15727297286348307,
+		"dateContained":"Sat 10 Oct 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 24 Mar 2020 07:16:41",
+		"dateHospitalsOverCapacity":"Fri 27 Mar 2020 12:52:18"
+	}
+}

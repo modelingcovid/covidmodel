@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5855677142428571,
+	"id":"scenario5",
+	"distancingDays":624,
+	"maintain":true,
+	"name":"Current Indefinite",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.7620055196342074e2,
+			"thresholdCrossed":0.7000000000001068
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.2621084865371384e2,
+			"thresholdCrossed":2.0507219431113765e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.360425246304814e2,
+			"thresholdCrossed":1.3567733664935145e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.1122336487632181e5,
+		"totalProjectedPCRConfirmed":3.609967288926656e6,
+		"totalProjectedInfected":1.426193212880084e7,
+		"totalInfectedFraction":0.5201361758438026,
+		"fatalityRate":7.798618298828884e-3,
+		"fatalityRateSymptomatic":1.1140883284041263e-2,
+		"fatalityRatePCR":3.0810075542094903e-2,
+		"fractionOfSymptomaticHospitalized":6.554907883918623e-2,
+		"fractionOfPCRHospitalized":0.2192081251418894,
+		"fractionHospitalizedInICU":0.2619699150562412,
+		"fractionDeathOfHospitalized":0.1037313861187287,
+		"fractionOfInfectionsPCRConfirmed":0.25311909047979647,
+		"dateContained":"Mon 26 Oct 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 5 May 2020 05:03:37",
+		"dateHospitalsOverCapacity":"Fri 15 May 2020 01:01:14"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":9.980930131158137e4,
+		"totalProjectedPCRConfirmed":3.476347016023183e6,
+		"totalProjectedInfected":1.3956250101210091e7,
+		"totalInfectedFraction":0.5089878770425377,
+		"fatalityRate":7.1515844576995145e-3,
+		"fatalityRateSymptomatic":1.021654922528502e-2,
+		"fatalityRatePCR":2.871097184819013e-2,
+		"fractionOfSymptomaticHospitalized":6.391586789360514e-2,
+		"fractionOfPCRHospitalized":0.21624080631117637,
+		"fractionHospitalizedInICU":0.2619699150562412,
+		"fractionDeathOfHospitalized":9.799057519904579e-2,
+		"fractionOfInfectionsPCRConfirmed":0.24908890216303609,
+		"dateContained":"Mon 26 Oct 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 5 May 2020 05:03:37",
+		"dateHospitalsOverCapacity":"Fri 15 May 2020 01:01:14"
+	}
+}

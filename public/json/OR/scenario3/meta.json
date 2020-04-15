@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.11,
+	"id":"scenario3",
+	"distancingDays":60,
+	"maintain":false,
+	"name":"Wuhan",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.650280896349014e2,
+			"thresholdCrossed":0.7000000000000264
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.4062180507454102e2,
+			"thresholdCrossed":1.619824666401833e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.4425577228571427e2,
+			"thresholdCrossed":9.548563621663143e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":3.9588284328098256e4,
+		"totalProjectedPCRConfirmed":1.0402817262197701e6,
+		"totalProjectedInfected":3.1435848020941736e6,
+		"totalInfectedFraction":0.7809902152389661,
+		"fatalityRate":1.2593356572320103e-2,
+		"fatalityRateSymptomatic":1.799050938902872e-2,
+		"fatalityRatePCR":3.8055349171571266e-2,
+		"fractionOfSymptomaticHospitalized":7.728648029463048e-2,
+		"fractionOfPCRHospitalized":0.23908426911844965,
+		"fractionHospitalizedInICU":0.29039695853176717,
+		"fractionDeathOfHospitalized":0.11294842448586137,
+		"fractionOfInfectionsPCRConfirmed":0.3309221133550339,
+		"dateContained":"Tue 19 May 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 27 Aug 2020 14:55:23",
+		"dateHospitalsOverCapacity":"Mon 31 Aug 2020 06:08:18"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":3.682265461293529e2,
+		"totalProjectedPCRConfirmed":5.071121204496342e3,
+		"totalProjectedInfected":3.128832477403167e4,
+		"totalInfectedFraction":7.77325157045521e-3,
+		"fatalityRate":1.1768816284947586e-2,
+		"fatalityRateSymptomatic":1.681259469278227e-2,
+		"fatalityRatePCR":7.261245221330197e-2,
+		"fractionOfSymptomaticHospitalized":7.326049815869566e-2,
+		"fractionOfPCRHospitalized":0.24649278007637465,
+		"fractionHospitalizedInICU":0.2903969585317673,
+		"fractionDeathOfHospitalized":0.20903661731212045,
+		"fractionOfInfectionsPCRConfirmed":0.16207710835017966,
+		"dateContained":"Tue 19 May 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 27 Aug 2020 14:55:23",
+		"dateHospitalsOverCapacity":"Mon 31 Aug 2020 06:08:18"
+	}
+}

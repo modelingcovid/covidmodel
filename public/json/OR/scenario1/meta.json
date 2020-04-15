@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.6347999576285714,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.2760766325373817e2,
+			"thresholdCrossed":0.7000000000000001
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.5078969004415177e2,
+			"thresholdCrossed":1.6198246664018303e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.7273248861620573e2,
+			"thresholdCrossed":9.54856362166316e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":3.756712506497775e4,
+		"totalProjectedPCRConfirmed":9.789334932678858e5,
+		"totalProjectedInfected":2.983090715011419e6,
+		"totalInfectedFraction":0.7411171659953634,
+		"fatalityRate":1.2593356573413475e-2,
+		"fatalityRateSymptomatic":1.7990509390590676e-2,
+		"fatalityRatePCR":3.8375564145395405e-2,
+		"fractionOfSymptomaticHospitalized":7.72864802949456e-2,
+		"fractionOfPCRHospitalized":0.23953820904164083,
+		"fractionHospitalizedInICU":0.29039695853176695,
+		"fractionDeathOfHospitalized":0.11368297836316377,
+		"fractionOfInfectionsPCRConfirmed":0.32816081936151864,
+		"dateContained":"Tue 1 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 29 May 2020 18:57:09",
+		"dateHospitalsOverCapacity":"Sat 20 Jun 2020 17:34:47"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":7.157776392182883e3,
+		"totalProjectedPCRConfirmed":2.916402790815065e5,
+		"totalProjectedInfected":1.1793515594992214e6,
+		"totalInfectedFraction":0.2929973537478995,
+		"fatalityRate":6.069247405092873e-3,
+		"fatalityRateSymptomatic":8.670353435846961e-3,
+		"fatalityRatePCR":2.454316809298641e-2,
+		"fractionOfSymptomaticHospitalized":5.07615792483349e-2,
+		"fractionOfPCRHospitalized":0.2022601793017229,
+		"fractionHospitalizedInICU":0.290396958531767,
+		"fractionDeathOfHospitalized":8.610645351040135e-2,
+		"fractionOfInfectionsPCRConfirmed":0.24728867039896343,
+		"dateContained":"Tue 1 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 29 May 2020 18:57:09",
+		"dateHospitalsOverCapacity":"Sat 20 Jun 2020 17:34:47"
+	}
+}

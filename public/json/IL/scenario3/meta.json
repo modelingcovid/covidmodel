@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.11,
+	"id":"scenario3",
+	"distancingDays":60,
+	"maintain":false,
+	"name":"Wuhan",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.3701355507671474e2,
+			"thresholdCrossed":0.6999999999999993
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1084950458967151e2,
+			"thresholdCrossed":2.0140765983903263e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.2328917570112625e2,
+			"thresholdCrossed":1.3066558979518512e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.1876253938145266e5,
+		"totalProjectedPCRConfirmed":3.33534512009701e6,
+		"totalProjectedInfected":1.1002045933991103e7,
+		"totalInfectedFraction":0.8558888856727275,
+		"fatalityRate":1.0794586760861702e-2,
+		"fatalityRateSymptomatic":1.5420838229802432e-2,
+		"fatalityRatePCR":3.560727154316144e-2,
+		"fractionOfSymptomaticHospitalized":7.334721824605259e-2,
+		"fractionOfPCRHospitalized":0.23185447389042924,
+		"fractionHospitalizedInICU":0.27767689581005334,
+		"fractionDeathOfHospitalized":0.11093145834634864,
+		"fractionOfInfectionsPCRConfirmed":0.3031568073891035,
+		"dateContained":"Tue 2 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 20:23:17",
+		"dateHospitalsOverCapacity":"Mon 10 Aug 2020 06:56:24"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":7.139483091945567e3,
+		"totalProjectedPCRConfirmed":1.0732544303319488e5,
+		"totalProjectedInfected":9.499807346635027e5,
+		"totalInfectedFraction":7.390243208217111e-2,
+		"fatalityRate":7.515397766960483e-3,
+		"fatalityRateSymptomatic":1.0736282524229262e-2,
+		"fatalityRatePCR":6.652181337595209e-2,
+		"fractionOfSymptomaticHospitalized":5.483345404700073e-2,
+		"fractionOfPCRHospitalized":0.2045213821162713,
+		"fractionHospitalizedInICU":0.27767689581005356,
+		"fractionDeathOfHospitalized":0.23493994728993786,
+		"fractionOfInfectionsPCRConfirmed":0.11297644164458889,
+		"dateContained":"Tue 2 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 20:23:17",
+		"dateHospitalsOverCapacity":"Mon 10 Aug 2020 06:56:24"
+	}
+}
