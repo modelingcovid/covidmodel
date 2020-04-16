@@ -242,7 +242,7 @@ export const Graph = (props) => {
     <figure
       className={props.decoration ? 'margin-bottom-1' : ''}
       style={{
-        background: theme.color.gray[0],
+        boxShadow: `inset 0 0 0 1px ${theme.color.gray[0]}`,
       }}
     >
       <Suspense

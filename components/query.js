@@ -1,10 +1,12 @@
 import {wrap} from 'optimism';
-import {useModelState} from './modeling';
-import {fetchMap} from '../lib/fetch';
-// import {CaseProgressionScenarioFragment} from './CaseProgressionCurve';
-// import {SEIRScenarioFragment} from './SEIR';
+import {useModelState, DistributionSeriesFullFragment} from './modeling';
+import {fetchSuspendable} from '../lib/fetch';
 
-const toQueryString = (location, scenario, [type, query, fragments = []]) => {
+const toQueryString = (
+  location,
+  scenario,
+  [type, query, transforms, fragments = []]
+) => {
   let body = query;
   switch (type) {
     case 'Location':
@@ -23,19 +25,52 @@ const toQueryString = (location, scenario, [type, query, fragments = []]) => {
   return Array.from(new Set([...fragments, body])).join('\n');
 };
 
-// const getScenarioQueries = wrap((location, scenario) => {
-//   const onScenario = withScenario(location, scenario);
-//   return {
-//     // SEIR: toQuery(SEIRScenarioFragment, onScenario('{ ...SEIRScenario }')),
-//     // CaseProgression: toQuery(
-//     //   CaseProgressionScenarioFragment,
-//     //   onScenario('{ ...CaseProgressionScenario }')
-//     // ),
-//   };
-// });
+export const compactDistributionProps = [
+  'expected',
+  'confirmed',
+  'percentile10',
+  'percentile50',
+  'percentile90',
+];
 
-const queries = {
-  locations: [
+export const fullDistributionProps = [
+  ...compactDistributionProps,
+  'percentile20',
+  'percentile30',
+  'percentile40',
+  'percentile60',
+  'percentile70',
+  'percentile80',
+];
+
+export const SeriesFull = [
+  `fragment SeriesFull on Series {
+    data
+    empty
+    max
+    min
+  }`,
+];
+
+export function mapBlock(propNames, block) {
+  return propNames
+    .map(
+      (propName) => `${propName} {
+        ${block}
+      }`
+    )
+    .join('\n');
+}
+
+export const DistributionSeriesFull = [
+  ...SeriesFull,
+  `fragment DistributionSeriesFull on DistributionSeries {
+    ${mapBlock(fullDistributionProps, '...SeriesFull')}
+  }`,
+];
+
+const queries = [
+  [
     'Query',
     `{
       locations {
@@ -43,8 +78,9 @@ const queries = {
         name
       }
     }`,
+    {locations: ({locations}) => locations},
   ],
-  summary: [
+  [
     'Location',
     `{
       importtime
@@ -52,49 +88,84 @@ const queries = {
       scenarios {
         id
         name
-        day {
-          data
-        }
         distancingLevel
         distancingDays
       }
     }`,
+    {
+      r0: (location) => location.r0,
+      importtime: (location) => location.importtime,
+      scenarios: (location) => location.scenarios,
+    },
   ],
-  distancing: [
+  [
     'Scenario',
     `{
-      distancing {
-        data
+      day { data }
+      distancing { data }
+    }`,
+    {
+      days: ({day}) => day.data,
+      distancing: ({distancing}, i) => distancing.data[i],
+    },
+  ],
+  [
+    'Scenario',
+    `{
+      cumulativeDeaths { ...DistributionSeriesFull }
+      cumulativeRecoveries { ...DistributionSeriesFull }
+      currentlyInfected { ...DistributionSeriesFull }
+      currentlyInfectious { ...DistributionSeriesFull }
+      susceptible { ...DistributionSeriesFull }
+    }`,
+    {},
+    DistributionSeriesFull,
+  ],
+  [
+    'Location',
+    `{
+      domain {
+        cumulativeDeaths { expected { max } }
+        currentlyInfected { expected { max } }
+        currentlyInfectious { expected { max } }
       }
     }`,
+    {
+      seirDomain: ({
+        domain: {cumulativeDeaths, currentlyInfected, currentlyInfectious},
+      }) =>
+        cumulativeDeaths.expected.max +
+        currentlyInfected.expected.max +
+        currentlyInfectious.expected.max,
+    },
   ],
-};
+];
 
-const getQueryStrings = wrap(function getQueryStrings(location, scenario) {
-  const result = {};
-  for (let [key, query] of Object.entries(queries)) {
-    result[key] = toQueryString(location, scenario, query);
+const getTypeAccessor = (type, request) => {
+  switch (type) {
+    case 'Location':
+      return () => request().location;
+    case 'Scenario':
+      return () => request().location.scenario;
+    case 'Query':
+    default:
+      return request;
   }
-  return result;
-});
+};
 
 export const fetchLocationData = wrap(function fetchLocationData(
   location,
   scenario
 ) {
-  const requests = fetchMap(getQueryStrings(location, scenario));
-  return {
-    // locations
-    locations: () => requests.locations.locations,
-    // summary
-    r0: () => requests.summary.location.r0,
-    importtime: () => requests.summary.location.importtime,
-    scenarios: () => requests.summary.location.scenarios,
-    days: () => {
-      const scenarios = requests.summary.location.scenarios;
-      return scenarios.find(({id}) => id === scenario).day.data;
-    },
-    // distancing
-    distancing: (i) => requests.distancing.location.scenario.distancing.data[i],
-  };
+  const requests = {};
+  for (let query of queries) {
+    const [type, queryString, transforms] = query;
+    const request = fetchSuspendable(toQueryString(location, scenario, query));
+    const typeAccessor = getTypeAccessor(type, request);
+
+    for (let [key, transform] of Object.entries(transforms)) {
+      requests[key] = (...args) => transform(typeAccessor(), ...args);
+    }
+  }
+  return requests;
 });
