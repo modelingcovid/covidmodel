@@ -6,5 +6,5 @@ const {useMemo} = React;
 
 export function useFindPoint() {
   const {indices, x} = useModelState();
-  return useMemo(() => findPoint(indices, x), [indices, x]);
+  return useMemo(() => findPoint(indices(), x), [indices, x]);
 }

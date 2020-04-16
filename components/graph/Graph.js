@@ -120,17 +120,14 @@ export const GraphContents = React.memo(function Graph({
 
   const distancingId = useDistancingId();
 
+  const clipPath = `url(#${clipPathId})`;
+  const context = useMemo(
+    () => ({data, clipPath, margin, x, xScale, yScale, xMax, yMax}),
+    [data, clipPath, margin, x, xScale, yScale, xMax, yMax]
+  );
+
   return (
-    <GraphDataProvider
-      data={data}
-      x={x}
-      xScale={xScale}
-      yScale={yScale}
-      xMax={xMax}
-      yMax={yMax}
-      margin={margin}
-      clipPath={`url(#${clipPathId})`}
-    >
+    <GraphDataProvider context={context}>
       {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph no-select">
@@ -180,7 +177,7 @@ export const GraphContents = React.memo(function Graph({
                 fill={`url(#${distancingId})`}
               />
             )}
-            {children}
+            {children(context)}
             <g pointerEvents="none">
               {decoration && (
                 <>
