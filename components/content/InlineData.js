@@ -38,7 +38,7 @@ export function InlinePlaceholder({width = '3em'}) {
     <span
       title="Loading…"
       style={{
-        width,
+        width: `calc(${width} - 8px)`,
       }}
     >
       <style jsx>{styles}</style>
@@ -47,7 +47,14 @@ export function InlinePlaceholder({width = '3em'}) {
 }
 
 export function InlineDataInner({children}) {
-  return <span>{formatText(children(), 'inline')}</span>;
+  return (
+    <span>
+      {formatText(
+        typeof children === 'function' ? children() : children,
+        'inline'
+      )}
+    </span>
+  );
 }
 
 export function InlineData({children, width}) {

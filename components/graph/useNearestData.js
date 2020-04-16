@@ -28,9 +28,9 @@ export const NearestDataProvider = ({
     () =>
       suspense(
         () => findPoint(data(), x),
-        () => 0
+        () => [null, null, []]
       ),
-    [data, x]
+    [data, suspense, x]
   );
 
   const nearestData = useMemo(() => findNearestPoint(point), [

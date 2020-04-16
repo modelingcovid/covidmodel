@@ -12,18 +12,21 @@ export function Suspense(props) {
 export function useSuspense() {
   const [count, render] = useReducer((x) => x + 1, 0);
 
-  return useCallback((fn, fallback = null) => {
-    if (typeof window === 'undefined') {
-      return fallback;
-    }
-    try {
-      return fn();
-    } catch (result) {
-      if (result.then) {
-        result.then(render);
+  return useCallback(
+    (fn, fallback = null) => {
+      if (typeof window === 'undefined') {
         return fallback;
       }
-      throw result;
-    }
-  });
+      try {
+        return fn();
+      } catch (result) {
+        if (result.then) {
+          result.then(render);
+          return fallback;
+        }
+        throw result;
+      }
+    },
+    [count]
+  );
 }

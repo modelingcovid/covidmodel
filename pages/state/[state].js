@@ -109,10 +109,10 @@ export default function StatePage() {
           </div>
           <Section className="margin-top-3">
             <ModelInputs width={width} height={160} />
-            {/* <SEIR width={width} heigh/t={height} />
-            <CaseProgressionCurve width={width} height={height} />
-            <ProjectedDeaths width={width} height={height} />
-            <ParameterTable /> */}
+            <SEIR width={width} height={height} />
+            {/* <CaseProgressionCurve width={width} height={height} /> */}
+            {/* <ProjectedDeaths width={width} height={height} /> */}
+            {/* <ParameterTable /> */}
           </Section>
           {/* <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>

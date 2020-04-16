@@ -25,6 +25,8 @@ const toQueryString = (
   return Array.from(new Set([...fragments, body])).join('\n');
 };
 
+export const seriesProps = ['data', 'empty', 'max', 'min'];
+
 export const compactDistributionProps = [
   'expected',
   'confirmed',
@@ -69,6 +71,23 @@ export const DistributionSeriesFull = [
   }`,
 ];
 
+export function createSeries(accessor) {
+  const transforms = {};
+  seriesProps.map((prop) => {
+    transforms[prop] = (data) => accessor(data)[prop];
+  });
+  transforms.get = (data, i) => transforms.data(data)[i];
+  return transforms;
+}
+
+export function createDistributionSeries(accessor) {
+  const transforms = {};
+  fullDistributionProps.map((prop) => {
+    transforms[prop] = createSeries((data) => accessor(data)[prop]);
+  });
+  return transforms;
+}
+
 const queries = [
   [
     'Query',
@@ -84,6 +103,7 @@ const queries = [
     'Location',
     `{
       importtime
+      population
       r0
       scenarios {
         id
@@ -95,6 +115,7 @@ const queries = [
     {
       r0: (location) => location.r0,
       importtime: (location) => location.importtime,
+      population: (location) => location.population,
       scenarios: (location) => location.scenarios,
     },
   ],
@@ -118,7 +139,17 @@ const queries = [
       currentlyInfectious { ...DistributionSeriesFull }
       susceptible { ...DistributionSeriesFull }
     }`,
-    {},
+    {
+      cumulativeDeaths: createDistributionSeries((d) => d.cumulativeDeaths),
+      cumulativeRecoveries: createDistributionSeries(
+        (d) => d.cumulativeRecoveries
+      ),
+      currentlyInfected: createDistributionSeries((d) => d.currentlyInfected),
+      currentlyInfectious: createDistributionSeries(
+        (d) => d.currentlyInfectious
+      ),
+      susceptible: createDistributionSeries((d) => d.susceptible),
+    },
     DistributionSeriesFull,
   ],
   [
@@ -141,7 +172,7 @@ const queries = [
   ],
 ];
 
-const getTypeAccessor = (type, request) => {
+function getTypeAccessor(type, request) {
   switch (type) {
     case 'Location':
       return () => request().location;
@@ -151,7 +182,19 @@ const getTypeAccessor = (type, request) => {
     default:
       return request;
   }
-};
+}
+
+function bindTransforms(transforms, accessor) {
+  const result = {};
+  for (let [key, transform] of Object.entries(transforms)) {
+    if (typeof transform === 'function') {
+      result[key] = (...args) => transform(accessor(), ...args);
+    } else if (typeof transform === 'object') {
+      result[key] = bindTransforms(transform, accessor);
+    }
+  }
+  return result;
+}
 
 export const fetchLocationData = wrap(function fetchLocationData(
   location,
@@ -163,9 +206,7 @@ export const fetchLocationData = wrap(function fetchLocationData(
     const request = fetchSuspendable(toQueryString(location, scenario, query));
     const typeAccessor = getTypeAccessor(type, request);
 
-    for (let [key, transform] of Object.entries(transforms)) {
-      requests[key] = (...args) => transform(typeAccessor(), ...args);
-    }
+    Object.assign(requests, bindTransforms(transforms, typeAccessor));
   }
   return requests;
 });

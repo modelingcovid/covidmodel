@@ -11,11 +11,6 @@ const {createContext, useContext, useMemo} = React;
 
 const ModelStateContext = createContext(null);
 
-export function useLocationData() {
-  const {location, scenario} = useModelState();
-  return fetchLocationData(location.id, scenario.id);
-}
-
 const isServer = typeof window === 'undefined';
 
 export const ModelStateProvider = ({
@@ -31,9 +26,6 @@ export const ModelStateProvider = ({
 
   const id = useComponentId('model');
   const context = useMemo(() => {
-    const x = (i) => dayToDate(days()[i]);
-    const indices = () => (isServer ? [] : Object.keys(days()));
-
     const location = {
       id: locationId,
       // NOTE: This should be better... but c'est la vie
@@ -55,21 +47,25 @@ export const ModelStateProvider = ({
       get locations() {
         return isServer ? [defaultLocation] : locations();
       },
-      get scenarioData() {
+      get scenarios() {
+        return isServer ? [defaultScenario] : scenarios();
+      },
+      id,
+      indices() {
+        return isServer ? [] : Object.keys(days());
+      },
+      location,
+      scenario,
+      scenarioData() {
         if (isServer) {
           return scenario;
         }
         return scenarios().find(({id}) => id === scenarioId);
       },
-      get scenarios() {
-        return isServer ? [defaultScenario] : scenarios();
-      },
-      id,
-      indices,
-      location,
-      scenario,
       setScenario,
-      x,
+      x(i) {
+        return dayToDate(days()[i]);
+      },
     };
   }, [days, id, locationId, locations, scenarioId, scenarios, setScenario]);
 

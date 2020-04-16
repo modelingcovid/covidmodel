@@ -4,15 +4,17 @@ import {PopulationGraph} from './configured';
 import {
   Grid,
   Gutter,
+  InlineData,
   InlineLabel,
   Heading,
   Paragraph,
   Title,
   UnorderedList,
 } from './content';
-import {Area, Graph, Line, WithGraphData, WithNearestData} from './graph';
+import {Area, Graph, Line, WithGraphData, useNearestData} from './graph';
 import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
+  CurrentDate,
   DistributionLegendRow,
   DistributionSeriesFullFragment,
   Estimation,
@@ -22,6 +24,7 @@ import {
   createDistributionSeries,
   useModelState,
   usePopulation,
+  useLocationData,
   useLocationQuery,
   useScenarioQuery,
 } from './modeling';
@@ -36,67 +39,75 @@ import {stackAccessors} from '../lib/stack';
 
 const {useMemo} = React;
 
-export const SEIRScenarioFragment = [
-  ...DistributionSeriesFullFragment,
-  `fragment SEIRScenario on Scenario {
-    cumulativeDeaths { ...DistributionSeriesFull }
-    cumulativeRecoveries { ...DistributionSeriesFull }
-    currentlyInfected { ...DistributionSeriesFull }
-    currentlyInfectious { ...DistributionSeriesFull }
-    susceptible { ...DistributionSeriesFull }
-  }`,
-];
+// export const SEIRScenarioFragment = [
+//   ...DistributionSeriesFullFragment,
+//   `fragment SEIRScenario on Scenario {
+//     cumulativeDeaths { ...DistributionSeriesFull }
+//     cumulativeRecoveries { ...DistributionSeriesFull }
+//     currentlyInfected { ...DistributionSeriesFull }
+//     currentlyInfectious { ...DistributionSeriesFull }
+//     susceptible { ...DistributionSeriesFull }
+//   }`,
+// ];
 
-const useDomain = () => {
-  const [data, error] = useLocationQuery(`{
-    domain {
-      cumulativeDeaths { expected { max } }
-      currentlyInfected { expected { max } }
-      currentlyInfectious { expected { max } }
-    }
-  }`);
-  if (!data) {
-    return [data, error];
-  }
-  const {domain} = data;
-  return [
-    domain.cumulativeDeaths.expected.max +
-      domain.currentlyInfected.expected.max +
-      domain.currentlyInfectious.expected.max,
-    error,
-  ];
-};
+// const useDomain = () => {
+//   const [data, error] = useLocationQuery(`{
+//     domain {
+//       cumulativeDeaths { expected { max } }
+//       currentlyInfected { expected { max } }
+//       currentlyInfectious { expected { max } }
+//     }
+//   }`);
+//   if (!data) {
+//     return [data, error];
+//   }
+//   const {domain} = data;
+//   return [
+//     domain.cumulativeDeaths.expected.max +
+//       domain.currentlyInfected.expected.max +
+//       domain.currentlyInfectious.expected.max,
+//     error,
+//   ];
+// };
+
+function PercentCases() {
+  const [d] = useNearestData();
+  const {population, susceptible} = useLocationData();
+  return formatPercent1(
+    (population() - susceptible.expected.get(d)) / population()
+  );
+}
 
 export function SEIR({height, width}) {
   const {location, indices, x} = useModelState();
-
-  const [population = 9000000] = usePopulation();
-
-  const [domain = 2000000] = useDomain();
-
-  const [scenario] = useScenarioQuery(
-    `{ ...SEIRScenario }`,
-    SEIRScenarioFragment
-  );
+  const {
+    population,
+    seirDomain,
+    susceptible,
+    cumulativeRecoveries,
+    currentlyInfected,
+    currentlyInfectious,
+    cumulativeDeaths,
+  } = useLocationData();
 
   const [config, configValues, label] = useMemo(() => {
     const config = {
       susceptible: {
-        y: createDistributionSeries(scenario?.susceptible),
+        y: susceptible,
         label: 'Susceptible',
         description: 'People who have not yet contracted COVID-19',
         fill: theme.color.magenta[1],
         color: theme.color.magenta[1],
       },
       recovered: {
-        y: createDistributionSeries(scenario?.cumulativeRecoveries),
+        y: cumulativeRecoveries,
         label: 'Recovered',
         description: 'People who have recovered from COVID-19',
         fill: theme.color.gray[3],
         color: theme.color.gray[5],
       },
       exposed: {
-        y: createDistributionSeries(scenario?.currentlyInfected),
+        y: currentlyInfected,
         label: 'Exposed',
         description:
           'People who have been infected with COVID-19 but cannot yet infect others',
@@ -104,14 +115,14 @@ export function SEIR({height, width}) {
         color: theme.color.yellow.text,
       },
       infectious: {
-        y: createDistributionSeries(scenario?.currentlyInfectious),
+        y: currentlyInfectious,
         label: 'Infectious',
         description: 'People who have COVID-19 and can infect others',
         fill: theme.color.blue[2],
         color: theme.color.blue.text,
       },
       deceased: {
-        y: createDistributionSeries(scenario?.cumulativeDeaths),
+        y: cumulativeDeaths,
         label: 'Deceased',
         description: 'People who have died from COVID-19',
         fill: theme.color.red[1],
@@ -125,14 +136,16 @@ export function SEIR({height, width}) {
       return o;
     }, {});
 
-    const accessors = stackAccessors(
-      configValues.map(({y}) => y?.expected ?? (() => 0))
-    );
+    const accessors = stackAccessors(configValues.map(({y}) => y.expected.get));
     configValues.forEach((c, i) => (c.area = accessors[i]));
     return [config, configValues, label];
-  }, [scenario]);
-
-  const expectedSusceptible = config.susceptible.y?.expected;
+  }, [
+    susceptible,
+    cumulativeRecoveries,
+    currentlyInfected,
+    currentlyInfectious,
+    cumulativeDeaths,
+  ]);
 
   return (
     <div className="margin-top-5">
@@ -189,7 +202,7 @@ export function SEIR({height, width}) {
         >
           <Graph
             data={indices}
-            domain={population * 1.05}
+            domain={() => population() * 1.05}
             initialScale="linear"
             height={height / 4}
             width={width / 8}
@@ -198,23 +211,23 @@ export function SEIR({height, width}) {
             scrubber={false}
             decoration={false}
           >
-            {configValues.map(({area: [y0, y1], fill}, i) => (
-              <Area
-                key={`area-${i}`}
-                y0={y0}
-                y1={y1}
-                fill={fill}
-                opacity="0.15"
-              />
-            ))}
-            {configValues.map(({area: [y0, y1], fill}, i) => (
-              <Line key={`line-${i}`} y={y1} stroke={fill} />
-            ))}
-            <WithGraphData>
-              {({xMax, yMax, yScale}) => {
-                const midY = yScale(domain);
-                const strokeWidth = 1;
-                return (
+            {({xMax, yMax, yScale}) => {
+              const midY = yScale(seirDomain());
+              const strokeWidth = 1;
+              return (
+                <>
+                  {configValues.map(({area: [y0, y1], fill}, i) => (
+                    <Area
+                      key={`area-${i}`}
+                      y0={y0}
+                      y1={y1}
+                      fill={fill}
+                      opacity="0.15"
+                    />
+                  ))}
+                  {configValues.map(({area: [y0, y1], fill}, i) => (
+                    <Line key={`line-${i}`} y={y1} stroke={fill} />
+                  ))}
                   <rect
                     x="0"
                     y={midY}
@@ -224,34 +237,38 @@ export function SEIR({height, width}) {
                     stroke={theme.color.gray[4]}
                     strokeWidth={strokeWidth}
                   />
-                );
-              }}
-            </WithGraphData>
+                </>
+              );
+            }}
           </Graph>
         </div>
         <Graph
           data={indices}
-          domain={domain}
+          domain={seirDomain}
           initialScale="linear"
           height={height}
           width={width}
           x={x}
           xLabel="people"
         >
-          {configValues.map(({area: [y0, y1], fill}, i) => (
-            <Area
-              key={`area-${i}`}
-              y0={y0}
-              y1={y1}
-              fill={fill}
-              opacity="0.15"
-            />
-          ))}
-          {configValues.map(({area: [y0, y1], fill}, i) => (
-            <Line key={`line-${i}`} y={y1} stroke={fill} />
-          ))}
+          {() => (
+            <>
+              {configValues.map(({area: [y0, y1], fill}, i) => (
+                <Area
+                  key={`area-${i}`}
+                  y0={y0}
+                  y1={y1}
+                  fill={fill}
+                  opacity="0.15"
+                />
+              ))}
+              {configValues.map(({area: [y0, y1], fill}, i) => (
+                <Line key={`line-${i}`} y={y1} stroke={fill} />
+              ))}
+            </>
+          )}
         </Graph>
-        <Gutter>
+        {/* <Gutter>
           {configValues.map(({y, fill, label, description}, i) => (
             <DistributionLegendRow
               key={i}
@@ -261,7 +278,7 @@ export function SEIR({height, width}) {
               compact
             />
           ))}
-        </Gutter>
+        </Gutter> */}
         <Paragraph className="margin-top-2">
           This graph shows how COVID-19 affects the population of{' '}
           {location.name} over time. While only a small portion of the
@@ -269,21 +286,16 @@ export function SEIR({height, width}) {
           spread. The graph in the top right shows how small changes compound to
           impact the population as a whole.
         </Paragraph>
-        <WithNearestData>
-          {([d]) => (
-            <Estimation>
-              The model estimates that{' '}
-              <strong>
-                {expectedSusceptible &&
-                  formatPercent1(
-                    (population - expectedSusceptible(d)) / population
-                  )}
-              </strong>{' '}
-              of the {location.name} population will have contracted COVID-19 by{' '}
-              <span className="nowrap">{formatShortDate(x(d))}</span>.
-            </Estimation>
-          )}
-        </WithNearestData>
+        <Estimation>
+          The model estimates that{' '}
+          <strong>
+            <InlineData>
+              <PercentCases />
+            </InlineData>
+          </strong>{' '}
+          of the {location.name} population will have contracted COVID-19 by{' '}
+          <CurrentDate />.
+        </Estimation>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider, useGraphData} from './useGraphData';
 import {Suspense, useComponentId} from '../util';
 import {createDateScale} from '../../lib/date';
+import {maybe} from '../../lib/fn';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 import {theme} from '../../styles';
 
@@ -67,7 +68,7 @@ export const GraphContents = React.memo(function Graph({
   const xScale = useMemo(() => createDateScale(xMax), [data, x, xMax]);
 
   const yScale = useMemo(() => {
-    const yDomain = typeof domain === 'number' ? [0, domain] : domain;
+    const yDomain = [0, maybe(domain)];
     switch (scale) {
       case 'log':
         // scaleSymlog allows us to define a log scale that includes 0, but d3
