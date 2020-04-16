@@ -74,7 +74,7 @@ export default function StatePage() {
             zIndex: -1,
           }}
         >
-          <DistancingGradient size={width} />
+          {/* <DistancingGradient size={width} /> */}
         </svg>
         <div className="flex flex-col justify-center">
           <Section className="margin-top-4">
@@ -109,19 +109,19 @@ export default function StatePage() {
           </div>
           <Section className="margin-top-3">
             <ModelInputs width={width} height={160} />
-            <SEIR width={width} height={height} />
+            {/* <SEIR width={width} heigh/t={height} />
             <CaseProgressionCurve width={width} height={height} />
             <ProjectedDeaths width={width} height={height} />
-            <ParameterTable />
+            <ParameterTable /> */}
           </Section>
-          <Section style={{marginTop: '300px'}}>
+          {/* <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>
             <div className="dek margin-top-1">
               These sections are being converted to match the format&nbsp;above.
             </div>
             <Hospitalizations width={width} height={height} />
             <ICU width={width} height={height} />
-          </Section>
+          </Section> */}
         </div>
       </ModelStateProvider>
       <FeedbackForm />

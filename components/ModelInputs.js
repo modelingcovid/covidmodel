@@ -11,6 +11,7 @@ import {
   useDistancing,
   useFindPoint,
   useModelState,
+  useLocationData,
   useLocationQuery,
   useScenarioQuery,
 } from './modeling';
@@ -29,24 +30,18 @@ const {useCallback, useMemo} = React;
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
 
-  const [data, _, accessor] = useLocationQuery(`{
-    importtime
-    r0
-  }`);
-  const importtime = useCallback(() => accessor()?.location?.importtime, [
-    accessor,
-  ]);
-  const r0 = useCallback(() => accessor()?.location?.r0, [accessor]);
+  const data = useLocationData();
+  const {r0, importtime, distancing} = data;
 
-  const [distancing] = useDistancing();
-
-  const findPoint = useFindPoint();
-  const [todayIndex] = findPoint(today);
-  const todayDistancing = distancing(todayIndex);
+  // const findPoint = useFindPoint();
+  // const [todayIndex] = findPoint(today);
+  // const todayDistancing = distancing(todayIndex);
+  const todayDistancing = 0;
   return (
     <div {...remaining}>
       <DistancingGraph
-        r0={data?.r0}
+        // TODO FILL ME IN
+        r0={undefined}
         y={distancing}
         leftLabel="distancing"
         rightLabel="R₀"

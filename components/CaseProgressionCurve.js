@@ -29,7 +29,7 @@ import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
 const {useCallback, useMemo, useState} = React;
 
-const CaseProgressionScenarioFragment = [
+export const CaseProgressionScenarioFragment = [
   ...DistributionSeriesFullFragment,
   `fragment CaseProgressionScenario on Scenario {
     cumulativeDeaths { ...DistributionSeriesFull }

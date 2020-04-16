@@ -36,7 +36,7 @@ import {stackAccessors} from '../lib/stack';
 
 const {useMemo} = React;
 
-const SEIRScenarioFragment = [
+export const SEIRScenarioFragment = [
   ...DistributionSeriesFullFragment,
   `fragment SEIRScenario on Scenario {
     cumulativeDeaths { ...DistributionSeriesFull }

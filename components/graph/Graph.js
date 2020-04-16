@@ -34,145 +34,13 @@ const valueTickLabelProps = () => ({
   strokeWidth: 5,
 });
 
-function GraphContents({
-  children,
-  clipPathId,
-  decoration,
-  height,
-  overlay,
-  scrubber,
-  tickFormat,
-  tickLabelProps,
-  xLabel,
-  width,
-}) {
-  const {data, x, xScale, yScale, xMax, yMax, margin} = useGraphData();
-
-  const yTicks = yScale.ticks(yMax > 180 ? 5 : 3);
-  const yTickCount = yTicks.length;
-  const tickFormatWithLabel = useCallback(
-    (v, i) => {
-      const value = tickFormat(v, i);
-      return xLabel && i === yTickCount - 1 ? `${value} ${xLabel}` : value;
-    },
-    [tickFormat, xLabel, yTickCount]
-  );
-
-  const distancingId = useDistancingId();
-
-  return (
-    <div className="graph no-select">
-      <style jsx>{`
-        .graph {
-          position: relative;
-          margin-left: ${-1 * margin.left}px;
-          margin-right: ${-1 * margin.right}px;
-          background: ${theme.color.background};
-          animation: fade-in 300ms ease-in both;
-        }
-        .graph-overlay {
-          pointer-events: none;
-          position: absolute;
-          top: ${margin.top}px;
-          left: ${margin.left}px;
-          bottom: ${margin.bottom}px;
-          right: ${margin.right}px;
-        }
-        @keyframes fade-in {
-          from {
-            transform: translateY(-3px);
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}</style>
-      <svg className="block" width={width} height={height}>
-        <Group
-          // Add 0.5 to snap centered strokes onto the pixel grid
-          left={margin.left + 0.5}
-          top={margin.top + 0.5}
-        >
-          <defs>
-            <clipPath id={clipPathId}>
-              <rect x="0" y="0" width={xMax} height={yMax} />
-            </clipPath>
-          </defs>
-          {decoration && (
-            <rect
-              x="0"
-              y="0"
-              width={xMax}
-              height={yMax}
-              fill={`url(#${distancingId})`}
-            />
-          )}
-          {children}
-          <g pointerEvents="none">
-            {decoration && (
-              <>
-                <NearestMarker />
-                <TodayMarker />
-                <DistancingMarker />
-                <GridRows
-                  scale={yScale}
-                  width={xMax}
-                  height={yMax}
-                  stroke={theme.color.shadow[0]}
-                />
-                <GridColumns
-                  scale={xScale}
-                  width={xMax}
-                  height={yMax}
-                  stroke={theme.color.shadow[0]}
-                />
-                <line
-                  x1={xMax}
-                  x2={xMax}
-                  y1={0}
-                  y2={yMax}
-                  stroke={theme.color.shadow[0]}
-                />
-                <AxisBottom />
-                <AxisLeft
-                  tickFormat={tickFormatWithLabel}
-                  tickValues={yTicks}
-                />
-              </>
-            )}
-            {!decoration && (
-              <>
-                <rect
-                  x={0}
-                  y={0}
-                  width={xMax - 1}
-                  height={yMax - 1}
-                  stroke={theme.color.shadow[0]}
-                  fill="transparent"
-                />
-              </>
-            )}
-          </g>
-        </Group>
-      </svg>
-      <div className="graph-overlay">
-        {scrubber && (
-          <Scrubber>{([d], active) => formatShortDate(x(d))}</Scrubber>
-        )}
-        {overlay}
-      </div>
-    </div>
-  );
-}
-
-export const Graph = React.memo(function Graph({
+export const GraphContents = React.memo(function Graph({
   accessors,
   children,
   overlay,
   after,
   before,
-  data,
+  data: dataFn,
   x,
   xLabel = '',
   domain = 1,
@@ -185,6 +53,7 @@ export const Graph = React.memo(function Graph({
   decoration = true,
   scrubber = true,
 }) {
+  const data = dataFn();
   const [scale, setScale] = useState(initialScale);
   const margin = decoration
     ? {top: 16, left: 16, right: 16, bottom: 32}
@@ -239,6 +108,18 @@ export const Graph = React.memo(function Graph({
 
   const clipPathId = useComponentId('graphClipPath');
 
+  const yTicks = yScale.ticks(yMax > 180 ? 5 : 3);
+  const yTickCount = yTicks.length;
+  const tickFormatWithLabel = useCallback(
+    (v, i) => {
+      const value = tickFormat(v, i);
+      return xLabel && i === yTickCount - 1 ? `${value} ${xLabel}` : value;
+    },
+    [tickFormat, xLabel, yTickCount]
+  );
+
+  const distancingId = useDistancingId();
+
   return (
     <GraphDataProvider
       data={data}
@@ -252,39 +133,133 @@ export const Graph = React.memo(function Graph({
     >
       {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
-      <figure
-        className={decoration ? 'margin-bottom-1' : ''}
-        style={{
-          background: theme.color.gray[0],
-        }}
-      >
-        <Suspense
-          fallback={
-            <div
-              style={{
-                height: `${height}px`,
-                width: `${width}px`,
-              }}
-            />
+      <div className="graph no-select">
+        <style jsx>{`
+          .graph {
+            position: relative;
+            margin-left: ${-1 * margin.left}px;
+            margin-right: ${-1 * margin.right}px;
+            background: ${theme.color.background};
+            animation: fade-in 300ms ease-in both;
           }
-        >
-          <GraphContents
-            accessors={accessors}
-            clipPathId={clipPathId}
-            decoration={decoration}
-            height={height}
-            overlay={overlay}
-            scrubber={scrubber}
-            tickFormat={tickFormat}
-            tickLabelProps={tickLabelProps}
-            xLabel={xLabel}
-            width={width}
+          .graph-overlay {
+            pointer-events: none;
+            position: absolute;
+            top: ${margin.top}px;
+            left: ${margin.left}px;
+            bottom: ${margin.bottom}px;
+            right: ${margin.right}px;
+          }
+          @keyframes fade-in {
+            from {
+              transform: translateY(-3px);
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+        `}</style>
+        <svg className="block" width={width} height={height}>
+          <Group
+            // Add 0.5 to snap centered strokes onto the pixel grid
+            left={margin.left + 0.5}
+            top={margin.top + 0.5}
           >
+            <defs>
+              <clipPath id={clipPathId}>
+                <rect x="0" y="0" width={xMax} height={yMax} />
+              </clipPath>
+            </defs>
+            {decoration && (
+              <rect
+                x="0"
+                y="0"
+                width={xMax}
+                height={yMax}
+                fill={`url(#${distancingId})`}
+              />
+            )}
             {children}
-          </GraphContents>
-        </Suspense>
-      </figure>
+            <g pointerEvents="none">
+              {decoration && (
+                <>
+                  <NearestMarker />
+                  <TodayMarker />
+                  <DistancingMarker />
+                  <GridRows
+                    scale={yScale}
+                    width={xMax}
+                    height={yMax}
+                    stroke={theme.color.shadow[0]}
+                  />
+                  <GridColumns
+                    scale={xScale}
+                    width={xMax}
+                    height={yMax}
+                    stroke={theme.color.shadow[0]}
+                  />
+                  <line
+                    x1={xMax}
+                    x2={xMax}
+                    y1={0}
+                    y2={yMax}
+                    stroke={theme.color.shadow[0]}
+                  />
+                  <AxisBottom />
+                  <AxisLeft
+                    tickFormat={tickFormatWithLabel}
+                    tickValues={yTicks}
+                  />
+                </>
+              )}
+              {!decoration && (
+                <>
+                  <rect
+                    x={0}
+                    y={0}
+                    width={xMax - 1}
+                    height={yMax - 1}
+                    stroke={theme.color.shadow[0]}
+                    fill="transparent"
+                  />
+                </>
+              )}
+            </g>
+          </Group>
+        </svg>
+        <div className="graph-overlay">
+          {scrubber && (
+            <Scrubber>{([d], active) => formatShortDate(x(d))}</Scrubber>
+          )}
+          {overlay}
+        </div>
+      </div>
       {after}
     </GraphDataProvider>
   );
 });
+
+export const Graph = (props) => {
+  return (
+    <figure
+      className={props.decoration ? 'margin-bottom-1' : ''}
+      style={{
+        background: theme.color.gray[0],
+      }}
+    >
+      <Suspense
+        fallback={
+          <div
+            style={{
+              height: `${props.height}px`,
+              width: `${props.width}px`,
+            }}
+          />
+        }
+      >
+        <GraphContents {...props} />
+      </Suspense>
+    </figure>
+  );
+};
