@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {LegendEntry, LegendRow, useGraphData} from '../graph';
+import {LegendEntry, LegendRow} from '../graph';
+import {useModelState} from '../modeling';
 import {formatNumber, formatNA} from '../../lib/format';
 
 const {useMemo} = React;
@@ -13,10 +14,10 @@ export const DistributionLegendRow = ({
   y,
   compact = false,
 }) => {
-  const {data} = useGraphData();
+  const {indices} = useModelState();
   const hasConfirmed = useMemo(
-    () => data.some((...d) => y && y.confirmed(...d)),
-    [data, y]
+    () => indices.some((...d) => y && y.confirmed(...d)),
+    [indices, y]
   );
 
   if (!y) {

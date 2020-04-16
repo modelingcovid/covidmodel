@@ -99,20 +99,18 @@ export const ICU = ({width, height}) => {
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Currently require intensive care"
-              y={currentlyCritical}
-              color={blue}
-              format={formatNumber}
-            />
-          </Gutter>
-        }
       >
         <Line y={icuBeds} stroke={red} strokeDasharray="6,3" />
         <DistributionLine y={currentlyCritical} color={blue} />
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Currently require intensive care"
+          y={currentlyCritical}
+          color={blue}
+          format={formatNumber}
+        />
+      </Gutter>
       <Graph
         data={indices}
         domain={cumulativeDomain}
@@ -122,19 +120,17 @@ export const ICU = ({width, height}) => {
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Total cases that require intensive care"
-              y={cumulativeCritical}
-              color={blue}
-              format={formatNumber}
-            />
-          </Gutter>
-        }
       >
         <DistributionLine y={cumulativeCritical} color={blue} />
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Total cases that require intensive care"
+          y={cumulativeCritical}
+          color={blue}
+          format={formatNumber}
+        />
+      </Gutter>
     </div>
   );
 };

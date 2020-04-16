@@ -237,19 +237,6 @@ export function SEIR({height, width}) {
           width={width}
           x={x}
           xLabel="people"
-          after={
-            <Gutter>
-              {configValues.map(({y, fill, label, description}, i) => (
-                <DistributionLegendRow
-                  key={i}
-                  y={y}
-                  color={fill}
-                  title={label}
-                  compact
-                />
-              ))}
-            </Gutter>
-          }
         >
           {configValues.map(({area: [y0, y1], fill}, i) => (
             <Area
@@ -264,6 +251,17 @@ export function SEIR({height, width}) {
             <Line key={`line-${i}`} y={y1} stroke={fill} />
           ))}
         </Graph>
+        <Gutter>
+          {configValues.map(({y, fill, label, description}, i) => (
+            <DistributionLegendRow
+              key={i}
+              y={y}
+              color={fill}
+              title={label}
+              compact
+            />
+          ))}
+        </Gutter>
         <Paragraph className="margin-top-2">
           This graph shows how COVID-19 affects the population of{' '}
           {location.name} over time. While only a small portion of the

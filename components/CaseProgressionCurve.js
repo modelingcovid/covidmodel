@@ -112,28 +112,6 @@ export function CaseProgressionCurve({height, width}) {
         xLabel="people"
         width={width}
         height={height}
-        after={
-          <Grid mobile={1}>
-            <DistributionLegendRow
-              y={cumulativeExposed}
-              color={theme.color.yellow[3]}
-              title="Total COVID-19 cases"
-              description="People who have been infected with COVID-19"
-            />
-            <DistributionLegendRow
-              y={cumulativePcr}
-              color={theme.color.blue[2]}
-              title="Reported positive tests"
-              description="Total number of COVID-19 tests projected to be positive"
-            />
-            <DistributionLegendRow
-              y={cumulativeDeaths}
-              color={theme.color.red[1]}
-              title="Deceased"
-              description="People who have died from COVID-19"
-            />
-          </Grid>
-        }
       >
         <DistributionLine
           y={cumulativeExposed}
@@ -151,6 +129,26 @@ export function CaseProgressionCurve({height, width}) {
           gradient
         />
       </PopulationGraph>
+      <Grid mobile={1}>
+        <DistributionLegendRow
+          y={cumulativeExposed}
+          color={theme.color.yellow[3]}
+          title="Total COVID-19 cases"
+          description="People who have been infected with COVID-19"
+        />
+        <DistributionLegendRow
+          y={cumulativePcr}
+          color={theme.color.blue[2]}
+          title="Reported positive tests"
+          description="Total number of COVID-19 tests projected to be positive"
+        />
+        <DistributionLegendRow
+          y={cumulativeDeaths}
+          color={theme.color.red[1]}
+          title="Deceased"
+          description="People who have died from COVID-19"
+        />
+      </Grid>
       <Heading className="margin-top-4">Finding the best fit</Heading>
       <Paragraph>
         The model adjusts three values to find a set of curves with the best fit

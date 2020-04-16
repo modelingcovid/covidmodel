@@ -53,22 +53,6 @@ export function ModelInputs({height, width, ...remaining}) {
         width={width}
         height={height}
       />
-      {/* <Grid className="margin-top-3 margin-bottom-3">
-        {distancingLevel != null && (
-          <MethodDefinition
-            icon={PeopleArrows}
-            value={formatPercent(1 - distancingLevel)}
-            label="Social distancing level"
-            method="input"
-          />
-        )}
-        <MethodDefinition
-          icon={Clock}
-          value={`${formatNumber(daysToMonths(distancingDays))} months`}
-          label="Social distancing period"
-          method="input"
-        />
-      </Grid> */}
       <Paragraph className="margin-top-2">
         A social distancing level of 100% means no contact with others, which
         yields an R₀ (basic reproduction number) for the virus of zero, since it
@@ -103,23 +87,6 @@ export function ModelInputs({height, width, ...remaining}) {
         and has an uninhibited R₀ of{' '}
         <InlineData>{() => formatNumber2(r0())}</InlineData>.
       </Paragraph>
-
-      {/* <MethodDisclaimer method="input" />
-
-      <Grid className="margin-bottom-3">
-        <MethodDefinition
-          icon={Viruses}
-          value={formatNumber2(model.r0)}
-          label="Basic reproduction number (R₀)"
-          method="fit"
-        />
-        <MethodDefinition
-          icon={CalendarDay}
-          value={formatShortDate(dayToDate(model.importtime))}
-          label="Import date of COVID-19"
-          method="fit"
-        />
-      </Grid> */}
     </div>
   );
 }

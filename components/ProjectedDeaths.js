@@ -109,19 +109,17 @@ export const ProjectedDeaths = ({width, height}) => {
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Fatalities per day"
-              y={dailyDeaths}
-              color={color}
-              format={formatNumber}
-            />
-          </Gutter>
-        }
       >
         <DistributionLine y={dailyDeaths} color={color} />
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Fatalities per day"
+          y={dailyDeaths}
+          color={color}
+          format={formatNumber}
+        />
+      </Gutter>
     </div>
   );
 };

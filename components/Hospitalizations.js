@@ -104,27 +104,25 @@ export const Hospitalizations = ({width, height}) => {
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Currently hospitalized"
-              y={currentlyHospitalized}
-              color={blue}
-              format={formatNumber}
-            />
-            <DistributionLegendRow
-              title="Currently reported hospitalized"
-              y={currentlyReportedHospitalized}
-              color={yellow}
-              format={formatNumber}
-            />
-          </Gutter>
-        }
       >
         <Line y={hospitalCapacity} stroke={red} strokeDasharray="6,3" />
         <DistributionLine y={currentlyHospitalized} color={blue} />
         <DistributionLine y={currentlyReportedHospitalized} color={yellow} />
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Currently hospitalized"
+          y={currentlyHospitalized}
+          color={blue}
+          format={formatNumber}
+        />
+        <DistributionLegendRow
+          title="Currently reported hospitalized"
+          y={currentlyReportedHospitalized}
+          color={yellow}
+          format={formatNumber}
+        />
+      </Gutter>
       <Graph
         data={indices}
         domain={cumulativeDomain}
@@ -134,26 +132,24 @@ export const Hospitalizations = ({width, height}) => {
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Total hospitalized"
-              y={cumulativeHospitalized}
-              color={blue}
-              format={formatNumber}
-            />
-            <DistributionLegendRow
-              title="Total reported hospitalized"
-              y={cumulativeReportedHospitalized}
-              color={yellow}
-              format={formatNumber}
-            />
-          </Gutter>
-        }
       >
         <DistributionLine y={cumulativeHospitalized} color={blue} />
         <DistributionLine y={cumulativeReportedHospitalized} color={yellow} />
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Total hospitalized"
+          y={cumulativeHospitalized}
+          color={blue}
+          format={formatNumber}
+        />
+        <DistributionLegendRow
+          title="Total reported hospitalized"
+          y={cumulativeReportedHospitalized}
+          color={yellow}
+          format={formatNumber}
+        />
+      </Gutter>
     </div>
   );
 };
