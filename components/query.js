@@ -74,7 +74,10 @@ export const DistributionSeriesFull = [
 export function createSeries(accessor) {
   const transforms = {};
   seriesProps.map((prop) => {
-    transforms[prop] = (data) => accessor(data)[prop];
+    transforms[prop] = (data) => {
+      const series = accessor(data);
+      return series ? series[prop] : null;
+    };
   });
   transforms.get = (data, i) => transforms.data(data)[i];
   return transforms;
@@ -83,7 +86,10 @@ export function createSeries(accessor) {
 export function createDistributionSeries(accessor) {
   const transforms = {};
   fullDistributionProps.map((prop) => {
-    transforms[prop] = createSeries((data) => accessor(data)[prop]);
+    transforms[prop] = createSeries((data) => {
+      const distribution = accessor(data);
+      return distribution ? distribution[prop] : null;
+    });
   });
   return transforms;
 }

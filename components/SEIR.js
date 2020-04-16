@@ -39,42 +39,17 @@ import {stackAccessors} from '../lib/stack';
 
 const {useMemo} = React;
 
-// export const SEIRScenarioFragment = [
-//   ...DistributionSeriesFullFragment,
-//   `fragment SEIRScenario on Scenario {
-//     cumulativeDeaths { ...DistributionSeriesFull }
-//     cumulativeRecoveries { ...DistributionSeriesFull }
-//     currentlyInfected { ...DistributionSeriesFull }
-//     currentlyInfectious { ...DistributionSeriesFull }
-//     susceptible { ...DistributionSeriesFull }
-//   }`,
-// ];
-
-// const useDomain = () => {
-//   const [data, error] = useLocationQuery(`{
-//     domain {
-//       cumulativeDeaths { expected { max } }
-//       currentlyInfected { expected { max } }
-//       currentlyInfectious { expected { max } }
-//     }
-//   }`);
-//   if (!data) {
-//     return [data, error];
-//   }
-//   const {domain} = data;
-//   return [
-//     domain.cumulativeDeaths.expected.max +
-//       domain.currentlyInfected.expected.max +
-//       domain.currentlyInfectious.expected.max,
-//     error,
-//   ];
-// };
-
 function PercentCases() {
   const [d] = useNearestData();
   const {population, susceptible} = useLocationData();
-  return formatPercent1(
-    (population() - susceptible.expected.get(d)) / population()
+  return (
+    <InlineData>
+      {() =>
+        formatPercent1(
+          (population() - susceptible.expected.get(d)) / population()
+        )
+      }
+    </InlineData>
   );
 }
 
@@ -268,7 +243,7 @@ export function SEIR({height, width}) {
             </>
           )}
         </Graph>
-        {/* <Gutter>
+        <Gutter>
           {configValues.map(({y, fill, label, description}, i) => (
             <DistributionLegendRow
               key={i}
@@ -278,7 +253,7 @@ export function SEIR({height, width}) {
               compact
             />
           ))}
-        </Gutter> */}
+        </Gutter>
         <Paragraph className="margin-top-2">
           This graph shows how COVID-19 affects the population of{' '}
           {location.name} over time. While only a small portion of the
@@ -289,9 +264,7 @@ export function SEIR({height, width}) {
         <Estimation>
           The model estimates that{' '}
           <strong>
-            <InlineData>
-              <PercentCases />
-            </InlineData>
+            <PercentCases />
           </strong>{' '}
           of the {location.name} population will have contracted COVID-19 by{' '}
           <CurrentDate />.

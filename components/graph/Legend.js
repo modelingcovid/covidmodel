@@ -2,6 +2,7 @@ import * as React from 'react';
 import css from 'styled-jsx/css';
 import {breakpoint, theme} from '../../styles';
 
+import {InlineData} from '../content';
 import {useNearestData} from './useNearestData';
 import {formatShortDate, formatNumber} from '../../lib/format';
 
@@ -58,6 +59,7 @@ export const LegendEntry = ({
   format = formatNumber,
   color,
   label,
+  hide,
   kind = 'minor',
   symbol = 'fill',
   y,
@@ -72,7 +74,6 @@ export const LegendEntry = ({
 
   const isStroke = symbol === 'stroke';
   const borderColor = isStroke ? color : 'transparent';
-  const value = y ? y(...d) : null;
 
   return (
     <div
@@ -96,7 +97,12 @@ export const LegendEntry = ({
         <div className="entry-info">
           {color && <div className="entry-symbol" />}
           <div className="entry-data">
-            {format ? format(value) : value.toString()}
+            <InlineData>
+              {() => {
+                const value = y ? y(...d) : null;
+                return format ? format(value) : value.toString();
+              }}
+            </InlineData>
           </div>
         </div>
       )}

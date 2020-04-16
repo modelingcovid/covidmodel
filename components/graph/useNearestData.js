@@ -24,19 +24,12 @@ export const NearestDataProvider = ({
   const setNearestData = useCallback((p) => {}, []);
 
   const [NearestDataContext, SetNearestDataContext] = contexts;
-  const findNearestPoint = useMemo(
-    () =>
-      suspense(
-        () => findPoint(data(), x),
-        () => [null, null, []]
-      ),
-    [data, suspense, x]
-  );
+  const findNearestPoint = useMemo(() => findPoint(data, x), [data, x]);
 
-  const nearestData = useMemo(() => findNearestPoint(point), [
-    findNearestPoint,
-    point,
-  ]);
+  const nearestData = useMemo(
+    () => suspense(() => findNearestPoint(point), [null, null, []]),
+    [findNearestPoint, point, suspense]
+  );
 
   return (
     <SetNearestDataContext.Provider value={setPoint}>

@@ -2,12 +2,15 @@ import * as React from 'react';
 
 const {useCallback, useReducer} = React;
 
-export function Suspense(props) {
-  if (typeof window === 'undefined') {
-    return props.fallback || null;
-  }
-  return <React.Suspense {...props} />;
-}
+export const Suspense =
+  typeof window === 'undefined'
+    ? function Suspense() {
+        // We don’t return the fallback on the server because React won’t
+        // recognize the fallback when hydrating on the client; React displays
+        // the warnForDeletedHydratableElement warning instead.
+        return null;
+      }
+    : React.Suspense;
 
 export function useSuspense() {
   const [count, render] = useReducer((x) => x + 1, 0);

@@ -27,21 +27,27 @@ import {
 
 const {useCallback, useMemo} = React;
 
+function TodayDistancing() {
+  const {distancing} = useLocationData();
+  const findPoint = useFindPoint();
+  return (
+    <InlineData width="2em">
+      {() => {
+        const [todayIndex] = findPoint(today);
+        const todayDistancing = distancing(todayIndex);
+        return formatPercent(1 - todayDistancing);
+      }}
+    </InlineData>
+  );
+}
+
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
-
-  const data = useLocationData();
-  const {r0, importtime, distancing} = data;
-
-  // const findPoint = useFindPoint();
-  // const [todayIndex] = findPoint(today);
-  // const todayDistancing = distancing(todayIndex);
-  const todayDistancing = 0;
+  const {r0, importtime, distancing} = useLocationData();
   return (
     <div {...remaining}>
       <DistancingGraph
-        // TODO FILL ME IN
-        r0={undefined}
+        r0={r0}
         y={distancing}
         leftLabel="distancing"
         rightLabel="R₀"
@@ -57,10 +63,9 @@ export function ModelInputs({height, width, ...remaining}) {
       </Paragraph>
 
       <Paragraph>
-        The current distancing level, {formatPercent(1 - todayDistancing)}, is
-        calculated based on the average the past three days of available
-        mobility data for {location.name}, which is usually reported with a
-        three-day delay.
+        The current distancing level, <TodayDistancing />, is calculated based
+        on the average the past three days of available mobility data for{' '}
+        {location.name}, which is usually reported with a three-day delay.
       </Paragraph>
 
       <div className="section-heading margin-top-4">

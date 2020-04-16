@@ -30,7 +30,7 @@ export const DistancingGraph = ({
 }) => {
   const {indices, x} = useModelState();
 
-  const formatR0 = useCallback((n) => formatNumber2(n * r0), [r0]);
+  const formatR0 = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   const endTickLabelProps = () => ({
     dx: '-4px',
