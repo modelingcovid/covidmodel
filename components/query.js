@@ -144,6 +144,8 @@ const queries = [
       currentlyInfected { ...DistributionSeriesFull }
       currentlyInfectious { ...DistributionSeriesFull }
       susceptible { ...DistributionSeriesFull }
+      cumulativeExposed { ...DistributionSeriesFull }
+      cumulativePcr { ...DistributionSeriesFull }
     }`,
     {
       cumulativeDeaths: createDistributionSeries((d) => d.cumulativeDeaths),
@@ -155,6 +157,8 @@ const queries = [
         (d) => d.currentlyInfectious
       ),
       susceptible: createDistributionSeries((d) => d.susceptible),
+      cumulativeExposed: createDistributionSeries((d) => d.cumulativeExposed),
+      cumulativePcr: createDistributionSeries((d) => d.cumulativePcr),
     },
     DistributionSeriesFull,
   ],
