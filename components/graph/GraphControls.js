@@ -14,6 +14,7 @@ export const GraphControls = ({scale, setScale}) => (
         display: flex;
         justify-content: flex-end;
         clear: both;
+        background: var(--color-background);
       }
       a {
         display: block;

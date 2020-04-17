@@ -57,7 +57,7 @@ export function SEIR({height, width}) {
   const {location, indices, x} = useModelState();
   const {
     population,
-    seirDomain,
+    domain,
     susceptible,
     cumulativeRecoveries,
     currentlyInfected,
@@ -187,7 +187,7 @@ export function SEIR({height, width}) {
             decoration={false}
           >
             {({xMax, yMax, yScale}) => {
-              const midY = yScale(seirDomain());
+              const midY = yScale(domain.seir());
               const strokeWidth = 1;
               return (
                 <>
@@ -219,7 +219,7 @@ export function SEIR({height, width}) {
         </div>
         <Graph
           data={indices}
-          domain={seirDomain}
+          domain={domain.seir}
           initialScale="linear"
           height={height}
           width={width}

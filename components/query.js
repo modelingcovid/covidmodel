@@ -163,21 +163,38 @@ const queries = [
     DistributionSeriesFull,
   ],
   [
+    'Scenario',
+    `{
+      dailyDeaths { ...DistributionSeriesFull }
+    }`,
+    {
+      dailyDeaths: createDistributionSeries((d) => d.dailyDeaths),
+    },
+    DistributionSeriesFull,
+  ],
+  [
     'Location',
     `{
       domain {
         cumulativeDeaths { expected { max } }
         currentlyInfected { expected { max } }
         currentlyInfectious { expected { max } }
+        dailyDeaths { expected { max } }
       }
     }`,
     {
-      seirDomain: ({
-        domain: {cumulativeDeaths, currentlyInfected, currentlyInfectious},
-      }) =>
-        cumulativeDeaths.expected.max +
-        currentlyInfected.expected.max +
-        currentlyInfectious.expected.max,
+      domain: {
+        seir: ({
+          domain: {cumulativeDeaths, currentlyInfected, currentlyInfectious},
+        }) => {
+          return (
+            cumulativeDeaths.expected.max +
+            currentlyInfected.expected.max +
+            currentlyInfectious.expected.max
+          );
+        },
+        dailyDeaths: ({domain: {dailyDeaths}}) => dailyDeaths.expected.max,
+      },
     },
   ],
 ];
