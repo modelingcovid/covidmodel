@@ -100,32 +100,32 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.8|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.7|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.8|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->42,"replower"->0.7,"repupper"->0.8|>,
   "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.9,"repupper"->1.2|>,
-  "PA"-><|"rlower"->4.2,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.8,"repupper"->1|>,
-  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.6|>,
+  "PA"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->49.5,"replower"->0.90,"repupper"->1.1|>,
+  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.65|>,
   "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.8|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.5,"repupper"->0.75|>,
-  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.56,"repupper"->0.9|>,
+  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->48,"replower"->0.3,"repupper"->0.6|>,
   "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.1,"repupper"->0.5|>,
-  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->30,"tupper"->35,"replower"->0.25,"repupper"->0.5|>,
+  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->30,"tupper"->35,"replower"->0.45,"repupper"->0.7|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1|>,
   "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.45|>,
-  "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.9|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.8|>,
-  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1|>,
-  "MD"-><|"rlower"->3.4,"rupper"->4.8,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->1|>,
+  "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.4|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.6|>,
+  "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->47,"replower"->0.65,"repupper"->1|>,
+  "MD"-><|"rlower"->3.4,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->1|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.6|>,
-  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->1|>,
-  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.5|>,
+  "NJ"-><|"rlower"->5.6,"rupper"->6,"tlower"->45,"tupper"->47,"replower"->0.6,"repupper"->1|>,
+  "IL"-><|"rlower"->4,"rupper"->5,"tlower"->46,"tupper"->75,"replower"->0.3,"repupper"->0.7|>,
   "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.25,"repupper"->0.45|>,
-  "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.8|>,
+  "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.5|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.8|>,
   "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.2|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->72,"replower"->0.5,"repupper"->1.1|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7|>
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.7|>
 |>;
 
 getBounds[state_]:=Module[{},
@@ -305,7 +305,7 @@ generateModelComponents[distancing_] := <|
       (*Entering critical care*)
       CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,
       (*Dying*)
-      Deaq'[t]==CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased + HHq[t]*fractionOfHospitalizedNonCriticalDeceased0/daysFromCriticalToRecoveredOrDeceased,
+      Deaq'[t]==testingProbability[t] * CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased + HHq[t]*fractionOfHospitalizedNonCriticalDeceased0/daysFromCriticalToRecoveredOrDeceased,
       (*Leaving critical care*)
       RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
       (* establishment *)
@@ -892,7 +892,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
-        Log[1.5]<=distpow<= Log[2],
+        Log[3.8]<=distpow<= Log[4],
         Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
       },
       {
@@ -945,7 +945,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Text["Fit for "<>state],
         Row[{
             Show[
-              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,200},{10^-7,10^-2}}],
+              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,200},{10^-7,10^-1}}],
               LogPlot[{
                   DeaqParametric[Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
@@ -958,7 +958,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
                   ][t]},
-                {t,40,200},PlotRange->{{40,200}, {10^-7,10^-2}}, ImageSize->500]
+                {t,40,200},PlotRange->{{40,200}, {10^-7,10^-1}}, ImageSize->500]
             ],
             ListPlot[{
                 Thread[{#2,#1/#3}&[
@@ -979,7 +979,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 
 
   output = Merge[{
-      <|"scenarios"->
+      (*<|"scenarios"->
         Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
               <|"params"->params,
                 "thisStateData"->thisStateData,
@@ -989,7 +989,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                 "hospitalizationCumulativeData" -> hospitalizationCumulativeData,
                 "icuCurrentData" -> icuCurrentData,
                 "icuCumulativeData" -> icuCumulativeData
-              |>, #, numberOfSimulations]}&/@scenarios]|>,
+              |>, #, numberOfSimulations]}&/@scenarios]|>,*)
       <|"parameterBest"->fitParams|>,
       KeyDrop[stateParams[state],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
@@ -1000,7 +1000,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "goodnessOfFitMetrics"->gofMetrics
     }, First];
 
-  Echo[plotStateHospitalization[output, state]];
+  (*Echo[plotStateHospitalization[output, state]];*)
 
   output
 ]

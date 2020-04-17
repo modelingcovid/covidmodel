@@ -229,6 +229,7 @@ stateDistancingPrecompute = Module[{
   stateDistancings = 1-rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];*)
+  
   (* Safegraph *)
   rawCsvTable=Import["https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/export?format=csv&gid=164776767","CSV"]; 
 
