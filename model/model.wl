@@ -979,7 +979,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 
 
   output = Merge[{
-      (*<|"scenarios"->
+      <|"scenarios"->
         Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
               <|"params"->params,
                 "thisStateData"->thisStateData,
@@ -989,7 +989,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                 "hospitalizationCumulativeData" -> hospitalizationCumulativeData,
                 "icuCurrentData" -> icuCurrentData,
                 "icuCumulativeData" -> icuCumulativeData
-              |>, #, numberOfSimulations]}&/@scenarios]|>,*)
+              |>, #, numberOfSimulations]}&/@scenarios]|>,
       <|"parameterBest"->fitParams|>,
       KeyDrop[stateParams[state],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
@@ -1000,7 +1000,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "goodnessOfFitMetrics"->gofMetrics
     }, First];
 
-  (*Echo[plotStateHospitalization[output, state]];*)
+  Echo[plotStateHospitalization[output, state]];
 
   output
 ]
