@@ -116,14 +116,14 @@ export default function StatePage() {
             <ProjectedDeaths width={width} height={height} />
             <ParameterTable />
           </Section>
-          {/* <Section style={{marginTop: '300px'}}>
+          <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>
             <div className="dek margin-top-1">
               These sections are being converted to match the format&nbsp;above.
             </div>
             <Hospitalizations width={width} height={height} />
             <ICU width={width} height={height} />
-          </Section> */}
+          </Section>
         </div>
       </ModelStateProvider>
       <FeedbackForm />

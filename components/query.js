@@ -79,7 +79,10 @@ export function createSeries(accessor) {
       return series ? series[prop] : null;
     };
   });
-  transforms.get = (data, i) => transforms.data(data)[i];
+  transforms.get = (data, i) => {
+    const list = transforms.data(data);
+    return list ? list[i] : null;
+  };
   return transforms;
 }
 
@@ -108,6 +111,7 @@ const queries = [
   [
     'Location',
     `{
+      icuBeds
       importtime
       population
       r0
@@ -119,9 +123,10 @@ const queries = [
       }
     }`,
     {
-      r0: (location) => location.r0,
+      icuBeds: (location) => location.icuBeds,
       importtime: (location) => location.importtime,
       population: (location) => location.population,
+      r0: (location) => location.r0,
       scenarios: (location) => location.scenarios,
     },
   ],
@@ -173,6 +178,44 @@ const queries = [
     DistributionSeriesFull,
   ],
   [
+    'Scenario',
+    `{
+      hospitalCapacity { data }
+      currentlyHospitalized { ...DistributionSeriesFull }
+      currentlyReportedHospitalized { ...DistributionSeriesFull }
+      cumulativeHospitalized { ...DistributionSeriesFull }
+      cumulativeReportedHospitalized { ...DistributionSeriesFull }
+    }`,
+    {
+      hospitalCapacity: (d, i) => d.hospitalCapacity.data[i],
+      currentlyHospitalized: createDistributionSeries(
+        (d) => d.currentlyHospitalized
+      ),
+      currentlyReportedHospitalized: createDistributionSeries(
+        (d) => d.currentlyReportedHospitalized
+      ),
+      cumulativeHospitalized: createDistributionSeries(
+        (d) => d.cumulativeHospitalized
+      ),
+      cumulativeReportedHospitalized: createDistributionSeries(
+        (d) => d.cumulativeReportedHospitalized
+      ),
+    },
+    DistributionSeriesFull,
+  ],
+  [
+    'Scenario',
+    `{
+      currentlyCritical { ...DistributionSeriesFull }
+      cumulativeCritical { ...DistributionSeriesFull }
+    }`,
+    {
+      currentlyCritical: createDistributionSeries((d) => d.currentlyCritical),
+      cumulativeCritical: createDistributionSeries((d) => d.cumulativeCritical),
+    },
+    DistributionSeriesFull,
+  ],
+  [
     'Location',
     `{
       domain {
@@ -180,20 +223,27 @@ const queries = [
         currentlyInfected { expected { max } }
         currentlyInfectious { expected { max } }
         dailyDeaths { expected { max } }
+        currentlyHospitalized { expected { max } }
+        cumulativeHospitalized { expected { max } }
+        currentlyCritical { expected { max } }
+        cumulativeCritical { expected { max } }
       }
     }`,
     {
       domain: {
-        seir: ({
-          domain: {cumulativeDeaths, currentlyInfected, currentlyInfectious},
-        }) => {
-          return (
-            cumulativeDeaths.expected.max +
-            currentlyInfected.expected.max +
-            currentlyInfectious.expected.max
-          );
+        seir: ({domain}) =>
+          domain.cumulativeDeaths.expected.max +
+          domain.currentlyInfected.expected.max +
+          domain.currentlyInfectious.expected.max,
+        dailyDeaths: ({domain}) => domain.dailyDeaths.expected.max,
+        hospitalized: {
+          currently: ({domain}) => domain.currentlyHospitalized.expected.max,
+          cumulative: ({domain}) => domain.cumulativeHospitalized.expected.max,
         },
-        dailyDeaths: ({domain: {dailyDeaths}}) => dailyDeaths.expected.max,
+        critical: {
+          currently: ({domain}) => domain.currentlyCritical.expected.max,
+          cumulative: ({domain}) => domain.cumulativeCritical.expected.max,
+        },
       },
     },
   ],

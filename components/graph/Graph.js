@@ -243,7 +243,7 @@ export const GraphContents = React.memo(function Graph({
 export const Graph = (props) => {
   return (
     <figure
-      className={props.decoration ? 'margin-bottom-1' : ''}
+      className={props.decoration ? 'clear margin-bottom-1' : 'clear'}
       style={{
         boxShadow: `inset 0 0 0 1px ${theme.color.gray[0]}`,
       }}
