@@ -222,20 +222,12 @@ stateDistancingPrecompute = Module[{
     SlowJoin,
     ApplyWhere
   },
-  (* Unicast *)
-  (*rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
+  
+  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
 
   dataDays = rawCsvTable[[1,2;;]];
   stateDistancings = 1-rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
-  countStates = Length[stateLabels];*)
-  
-  (* Safegraph *)
-  rawCsvTable=Import["https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/export?format=csv&gid=164776767","CSV"]; 
-
-  dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = 1+(rawCsvTable[[3;;,2;;]]-10)/100;
-  stateLabels = rawCsvTable[[3;;,1]];
   countStates = Length[stateLabels];
 
   totalDays = tmax0;

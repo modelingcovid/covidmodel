@@ -1,58 +1,53 @@
 {
-	"distancingLevel":0.6900519300000001,
+	"distancingLevel":0.6347999576285714,
 	"id":"scenario5",
-	"distancingDays":622,
+	"distancingDays":624,
 	"maintain":true,
 	"name":"Current Indefinite",
 	"events":{
-		"herd":{
-			"eventName":"herd",
-			"day":2.696150834572527e2,
-			"thresholdCrossed":0.7
-		},
 		"icu":{
 			"eventName":"icu",
-			"day":1.4740560199229367e2,
-			"thresholdCrossed":1.6198246664018295e-4
+			"day":1.5078969004415177e2,
+			"thresholdCrossed":1.6198246664018303e-4
 		},
 		"hospital":{
 			"eventName":"hospital",
-			"day":1.6373645703523633e2,
-			"thresholdCrossed":9.54856362164816e-4
+			"day":1.7273248861620573e2,
+			"thresholdCrossed":9.54856362166316e-4
 		}
 	},
 	"summary":{
-		"totalProjectedDeaths":2.0085060587016236e4,
-		"totalProjectedPCRConfirmed":5.1748491723534494e5,
-		"totalProjectedInfected":1.5949670032875317e6,
-		"totalInfectedFraction":0.3962525911076922,
-		"fatalityRate":1.2592774988834935e-2,
-		"fatalityRateSymptomatic":1.798967855547848e-2,
-		"fatalityRatePCR":3.881284249658977e-2,
-		"fractionOfSymptomaticHospitalized":7.72864803024503e-2,
-		"fractionOfPCRHospitalized":0.24008952437651318,
-		"fractionHospitalizedInICU":0.2903969585317669,
-		"fractionDeathOfHospitalized":0.11471433897472397,
-		"fractionOfInfectionsPCRConfirmed":0.3244486664418196,
-		"dateContained":"Wed 20 Jan 2021 00:00:00",
-		"dateICUOverCapacity":"Tue 26 May 2020 09:44:04",
-		"dateHospitalsOverCapacity":"Thu 11 Jun 2020 17:40:29"
+		"totalProjectedDeaths":1.7148724573741594e4,
+		"totalProjectedPCRConfirmed":4.398682585459546e5,
+		"totalProjectedInfected":1.361727893854785e6,
+		"totalInfectedFraction":0.3383068146308887,
+		"fatalityRate":1.2593356316728529e-2,
+		"fatalityRateSymptomatic":1.7990509023897896e-2,
+		"fatalityRatePCR":3.898604693693761e-2,
+		"fractionOfSymptomaticHospitalized":7.728647974648034e-2,
+		"fractionOfPCRHospitalized":0.2401783993449944,
+		"fractionHospitalizedInICU":0.2903969585317672,
+		"fractionDeathOfHospitalized":0.11518361999547051,
+		"fractionOfInfectionsPCRConfirmed":0.3230221401287255,
+		"dateContained":"Thu 25 Feb 2021 00:00:00",
+		"dateICUOverCapacity":"Fri 29 May 2020 18:57:09",
+		"dateHospitalsOverCapacity":"Sat 20 Jun 2020 17:34:47"
 	},
 	"summaryAug1":{
-		"totalProjectedDeaths":9.644356788099201e3,
-		"totalProjectedPCRConfirmed":3.3504784311838413e5,
-		"totalProjectedInfected":1.1488709830854202e6,
-		"totalInfectedFraction":0.2854247786679576,
-		"fatalityRate":8.394638675787783e-3,
-		"fatalityRateSymptomatic":1.199234096541112e-2,
-		"fatalityRatePCR":2.87850138008246e-2,
-		"fractionOfSymptomaticHospitalized":6.507601867806456e-2,
-		"fractionOfPCRHospitalized":0.2219628718579693,
+		"totalProjectedDeaths":6.9725635579958425e3,
+		"totalProjectedPCRConfirmed":2.3844054927292245e5,
+		"totalProjectedInfected":8.36519456131737e5,
+		"totalInfectedFraction":0.2078243633385324,
+		"fatalityRate":8.33520787458862e-3,
+		"fatalityRateSymptomatic":1.1907439820840887e-2,
+		"fatalityRatePCR":2.924235655075156e-2,
+		"fractionOfSymptomaticHospitalized":6.434040735218767e-2,
+		"fractionOfPCRHospitalized":0.22132986922787626,
 		"fractionHospitalizedInICU":0.29039695853176695,
-		"fractionDeathOfHospitalized":9.202409921439675e-2,
-		"fractionOfInfectionsPCRConfirmed":0.2916322616300884,
-		"dateContained":"Wed 20 Jan 2021 00:00:00",
-		"dateICUOverCapacity":"Tue 26 May 2020 09:44:04",
-		"dateHospitalsOverCapacity":"Thu 11 Jun 2020 17:40:29"
+		"fractionDeathOfHospitalized":9.3753568917296e-2,
+		"fractionOfInfectionsPCRConfirmed":0.2850388565682952,
+		"dateContained":"Thu 25 Feb 2021 00:00:00",
+		"dateICUOverCapacity":"Fri 29 May 2020 18:57:09",
+		"dateHospitalsOverCapacity":"Sat 20 Jun 2020 17:34:47"
 	}
 }
