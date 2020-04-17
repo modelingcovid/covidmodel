@@ -234,7 +234,7 @@ stateDistancingPrecompute = Module[{
   rawCsvTable=Import["https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/export?format=csv&gid=164776767","CSV"]; 
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = 1+rawCsvTable[[3;;,2;;]]/100;
+  stateDistancings = 1+(rawCsvTable[[3;;,2;;]]-10)/100;
   stateLabels = rawCsvTable[[3;;,1]];
   countStates = Length[stateLabels];
 

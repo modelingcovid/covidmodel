@@ -1,9 +1,9 @@
 {
 	"parameterBest":{
-		"r0natural":3.627215648894257,
-		"importtime":4.633928308230617e1,
-		"stateAdjustmentForTestingDifferences":0.6450151549206372,
-		"distpow":3.996339554964624
+		"r0natural":3.7894688333346296,
+		"importtime":4.847341489625213e1,
+		"stateAdjustmentForTestingDifferences":0.787105845294338,
+		"distpow":1.9327111196910713
 	},
 	"population":2887725,
 	"ventilators":753,
@@ -18,13 +18,13 @@
 	"pPCRH":0.7907066947529183,
 	"fractionOfCriticalDeceased":0.3621077977624332,
 	"initialInfectionImpulse":1.3672006748528405e1,
-	"r0":3.627215648894257,
-	"importtime":4.633928308230617e1,
-	"stateAdjustmentForTestingDifferences":0.6450151549206372,
-	"distpow":3.996339554964624,
+	"r0":3.7894688333346296,
+	"importtime":4.847341489625213e1,
+	"stateAdjustmentForTestingDifferences":0.787105845294338,
+	"distpow":1.9327111196910713,
 	"parameters":{
 		"r0":{
-			"value":3.627215648894257,
+			"value":3.7894688333346296,
 			"name":"Basic reproduction number",
 			"description":"The basic reproduction number.",
 			"type":"fit"
@@ -84,7 +84,7 @@
 			"type":"literature"
 		},
 		"importtime":{
-			"value":4.633928308230617e1,
+			"value":4.847341489625213e1,
 			"name":"Import Time",
 			"description":"The day that COVID-19 was seeded into that state.",
 			"type":"fit"
@@ -120,29 +120,29 @@
 			"type":"literature"
 		},
 		"stateAdjustmentForTestingDifferences":{
-			"value":0.6450151549206372,
+			"value":0.787105845294338,
 			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
 			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 			"type":"fit"
 		},
 		"distancePower":{
-			"value":3.996339554964624,
+			"value":1.9327111196910713,
 			"name":"Power of the distancing function",
 			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 			"type":"fit"
 		}
 	},
 	"goodnessOfFitMetrics":{
-		"chiSquared":9.61702475607882e-6,
-		"rmsRelativeError":0.4514582481947108,
-		"rmsRelativeErrorDeaths":0.34192642166704695,
-		"rmsRelativeErrorPcr":0.5233506456225364,
-		"meanRelativeErrorDeaths":-0.19854980195705998,
-		"meanRelativeErrorPcr":-0.280334199644355,
-		"rSquaredDeaths":1.6297811589620858e-2,
-		"rSquaredPcr":2.0645275515288802e-2,
-		"deathResidual7Day":-2.0409118123888437,
-		"pcrResidual7Day":-4.5758001082829125e1
+		"chiSquared":5.80556943565175e-6,
+		"rmsRelativeError":0.2735231545294552,
+		"rmsRelativeErrorDeaths":0.25349498806876974,
+		"rmsRelativeErrorPcr":0.288664476242219,
+		"meanRelativeErrorDeaths":0.19246288430820946,
+		"meanRelativeErrorPcr":-0.10155175720753454,
+		"rSquaredDeaths":0.20810501420620023,
+		"rSquaredPcr":3.46976868993928e-2,
+		"deathResidual7Day":-0.10484186357814229,
+		"pcrResidual7Day":-2.7556366824109627e1
 	},
 	"scenarios":"scenario4"
 }

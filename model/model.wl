@@ -102,28 +102,28 @@ and starting with a different random seed, then pick the best one (the real one 
 fitStartingOverrides=<|
   "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.8|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->42,"replower"->0.7,"repupper"->0.8|>,
-  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.9,"repupper"->1.2|>,
-  "PA"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->49.5,"replower"->0.90,"repupper"->1.1|>,
+  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->43,"replower"->0.9,"repupper"->1.2|>,
+  "PA"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->49.5,"replower"->0.8,"repupper"->1|>,
   "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.65|>,
-  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.8|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.56,"repupper"->0.9|>,
-  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->48,"replower"->0.3,"repupper"->0.6|>,
+  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->51,"replower"->0.4,"repupper"->0.7|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.56,"repupper"->0.7|>,
+  "CT"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->48,"replower"->0.3,"repupper"->0.5|>,
   "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.1,"repupper"->0.5|>,
   "NY"-><|"rlower"->4,"rupper"->5,"tlower"->30,"tupper"->35,"replower"->0.45,"repupper"->0.7|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1|>,
-  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.8|>,
+  "VT"-><|"rlower"->2,"rupper"->5,"tlower"->35,"tupper"->53,"replower"->0.2,"repupper"->0.5|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.45|>,
   "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.4|>,
   "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.6|>,
   "MA"-><|"rlower"->4,"rupper"->5,"tlower"->35,"tupper"->47,"replower"->0.65,"repupper"->1|>,
   "MD"-><|"rlower"->3.4,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->1|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.6|>,
-  "NJ"-><|"rlower"->5.6,"rupper"->6,"tlower"->45,"tupper"->47,"replower"->0.6,"repupper"->1|>,
+  "NJ"-><|"rlower"->5.6,"rupper"->6,"tlower"->40,"tupper"->47,"replower"->0.4,"repupper"->0.62|>,
   "IL"-><|"rlower"->4,"rupper"->5,"tlower"->46,"tupper"->75,"replower"->0.3,"repupper"->0.7|>,
   "IN"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.25,"repupper"->0.45|>,
   "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.8|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1.2|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.5|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.8|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->72,"replower"->0.5,"repupper"->1.1|>,
   "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.7|>
 |>;
@@ -488,8 +488,6 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
     soln,
   },
   
-  (*{time, soln} = AbsoluteTiming[Apply[parameterizedSolution, simulationParameters]];*)
-  (*Echo[time];*)
   {outputSolution, outputEvents} = Reap[
     Apply[parameterizedSolution, simulationParameters],
     {"containment","herd","icu","hospital","cutoff"},
@@ -652,8 +650,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
           "distancing"->distancing[t]^fitParams["distpow"],
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
           "dailyPcr" -> Merge[{
+              <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positiveIncrease"]]|>,
               <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
               percentileMap[PCRQuantiles[t] - PCRQuantiles[t-1]]
+            },First],
+          "dailyDeath" -> Merge[{
+              <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["deathIncrease"]]|>,
+              <|"expected"-> population*(sol[Deaq][t] - sol[Deaq][t-1])|>,
+              percentileMap[DeathQuantiles[t] - DeathQuantiles[t-1]]
             },First],
           "dailyTestsRequiredForContainment" -> <|"expected"-> population*testToAllCaseRatio0*(sol[cumEq][t])|>,
           "cumulativePcr" -> Merge[{
@@ -663,6 +667,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
             },First],
           "cumulativeExposed"->Merge[{
             <|"expected"-> population*sol[cumEq][t]|>
+          },First],
+          "dailyExposed"->Merge[{
+            <|"expected"-> population*(sol[cumEq][t]-sol[cumEq][t-1])|>
           },First],
           "cumulativeDeaths" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],0]]|>,
@@ -892,7 +899,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
-        Log[3.8]<=distpow<= Log[4],
+        Log[1.5]<=distpow<= Log[2],
         Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
       },
       {
