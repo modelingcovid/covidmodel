@@ -1,6 +1,6 @@
 # Modeling <span className="nowrap">COVID-19</span>
 
-<div className="dek" style={{marginTop: '-8px'}}>Forecasting models trained to actual social distancing, testing, and fatality data</div>
+<div className="dek" style={{marginTop: '-8px'}}>Forecasting the impact of the virus using models trained with actual social distancing, testing, and fatality data</div>
 
 ## Who built this?
 

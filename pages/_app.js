@@ -15,7 +15,7 @@ const {useState} = React;
 const title = 'Modeling COVID-19';
 const browserTitle = `${title} — The COVID Open Source Modeling Collaboration`;
 const description =
-  'COVID-19 forecasting models trained to actual social distancing, testing, and fatality data.';
+  'Forecasting the impact of COVID-19 using models trained with actual social distancing, testing, and fatality data.';
 const canonicalUrl = 'https://modelingcovid.com/';
 const socialImgUrl = `${canonicalUrl}social.png`;
 

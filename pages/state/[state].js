@@ -86,8 +86,8 @@ export default function StatePage() {
               <span className="nowrap">in {stateName}</span>
             </div>
             <div className="dek margin-bottom-3">
-              Forecasting models trained to actual social distancing, testing,
-              and fatality data
+              Forecasting the impact of the virus using models trained with
+              actual social distancing, testing, and fatality data
             </div>
 
             <p className="paragraph">
