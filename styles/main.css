@@ -159,11 +159,6 @@ body,
 .footnotes {
   counter-reset: citation footnote;
 }
-.footnote::after {
-  counter-increment: footnote;
-  content: counter(footnote);
-  vertical-align: super;
-}
 .caption,
 .citation,
 .footnote::after {
@@ -172,6 +167,12 @@ body,
   font-size: var(--font-size-tiny);
   font-weight: 400;
   line-height: 1.6;
+}
+.footnote::after {
+  counter-increment: footnote;
+  content: counter(footnote);
+  vertical-align: super;
+  line-height: 1;
 }
 .caption,
 .citation {
