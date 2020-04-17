@@ -1,4 +1,4 @@
-export * from './CaseProgressionCurve';
+export * from './Fitting';
 export * from './Hospitalizations';
 export * from './ICU';
 export * from './Layout';

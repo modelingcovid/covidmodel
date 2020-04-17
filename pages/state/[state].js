@@ -3,7 +3,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {
-  CaseProgressionCurve,
+  Fitting,
   Hospitalizations,
   ICU,
   Layout,
@@ -112,7 +112,7 @@ export default function StatePage() {
           <Section className="margin-top-3">
             <ModelInputs width={width} height={160} />
             <SEIR width={width} height={height} />
-            <CaseProgressionCurve width={width} height={height} />
+            <Fitting width={width} height={height} />
             <ProjectedDeaths width={width} height={height} />
             <ParameterTable />
           </Section>

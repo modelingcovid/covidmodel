@@ -50,7 +50,7 @@ function FatalityRate({asymptomaticRate}) {
   );
 }
 
-export function CaseProgressionCurve({height, width}) {
+export function Fitting({height, width}) {
   const {location, x} = useModelState();
 
   const defaultAsymptomaticRate = 0.3;
