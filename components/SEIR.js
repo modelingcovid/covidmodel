@@ -40,13 +40,13 @@ import {stackAccessors} from '../lib/stack';
 const {useMemo} = React;
 
 function PercentCases() {
-  const [d] = useNearestData();
+  const nearest = useNearestData();
   const {population, susceptible} = useLocationData();
   return (
     <InlineData>
       {() =>
         formatPercent1(
-          (population() - susceptible.expected.get(d)) / population()
+          (population() - susceptible.expected.get(nearest())) / population()
         )
       }
     </InlineData>

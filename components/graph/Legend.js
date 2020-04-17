@@ -67,10 +67,7 @@ export const LegendEntry = ({
   width = '60%',
   ...remaining
 }) => {
-  const d = useNearestData();
-  if (!d) {
-    return null;
-  }
+  const nearest = useNearestData();
 
   const isStroke = symbol === 'stroke';
   const borderColor = isStroke ? color : 'transparent';
@@ -99,7 +96,13 @@ export const LegendEntry = ({
           <div className="entry-data">
             <InlineData>
               {() => {
-                const value = y ? y(...d) : null;
+                if (y == null) {
+                  return null;
+                }
+                const value = y(nearest());
+                if (value == null) {
+                  return null;
+                }
                 return format ? format(value) : value.toString();
               }}
             </InlineData>

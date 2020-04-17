@@ -33,7 +33,7 @@ function TodayDistancing() {
   return (
     <InlineData width="2em">
       {() => {
-        const [todayIndex] = findPoint(today);
+        const todayIndex = findPoint(today);
         const todayDistancing = distancing(todayIndex);
         return formatPercent(1 - todayDistancing);
       }}

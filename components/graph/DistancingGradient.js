@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {hcl, rgb} from 'd3-color';
-import {interpolateHcl, piecewise} from 'd3-interpolate';
 import {scaleLinear} from '@vx/scale';
 import {ScaleGradient} from '../graph';
-import {useModelState, useDistancing} from '../modeling';
+import {useLocationData, useModelState} from '../modeling';
 import {useMatchMedia} from '../util';
 import {dateScale} from '../../lib/date';
 import {darkMode, mediaQuery, declarations, properties} from '../../styles';
@@ -39,7 +38,7 @@ export const DistancingGradient = React.memo(function DistancingGradient({
   const {indices, x} = useModelState();
   const id = useDistancingId();
   const isDarkMode = useMatchMedia(mediaQuery.darkMode);
-  const [distancing] = useDistancing();
+  const {distancing} = useLocationData();
   const inverted = useCallback((n) => 1 - distancing(n), [distancing]);
 
   return (

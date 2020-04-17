@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {wrap} from 'optimism';
 import {stateLabels} from '../../lib/controls';
 import {addDays, dayToDate, initialTargetDate, today} from '../../lib/date';
+import {memo} from '../../lib/fn';
 import {flattenData} from '../../lib/transform';
 import {NearestDataProvider} from '../graph';
 import {useComponentId} from '../util';
@@ -51,9 +51,12 @@ export const ModelStateProvider = ({
         return isServer ? [defaultScenario] : scenarios();
       },
       id,
-      indices() {
-        return isServer ? [] : Object.keys(days());
-      },
+      indices: memo(
+        function indices() {
+          return isServer ? [] : Object.keys(days());
+        },
+        {max: 1}
+      ),
       location,
       scenario,
       scenarioData() {

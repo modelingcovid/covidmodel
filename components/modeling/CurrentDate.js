@@ -10,7 +10,7 @@ export function CurrentDate({format = formatShortDate, width = '6em'}) {
   const {x} = useModelState();
   return (
     <InlineData width={width}>
-      {() => <span className="nowrap">{format(x(...nearest))}</span>}
+      {() => <span className="nowrap">{format(x(nearest()))}</span>}
     </InlineData>
   );
 }

@@ -18,7 +18,7 @@ import {Controls} from '../../components/configured';
 import {Section, Title} from '../../components/content';
 import {DistancingGradient} from '../../components/graph';
 import {ModelDataProvider, ModelStateProvider} from '../../components/modeling';
-import {useContentRect} from '../../components/util';
+import {Suspense, useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
 import {getStatesWithData} from '../../lib/data';
 import {initialTargetDate} from '../../lib/date';
@@ -66,16 +66,18 @@ export default function StatePage() {
             box-shadow: 0 2px ${theme.color.shadow[0]};
           }
         `}</style>
-        <svg
-          viewBox={`0 0 ${width} 0`}
-          style={{
-            position: 'absolute',
-            pointerEvents: 'none',
-            zIndex: -1,
-          }}
-        >
-          {/* <DistancingGradient size={width} /> */}
-        </svg>
+        <Suspense fallback={<div />}>
+          <svg
+            viewBox={`0 0 ${width} 0`}
+            style={{
+              position: 'absolute',
+              pointerEvents: 'none',
+              zIndex: -1,
+            }}
+          >
+            <DistancingGradient size={width} />
+          </svg>
+        </Suspense>
         <div className="flex flex-col justify-center">
           <Section className="margin-top-4">
             <div ref={sizeRef} />
