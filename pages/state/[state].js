@@ -114,7 +114,7 @@ export default function StatePage() {
             <SEIR width={width} height={height} />
             <CaseProgressionCurve width={width} height={height} />
             <ProjectedDeaths width={width} height={height} />
-            {/* <ParameterTable /> */}
+            <ParameterTable />
           </Section>
           {/* <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>

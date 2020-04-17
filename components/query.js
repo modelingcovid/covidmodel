@@ -197,6 +197,21 @@ const queries = [
       },
     },
   ],
+  [
+    'Location',
+    `{
+      parameters {
+        id
+        name
+        value
+        description
+        type
+      }
+    }`,
+    {
+      parameters: (location) => location.parameters,
+    },
+  ],
 ];
 
 function getTypeAccessor(type, request) {

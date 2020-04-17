@@ -4,7 +4,8 @@ import css from 'styled-jsx/css';
 import {theme} from '../styles';
 import {Grid, Title, Paragraph} from './content';
 import {LegendRow, LegendEntry} from './graph';
-import {useLocationQuery} from './modeling';
+import {useLocationData} from './modeling';
+import {Suspense} from './util';
 
 const styles = css`
   .parameter-description {
@@ -17,21 +18,8 @@ const styles = css`
   }
 `;
 
-export function ParameterTable() {
-  const [location, error] = useLocationQuery(`{
-    parameters {
-      id
-      name
-      value
-      description
-      type
-    }
-  }`);
-  const parameters = location?.parameters;
-
-  if (error) return null;
-  if (!parameters) return null;
-
+export function ParameterTableContents() {
+  const {parameters} = useLocationData();
   return (
     <div className="margin-top-5">
       <style jsx>{styles}</style>
@@ -40,7 +28,7 @@ export function ParameterTable() {
         The following parameters are used in the COSMC model:
       </Paragraph>
       <Grid mobile={1} desktop={2}>
-        {parameters.map(({id, name, value, description, type}) => (
+        {parameters().map(({id, name, value, description, type}) => (
           <LegendRow
             key={id}
             label={<span className="text-mono ellipsis">{id}</span>}
@@ -60,5 +48,13 @@ export function ParameterTable() {
         ))}
       </Grid>
     </div>
+  );
+}
+
+export function ParameterTable() {
+  return (
+    <Suspense fallback={<div />}>
+      <ParameterTableContents />
+    </Suspense>
   );
 }
