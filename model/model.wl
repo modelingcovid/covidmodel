@@ -649,7 +649,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   timeSeriesData = Module[{},
     Table[Association[{
           "day"->t,
-          "distancing"->distancing[t],
+          "distancing"->distancing[t]^fitParams["distpow"],
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
           "dailyPcr" -> Merge[{
               <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
@@ -829,7 +829,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     fittime
   },
 
-  modelComponents = modelPrecompute[state]["scenario1"];
+  modelComponents = modelPrecompute[state]["scenario3"];
 
   percentPositiveCase[t_]:=posInterpMap[state][t];
 
@@ -886,7 +886,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   ];
 
   (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
-  {fittime,fit}=AbsoluteTiming[Quiet[NonlinearModelFit[
+  fit=Quiet[NonlinearModelFit[
       longData,
       {
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
@@ -905,9 +905,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       Weights->dataWeights(*,
       EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    stateAdjustmentForTestingDifferences=", Exp[stateAdjustmentForTestingDifferences]]*)
     ], {InterpolatingFunction::dmval}
-  ]];
-  
-  Echo[fittime];
+  ];
 
   fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
   (* TODO: try using VarianceEstimatorFunction\[Rule](1&) *)
@@ -947,7 +945,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Text["Fit for "<>state],
         Row[{
             Show[
-              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
+              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,200},{10^-7,10^-2}}],
               LogPlot[{
                   DeaqParametric[Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
@@ -960,7 +958,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
                   ][t]},
-                {t,40,150},ImageSize->500]],
+                {t,40,200},PlotRange->{{40,200}, {10^-7,10^-2}}, ImageSize->500]
+            ],
             ListPlot[{
                 Thread[{#2,#1/#3}&[
                     fit["FitResiduals"][[1;;deathDataLength]],
