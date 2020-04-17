@@ -49,10 +49,8 @@ export class ObjectDataSource extends DataSource {
       log('miss:', key);
 
       const promise = this.fetch(key)
-        .then((result) => {
-          if (decorate) {
-            decorate(result, key);
-          }
+        .then((data) => {
+          const result = decorate ? decorate(data, key) ?? data : data;
 
           if (result) {
             log('set:', key);

@@ -1,5 +1,5 @@
 import {gql} from 'apollo-server-micro';
-import {getLocations, getLocation} from './data';
+import {cumulativeToDailyDistribution} from './data';
 import {stateLabels} from './format/location';
 
 export * from './CoreDataSource';
@@ -17,6 +17,7 @@ export const typeDefs = gql`
     importtime: Float!
     r0: Float!
     ventilators: Int!
+    days: Series
     scenarios: [Scenario!]!
     scenario(id: ID!): Scenario
     parameters: [Parameter!]!
@@ -28,7 +29,6 @@ export const typeDefs = gql`
     name: String!
     distancingDays: Int!
     distancingLevel: Float!
-    day: Series
     distancing: Series
     hospitalCapacity: Series
     cumulativeCritical: DistributionSeries
@@ -49,7 +49,6 @@ export const typeDefs = gql`
     susceptible: DistributionSeries
   }
   type LocationDomain {
-    day: Domain
     distancing: Domain
     hospitalCapacity: Domain
     cumulativeCritical: DistributionDomain
@@ -126,23 +125,30 @@ const Query = {
   },
 };
 
-const locationProp = (prop) =>
-  async function locationProp(parent, args, {dataSources: {get}}) {
-    const location = await get.location(parent.id);
-    return location[prop];
+function field(type) {
+  return async function field(parent, args, {dataSources: {get}}, {fieldName}) {
+    return await get[type](fieldName, parent);
   };
+}
+
+async function locationProp(parent, args, {dataSources: {get}}, {fieldName}) {
+  const location = await get.location(parent.id);
+  return location[fieldName];
+}
 
 const Location = {
   name(parent, args, context) {
     return stateLabels[parent.id] || parent.id;
   },
   async scenarios(parent, args, {dataSources: {get}}) {
-    const {scenarios} = await get.location(parent.id);
-    return Object.values(scenarios);
+    const locationId = parent.id;
+    const {scenarios} = await get.location(locationId);
+    return Promise.all(
+      scenarios.map((scenarioId) => get.scenario(locationId, scenarioId))
+    );
   },
   async scenario(parent, args, {dataSources: {get}}) {
-    const {scenarios} = await get.location(parent.id);
-    return scenarios[args.id];
+    return await get.scenario(parent.id, args.id);
   },
   async parameters(parent, args, {dataSources: {get}}) {
     const {parameters} = await get.location(parent.id);
@@ -155,19 +161,110 @@ const Location = {
     const {parameters} = await get.location(parent.id);
     return parameters[args.id];
   },
-  async population(parent, args, {dataSources: {get}}) {
-    const {population} = await get.location(parent.id);
-    return population;
+  domain(parent) {
+    return parent;
   },
-  population: locationProp('population'),
-  domain: locationProp('domain'),
-  icuBeds: locationProp('icuBeds'),
-  importtime: locationProp('importtime'),
-  r0: locationProp('r0'),
-  ventilators: locationProp('ventilators'),
+  population: locationProp,
+  icuBeds: locationProp,
+  importtime: locationProp,
+  r0: locationProp,
+  ventilators: locationProp,
+  async days(parent, args, {dataSources: {get}}) {
+    return await get.days(parent.id);
+  },
+};
+
+async function dailyDeaths(get, parent) {
+  const cumulativeDeaths = await get.distribution('cumulativeDeaths', parent);
+  return cumulativeToDailyDistribution(cumulativeDeaths);
+}
+
+const Scenario = {
+  distancing: field('series'),
+  hospitalCapacity: field('series'),
+  cumulativeCritical: field('distribution'),
+  cumulativeDeaths: field('distribution'),
+  cumulativeExposed: field('distribution'),
+  cumulativeHospitalized: field('distribution'),
+  cumulativePcr: field('distribution'),
+  cumulativeRecoveries: field('distribution'),
+  cumulativeReportedHospitalized: field('distribution'),
+  currentlyCritical: field('distribution'),
+  currentlyHospitalized: field('distribution'),
+  currentlyInfected: field('distribution'),
+  currentlyInfectious: field('distribution'),
+  currentlyReportedHospitalized: field('distribution'),
+  dailyPcr: field('distribution'),
+  dailyTestsRequiredForContainment: field('distribution'),
+  susceptible: field('distribution'),
+  async dailyDeaths(parent, args, {dataSources: {get}}) {
+    return dailyDeaths(get, parent);
+  },
+};
+
+function getSharedDomain(values) {
+  return {
+    max: Math.max(...values.map(({max}) => max)),
+    min: Math.min(...values.map(({min}) => min)),
+  };
+}
+
+const defaultAccessor = ({get, type, fieldName, parent}) =>
+  get[type](fieldName, parent);
+
+function domain(type, accessor = defaultAccessor) {
+  return async function domain(
+    parent,
+    args,
+    {dataSources: {get}},
+    {fieldName}
+  ) {
+    const locationId = parent.id;
+    const {scenarios} = await get.location(locationId);
+    const values = await Promise.all(
+      scenarios.map((id) =>
+        accessor({get, type, fieldName, parent: {id, locationId}})
+      )
+    );
+    switch (type) {
+      case 'series':
+        return getSharedDomain(values);
+      case 'distribution':
+        const result = {};
+        Object.keys(values[0]).forEach((key) => {
+          result[key] = getSharedDomain(values.map((value) => value[key]));
+        });
+        return result;
+    }
+  };
+}
+
+const LocationDomain = {
+  distancing: domain('series'),
+  hospitalCapacity: domain('series'),
+  cumulativeCritical: domain('distribution'),
+  cumulativeDeaths: domain('distribution'),
+  cumulativeExposed: domain('distribution'),
+  cumulativeHospitalized: domain('distribution'),
+  cumulativePcr: domain('distribution'),
+  cumulativeRecoveries: domain('distribution'),
+  cumulativeReportedHospitalized: domain('distribution'),
+  currentlyCritical: domain('distribution'),
+  currentlyHospitalized: domain('distribution'),
+  currentlyInfected: domain('distribution'),
+  currentlyInfectious: domain('distribution'),
+  currentlyReportedHospitalized: domain('distribution'),
+  dailyPcr: domain('distribution'),
+  dailyTestsRequiredForContainment: domain('distribution'),
+  susceptible: domain('distribution'),
+  dailyDeaths: domain('distribution', ({get, parent}) =>
+    dailyDeaths(get, parent)
+  ),
 };
 
 export const resolvers = {
   Query,
   Location,
+  LocationDomain,
+  Scenario,
 };

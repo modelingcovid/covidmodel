@@ -771,9 +771,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
  ];
  
- Echo[ListPlot[{#["day"], #["distancing"]}&/@timeSeriesData]];
- 
- 
  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
       scenario,
@@ -1000,7 +997,6 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "importtime"->fitParams["importtime"],
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
-      "longData"->longData,
       "parameters"->paramExpected,
       "goodnessOfFitMetrics"->gofMetrics
     }, First];
@@ -1070,14 +1066,37 @@ exportAllStatesSummaryAug1[allStates_]:=Module[{header, rows, table},
   Export["tests/summaryAug1.csv", table];
 ]
 
+getSeriesForKey[data_, key_]:=Module[{},
+ #[key]&/@data
+];
+
+exportTimeSeries[state_, scenario_, data_]:=Module[{timeData, fixedKeys, timeDataKeys, days, distancing, hospitalCapacity},
+   fixedKeys = {"day", "distancing", "hospitalCapacity"};
+   timeData = data["timeSeriesData"];
+   timeDataKeys = Keys[KeyDrop[timeData[[1]], fixedKeys]];
+   
+   
+   distancing = #["distancing"]&/@data["timeSeriesData"];
+   hospitalCapacity = #["hospitalCapacity"]&/@data["timeSeriesData"];
+   
+   Export["public/json/"<>state<>"/"<>scenario["id"]<>"/"<>#<>".json", getSeriesForKey[data["timeSeriesData"], #]]&/@timeDataKeys;
+   
+   Export["public/json/"<>state<>"/"<>scenario["id"]<>"/distancing.json", distancing];
+   Export["public/json/"<>state<>"/"<>scenario["id"]<>"/hospitalCapacity.json", hospitalCapacity];
+];
+
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
 when running the web server *)
-GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides]] := Module[{},
+GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides]] := Module[{days},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    Export["public/json/"<>state<>".json",stateData];
+    Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;
+    exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios;
+    days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+    Export["public/json/"<>state<>"/days.json", days];
+    Export["public/json/"<>state<>"/summary.json",KeyDrop[stateData, {"scenarios"}]];
     stateData
   ];
 

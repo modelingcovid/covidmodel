@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5701503637142857,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.0123681571097427e2,
+			"thresholdCrossed":0.7
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.272214135402368e2,
+			"thresholdCrossed":1.5610895209535033e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.3923159647707328e2,
+			"thresholdCrossed":9.77601243560442e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":6.404326353805373e4,
+		"totalProjectedPCRConfirmed":1.8878460226480493e6,
+		"totalProjectedInfected":6.193566635122683e6,
+		"totalInfectedFraction":0.7403301662647219,
+		"fatalityRate":1.03402881265336e-2,
+		"fatalityRateSymptomatic":1.4771840180762287e-2,
+		"fatalityRatePCR":3.392398679221802e-2,
+		"fractionOfSymptomaticHospitalized":7.317960271632916e-2,
+		"fractionOfPCRHospitalized":0.23289626481670683,
+		"fractionHospitalizedInICU":0.2756440534330211,
+		"fractionDeathOfHospitalized":0.10551067267455821,
+		"fractionOfInfectionsPCRConfirmed":0.304807574353425,
+		"dateContained":"Sat 19 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 6 May 2020 05:18:50",
+		"dateHospitalsOverCapacity":"Mon 18 May 2020 05:33:29"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":3.1699181360633444e4,
+		"totalProjectedPCRConfirmed":1.1044601950956485e6,
+		"totalProjectedInfected":4.0466666405051867e6,
+		"totalInfectedFraction":0.483706652931452,
+		"fatalityRate":7.833405658706818e-3,
+		"fatalityRateSymptomatic":1.1190579512438315e-2,
+		"fatalityRatePCR":2.8701062746664428e-2,
+		"fractionOfSymptomaticHospitalized":6.357151073105233e-2,
+		"fractionOfPCRHospitalized":0.22030824634513507,
+		"fractionHospitalizedInICU":0.275644053433021,
+		"fractionDeathOfHospitalized":9.43668056835652e-2,
+		"fractionOfInfectionsPCRConfirmed":0.2729308572246928,
+		"dateContained":"Sat 19 Dec 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 6 May 2020 05:18:50",
+		"dateHospitalsOverCapacity":"Mon 18 May 2020 05:33:29"
+	}
+}

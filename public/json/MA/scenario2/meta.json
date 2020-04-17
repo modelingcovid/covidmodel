@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.2932893093122289e2,
+			"thresholdCrossed":0.6999999999998329
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1120723752592698e2,
+			"thresholdCrossed":1.8013588697187444e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.346636866256648e2,
+			"thresholdCrossed":9.144354072183098e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":7.048457571095534e4,
+		"totalProjectedPCRConfirmed":1.855017151073705e6,
+		"totalProjectedInfected":5.792840328627655e6,
+		"totalInfectedFraction":0.8532284797087388,
+		"fatalityRate":1.216753297387249e-2,
+		"fatalityRateSymptomatic":1.7382189962674984e-2,
+		"fatalityRatePCR":3.799672454249712e-2,
+		"fractionOfSymptomaticHospitalized":7.676225730565973e-2,
+		"fractionOfPCRHospitalized":0.239580525613844,
+		"fractionHospitalizedInICU":0.2819563914217401,
+		"fractionDeathOfHospitalized":0.11387947803664146,
+		"fractionOfInfectionsPCRConfirmed":0.32022583842098845,
+		"dateContained":"Mon 16 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 20 Apr 2020 04:58:25",
+		"dateHospitalsOverCapacity":"Wed 13 May 2020 15:55:42"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.1545430286420235e4,
+		"totalProjectedPCRConfirmed":3.320456173534615e5,
+		"totalProjectedInfected":1.4783494907875475e6,
+		"totalInfectedFraction":0.21774635877140955,
+		"fatalityRate":7.809675829948535e-3,
+		"fatalityRateSymptomatic":1.1156679757069337e-2,
+		"fatalityRatePCR":3.477061488852648e-2,
+		"fractionOfSymptomaticHospitalized":5.578367721066998e-2,
+		"fractionOfPCRHospitalized":0.21543885844261074,
+		"fractionHospitalizedInICU":0.28195639142173967,
+		"fractionDeathOfHospitalized":0.11588818269612798,
+		"fractionOfInfectionsPCRConfirmed":0.22460562906310733,
+		"dateContained":"Mon 16 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 20 Apr 2020 04:58:25",
+		"dateHospitalsOverCapacity":"Wed 13 May 2020 15:55:42"
+	}
+}

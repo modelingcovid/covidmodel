@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.4267183769769935e2,
+			"thresholdCrossed":0.7
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.2452469368010716e2,
+			"thresholdCrossed":2.1255489772465668e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.2773834237102676e2,
+			"thresholdCrossed":1.3340159359733117e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.927892349447277e4,
+		"totalProjectedPCRConfirmed":1.5611295675831982e6,
+		"totalProjectedInfected":4.836261060377607e6,
+		"totalInfectedFraction":0.8391599796394282,
+		"fatalityRate":1.225718023787665e-2,
+		"fatalityRateSymptomatic":1.751025748268093e-2,
+		"fatalityRatePCR":3.7971815232635125e-2,
+		"fractionOfSymptomaticHospitalized":7.667352354070282e-2,
+		"fractionOfPCRHospitalized":0.23862570850856135,
+		"fractionHospitalizedInICU":0.28449236892904844,
+		"fractionDeathOfHospitalized":0.11385664911956402,
+		"fractionOfInfectionsPCRConfirmed":0.32279679448514054,
+		"dateContained":"Thu 26 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 11 Aug 2020 12:35:33",
+		"dateHospitalsOverCapacity":"Fri 14 Aug 2020 17:43:12"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":2.9197020612168976e3,
+		"totalProjectedPCRConfirmed":6.139949080394723e4,
+		"totalProjectedInfected":2.957728553221923e5,
+		"totalInfectedFraction":5.132079103080663e-2,
+		"fatalityRate":9.871433462128895e-3,
+		"fatalityRateSymptomatic":1.410204780304128e-2,
+		"fatalityRatePCR":4.7552545191941506e-2,
+		"fractionOfSymptomaticHospitalized":6.50871020389147e-2,
+		"fractionOfPCRHospitalized":0.23299158256945218,
+		"fractionHospitalizedInICU":0.2844923689290485,
+		"fractionDeathOfHospitalized":0.14603192349894523,
+		"fractionOfInfectionsPCRConfirmed":0.20759001273819844,
+		"dateContained":"Thu 26 Nov 2020 00:00:00",
+		"dateICUOverCapacity":"Tue 11 Aug 2020 12:35:33",
+		"dateHospitalsOverCapacity":"Fri 14 Aug 2020 17:43:12"
+	}
+}

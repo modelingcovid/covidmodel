@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.11,
+	"id":"scenario3",
+	"distancingDays":60,
+	"maintain":false,
+	"name":"Wuhan",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.3110069872387388e2,
+			"thresholdCrossed":0.7000000000000002
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.137915087800784e2,
+			"thresholdCrossed":1.5393392915601014e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.1389234937259604e2,
+			"thresholdCrossed":5.889434527283001e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.487356249873714e4,
+		"totalProjectedPCRConfirmed":1.6522316412711036e6,
+		"totalProjectedInfected":5.217903710493855e6,
+		"totalInfectedFraction":0.8702193067325923,
+		"fatalityRate":1.0516399984227298e-2,
+		"fatalityRateSymptomatic":1.5023428548896142e-2,
+		"fatalityRatePCR":3.3211785277590694e-2,
+		"fractionOfSymptomaticHospitalized":7.381073220045911e-2,
+		"fractionOfPCRHospitalized":0.2327495380053792,
+		"fractionHospitalizedInICU":0.27477229598324243,
+		"fractionDeathOfHospitalized":0.1034850895498147,
+		"fractionOfInfectionsPCRConfirmed":0.31664663300479456,
+		"dateContained":"Mon 1 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 31 Jul 2020 18:59:46",
+		"dateHospitalsOverCapacity":"Fri 31 Jul 2020 21:24:58"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.488779419929402e3,
+		"totalProjectedPCRConfirmed":8.353680214671699e4,
+		"totalProjectedInfected":5.857061537547343e5,
+		"totalInfectedFraction":9.768152717046162e-2,
+		"fatalityRate":2.5418538125054966e-3,
+		"fatalityRateSymptomatic":3.6312197321507096e-3,
+		"fatalityRatePCR":1.7821838778489935e-2,
+		"fractionOfSymptomaticHospitalized":2.7011021412770578e-2,
+		"fractionOfPCRHospitalized":0.14412458632112085,
+		"fractionHospitalizedInICU":0.27477229598324215,
+		"fractionDeathOfHospitalized":8.967860063711414e-2,
+		"fractionOfInfectionsPCRConfirmed":0.1426257887358619,
+		"dateContained":"Mon 1 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Fri 31 Jul 2020 18:59:46",
+		"dateHospitalsOverCapacity":"Fri 31 Jul 2020 21:24:58"
+	}
+}

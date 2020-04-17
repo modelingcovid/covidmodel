@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.5476829100714286,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.6568604168652604e2,
+			"thresholdCrossed":0.7000000000000002
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.342489433126722e2,
+			"thresholdCrossed":1.874485614787351e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.369326750570529e2,
+			"thresholdCrossed":8.298988186727964e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.107935279922737e4,
+		"totalProjectedPCRConfirmed":1.5029765086493657e6,
+		"totalProjectedInfected":4.852330328332499e6,
+		"totalInfectedFraction":0.6767576933523541,
+		"fatalityRate":1.0526767417497886e-2,
+		"fatalityRateSymptomatic":1.5038239167854125e-2,
+		"fatalityRatePCR":3.398546318274082e-2,
+		"fractionOfSymptomaticHospitalized":7.328665882471275e-2,
+		"fractionOfPCRHospitalized":0.2314586663982968,
+		"fractionHospitalizedInICU":0.2783021235955488,
+		"fractionDeathOfHospitalized":0.10596810648428674,
+		"fractionOfInfectionsPCRConfirmed":0.30974323818672567,
+		"dateContained":"Sat 9 Jan 2021 00:00:00",
+		"dateICUOverCapacity":"Fri 21 Aug 2020 05:58:28",
+		"dateHospitalsOverCapacity":"Sun 23 Aug 2020 22:23:03"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":2.704987605309293e3,
+		"totalProjectedPCRConfirmed":5.199637092187624e4,
+		"totalProjectedInfected":2.9171742796267476e5,
+		"totalInfectedFraction":4.068602100437488e-2,
+		"fatalityRate":9.272629421562692e-3,
+		"fatalityRateSymptomatic":1.3246613459375275e-2,
+		"fatalityRatePCR":5.2022623066780876e-2,
+		"fractionOfSymptomaticHospitalized":6.742156481743448e-2,
+		"fractionOfPCRHospitalized":0.23177664421091684,
+		"fractionHospitalizedInICU":0.2783021235955488,
+		"fractionDeathOfHospitalized":0.16198619459741317,
+		"fractionOfInfectionsPCRConfirmed":0.17824225067735472,
+		"dateContained":"Sat 9 Jan 2021 00:00:00",
+		"dateICUOverCapacity":"Fri 21 Aug 2020 05:58:28",
+		"dateHospitalsOverCapacity":"Sun 23 Aug 2020 22:23:03"
+	}
+}

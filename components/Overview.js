@@ -50,7 +50,7 @@ const styles = css`
   }
 `;
 
-export function Overview({overview, states, topo}) {
+export function Overview({states, topo}) {
   const ordered = states;
   return (
     <div>
@@ -62,7 +62,6 @@ export function Overview({overview, states, topo}) {
       <div className="location margin-top-4">
         {ordered.map((state) => {
           const stateName = stateLabels[state];
-          const model = overview[state];
           const url = `/state/${state}`;
           return (
             <div className="location-label" key={state}>

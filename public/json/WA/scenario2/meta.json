@@ -1,0 +1,58 @@
+{
+	"distancingLevel":0.4,
+	"id":"scenario2",
+	"distancingDays":90,
+	"maintain":false,
+	"name":"Italy",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.985336430081293e2,
+			"thresholdCrossed":0.7000000000000371
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.6744581903846176e2,
+			"thresholdCrossed":1.874485614787192e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.700143661056343e2,
+			"thresholdCrossed":8.298988186727411e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.141906474820218e4,
+		"totalProjectedPCRConfirmed":1.5167183602014957e6,
+		"totalProjectedInfected":4.884601578773378e6,
+		"totalInfectedFraction":0.6812585858168355,
+		"fatalityRate":1.0526767417766453e-2,
+		"fatalityRateSymptomatic":1.503823916823779e-2,
+		"fatalityRatePCR":3.3901524566084355e-2,
+		"fractionOfSymptomaticHospitalized":7.328665882490415e-2,
+		"fractionOfPCRHospitalized":0.23134133935079254,
+		"fractionHospitalizedInICU":0.2783021235955489,
+		"fractionDeathOfHospitalized":0.10575999237696379,
+		"fractionOfInfectionsPCRConfirmed":0.31051014821609546,
+		"dateContained":"Fri 26 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 23 Sep 2020 10:41:58",
+		"dateHospitalsOverCapacity":"Sat 26 Sep 2020 00:20:41"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.8345048465861576e3,
+		"totalProjectedPCRConfirmed":2.330402742975478e4,
+		"totalProjectedInfected":1.7493692709799382e5,
+		"totalInfectedFraction":2.4398567956867e-2,
+		"fatalityRate":1.0486664405386117e-2,
+		"fatalityRateSymptomatic":1.4980949150551596e-2,
+		"fatalityRatePCR":7.872050666417627e-2,
+		"fractionOfSymptomaticHospitalized":7.312972857740169e-2,
+		"fractionOfPCRHospitalized":0.2495821601878073,
+		"fractionHospitalizedInICU":0.2783021235955487,
+		"fractionDeathOfHospitalized":0.22763014169870094,
+		"fractionOfInfectionsPCRConfirmed":0.13321388351986224,
+		"dateContained":"Fri 26 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"Wed 23 Sep 2020 10:41:58",
+		"dateHospitalsOverCapacity":"Sat 26 Sep 2020 00:20:41"
+	}
+}
