@@ -1,49 +1,17 @@
 import * as React from 'react';
-import useSWR from 'swr';
-import {createLocationQuery, createScenarioQuery, useLocations} from './query';
 import {stateLabels} from '../../lib/controls';
 import {addDays, dayToDate, initialTargetDate, today} from '../../lib/date';
+import {memo} from '../../lib/fn';
 import {flattenData} from '../../lib/transform';
 import {NearestDataProvider} from '../graph';
 import {useComponentId} from '../util';
+import {fetchLocationData} from '../query';
 
 const {createContext, useContext, useMemo} = React;
 
 const ModelStateContext = createContext(null);
 
-const useScenarios = (locationId) => {
-  const {data, error} = useSWR(
-    createLocationQuery(
-      locationId,
-      `{
-        scenarios {
-          id
-          name
-          distancingLevel
-          distancingDays
-        }
-      }`
-    )
-  );
-  return [data?.location?.scenarios || [], error];
-};
-
-const useDays = (locationId, scenarioId) => {
-  const {data, error} = useSWR(
-    createLocationQuery(
-      locationId,
-      createScenarioQuery(
-        scenarioId,
-        `{
-          day {
-            data
-          }
-        }`
-      )
-    )
-  );
-  return [data?.location?.scenario?.day?.data || [], error];
-};
+const isServer = typeof window === 'undefined';
 
 export const ModelStateProvider = ({
   children,
@@ -51,39 +19,56 @@ export const ModelStateProvider = ({
   locationId,
   setScenario,
 }) => {
-  const [locations] = useLocations();
-  const [scenarios] = useScenarios(locationId);
-  const [days] = useDays(locationId, scenarioId);
+  const {locations, scenarios, days} = fetchLocationData(
+    locationId,
+    scenarioId
+  );
 
   const id = useComponentId('model');
   const context = useMemo(() => {
-    const location = locations.find(({id}) => id === locationId) || {
+    const location = {
       id: locationId,
-      name: '',
+      // NOTE: This should be better... but c'est la vie
+      name: stateLabels[locationId],
     };
-    const scenario = scenarios.find(({id}) => id === scenarioId) || {
+
+    const scenario = {
       id: scenarioId,
       name: '',
     };
-    const x = (i) => dayToDate(days[i]);
 
-    const indices = Object.keys(days);
-
-    const distancingEnds = addDays(today, scenario.distancingDays);
-    const distancingIndices = indices.filter((d) => x(d) <= distancingEnds);
+    // const distancingEnds = addDays(today, scenario.distancingDays);
+    // const distancingIndices = indices.filter((d) => x(d) <= distancingEnds);
 
     return {
-      days,
-      distancingEnds,
-      distancingIndices,
+      get days() {
+        return isServer ? [] : days();
+      },
+      get locations() {
+        return isServer ? [defaultLocation] : locations();
+      },
+      get scenarios() {
+        return isServer ? [defaultScenario] : scenarios();
+      },
       id,
-      indices,
+      indices: memo(
+        function indices() {
+          return isServer ? [] : Object.keys(days());
+        },
+        {max: 1}
+      ),
       location,
-      locations,
       scenario,
-      scenarios,
+      scenarioData() {
+        if (isServer) {
+          return scenario;
+        }
+        return scenarios().find(({id}) => id === scenarioId);
+      },
       setScenario,
-      x,
+      x(i) {
+        return dayToDate(days()[i]);
+      },
     };
   }, [days, id, locationId, locations, scenarioId, scenarios, setScenario]);
 

@@ -30,7 +30,7 @@ export const DistancingGraph = ({
 }) => {
   const {indices, x} = useModelState();
 
-  const formatR0 = useCallback((n) => formatNumber2(n * r0), [r0]);
+  const formatR0 = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   const endTickLabelProps = () => ({
     dx: '-4px',
@@ -49,59 +49,50 @@ export const DistancingGraph = ({
       width={width}
       tickFormat={formatPercentInverted}
     >
-      <WithGraphData>
-        {({xMax, yScale}) => {
-          const yTicks = yScale.ticks(3);
-          const yTickCount = yTicks.length;
-          const tickFormatWithLabel = (v, i) => {
-            const value = formatR0(v, i);
-            return rightLabel && i === yTickCount - 1
-              ? `${rightLabel} = ${value}`
-              : value;
-          };
-          return (
-            <>
-              {children}
-              <WithComponentId prefix="linearGradient">
-                {(gradientId) => (
-                  <>
-                    <LinearGradient
-                      size={xMax}
-                      direction="right"
-                      id={gradientId}
-                    >
-                      <Stop
-                        offset={todayOffset}
-                        stopColor="var(--color-blue2)"
-                      />
-                      <Stop
-                        offset={todayOffset}
-                        stopColor="var(--color-yellow3)"
-                      />
-                    </LinearGradient>
-                    <Line
-                      y={y}
-                      stroke={`url(#${gradientId})`}
-                      strokeWidth={1.5}
+      {({xMax, yScale}) => {
+        const yTicks = yScale.ticks(3);
+        const yTickCount = yTicks.length;
+        const tickFormatWithLabel = (v, i) => {
+          const value = formatR0(v, i);
+          return rightLabel && i === yTickCount - 1
+            ? `${rightLabel} = ${value}`
+            : value;
+        };
+        return (
+          <>
+            {children}
+            <WithComponentId prefix="linearGradient">
+              {(gradientId) => (
+                <>
+                  <LinearGradient size={xMax} direction="right" id={gradientId}>
+                    <Stop offset={todayOffset} stopColor="var(--color-blue2)" />
+                    <Stop
+                      offset={todayOffset}
+                      stopColor="var(--color-yellow3)"
                     />
-                  </>
-                )}
-              </WithComponentId>
-              <AxisRight
-                left={xMax}
-                scale={yScale}
-                tickValues={yTicks}
-                tickFormat={tickFormatWithLabel}
-                tickLabelProps={endTickLabelProps}
-                tickLength={0} // positions text at the axis
-                hideTicks
-                stroke="var(--color-gray2)"
-                strokeWidth={1}
-              />
-            </>
-          );
-        }}
-      </WithGraphData>
+                  </LinearGradient>
+                  <Line
+                    y={y}
+                    stroke={`url(#${gradientId})`}
+                    strokeWidth={1.5}
+                  />
+                </>
+              )}
+            </WithComponentId>
+            <AxisRight
+              left={xMax}
+              scale={yScale}
+              tickValues={yTicks}
+              tickFormat={tickFormatWithLabel}
+              tickLabelProps={endTickLabelProps}
+              tickLength={0} // positions text at the axis
+              hideTicks
+              stroke="var(--color-gray2)"
+              strokeWidth={1}
+            />
+          </>
+        );
+      }}
     </Graph>
   );
 };

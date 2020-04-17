@@ -6,15 +6,9 @@ import {HeadSideCough, People, Vial} from './icon';
 import {
   DistributionLegendRow,
   DistributionLine,
-  DistributionSeriesFullFragment,
   Estimation,
-  MethodDefinition,
-  SeriesFullFragment,
-  createDistributionSeries,
-  createSeries,
   useModelState,
-  useLocationQuery,
-  useScenarioQuery,
+  useLocationData,
 } from './modeling';
 import {
   formatShortDate,
@@ -32,60 +26,16 @@ const blue = theme.color.blue[2];
 const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
-const HospitalizationsScenarioFragment = [
-  ...SeriesFullFragment,
-  ...DistributionSeriesFullFragment,
-  `fragment HospitalizationsScenario on Scenario {
-    currentlyHospitalized { ...DistributionSeriesFull }
-    currentlyReportedHospitalized { ...DistributionSeriesFull }
-    cumulativeHospitalized { ...DistributionSeriesFull }
-    cumulativeReportedHospitalized { ...DistributionSeriesFull }
-    hospitalCapacity {...SeriesFull}
-  }`,
-];
-
-const useDomains = () => {
-  const [data, error] = useLocationQuery(`{
-    domain {
-      currentlyHospitalized { expected { max } }
-      cumulativeHospitalized { expected { max } }
-    }
-  }`);
-  const domains = useMemo(() => {
-    if (!data) {
-      return {};
-    }
-    const {domain} = data;
-    return {
-      currentDomain: domain.currentlyHospitalized.expected.max,
-      cumulativeDomain: domain.cumulativeHospitalized.expected.max,
-    };
-  });
-  return [domains, error];
-};
-
 export const Hospitalizations = ({width, height}) => {
-  const {location, indices, distancingIndices, x} = useModelState();
-
-  const [scenario] = useScenarioQuery(
-    `{ ...HospitalizationsScenario }`,
-    HospitalizationsScenarioFragment
-  );
-  const hospitalCapacity = createSeries(scenario?.hospitalCapacity);
-  const currentlyHospitalized = createDistributionSeries(
-    scenario?.currentlyHospitalized
-  );
-  const currentlyReportedHospitalized = createDistributionSeries(
-    scenario?.currentlyReportedHospitalized
-  );
-  const cumulativeHospitalized = createDistributionSeries(
-    scenario?.cumulativeHospitalized
-  );
-  const cumulativeReportedHospitalized = createDistributionSeries(
-    scenario?.cumulativeReportedHospitalized
-  );
-
-  const [{currentDomain = 2000, cumulativeDomain = 1000000}] = useDomains();
+  const {location, indices, x} = useModelState();
+  const {
+    domain,
+    hospitalCapacity,
+    currentlyHospitalized,
+    currentlyReportedHospitalized,
+    cumulativeHospitalized,
+    cumulativeReportedHospitalized,
+  } = useLocationData();
 
   return (
     <div className="margin-top-5">
@@ -97,63 +47,73 @@ export const Hospitalizations = ({width, height}) => {
       </Paragraph>
       <Graph
         data={indices}
-        domain={currentDomain}
+        domain={domain.hospitalized.currently}
         initialScale="log"
         x={x}
         xLabel="people"
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Currently hospitalized"
-              y={currentlyHospitalized}
-              color={blue}
-              format={formatNumber}
-            />
-            <DistributionLegendRow
-              title="Currently reported hospitalized"
+      >
+        {() => (
+          <>
+            <Line y={hospitalCapacity} stroke={red} strokeDasharray="6,3" />
+            <DistributionLine y={currentlyHospitalized} color={blue} />
+            <DistributionLine
               y={currentlyReportedHospitalized}
               color={yellow}
-              format={formatNumber}
             />
-          </Gutter>
-        }
-      >
-        <Line y={hospitalCapacity} stroke={red} strokeDasharray="6,3" />
-        <DistributionLine y={currentlyHospitalized} color={blue} />
-        <DistributionLine y={currentlyReportedHospitalized} color={yellow} />
+          </>
+        )}
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Currently hospitalized"
+          y={currentlyHospitalized}
+          color={blue}
+          format={formatNumber}
+        />
+        <DistributionLegendRow
+          title="Currently reported hospitalized"
+          y={currentlyReportedHospitalized}
+          color={yellow}
+          format={formatNumber}
+        />
+      </Gutter>
       <Graph
         data={indices}
-        domain={cumulativeDomain}
+        domain={domain.hospitalized.cumulative}
         initialScale="log"
         x={x}
         xLabel="people"
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Total hospitalized"
-              y={cumulativeHospitalized}
-              color={blue}
-              format={formatNumber}
-            />
-            <DistributionLegendRow
-              title="Total reported hospitalized"
+      >
+        {() => (
+          <>
+            <DistributionLine y={cumulativeHospitalized} color={blue} />
+            <DistributionLine
               y={cumulativeReportedHospitalized}
               color={yellow}
-              format={formatNumber}
             />
-          </Gutter>
-        }
-      >
-        <DistributionLine y={cumulativeHospitalized} color={blue} />
-        <DistributionLine y={cumulativeReportedHospitalized} color={yellow} />
+          </>
+        )}
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Total hospitalized"
+          y={cumulativeHospitalized}
+          color={blue}
+          format={formatNumber}
+        />
+        <DistributionLegendRow
+          title="Total reported hospitalized"
+          y={cumulativeReportedHospitalized}
+          color={yellow}
+          format={formatNumber}
+        />
+      </Gutter>
     </div>
   );
 };

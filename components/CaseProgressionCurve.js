@@ -5,6 +5,7 @@ import {
   Grid,
   Gutter,
   Heading,
+  InlineData,
   InlineLabel,
   Paragraph,
   Title,
@@ -12,7 +13,7 @@ import {
   UnorderedList,
   WithCitation,
 } from './content';
-import {WithNearestData} from './graph';
+import {useNearestData} from './graph';
 import {People, Vial, HeadSideCough} from './icon';
 import {
   DistributionLegendRow,
@@ -21,22 +22,33 @@ import {
   Estimation,
   MethodDefinition,
   MethodDisclaimer,
-  createDistributionSeries,
+  useLocationData,
   useModelState,
-  useScenarioQuery,
 } from './modeling';
 import {formatNumber, formatPercent, formatPercent1} from '../lib/format';
 
 const {useCallback, useMemo, useState} = React;
 
-const CaseProgressionScenarioFragment = [
-  ...DistributionSeriesFullFragment,
-  `fragment CaseProgressionScenario on Scenario {
-    cumulativeDeaths { ...DistributionSeriesFull }
-    cumulativeExposed { ...DistributionSeriesFull }
-    cumulativePcr { ...DistributionSeriesFull }
-  }`,
-];
+function FatalityRate({asymptomaticRate}) {
+  const nearest = useNearestData();
+  const {
+    cumulativeExposed,
+    cumulativePcr,
+    cumulativeDeaths,
+  } = useLocationData();
+
+  return (
+    <InlineData>
+      {() =>
+        formatPercent1(
+          (cumulativeDeaths.expected.get(nearest()) /
+            (cumulativeExposed.expected.get(nearest()) || 0.0001)) *
+            (1 - asymptomaticRate)
+        )
+      }
+    </InlineData>
+  );
+}
 
 export function CaseProgressionCurve({height, width}) {
   const {location, x} = useModelState();
@@ -48,18 +60,11 @@ export function CaseProgressionCurve({height, width}) {
   // Can we get these from the model?
   const fatalityWeight = 3;
 
-  const [scenario] = useScenarioQuery(
-    `{ ...CaseProgressionScenario }`,
-    CaseProgressionScenarioFragment
-  );
-
-  const [cumulativeDeaths, cumulativeExposed, cumulativePcr] = useMemo(() => {
-    return [
-      createDistributionSeries(scenario?.cumulativeDeaths),
-      createDistributionSeries(scenario?.cumulativeExposed),
-      createDistributionSeries(scenario?.cumulativePcr),
-    ];
-  }, [scenario]);
+  const {
+    cumulativeExposed,
+    cumulativePcr,
+    cumulativeDeaths,
+  } = useLocationData();
 
   return (
     <div className="margin-top-5">
@@ -112,28 +117,6 @@ export function CaseProgressionCurve({height, width}) {
         xLabel="people"
         width={width}
         height={height}
-        after={
-          <Grid mobile={1}>
-            <DistributionLegendRow
-              y={cumulativeExposed}
-              color={theme.color.yellow[3]}
-              title="Total COVID-19 cases"
-              description="People who have been infected with COVID-19"
-            />
-            <DistributionLegendRow
-              y={cumulativePcr}
-              color={theme.color.blue[2]}
-              title="Reported positive tests"
-              description="Total number of COVID-19 tests projected to be positive"
-            />
-            <DistributionLegendRow
-              y={cumulativeDeaths}
-              color={theme.color.red[1]}
-              title="Deceased"
-              description="People who have died from COVID-19"
-            />
-          </Grid>
-        }
       >
         <DistributionLine
           y={cumulativeExposed}
@@ -151,6 +134,26 @@ export function CaseProgressionCurve({height, width}) {
           gradient
         />
       </PopulationGraph>
+      <Grid mobile={1}>
+        <DistributionLegendRow
+          y={cumulativeExposed}
+          color={theme.color.yellow[3]}
+          title="Total COVID-19 cases"
+          description="People who have been infected with COVID-19"
+        />
+        <DistributionLegendRow
+          y={cumulativePcr}
+          color={theme.color.blue[2]}
+          title="Reported positive tests"
+          description="Total number of COVID-19 tests projected to be positive"
+        />
+        <DistributionLegendRow
+          y={cumulativeDeaths}
+          color={theme.color.red[1]}
+          title="Deceased"
+          description="People who have died from COVID-19"
+        />
+      </Grid>
       <Heading className="margin-top-4">Finding the best fit</Heading>
       <Paragraph>
         The model adjusts three values to find a set of curves with the best fit
@@ -195,25 +198,15 @@ export function CaseProgressionCurve({height, width}) {
             <strong>{formatPercent(defaultAsymptomaticRate)}</strong>.
           </span>
         </Paragraph>
-        <WithNearestData>
-          {(d) => (
-            <Estimation>
-              Based on an asymptomatic rate of{' '}
-              {formatPercent(defaultAsymptomaticRate)}, the model projects the
-              fatality rate of symptomatic COVID-19 cases to be{' '}
-              <strong>
-                {cumulativeDeaths && cumulativeExposed
-                  ? formatPercent1(
-                      (cumulativeDeaths.expected(...d) /
-                        (cumulativeExposed.expected(...d) || 0.0001)) *
-                        (1 - asymptomaticRate)
-                    )
-                  : '…'}
-              </strong>
-              .
-            </Estimation>
-          )}
-        </WithNearestData>
+        <Estimation>
+          Based on an asymptomatic rate of {formatPercent(asymptomaticRate)},
+          the model projects the fatality rate of symptomatic COVID-19 cases to
+          be{' '}
+          <strong>
+            <FatalityRate asymptomaticRate={asymptomaticRate} />
+          </strong>
+          .
+        </Estimation>
       </WithCitation>
     </div>
   );

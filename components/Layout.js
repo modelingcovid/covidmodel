@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import {LocationMenu} from './configured';
 import {Section} from './content';
+import {Suspense} from './util';
 import {Notice} from './Notice';
 import {theme} from '../styles';
 

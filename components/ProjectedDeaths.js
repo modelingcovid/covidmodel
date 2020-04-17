@@ -6,13 +6,9 @@ import {HeadSideCough, People, Vial} from './icon';
 import {
   DistributionLegendRow,
   DistributionLine,
-  DistributionSeriesFullFragment,
   Estimation,
-  MethodDefinition,
-  createDistributionSeries,
+  useLocationData,
   useModelState,
-  useLocationQuery,
-  useScenarioQuery,
 } from './modeling';
 import {
   formatShortDate,
@@ -29,53 +25,21 @@ const {useCallback, useMemo} = React;
 const color = theme.color.red[1];
 const textColor = theme.color.red.text;
 
-const ProjectedDeathsScenarioFragment = [
-  ...DistributionSeriesFullFragment,
-  `fragment ProjectedDeathsScenario on Scenario {
-    dailyDeaths { ...DistributionSeriesFull }
-  }`,
-];
-
-const useDomain = () => {
-  const [data, error] = useLocationQuery(`{
-    domain {
-      dailyDeaths { expected { max } }
-    }
-  }`);
-  if (!data) {
-    return [data, error];
-  }
-  return [data.domain.dailyDeaths.expected.max, error];
-};
-
 export const ProjectedDeaths = ({width, height}) => {
-  const {
-    location,
-    scenario: {distancingDays, distancingLevel},
-    indices,
-    distancingIndices,
-    x,
-  } = useModelState();
+  const {location, indices, x} = useModelState();
+  const {dailyDeaths, domain} = useLocationData();
 
-  const [scenario] = useScenarioQuery(
-    `{ ...ProjectedDeathsScenario }`,
-    ProjectedDeathsScenarioFragment
-  );
-  const dailyDeaths = createDistributionSeries(scenario?.dailyDeaths);
-
-  const [domain = 2000] = useDomain();
-
-  const peakWithinDistancing = useMemo(
-    () =>
-      distancingLevel !== 1 &&
-      distancingIndices.reduce((prev, d) => {
-        return prev != null &&
-          dailyDeaths.expected(prev) >= dailyDeaths.expected(d)
-          ? prev
-          : d;
-      }, null),
-    [distancingLevel, distancingIndices, dailyDeaths]
-  );
+  // const peakWithinDistancing = useMemo(
+  //   () =>
+  //     distancingLevel !== 1 &&
+  //     distancingIndices.reduce((prev, d) => {
+  //       return prev != null &&
+  //         dailyDeaths.expected(prev) >= dailyDeaths.expected(d)
+  //         ? prev
+  //         : d;
+  //     }, null),
+  //   [distancingLevel, distancingIndices, dailyDeaths]
+  // );
 
   return (
     <div className="margin-top-5">
@@ -89,7 +53,7 @@ export const ProjectedDeaths = ({width, height}) => {
         </InlineLabel>{' '}
         on a linear scale.
       </Paragraph>
-      {peakWithinDistancing && (
+      {/* {peakWithinDistancing && (
         <Estimation date={false}>
           The peak number of fatalities per day before the end of the{' '}
           {formatMonths(distancingDays)}-month social distancing period in{' '}
@@ -99,29 +63,27 @@ export const ProjectedDeaths = ({width, height}) => {
           </strong>
           .
         </Estimation>
-      )}
+      )} */}
       <Graph
         data={indices}
-        domain={domain}
+        domain={domain.dailyDeaths}
         initialScale="linear"
         x={x}
         xLabel="people"
         width={width}
         height={height}
         controls
-        after={
-          <Gutter>
-            <DistributionLegendRow
-              title="Fatalities per day"
-              y={dailyDeaths}
-              color={color}
-              format={formatNumber}
-            />
-          </Gutter>
-        }
       >
-        <DistributionLine y={dailyDeaths} color={color} />
+        {() => <DistributionLine y={dailyDeaths} color={color} />}
       </Graph>
+      <Gutter>
+        <DistributionLegendRow
+          title="Fatalities per day"
+          y={dailyDeaths}
+          color={color}
+          format={formatNumber}
+        />
+      </Gutter>
     </div>
   );
 };

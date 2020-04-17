@@ -14,7 +14,7 @@ const Point = ({
   ...remaining
 }) => {
   const {clipPath, x, xScale, yScale} = useGraphData();
-  const yVal = y(...d);
+  const yVal = y(d);
   // Only show points with data
   if (!yVal) {
     return null;
@@ -26,7 +26,7 @@ const Point = ({
       clipPath={clipPath}
       fill={fill}
       r={r}
-      cx={xScale(x(...d))}
+      cx={xScale(x(d))}
       cy={yScale(yVal)}
     />
   );
@@ -35,12 +35,13 @@ const Point = ({
 const NearestPoint = ({nearestProps, ...remaining}) => {
   const {data} = useGraphData();
   const nearest = useNearestData();
+  const d = nearest();
 
-  if (!nearest) {
+  if (!d) {
     return null;
   }
-  const props = nearestProps ? nearestProps(nearest) : {};
-  return <Point {...remaining} {...props} d={nearest} key="nearest" />;
+  const props = nearestProps ? nearestProps(d) : {};
+  return <Point {...remaining} {...props} d={d} key="nearest" />;
 };
 
 export const Points = ({nearestProps, ...remaining}) => {
@@ -49,7 +50,7 @@ export const Points = ({nearestProps, ...remaining}) => {
   return (
     <>
       {data.map((d, i) => (
-        <Point {...remaining} d={[d, i, data]} key={i} />
+        <Point {...remaining} d={d} key={i} />
       ))}
       <NearestPoint {...remaining} nearestProps={nearestProps} />
     </>

@@ -14,7 +14,6 @@ export function ScenarioSelect({
   ...props
 }) {
   const {scenario, scenarios, setScenario} = useModelState();
-  const scenarioIds = scenarios.map(({id}) => id);
 
   const currentScenario = useMemo(
     () => scenarios.find(({name}) => name === 'Current'),

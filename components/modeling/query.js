@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import useSWR from 'swr';
+import {useFetch} from '../util';
 import {useModelState} from './useModelState';
 
 export const createLocationQuery = (location, query) =>
@@ -8,34 +9,36 @@ export const createLocationQuery = (location, query) =>
 export const createScenarioQuery = (scenario, query) =>
   `{ scenario(id: "${scenario}") ${query} }`;
 
-export function useLocations(query = '') {
-  const {data, error} = useSWR(`{
-      locations {
-        id
-        name
-        ${query}
-      }
-    }`);
-  return [data?.locations || [], error];
+export function useLocations(input = '') {
+  const query = `{
+    locations {
+      id
+      name
+      ${input}
+    }
+  }`;
+  const {data, error} = useSWR(query);
+  const accessor = useFetch(query);
+  return [data?.locations || [], error, accessor];
 }
 
-export function useLocationQuery(query, fragments = []) {
+export function useLocationQuery(input, fragments = []) {
   const {location} = useModelState();
-  const {data, error} = useSWR(
-    Array.from(
-      new Set([...fragments, createLocationQuery(location.id, query)])
-    ).join('\n')
-  );
-  return [data?.location, error];
+  const query = Array.from(
+    new Set([...fragments, createLocationQuery(location.id, input)])
+  ).join('\n');
+  const {data, error} = useSWR(query);
+  const accessor = useFetch(query);
+  return [data?.location, error, accessor];
 }
 
 export function useScenarioQuery(query, fragments = []) {
   const {scenario} = useModelState();
-  const [data, error] = useLocationQuery(
+  const [data, error, accessor] = useLocationQuery(
     createScenarioQuery(scenario.id, query),
     fragments
   );
-  return [data?.scenario, error];
+  return [data?.scenario, error, accessor];
 }
 
 export const compactDistributionProps = [
@@ -106,16 +109,16 @@ export const PopulationFragment = [
 ];
 
 export function usePopulation() {
-  const [data, error] = useLocationQuery(`{ population }`);
-  return [data?.population, error];
+  const [data, error, accessor] = useLocationQuery(`{ population }`);
+  return [data?.population, error, accessor];
 }
 
 export function useDistancing() {
-  const [scenario, error] = useScenarioQuery(`{
+  const [scenario, error, accessor] = useScenarioQuery(`{
     distancing {
       data
     }
   }`);
 
-  return [createSeries(scenario?.distancing), error];
+  return [createSeries(scenario?.distancing), error, accessor];
 }

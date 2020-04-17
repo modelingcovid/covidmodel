@@ -7,14 +7,11 @@ export const DistributionLine = ({
   curve,
   gradient = false,
 }) => {
-  if (!y) {
-    return null;
-  }
   return (
     <>
       <Area
-        y0={y.percentile10}
-        y1={y.percentile90}
+        y0={y.percentile10.get}
+        y1={y.percentile90.get}
         fill={color}
         opacity="0.1"
         curve={curve}
@@ -22,22 +19,22 @@ export const DistributionLine = ({
       {gradient && (
         <>
           <Area
-            y0={y.percentile20}
-            y1={y.percentile80}
+            y0={y.percentile20.get}
+            y1={y.percentile80.get}
             fill={color}
             opacity="0.1"
             curve={curve}
           />
           <Area
-            y0={y.percentile30}
-            y1={y.percentile70}
+            y0={y.percentile30.get}
+            y1={y.percentile70.get}
             fill={color}
             opacity="0.1"
             curve={curve}
           />
           <Area
-            y0={y.percentile40}
-            y1={y.percentile60}
+            y0={y.percentile40.get}
+            y1={y.percentile60.get}
             fill={color}
             opacity="0.1"
             curve={curve}
@@ -45,15 +42,15 @@ export const DistributionLine = ({
         </>
       )}
       <Line
-        y={y.percentile50}
+        y={y.percentile50.get}
         stroke={color}
         opacity="0.2"
         dot={false}
         curve={curve}
       />
-      <Line y={y.expected} stroke={color} curve={curve} />
+      <Line y={y.expected.get} stroke={color} curve={curve} />
       <Points
-        y={y.confirmed}
+        y={y.confirmed.get}
         stroke={color}
         strokeWidth={1.5}
         r={2}

@@ -10,9 +10,10 @@ import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
 import {TodayMarker} from './TodayMarker';
-import {GraphDataProvider} from './useGraphData';
-import {useComponentId} from '../util';
+import {GraphDataProvider, useGraphData} from './useGraphData';
+import {Suspense, useComponentId} from '../util';
 import {createDateScale} from '../../lib/date';
+import {maybe} from '../../lib/fn';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 import {theme} from '../../styles';
 
@@ -34,12 +35,13 @@ const valueTickLabelProps = () => ({
   strokeWidth: 5,
 });
 
-export const Graph = React.memo(function Graph({
+export const GraphContents = React.memo(function Graph({
+  accessors,
   children,
   overlay,
   after,
   before,
-  data,
+  data: dataFn,
   x,
   xLabel = '',
   domain = 1,
@@ -52,6 +54,7 @@ export const Graph = React.memo(function Graph({
   decoration = true,
   scrubber = true,
 }) {
+  const data = dataFn();
   const [scale, setScale] = useState(initialScale);
   const margin = decoration
     ? {top: 16, left: 16, right: 16, bottom: 32}
@@ -65,7 +68,7 @@ export const Graph = React.memo(function Graph({
   const xScale = useMemo(() => createDateScale(xMax), [data, x, xMax]);
 
   const yScale = useMemo(() => {
-    const yDomain = typeof domain === 'number' ? [0, domain] : domain;
+    const yDomain = [0, maybe(domain)];
     switch (scale) {
       case 'log':
         // scaleSymlog allows us to define a log scale that includes 0, but d3
@@ -104,28 +107,9 @@ export const Graph = React.memo(function Graph({
     }
   }, [domain, scale, yMax]);
 
-  const xTicks = xScale.ticks(width > 600 ? 10 : 5);
-  const xTickCount = xTicks.length;
-  const dateTickLabelProps = useCallback(
-    (date, i) => {
-      const props = {
-        textAnchor: 'middle',
-        dy: '4px',
-        fill: 'var(--color-gray5)',
-      };
-      if (i === 0) {
-        props.textAnchor = 'start';
-        props.dx = '-2px';
-      } else if (i === xTickCount - 1) {
-        props.textAnchor = 'end';
-        props.dx = '2px';
-      }
-      return props;
-    },
-    [xTickCount]
-  );
+  const clipPathId = useComponentId('graphClipPath');
 
-  const yTicks = yScale.ticks(height > 180 ? 5 : 3);
+  const yTicks = yScale.ticks(yMax > 180 ? 5 : 3);
   const yTickCount = yTicks.length;
   const tickFormatWithLabel = useCallback(
     (v, i) => {
@@ -136,37 +120,44 @@ export const Graph = React.memo(function Graph({
   );
 
   const distancingId = useDistancingId();
-  const clipPathId = useComponentId('graphClipPath');
+
+  const clipPath = `url(#${clipPathId})`;
+  const context = useMemo(
+    () => ({data, clipPath, margin, x, xScale, yScale, xMax, yMax}),
+    [data, clipPath, margin, x, xScale, yScale, xMax, yMax]
+  );
 
   return (
-    <GraphDataProvider
-      data={data}
-      x={x}
-      xScale={xScale}
-      yScale={yScale}
-      xMax={xMax}
-      yMax={yMax}
-      margin={margin}
-      clipPath={`url(#${clipPathId})`}
-    >
-      <style jsx>{`
-        .graph {
-          position: relative;
-          margin-left: ${-1 * margin.left}px;
-          margin-right: ${-1 * margin.right}px;
-        }
-        .graph-overlay {
-          pointer-events: none;
-          position: absolute;
-          top: ${margin.top}px;
-          left: ${margin.left}px;
-          bottom: ${margin.bottom}px;
-          right: ${margin.right}px;
-        }
-      `}</style>
+    <GraphDataProvider context={context}>
       {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
-      <div className={`graph no-select${decoration ? ' margin-bottom-1' : ''}`}>
+      <div className="graph no-select">
+        <style jsx>{`
+          .graph {
+            position: relative;
+            margin-left: ${-1 * margin.left}px;
+            margin-right: ${-1 * margin.right}px;
+            background: ${theme.color.background};
+            animation: fade-in 300ms ease-in both;
+          }
+          .graph-overlay {
+            pointer-events: none;
+            position: absolute;
+            top: ${margin.top}px;
+            left: ${margin.left}px;
+            bottom: ${margin.bottom}px;
+            right: ${margin.right}px;
+          }
+          @keyframes fade-in {
+            from {
+              transform: translateY(-3px);
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+        `}</style>
         <svg className="block" width={width} height={height}>
           <Group
             // Add 0.5 to snap centered strokes onto the pixel grid
@@ -187,7 +178,7 @@ export const Graph = React.memo(function Graph({
                 fill={`url(#${distancingId})`}
               />
             )}
-            {children}
+            {children(context)}
             <g pointerEvents="none">
               {decoration && (
                 <>
@@ -237,7 +228,9 @@ export const Graph = React.memo(function Graph({
         </svg>
         <div className="graph-overlay">
           {scrubber && (
-            <Scrubber>{([d], active) => formatShortDate(x(d))}</Scrubber>
+            <Scrubber>
+              {(nearest, active) => formatShortDate(x(nearest()))}
+            </Scrubber>
           )}
           {overlay}
         </div>
@@ -246,3 +239,27 @@ export const Graph = React.memo(function Graph({
     </GraphDataProvider>
   );
 });
+
+export const Graph = (props) => {
+  return (
+    <figure
+      className={props.decoration ? 'clear margin-bottom-1' : 'clear'}
+      style={{
+        boxShadow: `inset 0 0 0 1px ${theme.color.gray[0]}`,
+      }}
+    >
+      <Suspense
+        fallback={
+          <div
+            style={{
+              height: `${props.height}px`,
+              width: `${props.width}px`,
+            }}
+          />
+        }
+      >
+        <GraphContents {...props} />
+      </Suspense>
+    </figure>
+  );
+};

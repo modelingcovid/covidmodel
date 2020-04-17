@@ -1,5 +1,7 @@
 import * as React from 'react';
-import {LegendEntry, LegendRow, useGraphData} from '../graph';
+import {LegendEntry, LegendRow} from '../graph';
+import {useSuspense} from '../util';
+import {useModelState} from '../modeling';
 import {formatNumber, formatNA} from '../../lib/format';
 
 const {useMemo} = React;
@@ -13,19 +15,16 @@ export const DistributionLegendRow = ({
   y,
   compact = false,
 }) => {
-  const {data} = useGraphData();
-  const hasConfirmed = useMemo(
-    () => data.some((...d) => y && y.confirmed(...d)),
-    [data, y]
-  );
-
-  if (!y) {
-    return null;
-  }
-
-  if (compact && !hasConfirmed) {
+  const suspense = useSuspense();
+  const hasConfirmed = suspense(() => y.confirmed.empty() === false, false);
+  if (compact) {
     return (
-      <LegendRow label={title} color={color} format={format} y={y.expected} />
+      <LegendRow
+        label={title}
+        color={color}
+        format={format}
+        y={y.expected.get}
+      />
     );
   }
   return (
@@ -34,14 +33,14 @@ export const DistributionLegendRow = ({
         label="Modeled"
         color={color}
         format={format}
-        y={y.expected}
+        y={y.expected.get}
       />
       {hasConfirmed && (
         <LegendEntry
           label="Confirmed"
           color={color}
           symbol="stroke"
-          y={y.confirmed}
+          y={y.confirmed.get}
           format={formatNA(format)}
         />
       )}

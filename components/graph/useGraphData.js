@@ -4,22 +4,7 @@ const {createContext, useContext, useMemo} = React;
 
 const GraphDataContext = createContext(null);
 
-export const GraphDataProvider = ({
-  children,
-  clipPath,
-  data,
-  margin,
-  x,
-  xScale,
-  yScale,
-  xMax,
-  yMax,
-}) => {
-  const context = useMemo(
-    () => ({data, clipPath, margin, x, xScale, yScale, xMax, yMax}),
-    [data, clipPath, margin, x, xScale, yScale, xMax, yMax]
-  );
-
+export const GraphDataProvider = ({children, context}) => {
   return (
     <GraphDataContext.Provider value={context}>
       {children}

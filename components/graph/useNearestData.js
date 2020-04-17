@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {memo} from '../../lib/fn';
 import {findPoint} from '../../lib/transform';
 
 const {createContext, useCallback, useContext, useMemo, useState} = React;
@@ -19,10 +20,12 @@ export const NearestDataProvider = ({
 }) => {
   const [point, setPoint] = useState(initial);
 
+  const setNearestData = useCallback((p) => {}, []);
+
   const [NearestDataContext, SetNearestDataContext] = contexts;
   const findNearestPoint = useMemo(() => findPoint(data, x), [data, x]);
 
-  const nearestData = useMemo(() => findNearestPoint(point), [
+  const nearestData = useMemo(() => memo(() => findNearestPoint(point)), [
     findNearestPoint,
     point,
   ]);
