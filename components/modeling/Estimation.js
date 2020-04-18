@@ -9,15 +9,13 @@ export function Estimation({children, className, date, ...remaining}) {
     <>
       <Paragraph
         {...remaining}
-        className={['estimation margin-bottom-0', className]
-          .filter(Boolean)
-          .join(' ')}
+        className={['estimation', className].filter(Boolean).join(' ')}
       >
         {children}
+        <span className="block caption margin-top-0">
+          <CurrentStatus date={date} />
+        </span>
       </Paragraph>
-      <div className="caption margin-bottom-1">
-        <CurrentStatus date={date} />
-      </div>
     </>
   );
 }

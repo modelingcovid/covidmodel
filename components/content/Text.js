@@ -39,6 +39,7 @@ export const createTextComponent = (Tag, boundClassName, kind) => ({
 export const Paragraph = createTextComponent('p', 'paragraph');
 export const Title = createTextComponent('h2', 'text-title clear');
 export const Heading = createTextComponent('h3', 'section-heading');
+export const FigureHeading = createTextComponent('h4', 'figure-heading');
 export const OrderedList = createTextComponent('ol', 'paragraph ordered-list');
 export const UnorderedList = createTextComponent(
   'ul',
