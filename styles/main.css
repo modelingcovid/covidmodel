@@ -183,8 +183,8 @@ body,
 .citation,
 .footnote::after {
   color: var(--color-gray3);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-tiny);
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-micro);
   font-weight: 400;
   line-height: 1.6;
 }
@@ -221,6 +221,7 @@ body,
   counter-increment: citation;
   content: counter(citation);
   vertical-align: super;
+  font-style: normal;
   display: inline-block;
   width: var(--spacing1);
   margin-left: calc(-1 * var(--spacing1));

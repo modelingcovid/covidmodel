@@ -1,4 +1,5 @@
 export * from './Daily';
+export * from './FeedbackForm';
 export * from './Fitting';
 export * from './Hospitalizations';
 export * from './ICU';
@@ -9,4 +10,4 @@ export * from './Overview';
 export * from './ParameterTable';
 export * from './ProjectedDeaths';
 export * from './SEIR';
-export * from './FeedbackForm';
+export * from './TestAndTrace';

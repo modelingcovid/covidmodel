@@ -46,3 +46,4 @@ export const UnorderedList = createTextComponent(
   'ul',
   'paragraph unordered-list'
 );
+export const ListItem = createTextComponent('li');

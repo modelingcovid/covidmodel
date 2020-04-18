@@ -4,6 +4,7 @@ import {useRouter} from 'next/router';
 
 import {
   Daily,
+  FeedbackForm,
   Fitting,
   Hospitalizations,
   ICU,
@@ -13,7 +14,7 @@ import {
   ParameterTable,
   ProjectedDeaths,
   SEIR,
-  FeedbackForm,
+  TestAndTrace,
 } from '../../components';
 import {Controls} from '../../components/configured';
 import {Section, Title} from '../../components/content';
@@ -115,7 +116,8 @@ export default function StatePage() {
             <SEIR width={width} height={height} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
-            <ProjectedDeaths width={width} height={height} />
+            {/* <TestAndTrace width={width} height={height} /> */}
+            {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
           </Section>
           <Section style={{marginTop: '300px'}}>

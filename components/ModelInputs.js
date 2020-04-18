@@ -3,7 +3,7 @@ import Link from 'next/link';
 import {theme} from '../styles';
 import {DistancingGraph} from './configured';
 import {
-  FigureHeading,
+  Heading,
   Gutter,
   InlineData,
   InlineLabel,
@@ -50,7 +50,27 @@ export function ModelInputs({height, width, ...remaining}) {
 
   return (
     <div className="flow-root" {...remaining}>
-      {/* <FigureHeading>Social distancing and R₀ over time</FigureHeading> */}
+      <Heading className="margin-top-3">
+        How does social distancing relate to how the virus spreads?
+      </Heading>
+      <Paragraph>
+        Epidemiologists measure how quickly a disease spreads through{' '}
+        <strong>R₀</strong>, its <strong>basic reproduction number</strong>,
+        defined as the number of people a disease will spread to from a single
+        infected person.
+      </Paragraph>
+      <Paragraph>
+        When social distancing measures are introduced, it becomes more
+        difficult for a disease to spread through a population. We represent
+        this using{' '}
+        <strong>
+          R<sub>t</sub>
+        </strong>
+        , the <strong>effective reproduction number</strong>. R<sub>t</sub>{' '}
+        represents how many people a single case of the disease will spread to
+        at a given point in time, taking social distancing measures into
+        account.
+      </Paragraph>
       <Paragraph>
         The following graph displays
         <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue.text}>
@@ -63,12 +83,13 @@ export function ModelInputs({height, width, ...remaining}) {
         >
           prospective social distancing levels
         </InlineLabel>{' '}
-        based on the scenario selected above.
+        based on the scenario selected above. It also shows how they impact R
+        <sub>t</sub>, which is displayed on the right axis.
       </Paragraph>
       <Instruction>
         <strong>Reading the graph:</strong> The background of the graph
         corresponds to the amount of social distancing at a given time. This is
-        also included on subsequent graphs.
+        also included on later graphs.
       </Instruction>
       <DistancingGraph
         formatDistancing={formatDistancing}
@@ -86,14 +107,23 @@ export function ModelInputs({height, width, ...remaining}) {
           format={formatDistancing}
           width="80%"
         />
-        <LegendRow label="R₀" y={distancing} format={formatR0} />
+        <LegendRow
+          label={
+            <>
+              R<sub>t</sub>
+            </>
+          }
+          width="80%"
+          y={distancing}
+          format={formatR0}
+        />
       </Gutter>
       <Paragraph className="margin-top-2">
-        A social distancing level of 100% means no contact with others, which
-        yields an R₀ (basic reproduction number) for the virus of zero, since it
-        cannot find new hosts. A social distancing level of 0% means that an
-        area is operating without any social distancing measures and continuing
-        life as usual.
+        A social distancing level of 100% means no contact with others and
+        yields an R<sub>t</sub> of zero, since it cannot find new hosts. A
+        social distancing level of 0% means that an area is operating without
+        any social distancing measures and continuing life as usual. At this
+        level, R<sub>t</sub> equals R₀.
       </Paragraph>
       <Paragraph>
         The current distancing level, <TodayDistancing />, is calculated based

@@ -7,6 +7,7 @@ import {
   InlineData,
   InlineLabel,
   Heading,
+  ListItem,
   Paragraph,
   Title,
   UnorderedList,
@@ -129,37 +130,37 @@ export function SEIR({height, width}) {
         virus by dividing the population into different groups:
       </Paragraph>
       <UnorderedList className="list-style-none">
-        <li>
+        <ListItem>
           <InlineLabel list {...label.susceptible}>
             Susceptible people
           </InlineLabel>{' '}
           are healthy and at risk for contracting COVID-19.
-        </li>
-        <li>
+        </ListItem>
+        <ListItem>
           <InlineLabel list {...label.exposed}>
             Exposed people
           </InlineLabel>{' '}
           have COVID-19 and are in the incubation period; they cannot infect
           others.
-        </li>
-        <li>
+        </ListItem>
+        <ListItem>
           <InlineLabel list {...label.infectious}>
             Infectious people
           </InlineLabel>{' '}
           have COVID-19 and can infect others.
-        </li>
-        <li>
+        </ListItem>
+        <ListItem>
           <InlineLabel list {...label.recovered}>
             Recovered people
           </InlineLabel>{' '}
           have had COVID-19 and are immune to re-infection.
-        </li>
-        <li>
+        </ListItem>
+        <ListItem>
           <InlineLabel list {...label.deceased}>
             Deceased people
           </InlineLabel>{' '}
           have passed away due to COVID-19.
-        </li>
+        </ListItem>
       </UnorderedList>
       <div className="relative">
         <div
