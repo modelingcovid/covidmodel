@@ -6,7 +6,7 @@ import {theme} from '../../styles';
 
 export function Controls(props) {
   return (
-    <div style={{display: 'flex', height: '34px'}} {...props}>
+    <div style={{display: 'flex', minHeight: '34px'}} {...props}>
       <Suspense fallback={<div />}>
         <StateSelect />
         <div style={{width: theme.spacing[3]}} />

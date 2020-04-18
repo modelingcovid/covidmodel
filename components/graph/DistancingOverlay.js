@@ -12,18 +12,16 @@ const styles = css`
   div {
     position: absolute;
     bottom: 100%;
-    margin-bottom: ${theme.spacing[1]};
+    margin-bottom: 8px;
     text-align: center;
     font-size: ${theme.font.size.micro};
-    line-height: 1.4;
-    color: ${theme.color.gray[3]};
-    box-shadow: 0 1px ${theme.color.gray[1]};
+    color: ${theme.color.gray[2]};
   }
   span {
     display: inline-block;
     background: ${theme.color.background};
     padding: 0 4px;
-    transform: translateY(50%);
+    transform: translateY(100%);
   }
 `;
 
@@ -34,19 +32,45 @@ export function DistancingOverlay() {
   const todayX = xScale(today);
   const distancingX = Math.min(xScale(distancingDate), xMax);
   const hasDistancing = distancingLevel !== 1;
-  const width = hasDistancing ? `${distancingX - todayX}px` : undefined;
+  const width = distancingX - todayX;
 
   return (
     <div
       style={{
         left: `${todayX}px`,
-        width,
+        width: hasDistancing ? `${width}px` : undefined,
       }}
     >
       <style jsx>{styles}</style>
-      <span>
-        {hasDistancing ? 'Distancing period' : 'No distancing period'}
-      </span>
+      {hasDistancing || <span>No distancing</span>}
+      {hasDistancing && (
+        <>
+          <span>Distancing</span>
+          <svg width={width} height={7}>
+            <rect
+              x="1"
+              y="3"
+              width={width - 2}
+              height="1"
+              fill={theme.color.shadow[2]}
+            />
+            <rect
+              x="0"
+              y="0"
+              width="1"
+              height="7"
+              fill={theme.color.shadow[2]}
+            />
+            <rect
+              x={width - 1}
+              y="0"
+              width="1"
+              height="7"
+              fill={theme.color.shadow[2]}
+            />
+          </svg>
+        </>
+      )}
     </div>
   );
 }

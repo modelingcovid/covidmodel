@@ -246,11 +246,11 @@ export const GraphContents = React.memo(function Graph({
   );
 });
 
-export const Graph = (props) => {
+export const Graph = ({decoration = true, ...props}) => {
   const {indices, x, xScale} = useModelState();
   return (
     <figure
-      className={props.decoration ? 'clear margin-bottom-1' : 'clear'}
+      className={decoration ? 'clear margin-top-2 margin-bottom-1' : 'clear'}
       style={{
         boxShadow: `inset 0 0 0 1px ${theme.color.gray[0]}`,
       }}
@@ -265,7 +265,13 @@ export const Graph = (props) => {
           />
         }
       >
-        <GraphContents data={indices} x={x} xScale={xScale} {...props} />
+        <GraphContents
+          data={indices}
+          x={x}
+          xScale={xScale}
+          decoration={decoration}
+          {...props}
+        />
       </Suspense>
     </figure>
   );
