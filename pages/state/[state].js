@@ -49,7 +49,7 @@ export default function StatePage() {
         setScenario={setScenario}
       >
         <Head>
-          <title>{stateName} COVID model forecast</title>
+          <title>Modeling COVID-19 in {stateName}</title>
           <meta
             name="Description"
             content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
