@@ -7,6 +7,7 @@ import {
   Gutter,
   InlineData,
   InlineLabel,
+  Instruction,
   Paragraph,
 } from './content';
 import {LegendRow} from './graph';
@@ -64,6 +65,11 @@ export function ModelInputs({height, width, ...remaining}) {
         </InlineLabel>{' '}
         based on the scenario selected above.
       </Paragraph>
+      <Instruction>
+        <strong>Reading the graph:</strong> The background of the graph
+        corresponds to the amount of social distancing at a given time. This is
+        also included on subsequent graphs.
+      </Instruction>
       <DistancingGraph
         formatDistancing={formatDistancing}
         formatR0={formatR0}
