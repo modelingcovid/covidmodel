@@ -226,7 +226,7 @@ stateDistancingPrecompute = Module[{
   rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = 1-rawCsvTable[[2;;,2;;]];
+  stateDistancings = 1-0.8*rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
 

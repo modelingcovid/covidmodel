@@ -536,6 +536,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     CurrentlyHospitalizedQuantiles,
     CurrentlyInfectedQuantiles,
     CurrentlyInfectiousQuantiles,
+    CumulativeExposedQuantiles,
     DeathQuantiles,
     deciles,
     distancing,
@@ -639,6 +640,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CurrentlyHospitalizedQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[HHq][t]&] * population;
   CurrentlyCriticalQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[CCq][t]&] * population;
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
+  CumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t]&] * population;
   
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
   
@@ -651,6 +653,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
           "day"->t,
           "distancing"->distancing[t],
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
+          "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1],
           "dailyPcr" -> Merge[{
               <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
               percentileMap[PCRQuantiles[t] - PCRQuantiles[t-1]]
@@ -662,7 +665,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               percentileMap[PCRQuantiles[t]]
             },First],
           "cumulativeExposed"->Merge[{
-            <|"expected"-> population*sol[cumEq][t]|>
+            <|"expected"-> population*sol[cumEq][t]|>,
+            percentileMap[CumulativeExposedQuantiles[t]]
+          },First],
+           "newlyExposed"->Merge[{
+            <|"expected"-> population*sol[cumEq][t]|>,
+            percentileMap[CumulativeExposedQuantiles[t] - CumulativeExposedQuantiles[t-1]]
           },First],
           "cumulativeDeaths" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],0]]|>,
@@ -937,7 +945,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     "pH"-><|"value"-> params["pH"], "name"-> "Probability of getting a case bad enough to require hospitalization.", "description"-> "An age-adjusted probability that you get a case requiring hospitalization.", "type"->"literature"|>,
     "pC"-><|"value"-> params["pC"], "name"-> "Probability of getting a case bad enough to require ICU admission", "description"-> "An age-adjusted probability get a severe case requiring ICU admission.", "type"->"literature"|>,
     "stateAdjustmentForTestingDifferences"-><|"value"-> fitParams["stateAdjustmentForTestingDifferences"], "name"-> "State adjustment for differences in PCR / death testing and reporting.", "description"-> "A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis", "type"->"fit"|>,
-    "distancePower"-><|"value"-> fitParams["distpow"], "name"-> "Power of the distancing function", "description"-> "Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.", "type"->"fit"|>
+    "distancePower"-><|"value"-> fitParams["distpow"], "name"-> "Power of the distancing function", "description"-> "Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.", "type"->"fit"|>,
+    "numberOfSimulations"-><|"value"->numberOfSimulations, "name"->"Number of Monte Carlo simulations run", "description"->"","type"->"set"|>
   |>;
 
   Echo[gofMetrics];
@@ -995,6 +1004,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       KeyDrop[stateParams[state],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
+      "numberOfSimulations"->numberOfSimulations,
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
       "parameters"->paramExpected,
