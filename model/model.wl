@@ -1072,7 +1072,7 @@ getSeriesForKey[data_, key_]:=Module[{},
 
 exportTimeSeries[state_, scenario_, data_]:=Module[{timeData, fixedKeys, timeDataKeys, days, distancing, hospitalCapacity},
    fixedKeys = {"day", "distancing", "hospitalCapacity"};
-   timeData = data["timeSeriesData"];
+   timeData = Select[data["timeSeriesData"], #["day"]<=370&];
    timeDataKeys = Keys[KeyDrop[timeData[[1]], fixedKeys]];
    
    
@@ -1095,8 +1095,12 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides
     Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;
     exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios;
     days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
-    Export["public/json/"<>state<>"/days.json", days];
-    Export["public/json/"<>state<>"/summary.json",KeyDrop[stateData, {"scenarios"}]];
+
+    Export["public/json/"<>state<>"/days.json", Select[days, #<=370&]];
+    Export["public/json/"<>state<>"/summary.json",Merge[{
+      KeyDrop[stateData, {"scenarios"}],
+      <|"scenarios"->#["id"]&/@scenarios|>}
+    ,First]];
     stateData
   ];
 
