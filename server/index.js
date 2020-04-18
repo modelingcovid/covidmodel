@@ -107,6 +107,7 @@ export const typeDefs = gql`
     empty: Boolean
     max: Float!
     min: Float!
+    length: Int!
   }
   type Parameter {
     id: String!

@@ -14,6 +14,7 @@ const series = (data) => {
     empty: rounded.every((n) => !n),
     min: Math.min(...rounded),
     max: Math.max(...rounded),
+    length: rounded.length,
   };
 };
 
