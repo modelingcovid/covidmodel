@@ -12,8 +12,6 @@ import {
 import {LegendRow} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
-  MethodDisclaimer,
-  MethodDefinition,
   createSeries,
   useDistancing,
   useFindPoint,

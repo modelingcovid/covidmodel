@@ -20,8 +20,6 @@ import {
   DistributionLine,
   DistributionSeriesFullFragment,
   Estimation,
-  MethodDefinition,
-  MethodDisclaimer,
   useLocationData,
   useModelState,
 } from './modeling';

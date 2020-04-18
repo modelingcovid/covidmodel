@@ -2,7 +2,6 @@ export * from './Controls';
 export * from './DistancingGraph';
 export * from './LocationMap';
 export * from './LocationMenu';
-export * from './OccupancyGraph';
 export * from './PopulationGraph';
 export * from './ScenarioSelect';
 export * from './StateSelect';
