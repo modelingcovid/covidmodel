@@ -6,9 +6,8 @@ import {today, addDays} from '../../lib/date';
 const {useMemo} = React;
 
 export function DistancingMarker({anchor = 'start'}) {
-  const {
-    scenario: {distancingDays, distancingLevel},
-  } = useModelState();
+  const {scenarioData} = useModelState();
+  const {distancingDays, distancingLevel} = scenarioData();
   const date = useMemo(() => addDays(today, distancingDays), [distancingDays]);
   if (distancingLevel === 1) {
     return null;
