@@ -11,16 +11,14 @@ import {
 import {useModelState} from '../modeling';
 import {WithComponentId} from '../util';
 import {dateScale, today} from '../../lib/date';
-import {formatNumber2, formatPercent} from '../../lib/format';
-
-const formatPercentInverted = (n) => formatPercent(1 - n);
 
 const {useCallback, useMemo} = React;
 const todayOffset = dateScale(today);
 
 export const DistancingGraph = ({
   children,
-  r0,
+  formatDistancing,
+  formatR0,
   y,
   leftLabel = '',
   rightLabel = '',
@@ -29,8 +27,6 @@ export const DistancingGraph = ({
   ...remaining
 }) => {
   const {indices, x} = useModelState();
-
-  const formatR0 = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   const endTickLabelProps = () => ({
     dx: '-4px',
@@ -47,7 +43,7 @@ export const DistancingGraph = ({
       xLabel={leftLabel}
       height={height}
       width={width}
-      tickFormat={formatPercentInverted}
+      tickFormat={formatDistancing}
     >
       {({xMax, yScale}) => {
         const yTicks = yScale.ticks(3);

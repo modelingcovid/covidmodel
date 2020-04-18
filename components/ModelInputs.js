@@ -2,7 +2,8 @@ import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
 import {DistancingGraph} from './configured';
-import {Grid, InlineData, Paragraph} from './content';
+import {Gutter, InlineData, Paragraph} from './content';
+import {LegendRow} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   MethodDisclaimer,
@@ -41,19 +42,35 @@ function TodayDistancing() {
   );
 }
 
+const formatDistancing = (n) => formatPercent(1 - n);
+
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
   const {r0, importtime, distancing} = useLocationData();
+
+  const formatR0 = useCallback((n) => formatNumber2(n * r0()), [r0]);
+
   return (
     <div {...remaining}>
       <DistancingGraph
-        r0={r0}
+        formatDistancing={formatDistancing}
+        formatR0={formatR0}
         y={distancing}
         leftLabel="distancing"
         rightLabel="R₀"
         width={width}
         height={height}
       />
+      <Gutter>
+        <LegendRow
+          label="Social distancing level"
+          y={distancing}
+          format={formatDistancing}
+          width="80%"
+        />
+        <LegendRow label="R₀" y={distancing} format={formatR0} />
+      </Gutter>
+
       <Paragraph className="margin-top-2">
         A social distancing level of 100% means no contact with others, which
         yields an R₀ (basic reproduction number) for the virus of zero, since it
