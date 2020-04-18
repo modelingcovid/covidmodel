@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {scaleUtc} from '@vx/scale';
 import {stateLabels} from '../../lib/controls';
 import {addDays, dayToDate, initialTargetDate, today} from '../../lib/date';
 import {memo} from '../../lib/fn';
@@ -40,6 +41,16 @@ export const ModelStateProvider = ({
     // const distancingEnds = addDays(today, scenario.distancingDays);
     // const distancingIndices = indices.filter((d) => x(d) <= distancingEnds);
 
+    const xScale = memo(() =>
+      scaleUtc({
+        domain: [
+          new Date('2020-01-01').getTime(),
+          new Date('2021-01-01').getTime(),
+        ],
+        range: [0, 1],
+      })
+    );
+
     return {
       get days() {
         return isServer ? [] : days();
@@ -68,6 +79,9 @@ export const ModelStateProvider = ({
       setScenario,
       x(i) {
         return dayToDate(days()[i]);
+      },
+      get xScale() {
+        return xScale();
       },
     };
   }, [days, id, locationId, locations, scenarioId, scenarios, setScenario]);

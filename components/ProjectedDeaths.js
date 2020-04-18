@@ -26,7 +26,7 @@ const color = theme.color.red[1];
 const textColor = theme.color.red.text;
 
 export const ProjectedDeaths = ({width, height}) => {
-  const {location, indices, x} = useModelState();
+  const {location} = useModelState();
   const {dailyDeaths, domain} = useLocationData();
 
   // const peakWithinDistancing = useMemo(
@@ -65,10 +65,8 @@ export const ProjectedDeaths = ({width, height}) => {
         </Estimation>
       )} */}
       <Graph
-        data={indices}
         domain={domain.dailyDeaths}
         initialScale="linear"
-        x={x}
         xLabel="people"
         width={width}
         height={height}

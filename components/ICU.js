@@ -31,7 +31,7 @@ const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
 export const ICU = ({width, height}) => {
-  const {location, indices, x} = useModelState();
+  const {location} = useModelState();
   const {
     currentlyCritical,
     cumulativeCritical,
@@ -43,10 +43,8 @@ export const ICU = ({width, height}) => {
     <div className="margin-top-5">
       <Title>ICU</Title>
       <Graph
-        data={indices}
         domain={domain.critical.currently}
         initialScale="log"
-        x={x}
         xLabel="people"
         width={width}
         height={height}
@@ -68,10 +66,8 @@ export const ICU = ({width, height}) => {
         />
       </Gutter>
       <Graph
-        data={indices}
         domain={domain.critical.cumulative}
         initialScale="log"
-        x={x}
         xLabel="people"
         width={width}
         height={height}

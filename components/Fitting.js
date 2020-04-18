@@ -105,13 +105,7 @@ export function Fitting({height, width}) {
         —the cumulative number of people who have been in the{' '}
         <strong>exposed</strong> state—in {location.name}.
       </Paragraph>
-      <PopulationGraph
-        controls
-        x={x}
-        xLabel="people"
-        width={width}
-        height={height}
-      >
+      <PopulationGraph controls xLabel="people" width={width} height={height}>
         <DistributionLine
           y={cumulativeExposed}
           color={theme.color.yellow[3]}

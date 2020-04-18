@@ -51,7 +51,7 @@ function PercentCases() {
 }
 
 export function SEIR({height, width}) {
-  const {location, indices, x} = useModelState();
+  const {location} = useModelState();
   const {
     population,
     domain,
@@ -173,12 +173,10 @@ export function SEIR({height, width}) {
           }}
         >
           <Graph
-            data={indices}
             domain={() => population() * 1.05}
             initialScale="linear"
             height={height / 4}
             width={width / 8}
-            x={x}
             xLabel="people"
             scrubber={false}
             decoration={false}
@@ -215,12 +213,10 @@ export function SEIR({height, width}) {
           </Graph>
         </div>
         <Graph
-          data={indices}
           domain={domain.seir}
           initialScale="linear"
           height={height}
           width={width}
-          x={x}
           xLabel="people"
         >
           {() => (

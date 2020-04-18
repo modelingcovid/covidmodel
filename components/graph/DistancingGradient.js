@@ -4,7 +4,6 @@ import {scaleLinear} from '@vx/scale';
 import {ScaleGradient} from '../graph';
 import {useLocationData, useModelState} from '../modeling';
 import {useMatchMedia} from '../util';
-import {dateScale} from '../../lib/date';
 import {darkMode, mediaQuery, declarations, properties} from '../../styles';
 
 const {useCallback} = React;
@@ -35,7 +34,7 @@ export function useDistancingId() {
 export const DistancingGradient = React.memo(function DistancingGradient({
   size,
 }) {
-  const {indices, x} = useModelState();
+  const {indices, x, xScale} = useModelState();
   const id = useDistancingId();
   const isDarkMode = useMatchMedia(mediaQuery.darkMode);
   const {distancing} = useLocationData();
@@ -46,7 +45,7 @@ export const DistancingGradient = React.memo(function DistancingGradient({
       color={isDarkMode ? darkColor : lightColor}
       data={indices}
       id={id}
-      x={(...d) => dateScale(x(...d))}
+      x={(...d) => xScale(x(...d))}
       y={inverted}
       size={size}
     />

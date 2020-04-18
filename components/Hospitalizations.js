@@ -27,7 +27,7 @@ const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
 export const Hospitalizations = ({width, height}) => {
-  const {location, indices, x} = useModelState();
+  const {location} = useModelState();
   const {
     domain,
     hospitalCapacity,
@@ -46,10 +46,8 @@ export const Hospitalizations = ({width, height}) => {
         typical occupancy rate.
       </Paragraph>
       <Graph
-        data={indices}
         domain={domain.hospitalized.currently}
         initialScale="log"
-        x={x}
         xLabel="people"
         width={width}
         height={height}
@@ -81,10 +79,8 @@ export const Hospitalizations = ({width, height}) => {
         />
       </Gutter>
       <Graph
-        data={indices}
         domain={domain.hospitalized.cumulative}
         initialScale="log"
-        x={x}
         xLabel="people"
         width={width}
         height={height}

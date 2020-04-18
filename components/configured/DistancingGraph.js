@@ -10,10 +10,9 @@ import {
 } from '../graph';
 import {useModelState} from '../modeling';
 import {WithComponentId} from '../util';
-import {dateScale, today} from '../../lib/date';
+import {today} from '../../lib/date';
 
 const {useCallback, useMemo} = React;
-const todayOffset = dateScale(today);
 
 export const DistancingGraph = ({
   children,
@@ -26,7 +25,8 @@ export const DistancingGraph = ({
   height = 400,
   ...remaining
 }) => {
-  const {indices, x} = useModelState();
+  const {xScale} = useModelState();
+  const todayOffset = xScale(today);
 
   const endTickLabelProps = () => ({
     dx: '-4px',
@@ -38,8 +38,6 @@ export const DistancingGraph = ({
   return (
     <Graph
       {...remaining}
-      data={indices}
-      x={x}
       xLabel={leftLabel}
       height={height}
       width={width}

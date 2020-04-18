@@ -12,7 +12,7 @@ import {Scrubber} from './Scrubber';
 import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider, useGraphData} from './useGraphData';
 import {Suspense, useComponentId} from '../util';
-import {createDateScale} from '../../lib/date';
+import {useModelState} from '../modeling';
 import {maybe} from '../../lib/fn';
 import {formatLargeNumber, formatShortDate} from '../../lib/format';
 import {theme} from '../../styles';
@@ -44,6 +44,7 @@ export const GraphContents = React.memo(function Graph({
   data: dataFn,
   x,
   xLabel = '',
+  xScale: xScaleSource,
   domain = 1,
   initialScale = 'linear',
   width: propWidth = 600,
@@ -65,7 +66,10 @@ export const GraphContents = React.memo(function Graph({
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  const xScale = useMemo(() => createDateScale(xMax), [data, x, xMax]);
+  const xScale = useMemo(() => xScaleSource.copy().range([0, xMax]), [
+    xScaleSource,
+    xMax,
+  ]);
 
   const yScale = useMemo(() => {
     const yDomain = [0, maybe(domain)];
@@ -241,6 +245,7 @@ export const GraphContents = React.memo(function Graph({
 });
 
 export const Graph = (props) => {
+  const {indices, x, xScale} = useModelState();
   return (
     <figure
       className={props.decoration ? 'clear margin-bottom-1' : 'clear'}
@@ -258,7 +263,7 @@ export const Graph = (props) => {
           />
         }
       >
-        <GraphContents {...props} />
+        <GraphContents data={indices} x={x} xScale={xScale} {...props} />
       </Suspense>
     </figure>
   );

@@ -115,8 +115,8 @@ export function ModelInputs({height, width, ...remaining}) {
         <InlineData width="130px">
           {() => formatDate(dayToDate(importtime()))}
         </InlineData>{' '}
-        and has an uninhibited R₀ of{' '}
-        <InlineData>{() => formatNumber2(r0())}</InlineData>.
+        and has an R₀ of <InlineData>{() => formatNumber2(r0())}</InlineData>{' '}
+        when there is no social distancing.
       </Paragraph>
     </div>
   );
