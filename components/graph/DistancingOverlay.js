@@ -30,19 +30,23 @@ const styles = css`
 export function DistancingOverlay() {
   const {distancingDate, distancingLevel} = useDistancingInfo();
 
-  const {xScale, yMax} = useGraphData();
+  const {xScale, xMax, yMax} = useGraphData();
   const todayX = xScale(today);
-  const distancingX = xScale(distancingDate);
+  const distancingX = Math.min(xScale(distancingDate), xMax);
+  const hasDistancing = distancingLevel !== 1;
+  const width = hasDistancing ? `${distancingX - todayX}px` : undefined;
 
   return (
     <div
       style={{
         left: `${todayX}px`,
-        width: `${distancingX - todayX}px`,
+        width,
       }}
     >
       <style jsx>{styles}</style>
-      <span>Distancing period</span>
+      <span>
+        {hasDistancing ? 'Distancing period' : 'No distancing period'}
+      </span>
     </div>
   );
 }
