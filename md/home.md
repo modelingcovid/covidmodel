@@ -4,4 +4,4 @@
 
 ## Who built this?
 
-This model is developed by the COVID Open Source Modeling Collaboration, a collection of researchers from **Harvard** and **Stanford** alongside data scientists and engineers at **Stripe** and **GitHub**.
+This model is developed by the COVID Open Source Modeling Collaboration (COSMC), a collection of researchers from **Harvard** and **Stanford** alongside data scientists and engineers at **Stripe** and **GitHub**.
