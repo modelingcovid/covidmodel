@@ -250,7 +250,7 @@ export const Graph = ({decoration = true, ...props}) => {
   const {indices, x, xScale} = useModelState();
   return (
     <figure
-      className={decoration ? 'clear margin-top-2 margin-bottom-1' : 'clear'}
+      className={decoration ? 'clear margin-top-3 margin-bottom-2' : 'clear'}
       style={{
         boxShadow: `inset 0 0 0 1px ${theme.color.gray[0]}`,
       }}

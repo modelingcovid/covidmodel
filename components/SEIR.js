@@ -120,7 +120,7 @@ export function SEIR({height, width}) {
   ]);
 
   return (
-    <div className="margin-top-5">
+    <div className="margin-top-3 flow-root">
       <Title className="margin-bottom-3">Projections</Title>
       <Paragraph>
         Our model is based upon a standard epidemiological model called{' '}

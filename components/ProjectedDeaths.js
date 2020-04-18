@@ -42,7 +42,7 @@ export const ProjectedDeaths = ({width, height}) => {
   // );
 
   return (
-    <div className="margin-top-5">
+    <div className="margin-top-3 flow-root">
       <Title>Finding the peak of the curve</Title>
       <Paragraph>
         Logarithmic scales and cumulative numbers can be difficult to observe by

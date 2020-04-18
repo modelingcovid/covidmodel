@@ -38,7 +38,7 @@ export const Hospitalizations = ({width, height}) => {
   } = useLocationData();
 
   return (
-    <div className="margin-top-5">
+    <div className="margin-top-3 flow-root">
       <Title>Hospitalizations</Title>
       <Paragraph>
         We estimate the hospital capacity for COVID-19 patients by taking the

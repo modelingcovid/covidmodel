@@ -40,7 +40,7 @@ export const ICU = ({width, height}) => {
   } = useLocationData();
 
   return (
-    <div className="margin-top-5">
+    <div className="margin-top-3 flow-root">
       <Title>ICU</Title>
       <Graph
         domain={domain.critical.currently}

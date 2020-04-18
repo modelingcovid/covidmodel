@@ -48,7 +48,7 @@ export function ModelInputs({height, width, ...remaining}) {
   const formatR0 = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   return (
-    <div {...remaining}>
+    <div className="flow-root" {...remaining}>
       {/* <FigureHeading>Social distancing and R₀ over time</FigureHeading> */}
       <Paragraph>
         The following graph displays

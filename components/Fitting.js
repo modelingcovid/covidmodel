@@ -61,7 +61,7 @@ export function Fitting({height, width}) {
   } = useLocationData();
 
   return (
-    <div className="margin-top-5">
+    <div className="margin-top-3 flow-root">
       <Title>Comparing the model with verified data</Title>
       <Paragraph>
         We use two primary data sources to calibrate the curves for each state:{' '}
