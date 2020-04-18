@@ -169,7 +169,7 @@ body,
 .caption,
 .citation,
 .footnote::after {
-  color: var(--color-gray2);
+  color: var(--color-gray3);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-tiny);
   font-weight: 400;
@@ -180,6 +180,11 @@ body,
   content: counter(footnote);
   vertical-align: super;
   line-height: 1;
+}
+.caption {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-small);
+  /* font-style: italic; */
 }
 .caption,
 .citation {

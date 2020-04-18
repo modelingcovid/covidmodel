@@ -11,7 +11,6 @@ export function CurrentStatus({date = true}) {
   const {location} = useModelState();
   return (
     <span>
-      Projection for{' '}
       {date ? (
         <>
           <CurrentDate format={formatFixedDate} /> in{' '}

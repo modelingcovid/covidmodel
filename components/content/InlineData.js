@@ -33,12 +33,12 @@ const styles = css`
   }
 `;
 
-export function InlinePlaceholder({width = '3em'}) {
+export function InlinePlaceholder({length = 4, width}) {
   return (
     <span
       title="Loading…"
       style={{
-        width: `calc(${width} - 8px)`,
+        width: `calc(${width || `${length}ch`} - 8px)`,
       }}
     >
       <style jsx>{styles}</style>
@@ -57,9 +57,9 @@ export function InlineDataInner({children}) {
   );
 }
 
-export function InlineData({children, width}) {
+export function InlineData({children, length, width}) {
   return (
-    <Suspense fallback={<InlinePlaceholder width={width} />}>
+    <Suspense fallback={<InlinePlaceholder length={length} width={width} />}>
       <InlineDataInner>{children}</InlineDataInner>
     </Suspense>
   );

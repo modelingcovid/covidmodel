@@ -8,4 +8,5 @@ export * from './useFindPoint';
 export * from './useLocationData';
 export * from './useModelData';
 export * from './useModelState';
+export * from './useTodayDistancing';
 export * from './query';

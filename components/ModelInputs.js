@@ -12,13 +12,11 @@ import {
 import {LegendRow} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
-  createSeries,
-  useDistancing,
+  Estimation,
   useFindPoint,
   useModelState,
   useLocationData,
-  useLocationQuery,
-  useScenarioQuery,
+  useTodayDistancing,
 } from './modeling';
 import {dayToDate, daysToMonths, today} from '../lib/date';
 import {
@@ -33,15 +31,10 @@ import {
 const {useCallback, useMemo} = React;
 
 function TodayDistancing() {
-  const {distancing} = useLocationData();
-  const findPoint = useFindPoint();
+  const todayDistancing = useTodayDistancing();
   return (
     <InlineData width="2em">
-      {() => {
-        const todayIndex = findPoint(today);
-        const todayDistancing = distancing(todayIndex);
-        return formatPercent(1 - todayDistancing);
-      }}
+      {() => formatPercent(1 - todayDistancing())}
     </InlineData>
   );
 }
@@ -110,14 +103,14 @@ export function ModelInputs({height, width, ...remaining}) {
         COVID-19 reached a location and how contaigious it is under those
         conditions.
       </Paragraph>
-      <Paragraph className="estimation">
+      <Estimation status={false}>
         We estimate that COVID-19 reached {location.name} on{' '}
         <InlineData width="130px">
           {() => formatDate(dayToDate(importtime()))}
         </InlineData>{' '}
         and has an R₀ of <InlineData>{() => formatNumber2(r0())}</InlineData>{' '}
         when there is no social distancing.
-      </Paragraph>
+      </Estimation>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import {theme} from '../../styles';
 import {Paragraph} from '../content';
 import {CurrentStatus} from './CurrentStatus';
 
-export function Estimation({children, className, date, ...remaining}) {
+export function Estimation({children, className, status = true, ...remaining}) {
   return (
     <>
       <Paragraph
@@ -12,9 +12,11 @@ export function Estimation({children, className, date, ...remaining}) {
         className={['estimation', className].filter(Boolean).join(' ')}
       >
         {children}
-        <span className="block caption margin-top-0">
-          <CurrentStatus date={date} />
-        </span>
+        {status && (
+          <span className="caption margin-top-0">
+            On <CurrentStatus />
+          </span>
+        )}
       </Paragraph>
     </>
   );
