@@ -1,3 +1,4 @@
+export * from './Daily';
 export * from './Fitting';
 export * from './Hospitalizations';
 export * from './ICU';

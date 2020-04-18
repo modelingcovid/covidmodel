@@ -49,9 +49,11 @@ text {
 .italic {
   font-style: italic;
 }
+.paragraph a,
 .link {
   text-decoration: underline;
 }
+.paragraph a:hover,
 .link:hover {
   color: var(--color-gray6);
 }
@@ -161,6 +163,17 @@ text {
   padding-left: var(--spacing2);
   box-shadow: inset 3px 0 var(--color-yellow2);
   background: var(--color-gray-bg);
+}
+.instruction {
+  padding: var(--spacing0);
+  padding-left: var(--spacing2);
+  box-shadow: inset 3px 0 var(--color-blue2);
+  background: var(--color-blue-bg);
+  color: var(--color-gray4);
+  font-size: var(--font-size-small);
+}
+.instruction strong {
+  color: var(--color-gray5);
 }
 body,
 .footnotes {

@@ -170,10 +170,14 @@ const queries = [
   [
     'Scenario',
     `{
-      dailyDeaths { ...DistributionSeriesFull }
+      dailyDeath { ...DistributionSeriesFull }
+      dailyExposed { ...DistributionSeriesFull }
+      dailyPcr { ...DistributionSeriesFull }
     }`,
     {
-      dailyDeaths: createDistributionSeries((d) => d.dailyDeaths),
+      dailyDeath: createDistributionSeries((d) => d.dailyDeath),
+      dailyExposed: createDistributionSeries((d) => d.dailyExposed),
+      dailyPcr: createDistributionSeries((d) => d.dailyPcr),
     },
     DistributionSeriesFull,
   ],
@@ -222,7 +226,9 @@ const queries = [
         cumulativeDeaths { expected { max } }
         currentlyInfected { expected { max } }
         currentlyInfectious { expected { max } }
-        dailyDeaths { expected { max } }
+        dailyDeath { expected { max } }
+        dailyExposed { expected { max } }
+        dailyPcr { expected { max } }
         currentlyHospitalized { expected { max } }
         cumulativeHospitalized { expected { max } }
         currentlyCritical { expected { max } }
@@ -235,7 +241,8 @@ const queries = [
           domain.cumulativeDeaths.expected.max +
           domain.currentlyInfected.expected.max +
           domain.currentlyInfectious.expected.max,
-        dailyDeaths: ({domain}) => domain.dailyDeaths.expected.max,
+        dailyDeath: ({domain}) => domain.dailyDeath.expected.max,
+        dailyExposed: ({domain}) => domain.dailyExposed.expected.max,
         hospitalized: {
           currently: ({domain}) => domain.currentlyHospitalized.expected.max,
           cumulative: ({domain}) => domain.cumulativeHospitalized.expected.max,

@@ -25,12 +25,12 @@ export const {
         '#2d3146',
         '#181b2c',
       ],
-      bg: '#f1f2f4',
+      bg: '#f2f5f7',
       muted: '#515a70',
     },
     blue: {
       ...['#b5eff1', '#0096ed', '#0670de', '#0055bc'],
-      bg: '#ddfffe',
+      bg: '#f2f9fe',
       text: '#0670de',
     },
     yellow: {
@@ -109,7 +109,7 @@ export const darkMode = setProperties({
     red: {...['#ffa8a8', '#ff0a33', '#f00028'], text: '#ff0a33'},
     blue: {
       ...['#b5eff1', '#26afff', '#0096ed', '#0670de'],
-      bg: '#ddfffe',
+      bg: '#1e2639',
       text: '#26afff',
     },
     yellow: {

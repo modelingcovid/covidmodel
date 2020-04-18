@@ -43,7 +43,8 @@ export const typeDefs = gql`
     currentlyInfected: DistributionSeries
     currentlyInfectious: DistributionSeries
     currentlyReportedHospitalized: DistributionSeries
-    dailyDeaths: DistributionSeries
+    dailyDeath: DistributionSeries
+    dailyExposed: DistributionSeries
     dailyPcr: DistributionSeries
     dailyTestsRequiredForContainment: DistributionSeries
     susceptible: DistributionSeries
@@ -63,7 +64,8 @@ export const typeDefs = gql`
     currentlyInfected: DistributionDomain
     currentlyInfectious: DistributionDomain
     currentlyReportedHospitalized: DistributionDomain
-    dailyDeaths: DistributionDomain
+    dailyDeath: DistributionDomain
+    dailyExposed: DistributionDomain
     dailyPcr: DistributionDomain
     dailyTestsRequiredForContainment: DistributionDomain
     susceptible: DistributionDomain
@@ -174,11 +176,6 @@ const Location = {
   },
 };
 
-async function dailyDeaths(get, parent) {
-  const cumulativeDeaths = await get.distribution('cumulativeDeaths', parent);
-  return cumulativeToDailyDistribution(cumulativeDeaths);
-}
-
 const Scenario = {
   distancing: field('series'),
   hospitalCapacity: field('series'),
@@ -194,12 +191,11 @@ const Scenario = {
   currentlyInfected: field('distribution'),
   currentlyInfectious: field('distribution'),
   currentlyReportedHospitalized: field('distribution'),
+  dailyDeath: field('distribution'),
+  dailyExposed: field('distribution'),
   dailyPcr: field('distribution'),
   dailyTestsRequiredForContainment: field('distribution'),
   susceptible: field('distribution'),
-  async dailyDeaths(parent, args, {dataSources: {get}}) {
-    return dailyDeaths(get, parent);
-  },
 };
 
 function getSharedDomain(values) {
@@ -254,12 +250,11 @@ const LocationDomain = {
   currentlyInfected: domain('distribution'),
   currentlyInfectious: domain('distribution'),
   currentlyReportedHospitalized: domain('distribution'),
+  dailyDeath: domain('distribution'),
+  dailyExposed: domain('distribution'),
   dailyPcr: domain('distribution'),
   dailyTestsRequiredForContainment: domain('distribution'),
   susceptible: domain('distribution'),
-  dailyDeaths: domain('distribution', ({get, parent}) =>
-    dailyDeaths(get, parent)
-  ),
 };
 
 export const resolvers = {

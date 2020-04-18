@@ -7,6 +7,7 @@ import {
   Heading,
   InlineData,
   InlineLabel,
+  Instruction,
   Paragraph,
   Title,
   OrderedList,
@@ -85,26 +86,43 @@ export function Fitting({height, width}) {
         the SEIR model.
       </Paragraph>
 
-      <Paragraph>
-        If we look at this data on a logarithmic scale, we can see how the
-        actual data aligns with the model’s predictions:
-        <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
-          positive tests
-        </InlineLabel>{' '}
-        and
-        <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
-          fatalities
-        </InlineLabel>
-        , and how they compare to the predicted number of
-        <InlineLabel
-          color={theme.color.yellow.text}
-          fill={theme.color.yellow[3]}
-        >
-          total COVID-19 cases
-        </InlineLabel>
-        —the cumulative number of people who have been in the{' '}
-        <strong>exposed</strong> state—in {location.name}.
-      </Paragraph>
+      <WithCitation
+        citation={
+          <>
+            The total number of cases is equivalent to the number of people who
+            have been in the <strong>exposed</strong> group.
+          </>
+        }
+      >
+        <Paragraph>
+          If we look at this data on a{' '}
+          <a href="https://en.wikipedia.org/wiki/Logarithmic_scale">
+            logarithmic scale
+          </a>
+          , we can see how the actual data aligns with the model’s predictions:
+          <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
+            positive tests
+          </InlineLabel>{' '}
+          and
+          <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
+            fatalities
+          </InlineLabel>
+          , and how they compare to the predicted number of
+          <InlineLabel
+            className="footnote"
+            color={theme.color.yellow.text}
+            fill={theme.color.yellow[3]}
+          >
+            total COVID-19 cases
+          </InlineLabel>{' '}
+          in {location.name}.
+        </Paragraph>
+        <Instruction>
+          <strong>Reading the graph:</strong> Each line represents the model’s
+          best estimation. The shaded area around a line indicates uncertainty:
+          the darker the area, the more likely the outcome.
+        </Instruction>
+      </WithCitation>
       <PopulationGraph controls xLabel="people" width={width} height={height}>
         <DistributionLine
           y={cumulativeExposed}
@@ -132,13 +150,13 @@ export function Fitting({height, width}) {
         <DistributionLegendRow
           y={cumulativePcr}
           color={theme.color.blue[2]}
-          title="Reported positive tests"
+          title="Total reported positive tests"
           description="Total number of COVID-19 tests projected to be positive"
         />
         <DistributionLegendRow
           y={cumulativeDeaths}
           color={theme.color.red[1]}
-          title="Deceased"
+          title="Total deceased"
           description="People who have died from COVID-19"
         />
       </Grid>

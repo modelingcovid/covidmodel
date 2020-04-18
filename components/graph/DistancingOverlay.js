@@ -21,7 +21,6 @@ const styles = css`
     display: inline-block;
     background: ${theme.color.background};
     padding: 0 4px;
-    transform: translateY(100%);
   }
 `;
 
@@ -42,10 +41,16 @@ export function DistancingOverlay() {
       }}
     >
       <style jsx>{styles}</style>
-      {hasDistancing || <span>No distancing</span>}
+      {hasDistancing || (
+        <span>
+          <CurrentScenario />
+        </span>
+      )}
       {hasDistancing && (
         <>
-          <span>Distancing</span>
+          <span>
+            <CurrentScenario />
+          </span>
           <svg width={width} height={7}>
             <rect
               x="1"

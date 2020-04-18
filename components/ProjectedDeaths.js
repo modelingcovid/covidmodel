@@ -27,18 +27,18 @@ const textColor = theme.color.red.text;
 
 export const ProjectedDeaths = ({width, height}) => {
   const {location} = useModelState();
-  const {dailyDeaths, domain} = useLocationData();
+  const {dailyDeath, domain} = useLocationData();
 
   // const peakWithinDistancing = useMemo(
   //   () =>
   //     distancingLevel !== 1 &&
   //     distancingIndices.reduce((prev, d) => {
   //       return prev != null &&
-  //         dailyDeaths.expected(prev) >= dailyDeaths.expected(d)
+  //         dailyDeath.expected(prev) >= dailyDeath.expected(d)
   //         ? prev
   //         : d;
   //     }, null),
-  //   [distancingLevel, distancingIndices, dailyDeaths]
+  //   [distancingLevel, distancingIndices, dailyDeath]
   // );
 
   return (
@@ -65,19 +65,19 @@ export const ProjectedDeaths = ({width, height}) => {
         </Estimation>
       )} */}
       <Graph
-        domain={domain.dailyDeaths}
+        domain={domain.dailyDeath}
         initialScale="linear"
         xLabel="people"
         width={width}
         height={height}
         controls
       >
-        {() => <DistributionLine y={dailyDeaths} color={color} gradient />}
+        {() => <DistributionLine y={dailyDeath} color={color} gradient />}
       </Graph>
       <Gutter>
         <DistributionLegendRow
           title="Fatalities per day"
-          y={dailyDeaths}
+          y={dailyDeath}
           color={color}
           format={formatNumber}
         />
