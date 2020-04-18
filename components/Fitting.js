@@ -31,21 +31,17 @@ const {useCallback, useMemo, useState} = React;
 
 function FatalityRate({asymptomaticRate}) {
   const nearest = useNearestData();
-  const {
-    cumulativeExposed,
-    cumulativePcr,
-    cumulativeDeaths,
-  } = useLocationData();
+  const {cumulativeDeaths, cumulativeRecoveries} = useLocationData();
 
   return (
     <InlineData>
-      {() =>
-        formatPercent1(
-          (cumulativeDeaths.expected.get(nearest()) /
-            (cumulativeExposed.expected.get(nearest()) || 0.0001)) *
-            (1 - asymptomaticRate)
-        )
-      }
+      {() => {
+        const deaths = cumulativeDeaths.expected.get(nearest());
+        const recoveries = cumulativeRecoveries.expected.get(nearest());
+        const cohort = (deaths + recoveries) * (1 - asymptomaticRate);
+        const rate = cohort ? deaths / cohort : 0;
+        return formatPercent1(rate);
+      }}
     </InlineData>
   );
 }
