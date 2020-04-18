@@ -4,6 +4,7 @@ export * from './CurrentStatus';
 export * from './DistributionLegendRow';
 export * from './DistributionLine';
 export * from './Estimation';
+export * from './useDistancingInfo';
 export * from './useFindPoint';
 export * from './useLocationData';
 export * from './useModelData';

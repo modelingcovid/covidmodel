@@ -6,6 +6,7 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {useDistancingId} from './DistancingGradient';
 import {DistancingMarker} from './DistancingMarker';
+import {DistancingOverlay} from './DistancingOverlay';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
@@ -231,6 +232,7 @@ export const GraphContents = React.memo(function Graph({
           </Group>
         </svg>
         <div className="graph-overlay">
+          {decoration && <DistancingOverlay />}
           {scrubber && (
             <Scrubber>
               {(nearest, active) => formatShortDate(x(nearest()))}
