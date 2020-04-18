@@ -567,6 +567,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     rawSimResults,
     RecoveredCriticalQuantiles,
     RecoveredHospitalizedQuantiles,
+    DailyCumulativeExposedQuantiles,
+    DailyPCRQuantiles,
+    DailyDeathQuantiles,
     setDistancing,
     sim,
     simResults,
@@ -636,6 +639,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   PCRQuantiles[t_] := simDeciles[#[PCR][t]&] * population;
   DeathQuantiles[t_] := simDeciles[#[Deaq][t]&] * population;
+  DailyPCRQuantiles[t_] := simDeciles[#[PCR][t] - #[PCR][t-1]&] * population;
+  DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
   CurrentlyInfectedQuantiles[t_] := simDeciles[#[Eq][t]&] * population;
   CurrentlyInfectiousQuantiles[t_] := simDeciles[#[Iq][t]&] * population;
   CumulativeHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]&] * population;
@@ -649,6 +654,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CurrentlyHospitalizedQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[HHq][t]&] * population;
   CurrentlyCriticalQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[CCq][t]&] * population;
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
+  DailyCumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
   CumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t]&] * population;
   
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
@@ -664,10 +670,16 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
           "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1],
           "dailyPcr" -> Merge[{
+              <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positiveIncrease"]]|>,
               <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
-              percentileMap[PCRQuantiles[t] - PCRQuantiles[t-1]]
+              percentileMap[DailyPCRQuantiles[t]]
             },First],
-          "dailyTestsRequiredForContainment" -> <|"expected"-> population*testToAllCaseRatio0*(sol[cumEq][t])|>,
+          "dailyDeath" -> Merge[{
+              <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["deathIncrease"]]|>,
+              <|"expected"-> population*(sol[Deaq][t] - sol[Deaq][t-1])|>,
+              percentileMap[DailyDeathQuantiles[t]]
+            },First],
+          "dailyTestsRequiredForContainment" -> <|"expected"-> population*testToAllCaseRatio0*(sol[cumEq][t] - sol[cumEq][t-1])|>,
           "cumulativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
               <|"expected"-> population*sol[PCR][t]|>,
@@ -678,8 +690,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
             percentileMap[CumulativeExposedQuantiles[t]]
           },First],
            "newlyExposed"->Merge[{
-            <|"expected"-> population*sol[cumEq][t]|>,
-            percentileMap[CumulativeExposedQuantiles[t] - CumulativeExposedQuantiles[t-1]]
+            <|"expected"-> population*(sol[cumEq][t] - sol[cumEq][t-1])|>,
+            percentileMap[DailyCumulativeExposedQuantiles[t]]
           },First],
           "cumulativeDeaths" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],0]]|>,
