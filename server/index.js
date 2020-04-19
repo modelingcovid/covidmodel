@@ -44,7 +44,7 @@ export const typeDefs = gql`
     currentlyInfectious: DistributionSeries
     currentlyReportedHospitalized: DistributionSeries
     dailyDeath: DistributionSeries
-    dailyExposed: DistributionSeries
+    newlyExposed: DistributionSeries
     dailyPcr: DistributionSeries
     dailyTestsRequiredForContainment: DistributionSeries
     susceptible: DistributionSeries
@@ -65,7 +65,7 @@ export const typeDefs = gql`
     currentlyInfectious: DistributionDomain
     currentlyReportedHospitalized: DistributionDomain
     dailyDeath: DistributionDomain
-    dailyExposed: DistributionDomain
+    newlyExposed: DistributionDomain
     dailyPcr: DistributionDomain
     dailyTestsRequiredForContainment: DistributionDomain
     susceptible: DistributionDomain
@@ -193,7 +193,7 @@ const Scenario = {
   currentlyInfectious: field('distribution'),
   currentlyReportedHospitalized: field('distribution'),
   dailyDeath: field('distribution'),
-  dailyExposed: field('distribution'),
+  newlyExposed: field('distribution'),
   dailyPcr: field('distribution'),
   dailyTestsRequiredForContainment: field('distribution'),
   susceptible: field('distribution'),
@@ -252,7 +252,7 @@ const LocationDomain = {
   currentlyInfectious: domain('distribution'),
   currentlyReportedHospitalized: domain('distribution'),
   dailyDeath: domain('distribution'),
-  dailyExposed: domain('distribution'),
+  newlyExposed: domain('distribution'),
   dailyPcr: domain('distribution'),
   dailyTestsRequiredForContainment: domain('distribution'),
   susceptible: domain('distribution'),
