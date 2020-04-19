@@ -5,6 +5,7 @@ import {
   breakpoint,
   mediaQuery,
   properties,
+  tabletUp,
   darkMode,
 } from './theme';
 import {px, toRootRule} from './util';
@@ -13,21 +14,14 @@ export const globalStyles = css.global`
   ${toRootRule(declarations)}
 
   ${breakpoint.tabletUp} {
-    ${toRootRule(
-      px({
-        [properties.font.size.jumbo]: 64,
-        [properties.font.size.title]: 36,
-        [properties.font.size.dek]: 28,
-        [properties.font.size.subtitle]: 20,
-      })
-    )}
+    ${toRootRule(tabletUp)}
   }
   ${mediaQuery.darkMode} {
     ${toRootRule(darkMode)}
   }
-  @media (min-width: 896px) {
+  @media (min-width: 1024px) {
     :root {
-      ${properties.maxWidth}: 896px;
+      ${properties.maxWidth}: 1024px;
     }
   }
 `;

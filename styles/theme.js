@@ -61,7 +61,7 @@ export const {
         dek: 22,
         subtitle: 16,
         section: 20,
-        body: 16,
+        body: 17,
       }),
     },
   },
@@ -83,6 +83,20 @@ export const breakpoint = {
 export const mediaQuery = {
   darkMode: '@media (prefers-color-scheme: dark)',
 };
+
+export const tabletUp = setProperties({
+  font: {
+    size: px({
+      jumbo: 64,
+      title: 36,
+      dek: 28,
+      subtitle: 20,
+      section: 26,
+      body: 18.5,
+      small: 15,
+    }),
+  },
+});
 
 export const darkMode = setProperties({
   color: {

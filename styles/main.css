@@ -128,7 +128,7 @@ text {
   line-height: 1.3;
 }
 .section-heading {
-  margin-top: var(--spacing0);
+  margin-top: var(--spacing3);
   margin-bottom: var(--spacing0);
 }
 .figure-heading {
@@ -159,14 +159,12 @@ text {
   letter-spacing: -0.02em;
 }
 .estimation {
-  padding: var(--spacing1);
-  padding-left: var(--spacing2);
+  padding: var(--spacing1) var(--spacing2);
   box-shadow: inset 3px 0 var(--color-yellow2);
   background: var(--color-gray-bg);
 }
 .instruction {
-  padding: var(--spacing0);
-  padding-left: var(--spacing2);
+  padding: var(--spacing1) var(--spacing2);
   box-shadow: inset 3px 0 var(--color-blue2);
   background: var(--color-blue-bg);
   color: var(--color-gray4);
@@ -184,9 +182,13 @@ body,
 .footnote::after {
   color: var(--color-gray3);
   font-family: var(--font-family-text);
-  font-size: var(--font-size-micro);
+  font-size: var(--font-size-small);
   font-weight: 400;
   line-height: 1.6;
+}
+.citation::before,
+.footnote::after {
+  font-size: var(--font-size-micro);
 }
 .footnote::after {
   counter-increment: footnote;
@@ -306,13 +308,15 @@ body,
   margin-top: var(--spacing5);
 }
 @media (min-width: 600px) {
-  .dek,
+  .dek {
+    max-width: calc(var(--column-width) * 10);
+  }
   .section-heading {
     max-width: calc(var(--column-width) * 10);
   }
   .text-width,
   .paragraph {
-    max-width: calc(var(--column-width) * 9);
+    max-width: calc(var(--column-width) * 8);
   }
   .maybe-nowrap {
     white-space: nowrap;
