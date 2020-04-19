@@ -1,16 +1,16 @@
 {
 	"parameterBest":{
-		"r0natural":3.6029187698919283,
-		"importtime":3.989474848269364e1,
-		"stateAdjustmentForTestingDifferences":1.0264352389567746,
-		"distpow":1.2140228971006906
+		"r0natural":4.163189173798112,
+		"importtime":4.468806919196352e1,
+		"stateAdjustmentForTestingDifferences":0.9706755649526291,
+		"distpow":1.843981773655426
 	},
 	"population":20278447,
 	"ventilators":4307,
-	"icuBeds":4979,
-	"staffedBeds":54821,
-	"bedUtilization":0.5860085029200001,
-	"hospitalCapacity":2.2695427861422675e4,
+	"icuBeds":0,
+	"staffedBeds":0,
+	"bedUtilization":0,
+	"hospitalCapacity":0,
 	"pS":0.9164770626225824,
 	"pH":5.825036106880485e-2,
 	"pC":2.5272576308612422e-2,
@@ -18,14 +18,15 @@
 	"pPCRH":0.8464907407879908,
 	"fractionOfCriticalDeceased":0.5110143457864949,
 	"initialInfectionImpulse":1.5621096351519812e1,
-	"r0":3.6029187698919283,
-	"importtime":3.989474848269364e1,
-	"numberOfSimulations":100,
-	"stateAdjustmentForTestingDifferences":1.0264352389567746,
-	"distpow":1.2140228971006906,
+	"r0":4.163189173798112,
+	"importtime":4.468806919196352e1,
+	"numberOfSimulations":200,
+	"dateModelRun":"Mon 20 Apr 2020",
+	"stateAdjustmentForTestingDifferences":0.9706755649526291,
+	"distpow":1.843981773655426,
 	"parameters":{
 		"r0":{
-			"value":3.6029187698919283,
+			"value":4.163189173798112,
 			"name":"Basic reproduction number",
 			"description":"The basic reproduction number.",
 			"type":"fit"
@@ -85,7 +86,7 @@
 			"type":"literature"
 		},
 		"importtime":{
-			"value":3.989474848269364e1,
+			"value":4.468806919196352e1,
 			"name":"Import Time",
 			"description":"The day that COVID-19 was seeded into that state.",
 			"type":"fit"
@@ -121,35 +122,35 @@
 			"type":"literature"
 		},
 		"stateAdjustmentForTestingDifferences":{
-			"value":1.0264352389567746,
+			"value":0.9706755649526291,
 			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
 			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 			"type":"fit"
 		},
 		"distancePower":{
-			"value":1.2140228971006906,
+			"value":1.843981773655426,
 			"name":"Power of the distancing function",
 			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 			"type":"fit"
 		},
 		"numberOfSimulations":{
-			"value":100,
+			"value":200,
 			"name":"Number of Monte Carlo simulations run",
 			"description":"",
 			"type":"set"
 		}
 	},
 	"goodnessOfFitMetrics":{
-		"chiSquared":1.0645980585342048e-5,
-		"rmsRelativeError":0.6123343191880016,
-		"rmsRelativeErrorDeaths":0.29939186199804924,
-		"rmsRelativeErrorPcr":0.8125707045422005,
-		"meanRelativeErrorDeaths":-0.21333170964194798,
-		"meanRelativeErrorPcr":-0.5462402038880398,
-		"rSquaredDeaths":1.7289146347342046e-2,
-		"rSquaredPcr":3.608933379237187e-2,
-		"deathResidual7Day":7.443387039035952e-2,
-		"pcrResidual7Day":-1.510608907942384e2
+		"chiSquared":7.315499023461529e-6,
+		"rmsRelativeError":0.4954351358963124,
+		"rmsRelativeErrorDeaths":0.25183391902784885,
+		"rmsRelativeErrorPcr":0.6538284369681927,
+		"meanRelativeErrorDeaths":-0.10323934914193446,
+		"meanRelativeErrorPcr":-0.39275203895009725,
+		"rSquaredDeaths":5.324342487592715e-3,
+		"rSquaredPcr":1.4524761683610134e-2,
+		"deathResidual7Day":1.0725232605976556,
+		"pcrResidual7Day":-1.03336545432527e2
 	},
 	"scenarios":"scenario4"
 }

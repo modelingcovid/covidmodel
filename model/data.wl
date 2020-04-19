@@ -72,22 +72,6 @@ countryVentilators = Association[{"United States"->61929,"France"->5000,"Italy"-
 
 countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
 
-(* https://docs.google.com/spreadsheets/d/1-kffWhXDyR4s0hL9YWG2ld0QWcCkxp8YxrbwFp52MJg *)
-italyDataRaw=Import[dataFile["italy.csv"]];
-italyDataHeader=italyDataRaw[[1]];
-italyDataBody=italyDataRaw[[2;;]];
-italyData=Thread[italyDataHeader->#]&/@italyDataBody//Map[Association];
-
-franceDataRaw=Import[dataFile["france.csv"]];
-franceDataHeader=franceDataRaw[[1]];
-franceDataBody=franceDataRaw[[2;;]];
-franceData=Thread[franceDataHeader->#]&/@franceDataBody//Map[Association];
-
-spainDataRaw=Import[dataFile["spain.csv"]];
-spainDataHeader=spainDataRaw[[1]];
-spainDataBody=spainDataRaw[[2;;]];
-spainData=Thread[spainDataHeader->#]&/@spainDataBody//Map[Association];
-
 ItalyPopulation=60.48*10^6;
 
 FrancePopulation = 66.99*10^6;
@@ -154,13 +138,24 @@ stateHospitalizationCumulativeActualsData[state_] := Module[{data},
 (* Data from covidtracking on reported PCR and fatalities *)
 stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
 (* remove data when there is only one positive case / death since that doesn't contain any trend information *)
-parsedData = Merge[{
+stateParsedData = Merge[{
     <|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]<=2] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>,
     <|"positive"-> If[KeyExistsQ[#,"positive"],If[TrueQ[#["positive"]<=4] || TrueQ[#["positive"]==Null],Null,#["positive"]],Null]|>,
     #},First]&/@(Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}],DateList[#["date"]//ToString]]]]&/@stateData);
+    
+franceData=<|"day"->Floor[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}], DateObject[#["last_update"]]]]],"state"->"France", "death"->#["deaths"],"positive"->#["confirmed"]|>&/@URLExecute[URLBuild["https://api.covid19data.cloud/v1/jh/daily-reports/?limit=100&country=France"], "RawJSON"];
+spainData=<|"day"->Floor[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}], DateObject[#["last_update"]]]]],"state"->"Spain", "death"->#["deaths"],"positive"->#["confirmed"]|>&/@URLExecute[URLBuild["https://api.covid19data.cloud/v1/jh/daily-reports/?limit=100&country=Spain"], "RawJSON"];
+italyData=<|"day"->Floor[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}], DateObject[#["last_update"]]]]],"state"->"Italy", "death"->#["deaths"],"positive"->#["confirmed"]|>&/@URLExecute[URLBuild["https://api.covid19data.cloud/v1/jh/daily-reports/?limit=100&country=Italy"], "RawJSON"];
+
+countryData=Join[franceData,spainData,italyData];
+
+parsedData=Join[countryData,stateParsedData];
+
 statesWith50CasesAnd5Deaths = DeleteDuplicates[#["state"]&/@Select[parsedData,(#["positive"]>=50&&#["death"]>=5)&]];
 stateRawDemographicData = Association[(#->cachedAgeDistributionFor[#])&/@statesWith50CasesAnd5Deaths];
-stateImportTime = Association[{"NY"->56,"AZ"->63,"CA"->56,"CO"->55,"CT"->57,"FL"->56,"GA"->52,"IL"->58,"IN"->58,"MA"->58, "MI"->59,"NJ"->56,"NV"->58,"OH"->61,"PA"->62,"SC"->59,"TX"->61,"VA"->58,"VT"->54,"WA"->41,"WI"->60,"LA"->51,"OR"->55}];
+(*stateImportTime = Association[{"NY"->56,"AZ"->63,"CA"->56,"CO"->55,"CT"->57,"FL"->56,"GA"->52,"IL"->58,"IN"->58,"MA"->58, "MI"->59,"NJ"->56,"NV"->58,"OH"->61,"PA"->62,"SC"->59,"TX"->61,"VA"->58,"VT"->54,"WA"->41,"WI"->60,"LA"->51,"OR"->55}];*)
+
+
 
 (* data cached from https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=53.086%2C-16.820%2C-78.047%2C72.123 *)
 icuRawData=Import["model/data/icu-beds.csv","CSV"];
@@ -205,10 +200,15 @@ testingProbability = Module[{rawData,interpolatedData},
 (* testingProbability=(1)&; *)
 
 
-(* grab state distancing data and return smoothed distancing functions for each scenario in the list of scenarios provided. *)
-(* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
-(* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
-stateDistancingPrecompute = Module[{
+parseCsv[url_]:=Module[{raw,header,body},
+raw=Import[url,"CSV"];
+header=raw[[1]];
+body=raw[[2;;]];
+Thread[header->#]&/@body//Map[Association]
+];
+
+
+countryDistancingPrecompute = Module[{
     totalDays,
     rawCsvTable,
     stateLabels,
@@ -220,13 +220,25 @@ stateDistancingPrecompute = Module[{
     processState,
     smoothing,
     SlowJoin,
-    ApplyWhere
+    ApplyWhere,
+googleMobility,
+dates,
+es,
+fr,
+it
   },
+
+googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
+dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"State"];
+es=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="ES"&&#["sub_region_1"]==""&],"Spain"];
+it=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"Italy"];
+fr=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="FR"&&#["sub_region_1"]==""&],"France"];
   
-  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
+
+  rawCsvTable = {dates,fr,es,it};
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = 1-1.2*rawCsvTable[[2;;,2;;]];
+  stateDistancings = rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
 
@@ -309,6 +321,126 @@ stateDistancingPrecompute = Module[{
 
   Association[MapThread[processState, {stateLabels, stateDistancings}]]
 ];
+
+
+(* grab state distancing data and return smoothed distancing functions for each scenario in the list of scenarios provided. *)
+(* data from https://docs.google.com/spreadsheets/d/13woalkLKdCHG1x1jTzR3rrYiYOPlNAKyaLVChZgenu8/edit#gid=1922212346 *)
+(* TODO: we need to be able to split this up into a scenario dependent part and a non-scenario dependent part for fitting parameters *)
+usStateDistancingPrecompute = Module[{
+    totalDays,
+    rawCsvTable,
+    stateLabels,
+    dataDays,
+    stateDistancings,
+    countStates,
+    fullDays,
+    processScenario,
+    processState,
+    smoothing,
+    SlowJoin,
+    ApplyWhere,
+    dates,stateDistancing
+  },
+  
+  dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="Virginia"&&#["sub_region_2"]==""&],"State"];
+
+  stateDistancing[state_]:=Module[{stateName},
+   stateName=codesToStates[state];	
+
+   Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]==stateName&&#["sub_region_2"]==""&],state]
+  ];
+
+  rawCsvTable=Prepend[stateDistancing[#]&/@Keys[fitStartingOverrides],dates];
+  
+  (*rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];*)
+
+  dataDays = rawCsvTable[[1,2;;]];
+  stateDistancings = (*1-1.2**)rawCsvTable[[2;;,2;;]];
+  stateLabels = rawCsvTable[[2;;,1]];
+  countStates = Length[stateLabels];
+
+  totalDays = tmax0;
+  fullDays = Range[0, totalDays];
+
+  smoothing = 3;
+  SlowJoin := Fold[Module[{smoother},
+      smoother=1-Exp[-Range[Length[#2]]/smoothing];
+      Join[#1, Last[#1](1-smoother)+#2 smoother]]&];
+  ApplyWhere[list_,condition_,func_]:=Module[{i,l},
+    i=Pick[Range[Length[list]],Map[condition,list]];
+    l=list;
+    l[[i]]=func[list[[i]]];
+    l
+  ];
+
+  processScenario[scenario_, distancing_] := Module[{
+      distancingLevel,
+      fullDistancing,
+      smoothedDistancing,
+      smoothedFullDistancing,
+      distancingFunction,
+      distancingDelay
+    },
+
+    distancingLevel = If[
+      scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
+
+    (* policy distancing filled with 1s to complete a full year *)
+    fullDistancing = Join[
+      (* pre-policy distancing - constant at 1 *)
+      ConstantArray[1., IntegerPart[Min[dataDays]]],
+      (* historical distancing data *)
+      distancing,
+      (* for any gap between the last day of data and today, fill in with the average of the last three days of data *)
+      ConstantArray[Mean[distancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
+      (* moving average going forward in the scenario *)
+      ConstantArray[distancingLevel, scenario["distancingDays"]],
+      (* post-policy distancing - constant at 1 *)
+      ConstantArray[1.,
+        totalDays - scenario["distancingDays"] - today]];
+
+    smoothedDistancing = ApplyWhere[
+      distancing,
+      #<1&,
+      GaussianFilter[#,smoothing]&];
+
+    smoothedFullDistancing = SlowJoin[{
+        ConstantArray[1., IntegerPart[Min[dataDays]]],
+        smoothedDistancing,
+        ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
+        ConstantArray[distancingLevel, scenario["distancingDays"]],
+        ConstantArray[1., totalDays - scenario["distancingDays"] - today]
+    }];
+
+    distancingDelay = 5;
+    Which[
+      distancingDelay>0,
+      smoothedFullDistancing=Join[ConstantArray[1,distancingDelay], smoothedFullDistancing[[;;-distancingDelay-1]]];,
+      distancingDelay<0,
+      smoothedFullDistancing=Join[smoothedFullDistancing[[distancingDelay+1;;]], ConstantArray[1,Abs[distancingDelay]]];
+    ];
+
+    distancingFunction = Interpolation[
+      Transpose[{
+          fullDays,
+          smoothedFullDistancing}],
+      InterpolationOrder->3];
+
+    scenario["id"]-><|
+      "distancingDays"->fullDays,
+      "distancingLevel"->distancingLevel,
+      "distancingData"->fullDistancing,
+      "distancingFunction"->distancingFunction|>
+  ];
+
+  processState[state_,distancing_] := state->Association[
+    Map[processScenario[#, distancing]&, scenarios]];
+
+  Association[MapThread[processState, {stateLabels, stateDistancings}]]
+];
+
+
+stateDistancingPrecompute = Merge[{countryDistancingPrecompute,usStateDistancingPrecompute},First];
 
 
 maxPosTestDay=Max[#["day"]&/@statePositiveTestData];

@@ -100,32 +100,35 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1,"powupper"->2|>,
+  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
-  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.95,"repupper"->1.05,"powlower"->1,"powupper"->2|>,
-  "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.5,"powupper"->2|>,
-  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
+  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.95,"repupper"->1.05,"powlower"->1.8,"powupper"->2|>,
+  "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
+  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.8,"powupper"->2|>,
   "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.7,"repupper"->0.9,"powlower"->1.5,"powupper"->2|>,
-  "CT"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->75,"replower"->0.3,"repupper"->0.8,"powlower"->1,"powupper"->2|>,
-  "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.45,"repupper"->0.7,"powlower"->1.6,"powupper"->2|>,
-  "NY"-><|"rlower"->4,"rupper"->5,"tlower"->30,"tupper"->35,"replower"->0.25,"repupper"->0.6,"powlower"->1,"powupper"->2|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1,"powupper"->2|>,
-  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->1,"powlower"->0.5,"powupper"->0.8|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->40,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.8,"powupper"->2|>,
-  "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.4,"repupper"->0.5,"powlower"->1,"powupper"->2|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1,"powupper"->2|>,
-  "MA"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->46,"replower"->0.55,"repupper"->0.65,"powlower"->1,"powupper"->1.2|>,
-  "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.6,"powlower"->1.3,"powupper"->2|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.6,"powlower"->1.45,"powupper"->2|>,
-  "NJ"-><|"rlower"->4.8,"rupper"->6,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.2,"powupper"->2|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.75,"repupper"->0.9,"powlower"->1.5,"powupper"->2|>,
+  "CT"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->75,"replower"->0.3,"repupper"->0.8,"powlower"->1.8,"powupper"->2|>,
+  "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.45,"repupper"->0.6,"powlower"->1.6,"powupper"->2|>,
+  "NY"-><|"rlower"->4.6,"rupper"->5,"tlower"->30,"tupper"->34,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
+  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->40,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
+  "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.45,"powlower"->1.5,"powupper"->2|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
+  "MA"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->46,"replower"->0.55,"repupper"->0.65,"powlower"->1.5,"powupper"->2|>,
+  "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.6,"powlower"->1.45,"powupper"->2|>,
+  "NJ"-><|"rlower"->4.8,"rupper"->6,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
   "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6,"powlower"->1.8,"powupper"->2|>,
-  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.25,"repupper"->0.45,"powlower"->1.5,"powupper"->2|>,
+  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.5,"powlower"->1.5,"powupper"->2|>,
   "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.4,"powlower"->1.7,"powupper"->2|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1.7,"powupper"->2|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1.9,"powupper"->2|>,
   "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.65,"powlower"->1,"powupper"->2|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->44,"replower"->0.5,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7,"powlower"->1.7,"powupper"->2.5|>
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7,"powlower"->1.7,"powupper"->2.5|>(*,
+  "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
+  "France"-><|"rlower"->2.8,"rupper"->4.6,"tlower"\[Rule]25,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1,"powupper"->2.5|>,
+  "Italy"-><|"rlower"\[Rule]3.5,"rupper"\[Rule]5,"tlower"\[Rule]10,"tupper"\[Rule]15,"replower"->0.2,"repupper"->0.4,"powlower"->1,"powupper"\[Rule]1.25|>*)
 |>;
 
 getBounds[state_]:=Module[{},
@@ -227,10 +230,10 @@ getStateParams[state_]:=Module[{raw,pop,dist,buckets},
     "population"->pop,
     "importtime0"->If[!KeyExistsQ[stateImportTime, state],Min[#["day"]&/@Select[parsedData,(#["state"]==state&&#["positive"]>=50)&]] - 20,stateImportTime[state]], (* importtime 20 days before 50 PCR confirmed reached *)
     "ventilators"->ventilators[state],
-    "icuBeds"->stateICUData[state]["icuBeds"],
-    "staffedBeds"->stateICUData[state]["staffedBeds"],
-    "bedUtilization"->stateICUData[state]["bedUtilization"],
-    "hospitalCapacity"->(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],
+    "icuBeds"->If[KeyExistsQ[stateICUData, "state"],stateICUData[state]["icuBeds"],0],
+    "staffedBeds"->If[KeyExistsQ[stateICUData, "state"],stateICUData[state]["staffedBeds"],0],
+    "bedUtilization"->If[KeyExistsQ[stateICUData, "state"],stateICUData[state]["bedUtilization"],0],
+    "hospitalCapacity"->If[KeyExistsQ[stateICUData, "state"],(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],0],
     "pS"->Sum[noCare[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pH"->Sum[infectedHospitalized[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pC"->Sum[infectedCritical[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
@@ -281,7 +284,7 @@ est - initial infection impulse (eg from imported cases at importtime)
 generateModelComponents[distancing_] := <|
   "equationsODE" -> Flatten[{
       (* susceptible, binned by susceptibility; the sum of all sSq[i]'s would be Sq, the full susceptible population *)
-      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * susceptibilityValues[[i]]*sSq[i][t] - est[t]*sSq[i][t],
+      Table[sSq[i]'[t]==-distancing[t]^distpow * r0natural * susceptibilityValues[[i]]*sSq[i][t] * (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) - est[t]*sSq[i][t],
         {i,1,susceptibilityBins}],
       (* Exposed *)
       Eq'[t]==distancing[t]^distpow * r0natural *  (ISq[t] / daysUntilNotInfectious + (IHq[t]+ICq[t]) / daysUntilHospitalized) * Sum[susceptibilityValues[[i]]*sSq[i][t],{i,1,susceptibilityBins}] + est[t]*Sum[sSq[i][t],{i,1,susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
@@ -666,7 +669,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   timeSeriesData = Module[{},
     Table[Association[{
           "day"->t,
-          "distancing"->distancing[t],
+          "distancing"->distancing[t]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}],
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
           "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1],
           "dailyPcr" -> Merge[{
@@ -1011,7 +1014,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 
   output = Merge[{
       <|"scenarios"->
-        Association[{#["id"]->evaluateScenario[state,fitParams,standardErrors,
+        Association[
+             {#["id"]->evaluateScenario[state,fitParams,standardErrors,
               <|"params"->params,
                 "thisStateData"->thisStateData,
                 "icuCapacity"->icuCapacity,
@@ -1026,7 +1030,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "numberOfSimulations"->numberOfSimulations,
-      "dateModelRun"->DateString[Today[]],
+      "dateModelRun"->DateString[Today],
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
       "parameters"->paramExpected,
@@ -1124,7 +1128,7 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides]] := Module[{days},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;
+    (*Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;*)
     exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios;
     days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
 
@@ -1178,7 +1182,7 @@ fitManipulate[state_:"OH"] := Module[{params, distancing, modelComponents, logTr
 outputODE, thisStateData, hospitalizationCumulativeData, icuCumulativeData, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
 params=stateParams[state];
 distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
-modelComponents = generateModelComponents[distancing];
+modelComponents = generateModelComponents[distancing, testingProbability];
 logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
   equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   eventsODE = modelComponents["parametricFitEvents"]/.logTransform;
