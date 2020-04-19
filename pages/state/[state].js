@@ -60,12 +60,15 @@ export default function StatePage() {
           .controls-container {
             position: sticky;
             z-index: 50;
-            top: 52px;
+            top: 51px;
             background: ${theme.color.background};
+            box-shadow: 0 2px ${theme.color.shadow[0]};
           }
           .controls {
             padding: var(--spacing1) 0;
-            box-shadow: 0 2px ${theme.color.shadow[0]};
+          }
+          .graph-size {
+            margin: 0 calc(${theme.column.width} * -1);
           }
         `}</style>
         <Suspense fallback={<div />}>
@@ -82,7 +85,7 @@ export default function StatePage() {
         </Suspense>
         <div className="flex flex-col justify-center">
           <Section className="margin-top-4">
-            <div ref={sizeRef} />
+            <div className="graph-size" ref={sizeRef} />
             <div className="text-jumbo margin-bottom-1">
               <span className="nowrap">Modeling COVID-19</span>{' '}
               <span className="nowrap">in {stateName}</span>

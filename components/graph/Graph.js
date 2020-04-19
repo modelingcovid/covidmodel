@@ -140,7 +140,7 @@ export const GraphContents = React.memo(function Graph({
         <style jsx>{`
           .graph {
             position: relative;
-            margin-left: ${-1 * margin.left}px;
+            margin-left: calc(${-1 * margin.left}px - ${theme.column.width});
             margin-right: ${-1 * margin.right}px;
             background: ${theme.color.background};
             animation: fade-in 300ms ease-in both;

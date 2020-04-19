@@ -13,8 +13,9 @@ export function Gutter({children, ...remaining}) {
         }
         @media (min-width: 600px) {
           div {
-            padding-left: ${theme.spacing[1]};
-            max-width: calc(${theme.column.width} * 3);
+            padding-left: ${theme.spacing[2]};
+            max-width: calc(${theme.column.width} * 4);
+            margin-right: calc(${theme.column.width} * -1);
           }
         }
       `}</style>

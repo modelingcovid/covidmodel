@@ -159,8 +159,7 @@ text {
   letter-spacing: -0.02em;
 }
 .estimation {
-  padding: var(--spacing1);
-  padding-left: var(--spacing2);
+  padding: var(--spacing1) var(--spacing2);
   box-shadow: inset 3px 0 var(--color-yellow2);
   background: var(--color-gray-bg);
 }
@@ -309,7 +308,9 @@ body,
   margin-top: var(--spacing5);
 }
 @media (min-width: 600px) {
-  .dek,
+  .dek {
+    max-width: calc(var(--column-width) * 10);
+  }
   .section-heading {
     max-width: calc(var(--column-width) * 10);
   }
