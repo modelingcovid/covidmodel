@@ -116,7 +116,7 @@ export default function StatePage() {
             <SEIR width={width} height={height} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
-            {/* <TestAndTrace width={width} height={height} /> */}
+            <TestAndTrace width={width} height={height} />
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
           </Section>

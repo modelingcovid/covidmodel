@@ -44,9 +44,17 @@ export const TestAndTrace = ({width, height}) => {
       </Paragraph>
       <OrderedList>
         <ListItem>
-          <strong>Herd immunity:</strong> A population develops herd immunity
-          when enough members have built up immunity to a virus through either
-          infection or vaccination, at which point the disease is contained.
+          <strong>Herd immunity:</strong> A population develops{' '}
+          <a
+            href="https://academic.oup.com/cid/article/52/7/911/299077"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            herd immunity
+          </a>{' '}
+          when enough members have built up immunity to a disease through either
+          infection or vaccination, at which point the disease can no longer
+          spread through the population.
         </ListItem>
         <ListItem>
           <strong>Test and trace:</strong> This approach attempts to contain the
