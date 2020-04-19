@@ -14,7 +14,7 @@ export const Grid = ({children, mobile = 2, desktop = 3, ...remaining}) => (
         div {
           grid-template-columns: repeat(${desktop}, minmax(0, 1fr));
           grid-gap: ${theme.spacing[3]};
-          margin: 0 calc(${theme.column.width} * -1);
+          margin-right: calc(${theme.column.width} * -1);
         }
       }
     `}</style>

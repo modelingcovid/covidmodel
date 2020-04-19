@@ -68,7 +68,7 @@ export default function StatePage() {
             padding: var(--spacing1) 0;
           }
           .graph-size {
-            margin: 0 calc(${theme.column.width} * -1);
+            margin-right: calc(${theme.column.width} * -1);
           }
         `}</style>
         <Suspense fallback={<div />}>
