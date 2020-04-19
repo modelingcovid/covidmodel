@@ -1,9 +1,9 @@
 {
 	"parameterBest":{
-		"r0natural":3.6030648659906563,
-		"importtime":3.989381136840853e1,
-		"stateAdjustmentForTestingDifferences":1.0264399368272512,
-		"distpow":1.2140329035722128
+		"r0natural":3.6029187698919283,
+		"importtime":3.989474848269364e1,
+		"stateAdjustmentForTestingDifferences":1.0264352389567746,
+		"distpow":1.2140228971006906
 	},
 	"population":20278447,
 	"ventilators":4307,
@@ -18,14 +18,14 @@
 	"pPCRH":0.8464907407879908,
 	"fractionOfCriticalDeceased":0.5110143457864949,
 	"initialInfectionImpulse":1.5621096351519812e1,
-	"r0":3.6030648659906563,
-	"importtime":3.989381136840853e1,
+	"r0":3.6029187698919283,
+	"importtime":3.989474848269364e1,
 	"numberOfSimulations":100,
-	"stateAdjustmentForTestingDifferences":1.0264399368272512,
-	"distpow":1.2140329035722128,
+	"stateAdjustmentForTestingDifferences":1.0264352389567746,
+	"distpow":1.2140228971006906,
 	"parameters":{
 		"r0":{
-			"value":3.6030648659906563,
+			"value":3.6029187698919283,
 			"name":"Basic reproduction number",
 			"description":"The basic reproduction number.",
 			"type":"fit"
@@ -85,7 +85,7 @@
 			"type":"literature"
 		},
 		"importtime":{
-			"value":3.989381136840853e1,
+			"value":3.989474848269364e1,
 			"name":"Import Time",
 			"description":"The day that COVID-19 was seeded into that state.",
 			"type":"fit"
@@ -121,13 +121,13 @@
 			"type":"literature"
 		},
 		"stateAdjustmentForTestingDifferences":{
-			"value":1.0264399368272512,
+			"value":1.0264352389567746,
 			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
 			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 			"type":"fit"
 		},
 		"distancePower":{
-			"value":1.2140329035722128,
+			"value":1.2140228971006906,
 			"name":"Power of the distancing function",
 			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 			"type":"fit"
@@ -140,16 +140,16 @@
 		}
 	},
 	"goodnessOfFitMetrics":{
-		"chiSquared":1.0925592196049513e-5,
-		"rmsRelativeError":0.6051828332385111,
-		"rmsRelativeErrorDeaths":0.2964642788567249,
-		"rmsRelativeErrorPcr":0.8028707583759325,
-		"meanRelativeErrorDeaths":-0.21099373609642286,
-		"meanRelativeErrorPcr":-0.5370746312153558,
-		"rSquaredDeaths":1.7703600850457725e-2,
-		"rSquaredPcr":4.007776305974171e-2,
-		"deathResidual7Day":7.336990502725067e-2,
-		"pcrResidual7Day":-1.511581549804064e2
+		"chiSquared":1.0645980585342048e-5,
+		"rmsRelativeError":0.6123343191880016,
+		"rmsRelativeErrorDeaths":0.29939186199804924,
+		"rmsRelativeErrorPcr":0.8125707045422005,
+		"meanRelativeErrorDeaths":-0.21333170964194798,
+		"meanRelativeErrorPcr":-0.5462402038880398,
+		"rSquaredDeaths":1.7289146347342046e-2,
+		"rSquaredPcr":3.608933379237187e-2,
+		"deathResidual7Day":7.443387039035952e-2,
+		"pcrResidual7Day":-1.510608907942384e2
 	},
 	"scenarios":"scenario4"
 }

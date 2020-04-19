@@ -1026,6 +1026,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "numberOfSimulations"->numberOfSimulations,
+      "dateModelRun"->DateString[Today[]],
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
       "parameters"->paramExpected,
