@@ -326,6 +326,10 @@ body,
   color: var(--color-gray6);
 }
 
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
 .focus:focus,
 .focus-within:focus-within {
   box-shadow: 0 0 0 1px var(--color-focus1), 0 0 0 4px var(--color-focus0);

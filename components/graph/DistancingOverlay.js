@@ -24,7 +24,7 @@ export function DistancingOverlay() {
       {hasDistancing && (
         <VMarker value={distancingDate} strokeDasharray="4,2" />
       )}
-      <g transform={`translate(${todayX}, -12)`}>
+      <g transform={`translate(${todayX}, -16)`}>
         <text
           fill={theme.color.gray[2]}
           x={width / 2}

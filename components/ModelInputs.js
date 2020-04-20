@@ -159,7 +159,7 @@ export function ModelInputs({height, width, ...remaining}) {
       <Paragraph>
         We use the data available to us — reported positive tests,
         hospitalizations, and fatalities (among others) — to estimate when
-        COVID-19 reached a location and how contaigious it is under those
+        COVID-19 reached a location and how contagious it is under those
         conditions.
       </Paragraph>
       <Estimation status={false}>
