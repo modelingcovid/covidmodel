@@ -112,7 +112,7 @@ export default function StatePage() {
             </Section>
           </div>
           <Section className="margin-top-3">
-            <ModelInputs width={width} height={160} />
+            <ModelInputs width={width} height={192} />
             <SEIR width={width} height={height} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />

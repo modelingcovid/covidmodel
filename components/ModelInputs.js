@@ -122,10 +122,13 @@ export function ModelInputs({height, width, ...remaining}) {
       <Paragraph>
         When social distancing measures are introduced, it becomes more
         difficult for a disease to spread through a population. We represent
-        this using{' '}
-        <strong>
+        this using
+        <InlineLabel
+          color={theme.color.magenta[1]}
+          fill={theme.color.magenta[1]}
+        >
           R<sub>t</sub>
-        </strong>
+        </InlineLabel>
         , the <strong>effective reproduction number</strong>. R<sub>t</sub>{' '}
         represents how many people a single case of the disease will spread to
         at a given point in time, taking social distancing measures into
@@ -143,6 +146,7 @@ export function ModelInputs({height, width, ...remaining}) {
       </Graph>
       <Gutter>
         <LegendRow
+          color={theme.color.magenta[1]}
           label={
             <>
               R<sub>t</sub>

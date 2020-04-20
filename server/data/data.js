@@ -27,6 +27,8 @@ export const decorateLocationSummary = (data, locationId) => {
     'scenario3',
     'scenario4',
     'scenario5',
+    'scenario6',
+    'scenario7',
   ];
 };
 

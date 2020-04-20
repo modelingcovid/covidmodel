@@ -98,10 +98,12 @@ export const Select = React.memo(function Select({
           margin-top: var(--spacing0);
           max-height: 50vh;
           min-width: 180px;
+          max-width: 45ch;
           overflow-y: auto;
           border-top: 0;
           background: var(--color-background);
           transition: opacity 100ms ease-in-out, transform 250ms ease-in-out;
+          line-height: 1.4;
         }
         .closed {
           opacity: 0;

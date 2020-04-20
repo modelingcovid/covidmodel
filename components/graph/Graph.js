@@ -58,7 +58,7 @@ export const GraphContents = React.memo(function Graph({
   const data = dataFn();
   const [scale, setScale] = useState(initialScale);
   const margin = decoration
-    ? {top: 32, left: 16, right: 16, bottom: 32}
+    ? {top: 48, left: 16, right: 16, bottom: 32}
     : {top: 0, left: 0, right: 0, bottom: 0};
   const width = propWidth + margin.left + margin.right;
 

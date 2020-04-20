@@ -336,7 +336,7 @@ textarea:focus,
   outline: none;
   border-radius: 2px;
 }
-.focus-within:focus-within .focus:focus {
+.focus-within:focus-within *:focus {
   box-shadow: none;
 }
 

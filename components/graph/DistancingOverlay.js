@@ -9,14 +9,16 @@ import {theme} from '../../styles';
 const {useCallback, useEffect, useRef} = React;
 
 export function DistancingOverlay() {
-  const scenario = useDistancingInfo();
-  const {distancingDate, distancingLevel} = scenario;
+  const [scenario, distancingDate] = useDistancingInfo();
+  const {distancingLevel} = scenario;
   const hasDistancing = distancingLevel !== 1;
 
   const {xScale, xMax, yMax} = useGraphData();
   const todayX = xScale(today);
   const distancingX = Math.min(xScale(distancingDate), xMax);
   const width = distancingX - todayX;
+  const scenarioLines = formatScenario(scenario).split('\n');
+  const lastIndex = scenarioLines.length - 1;
 
   return (
     <>
@@ -25,14 +27,18 @@ export function DistancingOverlay() {
         <VMarker value={distancingDate} strokeDasharray="4,2" />
       )}
       <g transform={`translate(${todayX}, -16)`}>
-        <text
-          fill={theme.color.gray[2]}
-          x={width / 2}
-          y="-4"
-          textAnchor="middle"
-        >
-          {formatScenario(scenario)}
-        </text>
+        {scenarioLines.map((text, i) => (
+          <text
+            key={i}
+            fill={theme.color.gray[2]}
+            x={width / 2}
+            y={-6 - 16 * (lastIndex - i)}
+            textAnchor="middle"
+          >
+            {text}
+          </text>
+        ))}
+
         <rect x="0" y="0" width="1" height="7" fill={theme.color.shadow[2]} />
         {hasDistancing && (
           <>

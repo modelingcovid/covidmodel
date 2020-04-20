@@ -4,14 +4,14 @@ import {today, addDays} from '../../lib/date';
 
 export function useDistancingInfo() {
   const {scenarioData} = useModelState();
-  const {distancingDays, distancingLevel} = scenarioData();
-  const hasDistancing = distancingLevel !== 1;
+  const scenario = scenarioData();
   return useMemo(
-    () => ({
-      distancingDays,
-      distancingLevel,
-      distancingDate: hasDistancing ? addDays(today, distancingDays) : today,
-    }),
-    [distancingDays, distancingLevel]
+    () => [
+      scenario,
+      scenario.distancingLevel !== 1
+        ? addDays(today, scenario.distancingDays)
+        : today,
+    ],
+    [scenario]
   );
 }
