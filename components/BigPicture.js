@@ -15,15 +15,22 @@ import {
 import {Area, Graph, Line, WithGraphData, useNearestData} from './graph';
 import {
   CurrentDate,
+  CurrentScenario,
   Estimation,
   useModelState,
   useLocationData,
 } from './modeling';
+import {
+  formatDistancingLevel,
+  formatDistancingDurationTerse,
+  formatScenarioName,
+} from '../lib/controls';
 import {getLastDate} from '../lib/date';
 import {
   formatShortDate,
   formatNumber,
-  formatLargeNumber,
+  formatLargeNumberVerbose,
+  formatPercent,
   formatPercent1,
 } from '../lib/format';
 import {stackAccessors} from '../lib/stack';
@@ -44,15 +51,39 @@ function PercentCases() {
   );
 }
 
-export function SEIR({height, width}) {
-  const {location} = useModelState();
+function Population() {
+  const {population} = useLocationData();
+  return (
+    <InlineData length={12}>
+      {() => formatLargeNumberVerbose(population())}
+    </InlineData>
+  );
+}
+
+export function BigPicture({height, width}) {
+  const {location, scenarioData} = useModelState();
   const {population, domain} = useLocationData();
 
   const {label} = useSEIRConfig();
 
   return (
     <div className="margin-top-3 flow-root">
-      <Title className="margin-bottom-3">Projections</Title>
+      <Title className="margin-bottom-3">The big picture</Title>
+      <Paragraph>
+        To illustrate how social distancing can impact the spread of COVID-19,
+        let’s consider an example:
+      </Paragraph>
+      <Paragraph className="pullquote">
+        What would happen if <strong>{location.name}</strong> enacted a policy
+        that set social distancing levels to{' '}
+        <strong>
+          <CurrentScenario format={formatDistancingLevel} length={3} />{' '}
+        </strong>
+        (the same levels used in{' '}
+        <CurrentScenario format={formatScenarioName} length={5} />) and then
+        completely lifted distancing restrictions after{' '}
+        <CurrentScenario format={formatDistancingDurationTerse} length={7} />?
+      </Paragraph>
       <Paragraph>
         Our model is based upon a standard epidemiological model called{' '}
         <strong>the SEIR model</strong>. The SEIR model is a{' '}
@@ -92,59 +123,25 @@ export function SEIR({height, width}) {
           have passed away due to COVID-19.
         </ListItem>
       </UnorderedList>
-      <div className="relative">
-        <div
-          style={{
-            position: 'absolute',
-            top: theme.spacing[4],
-            right: theme.spacing[1],
-            background: theme.color.background,
-            zIndex: 2,
-            boxShadow: `0 0 4px ${theme.color.gray[2]}`,
-          }}
-        >
-          <SEIRGraph
-            domain={() => population() * 1.05}
-            height={height / 4}
-            width={width / 8}
-            scrubber={false}
-            decoration={false}
-          >
-            {({xMax, yMax, yScale}) => {
-              const midY = yScale(domain.seir());
-              const strokeWidth = 1;
-              return (
-                <rect
-                  x="0"
-                  y={midY}
-                  width={xMax - strokeWidth}
-                  height={yMax - midY - strokeWidth}
-                  fill={theme.color.shadow[1]}
-                  stroke={theme.color.gray[4]}
-                  strokeWidth={strokeWidth}
-                />
-              );
-            }}
-          </SEIRGraph>
-        </div>
-        <SEIRGraph domain={domain.seir} height={height} width={width} />
-        <SEIRGutter />
-        <Paragraph className="margin-top-2">
-          This graph shows how COVID-19 affects the population of{' '}
-          {location.name} over time. While only a small portion of the
-          population actively has COVID-19 at any given time, it can quickly
-          spread. The graph in the top right shows how small changes compound to
-          impact the population as a whole.
-        </Paragraph>
-        <Estimation>
-          The model estimates that{' '}
-          <strong>
-            <PercentCases />
-          </strong>{' '}
-          of the {location.name} population will have contracted COVID-19 by{' '}
-          <CurrentDate />.
-        </Estimation>
-      </div>
+      <SEIRGraph
+        domain={population}
+        height={height}
+        width={width}
+        scrubber={false}
+      />
+      <Paragraph>
+        <strong>
+          <Population /> people
+        </strong>{' '}
+        live in {location.name}. During the distancing period, infections taper
+        off to nearly nothing. After the distancing period ends, the infections
+        return—first slowly, then rapidly and then taper off without infecting
+        the entire population.
+      </Paragraph>
+      <Paragraph>
+        After distancing ends, why doesn’t the entire population become
+        infected? This is called “herd immunity.”
+      </Paragraph>
     </div>
   );
 }

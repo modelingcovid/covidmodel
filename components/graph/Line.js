@@ -20,7 +20,7 @@ export const Line = ({
   dot = true,
   ...remaining
 }) => {
-  const {clipPath, data, x, xMax, xScale, yScale} = useGraphData();
+  const {clipPath, data, scrubber, x, xMax, xScale, yScale} = useGraphData();
   const xMaxPrev = usePreviousValue(xMax);
 
   const xFn = useCallback((...d) => xScale(x(...d)), [x, xMax, xScale]);
@@ -38,7 +38,9 @@ export const Line = ({
         strokeWidth={strokeWidth}
         immediate={xMax !== xMaxPrev}
       />
-      {dot && <NearestCircle y={y} fill={stroke} clipPath={clipPath} />}
+      {scrubber && dot && (
+        <NearestCircle y={y} fill={stroke} clipPath={clipPath} />
+      )}
     </>
   );
 };

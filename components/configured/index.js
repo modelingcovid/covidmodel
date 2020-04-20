@@ -3,6 +3,7 @@ export * from './DistancingGraph';
 export * from './LocationMap';
 export * from './LocationMenu';
 export * from './PopulationGraph';
+export * from './SEIR';
 export * from './ScenarioSelect';
 export * from './StateSelect';
 export * from './useCurrentLocation';

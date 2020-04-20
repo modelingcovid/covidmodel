@@ -44,6 +44,7 @@ export const TestAndTrace = ({width, height}) => {
       </Paragraph>
       <OrderedList>
         <ListItem>
+          {/* https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html */}
           <strong>Herd immunity:</strong> A population develops “
           <a
             href="https://apic.org/monthly_alerts/herd-immunity/"

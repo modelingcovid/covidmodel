@@ -10,10 +10,10 @@ export const ScaleGradient = React.memo(function ScaleGradient({
   x,
   y,
   color,
-  size,
+  width,
 }) {
   return (
-    <LinearGradient id={id} direction="right" size={size}>
+    <LinearGradient id={id} direction="right" size={width}>
       {maybe(data).map((d, i) => (
         <Stop
           key={i}
