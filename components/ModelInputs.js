@@ -82,12 +82,12 @@ export function ModelInputs({height, width, ...remaining}) {
             prospective social distancing levels
           </InlineLabel>{' '}
           based on the scenario selected above.
-          <Instruction>
-            <strong>Reading the graph:</strong> The background of the graph
-            corresponds to the amount of social distancing at a given time. This
-            is also included on later graphs.
-          </Instruction>
         </Paragraph>
+        <Instruction>
+          <strong>Reading the graph:</strong> The background of the graph
+          corresponds to the amount of social distancing at a given time. This
+          is also included on later graphs.
+        </Instruction>
       </WithCitation>
       <DistancingGraph
         formatDistancing={formatDistancing}

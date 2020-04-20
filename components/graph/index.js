@@ -1,7 +1,7 @@
 export * from './Area';
 export * from './Axis';
 export * from './DistancingGradient';
-export * from './DistancingMarker';
+export * from './DistancingOverlay';
 export * from './Graph';
 export * from './GraphControls';
 export * from './Legend';
@@ -14,7 +14,6 @@ export * from './NearestOverlay';
 export * from './Points';
 export * from './ScaleGradient';
 export * from './Scrubber';
-export * from './TodayMarker';
 export * from './useGraphData';
 export * from './useNearestPoint';
 export * from './useNearestData';

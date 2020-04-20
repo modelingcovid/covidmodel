@@ -5,12 +5,10 @@ import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {useDistancingId} from './DistancingGradient';
-import {DistancingMarker} from './DistancingMarker';
 import {DistancingOverlay} from './DistancingOverlay';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
-import {TodayMarker} from './TodayMarker';
 import {GraphDataProvider, useGraphData} from './useGraphData';
 import {Suspense, useComponentId} from '../util';
 import {useModelState} from '../modeling';
@@ -60,7 +58,7 @@ export const GraphContents = React.memo(function Graph({
   const data = dataFn();
   const [scale, setScale] = useState(initialScale);
   const margin = decoration
-    ? {top: 16, left: 16, right: 16, bottom: 32}
+    ? {top: 32, left: 16, right: 16, bottom: 32}
     : {top: 0, left: 0, right: 0, bottom: 0};
   const width = propWidth + margin.left + margin.right;
 
@@ -189,8 +187,7 @@ export const GraphContents = React.memo(function Graph({
               {decoration && (
                 <>
                   <NearestMarker />
-                  <TodayMarker />
-                  <DistancingMarker />
+                  <DistancingOverlay />
                   <GridRows
                     scale={yScale}
                     width={xMax}
@@ -233,7 +230,6 @@ export const GraphContents = React.memo(function Graph({
           </Group>
         </svg>
         <div className="graph-overlay">
-          {decoration && <DistancingOverlay />}
           {scrubber && (
             <Scrubber>
               {(nearest, active) => formatShortDate(x(nearest()))}
