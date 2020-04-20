@@ -4,18 +4,8 @@
 	"distancingDays":90,
 	"maintain":false,
 	"name":"Normal",
-	"events":{
-		"herd":{
-			"eventName":"herd",
-			"day":1.3802025970926607e2,
-			"thresholdCrossed":0.7000000000000002
-		},
-		"icu":{
-			"eventName":"icu",
-			"day":7.059059182153978e2,
-			"thresholdCrossed":-2.871453695004483e-28
-		}
-	},
+	"gradual":false,
+	"events":{},
 	"summary":{
 		"totalProjectedDeaths":7.291416737926376e4,
 		"totalProjectedPCRConfirmed":1.505144754010453e6,
@@ -30,7 +20,7 @@
 		"fractionDeathOfHospitalized":0.13720649557978104,
 		"fractionOfInfectionsPCRConfirmed":0.2511529984964786,
 		"dateContained":"Sat 8 Aug 2020 00:00:00",
-		"dateICUOverCapacity":"Sun 5 Dec 2021 21:44:31",
+		"dateICUOverCapacity":"",
 		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
@@ -47,7 +37,7 @@
 		"fractionDeathOfHospitalized":0.13662476147098493,
 		"fractionOfInfectionsPCRConfirmed":0.25111999374815236,
 		"dateContained":"Sat 8 Aug 2020 00:00:00",
-		"dateICUOverCapacity":"Sun 5 Dec 2021 21:44:31",
+		"dateICUOverCapacity":"",
 		"dateHospitalsOverCapacity":""
 	}
 }

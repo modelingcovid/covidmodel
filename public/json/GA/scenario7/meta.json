@@ -1,0 +1,60 @@
+{
+	"distancingLevel":0.5304761904761904,
+	"id":"scenario7",
+	"distancingDays":60,
+	"maintain":true,
+	"postDistancingLevel":1,
+	"name":"Open Gradual May 1",
+	"gradual":true,
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.7843104426748604e2,
+			"thresholdCrossed":0.6999999999999993
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":4.3657062462397874e2,
+			"thresholdCrossed":-3.4896682092080855e-25
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":4.365696858722548e2,
+			"thresholdCrossed":-3.015176730332355e-21
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":7.241985843758726e4,
+		"totalProjectedPCRConfirmed":2.408037561136185e6,
+		"totalProjectedInfected":8.366497798930685e6,
+		"totalInfectedFraction":0.8201134228906136,
+		"fatalityRate":8.655934678766446e-3,
+		"fatalityRateSymptomatic":1.2365620969666353e-2,
+		"fatalityRatePCR":3.0074222930068156e-2,
+		"fractionOfSymptomaticHospitalized":6.903981267055913e-2,
+		"fractionOfPCRHospitalized":0.22358458942872667,
+		"fractionHospitalizedInICU":0.26726682756597875,
+		"fractionDeathOfHospitalized":9.855947957925561e-2,
+		"fractionOfInfectionsPCRConfirmed":0.28781906348483766,
+		"dateContained":"Sun 27 Sep 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 11 Mar 2021 13:41:41",
+		"dateHospitalsOverCapacity":"Thu 11 Mar 2021 13:40:20"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":6.179673649733039e4,
+		"totalProjectedPCRConfirmed":2.3558144875632836e6,
+		"totalProjectedInfected":8.300418619839746e6,
+		"totalInfectedFraction":0.8136361102744556,
+		"fatalityRate":7.445014441756372e-3,
+		"fatalityRateSymptomatic":1.0635734916794816e-2,
+		"fatalityRatePCR":2.6231580128047056e-2,
+		"fractionOfSymptomaticHospitalized":6.693275708117598e-2,
+		"fractionOfPCRHospitalized":0.21951275167051756,
+		"fractionHospitalizedInICU":0.2672668275659788,
+		"fractionDeathOfHospitalized":8.756096754702865e-2,
+		"fractionOfInfectionsPCRConfirmed":0.2838187560724217,
+		"dateContained":"Sun 27 Sep 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 11 Mar 2021 13:41:41",
+		"dateHospitalsOverCapacity":"Thu 11 Mar 2021 13:40:20"
+	}
+}

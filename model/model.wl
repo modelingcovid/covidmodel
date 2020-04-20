@@ -669,7 +669,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   timeSeriesData = Module[{},
     Table[Association[{
           "day"->t,
-          "distancing"->distancing[t]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}],
+          "distancing"->distancing[t],
+          "rt"->distancing[t]^fitParams["distpow"]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}],
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"],
           "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1],
           "dailyPcr" -> Merge[{
