@@ -94,13 +94,16 @@ susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibili
 
 
 
+mostRecentDistancingDay=DateString[DatePlus[DateObject[{2020,1,1}],Last[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="California"&&#["sub_region_2"]==""&]]-1]];
+
+
 (* to help the numerical optimizer we give slightly different problem bounds depening on state
 based on eg their epidemics starting earlier or having different hospital systems and thus a different
 gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
+  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.8,"powupper"->2|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
   "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.95,"repupper"->1.05,"powlower"->1.8,"powupper"->2|>,
   "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
@@ -111,7 +114,7 @@ fitStartingOverrides=<|
   "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.45,"repupper"->0.6,"powlower"->1.6,"powupper"->2|>,
   "NY"-><|"rlower"->4.6,"rupper"->5,"tlower"->30,"tupper"->34,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
-  "VT"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
+  "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1,"powlower"->1.8,"powupper"->2|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->40,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
   "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.45,"powlower"->1.5,"powupper"->2|>,
   "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
@@ -119,11 +122,11 @@ fitStartingOverrides=<|
   "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.6,"powlower"->1.45,"powupper"->2|>,
   "NJ"-><|"rlower"->4.8,"rupper"->6,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
-  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.3,"repupper"->0.6,"powlower"->1.8,"powupper"->2|>,
-  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.5,"powlower"->1.5,"powupper"->2|>,
-  "OK"-><|"rlower"->3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.4,"powlower"->1.7,"powupper"->2|>,
+  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.65,"powlower"->1.8,"powupper"->2|>,
+  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->50,"replower"->0.35,"repupper"->0.5,"powlower"->1.9,"powupper"->2|>,
+  "OK"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.4,"powlower"->1.9,"powupper"->2|>,
   "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1.9,"powupper"->2|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.65,"powlower"->1,"powupper"->2|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.65,"powlower"->1.6,"powupper"->2|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->44,"replower"->0.5,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
   "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7,"powlower"->1.7,"powupper"->2.5|>(*,
   "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
@@ -228,12 +231,11 @@ getStateParams[state_]:=Module[{raw,pop,dist,buckets},
   (*return a map of per state params to values *)
   <|
     "population"->pop,
-    "importtime0"->If[!KeyExistsQ[stateImportTime, state],Min[#["day"]&/@Select[parsedData,(#["state"]==state&&#["positive"]>=50)&]] - 20,stateImportTime[state]], (* importtime 20 days before 50 PCR confirmed reached *)
     "ventilators"->ventilators[state],
-    "icuBeds"->If[KeyExistsQ[stateICUData, "state"],stateICUData[state]["icuBeds"],0],
-    "staffedBeds"->If[KeyExistsQ[stateICUData, "state"],stateICUData[state]["staffedBeds"],0],
-    "bedUtilization"->If[KeyExistsQ[stateICUData, "state"],stateICUData[state]["bedUtilization"],0],
-    "hospitalCapacity"->If[KeyExistsQ[stateICUData, "state"],(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],0],
+    "icuBeds"->If[KeyExistsQ[stateICUData, state],stateICUData[state]["icuBeds"],0],
+    "staffedBeds"->If[KeyExistsQ[stateICUData, state],stateICUData[state]["staffedBeds"],0],
+    "bedUtilization"->If[KeyExistsQ[stateICUData, state],stateICUData[state]["bedUtilization"],0],
+    "hospitalCapacity"->If[KeyExistsQ[stateICUData, state],(1-stateICUData[state]["bedUtilization"])*stateICUData[state]["staffedBeds"],0],
     "pS"->Sum[noCare[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pH"->Sum[infectedHospitalized[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pC"->Sum[infectedCritical[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
@@ -639,6 +641,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   simDeciles[computationFunction_,simResults_:simResults]:=Quantile[Map[computationFunction, simResults], deciles];
   simMedian[computationFunction_,simResults_:simResults]:=Median[Map[computationFunction, simResults]];
+  
+  distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
 
   PCRQuantiles[t_] := simDeciles[#[PCR][t]&] * population;
   DeathQuantiles[t_] := simDeciles[#[Deaq][t]&] * population;
@@ -646,23 +650,23 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
   CurrentlyInfectedQuantiles[t_] := simDeciles[#[Eq][t]&] * population;
   CurrentlyInfectiousQuantiles[t_] := simDeciles[#[Iq][t]&] * population;
-  CumulativeHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]&] * population;
-  CumulativeCriticalQuantiles[t_] := simDeciles[#[RepHCq][t]&] * population;
+  CumulativeHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]*population &];
+  CumulativeCriticalQuantiles[t_] := simDeciles[#[RepHCq][t]*population&];
   (* TODO why does this not include people who are exposed or infectious? *)
   (* it looks like this used later on to mock up the number of people who are symptomatic; we cannot compute this quantity with the current model *)
   CumulativeInfectionQuantiles[t_] := simDeciles[#[Deaq][t] + #[Rq][t]&] * population;
   CumulativeRecoveredQuantiles[t_] := simDeciles[#[Rq][t]&] * population;
   RecoveredHospitalizedQuantiles[t_] := simDeciles[#[RHq][t]&] * population;
   RecoveredCriticalQuantiles[t_] := simDeciles[#[RCq][t]&] * population;
-  CurrentlyHospitalizedQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[HHq][t]&] * population;
-  CurrentlyCriticalQuantiles[t_] := simDeciles[(*stateParams["params"]["pPCRH"]**)#[CCq][t]&] * population;
+  CurrentlyHospitalizedQuantiles[t_] := simDeciles[Min[population*#[HHq][t],(1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"]]&];
+  CurrentlyCriticalQuantiles[t_] := simDeciles[Min[population*#[CCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1]]&];
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   DailyCumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
   CumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t]&] * population;
   
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
   
-  distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
+  
 
   (* TODO Revisit these defintions *)
   (* TODO shift all percentiles down by 1 (since index 1 is now the zeroth percentile) *)
@@ -722,7 +726,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["hospitalizationCurrentData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0
               ]|>,
-              <|"expected"-> (*stateParams["params"]["pPCRH"]**)population*sol[HHq][t - daysForHospitalsToReportCases0]|>,
+              <|"expected"-> Min[population*sol[HHq][t - daysForHospitalsToReportCases0], (1-stateParams["params"]["bedUtilization"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1])*stateParams["params"]["staffedBeds"]]|>,
               percentileMap[CurrentlyHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             },First],
           "currentlyHospitalized" -> Merge[{
@@ -761,7 +765,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
                   Select[stateParams["icuCurrentData"],(#["day"]==t)&][[1]]["icu"],
                   0
               ]|>,
-              <|"expected"-> (*stateParams["params"]["pPCRH"]**)population*sol[CCq][t - daysForHospitalsToReportCases0]|>,
+              <|"expected"-> Min[population*sol[CCq][t - daysForHospitalsToReportCases0], stateParams["params"]["icuBeds"]*If[distancing[t]>0.3,(1-0.5)/(1-0.3)*(distancing[t]-.3)+1,1]]|>,
               percentileMap[CurrentlyCriticalQuantiles[t]]
             },First],
           "susceptible" -> Merge[{
@@ -1031,7 +1035,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
       "numberOfSimulations"->numberOfSimulations,
-      "dateModelRun"->DateString[Today],
+      "dateModelRun"->DateString[Now],
+      "mostRecentDistancingDate"->mostRecentDistancingDay,
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
       "parameters"->paramExpected,
@@ -1136,7 +1141,8 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides
     Export["public/json/"<>state<>"/days.json", Select[days, #<=370&]];
     Export["public/json/"<>state<>"/summary.json",Merge[{
       KeyDrop[stateData, {"scenarios"}],
-      <|"scenarios"->#["id"]&/@scenarios|>}
+      <|"scenarios"->(#["id"]&/@scenarios)|>
+      }
     ,First]];
     stateData
   ];

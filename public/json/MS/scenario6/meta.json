@@ -6,7 +6,23 @@
 	"postDistancingLevel":1,
 	"name":"Open May 1",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.6309734598929663e2,
+			"thresholdCrossed":0.7000000000000233
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.3457447737343492e2,
+			"thresholdCrossed":2.1867109590050288e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.4533692969961845e2,
+			"thresholdCrossed":1.9975879834024106e-3
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":2.3335323548959102e4,
 		"totalProjectedPCRConfirmed":6.320330620161186e5,
@@ -21,8 +37,8 @@
 		"fractionDeathOfHospitalized":0.11380677823854027,
 		"fractionOfInfectionsPCRConfirmed":0.2878786562591937,
 		"dateContained":"Sat 19 Sep 2020 00:00:00",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Wed 13 May 2020 13:47:14",
+		"dateHospitalsOverCapacity":"Sun 24 May 2020 08:05:10"
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":2.2137849299269146e4,
@@ -38,7 +54,7 @@
 		"fractionDeathOfHospitalized":0.10932928002368408,
 		"fractionOfInfectionsPCRConfirmed":0.28659596823134714,
 		"dateContained":"Sat 19 Sep 2020 00:00:00",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Wed 13 May 2020 13:47:14",
+		"dateHospitalsOverCapacity":"Sun 24 May 2020 08:05:10"
 	}
 }
