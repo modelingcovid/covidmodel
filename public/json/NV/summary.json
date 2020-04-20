@@ -1,156 +1,165 @@
 {
-	"parameterBest":{
-		"r0natural":3.785360443683571,
-		"importtime":4.762575347544722e1,
-		"stateAdjustmentForTestingDifferences":0.5462137410660403,
-		"distpow":1.3343265457960398
-	},
-	"population":2887725,
-	"ventilators":753,
-	"icuBeds":0,
-	"staffedBeds":0,
-	"bedUtilization":0,
-	"hospitalCapacity":0,
-	"pS":0.9293695049352712,
-	"pH":5.0910657096193856e-2,
-	"pC":1.9719837968534812e-2,
-	"pPCRNH":0.1284898378973492,
-	"pPCRH":0.7907066947529183,
-	"fractionOfCriticalDeceased":0.3621077977624332,
-	"initialInfectionImpulse":1.3672006748528405e1,
-	"r0":3.785360443683571,
-	"importtime":4.762575347544722e1,
-	"numberOfSimulations":200,
-	"dateModelRun":"Mon 20 Apr 2020",
-	"stateAdjustmentForTestingDifferences":0.5462137410660403,
-	"distpow":1.3343265457960398,
-	"parameters":{
-		"r0":{
-			"value":3.785360443683571,
-			"name":"Basic reproduction number",
-			"description":"The basic reproduction number.",
-			"type":"fit"
-		},
-		"daysUntilNotInfectious":{
-			"value":5,
-			"name":"Days until not infectious",
-			"description":"The number of days it takes to lose infectiousness after starting on average.",
-			"type":"literature"
-		},
-		"daysUntilHospitalized":{
-			"value":7,
-			"name":"Days until hospitalized",
-			"description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
-			"type":"literature"
-		},
-		"daysFromInfectedToInfectious":{
-			"value":4,
-			"name":"Days from infected to infectious",
-			"description":"The number of days it takes to become infectious after being infected on average",
-			"type":"literature"
-		},
-		"daysToLeaveHosptialNonCritical":{
-			"value":12,
-			"name":"Days to leave the hospital in a non-critical case",
-			"description":"The number of days it takes to leave the hospital if you are not a critical case",
-			"type":"literature"
-		},
-		"pPCRNH":{
-			"value":0.1284898378973492,
-			"name":"Probability of getting a positive PCR test if you are not in the hospital",
-			"description":"An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.",
-			"type":"literature"
-		},
-		"pPCRH":{
-			"value":0.7907066947529183,
-			"name":"Probability of getting a positive PCR test if you are in the hospital or ICU,",
-			"description":"An age-adjusted probability that you get a positive PCR test in cases that require hospitalization or critical care",
-			"type":"literature"
-		},
-		"daysTogoToCriticalCare":{
-			"value":1.5,
-			"name":"Days to go to critical care after arriving in the hospital",
-			"description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
-			"type":"literature"
-		},
-		"daysFromCriticalToRecoveredOrDeceased":{
-			"value":10,
-			"name":"Days from an ICU admission to recovery or fatality",
-			"description":"The number of days it takes on average to resolve an ICU admission on average",
-			"type":"literature"
-		},
-		"fractionOfCriticalDeceased":{
-			"value":0.3621077977624332,
-			"name":"Fraction of ICU admissions deceased.",
-			"description":"An age adjusted fraction of the ICU admissions that will be deceased.",
-			"type":"literature"
-		},
-		"importtime":{
-			"value":4.762575347544722e1,
-			"name":"Import Time",
-			"description":"The day that COVID-19 was seeded into that state.",
-			"type":"fit"
-		},
-		"importlength":{
-			"value":3,
-			"name":"Import duration",
-			"description":"Duration of the covid seeding event -- together with the initial infection impulse gets the model kicked off starting at the import time.",
-			"type":"assumed"
-		},
-		"initialInfectionImpulse":{
-			"value":1.3672006748528405e1,
-			"name":"Size of initial infection impulse",
-			"description":"Size of the initial infection impulse. The model is not very sensitive to the exact value, but it is needed in order to start the virus spreading.",
-			"type":"assumed"
-		},
-		"pS":{
-			"value":0.9293695049352712,
-			"name":"Probability of getting a mild case.",
-			"description":"An age-adjusted probability that you get a mild case.",
-			"type":"literature"
-		},
-		"pH":{
-			"value":5.0910657096193856e-2,
-			"name":"Probability of getting a case bad enough to require hospitalization.",
-			"description":"An age-adjusted probability that you get a case requiring hospitalization.",
-			"type":"literature"
-		},
-		"pC":{
-			"value":1.9719837968534812e-2,
-			"name":"Probability of getting a case bad enough to require ICU admission",
-			"description":"An age-adjusted probability get a severe case requiring ICU admission.",
-			"type":"literature"
-		},
-		"stateAdjustmentForTestingDifferences":{
-			"value":0.5462137410660403,
-			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
-			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
-			"type":"fit"
-		},
-		"distancePower":{
-			"value":1.3343265457960398,
-			"name":"Power of the distancing function",
-			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
-			"type":"fit"
-		},
-		"numberOfSimulations":{
-			"value":200,
-			"name":"Number of Monte Carlo simulations run",
-			"description":"",
-			"type":"set"
-		}
-	},
-	"goodnessOfFitMetrics":{
-		"chiSquared":5.169215055278784e-6,
-		"rmsRelativeError":0.2344045942994908,
-		"rmsRelativeErrorDeaths":0.22267496183210508,
-		"rmsRelativeErrorPcr":0.24364064520288928,
-		"meanRelativeErrorDeaths":-0.11696790162794317,
-		"meanRelativeErrorPcr":-7.043502886877658e-2,
-		"rSquaredDeaths":2.699951071798269e-2,
-		"rSquaredPcr":3.0981356439888624e-2,
-		"deathResidual7Day":-1.1937800415390123,
-		"pcrResidual7Day":-1.8066377173205005e1
-	},
-	"scenarios":"scenario7"
+"parameterBest":{
+"r0natural":4.2911,
+"importtime":4.9700e1,
+"stateAdjustmentForTestingDifferences":0.5710,
+"distpow":1.9290
+},
+"population":2887725,
+"ventilators":753,
+"icuBeds":776,
+"staffedBeds":7775,
+"bedUtilization":0.5523,
+"hospitalCapacity":3.4807e3,
+"pS":0.9293,
+"pH":5.0910e-2,
+"pC":1.9719e-2,
+"pPCRNH":0.1284,
+"pPCRH":0.7907,
+"fractionOfCriticalDeceased":0.3621,
+"initialInfectionImpulse":1.3672e1,
+"r0":4.2911,
+"importtime":4.9700e1,
+"numberOfSimulations":100,
+"dateModelRun":"Mon 20 Apr 2020 18:26:33",
+"mostRecentDistancingDate":"Fri 10 Apr 2020",
+"stateAdjustmentForTestingDifferences":0.5710,
+"distpow":1.9290,
+"parameters":{
+"r0":{
+"value":4.2911,
+"name":"Basic reproduction number",
+"description":"The basic reproduction number.",
+"type":"fit"
+},
+"daysUntilNotInfectious":{
+"value":5,
+"name":"Days until not infectious",
+"description":"The number of days it takes to lose infectiousness after starting on average.",
+"type":"literature"
+},
+"daysUntilHospitalized":{
+"value":7,
+"name":"Days until hospitalized",
+"description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
+"type":"literature"
+},
+"daysFromInfectedToInfectious":{
+"value":4,
+"name":"Days from infected to infectious",
+"description":"The number of days it takes to become infectious after being infected on average",
+"type":"literature"
+},
+"daysToLeaveHosptialNonCritical":{
+"value":12,
+"name":"Days to leave the hospital in a non-critical case",
+"description":"The number of days it takes to leave the hospital if you are not a critical case",
+"type":"literature"
+},
+"pPCRNH":{
+"value":0.1284,
+"name":"Probability of getting a positive PCR test if you are not in the hospital",
+"description":"An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.",
+"type":"literature"
+},
+"pPCRH":{
+"value":0.7907,
+"name":"Probability of getting a positive PCR test if you are in the hospital or ICU,",
+"description":"An age-adjusted probability that you get a positive PCR test in cases that require hospitalization or critical care",
+"type":"literature"
+},
+"daysTogoToCriticalCare":{
+"value":1.5,
+"name":"Days to go to critical care after arriving in the hospital",
+"description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
+"type":"literature"
+},
+"daysFromCriticalToRecoveredOrDeceased":{
+"value":10,
+"name":"Days from an ICU admission to recovery or fatality",
+"description":"The number of days it takes on average to resolve an ICU admission on average",
+"type":"literature"
+},
+"fractionOfCriticalDeceased":{
+"value":0.3621,
+"name":"Fraction of ICU admissions deceased.",
+"description":"An age adjusted fraction of the ICU admissions that will be deceased.",
+"type":"literature"
+},
+"importtime":{
+"value":4.9700e1,
+"name":"Import Time",
+"description":"The day that COVID-19 was seeded into that state.",
+"type":"fit"
+},
+"importlength":{
+"value":3,
+"name":"Import duration",
+"description":"Duration of the covid seeding event -- together with the initial infection impulse gets the model kicked off starting at the import time.",
+"type":"assumed"
+},
+"initialInfectionImpulse":{
+"value":1.3672e1,
+"name":"Size of initial infection impulse",
+"description":"Size of the initial infection impulse. The model is not very sensitive to the exact value, but it is needed in order to start the virus spreading.",
+"type":"assumed"
+},
+"pS":{
+"value":0.9293,
+"name":"Probability of getting a mild case.",
+"description":"An age-adjusted probability that you get a mild case.",
+"type":"literature"
+},
+"pH":{
+"value":5.0910e-2,
+"name":"Probability of getting a case bad enough to require hospitalization.",
+"description":"An age-adjusted probability that you get a case requiring hospitalization.",
+"type":"literature"
+},
+"pC":{
+"value":1.9719e-2,
+"name":"Probability of getting a case bad enough to require ICU admission",
+"description":"An age-adjusted probability get a severe case requiring ICU admission.",
+"type":"literature"
+},
+"stateAdjustmentForTestingDifferences":{
+"value":0.5710,
+"name":"State adjustment for differences in PCR \/ death testing and reporting.",
+"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
+"type":"fit"
+},
+"distancePower":{
+"value":1.9290,
+"name":"Power of the distancing function",
+"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
+"type":"fit"
+},
+"numberOfSimulations":{
+"value":100,
+"name":"Number of Monte Carlo simulations run",
+"description":"",
+"type":"set"
+}
+},
+"goodnessOfFitMetrics":{
+"chiSquared":9.5677e-6,
+"rmsRelativeError":0.4264,
+"rmsRelativeErrorDeaths":0.3798,
+"rmsRelativeErrorPcr":0.4613,
+"meanRelativeErrorDeaths":-0.2879,
+"meanRelativeErrorPcr":-0.2347,
+"rSquaredDeaths":5.3356e-2,
+"rSquaredPcr":2.2991e-2,
+"deathResidual7Day":-1.8681,
+"pcrResidual7Day":-3.4693e1
+},
+"scenarios":[
+"scenario5",
+"scenario1",
+"scenario2",
+"scenario3",
+"scenario4",
+"scenario6",
+"scenario7"
+]
 }

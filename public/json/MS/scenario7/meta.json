@@ -6,7 +6,23 @@
 	"postDistancingLevel":1,
 	"name":"Open Gradual May 1",
 	"gradual":true,
-	"events":{},
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.8043062144475397e2,
+			"thresholdCrossed":0.6999999999999998
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.3672752556749128e2,
+			"thresholdCrossed":2.1867109590050307e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.5791832627113786e2,
+			"thresholdCrossed":1.9975879834021795e-3
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":2.256834280604074e4,
 		"totalProjectedPCRConfirmed":6.281356603492972e5,
@@ -21,8 +37,8 @@
 		"fractionDeathOfHospitalized":0.11165274662592743,
 		"fractionOfInfectionsPCRConfirmed":0.2958261370856661,
 		"dateContained":"Thu 15 Oct 2020 00:00:00",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Fri 15 May 2020 17:27:38",
+		"dateHospitalsOverCapacity":"Fri 5 Jun 2020 22:02:23"
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":1.863786666168913e4,
@@ -38,7 +54,7 @@
 		"fractionDeathOfHospitalized":9.881074556568564e-2,
 		"fractionOfInfectionsPCRConfirmed":0.28904665798094664,
 		"dateContained":"Thu 15 Oct 2020 00:00:00",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Fri 15 May 2020 17:27:38",
+		"dateHospitalsOverCapacity":"Fri 5 Jun 2020 22:02:23"
 	}
 }

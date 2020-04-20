@@ -15,7 +15,7 @@ may1=121;
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
 (* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
 scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Current", "gradual"->False|>;
-scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy", "gradual"->False|>;
+scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.2,"maintain"->False,"name"->"Italy", "gradual"->False|>;
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan", "gradual"->False|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal", "gradual"->False|>;
 scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite", "gradual"->False|>;
@@ -209,6 +209,57 @@ body=raw[[2;;]];
 Thread[header->#]&/@body//Map[Association]
 ];
 
+codesToStates=<|"AL" -> "Alabama",
+"AK" -> "Alaska",
+"AZ" -> "Arizona",
+"AR" -> "Arkansas",
+"CA" -> "California",
+"CO" -> "Colorado",
+"CT" -> "Connecticut",
+"DE" -> "Delaware",
+"FL" -> "Florida",
+"GA" -> "Georgia",
+"HI" -> "Hawaii",
+"ID" -> "Idaho",
+"IL" -> "Illinois",
+"IN" -> "Indiana",
+"IA" -> "Iowa",
+"KS" -> "Kansas",
+"KY" -> "Kentucky",
+"LA" -> "Louisiana",
+"ME" -> "Maine",
+"MD" -> "Maryland",
+"MA" -> "Massachusetts",
+"MI" -> "Michigan",
+"MN" -> "Minnesota",
+"MS" -> "Mississippi",
+"MO" -> "Missouri",
+"MT" -> "Montana",
+"NE" -> "Nebraska",
+"NV" -> "Nevada",
+"NH" -> "New Hampshire",
+"NJ" -> "New Jersey",
+"NM" -> "New Mexico",
+"NY" -> "New York",
+"NC" -> "North Carolina",
+"ND" -> "North Dakota",
+"OH" -> "Ohio",
+"OK" -> "Oklahoma",
+"OR" -> "Oregon",
+"PA" -> "Pennsylvania",
+"RI" -> "Rhode Island",
+"SC" -> "South Carolina",
+"SD" -> "South Dakota",
+"TN" -> "Tennessee",
+"TX" -> "Texas",
+"UT" -> "Utah",
+"VT" -> "Vermont",
+"VA" -> "Virginia",
+"WA" -> "Washington",
+"WV" -> "West Virginia",
+"WI" -> "Wisconsin",
+"WY" -> "Wyoming"|>;
+
 
 countryDistancingPrecompute = Module[{
     totalDays,
@@ -341,9 +392,10 @@ usStateDistancingPrecompute = Module[{
     smoothing,
     SlowJoin,
     ApplyWhere,
-    dates,stateDistancing
+    dates,stateDistancing,googleMobility
+    
   },
-  
+  googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
   dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="Virginia"&&#["sub_region_2"]==""&],"State"];
 
   stateDistancing[state_]:=Module[{stateName},
@@ -357,7 +409,7 @@ usStateDistancingPrecompute = Module[{
   (*rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];*)
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = (*1-1.2**)rawCsvTable[[2;;,2;;]];
+  stateDistancings = rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
 
