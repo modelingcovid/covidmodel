@@ -1,9 +1,9 @@
 {
 	"parameterBest":{
-		"r0natural":4.908926102617952,
-		"importtime":4.811221419720972e1,
-		"stateAdjustmentForTestingDifferences":0.392678504563687,
-		"distpow":1.8005846383565693
+		"r0natural":4.925075629481653,
+		"importtime":4.8249630594807044e1,
+		"stateAdjustmentForTestingDifferences":0.39264444819506517,
+		"distpow":1.8000247503751714
 	},
 	"population":3594478,
 	"ventilators":688,
@@ -18,15 +18,15 @@
 	"pPCRH":0.8270889991374988,
 	"fractionOfCriticalDeceased":0.44399807843434336,
 	"initialInfectionImpulse":1.389093653259958e1,
-	"r0":4.908926102617952,
-	"importtime":4.811221419720972e1,
+	"r0":4.925075629481653,
+	"importtime":4.8249630594807044e1,
 	"numberOfSimulations":200,
 	"dateModelRun":"Mon 20 Apr 2020",
-	"stateAdjustmentForTestingDifferences":0.392678504563687,
-	"distpow":1.8005846383565693,
+	"stateAdjustmentForTestingDifferences":0.39264444819506517,
+	"distpow":1.8000247503751714,
 	"parameters":{
 		"r0":{
-			"value":4.908926102617952,
+			"value":4.925075629481653,
 			"name":"Basic reproduction number",
 			"description":"The basic reproduction number.",
 			"type":"fit"
@@ -86,7 +86,7 @@
 			"type":"literature"
 		},
 		"importtime":{
-			"value":4.811221419720972e1,
+			"value":4.8249630594807044e1,
 			"name":"Import Time",
 			"description":"The day that COVID-19 was seeded into that state.",
 			"type":"fit"
@@ -122,13 +122,13 @@
 			"type":"literature"
 		},
 		"stateAdjustmentForTestingDifferences":{
-			"value":0.392678504563687,
+			"value":0.39264444819506517,
 			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
 			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 			"type":"fit"
 		},
 		"distancePower":{
-			"value":1.8005846383565693,
+			"value":1.8000247503751714,
 			"name":"Power of the distancing function",
 			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 			"type":"fit"
@@ -141,16 +141,16 @@
 		}
 	},
 	"goodnessOfFitMetrics":{
-		"chiSquared":5.43893173299035e-5,
-		"rmsRelativeError":0.9865211491218204,
-		"rmsRelativeErrorDeaths":0.8654406121044793,
-		"rmsRelativeErrorPcr":1.0878629139110056,
-		"meanRelativeErrorDeaths":-0.5853308669088315,
-		"meanRelativeErrorPcr":-0.5664634871125017,
-		"rSquaredDeaths":4.0522467721119136e-2,
-		"rSquaredPcr":3.088686649996245e-2,
-		"deathResidual7Day":-5.36216387817666,
-		"pcrResidual7Day":-2.067939730549315e2
+		"chiSquared":5.110072570560771e-5,
+		"rmsRelativeError":0.9472872195679563,
+		"rmsRelativeErrorDeaths":0.8269629599720367,
+		"rmsRelativeErrorPcr":1.0478071913011224,
+		"meanRelativeErrorDeaths":-0.543028586569102,
+		"meanRelativeErrorPcr":-0.5314954001202425,
+		"rSquaredDeaths":3.7128077961561985e-2,
+		"rSquaredPcr":2.872959152006585e-2,
+		"deathResidual7Day":-5.198299676368862,
+		"pcrResidual7Day":-2.0223952123903405e2
 	},
-	"scenarios":"scenario4"
+	"scenarios":"scenario7"
 }

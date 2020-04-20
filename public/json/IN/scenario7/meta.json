@@ -1,0 +1,60 @@
+{
+	"distancingLevel":0.6257142857142856,
+	"id":"scenario7",
+	"distancingDays":60,
+	"maintain":true,
+	"postDistancingLevel":1,
+	"name":"Open Gradual May 1",
+	"gradual":true,
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.6108995159663831e2,
+			"thresholdCrossed":0.6999999999999996
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":6.60275827885935e2,
+			"thresholdCrossed":4.724473761872346e-24
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":6.62975293979562e2,
+			"thresholdCrossed":2.398137151871876e-28
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.620811875320039e4,
+		"totalProjectedPCRConfirmed":1.3934562951431395e6,
+		"totalProjectedInfected":5.140795055672652e6,
+		"totalInfectedFraction":0.7772104901251558,
+		"fatalityRate":1.0933740432071315e-2,
+		"fatalityRateSymptomatic":1.561962918867331e-2,
+		"fatalityRatePCR":4.03371953243977e-2,
+		"fractionOfSymptomaticHospitalized":7.339390647224135e-2,
+		"fractionOfPCRHospitalized":0.23757433156428057,
+		"fractionHospitalizedInICU":0.2807707029324487,
+		"fractionDeathOfHospitalized":0.1221162759790545,
+		"fractionOfInfectionsPCRConfirmed":0.2710585191692321,
+		"dateContained":"Thu 1 Oct 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 21 Oct 2021 06:37:11",
+		"dateHospitalsOverCapacity":"Sat 23 Oct 2021 23:24:25"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":5.237358057745397e4,
+		"totalProjectedPCRConfirmed":1.3728099659362505e6,
+		"totalProjectedInfected":5.10873421020301e6,
+		"totalInfectedFraction":0.7723633750094127,
+		"fatalityRate":1.025177243961039e-2,
+		"fatalityRateSymptomatic":1.4645389199443415e-2,
+		"fatalityRatePCR":3.815064129559652e-2,
+		"fractionOfSymptomaticHospitalized":7.235005715754006e-2,
+		"fractionOfPCRHospitalized":0.23562060774318302,
+		"fractionHospitalizedInICU":0.28077070293244855,
+		"fractionDeathOfHospitalized":0.11645441026794931,
+		"fractionOfInfectionsPCRConfirmed":0.26871822049276234,
+		"dateContained":"Thu 1 Oct 2020 00:00:00",
+		"dateICUOverCapacity":"Thu 21 Oct 2021 06:37:11",
+		"dateHospitalsOverCapacity":"Sat 23 Oct 2021 23:24:25"
+	}
+}

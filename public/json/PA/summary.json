@@ -1,9 +1,9 @@
 {
 	"parameterBest":{
-		"r0natural":4.963290899071728,
-		"importtime":4.935157476406691e1,
-		"stateAdjustmentForTestingDifferences":0.9623755079912715,
-		"distpow":1.840575197098498
+		"r0natural":4.948141396718123,
+		"importtime":4.9331490315877105e1,
+		"stateAdjustmentForTestingDifferences":0.9601629296008738,
+		"distpow":1.8
 	},
 	"population":12790505,
 	"ventilators":3013,
@@ -18,15 +18,15 @@
 	"pPCRH":0.8284486901426326,
 	"fractionOfCriticalDeceased":0.467159063993515,
 	"initialInfectionImpulse":1.516024085242147e1,
-	"r0":4.963290899071728,
-	"importtime":4.935157476406691e1,
+	"r0":4.948141396718123,
+	"importtime":4.9331490315877105e1,
 	"numberOfSimulations":200,
 	"dateModelRun":"Mon 20 Apr 2020",
-	"stateAdjustmentForTestingDifferences":0.9623755079912715,
-	"distpow":1.840575197098498,
+	"stateAdjustmentForTestingDifferences":0.9601629296008738,
+	"distpow":1.8,
 	"parameters":{
 		"r0":{
-			"value":4.963290899071728,
+			"value":4.948141396718123,
 			"name":"Basic reproduction number",
 			"description":"The basic reproduction number.",
 			"type":"fit"
@@ -86,7 +86,7 @@
 			"type":"literature"
 		},
 		"importtime":{
-			"value":4.935157476406691e1,
+			"value":4.9331490315877105e1,
 			"name":"Import Time",
 			"description":"The day that COVID-19 was seeded into that state.",
 			"type":"fit"
@@ -122,13 +122,13 @@
 			"type":"literature"
 		},
 		"stateAdjustmentForTestingDifferences":{
-			"value":0.9623755079912715,
+			"value":0.9601629296008738,
 			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
 			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 			"type":"fit"
 		},
 		"distancePower":{
-			"value":1.840575197098498,
+			"value":1.8,
 			"name":"Power of the distancing function",
 			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 			"type":"fit"
@@ -141,16 +141,16 @@
 		}
 	},
 	"goodnessOfFitMetrics":{
-		"chiSquared":4.8018644025821225e-5,
-		"rmsRelativeError":1.1753241807850754,
-		"rmsRelativeErrorDeaths":0.7257817238682431,
-		"rmsRelativeErrorPcr":1.4285206500555687,
-		"meanRelativeErrorDeaths":-0.4335940707812238,
-		"meanRelativeErrorPcr":-0.8502586381968581,
-		"rSquaredDeaths":3.3433615299446454e-2,
-		"rSquaredPcr":5.9066522115827316e-2,
-		"deathResidual7Day":-9.949237690585528,
-		"pcrResidual7Day":-1.3260874369094563e2
+		"chiSquared":4.3520890811025026e-5,
+		"rmsRelativeError":1.1353230493023665,
+		"rmsRelativeErrorDeaths":0.7013562800501981,
+		"rmsRelativeErrorPcr":1.3816266741085634,
+		"meanRelativeErrorDeaths":-0.4032041718734834,
+		"meanRelativeErrorPcr":-0.8158306810919167,
+		"rSquaredDeaths":5.632291215662961e-2,
+		"rSquaredPcr":4.355536417318504e-2,
+		"deathResidual7Day":-9.782315876892973,
+		"pcrResidual7Day":-1.302199234902665e2
 	},
-	"scenarios":"scenario4"
+	"scenarios":"scenario7"
 }

@@ -9,18 +9,20 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 (* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365 * 2;
 tmin0 = 1;
+may1=121;
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
 (* TODO: add test and trace scenario where there is a postDistancingLevel of r0=1 (we wont have access to fit r0 at this point... *)
-scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Current"|>;
-scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy"|>;
-scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan"|>;
-scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal"|>;
-scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite"|>;
-(*scenario6=<|"id"->"scenario6","distancingDays"->90,"distancingLevel"->0.11,"postDistancingLevel"->1,"maintain"->False|>;*)
+scenario1=<|"id"->"scenario1","distancingDays"->90,"maintain"->True,"name"->"Current", "gradual"->False|>;
+scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.4,"maintain"->False,"name"->"Italy", "gradual"->False|>;
+scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan", "gradual"->False|>;
+scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal", "gradual"->False|>;
+scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite", "gradual"->False|>;
+scenario6=<|"id"->"scenario6","distancingDays"->may1-today,"maintain"->True,"postDistancingLevel"->1, "name"->"Open May 1", "gradual"->False|>;
+scenario7=<|"id"->"scenario7","distancingDays"->60,"maintain"->True,"postDistancingLevel"->1, "name"->"Open Gradual May 1", "gradual"->True|>;
 
-scenarios={scenario5,scenario1,scenario2,scenario3,scenario4};
+scenarios={scenario5,scenario1,scenario2,scenario3,scenario4,scenario6,scenario7};
 
 (* helper to get the scenario for a given id *)
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
@@ -394,7 +396,9 @@ usStateDistancingPrecompute = Module[{
       (* for any gap between the last day of data and today, fill in with the average of the last three days of data *)
       ConstantArray[Mean[distancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
       (* moving average going forward in the scenario *)
-      ConstantArray[distancingLevel, scenario["distancingDays"]],
+      ConstantArray[distancingLevel, If[scenario["gradual"],may1-today,scenario["distancingDays"]]],
+      (* gradual gets another array raising back to 1 *)
+      If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(may1-today)) Array[#&,scenario["distancingDays"]-(may1-today)]+distancingLevel,{}],
       (* post-policy distancing - constant at 1 *)
       ConstantArray[1.,
         totalDays - scenario["distancingDays"] - today]];
@@ -408,7 +412,8 @@ usStateDistancingPrecompute = Module[{
         ConstantArray[1., IntegerPart[Min[dataDays]]],
         smoothedDistancing,
         ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
-        ConstantArray[distancingLevel, scenario["distancingDays"]],
+        ConstantArray[distancingLevel, If[scenario["gradual"],may1-today,scenario["distancingDays"]]],
+        If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(may1-today)) Array[#&,scenario["distancingDays"]-(may1-today)]+distancingLevel,{}],
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
     }];
 

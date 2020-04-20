@@ -1,0 +1,60 @@
+{
+	"distancingLevel":0.6257142857142856,
+	"id":"scenario6",
+	"distancingDays":11,
+	"maintain":true,
+	"postDistancingLevel":1,
+	"name":"Open May 1",
+	"gradual":false,
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":1.4815737611587176e2,
+			"thresholdCrossed":0.7000000000000004
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":6.22900611132214e2,
+			"thresholdCrossed":-3.534096855390133e-28
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":6.271380039645259e2,
+			"thresholdCrossed":3.6350710512584224e-27
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":6.0313944038461595e4,
+		"totalProjectedPCRConfirmed":1.4137054631956199e6,
+		"totalProjectedInfected":5.51629793065904e6,
+		"totalInfectedFraction":0.8339808476965078,
+		"fatalityRate":1.0933772032732793e-2,
+		"fatalityRateSymptomatic":1.561967433247542e-2,
+		"fatalityRatePCR":4.266372706951598e-2,
+		"fractionOfSymptomaticHospitalized":7.339390647223415e-2,
+		"fractionOfPCRHospitalized":0.24170682435037966,
+		"fractionHospitalizedInICU":0.28077070293244827,
+		"fractionDeathOfHospitalized":0.126951328382887,
+		"fractionOfInfectionsPCRConfirmed":0.25627793874917165,
+		"dateContained":"Tue 25 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 13 Sep 2021 21:36:52",
+		"dateHospitalsOverCapacity":"Sat 18 Sep 2021 03:18:43"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":5.948589617975073e4,
+		"totalProjectedPCRConfirmed":1.412309782519332e6,
+		"totalProjectedInfected":5.51488178623285e6,
+		"totalInfectedFraction":0.8337667480695731,
+		"fatalityRate":1.0786431783225012e-2,
+		"fatalityRateSymptomatic":1.5409188261750018e-2,
+		"fatalityRatePCR":4.21195809276613e-2,
+		"fractionOfSymptomaticHospitalized":7.329690797434403e-2,
+		"fractionOfPCRHospitalized":0.24149914036902165,
+		"fractionHospitalizedInICU":0.2807707029324486,
+		"fractionDeathOfHospitalized":0.12543993546764445,
+		"fractionOfInfectionsPCRConfirmed":0.25609067197867613,
+		"dateContained":"Tue 25 Aug 2020 00:00:00",
+		"dateICUOverCapacity":"Mon 13 Sep 2021 21:36:52",
+		"dateHospitalsOverCapacity":"Sat 18 Sep 2021 03:18:43"
+	}
+}
