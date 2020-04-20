@@ -1128,7 +1128,7 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides]] := Module[{days},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo];
-    (*Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;*)
+    Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;
     exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios;
     days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
 

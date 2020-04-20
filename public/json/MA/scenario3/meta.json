@@ -1,0 +1,48 @@
+{
+	"distancingLevel":0.11,
+	"id":"scenario3",
+	"distancingDays":60,
+	"maintain":false,
+	"name":"Wuhan",
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.295189811524905e2,
+			"thresholdCrossed":0.700000000000005
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":7.247066975664499e4,
+		"totalProjectedPCRConfirmed":1.8732301714888348e6,
+		"totalProjectedInfected":5.956490350433831e6,
+		"totalInfectedFraction":0.8773325204536465,
+		"fatalityRate":1.2166672905189328e-2,
+		"fatalityRateSymptomatic":1.7380961293127616e-2,
+		"fatalityRatePCR":3.868754137087469e-2,
+		"fractionOfSymptomaticHospitalized":7.676225730565696e-2,
+		"fractionOfPCRHospitalized":0.23953868667173225,
+		"fractionHospitalizedInICU":0.2819563914217397,
+		"fractionDeathOfHospitalized":0.11597016832205004,
+		"fractionOfInfectionsPCRConfirmed":0.31448555462738237,
+		"dateContained":"Tue 16 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":6.816791497654779e3,
+		"totalProjectedPCRConfirmed":1.5639328332402505e5,
+		"totalProjectedInfected":1.0918809290251608e6,
+		"totalInfectedFraction":0.1608233357462156,
+		"fatalityRate":6.243163807010404e-3,
+		"fatalityRateSymptomatic":8.91880543858629e-3,
+		"fatalityRatePCR":4.358749527325504e-2,
+		"fractionOfSymptomaticHospitalized":4.569674370584707e-2,
+		"fractionOfPCRHospitalized":0.1877245788231861,
+		"fractionHospitalizedInICU":0.2819563914217402,
+		"fractionDeathOfHospitalized":0.1667214948148829,
+		"fractionOfInfectionsPCRConfirmed":0.14323291044533046,
+		"dateContained":"Tue 16 Jun 2020 00:00:00",
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
+	}
+}
