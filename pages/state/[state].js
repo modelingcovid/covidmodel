@@ -34,7 +34,7 @@ export default function StatePage() {
   const {
     query: {state},
   } = useRouter();
-  const [scenario, setScenario] = useState('scenario1');
+  const [scenario, setScenario] = useState('scenario5');
 
   const sizeRef = useRef(null);
   const {width} = useContentRect(sizeRef, {width: 896, height: 360});
