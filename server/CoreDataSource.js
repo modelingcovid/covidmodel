@@ -6,6 +6,8 @@ import {
 } from './data';
 import {ObjectDataSource} from './util';
 
+const identity = (x) => x;
+
 export class CoreDataSource extends ObjectDataSource {
   defaultTtl = 3600;
 
@@ -37,10 +39,10 @@ export class CoreDataSource extends ObjectDataSource {
     });
   }
 
-  series(seriesName, scenario) {
+  series(seriesName, scenario, decorate = identity) {
     const {id, locationId} = scenario;
     return this._get(`${locationId}/${id}/${seriesName}`, {
-      decorate: (data) => decorateSeries(data),
+      decorate: (data) => decorateSeries(decorate(data)),
     });
   }
 

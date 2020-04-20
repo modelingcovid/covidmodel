@@ -108,7 +108,7 @@ export const Daily = ({width, height}) => {
         />
         <DistributionLegendRow
           title="Fatalities per day"
-          y={dailyPcr}
+          y={dailyDeath}
           color={theme.color.red[1]}
           format={formatNumber}
         />

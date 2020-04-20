@@ -31,6 +31,7 @@ export const typeDefs = gql`
     distancingLevel: Float!
     distancing: Series
     hospitalCapacity: Series
+    rt: Series
     cumulativeCritical: DistributionSeries
     cumulativeDeaths: DistributionSeries
     cumulativeExposed: DistributionSeries
@@ -52,6 +53,7 @@ export const typeDefs = gql`
   type LocationDomain {
     distancing: Domain
     hospitalCapacity: Domain
+    rt: Domain
     cumulativeCritical: DistributionDomain
     cumulativeDeaths: DistributionDomain
     cumulativeExposed: DistributionDomain
@@ -128,9 +130,9 @@ const Query = {
   },
 };
 
-function field(type) {
+function field(type, decorate) {
   return async function field(parent, args, {dataSources: {get}}, {fieldName}) {
-    return await get[type](fieldName, parent);
+    return await get[type](fieldName, parent, decorate);
   };
 }
 
@@ -180,6 +182,7 @@ const Location = {
 const Scenario = {
   distancing: field('series'),
   hospitalCapacity: field('series'),
+  rt: field('series'),
   cumulativeCritical: field('distribution'),
   cumulativeDeaths: field('distribution'),
   cumulativeExposed: field('distribution'),
@@ -239,6 +242,7 @@ function domain(type, accessor = defaultAccessor) {
 const LocationDomain = {
   distancing: domain('series'),
   hospitalCapacity: domain('series'),
+  rt: domain('series'),
   cumulativeCritical: domain('distribution'),
   cumulativeDeaths: domain('distribution'),
   cumulativeExposed: domain('distribution'),

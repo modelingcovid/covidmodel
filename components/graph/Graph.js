@@ -55,6 +55,7 @@ export const GraphContents = React.memo(function Graph({
   controls = false,
   decoration = true,
   scrubber = true,
+  nice = true,
 }) {
   const data = dataFn();
   const [scale, setScale] = useState(initialScale);
@@ -107,10 +108,10 @@ export const GraphContents = React.memo(function Graph({
         return scaleLinear({
           domain: yDomain,
           range: [yMax, 0],
-          nice: true,
+          nice,
         });
     }
-  }, [domain, scale, yMax]);
+  }, [domain, nice, scale, yMax]);
 
   const clipPathId = useComponentId('graphClipPath');
 

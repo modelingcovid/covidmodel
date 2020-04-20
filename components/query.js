@@ -136,9 +136,11 @@ const queries = [
     'Scenario',
     `{
       distancing { data }
+      rt { data }
     }`,
     {
       distancing: ({distancing}, i) => distancing.data[i],
+      rt: ({rt}, i) => rt.data[i],
     },
   ],
   [

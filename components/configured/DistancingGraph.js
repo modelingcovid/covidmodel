@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {AxisRight} from '@vx/axis';
 import {
   Graph,
   GraphDataProvider,
@@ -17,10 +16,8 @@ const {useCallback, useMemo} = React;
 export const DistancingGraph = ({
   children,
   formatDistancing,
-  formatR0,
   y,
-  leftLabel = '',
-  rightLabel = '',
+  xLabel = '',
   width = 600,
   height = 400,
   ...remaining
@@ -38,20 +35,12 @@ export const DistancingGraph = ({
   return (
     <Graph
       {...remaining}
-      xLabel={leftLabel}
+      xLabel={xLabel}
       height={height}
       width={width}
       tickFormat={formatDistancing}
     >
-      {({xMax, yScale}) => {
-        const yTicks = yScale.ticks(3);
-        const yTickCount = yTicks.length;
-        const tickFormatWithLabel = (v, i) => {
-          const value = formatR0(v, i);
-          return rightLabel && i === yTickCount - 1
-            ? `${rightLabel} = ${value}`
-            : value;
-        };
+      {({xMax}) => {
         return (
           <>
             {children}
@@ -73,17 +62,6 @@ export const DistancingGraph = ({
                 </>
               )}
             </WithComponentId>
-            <AxisRight
-              left={xMax}
-              scale={yScale}
-              tickValues={yTicks}
-              tickFormat={tickFormatWithLabel}
-              tickLabelProps={endTickLabelProps}
-              tickLength={0} // positions text at the axis
-              hideTicks
-              stroke="var(--color-gray2)"
-              strokeWidth={1}
-            />
           </>
         );
       }}

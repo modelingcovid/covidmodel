@@ -3,14 +3,15 @@ import Link from 'next/link';
 import {theme} from '../styles';
 import {DistancingGraph} from './configured';
 import {
-  Heading,
   Gutter,
+  Heading,
   InlineData,
   InlineLabel,
   Instruction,
   Paragraph,
+  WithCitation,
 } from './content';
-import {LegendRow} from './graph';
+import {Graph, LegendRow, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   Estimation,
@@ -44,13 +45,72 @@ const formatDistancing = (n) => formatPercent(1 - n);
 
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
-  const {r0, importtime, distancing} = useLocationData();
+  const {r0, importtime, distancing, rt} = useLocationData();
 
-  const formatR0 = useCallback((n) => formatNumber2(n * r0()), [r0]);
+  const formatR = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   return (
     <div className="flow-root" {...remaining}>
-      <Heading className="margin-top-3">
+      <WithCitation
+        citation={
+          <>
+            Past social distancing levels are calculated from Google’s{' '}
+            <a href="https://www.google.com/covid19/mobility/">
+              COVID-19 Community Mobility Reports
+            </a>
+            , which track movement trends over time by geographic area and
+            location category (e.g., retail, transit, workplace) relative to a
+            baseline. For more information, see{' '}
+            <a href="https://www.google.com/covid19/mobility/data_documentation.html">
+              the documentation
+            </a>
+            .
+          </>
+        }
+      >
+        <Paragraph>
+          The following graph displays
+          <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue.text}>
+            past social distancing levels
+          </InlineLabel>{' '}
+          based on <span className="footnote">available mobility data</span> for{' '}
+          {location.name}, and{' '}
+          <InlineLabel
+            color={theme.color.yellow[3]}
+            fill={theme.color.yellow.text}
+          >
+            prospective social distancing levels
+          </InlineLabel>{' '}
+          based on the scenario selected above.
+          <Instruction>
+            <strong>Reading the graph:</strong> The background of the graph
+            corresponds to the amount of social distancing at a given time. This
+            is also included on later graphs.
+          </Instruction>
+        </Paragraph>
+      </WithCitation>
+      <DistancingGraph
+        formatDistancing={formatDistancing}
+        y={distancing}
+        xLabel="distancing"
+        width={width}
+        height={height}
+      />
+      <Gutter>
+        <LegendRow
+          label="Social distancing level"
+          y={distancing}
+          format={formatDistancing}
+          width="80%"
+        />
+      </Gutter>
+      <Paragraph>
+        The current distancing level, <TodayDistancing />, is calculated based
+        on the average the past three days of available mobility data for{' '}
+        {location.name}, which is usually reported with a three-day delay.
+      </Paragraph>
+
+      <Heading className="margin-top-4">
         How does social distancing relate to how the virus spreads?
       </Heading>
       <Paragraph>
@@ -71,68 +131,31 @@ export function ModelInputs({height, width, ...remaining}) {
         at a given point in time, taking social distancing measures into
         account.
       </Paragraph>
-      <Paragraph>
-        The following graph displays
-        <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue.text}>
-          past social distancing levels
-        </InlineLabel>{' '}
-        based on available mobility data for {location.name}, and{' '}
-        <InlineLabel
-          color={theme.color.yellow[3]}
-          fill={theme.color.yellow.text}
-        >
-          prospective social distancing levels
-        </InlineLabel>{' '}
-        based on the scenario selected above. It also shows how they impact R
-        <sub>t</sub>, which is displayed on the right axis.
-      </Paragraph>
-      <Instruction>
-        <strong>Reading the graph:</strong> The background of the graph
-        corresponds to the amount of social distancing at a given time. This is
-        also included on later graphs.
-      </Instruction>
-      <DistancingGraph
-        formatDistancing={formatDistancing}
-        formatR0={formatR0}
-        y={distancing}
-        leftLabel="distancing"
-        rightLabel="R₀"
-        width={width}
+      <Graph
+        initialScale="linear"
+        tickFormat={formatR}
         height={height}
-      />
+        width={width}
+        xLabel="R"
+        nice={false}
+      >
+        {() => <Line y={rt} stroke={theme.color.magenta[1]} />}
+      </Graph>
       <Gutter>
-        <LegendRow
-          label="Social distancing level"
-          y={distancing}
-          format={formatDistancing}
-          width="80%"
-        />
         <LegendRow
           label={
             <>
               R<sub>t</sub>
             </>
           }
-          width="80%"
-          y={distancing}
-          format={formatR0}
+          y={rt}
+          format={formatR}
         />
       </Gutter>
-      <Paragraph className="margin-top-2">
-        A social distancing level of 100% means no contact with others and
-        yields an R<sub>t</sub> of zero, since it cannot find new hosts. A
-        social distancing level of 0% means that an area is operating without
-        any social distancing measures and continuing life as usual. At this
-        level, R<sub>t</sub> equals R₀.
-      </Paragraph>
-      <Paragraph>
-        The current distancing level, <TodayDistancing />, is calculated based
-        on the average the past three days of available mobility data for{' '}
-        {location.name}, which is usually reported with a three-day delay.
-      </Paragraph>
-      <div className="section-heading margin-top-4">
+
+      <Heading className="margin-top-5">
         How does the model differ between locations?
-      </div>
+      </Heading>
       <Paragraph>
         We use the data available to us — reported positive tests,
         hospitalizations, and fatalities (among others) — to estimate when
