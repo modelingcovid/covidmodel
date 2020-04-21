@@ -17,6 +17,9 @@ a {
   color: inherit;
   text-decoration: inherit;
 }
+blockquote {
+  margin: 0;
+}
 button {
   background: inherit;
   border: inherit;
@@ -139,7 +142,8 @@ text {
   color: var(--color-gray3);
 }
 .text-body,
-.paragraph {
+.paragraph,
+.blockquote {
   font-family: var(--font-family-text);
   font-size: var(--font-size-body);
   line-height: 1.6;
@@ -165,6 +169,10 @@ text {
   letter-spacing: -0.02em;
   background: var(--color-gray-bg);
   padding: var(--spacing1) var(--spacing2);
+}
+.blockquote {
+  padding-left: var(--spacing2);
+  box-shadow: inset 3px 0 var(--color-gray1);
 }
 .estimation {
   padding: var(--spacing1) var(--spacing2);

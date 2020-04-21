@@ -77,6 +77,7 @@ export default function StatePage() {
 
       <div className="flex flex-col justify-center">
         <ModelStateProvider locationId={state} scenarioId="scenario2">
+          <DistancingGradient width={width} />
           <Section className="margin-top-4 margin-bottom-3">
             <div className="graph-size" ref={sizeRef} />
             <div className="text-jumbo margin-bottom-1">
@@ -142,12 +143,12 @@ export default function StatePage() {
             </Section>
           </div>
           <Section className="margin-top-3">
-            <ModelInputs width={width} height={192} />
+            <ModelInputs width={width} height={208} />
             <TestAndTrace width={width} height={height} />
             <SEIR width={width} height={height} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
-            <EffectiveReproductionNumber width={width} height={192} />
+            <EffectiveReproductionNumber width={width} height={208} />
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
           </Section>

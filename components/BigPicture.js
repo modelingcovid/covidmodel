@@ -7,6 +7,7 @@ import {
   useSEIRConfig,
 } from './configured';
 import {
+  Blockquote,
   Grid,
   Gutter,
   InlineData,
@@ -16,6 +17,7 @@ import {
   Paragraph,
   Title,
   UnorderedList,
+  WithCitation,
 } from './content';
 import {Area, Graph, Line, WithGraphData, useNearestData} from './graph';
 import {
@@ -143,15 +145,58 @@ export function BigPicture({height, width}) {
         return—first slowly, then rapidly and then taper off without infecting
         the entire population.
       </Paragraph>
+      <Heading>Herd immunity</Heading>
       <Paragraph>
         After distancing ends, why doesn’t the entire population become
-        infected? This is called “<strong>herd immunity</strong>.”
+        infected? This is due to “<strong>herd immunity</strong>.”
       </Paragraph>
-      <Heading>Flattening the curve</Heading>
+      <WithCitation
+        citation={
+          <>
+            Marc Lipsitch, “
+            <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
+              Who is immune to the coronavirus?
+            </a>
+            ”
+          </>
+        }
+      >
+        <Blockquote className="footnote">
+          “As more and more people become immune to the virus, an infected
+          individual has less and less chance of coming into contact with a
+          person susceptible to infection. Eventually, herd immunity becomes
+          pervasive enough that an infected person on average infects less than
+          one other person; at that point, the number of cases starts to go
+          down. If herd immunity is widespread enough, then even in the absence
+          of measures designed to slow transmission, the virus will be contained
+          — at least until immunity wanes or enough new people susceptible to
+          infection are born.”
+        </Blockquote>
+      </WithCitation>
       <Paragraph>
-        By the end of the year, after a lengthy period of no distancing, the
-        model predicts most people in {location.name} will be immune to
-        COVID-19.
+        By the end of the year, after a lengthy period of no distancing and
+        letting the virus run its course, the model predicts most people in{' '}
+        {location.name} will be immune to COVID-19. However, the period of no
+        distancing takes a significant toll on {location.name}’s hospital
+        system.
+      </Paragraph>
+      <Paragraph>
+        When the virus is allowed to spread uninhibited, the{' '}
+        <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
+          current number of people who require hospitalization
+        </InlineLabel>{' '}
+        quickly exceeds the available{' '}
+        <InlineLabel
+          color={theme.color.yellow.text}
+          fill={theme.color.yellow[3]}
+        >
+          hospital capacity
+        </InlineLabel>{' '}
+        in {location.name}, which increases the{' '}
+        <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
+          total number of fatalities
+        </InlineLabel>
+        .
       </Paragraph>
       <HospitalizationGraph height={height} width={width} scrubber={false} />
     </div>

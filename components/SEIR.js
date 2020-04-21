@@ -96,11 +96,11 @@ export function SEIR({height, width}) {
         <div
           style={{
             position: 'absolute',
-            top: theme.spacing[4],
+            top: '72px',
             right: theme.spacing[1],
             background: theme.color.background,
             zIndex: 2,
-            boxShadow: `0 0 4px ${theme.color.gray[2]}`,
+            boxShadow: `0 0 4px ${theme.color.shadow[1]}`,
           }}
         >
           <SEIRGraph

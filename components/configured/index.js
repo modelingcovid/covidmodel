@@ -1,5 +1,6 @@
 export * from './Controls';
 export * from './DistancingGraph';
+export * from './FatalityGraph';
 export * from './HospitalizationGraph';
 export * from './LocationMap';
 export * from './LocationMenu';

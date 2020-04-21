@@ -248,6 +248,7 @@ const queries = [
           domain.cumulativeDeaths.expected.max +
           domain.currentlyInfected.expected.max +
           domain.currentlyInfectious.expected.max,
+        cumulativeDeaths: ({domain}) => domain.cumulativeDeaths.expected.max,
         dailyDeath: ({domain}) => domain.dailyDeath.expected.max,
         newlyExposed: ({domain}) => domain.newlyExposed.expected.max,
         hospitalized: {

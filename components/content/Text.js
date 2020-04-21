@@ -54,6 +54,11 @@ export const createTextComponent = (Tag, boundClassName, kind) => ({
 );
 
 export const Paragraph = createTextComponent('p', 'paragraph');
+export const Blockquote = createTextComponent(
+  'blockquote',
+  'paragraph blockquote'
+);
+export const Pullquote = createTextComponent('p', 'paragraph pullquote');
 export const Instruction = createTextComponent('p', 'paragraph instruction');
 export const Title = createTextComponent('h2', 'text-title clear');
 export const Heading = createTextComponent('h3', 'section-heading');

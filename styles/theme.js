@@ -9,7 +9,11 @@ export const {
   color: {
     background: '#fff',
     backgroundRgb: '255, 255, 255',
-    focus: ['rgba(66, 153, 225, 0.2)', 'rgba(66, 153, 225, 0.5)'],
+    focus: [
+      'rgba(66, 153, 225, 0.2)',
+      'rgba(66, 153, 225, 0.5)',
+      'rgba(66, 153, 225, 0.7)',
+    ],
     shadow: [
       'rgba(24, 27, 44, 0.1)',
       'rgba(24, 27, 44, 0.2)',
@@ -104,6 +108,11 @@ export const darkMode = setProperties({
   color: {
     background: '#181b2c',
     backgroundRgb: '24, 27, 44',
+    focus: [
+      'hsla(213, 90%, 75%, 0.3)',
+      'hsla(213, 90%, 75%, 0.6)',
+      'hsla(213, 90%, 75%, 0.8)',
+    ],
     shadow: [
       'rgba(255, 255, 255, 0.1)',
       'rgba(255, 255, 255, 0.2)',

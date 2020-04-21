@@ -14,6 +14,7 @@ export * from './NearestOverlay';
 export * from './Points';
 export * from './ScaleGradient';
 export * from './Scrubber';
+export * from './SimpleGraph';
 export * from './useGraphData';
 export * from './useNearestPoint';
 export * from './useNearestData';

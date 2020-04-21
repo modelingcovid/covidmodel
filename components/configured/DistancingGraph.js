@@ -6,22 +6,22 @@ import {
   Stop,
   WithGraphData,
 } from '../graph';
-
-import {useModelState, DistributionLine} from '../modeling';
+import {useModelState, useLocationData} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
+import {formatPercent} from '../../lib/format';
 
 const {useCallback, useMemo} = React;
 
+export const formatDistancing = (n) => formatPercent(1 - n);
+
 export const DistancingGraph = ({
   children,
-  formatDistancing,
-  y,
-  xLabel = '',
   width = 600,
   height = 400,
   ...remaining
 }) => {
+  const {distancing} = useLocationData();
   const {xScale} = useModelState();
   const todayOffset = xScale(today);
 
@@ -34,11 +34,11 @@ export const DistancingGraph = ({
 
   return (
     <Graph
+      xLabel="distancing"
+      tickFormat={formatDistancing}
       {...remaining}
-      xLabel={xLabel}
       height={height}
       width={width}
-      tickFormat={formatDistancing}
     >
       {({xMax}) => {
         return (
@@ -54,8 +54,8 @@ export const DistancingGraph = ({
                       stopColor="var(--color-yellow3)"
                     />
                   </LinearGradient>
-                  <DistributionLine
-                    y={y}
+                  <Line
+                    y={distancing.expected.get}
                     stroke={`url(#${gradientId})`}
                     strokeWidth={1.5}
                   />

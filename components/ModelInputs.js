@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
-import {DistancingGraph} from './configured';
+import {DistancingGraph, formatDistancing} from './configured';
 import {
   Gutter,
   Heading,
@@ -42,8 +42,6 @@ function TodayDistancing() {
     </InlineData>
   );
 }
-
-const formatDistancing = (n) => formatPercent(1 - n);
 
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
@@ -92,13 +90,7 @@ export function ModelInputs({height, width, ...remaining}) {
           {location.name}, which is usually reported with a three-day delay.
         </Paragraph>
       </WithCitation>
-      <DistancingGraph
-        formatDistancing={formatDistancing}
-        y={distancing}
-        xLabel="distancing"
-        width={width}
-        height={height}
-      />
+      <DistancingGraph width={width} height={height} />
       <Gutter>
         <DistributionLegendRow
           label="Social distancing level"

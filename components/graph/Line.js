@@ -29,8 +29,8 @@ export const Line = ({
   return (
     <>
       <LinePath
-        {...remaining}
         clipPath={clipPath}
+        {...remaining}
         data={data}
         x={xFn}
         y={yFn}

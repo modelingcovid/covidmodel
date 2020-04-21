@@ -31,6 +31,7 @@ export const HospitalizationGraph = ({children, ...props}) => {
     hospitalCapacity,
     currentlyHospitalized,
     currentlyReportedHospitalized,
+    cumulativeDeaths,
   } = useLocationData();
 
   return (
@@ -50,13 +51,13 @@ export const HospitalizationGraph = ({children, ...props}) => {
             <LinearGradient size={yMax} direction="up" id={gradientId}>
               <stop
                 offset={0}
-                stopColor={theme.color.red[2]}
-                stopOpacity={0.4}
+                stopColor={theme.color.blue[2]}
+                stopOpacity={0.15}
               />
               <stop
                 offset={0.4}
-                stopColor={theme.color.red[1]}
-                stopOpacity={0.8}
+                stopColor={theme.color.blue[1]}
+                stopOpacity={0.6}
               />
             </LinearGradient>
             <defs>
@@ -64,25 +65,25 @@ export const HospitalizationGraph = ({children, ...props}) => {
                 <Area y0={hospitalCapacity.max} y1={() => yDomain} />
               </clipPath>
             </defs>
-            <g clipPath={`url(#${clipPathId})`}>
-              <Area
-                y0={hospitalCapacity.max}
-                y1={currentlyHospitalized.expected.get}
-                fill={`url(#${gradientId})`}
-              />
-            </g>
-            <Line
-              y={currentlyHospitalized.expected.get}
-              stroke={theme.color.background}
-              strokeWidth={4}
+            <Area
+              clipPath={`url(#${clipPathId})`}
+              y0={hospitalCapacity.max}
+              y1={currentlyHospitalized.expected.get}
+              fill={`url(#${gradientId})`}
             />
             <Line y={currentlyHospitalized.expected.get} stroke={blue} />
+            <Line y={hospitalCapacity.max} stroke={theme.color.background} />
             <Line
               y={hospitalCapacity.max}
+              stroke={yellow}
+              strokeDasharray="6,2"
+            />
+            <Line
+              y={cumulativeDeaths.expected.get}
               stroke={theme.color.background}
               strokeWidth={4}
             />
-            <Line y={hospitalCapacity.max} stroke={red} strokeDasharray="6,4" />
+            <Line y={cumulativeDeaths.expected.get} stroke={red} />
             {children && children(context)}
           </>
         );

@@ -13,8 +13,8 @@ export const Area = ({y0, y1, ...remaining}) => {
 
   return (
     <VxArea
-      {...remaining}
       clipPath={clipPath}
+      {...remaining}
       data={data}
       x={xFn}
       y0={y0Fn}

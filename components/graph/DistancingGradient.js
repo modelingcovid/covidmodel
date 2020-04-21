@@ -16,13 +16,13 @@ const distancingScale = scaleLinear({
 const lightMode = declarations;
 const lightSource = rgb(lightMode[properties.color.focus[0]]);
 const lightColor = (n) => {
-  lightSource.opacity = n * 0.2;
+  lightSource.opacity = n * 0.1;
   return lightSource.toString();
 };
 
-const darkSource = hcl('#272d4a');
+const darkSource = rgb(darkMode[properties.color.focus[0]]);
 const darkColor = (n) => {
-  darkSource.opacity = n * 0.8;
+  darkSource.opacity = n * 0.1;
   return darkSource.toString();
 };
 
