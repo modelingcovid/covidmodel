@@ -91,52 +91,6 @@ ventilators=Association[{"AL"->920,"AK"->104,"AZ"->1309,"AR"->633,"CA"->6589,"CO
 
 
 
-(* csv here https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/edit *)
-icuCurrentActualsRaw=Transpose[Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=158164744","CSV"][[2;;28]]];
-icuCurrentActualsHeader=icuCurrentActualsRaw[[1]];
-icuCurrentActualsBody=icuCurrentActualsRaw[[2;;]];
-icuCurrentActualsParsedData=Thread[icuCurrentActualsHeader->#]&/@icuCurrentActualsBody//Map[Association];
-stateICUCurrentActualsData[state_]:=Module[{data},
-  data = Select[Association[{"day"->#["State"], "icu"->If[#[state]=="",0,#[state]]}]&/@icuCurrentActualsParsedData,#["icu"]>0&];
-  If[Length[data]<=1,{},data]
-];
-
-icuCumulativeActualsRaw=Transpose[Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=460657503","CSV"][[2;;28]]];
-icuCumulativeActualsHeader=icuCumulativeActualsRaw[[1]];
-icuCumulativeActualsBody=icuCumulativeActualsRaw[[2;;]];
-icuCumulativeActualsParsedData=Thread[icuCumulativeActualsHeader->#]&/@icuCumulativeActualsBody//Map[Association];
-stateICUCumulativeActualsData[state_]:=Module[{data},
-  data = Select[Association[{"day"->#["State"],"icu"->If[#[state]=="",0,#[state]]}]&/@icuCumulativeActualsParsedData,#["icu"]>0&];
-  If[Length[data]<=1,{},data]
-];
-
-hospitalizatonsCurrentActualsRaw =
-Transpose[
-  Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=0", "CSV"][[2 ;; 28]]];
-hospitalizatonsCurrentActualsHeader = hospitalizatonsCurrentActualsRaw[[1]];
-hospitalizatonsCurrentActualsBody = hospitalizatonsCurrentActualsRaw[[2 ;;]];
-hospitalizatonsCurrentActualsParsedData =
-Thread[hospitalizatonsCurrentActualsHeader -> #]&/@hospitalizatonsCurrentActualsBody//Map[Association];
-stateHospitalizationCurrentActualsData[state_] := Module[{data},
-  data = Select[Association[{"day" -> #["State"],
-        "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCurrentActualsParsedData, #["hospitalizations"] > 0 &];
-  If[Length[data]<=1,{},data]
-]
-
-hospitalizatonsCumulativeActualsRaw =
-Transpose[
-  Import["https://docs.google.com/spreadsheets/d/16gJ6CEr6esVQ7guQCcz87j4S7Zt2GbIlOCqdVP9aGx0/export?format=csv&gid=1062475929", "CSV"][[2 ;; 28]]];
-hospitalizatonsCumulativeActualsHeader = hospitalizatonsCumulativeActualsRaw[[1]];
-hospitalizatonsCumulativeActualsBody = hospitalizatonsCumulativeActualsRaw[[2 ;;]];
-hospitalizatonsCumulativeActualsParsedData =
-Thread[hospitalizatonsCumulativeActualsHeader -> #] & /@
-hospitalizatonsCumulativeActualsBody // Map[Association];
-stateHospitalizationCumulativeActualsData[state_] := Module[{data},
-  data = Select[Association[{"day" -> #["State"], "hospitalizations" -> If[#[state] == "", 0, #[state]]}]&/@hospitalizatonsCumulativeActualsParsedData, #["hospitalizations"] > 0 &];
-  If[Length[data]<=1,{},data]
-];
-
-
 (* Data from covidtracking on reported PCR and fatalities *)
 stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
 (* remove data when there is only one positive case / death since that doesn't contain any trend information *)
@@ -157,6 +111,30 @@ statesWith50CasesAnd5Deaths = DeleteDuplicates[#["state"]&/@Select[parsedData,(#
 stateRawDemographicData = Association[(#->cachedAgeDistributionFor[#])&/@statesWith50CasesAnd5Deaths];
 (*stateImportTime = Association[{"NY"->56,"AZ"->63,"CA"->56,"CO"->55,"CT"->57,"FL"->56,"GA"->52,"IL"->58,"IN"->58,"MA"->58, "MI"->59,"NJ"->56,"NV"->58,"OH"->61,"PA"->62,"SC"->59,"TX"->61,"VA"->58,"VT"->54,"WA"->41,"WI"->60,"LA"->51,"OR"->55}];*)
 
+
+
+statesWithTrustedHospitalization={"AZ","CA","CO","CT","FL","GA","LA","MA","MD","MI","MS","NJ","NV","NY","OH","OK","OR","PA","TX","VA","WI"};
+trustedHospitalizationData=Select[stateParsedData,MemberQ[statesWithTrustedHospitalization,#["state"]]&];
+
+stateICUCurrentActualsData[state_]:=Module[{data},
+  data = Select[Association[{"day"->#["day"], "icu"->#["inIcuCurrently"]}]&/@Select[trustedHospitalizationData,#["state"]==state&],#["icu"]>0&];
+  If[Length[data]<=1,{},data]
+];
+
+stateICUCumulativeActualsData[state_]:=Module[{data},
+  data = Select[Association[{"day"->#["day"], "icu"->#["inIcuCumulative"]}]&/@Select[trustedHospitalizationData,#["state"]==state&],#["icu"]>0&];
+  If[Length[data]<=1,{},data]
+];
+
+stateHospitalizationCurrentActualsData[state_] := Module[{data},
+  data = Select[Association[{"day"->#["day"], "hospitalizations"->#["hospitalizedCurrently"]}]&/@Select[trustedHospitalizationData,#["state"]==state&],#["hospitalizations"]>0&];
+  If[Length[data]<=1,{},data]
+];
+
+stateHospitalizationCumulativeActualsData[state_] := Module[{data},
+  data = Select[Association[{"day"->#["day"], "hospitalizations"->#["hospitalizedCumulative"]}]&/@Select[trustedHospitalizationData,#["state"]==state&],#["hospitalizations"]>0&];
+  If[Length[data]<=1,{},data]
+];
 
 
 (* data cached from https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=53.086%2C-16.820%2C-78.047%2C72.123 *)
