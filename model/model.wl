@@ -94,7 +94,8 @@ susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibili
 
 
 
-mostRecentDistancingDay=DateString[DatePlus[DateObject[{2020,1,1}],Last[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="California"&&#["sub_region_2"]==""&]]-1]];
+(*mostRecentDistancingDay=DateString[DatePlus[DateObject[{2020,1,1}],Last[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="California"&&#["sub_region_2"]==""&]]-1]];*)
+mostRecentDistancingDay = usStateDistancingPrecompute["CA"]["scenario1"]["mostRecentDistancingDay"];
 
 
 (* to help the numerical optimizer we give slightly different problem bounds depening on state
@@ -406,16 +407,16 @@ generateModelComponents[distancing_] := <|
 
 getModelComponentsForState[state_] := Association[{#["id"]->generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]]}&/@scenarios];
 getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelComponents, equationsODE, initialConditions, outputODE, dependentVariables, eventsODE, parameters, parameterizedSolution},
-   modelComponents = generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]];
-   equationsODE = modelComponents["equationsODE"];
-   initialConditions = modelComponents["initialConditions"];
-   outputODE = modelComponents["outputFunctions"];
-   dependentVariables = modelComponents["dependentVariables"];
+      modelComponents = generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]];
+      equationsODE = modelComponents["equationsODE"];
+      initialConditions = modelComponents["initialConditions"];
+      outputODE = modelComponents["outputFunctions"];
+      dependentVariables = modelComponents["dependentVariables"];
 
-   eventsODE = modelComponents["simulationEvents"];
-   parameters = modelComponents["simulationParameters"];
-  
-   parameterizedSolution = ParametricNDSolveValue[{
+      eventsODE = modelComponents["simulationEvents"];
+      parameters = modelComponents["simulationParameters"];
+
+      parameterizedSolution = ParametricNDSolveValue[{
           equationsODE,
           eventsODE,
           initialConditions
@@ -426,13 +427,13 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
         DependentVariables->dependentVariables,
         Method->{"DiscontinuityProcessing"->False}
       ];
-      
+
       <|
         "parameterizedSolution" -> parameterizedSolution,
         "outputODE" -> outputODE
       |>
-   
-   ]}&/@scenarios];
+
+  ]}&/@scenarios];
 
 
 modelPrecompute = Association[{#->getModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
@@ -455,9 +456,9 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
     soln,
     parameterizedSolution
   },
-  
+
   modelComponents = simModelPrecompute[state][scenarioId];
-  
+
   outputODE = modelComponents["outputODE"];
   parameterizedSolution = modelComponents["parameterizedSolution"];
 
@@ -476,7 +477,7 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
       Sq->(Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&),
       Iq->(outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&),
       Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)
-     |>
+    |>
   ];
 
   outputEvents = Association[Table[
@@ -501,9 +502,9 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
     outputSolutionRules,
     outputEvents,
     time,
-    soln,
+    soln
   },
-  
+
   (*{time, soln} = AbsoluteTiming[Apply[parameterizedSolution, simulationParameters]];*)
   (*Echo[time];*)
   {outputSolution, outputEvents} = Reap[
@@ -521,7 +522,7 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
       Sq->(Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&),
       Iq->(outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&),
       Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)
-     |>
+    |>
   ];
 
   outputEvents = Association[Table[
@@ -624,26 +625,26 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   endOfYear = 730;
   endOfEval = endOfYear;
   endOfEvalAug1 = aug1;
-   population = stateParams["params"]["population"];
+  population = stateParams["params"]["population"];
 
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
   sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams];
 
   (* generate a solution for each simulation so we can get bands *)
   modelComponents = simModelPrecompute[state][scenario["id"]];
-  
+
   outputODE = modelComponents["outputODE"];
   parameterizedSolution = modelComponents["parameterizedSolution"];
 
   rawSimResults=Map[integrateModelSim[parameterizedSolution, outputODE, #][[1]]&, sims];
   simResults=Select[rawSimResults, endTime[#[Sq]]>=endOfEval&];
- 
+
 
   deciles = Range[0,10]/10;
 
   simDeciles[computationFunction_,simResults_:simResults]:=Quantile[Map[computationFunction, simResults], deciles];
   simMedian[computationFunction_,simResults_:simResults]:=Median[Map[computationFunction, simResults]];
-  
+
   distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
 
   PCRQuantiles[t_] := simDeciles[#[PCR][t]&] * population;
@@ -665,10 +666,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   DailyCumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
   CumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t]&] * population;
-  
+
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
-  
-  
+
+
 
   (* TODO Revisit these defintions *)
   (* TODO shift all percentiles down by 1 (since index 1 is now the zeroth percentile) *)
@@ -696,13 +697,13 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               percentileMap[PCRQuantiles[t]]
             },First],
           "cumulativeExposed"->Merge[{
-            <|"expected"-> population*sol[cumEq][t]|>,
-            percentileMap[CumulativeExposedQuantiles[t]]
-          },First],
-           "newlyExposed"->Merge[{
-            <|"expected"-> population*(sol[cumEq][t] - sol[cumEq][t-1])|>,
-            percentileMap[DailyCumulativeExposedQuantiles[t]]
-          },First],
+              <|"expected"-> population*sol[cumEq][t]|>,
+              percentileMap[CumulativeExposedQuantiles[t]]
+            },First],
+          "newlyExposed"->Merge[{
+              <|"expected"-> population*(sol[cumEq][t] - sol[cumEq][t-1])|>,
+              percentileMap[DailyCumulativeExposedQuantiles[t]]
+            },First],
           "cumulativeDeaths" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],0]]|>,
               <|"expected"-> population*sol[Deaq][t]|>,
@@ -720,7 +721,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               <|"expected"-> population*sol[Rq][t]|>,
               percentileMap[CumulativeRecoveredQuantiles[t]]
             }, First],
-            
+
           "currentlyReportedHospitalized" -> Merge[{
               <|"confirmed"->If[
                   Length[Select[stateParams["hospitalizationCurrentData"],(#["day"]==t)&]]==1 && KeyExistsQ[Select[stateParams["hospitalizationCurrentData"],
@@ -749,7 +750,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               <|"expected"-> population*sol[EHq][t]|>,
               percentileMap[CumulativeHospitalizedQuantiles[t]]
             }, First],
-            
+
           "cumulativeCritical" -> Merge[{
               <|"confirmed"->If[
                   Length[Select[stateParams["icuCumulativeData"],(#["day"]==t)&]]==1 && KeyExistsQ[Select[stateParams["icuCumulativeData"],
@@ -786,34 +787,34 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   {summary, summaryAug1} = Map[
     Function[t, <|
-       "totalProjectedDeaths"->sol[Deaq][t] * population,
-"totalProjectedPCRConfirmed"-> sol[PCR][t] * population,
-"totalProjectedInfected"->  sol[cumEq][t] * population,
-"totalInfectedFraction"-> sol[cumEq][t],
-"fatalityRate"-> sol[Deaq][t] /  sol[cumEq][t],
-"fatalityRateSymptomatic"-> sol[Deaq][t] / (fractionSymptomatic0 * sol[cumEq][t]),
-"fatalityRatePCR"-> sol[Deaq][t] / sol[PCR][t],
-"fractionOfSymptomaticHospitalized"-> sol[EHq][t] / (fractionSymptomatic0 * sol[cumEq][t]),
-"fractionOfSymptomaticHospitalizedOrICU"-> (sol[EHq][t]+sol[EHCq][t]) / (fractionSymptomatic0 * sol[cumEq][t]),
-"fractionOfPCRHospitalized"-> sol[RepHq][t] / sol[PCR][t],
-"fractionOfPCRHospitalizedOrICU"-> (sol[RepHq][t] + sol[RepHCq][t]) / sol[PCR][t],
-"fractionHospitalizedInICU"->(sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]),
-"fractionOfDeathInICU"->(sol[DeaICUq][t]) / (sol[Deaq][t]),
-"fractionDeathOfHospitalizedOrICU"->sol[Deaq][t] / (sol[RepHq][t] + sol[RepHCq][t]),
-"fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
-"dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
-"dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
-    DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
-    ""],
-"dateHospitalsOverCapacity"->If[!TrueQ[hospitalOverloadTime == Null],
-    DateString[DatePlus[{2020,1,1}, hospitalOverloadTime - 1]],
-    ""]|>],
+        "totalProjectedDeaths"->sol[Deaq][t] * population,
+        "totalProjectedPCRConfirmed"-> sol[PCR][t] * population,
+        "totalProjectedInfected"->  sol[cumEq][t] * population,
+        "totalInfectedFraction"-> sol[cumEq][t],
+        "fatalityRate"-> sol[Deaq][t] /  sol[cumEq][t],
+        "fatalityRateSymptomatic"-> sol[Deaq][t] / (fractionSymptomatic0 * sol[cumEq][t]),
+        "fatalityRatePCR"-> sol[Deaq][t] / sol[PCR][t],
+        "fractionOfSymptomaticHospitalized"-> sol[EHq][t] / (fractionSymptomatic0 * sol[cumEq][t]),
+        "fractionOfSymptomaticHospitalizedOrICU"-> (sol[EHq][t]+sol[EHCq][t]) / (fractionSymptomatic0 * sol[cumEq][t]),
+        "fractionOfPCRHospitalized"-> sol[RepHq][t] / sol[PCR][t],
+        "fractionOfPCRHospitalizedOrICU"-> (sol[RepHq][t] + sol[RepHCq][t]) / sol[PCR][t],
+        "fractionHospitalizedInICU"->(sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]),
+        "fractionOfDeathInICU"->(sol[DeaICUq][t]) / (sol[Deaq][t]),
+        "fractionDeathOfHospitalizedOrICU"->sol[Deaq][t] / (sol[RepHq][t] + sol[RepHCq][t]),
+        "fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
+        "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
+        "dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
+          DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
+          ""],
+        "dateHospitalsOverCapacity"->If[!TrueQ[hospitalOverloadTime == Null],
+          DateString[DatePlus[{2020,1,1}, hospitalOverloadTime - 1]],
+          ""]|>],
     {
       If[hasContainment,containmentTime,endOfEval],
       If[hasContainment, Min[containmentTime, endOfEvalAug1], endOfEvalAug1]}
- ];
- 
- Merge[{
+  ];
+
+  Merge[{
       <|"distancingLevel"-> stateDistancingPrecompute[state][scenario["id"]]["distancingLevel"]|>,
       scenario,
       Association[{
@@ -865,7 +866,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     tupper,
     replower,
     repupper,
-    powlower, 
+    powlower,
     powupper,
     deathDataLength,
     output,
@@ -1035,7 +1036,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   output = Merge[{
       <|"scenarios"->
         Association[
-             {#["id"]->evaluateScenario[state,fitParams,standardErrors,
+          {#["id"]->evaluateScenario[state,fitParams,standardErrors,
               <|"params"->params,
                 "thisStateData"->thisStateData,
                 "icuCapacity"->icuCapacity,
@@ -1124,22 +1125,22 @@ exportAllStatesSummaryAug1[allStates_]:=Module[{header, rows, table},
 ]
 
 getSeriesForKey[data_, key_]:=Module[{},
- #[key]&/@data
+  #[key]&/@data
 ];
 
 exportTimeSeries[state_, scenario_, data_]:=Module[{timeData, fixedKeys, timeDataKeys, days, distancing, hospitalCapacity},
-   fixedKeys = {"day", "distancing", "hospitalCapacity"};
-   timeData = Select[data["timeSeriesData"], #["day"]<=370&];
-   timeDataKeys = Keys[KeyDrop[timeData[[1]], fixedKeys]];
-   
-   
-   distancing = #["distancing"]&/@data["timeSeriesData"];
-   hospitalCapacity = #["hospitalCapacity"]&/@data["timeSeriesData"];
-   
-   Export["public/json/"<>state<>"/"<>scenario["id"]<>"/"<>#<>".json", getSeriesForKey[data["timeSeriesData"], #]]&/@timeDataKeys;
-   
-   Export["public/json/"<>state<>"/"<>scenario["id"]<>"/distancing.json", distancing];
-   Export["public/json/"<>state<>"/"<>scenario["id"]<>"/hospitalCapacity.json", hospitalCapacity];
+  fixedKeys = {"day", "distancing", "hospitalCapacity"};
+  timeData = Select[data["timeSeriesData"], #["day"]<=370&];
+  timeDataKeys = Keys[KeyDrop[timeData[[1]], fixedKeys]];
+
+
+  distancing = #["distancing"]&/@data["timeSeriesData"];
+  hospitalCapacity = #["hospitalCapacity"]&/@data["timeSeriesData"];
+
+  Export["public/json/"<>state<>"/"<>scenario["id"]<>"/"<>#<>".json", getSeriesForKey[data["timeSeriesData"], #]]&/@timeDataKeys;
+
+  Export["public/json/"<>state<>"/"<>scenario["id"]<>"/distancing.json", distancing];
+  Export["public/json/"<>state<>"/"<>scenario["id"]<>"/hospitalCapacity.json", hospitalCapacity];
 ];
 
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
@@ -1155,10 +1156,10 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:Keys[fitStartingOverrides
 
     Export["public/json/"<>state<>"/days.json", Select[days, #<=370&]];
     Export["public/json/"<>state<>"/summary.json",Merge[{
-      KeyDrop[stateData, {"scenarios"}],
-      <|"scenarios"->(#["id"]&/@scenarios)|>
-      }
-    ,First]];
+          KeyDrop[stateData, {"scenarios"}],
+          <|"scenarios"->(#["id"]&/@scenarios)|>
+        }
+        ,First]];
     stateData
   ];
 
@@ -1201,11 +1202,11 @@ Module[{raw,pop,dist,buckets},
 
 
 fitManipulate[state_:"OH"] := Module[{params, distancing, modelComponents, logTransform, equationsODE, eventsODE, initialConditions, dependentVariablesODE, parameters,
-outputODE, thisStateData, hospitalizationCumulativeData, icuCumulativeData, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
-params=stateParams[state];
-distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
-modelComponents = generateModelComponents[distancing, testingProbability];
-logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
+    outputODE, thisStateData, hospitalizationCumulativeData, icuCumulativeData, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
+  params=stateParams[state];
+  distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
+  modelComponents = generateModelComponents[distancing, testingProbability];
+  logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
   equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   eventsODE = modelComponents["parametricFitEvents"]/.logTransform;
   initialConditions = modelComponents["initialConditions"];
@@ -1222,34 +1223,34 @@ logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences
     Method->{"DiscontinuityProcessing"->False}
   ];
 
-thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
-hospitalizationCumulativeData = stateHospitalizationCumulativeActualsData[state];
+  thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
+  hospitalizationCumulativeData = stateHospitalizationCumulativeActualsData[state];
   icuCumulativeData = stateICUCumulativeActualsData[state];
 
-longData=Select[Join[
-{1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
-{2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData,
-{3,#["day"],#["hospitalizations"]/params["population"]}&/@hospitalizationCumulativeData],#[[3]]>0&]
-;
+  longData=Select[Join[
+      {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
+      {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData,
+      {3,#["day"],#["hospitalizations"]/params["population"]}&/@hospitalizationCumulativeData],#[[3]]>0&]
+  ;
 
-Manipulate[Show[
-   ListLogPlot[Cases[longData,{#,t_,c_}:>{t,c}]&/@{1,2,3},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
-   LogPlot[{
-      DeaqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-      PCRParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-      RepHqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t-daysForHospitalsToReportCases]
-   },{t,40,150},ImageSize->500]
- ],{{r0,3.645},2,5},{{t0,65},35,70},{{adj,0.38},0,2},{{distpow,2},1.5,2},{{daysForHospitalsToReportCases,1.5},1,10}]
+  Manipulate[Show[
+      ListLogPlot[Cases[longData,{#,t_,c_}:>{t,c}]&/@{1,2,3},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
+      LogPlot[{
+          DeaqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
+          PCRParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
+          RepHqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t-daysForHospitalsToReportCases]
+        },{t,40,150},ImageSize->500]
+    ],{{r0,3.645},2,5},{{t0,65},35,70},{{adj,0.38},0,2},{{distpow,2},1.5,2},{{daysForHospitalsToReportCases,1.5},1,10}]
 ];
 
 
 fitManipulateCurrent[state_:"TX"] := Module[
   {params, distancing, modelComponents, logTransform, equationsODE, eventsODE, initialConditions, dependentVariablesODE, parameters,
-outputODE, thisStateData, hospitalizationCurrentData, icuCumulativeData, HHqParametric, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
-params=stateParams[state];
-distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
-modelComponents = generateModelComponents[distancing];
-logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
+    outputODE, thisStateData, hospitalizationCurrentData, icuCumulativeData, HHqParametric, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
+  params=stateParams[state];
+  distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
+  modelComponents = generateModelComponents[distancing];
+  logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
   equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   eventsODE = modelComponents["parametricFitEvents"]/.logTransform;
   initialConditions = modelComponents["initialConditions"];
@@ -1266,21 +1267,21 @@ logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences
     Method->{"DiscontinuityProcessing"->False}
   ];
 
-thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
-hospitalizationCurrentData = stateHospitalizationCurrentActualsData[state];
+  thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
+  hospitalizationCurrentData = stateHospitalizationCurrentActualsData[state];
   icuCumulativeData = stateICUCumulativeActualsData[state];
 
-longData=Select[Join[
-{1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
-{2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData,
-{3,#["day"],#["hospitalizations"]/params["population"]}&/@hospitalizationCurrentData],#[[3]]>0&];
+  longData=Select[Join[
+      {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
+      {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData,
+      {3,#["day"],#["hospitalizations"]/params["population"]}&/@hospitalizationCurrentData],#[[3]]>0&];
 
-Manipulate[Show[
-   ListLogPlot[Cases[longData,{#,t_,c_}:>{t,c}]&/@{1,2,3},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
-   LogPlot[{
-      DeaqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-      PCRParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-      HHqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t-daysForHospitalsToReportCases]
-   },{t,40,150},ImageSize->500]
- ],{{r0,3.645},2,5},{{t0,65},35,70},{{adj,0.38},0,2},{{distpow,2},1.5,2},{{daysForHospitalsToReportCases,1.5},1,10}]
+  Manipulate[Show[
+      ListLogPlot[Cases[longData,{#,t_,c_}:>{t,c}]&/@{1,2,3},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
+      LogPlot[{
+          DeaqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
+          PCRParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
+          HHqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t-daysForHospitalsToReportCases]
+        },{t,40,150},ImageSize->500]
+    ],{{r0,3.645},2,5},{{t0,65},35,70},{{adj,0.38},0,2},{{distpow,2},1.5,2},{{daysForHospitalsToReportCases,1.5},1,10}]
 ];

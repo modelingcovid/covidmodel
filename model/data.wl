@@ -98,7 +98,7 @@ stateParsedData = Merge[{
     <|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]<=2] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>,
     <|"positive"-> If[KeyExistsQ[#,"positive"],If[TrueQ[#["positive"]<=4] || TrueQ[#["positive"]==Null],Null,#["positive"]],Null]|>,
     #},First]&/@(Append[#,"day"->QuantityMagnitude[DateDifference[DateList[{2020,1,1}],DateList[#["date"]//ToString]]]]&/@stateData);
-    
+
 franceData=<|"day"->Floor[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}], DateObject[#["last_update"]]]]],"state"->"France", "death"->#["deaths"],"positive"->#["confirmed"]|>&/@URLExecute[URLBuild["https://api.covid19data.cloud/v1/jh/daily-reports/?limit=100&country=France"], "RawJSON"];
 spainData=<|"day"->Floor[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}], DateObject[#["last_update"]]]]],"state"->"Spain", "death"->#["deaths"],"positive"->#["confirmed"]|>&/@URLExecute[URLBuild["https://api.covid19data.cloud/v1/jh/daily-reports/?limit=100&country=Spain"], "RawJSON"];
 italyData=<|"day"->Floor[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}], DateObject[#["last_update"]]]]],"state"->"Italy", "death"->#["deaths"],"positive"->#["confirmed"]|>&/@URLExecute[URLBuild["https://api.covid19data.cloud/v1/jh/daily-reports/?limit=100&country=Italy"], "RawJSON"];
@@ -181,62 +181,62 @@ testingProbability = Module[{rawData,interpolatedData},
 
 
 parseCsv[url_]:=Module[{raw,header,body},
-raw=Import[url,"CSV"];
-header=raw[[1]];
-body=raw[[2;;]];
-Thread[header->#]&/@body//Map[Association]
+  raw=Import[url,"CSV"];
+  header=raw[[1]];
+  body=raw[[2;;]];
+  Thread[header->#]&/@body//Map[Association]
 ];
 
 codesToStates=<|"AL" -> "Alabama",
-"AK" -> "Alaska",
-"AZ" -> "Arizona",
-"AR" -> "Arkansas",
-"CA" -> "California",
-"CO" -> "Colorado",
-"CT" -> "Connecticut",
-"DE" -> "Delaware",
-"FL" -> "Florida",
-"GA" -> "Georgia",
-"HI" -> "Hawaii",
-"ID" -> "Idaho",
-"IL" -> "Illinois",
-"IN" -> "Indiana",
-"IA" -> "Iowa",
-"KS" -> "Kansas",
-"KY" -> "Kentucky",
-"LA" -> "Louisiana",
-"ME" -> "Maine",
-"MD" -> "Maryland",
-"MA" -> "Massachusetts",
-"MI" -> "Michigan",
-"MN" -> "Minnesota",
-"MS" -> "Mississippi",
-"MO" -> "Missouri",
-"MT" -> "Montana",
-"NE" -> "Nebraska",
-"NV" -> "Nevada",
-"NH" -> "New Hampshire",
-"NJ" -> "New Jersey",
-"NM" -> "New Mexico",
-"NY" -> "New York",
-"NC" -> "North Carolina",
-"ND" -> "North Dakota",
-"OH" -> "Ohio",
-"OK" -> "Oklahoma",
-"OR" -> "Oregon",
-"PA" -> "Pennsylvania",
-"RI" -> "Rhode Island",
-"SC" -> "South Carolina",
-"SD" -> "South Dakota",
-"TN" -> "Tennessee",
-"TX" -> "Texas",
-"UT" -> "Utah",
-"VT" -> "Vermont",
-"VA" -> "Virginia",
-"WA" -> "Washington",
-"WV" -> "West Virginia",
-"WI" -> "Wisconsin",
-"WY" -> "Wyoming"|>;
+  "AK" -> "Alaska",
+  "AZ" -> "Arizona",
+  "AR" -> "Arkansas",
+  "CA" -> "California",
+  "CO" -> "Colorado",
+  "CT" -> "Connecticut",
+  "DE" -> "Delaware",
+  "FL" -> "Florida",
+  "GA" -> "Georgia",
+  "HI" -> "Hawaii",
+  "ID" -> "Idaho",
+  "IL" -> "Illinois",
+  "IN" -> "Indiana",
+  "IA" -> "Iowa",
+  "KS" -> "Kansas",
+  "KY" -> "Kentucky",
+  "LA" -> "Louisiana",
+  "ME" -> "Maine",
+  "MD" -> "Maryland",
+  "MA" -> "Massachusetts",
+  "MI" -> "Michigan",
+  "MN" -> "Minnesota",
+  "MS" -> "Mississippi",
+  "MO" -> "Missouri",
+  "MT" -> "Montana",
+  "NE" -> "Nebraska",
+  "NV" -> "Nevada",
+  "NH" -> "New Hampshire",
+  "NJ" -> "New Jersey",
+  "NM" -> "New Mexico",
+  "NY" -> "New York",
+  "NC" -> "North Carolina",
+  "ND" -> "North Dakota",
+  "OH" -> "Ohio",
+  "OK" -> "Oklahoma",
+  "OR" -> "Oregon",
+  "PA" -> "Pennsylvania",
+  "RI" -> "Rhode Island",
+  "SC" -> "South Carolina",
+  "SD" -> "South Dakota",
+  "TN" -> "Tennessee",
+  "TX" -> "Texas",
+  "UT" -> "Utah",
+  "VT" -> "Vermont",
+  "VA" -> "Virginia",
+  "WA" -> "Washington",
+  "WV" -> "West Virginia",
+  "WI" -> "Wisconsin",
+  "WY" -> "Wyoming"|>;
 
 
 countryDistancingPrecompute = Module[{
@@ -252,19 +252,19 @@ countryDistancingPrecompute = Module[{
     smoothing,
     SlowJoin,
     ApplyWhere,
-googleMobility,
-dates,
-es,
-fr,
-it
+    googleMobility,
+    dates,
+    es,
+    fr,
+    it
   },
 
-googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
-dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"State"];
-es=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="ES"&&#["sub_region_1"]==""&],"Spain"];
-it=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"Italy"];
-fr=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="FR"&&#["sub_region_1"]==""&],"France"];
-  
+  googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
+  dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"State"];
+  es=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="ES"&&#["sub_region_1"]==""&],"Spain"];
+  it=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"Italy"];
+  fr=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="FR"&&#["sub_region_1"]==""&],"France"];
+
 
   rawCsvTable = {dates,fr,es,it};
 
@@ -370,20 +370,28 @@ usStateDistancingPrecompute = Module[{
     smoothing,
     SlowJoin,
     ApplyWhere,
-    dates,stateDistancing,googleMobility
-    
+    dates,
+    stateDistancing,
+    googleMobility,
+    stateList
   },
   googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
   dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="Virginia"&&#["sub_region_2"]==""&],"State"];
 
   stateDistancing[state_]:=Module[{stateName},
-   stateName=codesToStates[state];	
-
-   Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]==stateName&&#["sub_region_2"]==""&],state]
+    stateName=codesToStates[state];
+    Prepend[
+      Map[
+        Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&,
+        Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]==stateName&&#["sub_region_2"]==""&]],
+      state]
   ];
 
-  rawCsvTable=Prepend[stateDistancing[#]&/@Keys[fitStartingOverrides],dates];
-  
+  stateList={"AZ","CA","FL","PA","CO","TX","WA","CT","OH","NY","VA","VT","LA","MI","MS","MA","MD","GA","NJ","IL","IN","OK","WI","NV","OR","SC"};
+  rawCsvTable=Prepend[
+    Map[stateDistancing, stateList],
+    dates];
+
   (*rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];*)
 
   dataDays = rawCsvTable[[1,2;;]];
@@ -465,7 +473,9 @@ usStateDistancingPrecompute = Module[{
       "distancingDays"->fullDays,
       "distancingLevel"->distancingLevel,
       "distancingData"->fullDistancing,
-      "distancingFunction"->distancingFunction|>
+      "distancingFunction"->distancingFunction,
+      "mostRecentDistancingDay"->DateString[DatePlus[DateObject[{2020,1,1}], Last[dataDays]]]
+    |>
   ];
 
   processState[state_,distancing_] := state->Association[
