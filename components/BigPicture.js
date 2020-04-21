@@ -145,7 +145,7 @@ export function BigPicture({height, width}) {
         return—first slowly, then rapidly and then taper off without infecting
         the entire population.
       </Paragraph>
-      <Heading>Herd immunity</Heading>
+      <Heading>Herd immunity and flattening the curve</Heading>
       <Paragraph>
         After distancing ends, why doesn’t the entire population become
         infected? This is due to “<strong>herd immunity</strong>.”
@@ -180,25 +180,61 @@ export function BigPicture({height, width}) {
         distancing takes a significant toll on {location.name}’s hospital
         system.
       </Paragraph>
+
       <Paragraph>
-        When the virus is allowed to spread uninhibited, the{' '}
+        In this example, the model predicts that the{' '}
+        <strong>social distancing period</strong> slows the spread of the virus,
+        which allows the{' '}
         <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
           current number of people who require hospitalization
         </InlineLabel>{' '}
-        quickly exceeds the available{' '}
+        to remain below{' '}
+        <InlineLabel
+          color={theme.color.yellow.text}
+          fill={theme.color.yellow[3]}
+        >
+          hospital capacity
+        </InlineLabel>
+        , and lessen the{' '}
+        <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
+          total number of fatalities
+        </InlineLabel>
+        .
+      </Paragraph>
+
+      <HospitalizationGraph height={height} width={width} scrubber={false} />
+
+      <Paragraph>
+        However, if the virus is then allowed to spread uninhibited{' '}
+        <strong>without social distancing measures</strong>, the{' '}
+        <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
+          current number of people who require hospitalization
+        </InlineLabel>{' '}
+        will quickly exceed the available{' '}
         <InlineLabel
           color={theme.color.yellow.text}
           fill={theme.color.yellow[3]}
         >
           hospital capacity
         </InlineLabel>{' '}
-        in {location.name}, which increases the{' '}
+        in {location.name}, which will increase the{' '}
         <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
           total number of fatalities
         </InlineLabel>
         .
       </Paragraph>
-      <HospitalizationGraph height={height} width={width} scrubber={false} />
+      <Paragraph>
+        The contrast between the outcome of the{' '}
+        <strong>social distancing period</strong> and the time{' '}
+        <strong>without distancing measures</strong> illustrates how social
+        distancing “
+        <strong>
+          <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">
+            flattens the curve
+          </a>
+        </strong>
+        .”
+      </Paragraph>
     </div>
   );
 }
