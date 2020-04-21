@@ -17,7 +17,7 @@ daysFromInfectedToSymptomatic0 = 5;
 
 (*Rate of losing infectiousness or going to the hospital*)
 daysUntilNotInfectious0 = 5;
-daysUntilHospitalized0 = 7;
+daysUntilHospitalized0 = 9.5;
 
 (*Rate of leaving hospital for those not going to critical care*)
 daysToLeaveHosptialNonCritical0 = 12;
@@ -29,8 +29,8 @@ daysTogoToCriticalCare0 = 1.5;
 daysFromCriticalToRecoveredOrDeceased0 = 10;
 
 (* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
-pPCRH0 = 0.8;
-pPCRNH0 = 0.13;
+pPCRH0 = 0.7;
+pPCRNH0 = 0.15;
 
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1.5;
@@ -50,7 +50,7 @@ importlength0 = 3;
 fractionOfCriticalDeceased0 = 0.4;
 (*Fraction deceased from hospital who dont make it to critical care (clear it happens from NY cumulative ICU numbers) *)
 (* currently unused, but we should figure out if it makes sense to add *)
-fractionOfHospitalizedNonCriticalDeceased0 = 0.05;
+fractionOfHospitalizedNonCriticalDeceased0 = 0.11;
 
 (* interpret as: steepness of age depencence*)
 medianHospitalizationAge0 = 61;
@@ -89,7 +89,7 @@ susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
   Table[
     NIntegrate[x PDF[dist,x],{x,binEdges[[i]],binEdges[[i+1]]}],{i,1,binCount}]//(binCount #/Total[#])&
 ];
-susceptibilityValues=susceptibilityValuesLogNormal[susceptibilityBins,1];
+susceptibilityValues=susceptibilityValuesLogNormal[susceptibilityBins,1.2];
 susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibilityBins];
 
 
@@ -104,31 +104,31 @@ gap between PCR and death *)
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
   "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.8,"powupper"->2|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
-  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.95,"repupper"->1.05,"powlower"->1.8,"powupper"->2|>,
+  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.5,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
+  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
   "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "CO"-><|"rlower"->3.3,"rupper"->4.4,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.8,"powupper"->2|>,
-  "TX"-><|"rlower"->3,"rupper"->4.8,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
-  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.75,"repupper"->0.9,"powlower"->1.5,"powupper"->2|>,
+  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->42.5,"tupper"->75,"replower"->0.5,"repupper"->0.7,"powlower"->1.8,"powupper"->2|>,
+  "TX"-><|"rlower"->3,"rupper"->5,"tlower"->42,"tupper"->75,"replower"->0.5,"repupper"->0.75,"powlower"->1.8,"powupper"->2|>,
+  "WA"-><|"rlower"->2.3,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.75,"repupper"->0.95,"powlower"->1.5,"powupper"->2|>,
   "CT"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->75,"replower"->0.3,"repupper"->0.8,"powlower"->1.8,"powupper"->2|>,
   "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.45,"repupper"->0.6,"powlower"->1.6,"powupper"->2|>,
-  "NY"-><|"rlower"->4.6,"rupper"->5,"tlower"->30,"tupper"->34,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
+  "NY"-><|"rlower"->4.7,"rupper"->5,"tlower"->30,"tupper"->34,"replower"->0.5,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
-  "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->1,"powlower"->1.8,"powupper"->2|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->40,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
+  "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.85,"powlower"->1.8,"powupper"->2|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
   "MI"-><|"rlower"->4.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.45,"powlower"->1.5,"powupper"->2|>,
   "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
   "MA"-><|"rlower"->4.8,"rupper"->5,"tlower"->35,"tupper"->46,"replower"->0.55,"repupper"->0.65,"powlower"->1.5,"powupper"->2|>,
   "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.6,"powlower"->1.45,"powupper"->2|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->35,"tupper"->75,"replower"->0.40,"repupper"->0.55,"powlower"->1.45,"powupper"->2|>,
   "NJ"-><|"rlower"->4.8,"rupper"->6,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
-  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.65,"powlower"->1.8,"powupper"->2|>,
+  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->2|>,
   "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->50,"replower"->0.35,"repupper"->0.5,"powlower"->1.9,"powupper"->2|>,
-  "OK"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.4,"powlower"->1.9,"powupper"->2|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1.9,"powupper"->2|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.65,"powlower"->1.6,"powupper"->2|>,
-  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->44,"replower"->0.5,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7,"powlower"->1.7,"powupper"->2.5|>(*,
+  "OK"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.4,"powlower"->1.9,"powupper"->2|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.6,"powlower"->1.9,"powupper"->2|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->0.7,"powlower"->1.6,"powupper"->2|>,
+  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->44,"replower"->0.85,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
+  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.8,"powlower"->1.7,"powupper"->2.5|>(*,
   "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
   "France"-><|"rlower"->2.8,"rupper"->4.6,"tlower"\[Rule]25,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1,"powupper"->2.5|>,
   "Italy"-><|"rlower"\[Rule]3.5,"rupper"\[Rule]5,"tlower"\[Rule]10,"tupper"\[Rule]15,"replower"->0.2,"repupper"->0.4,"powlower"->1,"powupper"\[Rule]1.25|>*)
@@ -320,6 +320,8 @@ generateModelComponents[distancing_] := <|
       CCq'[t]==HCq[t]/daysTogoToCriticalCare-CCq[t]/daysFromCriticalToRecoveredOrDeceased,
       (*Dying*)
       Deaq'[t]==testingProbability[t] * CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased + HHq[t]*fractionOfHospitalizedNonCriticalDeceased0/daysToLeaveHosptialNonCritical,
+      (*Deaq ICU*)
+      DeaICUq'[t]==testingProbability[t] * CCq[t]*If[CCq[t]>=icuCapacity,fractionOfCriticalDeceased,fractionOfCriticalDeceased]/daysFromCriticalToRecoveredOrDeceased,
       (*Leaving critical care*)
       RCq'[t]==CCq[t]*(1-fractionOfCriticalDeceased)/daysFromCriticalToRecoveredOrDeceased,
       (* establishment *)
@@ -341,15 +343,15 @@ generateModelComponents[distancing_] := <|
       Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
       Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
       RepHq[tmin0]==0,RepHCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
-      Deaq[tmin0]==0,est[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
+      Deaq[tmin0]==0,DeaICUq[tmin0]==0,est[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
 
   "outputFunctions" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, cumEq}],
+      Deaq, PCR, RepHq, RepHCq, DeaICUq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, cumEq}],
 
   "dependentVariables" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, cumEq}],
+      Deaq, PCR, RepHq, RepHCq, DeaICUq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, cumEq}],
 
   "simulationParameters" -> {
     r0natural,
@@ -792,9 +794,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 "fatalityRateSymptomatic"-> sol[Deaq][t] / (fractionSymptomatic0 * sol[cumEq][t]),
 "fatalityRatePCR"-> sol[Deaq][t] / sol[PCR][t],
 "fractionOfSymptomaticHospitalized"-> sol[EHq][t] / (fractionSymptomatic0 * sol[cumEq][t]),
+"fractionOfSymptomaticHospitalizedOrICU"-> (sol[EHq][t]+sol[EHCq][t]) / (fractionSymptomatic0 * sol[cumEq][t]),
 "fractionOfPCRHospitalized"-> sol[RepHq][t] / sol[PCR][t],
+"fractionOfPCRHospitalizedOrICU"-> (sol[RepHq][t] + sol[RepHCq][t]) / sol[PCR][t],
 "fractionHospitalizedInICU"->(sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]),
-"fractionDeathOfHospitalized"->(sol[Deaq][t] / (sol[RepHq][t] + sol[RepHCq][t])),
+"fractionOfDeathInICU"->(sol[DeaICUq][t]) / (sol[Deaq][t]),
+"fractionDeathOfHospitalizedOrICU"->sol[Deaq][t] / (sol[RepHq][t] + sol[RepHCq][t]),
 "fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
 "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
 "dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
@@ -865,7 +870,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     deathDataLength,
     output,
     paramExpected,
-    fittime
+    fittime,
+    DeaICUqParametric
   },
 
   modelComponents = modelPrecompute[state]["scenario1"];
@@ -888,8 +894,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   dependentVariablesODE = modelComponents["dependentVariables"];
   parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
 
-  outputODE = {Deaq, PCR};
-  {DeaqParametric,PCRParametric}= {Deaq, PCR}/.ParametricNDSolve[
+  outputODE = {Deaq, PCR, DeaICUq};
+  {DeaqParametric,PCRParametric, DeaICUqParametric}= {Deaq, PCR, DeaICUq}/.ParametricNDSolve[
     {equationsODE, eventsODE, initialConditions},
     outputODE,
     {t,tmin0,tmax0},
