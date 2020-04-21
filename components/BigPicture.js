@@ -1,6 +1,11 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {SEIRGraph, SEIRGutter, useSEIRConfig} from './configured';
+import {
+  HospitalizationGraph,
+  SEIRGraph,
+  SEIRGutter,
+  useSEIRConfig,
+} from './configured';
 import {
   Grid,
   Gutter,
@@ -71,7 +76,7 @@ export function BigPicture({height, width}) {
       <Title className="margin-bottom-3">The big picture</Title>
       <Paragraph>
         To illustrate how social distancing can impact the spread of COVID-19,
-        let’s consider an example:
+        consider an example:
       </Paragraph>
       <Paragraph className="pullquote">
         What would happen if <strong>{location.name}</strong> enacted a policy
@@ -140,8 +145,15 @@ export function BigPicture({height, width}) {
       </Paragraph>
       <Paragraph>
         After distancing ends, why doesn’t the entire population become
-        infected? This is called “herd immunity.”
+        infected? This is called “<strong>herd immunity</strong>.”
       </Paragraph>
+      <Heading>Flattening the curve</Heading>
+      <Paragraph>
+        By the end of the year, after a lengthy period of no distancing, the
+        model predicts most people in {location.name} will be immune to
+        COVID-19.
+      </Paragraph>
+      <HospitalizationGraph height={height} width={width} scrubber={false} />
     </div>
   );
 }

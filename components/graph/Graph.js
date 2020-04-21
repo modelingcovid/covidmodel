@@ -100,7 +100,7 @@ export const GraphContents = React.memo(function Graph({
     }
   }, [domain, nice, scale, yMax]);
 
-  const clipPathId = useComponentId('graphClipPath');
+  const id = useComponentId('graph');
 
   const yTicks = yScale.ticks(yMax > 180 ? 5 : 3);
   const yTickCount = yTicks.length;
@@ -114,10 +114,22 @@ export const GraphContents = React.memo(function Graph({
 
   const distancingId = useDistancingId();
 
+  const clipPathId = `${id}-boundary`;
   const clipPath = `url(#${clipPathId})`;
   const context = useMemo(
-    () => ({data, clipPath, margin, scrubber, x, xScale, yScale, xMax, yMax}),
-    [data, clipPath, margin, scrubber, x, xScale, yScale, xMax, yMax]
+    () => ({
+      data,
+      clipPath,
+      id,
+      margin,
+      scrubber,
+      x,
+      xScale,
+      yScale,
+      xMax,
+      yMax,
+    }),
+    [data, clipPath, id, margin, scrubber, x, xScale, yScale, xMax, yMax]
   );
 
   return (

@@ -189,14 +189,14 @@ const queries = [
   [
     'Scenario',
     `{
-      hospitalCapacity { data }
+      hospitalCapacity { ...SeriesFull }
       currentlyHospitalized { ...DistributionSeriesFull }
       currentlyReportedHospitalized { ...DistributionSeriesFull }
       cumulativeHospitalized { ...DistributionSeriesFull }
       cumulativeReportedHospitalized { ...DistributionSeriesFull }
     }`,
     {
-      hospitalCapacity: (d, i) => d.hospitalCapacity.data[i],
+      hospitalCapacity: createSeries((d) => d.hospitalCapacity),
       currentlyHospitalized: createDistributionSeries(
         (d) => d.currentlyHospitalized
       ),
@@ -210,7 +210,7 @@ const queries = [
         (d) => d.cumulativeReportedHospitalized
       ),
     },
-    DistributionSeriesFull,
+    [...SeriesFull, ...DistributionSeriesFull],
   ],
   [
     'Scenario',

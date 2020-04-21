@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {Grid, Gutter, InlineLabel, Paragraph, Title} from './content';
-import {Graph, Line} from './graph';
+import {Graph, LegendRow, Line} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   DistributionLegendRow,
@@ -55,7 +55,7 @@ export const Hospitalizations = ({width, height}) => {
       >
         {() => (
           <>
-            <Line y={hospitalCapacity} stroke={red} strokeDasharray="6,3" />
+            <Line y={hospitalCapacity.get} stroke={red} strokeDasharray="6,3" />
             <DistributionLine y={currentlyHospitalized} color={blue} />
             <DistributionLine
               y={currentlyReportedHospitalized}
@@ -65,6 +65,12 @@ export const Hospitalizations = ({width, height}) => {
         )}
       </Graph>
       <Gutter>
+        <LegendRow
+          label="Hospital capacity"
+          y={hospitalCapacity.get}
+          color={red}
+          format={formatNumber}
+        />
         <DistributionLegendRow
           title="Currently hospitalized"
           y={currentlyHospitalized}

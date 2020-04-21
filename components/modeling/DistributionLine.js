@@ -6,6 +6,7 @@ export const DistributionLine = ({
   color = 'var(--color-blue2)',
   curve,
   gradient = false,
+  points = true,
 }) => {
   return (
     <>
@@ -49,14 +50,16 @@ export const DistributionLine = ({
         curve={curve}
       />
       <Line y={y.expected.get} stroke={color} curve={curve} />
-      <Points
-        y={y.confirmed.get}
-        stroke={color}
-        strokeWidth={1.5}
-        r={2}
-        fill="var(--color-background)"
-        nearestProps={() => ({r: 3.5})}
-      />
+      {points && (
+        <Points
+          y={y.confirmed.get}
+          stroke={color}
+          strokeWidth={1.5}
+          r={2}
+          fill="var(--color-background)"
+          nearestProps={() => ({r: 3.5})}
+        />
+      )}
     </>
   );
 };
