@@ -29,9 +29,9 @@ export const typeDefs = gql`
     name: String!
     distancingDays: Int!
     distancingLevel: Float!
-    distancing: Series
     hospitalCapacity: Series
-    rt: Series
+    distancing: DistributionSeries
+    rt: DistributionSeries
     cumulativeCritical: DistributionSeries
     cumulativeDeaths: DistributionSeries
     cumulativeExposed: DistributionSeries
@@ -51,9 +51,9 @@ export const typeDefs = gql`
     susceptible: DistributionSeries
   }
   type LocationDomain {
-    distancing: Domain
     hospitalCapacity: Domain
-    rt: Domain
+    distancing: DistributionDomain
+    rt: DistributionDomain
     cumulativeCritical: DistributionDomain
     cumulativeDeaths: DistributionDomain
     cumulativeExposed: DistributionDomain
@@ -75,6 +75,7 @@ export const typeDefs = gql`
   type DistributionSeries {
     confirmed: Series
     expected: Series
+    expectedTestTrace: Series
     percentile10: Series
     percentile20: Series
     percentile30: Series
@@ -93,6 +94,7 @@ export const typeDefs = gql`
   type DistributionDomain {
     confirmed: Domain
     expected: Domain
+    expectedTestTrace: Domain
     percentile10: Domain
     percentile20: Domain
     percentile30: Domain
@@ -180,9 +182,9 @@ const Location = {
 };
 
 const Scenario = {
-  distancing: field('series'),
   hospitalCapacity: field('series'),
-  rt: field('series'),
+  distancing: field('distribution'),
+  rt: field('distribution'),
   cumulativeCritical: field('distribution'),
   cumulativeDeaths: field('distribution'),
   cumulativeExposed: field('distribution'),
@@ -240,9 +242,9 @@ function domain(type, accessor = defaultAccessor) {
 }
 
 const LocationDomain = {
-  distancing: domain('series'),
   hospitalCapacity: domain('series'),
-  rt: domain('series'),
+  distancing: domain('distribution'),
+  rt: domain('distribution'),
   cumulativeCritical: domain('distribution'),
   cumulativeDeaths: domain('distribution'),
   cumulativeExposed: domain('distribution'),

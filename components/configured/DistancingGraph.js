@@ -2,12 +2,12 @@ import * as React from 'react';
 import {
   Graph,
   GraphDataProvider,
-  Line,
   LinearGradient,
   Stop,
   WithGraphData,
 } from '../graph';
-import {useModelState} from '../modeling';
+
+import {useModelState, DistributionLine} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
 
@@ -54,7 +54,7 @@ export const DistancingGraph = ({
                       stopColor="var(--color-yellow3)"
                     />
                   </LinearGradient>
-                  <Line
+                  <DistributionLine
                     y={y}
                     stroke={`url(#${gradientId})`}
                     strokeWidth={1.5}
