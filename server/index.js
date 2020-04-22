@@ -52,7 +52,7 @@ export const typeDefs = gql`
   }
   type LocationDomain {
     hospitalCapacity: Domain
-    distancing: Domain
+    distancing: DistributionDomain
     rt: DistributionDomain
     cumulativeCritical: DistributionDomain
     cumulativeDeaths: DistributionDomain
@@ -75,6 +75,7 @@ export const typeDefs = gql`
   type DistributionSeries {
     confirmed: Series
     expected: Series
+    expectedTestTrace: Series
     percentile10: Series
     percentile20: Series
     percentile30: Series
@@ -93,6 +94,7 @@ export const typeDefs = gql`
   type DistributionDomain {
     confirmed: Domain
     expected: Domain
+    expectedTestTrace: Domain
     percentile10: Domain
     percentile20: Domain
     percentile30: Domain

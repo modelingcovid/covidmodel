@@ -38,7 +38,10 @@ export const DistancingGradient = React.memo(function DistancingGradient({
   const id = useDistancingId();
   const isDarkMode = useMatchMedia(mediaQuery.darkMode);
   const {distancing} = useLocationData();
-  const inverted = useCallback((n) => 1 - distancing(n), [distancing]);
+
+  const inverted = useCallback((n) => 1 - distancing.expected.get(n), [
+    distancing,
+  ]);
 
   return (
     <ScaleGradient

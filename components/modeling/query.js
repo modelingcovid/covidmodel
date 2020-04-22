@@ -116,7 +116,9 @@ export function usePopulation() {
 export function useDistancing() {
   const [scenario, error, accessor] = useScenarioQuery(`{
     distancing {
-      data
+      expected {
+        data
+      }
     }
   }`);
 

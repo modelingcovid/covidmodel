@@ -10,6 +10,6 @@ export function useTodayDistancing() {
   const findPoint = useFindPoint();
   return useCallback(() => {
     const todayIndex = findPoint(today);
-    return distancing(todayIndex);
+    return distancing.expected.get(todayIndex);
   }, [distancing, findPoint]);
 }

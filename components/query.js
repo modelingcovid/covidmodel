@@ -135,13 +135,16 @@ const queries = [
   [
     'Scenario',
     `{
-      distancing { data }
-      rt { data }
+      distancing { ...DistributionSeriesFull }
+      rt { ...DistributionSeriesFull }
     }`,
     {
-      distancing: ({distancing}, i) => distancing.data[i],
-      rt: ({rt}, i) => rt.data[i],
+      // distancing: ({distancing}, i) => distancing.data[i],
+      // rt: ({rt}, i) => rt.data[i],
+      distancing: createDistributionSeries((d) => d.distancing),
+      rt: createDistributionSeries((d) => d.rt),
     },
+    DistributionSeriesFull,
   ],
   [
     'Scenario',
@@ -225,6 +228,7 @@ const queries = [
     'Location',
     `{
       domain {
+        rt { expected { max }}
         cumulativeDeaths { expected { max } }
         currentlyInfected { expected { max } }
         currentlyInfectious { expected { max } }
@@ -239,6 +243,7 @@ const queries = [
     }`,
     {
       domain: {
+        rt: ({domain}) => domain.rt.expected.max,
         seir: ({domain}) =>
           domain.cumulativeDeaths.expected.max +
           domain.currentlyInfected.expected.max +

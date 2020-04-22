@@ -15,6 +15,8 @@ import {Graph, LegendRow, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   Estimation,
+  DistributionLegendRow,
+  DistributionLine,
   useFindPoint,
   useModelState,
   useLocationData,
@@ -45,9 +47,9 @@ const formatDistancing = (n) => formatPercent(1 - n);
 
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
-  const {r0, importtime, distancing, rt} = useLocationData();
+  const {r0, importtime, distancing, rt, domain} = useLocationData();
 
-  const formatR = useCallback((n) => formatNumber2(n * r0()), [r0]);
+  const formatR = useCallback((n) => formatNumber2(n), [r0]);
 
   return (
     <div className="flow-root" {...remaining}>
@@ -97,7 +99,7 @@ export function ModelInputs({height, width, ...remaining}) {
         height={height}
       />
       <Gutter>
-        <LegendRow
+        <DistributionLegendRow
           label="Social distancing level"
           y={distancing}
           format={formatDistancing}
@@ -139,13 +141,14 @@ export function ModelInputs({height, width, ...remaining}) {
         tickFormat={formatR}
         height={height}
         width={width}
+        domain={domain.rt}
         xLabel="R"
         nice={false}
       >
-        {() => <Line y={rt} stroke={theme.color.magenta[1]} />}
+        {() => <DistributionLine y={rt} stroke={theme.color.magenta[1]} />}
       </Graph>
       <Gutter>
-        <LegendRow
+        <DistributionLegendRow
           color={theme.color.magenta[1]}
           label={
             <>
