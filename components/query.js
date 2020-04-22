@@ -139,8 +139,6 @@ const queries = [
       rt { ...DistributionSeriesFull }
     }`,
     {
-      // distancing: ({distancing}, i) => distancing.data[i],
-      // rt: ({rt}, i) => rt.data[i],
       distancing: createDistributionSeries((d) => d.distancing),
       rt: createDistributionSeries((d) => d.rt),
     },

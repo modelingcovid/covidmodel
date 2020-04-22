@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   Graph,
   GraphDataProvider,
+  Line,
   LinearGradient,
   Stop,
   WithGraphData,

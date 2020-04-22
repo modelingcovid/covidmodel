@@ -12,9 +12,10 @@ import {
   Title,
   WithCitation,
 } from './content';
-import {Graph, LegendRow, Line} from './graph';
+import {Graph, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
+  DistributionLegendRow,
   Estimation,
   useFindPoint,
   useModelState,
@@ -83,25 +84,26 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
         account.
       </Paragraph>
       <Graph
+        domain={r0}
         initialScale="linear"
-        tickFormat={formatR}
+        tickFormat={formatNumber2}
         height={height}
         width={width}
         xLabel="R"
         nice={false}
       >
-        {() => <Line y={rt} stroke={theme.color.magenta[1]} />}
+        {() => <Line y={rt.expected.get} stroke={theme.color.magenta[1]} />}
       </Graph>
       <Gutter>
-        <LegendRow
+        <DistributionLegendRow
           color={theme.color.magenta[1]}
-          label={
+          title={
             <>
               R<sub>t</sub>
             </>
           }
           y={rt}
-          format={formatR}
+          format={formatNumber2}
         />
       </Gutter>
     </div>

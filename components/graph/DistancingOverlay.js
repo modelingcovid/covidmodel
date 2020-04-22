@@ -91,13 +91,13 @@ export function DistancingOverlay() {
                   />
                 )}
                 <Line
-                  y={distancing}
+                  y={distancing.expected.get}
                   stroke={theme.color.focus[2]}
                   strokeWidth={1}
                   clipPath={`url(#${leftId})`}
                 />
                 <Line
-                  y={distancing}
+                  y={distancing.expected.get}
                   stroke={theme.color.focus[2]}
                   strokeWidth={1.5}
                   strokeDasharray="3,1"
