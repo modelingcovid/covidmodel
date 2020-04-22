@@ -21,7 +21,12 @@ const shiftFirstQuote = ([first, ...rest]) => {
   if (typeof first !== 'string' || !first.startsWith('“')) {
     return [first, ...rest];
   }
-  return [<span style={{marginLeft: '-0.5ch'}}>{first}</span>, ...rest];
+  return [
+    <span key="quote" style={{marginLeft: '-0.5ch'}}>
+      {first}
+    </span>,
+    ...rest,
+  ];
 };
 
 const corrections = {

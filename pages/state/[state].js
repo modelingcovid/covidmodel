@@ -20,6 +20,7 @@ import {
 } from '../../components';
 import {Controls} from '../../components/configured';
 import {
+  Blockquote,
   Heading,
   Instruction,
   ListItem,
@@ -28,6 +29,7 @@ import {
   Section,
   Title,
   UnorderedList,
+  WithCitation,
 } from '../../components/content';
 import {DistancingGradient} from '../../components/graph';
 import {ModelDataProvider, ModelStateProvider} from '../../components/modeling';
@@ -90,10 +92,51 @@ export default function StatePage() {
             </div>
 
             <Paragraph>
+              The COSMC model is an epidemiological model of COVID-19, fit to
+              actual social distancing, testing, and fatality data. We use this
+              data to project how COVID-19 might spread through a population for
+              different <strong>locations</strong> and different{' '}
+              <strong>social distancing scenarios</strong>.
+            </Paragraph>
+            <WithCitation
+              citation={
+                <>
+                  We use data from the{' '}
+                  <a href="https://covidtracking.com/">
+                    COVID Tracking Project
+                  </a>
+                  , mobility data from{' '}
+                  <a href="https://www.google.com/covid19/mobility/">Google</a>,
+                  hospital capacity data from{' '}
+                  <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
+                    Esri
+                  </a>
+                  , and demographic data from{' '}
+                  <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
+                    Wolfram
+                  </a>
+                  .
+                </>
+              }
+            >
+              <Paragraph>
+                A model is only as good as{' '}
+                <span className="footnote">the data it’s based on,</span> and
+                we’re thankful for the many people who have worked to produce
+                the data that powers the model. That said, all data has its
+                caveats and limitations: we’ve tried to make the best of the
+                available data and hope to continually improve the model as more
+                data becomes available.
+              </Paragraph>
+            </WithCitation>
+            <Blockquote>
+              <em>“All models are wrong, but some are useful.”</em>
+            </Blockquote>
+            {/* <Paragraph>
               <strong>“All models are wrong, but some are useful.”</strong> Like
               all models, this model is just one approximation among many. We
               hope it proves useful.
-            </Paragraph>
+            </Paragraph> */}
 
             {/* <Heading className="margin-top-4">Table of contents</Heading>
             <OrderedList style={{fontStyle: 'italic'}}>

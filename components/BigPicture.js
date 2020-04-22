@@ -145,7 +145,7 @@ export function BigPicture({height, width}) {
         return—first slowly, then rapidly and then taper off without infecting
         the entire population.
       </Paragraph>
-      <Heading>Herd immunity and flattening the curve</Heading>
+      <Heading>The second wave</Heading>
       <Paragraph>
         After distancing ends, why doesn’t the entire population become
         infected? This is due to “<strong>herd immunity</strong>.”
