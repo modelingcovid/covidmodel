@@ -151,8 +151,9 @@ export function BigPicture({height, width}) {
           </Paragraph>
           <ModelStateProvider value={withoutDistancing}>
             <Paragraph className="pullquote">
-              What would happen if <strong>{location.name}</strong> stopped
-              social distancing and returned to normal?
+              What might happen if{' '}
+              <strong>{location.name} stops social distancing</strong> and
+              returns to normal?
             </Paragraph>
             <Paragraph>
               The model projects that if the virus is allowed to spread
@@ -172,14 +173,18 @@ export function BigPicture({height, width}) {
             Now consider an alternate scenario, with a social distancing period:
           </Paragraph>
           <Paragraph className="pullquote">
-            What would happen if <strong>{location.name}</strong> enacted a
-            policy that set social distancing levels to{' '}
+            What might happen if <strong>{location.name}</strong> enacts a
+            policy that results in{' '}
             <strong>
-              <CurrentScenario format={formatDistancingLevel} length={3} />
-            </strong>{' '}
-            (the same levels used in{' '}
-            <CurrentScenario format={formatScenarioName} length={5} />){' '}
-            <CurrentScenario format={formatDistancingDuration} length={7} />?
+              <CurrentScenario format={formatDistancingLevel} length={3} />{' '}
+              social distancing levels
+            </strong>
+            —the same amount as{' '}
+            <CurrentScenario format={formatScenarioName} length={5} />—
+            <strong>
+              <CurrentScenario format={formatDistancingDuration} length={7} />
+            </strong>
+            ?
           </Paragraph>
 
           <Paragraph>
@@ -283,14 +288,13 @@ export function BigPicture({height, width}) {
             />
           </ModelStateProvider>
           <Paragraph>
-            However, if {location.name} enacted a policy that resulted in{' '}
+            If {location.name} enacts a policy that resulted in{' '}
             <strong>
               <CurrentScenario format={formatDistancingLevel} length={3} />{' '}
               social distancing{' '}
               <CurrentScenario format={formatDistancingDuration} length={7} />
             </strong>
-            , the model projects that by the end of the distancing period the
-            majority of the population would still be susceptible to COVID-19:
+            , the model projects that COVID-19 cases would stabilize:
           </Paragraph>
           <SEIRGraph
             domain={() => population() * 1.01}
@@ -300,16 +304,41 @@ export function BigPicture({height, width}) {
             scrubber={false}
           />
           <Paragraph>
-            <strong>
-              <Population /> people
-            </strong>{' '}
-            live in {location.name}. During the distancing period, infections
-            taper off to nearly nothing. After the distancing period ends, the
-            infections return—first slowly, then rapidly and then taper off
-            without infecting the entire population.
+            Comparing the two examples demonstrates how social distancing plays
+            a significant role in how the virus might spread. The model projects
+            that scenarios with little or no social distancing result in the
+            virus spreading through the population quickly, while scenarios with
+            significant social distancing suppress the virus and result in fewer
+            cases overall.
+          </Paragraph>
+          <Paragraph>
+            However, we also need to consider what happens after our distancing
+            period ends. By the end of the social distancing period the majority
+            of the population would still be susceptible to COVID-19. What might
+            happen if we return to normal after social distancing?
           </Paragraph>
         </XScaleDistancingPeriod>
-        <Heading>The second wave</Heading>
+
+        <Title className="margin-top-4">The second wave</Title>
+        <Paragraph>
+          Let’s look at our social distancing example on a longer timeframe. If
+          we continue to model further into the future, we can project what
+          might occur if we return to normal:
+        </Paragraph>
+        <SEIRGraph
+          domain={() => population() * 1.01}
+          nice={false}
+          height={height}
+          width={width}
+          scrubber={false}
+        />
+        <Paragraph>
+          While the model projects that the social distancing measures drive
+          cases down to nearly zero, some cases remain. If left unchecked, the
+          model predicts that these cases will cause another outbreak, creating
+          a <strong>second wave</strong> of infections.
+        </Paragraph>
+
         <Paragraph>
           After distancing ends, why doesn’t the entire population become
           infected? This is due to “<strong>herd immunity</strong>.”
