@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.9487,
-"importtime":4.5917e1,
+"r0natural":4.9499,
+"importtime":4.5847e1,
 "stateAdjustmentForTestingDifferences":0.6029,
-"distpow":1.5000
+"distpow":1.5023
 },
 "population":6789319,
 "ventilators":1408,
@@ -18,16 +18,16 @@
 "pPCRH":0.7149,
 "fractionOfCriticalDeceased":0.4238,
 "initialInfectionImpulse":1.4526e1,
-"r0":4.9487,
-"importtime":4.5917e1,
+"r0":4.9499,
+"importtime":4.5847e1,
 "numberOfSimulations":100,
-"dateModelRun":"Tue 21 Apr 2020 19:01:54",
-"mostRecentDistancingDate":"Fri 10 Apr 2020",
+"dateModelRun":"Wed 22 Apr 2020 17:21:15",
+"mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.6029,
-"distpow":1.5000,
+"distpow":1.5023,
 "parameters":{
 "r0":{
-"value":4.9487,
+"value":4.9499,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -128,7 +128,7 @@
 ]
 },
 "importtime":{
-"value":4.5917e1,
+"value":4.5847e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -174,7 +174,7 @@
 "type":"fit"
 },
 "distancePower":{
-"value":1.5000,
+"value":1.5023,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
@@ -187,16 +187,16 @@
 }
 },
 "goodnessOfFitMetrics":{
-"chiSquared":6.7494e-5,
-"rmsRelativeError":1.1066,
-"rmsRelativeErrorDeaths":1.2990,
-"rmsRelativeErrorPcr":0.9455,
-"meanRelativeErrorDeaths":-0.8135,
-"meanRelativeErrorPcr":-0.4811,
-"rSquaredDeaths":3.9142e-2,
-"rSquaredPcr":3.6098e-2,
-"deathResidual7Day":-1.9602e1,
-"pcrResidual7Day":5.6133e1
+"chiSquared":6.8843e-5,
+"rmsRelativeError":1.1257,
+"rmsRelativeErrorDeaths":1.3172,
+"rmsRelativeErrorPcr":0.9644,
+"meanRelativeErrorDeaths":-0.8179,
+"meanRelativeErrorPcr":-0.4957,
+"rSquaredDeaths":3.7497e-2,
+"rSquaredPcr":3.0429e-2,
+"deathResidual7Day":-2.0109e1,
+"pcrResidual7Day":5.5402e1
 },
 "scenarios":[
 "scenario5",
