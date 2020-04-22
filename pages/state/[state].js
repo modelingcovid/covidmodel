@@ -120,13 +120,19 @@ export default function StatePage() {
               }
             >
               <Paragraph>
-                A model is only as good as{' '}
-                <span className="footnote">the data it’s based on,</span> and
-                we’re thankful for the many people who have worked to produce
-                the data that powers the model. That said, all data has its
-                caveats and limitations: we’ve tried to make the best of the
-                available data and hope to continually improve the model as more
-                data becomes available.
+                <strong>
+                  A model is only as good as{' '}
+                  <span className="footnote">the data it’s based on,</span>
+                </strong>{' '}
+                and we’re thankful for the many people and organizations who
+                have worked to produce the data that powers the model. That
+                said, all data has its caveats and limitations: in particular,
+                fatality counts are difficult to assess and are{' '}
+                <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+                  often underreported
+                </a>
+                . We’ve tried to make the best of the available data and hope to
+                continually improve the model as more data becomes available.
               </Paragraph>
             </WithCitation>
             <Blockquote>
