@@ -78,7 +78,7 @@ export function BigPicture({height, width}) {
       <Title className="margin-bottom-3">The big picture</Title>
       <Paragraph>
         To illustrate how social distancing can impact the spread of COVID-19,
-        consider an example:
+        consider an example scenario for {location.name}:
       </Paragraph>
       <Paragraph className="pullquote">
         What would happen if <strong>{location.name}</strong> enacted a policy
