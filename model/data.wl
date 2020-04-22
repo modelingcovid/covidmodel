@@ -194,6 +194,7 @@ codesToStates=<|"AL" -> "Alabama",
   "CA" -> "California",
   "CO" -> "Colorado",
   "CT" -> "Connecticut",
+  "DC" -> "District of Columbia",
   "DE" -> "Delaware",
   "FL" -> "Florida",
   "GA" -> "Georgia",
@@ -237,6 +238,7 @@ codesToStates=<|"AL" -> "Alabama",
   "WV" -> "West Virginia",
   "WI" -> "Wisconsin",
   "WY" -> "Wyoming"|>;
+statesToCodes = Association[KeyValueMap[#2->#1&,codesToStates]];
 
 
 countryDistancingPrecompute = Module[{
@@ -387,7 +389,16 @@ usStateDistancingPrecompute = Module[{
       state]
   ];
 
-  stateList={"AZ","CA","FL","PA","CO","TX","WA","CT","OH","NY","VA","VT","LA","MI","MS","MA","MD","GA","NJ","IL","IN","OK","WI","NV","OR","SC"};
+  stateList = Map[
+    statesToCodes[#]&,
+    DeleteDuplicates[Map[
+      #["sub_region_1"]&,
+      Select[googleMobility,
+        And[
+          #["country_region_code"]=="US",
+          #["sub_region_1"]!="",
+          #["sub_region_2"]==""
+        ]&]]]];
   rawCsvTable=Prepend[
     Map[stateDistancing, stateList],
     dates];
