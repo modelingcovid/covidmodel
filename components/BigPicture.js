@@ -180,7 +180,6 @@ export function BigPicture({height, width}) {
         distancing takes a significant toll on {location.name}’s hospital
         system.
       </Paragraph>
-
       <Paragraph>
         In this example, the model predicts that the{' '}
         <strong>social distancing period</strong> slows the spread of the virus,
@@ -201,9 +200,7 @@ export function BigPicture({height, width}) {
         </InlineLabel>
         .
       </Paragraph>
-
       <HospitalizationGraph height={height} width={width} scrubber={false} />
-
       <Paragraph>
         However, if the virus is then allowed to spread uninhibited{' '}
         <strong>without social distancing measures</strong>, the{' '}
@@ -235,6 +232,32 @@ export function BigPicture({height, width}) {
         </strong>
         .”
       </Paragraph>
+      <Heading>Test, trace, and treat</Heading>
+      <Paragraph>
+        Is it possible to avoid the no-distancing peak? One option is to
+        continue social distancing until a <strong>vaccine</strong> is
+        developed, which experts estimate will take at least a year. A vaccine
+        would allow the population to develop herd immunity without requiring
+        mass infections.
+      </Paragraph>
+      <Paragraph>
+        Another approach, called “<strong>test, trace, and treat</strong>”
+        involves tracking the virus to identify and prevent future outbreaks{' '}
+        <em>without</em> establishing herd immunity. This approach could allow
+        distancing restrictions to ease, but only if certain conditions are met:
+      </Paragraph>
+      <UnorderedList>
+        <ListItem>
+          <strong>Testing rates</strong> need to be high enough to confidently
+          detect all new cases of the virus.
+        </ListItem>
+        <ListItem>
+          <strong>Trace:</strong>
+        </ListItem>
+        <ListItem>
+          <strong>Treat:</strong>
+        </ListItem>
+      </UnorderedList>
     </div>
   );
 }
