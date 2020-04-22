@@ -32,7 +32,11 @@ import {
   WithCitation,
 } from '../../components/content';
 import {DistancingGradient} from '../../components/graph';
-import {ModelDataProvider, ModelStateProvider} from '../../components/modeling';
+import {
+  ModelDataProvider,
+  ModelStateProvider,
+  useCreateModelState,
+} from '../../components/modeling';
 import {Suspense, useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
 import {getStatesWithData} from '../../lib/data';
@@ -47,7 +51,7 @@ export default function StatePage() {
   const {
     query: {state},
   } = useRouter();
-  const [scenario, setScenario] = useState('scenario5');
+  const [scenario, setScenario] = useState('scenario2');
 
   const sizeRef = useRef(null);
   const {width} = useContentRect(sizeRef, {width: 896, height: 360});
@@ -55,31 +59,36 @@ export default function StatePage() {
 
   const stateName = stateLabels[state];
 
-  return (
-    <Layout>
-      <Head>
-        <title>Modeling COVID-19 in {stateName}</title>
-        <meta
-          name="Description"
-          content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
-        />
-      </Head>
-      <style jsx>{`
-        .controls-container {
-          position: sticky;
-          z-index: 50;
-          top: 51px;
-          background: ${theme.color.background};
-          box-shadow: 0 2px ${theme.color.shadow[0]};
-        }
-        .controls {
-          padding: var(--spacing1) 0;
-        }
-      `}</style>
+  const interactiveModelState = useCreateModelState({
+    locationId: state,
+    scenarioId: scenario,
+    setScenario: setScenario,
+  });
 
-      <div className="flex flex-col justify-center">
-        <ModelStateProvider locationId={state} scenarioId="scenario2">
-          <DistancingGradient width={width} />
+  return (
+    <ModelStateProvider value={interactiveModelState}>
+      <Layout>
+        <Head>
+          <title>Modeling COVID-19 in {stateName}</title>
+          <meta
+            name="Description"
+            content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
+          />
+        </Head>
+        <style jsx>{`
+          .controls-container {
+            position: sticky;
+            z-index: 50;
+            top: 51px;
+            background: ${theme.color.background};
+            box-shadow: 0 2px ${theme.color.shadow[0]};
+          }
+          .controls {
+            padding: var(--spacing1) 0;
+          }
+        `}</style>
+
+        <div className="flex flex-col justify-center">
           <Section className="margin-top-4 margin-bottom-3">
             <div className="graph-size" ref={sizeRef} />
             <div className="text-jumbo margin-bottom-1">
@@ -153,13 +162,7 @@ export default function StatePage() {
 
             <BigPicture width={width} height={height} />
           </Section>
-        </ModelStateProvider>
 
-        <ModelStateProvider
-          locationId={state}
-          scenarioId={scenario}
-          setScenario={setScenario}
-        >
           <DistancingGradient width={width} />
           <Section>
             <Title className="margin-top-5">What are we modeling?</Title>
@@ -209,10 +212,10 @@ export default function StatePage() {
             <Hospitalizations width={width} height={height} />
             <ICU width={width} height={height} />
           </Section>
-        </ModelStateProvider>
-      </div>
-      <FeedbackForm />
-    </Layout>
+        </div>
+        <FeedbackForm />
+      </Layout>
+    </ModelStateProvider>
   );
 }
 

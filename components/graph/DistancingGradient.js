@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {hcl, rgb} from 'd3-color';
 import {scaleLinear} from '@vx/scale';
-import {ScaleGradient} from '../graph';
+import {ScaleGradient, useXScale} from '../graph';
 import {useLocationData, useModelState} from '../modeling';
 import {Suspense, useMatchMedia} from '../util';
+import {getFunctionId} from '../../lib/fn';
 import {darkMode, mediaQuery, declarations, properties} from '../../styles';
 
 const {useCallback} = React;
@@ -26,15 +27,18 @@ const darkColor = (n) => {
   return darkSource.toString();
 };
 
-export function useDistancingId() {
+export function useDistancingId(width) {
   const {id} = useModelState();
-  return `${id}-distancing`;
+  const xScale = useXScale();
+  const xScaleId = getFunctionId(xScale);
+  return `${id}-${xScaleId}-${width}-distancing`;
 }
 
 export const DistancingGradientContents = React.memo(
   function DistancingGradientContents({width}) {
-    const {indices, x, xScale} = useModelState();
-    const id = useDistancingId();
+    const {indices, x} = useModelState();
+    const xScale = useXScale();
+    const id = useDistancingId(width);
     const isDarkMode = useMatchMedia(mediaQuery.darkMode);
     const {distancing} = useLocationData();
     const inverted = useCallback((n) => 1 - distancing.expected.get(n), [

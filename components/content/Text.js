@@ -45,18 +45,16 @@ export function formatText(children, kind = 'block') {
   }, childrenArray);
 }
 
-export const createTextComponent = (Tag, boundClassName, kind) => ({
-  children,
-  className,
-  ...props
-}) => (
-  <Tag
-    {...props}
-    className={[boundClassName, className].filter(Boolean).join(' ')}
-  >
-    {formatText(children, kind)}
-  </Tag>
-);
+export const createTextComponent = (Tag, boundClassName, kind) =>
+  React.forwardRef(({children, className, ...props}, ref) => (
+    <Tag
+      {...props}
+      className={[boundClassName, className].filter(Boolean).join(' ')}
+      ref={ref}
+    >
+      {formatText(children, kind)}
+    </Tag>
+  ));
 
 export const Paragraph = createTextComponent('p', 'paragraph');
 export const Blockquote = createTextComponent(

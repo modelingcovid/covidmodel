@@ -6,8 +6,9 @@ import {
   LinearGradient,
   Stop,
   WithGraphData,
+  useXScale,
 } from '../graph';
-import {useModelState, useLocationData} from '../modeling';
+import {useLocationData} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
 import {formatPercent} from '../../lib/format';
@@ -23,7 +24,7 @@ export const DistancingGraph = ({
   ...remaining
 }) => {
   const {distancing} = useLocationData();
-  const {xScale} = useModelState();
+  const xScale = useXScale();
   const todayOffset = xScale(today);
 
   const endTickLabelProps = () => ({

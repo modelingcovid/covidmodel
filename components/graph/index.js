@@ -18,3 +18,4 @@ export * from './SimpleGraph';
 export * from './useGraphData';
 export * from './useNearestPoint';
 export * from './useNearestData';
+export * from './useXScale';

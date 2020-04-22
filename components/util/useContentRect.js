@@ -32,9 +32,10 @@ export const useContentRect = (elementRef, defaultRect = {}) => {
     if (!elementRef.current) {
       return;
     }
-    const observer = new ResizeObserverPolyfill((entries) =>
-      setContentRect(entries[0].contentRect)
-    );
+    const observer = new ResizeObserverPolyfill((entries) => {
+      console.log('hi', entries[0]);
+      setContentRect(entries[0].contentRect);
+    });
     observer.observe(elementRef.current);
     return () => observer.disconnect();
   }, [elementRef]);

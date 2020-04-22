@@ -324,14 +324,20 @@ body,
   margin-top: var(--spacing5);
 }
 @media (min-width: 600px) {
+  .column-6 {
+    max-width: calc(var(--column-width) * 6);
+  }
+  .column-8,
   .text-width,
   .paragraph {
     max-width: calc(var(--column-width) * 8);
   }
+  .column-9,
   .section-heading,
   .pullquote {
     max-width: calc(var(--column-width) * 9);
   }
+  .column-10,
   .dek {
     max-width: calc(var(--column-width) * 10);
   }

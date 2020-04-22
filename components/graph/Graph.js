@@ -25,7 +25,6 @@ export const GraphContents = React.memo(function Graph({
   after,
   before,
   xLabel = '',
-  xScale: xScaleSource,
   domain = 1,
   initialScale = 'linear',
   width: propWidth = 600,
@@ -73,7 +72,7 @@ export const GraphContents = React.memo(function Graph({
     [tickFormat, xLabel, yTickCount]
   );
 
-  const distancingId = useDistancingId();
+  const distancingId = useDistancingId(xMax);
 
   return (
     <GraphDataProvider context={context}>
@@ -186,7 +185,6 @@ export const GraphContents = React.memo(function Graph({
 });
 
 export const Graph = ({decoration = true, frameless = false, ...props}) => {
-  const {indices, x, xScale} = useModelState();
   return (
     <figure
       className={decoration ? 'clear margin-top-3 margin-bottom-2' : 'clear'}
@@ -202,9 +200,6 @@ export const Graph = ({decoration = true, frameless = false, ...props}) => {
         }
       >
         <GraphContents
-          data={indices}
-          x={x}
-          xScale={xScale}
           decoration={decoration}
           frameless={frameless}
           {...props}

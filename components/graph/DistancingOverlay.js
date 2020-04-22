@@ -28,7 +28,7 @@ export function DistancingOverlay() {
 
   const height = 20;
   const offset = 8;
-  const distancingId = useDistancingId();
+  const distancingId = useDistancingId(xMax);
 
   return (
     <>

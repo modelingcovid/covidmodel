@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {scaleLinear, scaleSymlog} from '@vx/scale';
 import {useGraphData} from './useGraphData';
+import {useXScale} from './useXScale';
 import {useComponentId} from '../util';
 import {useModelState} from '../modeling';
 import {maybe} from '../../lib/fn';
@@ -28,7 +29,8 @@ export const useGraphConfig = function Graph({
   scrubber = false,
   nice = true,
 }) {
-  const {indices, x, xScale: xScaleSource} = useModelState();
+  const {indices, x} = useModelState();
+  const xScaleSource = useXScale();
   const data = indices();
 
   const margin = decoration ? marginDecorated : marginCompact;

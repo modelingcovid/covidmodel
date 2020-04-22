@@ -1,9 +1,7 @@
 import * as React from 'react';
-import {scaleUtc} from '@vx/scale';
 import {stateLabels} from '../../lib/controls';
-import {addDays, dayToDate, initialTargetDate, today} from '../../lib/date';
+import {dayToDate, initialTargetDate} from '../../lib/date';
 import {memo} from '../../lib/fn';
-import {flattenData} from '../../lib/transform';
 import {NearestDataProvider} from '../graph';
 import {useComponentId} from '../util';
 import {fetchLocationData} from '../query';
@@ -14,19 +12,14 @@ const ModelStateContext = createContext(null);
 
 const isServer = typeof window === 'undefined';
 
-export const ModelStateProvider = ({
-  children,
-  scenarioId,
-  locationId,
-  setScenario,
-}) => {
+export const useCreateModelState = ({scenarioId, locationId, setScenario}) => {
   const {locations, scenarios, days} = fetchLocationData(
     locationId,
     scenarioId
   );
 
   const id = useComponentId('model');
-  const context = useMemo(() => {
+  return useMemo(() => {
     const location = {
       id: locationId,
       // NOTE: This should be better... but c'est la vie
@@ -37,19 +30,6 @@ export const ModelStateProvider = ({
       id: scenarioId,
       name: '',
     };
-
-    // const distancingEnds = addDays(today, scenario.distancingDays);
-    // const distancingIndices = indices.filter((d) => x(d) <= distancingEnds);
-
-    const xScale = memo(() =>
-      scaleUtc({
-        domain: [
-          new Date('2020-01-01').getTime(),
-          new Date('2021-01-01').getTime(),
-        ],
-        range: [0, 1],
-      })
-    );
 
     return {
       get days() {
@@ -80,17 +60,16 @@ export const ModelStateProvider = ({
       x(i) {
         return dayToDate(days()[i]);
       },
-      get xScale() {
-        return xScale();
-      },
     };
   }, [days, id, locationId, locations, scenarioId, scenarios, setScenario]);
+};
 
+export const ModelStateProvider = ({children, value}) => {
   return (
-    <ModelStateContext.Provider value={context}>
+    <ModelStateContext.Provider value={value}>
       <NearestDataProvider
-        x={context.x}
-        data={context.indices}
+        x={value.x}
+        data={value.indices}
         initial={initialTargetDate}
       >
         {children}

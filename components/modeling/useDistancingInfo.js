@@ -1,17 +1,21 @@
-import {useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useModelState} from '../modeling';
-import {today, addDays} from '../../lib/date';
+import {getDistancingDate} from '../../lib/controls';
+import {today} from '../../lib/date';
+
+export function useDistancingDate(offset) {
+  const {scenarioData} = useModelState();
+  return useCallback(() => {
+    const {distancingDays, distancingLevel} = scenarioData();
+    return distancingLevel !== 1
+      ? getDistancingDate(distancingDays, offset)
+      : today;
+  }, [scenarioData]);
+}
 
 export function useDistancingInfo() {
   const {scenarioData} = useModelState();
   const scenario = scenarioData();
-  return useMemo(
-    () => [
-      scenario,
-      scenario.distancingLevel !== 1
-        ? addDays(today, scenario.distancingDays)
-        : today,
-    ],
-    [scenario]
-  );
+  const distancingDate = useDistancingDate();
+  return useMemo(() => [scenario, distancingDate()], [scenario]);
 }
