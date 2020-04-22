@@ -287,6 +287,16 @@ body,
 .ordered-list li:last-child {
   margin-bottom: 0;
 }
+.graph {
+  clear: both;
+}
+.graph-decoration {
+  margin-top: var(--spacing2);
+  margin-bottom: var(--spacing2);
+}
+.paragraph + .graph {
+  margin-top: calc(-1 * var(--spacing1));
+}
 .margin-bottom-0 {
   margin-bottom: var(--spacing0);
 }

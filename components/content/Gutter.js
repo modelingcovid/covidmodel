@@ -34,6 +34,7 @@ export function WithGutter({
         div {
           display: flex;
           flex-direction: column;
+          margin-top: calc(-1 * ${theme.spacing[1]});
         }
         @media (min-width: 600px) {
           div {

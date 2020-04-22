@@ -149,6 +149,28 @@ export function BigPicture({height, width}) {
             To illustrate how social distancing can impact the spread of
             COVID-19, consider two example scenarios for {location.name}:
           </Paragraph>
+          <ModelStateProvider value={withoutDistancing}>
+            <Paragraph className="pullquote">
+              What would happen if <strong>{location.name}</strong> stopped
+              social distancing and returned to normal?
+            </Paragraph>
+            <Paragraph>
+              The model projects that if the virus is allowed to spread
+              uninhibited <strong>without social distancing measures</strong>,
+              the <CurrentlyHospitalizedLabel /> will quickly exceed the
+              available <HospitalCapacityLabel /> in {location.name}, which will
+              increase the <TotalFatalitiesLabel />.
+            </Paragraph>
+            <HospitalizationGraph
+              height={smallHeight}
+              width={smallWidth}
+              scrubber={false}
+            />
+          </ModelStateProvider>
+
+          <Paragraph>
+            Now consider an alternate scenario, with a social distancing period:
+          </Paragraph>
           <Paragraph className="pullquote">
             What would happen if <strong>{location.name}</strong> enacted a
             policy that set social distancing levels to{' '}
@@ -173,28 +195,6 @@ export function BigPicture({height, width}) {
             width={smallWidth}
             scrubber={false}
           />
-          <ModelStateProvider value={withoutDistancing}>
-            <Paragraph>
-              Now consider an alternate scenario, without a social distancing
-              period:
-            </Paragraph>
-            <Paragraph className="pullquote">
-              What would happen if <strong>{location.name}</strong> stopped
-              social distancing and returned to normal?
-            </Paragraph>
-            <Paragraph>
-              The model projects that if the virus is allowed to spread
-              uninhibited <strong>without social distancing measures</strong>,
-              the <CurrentlyHospitalizedLabel /> will quickly exceed the
-              available <HospitalCapacityLabel /> in {location.name}, which will
-              increase the <TotalFatalitiesLabel />.
-            </Paragraph>
-            <HospitalizationGraph
-              height={smallHeight}
-              width={smallWidth}
-              scrubber={false}
-            />
-          </ModelStateProvider>
           <Paragraph>
             The contrast between the outcome of the scenario with a social
             distancing period and the scenario without distancing measures
@@ -206,51 +206,97 @@ export function BigPicture({height, width}) {
             </strong>
             .”
           </Paragraph>
+          <Paragraph>
+            From here, we can zoom out. How might COVID-19 affect the{' '}
+            <strong>
+              <Population /> people
+            </strong>{' '}
+            who live in {location.name}?
+          </Paragraph>
 
-          <Title>------</Title>
+          <Heading>How does distancing affect the population?</Heading>
           <Paragraph>
             Our model is based upon a standard epidemiological model called{' '}
             <strong>the SEIR model</strong>. The SEIR model is a{' '}
             <strong>compartmental model</strong>, which estimates the spread of
             a virus by dividing the population into different groups:
           </Paragraph>
-          <UnorderedList className="list-style-none">
-            <ListItem>
-              <InlineLabel list {...label.susceptible}>
-                Susceptible people
-              </InlineLabel>{' '}
-              are healthy and at risk for contracting COVID-19.
-            </ListItem>
-            <ListItem>
-              <InlineLabel list {...label.exposed}>
-                Exposed people
-              </InlineLabel>{' '}
-              have COVID-19 and are in the incubation period; they cannot infect
-              others.
-            </ListItem>
-            <ListItem>
-              <InlineLabel list {...label.infectious}>
-                Infectious people
-              </InlineLabel>{' '}
-              have COVID-19 and can infect others.
-            </ListItem>
-            <ListItem>
-              <InlineLabel list {...label.recovered}>
-                Recovered people
-              </InlineLabel>{' '}
-              have had COVID-19 and are immune to re-infection.
-            </ListItem>
-            <ListItem>
-              <InlineLabel list {...label.deceased}>
-                Deceased people
-              </InlineLabel>{' '}
-              have passed away due to COVID-19.
-            </ListItem>
-          </UnorderedList>
+          <WithCitation
+            citation={
+              <>
+                There is much we don’t know about immunity to COVID-19. Our
+                model assumes that the typical immune response will last{' '}
+                <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
+                  at least a year
+                </a>
+                .
+              </>
+            }
+          >
+            <UnorderedList className="list-style-none">
+              <ListItem>
+                <InlineLabel list {...label.susceptible}>
+                  Susceptible people
+                </InlineLabel>{' '}
+                are healthy and at risk for contracting COVID-19.
+              </ListItem>
+              <ListItem>
+                <InlineLabel list {...label.exposed}>
+                  Exposed people
+                </InlineLabel>{' '}
+                have COVID-19 and are in the incubation period; they cannot
+                infect others.
+              </ListItem>
+              <ListItem>
+                <InlineLabel list {...label.infectious}>
+                  Infectious people
+                </InlineLabel>{' '}
+                have COVID-19 and can infect others.
+              </ListItem>
+              <ListItem>
+                <InlineLabel list {...label.recovered}>
+                  Recovered people
+                </InlineLabel>{' '}
+                have had COVID-19 and are{' '}
+                <span className="footnote">immune</span> to re-infection.
+              </ListItem>
+              <ListItem>
+                <InlineLabel list {...label.deceased}>
+                  Deceased people
+                </InlineLabel>{' '}
+                have passed away due to COVID-19.
+              </ListItem>
+            </UnorderedList>
+          </WithCitation>
+          <Paragraph>
+            If {location.name} returns to normal{' '}
+            <strong>without any social distancing</strong>, the model projects
+            that COVID-19 will quickly spread through the population:
+          </Paragraph>
+          <ModelStateProvider value={withoutDistancing}>
+            <SEIRGraph
+              domain={() => population() * 1.01}
+              nice={false}
+              height={smallHeight}
+              width={smallWidth}
+              scrubber={false}
+            />
+          </ModelStateProvider>
+          <Paragraph>
+            However, if {location.name} enacted a policy that resulted in{' '}
+            <strong>
+              <CurrentScenario format={formatDistancingLevel} length={3} />{' '}
+              social distancing{' '}
+              <CurrentScenario format={formatDistancingDuration} length={7} />
+            </strong>
+            , the model projects that by the end of the distancing period the
+            majority of the population would still be susceptible to COVID-19:
+          </Paragraph>
           <SEIRGraph
-            domain={population}
-            height={height}
-            width={width}
+            domain={() => population() * 1.01}
+            nice={false}
+            height={smallHeight}
+            width={smallWidth}
             scrubber={false}
           />
           <Paragraph>

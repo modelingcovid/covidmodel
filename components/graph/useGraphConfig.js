@@ -16,7 +16,7 @@ const floorLog = (n) =>
 const ceilLog = (n) =>
   sign(n) * pow(10, floor(log10(abs(n)) + (n >= 0 ? 1 : 0)));
 
-const marginDecorated = {top: 64, left: 16, right: 16, bottom: 32};
+const marginDecorated = {top: 60, left: 16, right: 16, bottom: 32};
 const marginCompact = {top: 1, left: 1, right: 1, bottom: 1};
 
 export const useGraphConfig = function Graph({

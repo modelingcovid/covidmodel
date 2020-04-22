@@ -78,14 +78,14 @@ export const GraphContents = React.memo(function Graph({
     <GraphDataProvider context={context}>
       {before}
       {controls && <GraphControls scale={scale} setScale={setScale} />}
-      <div className="graph no-select">
+      <div className="graph-contents no-select">
         <style jsx>{`
-          .graph {
+          .graph-contents {
             position: relative;
             margin-left: ${-1 * margin.left}px;
             margin-right: ${-1 * margin.right}px;
           }
-          .graph-overlay {
+          .graph-contents-overlay {
             pointer-events: none;
             position: absolute;
             top: ${margin.top}px;
@@ -170,7 +170,7 @@ export const GraphContents = React.memo(function Graph({
             </g>
           </Group>
         </svg>
-        <div className="graph-overlay">
+        <div className="graph-contents-overlay">
           {scrubber && (
             <Scrubber>
               {(nearest, active) => formatShortDate(x(nearest()))}
@@ -186,9 +186,7 @@ export const GraphContents = React.memo(function Graph({
 
 export const Graph = ({decoration = true, frameless = false, ...props}) => {
   return (
-    <figure
-      className={decoration ? 'clear margin-top-3 margin-bottom-2' : 'clear'}
-    >
+    <figure className={decoration ? 'graph graph-decoration' : 'graph'}>
       <Suspense
         fallback={
           <div
