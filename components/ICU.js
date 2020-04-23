@@ -69,7 +69,7 @@ export const ICU = ({width, height}) => {
         {() => (
           <>
             <Line y={icuBeds} stroke={red} strokeDasharray="6,3" />
-            <DistributionLine y={currentlyCritical} color={blue} />
+            <DistributionLine y={currentlyCritical} color={blue} gradient />
           </>
         )}
       </Graph>
@@ -111,7 +111,7 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <DistributionLine y={cumulativeCritical} color={blue} />
+            <DistributionLine y={cumulativeCritical} color={blue} gradient />
           </>
         )}
       </Graph>

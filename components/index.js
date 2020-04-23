@@ -12,4 +12,5 @@ export * from './Overview';
 export * from './ParameterTable';
 export * from './ProjectedDeaths';
 export * from './SEIR';
+export * from './Symptomatic';
 export * from './TestAndTrace';
