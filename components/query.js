@@ -29,6 +29,7 @@ export const seriesProps = ['data', 'empty', 'max', 'min'];
 
 export const compactDistributionProps = [
   'expected',
+  'expectedTestTrace',
   'confirmed',
   'percentile10',
   'percentile50',
@@ -111,6 +112,7 @@ const queries = [
   [
     'Location',
     `{
+      dateModelRun
       days { data }
       icuBeds
       importtime
@@ -124,6 +126,7 @@ const queries = [
       }
     }`,
     {
+      dateModelRun: (location) => location.dateModelRun,
       days: ({days}) => days.data,
       icuBeds: (location) => location.icuBeds,
       importtime: (location) => location.importtime,
@@ -135,12 +138,12 @@ const queries = [
   [
     'Scenario',
     `{
+      dateContained
       distancing { ...DistributionSeriesFull }
       rt { ...DistributionSeriesFull }
     }`,
     {
-      // distancing: ({distancing}, i) => distancing.data[i],
-      // rt: ({rt}, i) => rt.data[i],
+      dateContained: (d) => d.dateContained,
       distancing: createDistributionSeries((d) => d.distancing),
       rt: createDistributionSeries((d) => d.rt),
     },
@@ -189,14 +192,14 @@ const queries = [
   [
     'Scenario',
     `{
-      hospitalCapacity { data }
+      hospitalCapacity { ...SeriesFull }
       currentlyHospitalized { ...DistributionSeriesFull }
       currentlyReportedHospitalized { ...DistributionSeriesFull }
       cumulativeHospitalized { ...DistributionSeriesFull }
       cumulativeReportedHospitalized { ...DistributionSeriesFull }
     }`,
     {
-      hospitalCapacity: (d, i) => d.hospitalCapacity.data[i],
+      hospitalCapacity: createSeries((d) => d.hospitalCapacity),
       currentlyHospitalized: createDistributionSeries(
         (d) => d.currentlyHospitalized
       ),
@@ -210,7 +213,7 @@ const queries = [
         (d) => d.cumulativeReportedHospitalized
       ),
     },
-    DistributionSeriesFull,
+    [...SeriesFull, ...DistributionSeriesFull],
   ],
   [
     'Scenario',
@@ -228,7 +231,7 @@ const queries = [
     'Location',
     `{
       domain {
-        rt { expected { max }}
+        rt { expected { max } }
         cumulativeDeaths { expected { max } }
         currentlyInfected { expected { max } }
         currentlyInfectious { expected { max } }
@@ -248,6 +251,7 @@ const queries = [
           domain.cumulativeDeaths.expected.max +
           domain.currentlyInfected.expected.max +
           domain.currentlyInfectious.expected.max,
+        cumulativeDeaths: ({domain}) => domain.cumulativeDeaths.expected.max,
         dailyDeath: ({domain}) => domain.dailyDeath.expected.max,
         newlyExposed: ({domain}) => domain.newlyExposed.expected.max,
         hospitalized: {

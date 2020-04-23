@@ -1,5 +1,6 @@
 export * from './Area';
 export * from './Axis';
+export * from './ClipPathX';
 export * from './DistancingGradient';
 export * from './DistancingOverlay';
 export * from './Graph';
@@ -14,6 +15,8 @@ export * from './NearestOverlay';
 export * from './Points';
 export * from './ScaleGradient';
 export * from './Scrubber';
+export * from './SimpleGraph';
 export * from './useGraphData';
 export * from './useNearestPoint';
 export * from './useNearestData';
+export * from './useXScale';

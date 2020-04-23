@@ -17,6 +17,9 @@ a {
   color: inherit;
   text-decoration: inherit;
 }
+blockquote {
+  margin: 0;
+}
 button {
   background: inherit;
   border: inherit;
@@ -139,7 +142,8 @@ text {
   color: var(--color-gray3);
 }
 .text-body,
-.paragraph {
+.paragraph,
+.blockquote {
   font-family: var(--font-family-text);
   font-size: var(--font-size-body);
   line-height: 1.6;
@@ -157,6 +161,18 @@ text {
   font-size: var(--font-size-dek);
   line-height: 1.3;
   letter-spacing: -0.02em;
+}
+.pullquote {
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-pullquote);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  background: var(--color-gray-bg);
+  padding: var(--spacing1) var(--spacing2);
+}
+.blockquote {
+  padding-left: var(--spacing2);
+  box-shadow: inset 3px 0 var(--color-gray1);
 }
 .estimation {
   padding: var(--spacing1) var(--spacing2);
@@ -271,6 +287,16 @@ body,
 .ordered-list li:last-child {
   margin-bottom: 0;
 }
+.graph {
+  clear: both;
+}
+.graph-decoration {
+  margin-top: var(--spacing2);
+  margin-bottom: var(--spacing2);
+}
+.paragraph + .graph {
+  margin-top: calc(-1 * var(--spacing1));
+}
 .margin-bottom-0 {
   margin-bottom: var(--spacing0);
 }
@@ -308,15 +334,22 @@ body,
   margin-top: var(--spacing5);
 }
 @media (min-width: 600px) {
-  .dek {
-    max-width: calc(var(--column-width) * 10);
+  .column-6 {
+    max-width: calc(var(--column-width) * 6);
   }
-  .section-heading {
-    max-width: calc(var(--column-width) * 10);
-  }
+  .column-8,
   .text-width,
   .paragraph {
     max-width: calc(var(--column-width) * 8);
+  }
+  .column-9,
+  .section-heading,
+  .pullquote {
+    max-width: calc(var(--column-width) * 9);
+  }
+  .column-10,
+  .dek {
+    max-width: calc(var(--column-width) * 10);
   }
   .maybe-nowrap {
     white-space: nowrap;

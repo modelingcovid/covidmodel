@@ -6,6 +6,7 @@ import {
 } from '@vx/axis';
 import {useGraphData} from './useGraphData';
 import {formatDateAxis} from '../../lib/format';
+import {theme} from '../../styles';
 
 const {useCallback} = React;
 
@@ -19,7 +20,7 @@ export const AxisBottom = React.memo(function AxisBottom(props) {
       const props = {
         textAnchor: 'middle',
         dy: '4px',
-        fill: 'var(--color-gray5)',
+        fill: theme.color.gray[2],
       };
       if (i === 0) {
         props.textAnchor = 'start';
@@ -42,8 +43,8 @@ export const AxisBottom = React.memo(function AxisBottom(props) {
       tickFormat={formatDateAxis}
       tickLabelProps={bottomTickLabelProps}
       strokeWidth={1}
-      stroke="var(--color-gray2)"
-      tickStroke="var(--color-gray2)"
+      stroke={theme.color.gray[2]}
+      tickStroke={theme.color.gray[2]}
       {...props}
     />
   );
@@ -53,9 +54,9 @@ const leftTickLabelProps = () => ({
   dx: '4px',
   dy: '-4px',
   textAnchor: 'start',
-  fill: 'var(--color-gray4)',
+  fill: theme.color.gray[2],
   paintOrder: 'stroke',
-  stroke: 'var(--color-background)',
+  stroke: theme.color.background,
   strokeWidth: 5,
 });
 
@@ -66,7 +67,7 @@ export const AxisLeft = React.memo(function AxisLeft(props) {
       scale={yScale}
       tickLength={0} // positions text at the axis
       hideTicks
-      stroke="var(--color-gray2)"
+      stroke={theme.color.gray[2]}
       strokeWidth={1}
       tickLabelProps={leftTickLabelProps}
       {...props}
@@ -78,7 +79,7 @@ const rightTickLabelProps = () => ({
   dx: '-4px',
   dy: '-4px',
   textAnchor: 'end',
-  fill: 'var(--color-gray4)',
+  fill: theme.color.gray[2],
 });
 
 export const AxisRight = React.memo(function AxisRight(props) {
@@ -90,7 +91,7 @@ export const AxisRight = React.memo(function AxisRight(props) {
       tickLabelProps={rightTickLabelProps}
       tickLength={0} // positions text at the axis
       hideTicks
-      stroke="var(--color-gray2)"
+      stroke={theme.color.gray[2]}
       strokeWidth={1}
       {...props}
     />

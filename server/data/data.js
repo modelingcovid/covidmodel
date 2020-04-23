@@ -21,15 +21,6 @@ const series = (data) => {
 export const decorateLocationSummary = (data, locationId) => {
   data.id = locationId;
   data.name = stateLabels[locationId] || locationId;
-  data.scenarios = [
-    'scenario1',
-    'scenario2',
-    'scenario3',
-    'scenario4',
-    'scenario5',
-    'scenario6',
-    'scenario7',
-  ];
 };
 
 export const decorateScenarioSummary = (data, locationId) => {

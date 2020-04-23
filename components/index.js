@@ -1,4 +1,6 @@
+export * from './BigPicture';
 export * from './Daily';
+export * from './EffectiveReproductionNumber';
 export * from './FeedbackForm';
 export * from './Fitting';
 export * from './Hospitalizations';

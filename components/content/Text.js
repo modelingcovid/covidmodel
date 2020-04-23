@@ -1,12 +1,36 @@
 import * as React from 'react';
 
-const addHairspacesAroundEmDashes = (str) =>
-  str.replace(/\s—\s/g, ' — ').replace(/—/g, ' — ');
+const createStringCorrection = (correction) => (childrenArray) => {
+  return childrenArray.map((child) => {
+    if (typeof child !== 'string') {
+      return child;
+    }
+    return correction(child);
+  });
+};
 
-const preventWidows = (str) => str.replace(/ ([^\s]+)$/g, ' $1');
+const addHairspacesAroundEmDashes = createStringCorrection((str) =>
+  str.replace(/\s—\s/g, ' — ').replace(/—/g, ' — ')
+);
+
+const preventWidows = createStringCorrection((str) =>
+  str.replace(/ ([^\s]+)$/g, ' $1')
+);
+
+const shiftFirstQuote = ([first, ...rest]) => {
+  if (typeof first !== 'string' || !first.startsWith('“')) {
+    return [first, ...rest];
+  }
+  return [
+    <span key="quote" style={{marginLeft: '-0.5ch'}}>
+      {first}
+    </span>,
+    ...rest,
+  ];
+};
 
 const corrections = {
-  block: [addHairspacesAroundEmDashes, preventWidows],
+  block: [addHairspacesAroundEmDashes, preventWidows, shiftFirstQuote],
   inline: [addHairspacesAroundEmDashes],
 };
 
@@ -14,29 +38,30 @@ const applyTypography = (str, kind = 'block') => {
   return corrections[kind].reduce((s, fn) => fn(s), str);
 };
 
-export function formatText(children, kind) {
-  return React.Children.map(children, (child) => {
-    if (typeof child !== 'string') {
-      return child;
-    }
-    return applyTypography(child, kind);
-  });
+export function formatText(children, kind = 'block') {
+  const childrenArray = React.Children.toArray(children);
+  return corrections[kind].reduce((children, correction) => {
+    return correction(children);
+  }, childrenArray);
 }
 
-export const createTextComponent = (Tag, boundClassName, kind) => ({
-  children,
-  className,
-  ...props
-}) => (
-  <Tag
-    {...props}
-    className={[boundClassName, className].filter(Boolean).join(' ')}
-  >
-    {formatText(children, kind)}
-  </Tag>
-);
+export const createTextComponent = (Tag, boundClassName, kind) =>
+  React.forwardRef(({children, className, ...props}, ref) => (
+    <Tag
+      {...props}
+      className={[boundClassName, className].filter(Boolean).join(' ')}
+      ref={ref}
+    >
+      {formatText(children, kind)}
+    </Tag>
+  ));
 
 export const Paragraph = createTextComponent('p', 'paragraph');
+export const Blockquote = createTextComponent(
+  'blockquote',
+  'paragraph blockquote'
+);
+export const Pullquote = createTextComponent('p', 'paragraph pullquote');
 export const Instruction = createTextComponent('p', 'paragraph instruction');
 export const Title = createTextComponent('h2', 'text-title clear');
 export const Heading = createTextComponent('h3', 'section-heading');

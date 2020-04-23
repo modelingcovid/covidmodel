@@ -3,7 +3,9 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {
+  BigPicture,
   Daily,
+  EffectiveReproductionNumber,
   FeedbackForm,
   Fitting,
   Hospitalizations,
@@ -17,9 +19,25 @@ import {
   TestAndTrace,
 } from '../../components';
 import {Controls} from '../../components/configured';
-import {Section, Title} from '../../components/content';
+import {
+  Blockquote,
+  Heading,
+  Instruction,
+  ListItem,
+  OrderedList,
+  Paragraph,
+  Section,
+  Title,
+  UnorderedList,
+  WithCitation,
+} from '../../components/content';
 import {DistancingGradient} from '../../components/graph';
-import {ModelDataProvider, ModelStateProvider} from '../../components/modeling';
+import {
+  DateModelRun,
+  ModelDataProvider,
+  ModelStateProvider,
+  useCreateModelState,
+} from '../../components/modeling';
 import {Suspense, useContentRect} from '../../components/util';
 import {stateLabels} from '../../lib/controls';
 import {getStatesWithData} from '../../lib/data';
@@ -34,7 +52,7 @@ export default function StatePage() {
   const {
     query: {state},
   } = useRouter();
-  const [scenario, setScenario] = useState('scenario1');
+  const [scenario, setScenario] = useState('scenario2');
 
   const sizeRef = useRef(null);
   const {width} = useContentRect(sizeRef, {width: 896, height: 360});
@@ -42,13 +60,15 @@ export default function StatePage() {
 
   const stateName = stateLabels[state];
 
+  const interactiveModelState = useCreateModelState({
+    locationId: state,
+    scenarioId: scenario,
+    setScenario: setScenario,
+  });
+
   return (
-    <Layout>
-      <ModelStateProvider
-        locationId={state}
-        scenarioId={scenario}
-        setScenario={setScenario}
-      >
+    <ModelStateProvider value={interactiveModelState}>
+      <Layout>
         <Head>
           <title>Modeling COVID-19 in {stateName}</title>
           <meta
@@ -68,20 +88,9 @@ export default function StatePage() {
             padding: var(--spacing1) 0;
           }
         `}</style>
-        <Suspense fallback={<div />}>
-          <svg
-            viewBox={`0 0 ${width} 0`}
-            style={{
-              position: 'absolute',
-              pointerEvents: 'none',
-              zIndex: -1,
-            }}
-          >
-            <DistancingGradient size={width} />
-          </svg>
-        </Suspense>
+
         <div className="flex flex-col justify-center">
-          <Section className="margin-top-4">
+          <Section className="margin-top-4 margin-bottom-3">
             <div className="graph-size" ref={sizeRef} />
             <div className="text-jumbo margin-bottom-1">
               <span className="nowrap">Modeling COVID-19</span>{' '}
@@ -92,17 +101,80 @@ export default function StatePage() {
               actual social distancing, testing, and fatality data
             </div>
 
-            <p className="paragraph">
-              Our model has two primary variables: <strong>location</strong> and{' '}
-              <strong>social distancing scenario</strong>. We use location to
-              determine the demographic data we use, including population,
-              existing data about the spread of COVID-19 in the region, and
-              historical social distancing levels. The social distancing
-              scenario models what the people and governments in the region
-              might do in the future: how socially distanced will they be, and
-              for how long?
-              {/* Every model makes assumptions: we’ve attempted to explain o */}
-            </p>
+            <Paragraph>
+              The COSMC model is an epidemiological model of COVID-19, fit to
+              actual social distancing, testing, and fatality data. We use this
+              data to project how COVID-19 might spread through a population for
+              different <strong>locations</strong> and different{' '}
+              <strong>social distancing scenarios</strong>.
+            </Paragraph>
+            <WithCitation
+              citation={
+                <>
+                  We use data from the{' '}
+                  <a href="https://covidtracking.com/">
+                    COVID Tracking Project
+                  </a>
+                  , mobility data from{' '}
+                  <a href="https://www.google.com/covid19/mobility/">Google</a>,
+                  hospital capacity data from{' '}
+                  <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
+                    Esri
+                  </a>
+                  , and demographic data from{' '}
+                  <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
+                    Wolfram
+                  </a>
+                  . The model was last run on <DateModelRun />.
+                </>
+              }
+            >
+              <Paragraph>
+                <strong>
+                  A model is only as good as{' '}
+                  <span className="footnote">the data it’s based on,</span>
+                </strong>{' '}
+                and we’re thankful for the many people and organizations who
+                have worked to produce the data that powers the model. That
+                said, all data has its caveats and limitations: in particular,
+                fatality counts are difficult to assess and are{' '}
+                <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+                  often underreported
+                </a>
+                . We’ve tried to make the best of the available data and hope to
+                continually improve the model as more data becomes available.
+              </Paragraph>
+            </WithCitation>
+            <Blockquote>
+              <em>“All models are wrong, but some are useful.”</em>
+            </Blockquote>
+
+            <BigPicture width={width} height={height} />
+          </Section>
+
+          <DistancingGradient width={width} />
+          <Section>
+            <Title className="margin-top-5">What are we modeling?</Title>
+            <Paragraph>Our model has two primary dimensions:</Paragraph>
+            <UnorderedList>
+              <ListItem>
+                <strong>Location:</strong> We use location to determine the
+                demographic data we use, including population, existing data
+                about the spread of COVID-19 in the region, and historical
+                social distancing levels.
+              </ListItem>
+              <ListItem>
+                <strong>Social distancing scenario:</strong> The social
+                distancing scenario models what the people and governments in
+                the region might do in the future—how socially distanced will
+                they be, and for how long?
+              </ListItem>
+            </UnorderedList>
+            <Instruction>
+              <strong>Interact with the model</strong> by selecting a location
+              and scenario below. These controls will remain docked to the top
+              of the screen.
+            </Instruction>
           </Section>
           <div className="controls-container">
             <Section>
@@ -112,10 +184,11 @@ export default function StatePage() {
             </Section>
           </div>
           <Section className="margin-top-3">
-            <ModelInputs width={width} height={192} />
-            <SEIR width={width} height={height} />
+            <ModelInputs width={width} height={208} />
+            <EffectiveReproductionNumber width={width} height={208} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
+            <SEIR width={width} height={height} />
             {/* <TestAndTrace width={width} height={height} /> */}
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
@@ -129,9 +202,9 @@ export default function StatePage() {
             <ICU width={width} height={height} />
           </Section>
         </div>
-      </ModelStateProvider>
-      <FeedbackForm />
-    </Layout>
+        <FeedbackForm />
+      </Layout>
+    </ModelStateProvider>
   );
 }
 

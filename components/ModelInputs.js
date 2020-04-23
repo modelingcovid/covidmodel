@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
-import {DistancingGraph} from './configured';
+import {DistancingGraph, formatDistancing} from './configured';
 import {
   Gutter,
   Heading,
@@ -43,8 +43,6 @@ function TodayDistancing() {
   );
 }
 
-const formatDistancing = (n) => formatPercent(1 - n);
-
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
   const {r0, importtime, distancing, rt, domain} = useLocationData();
@@ -71,33 +69,28 @@ export function ModelInputs({height, width, ...remaining}) {
         }
       >
         <Paragraph>
-          The following graph displays
+          The following graph displays social distancing levels relative to
+          regular social activity.
           <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue.text}>
-            past social distancing levels
+            Past social distancing levels
           </InlineLabel>{' '}
-          based on <span className="footnote">available mobility data</span> for{' '}
-          {location.name}, and{' '}
+          are based on <span className="footnote">available mobility data</span>{' '}
+          for {location.name}, and{' '}
           <InlineLabel
             color={theme.color.yellow[3]}
             fill={theme.color.yellow.text}
           >
             prospective social distancing levels
           </InlineLabel>{' '}
-          based on the scenario selected above.
+          are based on the scenario selected above.
         </Paragraph>
-        <Instruction>
-          <strong>Reading the graph:</strong> The background of the graph
-          corresponds to the amount of social distancing at a given time. This
-          is also included on later graphs.
-        </Instruction>
+        <Paragraph>
+          The current distancing level, <TodayDistancing />, is calculated based
+          on the average the past three days of available mobility data for{' '}
+          {location.name}, which is usually reported with a three-day delay.
+        </Paragraph>
       </WithCitation>
-      <DistancingGraph
-        formatDistancing={formatDistancing}
-        y={distancing}
-        xLabel="distancing"
-        width={width}
-        height={height}
-      />
+      <DistancingGraph width={width} height={height} />
       <Gutter>
         <DistributionLegendRow
           label="Social distancing level"
@@ -106,76 +99,23 @@ export function ModelInputs({height, width, ...remaining}) {
           width="80%"
         />
       </Gutter>
-      <Paragraph>
-        The current distancing level, <TodayDistancing />, is calculated based
-        on the average the past three days of available mobility data for{' '}
-        {location.name}, which is usually reported with a three-day delay.
-      </Paragraph>
+      <Instruction>
+        <strong>Reading the graph:</strong> The background of the graph
+        corresponds to the amount of social distancing at a given time. This is
+        also included on later graphs.
+      </Instruction>
 
-      <Heading className="margin-top-4">
-        How does social distancing relate to how the virus spreads?
-      </Heading>
       <Paragraph>
-        Epidemiologists measure how quickly a disease spreads through{' '}
-        <strong>R₀</strong>, its <strong>basic reproduction number</strong>,
-        defined as the number of people a disease will spread to from a single
-        infected person.
-      </Paragraph>
-      <Paragraph>
-        When social distancing measures are introduced, it becomes more
-        difficult for a disease to spread through a population. We represent
-        this using
-        <InlineLabel
-          color={theme.color.magenta[1]}
-          fill={theme.color.magenta[1]}
-        >
-          R<sub>t</sub>
-        </InlineLabel>
-        , the <strong>effective reproduction number</strong>. R<sub>t</sub>{' '}
-        represents how many people a single case of the disease will spread to
-        at a given point in time, taking social distancing measures into
-        account.
-      </Paragraph>
-      <Graph
-        initialScale="linear"
-        tickFormat={formatR}
-        height={height}
-        width={width}
-        domain={domain.rt}
-        xLabel="R"
-        nice={false}
-      >
-        {() => <DistributionLine y={rt} stroke={theme.color.magenta[1]} />}
-      </Graph>
-      <Gutter>
-        <DistributionLegendRow
-          color={theme.color.magenta[1]}
-          label={
-            <>
-              R<sub>t</sub>
-            </>
-          }
-          y={rt}
-          format={formatR}
-        />
-      </Gutter>
-
-      <Heading className="margin-top-5">
-        How does the model differ between locations?
-      </Heading>
-      <Paragraph>
-        We use the data available to us — reported positive tests,
-        hospitalizations, and fatalities (among others) — to estimate when
-        COVID-19 reached a location and how contagious it is under those
-        conditions.
+        We use the data available to us — location demographics, reported
+        fatalities, and positive test cases — to estimate when COVID-19 reached
+        a location.
       </Paragraph>
       <Estimation status={false}>
         We estimate that COVID-19 reached {location.name} on{' '}
         <InlineData width="130px">
-          {() => formatDate(dayToDate(importtime()))}
-        </InlineData>{' '}
-        and has an R₀ of <InlineData>{() => formatNumber2(r0())}</InlineData>{' '}
-        when there is no social distancing.
+          {() => <strong>{formatDate(dayToDate(importtime()))}</strong>}
+        </InlineData>
+        .
       </Estimation>
     </div>
   );

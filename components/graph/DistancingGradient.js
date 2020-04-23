@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {hcl, rgb} from 'd3-color';
 import {scaleLinear} from '@vx/scale';
-import {ScaleGradient} from '../graph';
+import {ScaleGradient, useXScale} from '../graph';
 import {useLocationData, useModelState} from '../modeling';
-import {useMatchMedia} from '../util';
+import {Suspense, useMatchMedia} from '../util';
+import {getFunctionId} from '../../lib/fn';
 import {darkMode, mediaQuery, declarations, properties} from '../../styles';
 
 const {useCallback} = React;
@@ -16,41 +17,60 @@ const distancingScale = scaleLinear({
 const lightMode = declarations;
 const lightSource = rgb(lightMode[properties.color.focus[0]]);
 const lightColor = (n) => {
-  lightSource.opacity = n * 0.2;
+  lightSource.opacity = n * 0.1;
   return lightSource.toString();
 };
 
-const darkSource = hcl('#272d4a');
+const darkSource = rgb(darkMode[properties.color.focus[0]]);
 const darkColor = (n) => {
-  darkSource.opacity = n * 0.8;
+  darkSource.opacity = n * 0.1;
   return darkSource.toString();
 };
 
-export function useDistancingId() {
+export function useDistancingId(width) {
   const {id} = useModelState();
-  return `${id}-distancing`;
+  const xScale = useXScale();
+  const xScaleId = getFunctionId(xScale);
+  return `${id}-${xScaleId}-${width}-distancing`;
 }
 
-export const DistancingGradient = React.memo(function DistancingGradient({
-  size,
-}) {
-  const {indices, x, xScale} = useModelState();
-  const id = useDistancingId();
-  const isDarkMode = useMatchMedia(mediaQuery.darkMode);
-  const {distancing} = useLocationData();
+export const DistancingGradientContents = React.memo(
+  function DistancingGradientContents({width}) {
+    const {indices, x} = useModelState();
+    const xScale = useXScale();
+    const id = useDistancingId(width);
+    const isDarkMode = useMatchMedia(mediaQuery.darkMode);
+    const {distancing} = useLocationData();
+    const inverted = useCallback((n) => 1 - distancing.expected.get(n), [
+      distancing,
+    ]);
 
-  const inverted = useCallback((n) => 1 - distancing.expected.get(n), [
-    distancing,
-  ]);
+    return (
+      <ScaleGradient
+        color={isDarkMode ? darkColor : lightColor}
+        data={indices}
+        id={id}
+        x={(...d) => xScale(x(...d))}
+        y={inverted}
+        width={width}
+      />
+    );
+  }
+);
 
+export function DistancingGradient({width}) {
   return (
-    <ScaleGradient
-      color={isDarkMode ? darkColor : lightColor}
-      data={indices}
-      id={id}
-      x={(...d) => xScale(x(...d))}
-      y={inverted}
-      size={size}
-    />
+    <Suspense fallback={<div />}>
+      <svg
+        viewBox={`0 0 ${width} 0`}
+        style={{
+          position: 'absolute',
+          pointerEvents: 'none',
+          zIndex: -1,
+        }}
+      >
+        <DistancingGradientContents width={width} />
+      </svg>
+    </Suspense>
   );
-});
+}

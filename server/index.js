@@ -12,9 +12,10 @@ export const typeDefs = gql`
   type Location {
     id: String!
     name: String!
-    population: Int!
+    dateModelRun: String!
     icuBeds: Int!
     importtime: Float!
+    population: Int!
     r0: Float!
     ventilators: Int!
     days: Series
@@ -27,6 +28,7 @@ export const typeDefs = gql`
   type Scenario {
     id: ID!
     name: String!
+    dateContained: String!
     distancingDays: Int!
     distancingLevel: Float!
     hospitalCapacity: Series
@@ -171,9 +173,10 @@ const Location = {
   domain(parent) {
     return parent;
   },
-  population: locationProp,
+  dateModelRun: locationProp,
   icuBeds: locationProp,
   importtime: locationProp,
+  population: locationProp,
   r0: locationProp,
   ventilators: locationProp,
   async days(parent, args, {dataSources: {get}}) {
@@ -182,6 +185,9 @@ const Location = {
 };
 
 const Scenario = {
+  dateContained(parent) {
+    return parent.summary.dateContained;
+  },
   hospitalCapacity: field('series'),
   distancing: field('distribution'),
   rt: field('distribution'),

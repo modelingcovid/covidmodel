@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {PopulationGraph} from './configured';
+import {SEIRGraph, SEIRGutter, useSEIRConfig} from './configured';
 import {
   Grid,
   Gutter,
@@ -13,18 +13,11 @@ import {
   UnorderedList,
 } from './content';
 import {Area, Graph, Line, WithGraphData, useNearestData} from './graph';
-import {People, SkullCrossbones, HeadSideCough} from './icon';
 import {
   CurrentDate,
-  DistributionLegendRow,
-  DistributionSeriesFullFragment,
   Estimation,
-  createDistributionSeries,
   useModelState,
-  usePopulation,
   useLocationData,
-  useLocationQuery,
-  useScenarioQuery,
 } from './modeling';
 import {getLastDate} from '../lib/date';
 import {
@@ -53,72 +46,9 @@ function PercentCases() {
 
 export function SEIR({height, width}) {
   const {location} = useModelState();
-  const {
-    population,
-    domain,
-    susceptible,
-    cumulativeRecoveries,
-    currentlyInfected,
-    currentlyInfectious,
-    cumulativeDeaths,
-  } = useLocationData();
+  const {population, domain} = useLocationData();
 
-  const [config, configValues, label] = useMemo(() => {
-    const config = {
-      susceptible: {
-        y: susceptible,
-        label: 'Susceptible',
-        description: 'People who have not yet contracted COVID-19',
-        fill: theme.color.magenta[1],
-        color: theme.color.magenta[1],
-      },
-      recovered: {
-        y: cumulativeRecoveries,
-        label: 'Recovered',
-        description: 'People who have recovered from COVID-19',
-        fill: theme.color.gray[3],
-        color: theme.color.gray[5],
-      },
-      exposed: {
-        y: currentlyInfected,
-        label: 'Exposed',
-        description:
-          'People who have been infected with COVID-19 but cannot yet infect others',
-        fill: theme.color.yellow[2],
-        color: theme.color.yellow.text,
-      },
-      infectious: {
-        y: currentlyInfectious,
-        label: 'Infectious',
-        description: 'People who have COVID-19 and can infect others',
-        fill: theme.color.blue[2],
-        color: theme.color.blue.text,
-      },
-      deceased: {
-        y: cumulativeDeaths,
-        label: 'Deceased',
-        description: 'People who have died from COVID-19',
-        fill: theme.color.red[1],
-        color: theme.color.red.text,
-      },
-    };
-
-    const configValues = Object.values(config);
-    const label = configValues.reduce((o, {label, fill, color}) => {
-      o[label.toLowerCase()] = {fill, color};
-      return o;
-    }, {});
-
-    const accessors = stackAccessors(configValues.map(({y}) => y.expected.get));
-    configValues.forEach((c, i) => (c.area = accessors[i]));
-    return [config, configValues, label];
-  }, [
-    susceptible,
-    cumulativeRecoveries,
-    currentlyInfected,
-    currentlyInfectious,
-    cumulativeDeaths,
-  ]);
+  const {label} = useSEIRConfig();
 
   return (
     <div className="margin-top-3 flow-root">
@@ -166,19 +96,17 @@ export function SEIR({height, width}) {
         <div
           style={{
             position: 'absolute',
-            top: theme.spacing[4],
+            top: '72px',
             right: theme.spacing[1],
             background: theme.color.background,
             zIndex: 2,
-            boxShadow: `0 0 4px ${theme.color.gray[2]}`,
+            boxShadow: `0 0 4px ${theme.color.shadow[1]}`,
           }}
         >
-          <Graph
+          <SEIRGraph
             domain={() => population() * 1.05}
-            initialScale="linear"
             height={height / 4}
             width={width / 8}
-            xLabel="people"
             scrubber={false}
             decoration={false}
           >
@@ -186,68 +114,21 @@ export function SEIR({height, width}) {
               const midY = yScale(domain.seir());
               const strokeWidth = 1;
               return (
-                <>
-                  {configValues.map(({area: [y0, y1], fill}, i) => (
-                    <Area
-                      key={`area-${i}`}
-                      y0={y0}
-                      y1={y1}
-                      fill={fill}
-                      opacity="0.15"
-                    />
-                  ))}
-                  {configValues.map(({area: [y0, y1], fill}, i) => (
-                    <Line key={`line-${i}`} y={y1} stroke={fill} />
-                  ))}
-                  <rect
-                    x="0"
-                    y={midY}
-                    width={xMax - strokeWidth}
-                    height={yMax - midY - strokeWidth}
-                    fill={theme.color.shadow[1]}
-                    stroke={theme.color.gray[4]}
-                    strokeWidth={strokeWidth}
-                  />
-                </>
+                <rect
+                  x="0"
+                  y={midY}
+                  width={xMax - strokeWidth}
+                  height={yMax - midY - strokeWidth}
+                  fill={theme.color.shadow[1]}
+                  stroke={theme.color.gray[4]}
+                  strokeWidth={strokeWidth}
+                />
               );
             }}
-          </Graph>
+          </SEIRGraph>
         </div>
-        <Graph
-          domain={domain.seir}
-          initialScale="linear"
-          height={height}
-          width={width}
-          xLabel="people"
-        >
-          {() => (
-            <>
-              {configValues.map(({area: [y0, y1], fill}, i) => (
-                <Area
-                  key={`area-${i}`}
-                  y0={y0}
-                  y1={y1}
-                  fill={fill}
-                  opacity="0.15"
-                />
-              ))}
-              {configValues.map(({area: [y0, y1], fill}, i) => (
-                <Line key={`line-${i}`} y={y1} stroke={fill} />
-              ))}
-            </>
-          )}
-        </Graph>
-        <Gutter>
-          {configValues.map(({y, fill, label, description}, i) => (
-            <DistributionLegendRow
-              key={i}
-              y={y}
-              color={fill}
-              title={label}
-              compact
-            />
-          ))}
-        </Gutter>
+        <SEIRGraph domain={domain.seir} height={height} width={width} />
+        <SEIRGutter />
         <Paragraph className="margin-top-2">
           This graph shows how COVID-19 affects the population of{' '}
           {location.name} over time. While only a small portion of the
