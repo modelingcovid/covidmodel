@@ -313,9 +313,8 @@ export function BigPicture({height, width}) {
           </Paragraph>
           <Paragraph>
             However, we also need to consider what happens after our distancing
-            period ends. By the end of the social distancing period the majority
-            of the population would still be susceptible to COVID-19. What might
-            happen if we return to normal after social distancing?
+            period ends. What might happen if we return to normal after social
+            distancing?
           </Paragraph>
         </XScaleDistancingPeriod>
 
@@ -333,6 +332,10 @@ export function BigPicture({height, width}) {
           scrubber={false}
         />
         <Paragraph>
+          <strong>
+            By the end of the social distancing period the majority of the
+            population is projected to still be susceptible to COVID-19.
+          </strong>{' '}
           While the model projects that the social distancing measures drive
           cases down to nearly zero, some cases remain. If left unchecked, the
           model predicts that these cases will cause another outbreak, creating
@@ -340,95 +343,15 @@ export function BigPicture({height, width}) {
         </Paragraph>
 
         <Paragraph>
-          After distancing ends, why doesn’t the entire population become
-          infected? This is due to “<strong>herd immunity</strong>.”
-        </Paragraph>
-        <WithCitation
-          citation={
-            <>
-              Marc Lipsitch, “
-              <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
-                Who is immune to the coronavirus?
-              </a>
-              ”
-            </>
-          }
-        >
-          <Blockquote className="footnote">
-            “As more and more people become immune to the virus, an infected
-            individual has less and less chance of coming into contact with a
-            person susceptible to infection. Eventually, herd immunity becomes
-            pervasive enough that an infected person on average infects less
-            than one other person; at that point, the number of cases starts to
-            go down. If herd immunity is widespread enough, then even in the
-            absence of measures designed to slow transmission, the virus will be
-            contained — at least until immunity wanes or enough new people
-            susceptible to infection are born.”
-          </Blockquote>
-        </WithCitation>
-        <Paragraph>
-          By the end of the year, after a lengthy period of no distancing and
-          letting the virus run its course, the model predicts most people in{' '}
-          {location.name} will be immune to COVID-19. However, the period of no
-          distancing takes a significant toll on {location.name}’s hospital
-          system.
-        </Paragraph>
-        <Paragraph>
-          In this example, the model predicts that the{' '}
-          <strong>social distancing period</strong> slows the spread of the
-          virus, which allows the{' '}
-          <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
-            current number of people who require hospitalization
-          </InlineLabel>{' '}
-          to remain below{' '}
-          <InlineLabel
-            color={theme.color.yellow.text}
-            fill={theme.color.yellow[3]}
-          >
-            hospital capacity
-          </InlineLabel>
-          , and lessen the{' '}
-          <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
-            total number of fatalities
-          </InlineLabel>
-          .
+          The second wave appears similar to the example without social
+          distancing above. The model projects it will put a similar level of
+          strain on {location.name}’s hospital system:
         </Paragraph>
         <HospitalizationGraph height={height} width={width} scrubber={false} />
+
         <Paragraph>
-          However, if the virus is then allowed to spread uninhibited{' '}
-          <strong>without social distancing measures</strong>, the{' '}
-          <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[2]}>
-            current number of people who require hospitalization
-          </InlineLabel>{' '}
-          will quickly exceed the available{' '}
-          <InlineLabel
-            color={theme.color.yellow.text}
-            fill={theme.color.yellow[3]}
-          >
-            hospital capacity
-          </InlineLabel>{' '}
-          in {location.name}, which will increase the{' '}
-          <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
-            total number of fatalities
-          </InlineLabel>
-          .
-        </Paragraph>
-        <Paragraph>
-          The contrast between the outcome of the{' '}
-          <strong>social distancing period</strong> and the time{' '}
-          <strong>without distancing measures</strong> illustrates how social
-          distancing “
-          <strong>
-            <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">
-              flattens the curve
-            </a>
-          </strong>
-          .”
-        </Paragraph>
-        <Heading>Test, trace, and treat</Heading>
-        <Paragraph>
-          Is it possible to avoid the no-distancing peak? One option is to
-          continue social distancing until a <strong>vaccine</strong> is
+          <strong>Is it possible to avoid the second wave?</strong> One option
+          is to continue social distancing until a <strong>vaccine</strong> is
           developed, which experts estimate will take at least a year. A vaccine
           would allow the population to develop herd immunity without requiring
           mass infections.
@@ -438,15 +361,28 @@ export function BigPicture({height, width}) {
           involves tracking the virus to identify and prevent future outbreaks{' '}
           <em>without</em> establishing herd immunity. This approach could allow
           distancing restrictions to ease, but only if certain conditions are
-          met:
+          met.
+        </Paragraph>
+
+        <Title className="margin-top-4">Test, trace, and treat</Title>
+        <Paragraph>
+          Test, trace, and treat was used in{' '}
+          <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
+            South Korea
+          </a>
+          , others?
         </Paragraph>
         <UnorderedList>
           <ListItem>
             <strong>Testing rates</strong> need to be high enough to confidently
-            detect all new cases of the virus.
+            detect most new cases of the virus.
           </ListItem>
           <ListItem>
-            <strong>Trace:</strong>
+            <strong>
+              <a href="https://blog.google/documents/57/Overview_of_COVID-19_Contact_Tracing_Using_BLE.pdf">
+                contact tracing
+              </a>
+            </strong>
           </ListItem>
           <ListItem>
             <strong>Treat:</strong>
