@@ -16,6 +16,7 @@ import {Graph, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   DistributionLegendRow,
+  DistributionLine,
   Estimation,
   useFindPoint,
   useModelState,
