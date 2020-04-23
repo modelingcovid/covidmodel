@@ -1,8 +1,8 @@
 {
 "parameterBest":{
-"r0natural":3.0037,
-"importtime":4.2618e1,
-"stateAdjustmentForTestingDifferences":0.8827,
+"r0natural":3.0018,
+"importtime":4.2585e1,
+"stateAdjustmentForTestingDifferences":0.8793,
 "distpow":1.8
 },
 "population":4025127,
@@ -18,16 +18,16 @@
 "pPCRH":0.7140,
 "fractionOfCriticalDeceased":0.4221,
 "initialInfectionImpulse":1.4004e1,
-"r0":3.0037,
-"importtime":4.2618e1,
+"r0":3.0018,
+"importtime":4.2585e1,
 "numberOfSimulations":100,
-"dateModelRun":"Wed 22 Apr 2020 18:06:04",
+"dateModelRun":"Thu 23 Apr 2020 18:14:25",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.8827,
+"stateAdjustmentForTestingDifferences":0.8793,
 "distpow":1.8,
 "parameters":{
 "r0":{
-"value":3.0037,
+"value":3.0018,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -128,7 +128,7 @@
 ]
 },
 "importtime":{
-"value":4.2618e1,
+"value":4.2585e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -168,7 +168,7 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.8827,
+"value":0.8793,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
@@ -187,16 +187,16 @@
 }
 },
 "goodnessOfFitMetrics":{
-"chiSquared":2.3090e-6,
-"rmsRelativeError":0.2460,
-"rmsRelativeErrorDeaths":0.1263,
-"rmsRelativeErrorPcr":0.3242,
-"meanRelativeErrorDeaths":1.7545e-2,
-"meanRelativeErrorPcr":-0.1577,
-"rSquaredDeaths":1.6659e-2,
-"rSquaredPcr":1.3309e-2,
-"deathResidual7Day":1.0192,
-"pcrResidual7Day":-4.2281e1
+"chiSquared":2.2815e-6,
+"rmsRelativeError":0.2669,
+"rmsRelativeErrorDeaths":0.2038,
+"rmsRelativeErrorPcr":0.3177,
+"meanRelativeErrorDeaths":0.1684,
+"meanRelativeErrorPcr":-0.1501,
+"rSquaredDeaths":3.2666e-2,
+"rSquaredPcr":1.2795e-2,
+"deathResidual7Day":1.4102,
+"pcrResidual7Day":-4.2021e1
 },
 "scenarios":[
 "scenario5",

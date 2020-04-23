@@ -139,11 +139,15 @@ const queries = [
     'Scenario',
     `{
       dateContained
+      dateHospitalsOverCapacity
+      dateICUOverCapacity
       distancing { ...DistributionSeriesFull }
       rt { ...DistributionSeriesFull }
     }`,
     {
       dateContained: (d) => d.dateContained,
+      dateHospitalsOverCapacity: (d) => d.dateHospitalsOverCapacity,
+      dateICUOverCapacity: (d) => d.dateICUOverCapacity,
       distancing: createDistributionSeries((d) => d.distancing),
       rt: createDistributionSeries((d) => d.rt),
     },
@@ -274,6 +278,7 @@ const queries = [
         value
         description
         type
+        citations
       }
     }`,
     {

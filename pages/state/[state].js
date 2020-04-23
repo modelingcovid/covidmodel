@@ -188,19 +188,19 @@ export default function StatePage() {
             <EffectiveReproductionNumber width={width} height={208} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
+            <Hospitalizations width={width} height={height} />
+            <ICU width={width} height={height} />
+            <TestAndTrace width={width} height={height} />
             <SEIR width={width} height={height} />
-            {/* <TestAndTrace width={width} height={height} /> */}
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
           </Section>
-          <Section style={{marginTop: '300px'}}>
+          {/* <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>
             <div className="dek margin-top-1">
               These sections are being converted to match the format&nbsp;above.
             </div>
-            <Hospitalizations width={width} height={height} />
-            <ICU width={width} height={height} />
-          </Section>
+          </Section> */}
         </div>
         <FeedbackForm />
       </Layout>
