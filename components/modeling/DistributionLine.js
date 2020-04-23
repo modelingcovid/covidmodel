@@ -66,6 +66,58 @@ export function DistributionLineContents({
   );
 }
 
+export function DistributionLineContentsTestTrace({
+  y,
+  color = 'var(--color-blue2)',
+  curve,
+  gradient = false,
+}) {
+  return (
+    <>
+      <Area
+        y0={y.percentileTestTrace10.get}
+        y1={y.percentileTestTrace90.get}
+        fill={color}
+        opacity="0.1"
+        curve={curve}
+      />
+      {gradient && (
+        <>
+          <Area
+            y0={y.percentileTestTrace20.get}
+            y1={y.percentileTestTrace80.get}
+            fill={color}
+            opacity="0.1"
+            curve={curve}
+          />
+          <Area
+            y0={y.percentileTestTrace30.get}
+            y1={y.percentileTestTrace70.get}
+            fill={color}
+            opacity="0.1"
+            curve={curve}
+          />
+          <Area
+            y0={y.percentileTestTrace40.get}
+            y1={y.percentileTestTrace60.get}
+            fill={color}
+            opacity="0.1"
+            curve={curve}
+          />
+        </>
+      )}
+      <Line
+        y={y.percentileTestTrace50.get}
+        stroke={color}
+        opacity="0.2"
+        dot={false}
+        curve={curve}
+      />
+      <Line y={y.expectedTestTrace.get} stroke={color} curve={curve} />
+    </>
+  );
+}
+
 export function DistributionLine(props) {
   // return <DistributionLineContents {...props} />;
 
@@ -84,7 +136,8 @@ export function DistributionLine(props) {
         <DistributionLineContents {...props} />
       </g>
       <g clipPath={`url(#${right})`}>
-        <Line y={y.expectedTestTrace.get} stroke={color} curve={curve} />
+        <DistributionLineContentsTestTrace {...props} />
+        {/* <Line y={y.expectedTestTrace.get} stroke={color} curve={curve} /> */}
       </g>
     </>
   );

@@ -90,6 +90,16 @@ export const typeDefs = gql`
     percentile80: Series
     percentile90: Series
     percentile100: Series
+    percentileTestTrace10: Series
+    percentileTestTrace20: Series
+    percentileTestTrace30: Series
+    percentileTestTrace40: Series
+    percentileTestTrace50: Series
+    percentileTestTrace60: Series
+    percentileTestTrace70: Series
+    percentileTestTrace80: Series
+    percentileTestTrace90: Series
+    percentileTestTrace100: Series
   }
   type Domain {
     max: Float!
@@ -109,6 +119,16 @@ export const typeDefs = gql`
     percentile80: Domain
     percentile90: Domain
     percentile100: Domain
+    percentileTestTrace10: Domain
+    percentileTestTrace20: Domain
+    percentileTestTrace30: Domain
+    percentileTestTrace40: Domain
+    percentileTestTrace50: Domain
+    percentileTestTrace60: Domain
+    percentileTestTrace70: Domain
+    percentileTestTrace80: Domain
+    percentileTestTrace90: Domain
+    percentileTestTrace100: Domain
   }
   type Series {
     data: [Float]

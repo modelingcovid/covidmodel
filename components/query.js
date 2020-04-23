@@ -34,6 +34,9 @@ export const compactDistributionProps = [
   'percentile10',
   'percentile50',
   'percentile90',
+  'percentileTestTrace10',
+  'percentileTestTrace50',
+  'percentileTestTrace90',
 ];
 
 export const fullDistributionProps = [
@@ -44,6 +47,12 @@ export const fullDistributionProps = [
   'percentile60',
   'percentile70',
   'percentile80',
+  'percentileTestTrace20',
+  'percentileTestTrace30',
+  'percentileTestTrace40',
+  'percentileTestTrace60',
+  'percentileTestTrace70',
+  'percentileTestTrace80',
 ];
 
 export const SeriesFull = [
