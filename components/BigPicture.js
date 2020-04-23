@@ -219,7 +219,7 @@ export function BigPicture({height, width}) {
             who live in {location.name}?
           </Paragraph>
 
-          <Heading>How does distancing affect the population?</Heading>
+          <Heading>How could distancing affect the population?</Heading>
           <Paragraph>
             Our model is based upon a standard epidemiological model called{' '}
             <strong>the SEIR model</strong>. The SEIR model is a{' '}

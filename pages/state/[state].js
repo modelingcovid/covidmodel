@@ -148,18 +148,6 @@ export default function StatePage() {
             <Blockquote>
               <em>“All models are wrong, but some are useful.”</em>
             </Blockquote>
-            {/* <Paragraph>
-              <strong>“All models are wrong, but some are useful.”</strong> Like
-              all models, this model is just one approximation among many. We
-              hope it proves useful.
-            </Paragraph> */}
-
-            {/* <Heading className="margin-top-4">Table of contents</Heading>
-            <OrderedList style={{fontStyle: 'italic'}}>
-              <ListItem>The big picture</ListItem>
-              <ListItem>What are we modeling?</ListItem>
-              <ListItem>What are we looking for?</ListItem>
-            </OrderedList> */}
 
             <BigPicture width={width} height={height} />
           </Section>
@@ -197,11 +185,11 @@ export default function StatePage() {
           </div>
           <Section className="margin-top-3">
             <ModelInputs width={width} height={208} />
+            <EffectiveReproductionNumber width={width} height={208} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
             <SEIR width={width} height={height} />
-            <EffectiveReproductionNumber width={width} height={208} />
-            <TestAndTrace width={width} height={height} />
+            {/* <TestAndTrace width={width} height={height} /> */}
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
           </Section>
