@@ -394,7 +394,7 @@ export function BigPicture({height, width}) {
               South Korea
             </a>{' '}
             shows that with a “test and trace” strategy it’s possible to ease
-            distancing restrictions and still keep the virus contained for a
+            distancing restrictions and still prevent exponential growth for a
             period of time. Specifically, the data suggests that distancing
             restrictions can be reduced when the number of{' '}
             <span className="footnote">new cases per day</span> falls below two
