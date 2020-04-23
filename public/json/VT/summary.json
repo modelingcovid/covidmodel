@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":3.2221,
-"importtime":4.9263e1,
-"stateAdjustmentForTestingDifferences":0.8186,
-"distpow":1.8127
+"r0natural":3.6252,
+"importtime":5.1019e1,
+"stateAdjustmentForTestingDifferences":0.5040,
+"distpow":1.8198
 },
 "population":624636,
 "ventilators":90,
@@ -18,16 +18,16 @@
 "pPCRH":0.7453,
 "fractionOfCriticalDeceased":0.4585,
 "initialInfectionImpulse":1.2140e1,
-"r0":3.2221,
-"importtime":4.9263e1,
+"r0":3.6252,
+"importtime":5.1019e1,
 "numberOfSimulations":100,
-"dateModelRun":"Wed 22 Apr 2020 15:48:17",
+"dateModelRun":"Thu 23 Apr 2020 16:43:44",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.8186,
-"distpow":1.8127,
+"stateAdjustmentForTestingDifferences":0.5040,
+"distpow":1.8198,
 "parameters":{
 "r0":{
-"value":3.2221,
+"value":3.6252,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -128,7 +128,7 @@
 ]
 },
 "importtime":{
-"value":4.9263e1,
+"value":5.1019e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -168,13 +168,13 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.8186,
+"value":0.5040,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
 },
 "distancePower":{
-"value":1.8127,
+"value":1.8198,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
@@ -187,16 +187,16 @@
 }
 },
 "goodnessOfFitMetrics":{
-"chiSquared":1.3328e-5,
-"rmsRelativeError":0.3375,
-"rmsRelativeErrorDeaths":0.3321,
-"rmsRelativeErrorPcr":0.3426,
-"meanRelativeErrorDeaths":0.2435,
-"meanRelativeErrorPcr":-9.6592e-2,
-"rSquaredDeaths":0.1798,
-"rSquaredPcr":7.4085e-2,
-"deathResidual7Day":2.7213,
-"pcrResidual7Day":-6.4978e1
+"chiSquared":9.1326e-6,
+"rmsRelativeError":0.2907,
+"rmsRelativeErrorDeaths":0.3498,
+"rmsRelativeErrorPcr":0.2188,
+"meanRelativeErrorDeaths":0.1014,
+"meanRelativeErrorPcr":-1.2842e-2,
+"rSquaredDeaths":0.4327,
+"rSquaredPcr":6.6002e-2,
+"deathResidual7Day":2.9056,
+"pcrResidual7Day":-4.2372e1
 },
 "scenarios":[
 "scenario5",

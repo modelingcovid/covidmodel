@@ -52,12 +52,12 @@ export function SEIR({height, width}) {
 
   return (
     <div className="margin-top-3 flow-root">
-      <Title className="margin-bottom-3">Projections</Title>
+      <Title className="margin-bottom-3">Model Detail</Title>
       <Paragraph>
-        Our model is based upon a standard epidemiological model called{' '}
-        <strong>the SEIR model</strong>. The SEIR model is a{' '}
-        <strong>compartmental model</strong>, which estimates the spread of a
-        virus by dividing the population into different groups:
+        As mentioned in the introduction, our model is based upon a standard
+        epidemiological model called <strong>the SEIR model</strong>. The SEIR
+        model is a <strong>compartmental model</strong>, which estimates the
+        spread of a virus by dividing the population into different groups:
       </Paragraph>
       <UnorderedList className="list-style-none">
         <ListItem>
@@ -130,11 +130,11 @@ export function SEIR({height, width}) {
         <SEIRGraph domain={domain.seir} height={height} width={width} />
         <SEIRGutter />
         <Paragraph className="margin-top-2">
-          This graph shows how COVID-19 affects the population of{' '}
-          {location.name} over time. While only a small portion of the
-          population actively has COVID-19 at any given time, it can quickly
-          spread. The graph in the top right shows how small changes compound to
-          impact the population as a whole.
+          This graph shows a detailed view of how we project that COVID-19 will
+          affect the population of {location.name} over time. While only a small
+          portion of the population actively has COVID-19 at any given time, it
+          can quickly spread. The graph in the top right shows how small changes
+          compound to impact the population as a whole.
         </Paragraph>
         <Estimation>
           The model estimates that{' '}

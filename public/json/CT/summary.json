@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.9083,
-"importtime":4.8075e1,
+"r0natural":4.9086,
+"importtime":4.8072e1,
 "stateAdjustmentForTestingDifferences":0.3926,
-"distpow":1.8014
+"distpow":1.8013
 },
 "population":3594478,
 "ventilators":688,
@@ -18,16 +18,16 @@
 "pPCRH":0.7237,
 "fractionOfCriticalDeceased":0.4439,
 "initialInfectionImpulse":1.3890e1,
-"r0":4.9083,
-"importtime":4.8075e1,
+"r0":4.9086,
+"importtime":4.8072e1,
 "numberOfSimulations":100,
-"dateModelRun":"Wed 22 Apr 2020 16:14:50",
+"dateModelRun":"Thu 23 Apr 2020 17:34:50",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.3926,
-"distpow":1.8014,
+"distpow":1.8013,
 "parameters":{
 "r0":{
-"value":4.9083,
+"value":4.9086,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -128,7 +128,7 @@
 ]
 },
 "importtime":{
-"value":4.8075e1,
+"value":4.8072e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -174,7 +174,7 @@
 "type":"fit"
 },
 "distancePower":{
-"value":1.8014,
+"value":1.8013,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
@@ -187,16 +187,16 @@
 }
 },
 "goodnessOfFitMetrics":{
-"chiSquared":5.7576e-5,
-"rmsRelativeError":0.9380,
-"rmsRelativeErrorDeaths":0.7992,
-"rmsRelativeErrorPcr":1.0522,
-"meanRelativeErrorDeaths":-0.4811,
-"meanRelativeErrorPcr":-0.4882,
-"rSquaredDeaths":5.0149e-2,
-"rSquaredPcr":4.3335e-2,
-"deathResidual7Day":-5.4386,
-"pcrResidual7Day":-2.1148e2
+"chiSquared":5.9140e-5,
+"rmsRelativeError":0.8418,
+"rmsRelativeErrorDeaths":0.5614,
+"rmsRelativeErrorPcr":1.0394,
+"meanRelativeErrorDeaths":-0.2206,
+"meanRelativeErrorPcr":-0.4725,
+"rSquaredDeaths":0.1468,
+"rSquaredPcr":4.2585e-2,
+"deathResidual7Day":-3.8421,
+"pcrResidual7Day":-2.1178e2
 },
 "scenarios":[
 "scenario5",

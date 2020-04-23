@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.9499,
-"importtime":4.5847e1,
+"r0natural":4.9584,
+"importtime":4.5751e1,
 "stateAdjustmentForTestingDifferences":0.6029,
-"distpow":1.5023
+"distpow":1.5014
 },
 "population":6789319,
 "ventilators":1408,
@@ -18,16 +18,16 @@
 "pPCRH":0.7149,
 "fractionOfCriticalDeceased":0.4238,
 "initialInfectionImpulse":1.4526e1,
-"r0":4.9499,
-"importtime":4.5847e1,
+"r0":4.9584,
+"importtime":4.5751e1,
 "numberOfSimulations":100,
-"dateModelRun":"Wed 22 Apr 2020 17:21:15",
+"dateModelRun":"Thu 23 Apr 2020 17:57:31",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.6029,
-"distpow":1.5023,
+"distpow":1.5014,
 "parameters":{
 "r0":{
-"value":4.9499,
+"value":4.9584,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -128,7 +128,7 @@
 ]
 },
 "importtime":{
-"value":4.5847e1,
+"value":4.5751e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -174,7 +174,7 @@
 "type":"fit"
 },
 "distancePower":{
-"value":1.5023,
+"value":1.5014,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
@@ -187,16 +187,16 @@
 }
 },
 "goodnessOfFitMetrics":{
-"chiSquared":6.8843e-5,
-"rmsRelativeError":1.1257,
-"rmsRelativeErrorDeaths":1.3172,
-"rmsRelativeErrorPcr":0.9644,
-"meanRelativeErrorDeaths":-0.8179,
-"meanRelativeErrorPcr":-0.4957,
-"rSquaredDeaths":3.7497e-2,
-"rSquaredPcr":3.0429e-2,
-"deathResidual7Day":-2.0109e1,
-"pcrResidual7Day":5.5402e1
+"chiSquared":7.0235e-5,
+"rmsRelativeError":1.0092,
+"rmsRelativeErrorDeaths":1.0187,
+"rmsRelativeErrorPcr":1.0022,
+"meanRelativeErrorDeaths":-0.5415,
+"meanRelativeErrorPcr":-0.5326,
+"rSquaredDeaths":9.0892e-2,
+"rSquaredPcr":2.0193e-2,
+"deathResidual7Day":-1.6120e1,
+"pcrResidual7Day":5.4362e1
 },
 "scenarios":[
 "scenario5",

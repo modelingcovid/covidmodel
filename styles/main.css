@@ -212,6 +212,10 @@ body,
   vertical-align: super;
   line-height: 1;
 }
+.parameter-citation {
+  margin-left: 4px;
+  max-width: 70px;
+}
 .caption {
   font-family: var(--font-family-body);
   font-size: var(--font-size-small);
@@ -222,10 +226,12 @@ body,
   display: block;
 }
 .caption a,
+.parameter-citation a,
 .citation a {
   text-decoration: underline;
 }
 .caption a:hover,
+.parameter-citation a:hover,
 .citation a:hover {
   color: var(--color-gray5);
 }

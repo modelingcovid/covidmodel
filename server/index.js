@@ -29,6 +29,8 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     dateContained: String!
+    dateHospitalsOverCapacity: String
+    dateICUOverCapacity: String
     distancingDays: Int!
     distancingLevel: Float!
     hospitalCapacity: Series
@@ -121,6 +123,7 @@ export const typeDefs = gql`
     name: String!
     description: String!
     type: String!
+    citations: [String]
   }
 `;
 
@@ -187,6 +190,12 @@ const Location = {
 const Scenario = {
   dateContained(parent) {
     return parent.summary.dateContained;
+  },
+  dateHospitalsOverCapacity(parent) {
+    return parent.summary.dateHospitalsOverCapacity;
+  },
+  dateICUOverCapacity(parent) {
+    return parent.summary.dateICUOverCapacity;
   },
   hospitalCapacity: field('series'),
   distancing: field('distribution'),
