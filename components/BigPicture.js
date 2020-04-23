@@ -360,35 +360,37 @@ export function BigPicture({height, width}) {
           mass infections.
         </Paragraph>
         <Paragraph>
-          <strong>Contact tracing</strong> is another approach that involves
+          <strong>“Test and trace”</strong> is another approach that involves
           tracking the virus to identify and suppress future outbreaks{' '}
           <em>without</em> establishing herd immunity. This approach could allow
           distancing restrictions to ease, but only if certain conditions are
           met.
         </Paragraph>
 
-        <Title className="margin-top-4">Contact tracing</Title>
+        <Title className="margin-top-4">Test and trace</Title>
         <Paragraph>
+          A “test and trace” approach couples high testing rates with widely
+          deployed contact tracing.{' '}
           <a href="https://www.cdc.gov/coronavirus/2019-ncov/php/open-america/contact-tracing.html">
             Contact tracing
           </a>{' '}
-          attempts to contain the virus by identifying, notifying, and testing
-          people who have recently been in contact with an infected person and
-          encouraging infected and at-risk people to quarantine.
+          attempts to reduce the spread of a disease by identifying, notifying,
+          and testing people who have recently been in contact with an infected
+          person and encouraging infected and at-risk people to quarantine.
         </Paragraph>
         <Paragraph>
           Data from{' '}
           <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
             South Korea
           </a>{' '}
-          shows that when contact tracing is applied to a sufficient degree,
-          it’s possible to ease distancing restrictions and still keep the virus
-          contained for a period of time. Specifically, the data suggests that
-          distancing restrictions can be reduced when the number of new
-          confirmed cases per day falls below two cases per million people. To
-          keep the virus contained, data suggests that for every 100 tests
-          performed, only one should come back positive and 80% of positive
-          tests should be able to be traced back to another known case.
+          shows that with a “test and trace” strategy it’s possible to ease
+          distancing restrictions and still keep the virus contained for a
+          period of time. Specifically, the data suggests that distancing
+          restrictions can be reduced when the number of new confirmed cases per
+          day falls below two cases per million people. To keep the virus
+          contained, data suggests that for every 100 tests performed, only one
+          should come back positive and 80% of positive tests should be able to
+          be traced back to another known case.
         </Paragraph>
       </div>
     </ModelStateProvider>
