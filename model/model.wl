@@ -159,7 +159,7 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 (* a function to generate the monte carlo simulations from combo of fit / assumed parameters *)
 (* for the assumed parameters we temporarily have a 5% stdev, but we will replace this with a calculated
 one when we have multiple literature sources shortly *)
-generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{}, {
+generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_, testTrace_]:=Module[{}, {
     RandomVariate[PosNormal[fitParams["r0natural"],0.05*fitParams["r0natural"]]],
     RandomVariate[PosNormal[daysUntilNotInfectious0,daysUntilNotInfectious0*0.05]],
     RandomVariate[PosNormal[daysUntilHospitalized0,daysUntilHospitalized0*0.05]],
@@ -181,7 +181,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     stateParams["hospitalCapacity"],
     RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
     RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]],
-    0
+    testTrace
   }&/@Range[numberOfSimulations]]
 
 
@@ -605,7 +605,10 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     parameterizedSolution,
     soltt,
     eventstt,
-    paramExpectedtt
+    paramExpectedtt,
+    simsTestTrace,
+    rawSimResultsTestTrace,
+    simResultsTestTrace
   },
 
   paramExpected = {
@@ -668,7 +671,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   population = stateParams["params"]["population"];
 
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
-  sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams];
+  sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams,0];
+  simsTestTrace=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams,1];
 
   (* generate a solution for each simulation so we can get bands *)
   modelComponents = simModelPrecompute[state][scenario["id"]];
@@ -678,36 +682,37 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   rawSimResults=Map[integrateModelSim[parameterizedSolution, outputODE, #][[1]]&, sims];
   simResults=Select[rawSimResults, endTime[#[Sq]]>=endOfEval&];
-
+  
+  rawSimResultsTestTrace=Map[integrateModelSim[parameterizedSolution, outputODE, #][[1]]&, simsTestTrace];
+  simResultsTestTrace=Select[rawSimResultsTestTrace, endTime[#[Sq]]>=endOfEval&];
 
   deciles = Range[0,10]/10;
 
-  simDeciles[computationFunction_,simResults_:simResults]:=Quantile[Map[computationFunction, simResults], deciles];
-  simMedian[computationFunction_,simResults_:simResults]:=Median[Map[computationFunction, simResults]];
+  simDeciles[computationFunction_,testTrace_:0,simResults_:simResults]:=If[testTrace==0, Quantile[Map[computationFunction, simResults], deciles], Quantile[Map[computationFunction, simResultsTestTrace], deciles]];
 
   distancing = stateDistancingPrecompute[state][scenario["id"]]["distancingFunction"];
 
-  PCRQuantiles[t_] := simDeciles[#[PCR][t]&] * population;
-  DeathQuantiles[t_] := simDeciles[#[Deaq][t]&] * population;
-  DailyPCRQuantiles[t_] := simDeciles[#[PCR][t] - #[PCR][t-1]&] * population;
-  DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
-  CurrentlyInfectedQuantiles[t_] := simDeciles[#[Eq][t]&] * population;
-  CurrentlyInfectiousQuantiles[t_] := simDeciles[#[Iq][t]&] * population;
-  CumulativeHospitalizedQuantiles[t_] := simDeciles[#[RepHq][t]*population &];
-  CumulativeCriticalQuantiles[t_] := simDeciles[#[RepHCq][t]*population&];
+  PCRQuantiles[t_, testTrace_:0] := simDeciles[#[PCR][t]&, testTrace] * population;
+  DeathQuantiles[t_, testTrace_:0] := simDeciles[#[Deaq][t]&, testTrace] * population;
+  DailyPCRQuantiles[t_, testTrace_:0] := simDeciles[#[PCR][t] - #[PCR][t-1]&, testTrace] * population;
+  DailyDeathQuantiles[t_, testTrace_:0] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&, testTrace] * population;
+  CurrentlyInfectedQuantiles[t_, testTrace_:0] := simDeciles[#[Eq][t]&, testTrace] * population;
+  CurrentlyInfectiousQuantiles[t_, testTrace_:0] := simDeciles[#[Iq][t]&, testTrace] * population;
+  CumulativeHospitalizedQuantiles[t_, testTrace_:0] := simDeciles[#[RepHq][t]*population &, testTrace];
+  CumulativeCriticalQuantiles[t_, testTrace_:0] := simDeciles[#[RepHCq][t]*population&, testTrace];
   (* TODO why does this not include people who are exposed or infectious? *)
   (* it looks like this used later on to mock up the number of people who are symptomatic; we cannot compute this quantity with the current model *)
-  CumulativeInfectionQuantiles[t_] := simDeciles[#[Deaq][t] + #[Rq][t]&] * population;
-  CumulativeRecoveredQuantiles[t_] := simDeciles[#[Rq][t]&] * population;
-  RecoveredHospitalizedQuantiles[t_] := simDeciles[#[RHq][t]&] * population;
-  RecoveredCriticalQuantiles[t_] := simDeciles[#[RCq][t]&] * population;
-  CurrentlyHospitalizedQuantiles[t_]:=simDeciles[#[HHq][t]&] * population;
-  CurrentlyCriticalQuantiles[t_]:=simDeciles[#[CCq][t]&] * population;
-  CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*#[HHq][t],(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
-  CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[CCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,1.5,1]]&];
-  SuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
-  DailyCumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
-  CumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t]&] * population;
+  CumulativeInfectionQuantiles[t_, testTrace_:0] := simDeciles[#[Deaq][t] + #[Rq][t]&, testTrace] * population;
+  CumulativeRecoveredQuantiles[t_, testTrace_:0] := simDeciles[#[Rq][t]&, testTrace] * population;
+  RecoveredHospitalizedQuantiles[t_, testTrace_:0] := simDeciles[#[RHq][t]&, testTrace] * population;
+  RecoveredCriticalQuantiles[t_, testTrace_:0] := simDeciles[#[RCq][t]&, testTrace] * population;
+  CurrentlyReportedHospitalizedQuantiles[t_, testTrace_:0] := simDeciles[Min[population*#[HHq][t],(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&, testTrace];
+  CurrentlyReportedCriticalQuantiles[t_, testTrace_:0] := simDeciles[Min[population*#[CCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&, testTrace];
+  CurrentlyHospitalizedQuantiles[t_, testTrace_:0] := simDeciles[population*#[HHq][t]&, testTrace];
+  CurrentlyCriticalQuantiles[t_, testTrace_:0] := simDeciles[population*#[CCq][t]&, testTrace];
+  SuseptibleQuantiles[t_, testTrace_:0] :=  simDeciles[#[Sq][t]&, testTrace] * population;
+  DailyCumulativeExposedQuantiles[t_, testTrace_:0]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&, testTrace] * population;
+  CumulativeExposedQuantiles[t_, testTrace_:0]:=simDeciles[#[cumEq][t]&, testTrace] * population;
 
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
   percentileMapTestTrace[percentileList_]:=Association[MapIndexed[("percentileTestTrace" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
@@ -728,28 +733,31 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
              <|"expectedTestTrace"->If[(soltt[cumEq][t]-soltt[cumEq][t-1])<testTraceNewCaseThreshold0 && t>today, 1, distancing[t]^fitParams["distpow"] * fitParams["r0natural"]]*Sum[susceptibilityValues[[i]]*soltt[sSq[i]][t],{i,1,susceptibilityBins}]|>
           },First],
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"],
-          "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,1.5,1],
+          "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7],
           "dailyNegativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["negativeIncrease"]]|>
             },First],
-          "dailyPcr" -> Merge[{
+         "dailyPcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positiveIncrease"]]|>,
               <|"expected"-> population*(sol[PCR][t] - sol[PCR][t-1])|>,
               <|"expectedTestTrace"-> population*(soltt[PCR][t]-soltt[PCR][t-1])|>,
-              percentileMap[DailyPCRQuantiles[t]]
+              percentileMap[DailyPCRQuantiles[t, 0]],
+              percentileMapTestTrace[DailyPCRQuantiles[t,1]]
             },First],
           "dailyDeath" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["deathIncrease"]]|>,
               <|"expected"-> population*(sol[Deaq][t] - sol[Deaq][t-1])|>,
               <|"expectedTestTrace"-> population*(soltt[Deaq][t]-soltt[Deaq][t-1])|>,
-              percentileMap[DailyDeathQuantiles[t]]
+              percentileMap[DailyDeathQuantiles[t, 0]],
+              percentileMapTestTrace[DailyDeathQuantiles[t, 1]]
             },First],
           "dailyTestsRequiredForContainment" -> <|"expected"-> population*testToAllCaseRatio0*(sol[cumEq][t] - sol[cumEq][t-1])|>,
           "cumulativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]]|>,
               <|"expected"-> population*sol[PCR][t]|>,
               <|"expectedTestTrace"-> population*soltt[PCR][t]|>,
-              percentileMap[PCRQuantiles[t]]
+              percentileMap[PCRQuantiles[t, 0]],
+              percentileMapTestTrace[PCRQuantiles[t, 1]]
             },First],
           "cumulativeNegativePcr" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["negative"]]|>
@@ -757,33 +765,39 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
           "cumulativeExposed"->Merge[{
               <|"expected"-> population*sol[cumEq][t]|>,
               <|"expectedTestTrace"-> population*soltt[cumEq][t]|>,
-              percentileMap[CumulativeExposedQuantiles[t]]
+              percentileMap[CumulativeExposedQuantiles[t, 0]],
+              percentileMapTestTrace[CumulativeExposedQuantiles[t, 1]]
             },First],
           "newlyExposed"->Merge[{
               <|"expected"-> population*(sol[cumEq][t] - sol[cumEq][t-1])|>,
               <|"expectedTestTrace"-> population*(soltt[cumEq][t] - soltt[cumEq][t-1])|>,
-              percentileMap[DailyCumulativeExposedQuantiles[t]]
+              percentileMap[DailyCumulativeExposedQuantiles[t, 0]],
+              percentileMapTestTrace[DailyCumulativeExposedQuantiles[t, 1]]
             },First],
           "cumulativeDeaths" -> Merge[{
               <|"confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, If[KeyExistsQ[Select[stateParams["thisStateData"],(#["day"]==t)&][[1]],"death"],Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["death"],0]]|>,
               <|"expected"-> population*sol[Deaq][t]|>,
               <|"expectedTestTrace"-> population*soltt[Deaq][t]|>,
-              percentileMap[DeathQuantiles[t]]
+              percentileMap[DeathQuantiles[t, 0]],
+              percentileMapTestTrace[DeathQuantiles[t, 1]]
             },First],
           "currentlyInfected" -> Merge[{
               <|"expected"-> population*sol[Eq][t]|>,
               <|"expectedTestTrace"-> population*soltt[Eq][t]|>,
-              percentileMap[CurrentlyInfectedQuantiles[t]]
+              percentileMap[CurrentlyInfectedQuantiles[t, 0]],
+              percentileMapTestTrace[CurrentlyInfectedQuantiles[t, 1]]
             }, First],
           "currentlyInfectious" -> Merge[{
               <|"expected"-> population*sol[Iq][t]|>,
               <|"expectedTestTrace"-> population*soltt[Iq][t]|>,
-              percentileMap[CurrentlyInfectiousQuantiles[t]]
+              percentileMap[CurrentlyInfectiousQuantiles[t, 0]],
+              percentileMapTestTrace[CurrentlyInfectiousQuantiles[t, 1]]
             }, First],
           "cumulativeRecoveries" -> Merge[{
               <|"expected"-> population*sol[Rq][t]|>,
               <|"expectedTestTrace"-> population*soltt[Rq][t]|>,
-              percentileMap[CumulativeRecoveredQuantiles[t]]
+              percentileMap[CumulativeRecoveredQuantiles[t, 0]],
+              percentileMapTestTrace[CumulativeRecoveredQuantiles[t, 1]]
             }, First],
 
           "currentlyReportedHospitalized" -> Merge[{
@@ -795,12 +809,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               ]|>,
               <|"expected"-> Min[population*sol[HHq][t - daysForHospitalsToReportCases0], (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]|>,
               <|"expectedTestTrace"-> Min[population*soltt[HHq][t - daysForHospitalsToReportCases0], (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]|>,
-              percentileMap[CurrentlyReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
+              percentileMap[CurrentlyReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0, 0]],
+              percentileMapTestTrace[CurrentlyReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0, 1]]
             },First],
           "currentlyHospitalized" -> Merge[{
               <|"expected"-> population*sol[HHq][t]|>,
               <|"expectedTestTrace"-> population*soltt[HHq][t]|>,
-              percentileMap[CurrentlyHospitalizedQuantiles[t]]
+              percentileMap[CurrentlyHospitalizedQuantiles[t, 0]],
+              percentileMapTestTrace[CurrentlyHospitalizedQuantiles[t, 1]]
             }, First],
           "cumulativeReportedHospitalized" -> Merge[{
               <|"confirmed"->If[
@@ -811,12 +827,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               ]|>,
               <|"expected"-> population*sol[RepHq][t - daysForHospitalsToReportCases0]|>,
               <|"expectedTestTrace"-> population*soltt[RepHq][t - daysForHospitalsToReportCases0]|>,
-              percentileMap[CumulativeHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
+              percentileMap[CumulativeHospitalizedQuantiles[t - daysForHospitalsToReportCases0, 0]],
+              percentileMapTestTrace[CumulativeHospitalizedQuantiles[t - daysForHospitalsToReportCases0, 1]]
             },First],
           "cumulativeHospitalized" -> Merge[{
               <|"expected"-> population*sol[EHq][t]|>,
               <|"expectedTestTrace"-> population*soltt[EHq][t]|>,
-              percentileMap[CumulativeHospitalizedQuantiles[t]]
+              percentileMap[CumulativeHospitalizedQuantiles[t, 0]],
+              percentileMapTestTrace[CumulativeHospitalizedQuantiles[t, 1]]
             }, First],
 
           "cumulativeCritical" -> Merge[{
@@ -828,7 +846,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               ]|>,
               <|"expected"-> population*(sol[RepHCq][t - daysForHospitalsToReportCases0])|>,
               <|"expectedTestTrace"-> population*(soltt[RepHCq][t - daysForHospitalsToReportCases0])|>,
-              percentileMap[CumulativeCriticalQuantiles[t]]
+              percentileMap[CumulativeCriticalQuantiles[t, 0]],
+              percentileMapTestTrace[CumulativeCriticalQuantiles[t, 1]]
             }, First],
           "currentlyCritical" -> Merge[{
               <|"confirmed"->If[
@@ -839,12 +858,14 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               ]|>,
               <|"expected"-> population*sol[CCq][t]|>,
               <|"expectedTestTrace"-> population*soltt[CCq][t]|>,
-              percentileMap[CurrentlyCriticalQuantiles[t]]
+              percentileMap[CurrentlyCriticalQuantiles[t, 0]],
+              percentileMapTestTrace[CurrentlyCriticalQuantiles[t, 1]]
             },First],
           "susceptible" -> Merge[{
               <|"expected"-> population*sol[Sq][t]|>,
               <|"expectedTestTrace"-> population*soltt[Sq][t]|>,
-              percentileMap[SuseptibleQuantiles[t]]
+              percentileMap[SuseptibleQuantiles[t, 0]],
+              percentileMapTestTrace[SuseptibleQuantiles[t, 1]]
             },First]
       }],{t,Floor[fitParams["importtime"]] - 5, endOfEval}]];
 
@@ -873,7 +894,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
         "fractionOfDeathInICU"->(sol[DeaICUq][t]) / (sol[Deaq][t]),
         "fractionDeathOfHospitalizedOrICU"->((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]))*(fractionOfCriticalDeceased0 + (1 - ((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t])))*fractionOfHospitalizedNonCriticalDeceased0/((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]))),
         "fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
-        "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
+        "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["newlyExposed"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<testTraceNewCaseThreshold0&][[1]][[1]]-1]],
         "dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
           DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
           ""],
