@@ -151,7 +151,7 @@ export default function StatePage() {
               <em>“All models are wrong, but some are useful.”</em>
             </Blockquote>
 
-            <BigPicture width={width} height={height} />
+            <BigPicture width={width} height={smallHeight} />
           </Section>
 
           <DistancingGradient width={width} />

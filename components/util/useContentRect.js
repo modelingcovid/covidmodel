@@ -33,7 +33,6 @@ export const useContentRect = (elementRef, defaultRect = {}) => {
       return;
     }
     const observer = new ResizeObserverPolyfill((entries) => {
-      console.log('hi', entries[0]);
       setContentRect(entries[0].contentRect);
     });
     observer.observe(elementRef.current);

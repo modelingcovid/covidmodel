@@ -116,7 +116,6 @@ function TotalFatalitiesLabel() {
 export function BigPicture({height, width}) {
   const sizeRef = useRef(null);
   const {width: smallWidth} = useContentRect(sizeRef, {height, width});
-  const smallHeight = Math.min(256, height);
 
   const {location} = useModelState();
   const {population, domain} = useLocationData();
@@ -165,7 +164,7 @@ export function BigPicture({height, width}) {
               increase the <TotalFatalitiesLabel />.
             </Paragraph>
             <HospitalizationGraph
-              height={smallHeight}
+              height={height}
               width={smallWidth}
               scrubber={false}
             />
@@ -198,7 +197,7 @@ export function BigPicture({height, width}) {
           </Paragraph>
 
           <HospitalizationGraph
-            height={smallHeight}
+            height={height}
             width={smallWidth}
             scrubber={false}
           />
@@ -285,7 +284,7 @@ export function BigPicture({height, width}) {
             <SEIRGraph
               domain={() => population() * 1.01}
               nice={false}
-              height={smallHeight}
+              height={height}
               width={smallWidth}
               scrubber={false}
             />
@@ -302,7 +301,7 @@ export function BigPicture({height, width}) {
           <SEIRGraph
             domain={() => population() * 1.01}
             nice={false}
-            height={smallHeight}
+            height={height}
             width={smallWidth}
             scrubber={false}
           />
