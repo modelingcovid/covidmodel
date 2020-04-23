@@ -20,6 +20,7 @@ const styles = css`
 
 export function ParameterTableContents() {
   const {parameters} = useLocationData();
+
   return (
     <div className="margin-top-3 flow-root">
       <style jsx>{styles}</style>
@@ -28,7 +29,7 @@ export function ParameterTableContents() {
         The following parameters are used in the COSMC model:
       </Paragraph>
       <Grid mobile={1} desktop={2}>
-        {parameters().map(({id, name, value, description, type}) => (
+        {parameters().map(({id, name, value, description, type, citations}) => (
           <LegendRow
             key={id}
             label={<span className="text-mono ellipsis">{id}</span>}
