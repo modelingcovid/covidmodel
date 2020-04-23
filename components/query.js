@@ -29,6 +29,7 @@ export const seriesProps = ['data', 'empty', 'max', 'min'];
 
 export const compactDistributionProps = [
   'expected',
+  'expectedTestTrace',
   'confirmed',
   'percentile10',
   'percentile50',
@@ -111,6 +112,7 @@ const queries = [
   [
     'Location',
     `{
+      dateModelRun
       days { data }
       icuBeds
       importtime
@@ -124,6 +126,7 @@ const queries = [
       }
     }`,
     {
+      dateModelRun: (location) => location.dateModelRun,
       days: ({days}) => days.data,
       icuBeds: (location) => location.icuBeds,
       importtime: (location) => location.importtime,
@@ -135,10 +138,12 @@ const queries = [
   [
     'Scenario',
     `{
+      dateContained
       distancing { ...DistributionSeriesFull }
       rt { ...DistributionSeriesFull }
     }`,
     {
+      dateContained: (d) => d.dateContained,
       distancing: createDistributionSeries((d) => d.distancing),
       rt: createDistributionSeries((d) => d.rt),
     },

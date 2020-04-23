@@ -1,6 +1,7 @@
 export * from './CurrentDate';
 export * from './CurrentScenario';
 export * from './CurrentStatus';
+export * from './DateModelRun';
 export * from './DistributionLegendRow';
 export * from './DistributionLine';
 export * from './Estimation';

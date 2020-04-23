@@ -1,5 +1,6 @@
 export * from './Area';
 export * from './Axis';
+export * from './ClipPathX';
 export * from './DistancingGradient';
 export * from './DistancingOverlay';
 export * from './Graph';

@@ -33,6 +33,7 @@ import {
 } from '../../components/content';
 import {DistancingGradient} from '../../components/graph';
 import {
+  DateModelRun,
   ModelDataProvider,
   ModelStateProvider,
   useCreateModelState,
@@ -124,7 +125,7 @@ export default function StatePage() {
                   <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
                     Wolfram
                   </a>
-                  .
+                  . The model was last run on <DateModelRun />.
                 </>
               }
             >
@@ -196,11 +197,11 @@ export default function StatePage() {
           </div>
           <Section className="margin-top-3">
             <ModelInputs width={width} height={208} />
-            <TestAndTrace width={width} height={height} />
-            <SEIR width={width} height={height} />
             <Fitting width={width} height={height} />
             <Daily width={width} height={height} />
+            <SEIR width={width} height={height} />
             <EffectiveReproductionNumber width={width} height={208} />
+            <TestAndTrace width={width} height={height} />
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
           </Section>

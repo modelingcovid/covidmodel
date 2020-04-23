@@ -4,7 +4,6 @@ import {scaleLinear, scaleSymlog} from '@vx/scale';
 import {AxisLeft, AxisBottom} from './Axis';
 import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
-import {useDistancingId} from './DistancingGradient';
 import {DistancingOverlay} from './DistancingOverlay';
 import {GraphControls} from './GraphControls';
 import {NearestMarker} from './NearestMarker';
@@ -72,8 +71,6 @@ export const GraphContents = React.memo(function Graph({
     [tickFormat, xLabel, yTickCount]
   );
 
-  const distancingId = useDistancingId(xMax);
-
   return (
     <GraphDataProvider context={context}>
       {before}
@@ -114,15 +111,6 @@ export const GraphContents = React.memo(function Graph({
                 <rect x="0" y="0" width={xMax} height={yMax} />
               </clipPath>
             </defs>
-            {/* {decoration && (
-              <rect
-                x="0"
-                y="0"
-                width={xMax}
-                height={yMax}
-                fill={`url(#${distancingId})`}
-              />
-            )} */}
             <g>{children(context)}</g>
             <g pointerEvents="none">
               {decoration && (

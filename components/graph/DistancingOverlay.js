@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {CurrentScenario, useDistancingInfo, useLocationData} from '../modeling';
 import {useDistancingId} from './DistancingGradient';
+import {ClipPathX} from './ClipPathX';
 import {Line} from './Line';
 import {LinearGradient} from './LinearGradient';
 import {VMarker} from './Marker';
@@ -63,7 +64,8 @@ export function DistancingOverlay() {
                   height={yMax}
                   fill={`url(#${distancingId})`}
                 />
-                <defs>
+                <ClipPathX left={leftId} right={rightId} value={today} />
+                {/* <defs>
                   <clipPath id={leftId}>
                     <rect x="0" y="0" width={todayX} height={yMax} />
                   </clipPath>
@@ -75,7 +77,7 @@ export function DistancingOverlay() {
                       height={yMax}
                     />
                   </clipPath>
-                </defs>
+                </defs> */}
                 <VMarker
                   value={today}
                   strokeDasharray="4,2"
