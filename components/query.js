@@ -231,7 +231,7 @@ const queries = [
     'Location',
     `{
       domain {
-        rt { expected { max }}
+        rt { expected { max } }
         cumulativeDeaths { expected { max } }
         currentlyInfected { expected { max } }
         currentlyInfectious { expected { max } }

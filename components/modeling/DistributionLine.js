@@ -67,6 +67,8 @@ export function DistributionLineContents({
 }
 
 export function DistributionLine(props) {
+  return <DistributionLineContents {...props} />;
+
   const {y, color, curve} = props;
   const {dateContained} = useLocationData();
   const id = useComponentId('distribution-line');

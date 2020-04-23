@@ -358,49 +358,35 @@ export function BigPicture({height, width}) {
           mass infections.
         </Paragraph>
         <Paragraph>
-          Another approach, called “<strong>test, trace, and treat</strong>”
-          involves tracking the virus to identify and suppress future outbreaks{' '}
+          <strong>Contact tracing</strong> is another approach that involves
+          tracking the virus to identify and suppress future outbreaks{' '}
           <em>without</em> establishing herd immunity. This approach could allow
           distancing restrictions to ease, but only if certain conditions are
           met.
         </Paragraph>
 
-        <Title className="margin-top-4">Test, trace, and treat</Title>
+        <Title className="margin-top-4">Contact tracing</Title>
         <Paragraph>
-          Test, trace, and treat was used in{' '}
+          <a href="https://www.cdc.gov/coronavirus/2019-ncov/php/open-america/contact-tracing.html">
+            Contact tracing
+          </a>{' '}
+          attempts to contain the virus by identifying, notifying, and testing
+          people who have recently been in contact with an infected person and
+          encouraging infected and at-risk people to quarantine.
+        </Paragraph>
+        <Paragraph>
+          Data from{' '}
           <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
             South Korea
-          </a>
-          , Singapore, and Taiwan. It is very difficult. Based on data from
-          South Korea, in order for test, trace, and treat to be feasible, the
-          number of newly confirmed cases per day must be less than two per
-          million.
-        </Paragraph>
-        <UnorderedList>
-          <ListItem>
-            <strong>Test:</strong> Testing rates need to be high enough to
-            confidently detect most new cases of the virus. In South Korea, data
-            suggests that for every 100 tests performed, only one should come
-            back positive.
-          </ListItem>
-          <ListItem>
-            <strong>Trace:</strong> Determine who has interacted with people who
-            have tested positive by adopting{' '}
-            <a href="https://blog.google/documents/57/Overview_of_COVID-19_Contact_Tracing_Using_BLE.pdf">
-              contact tracing
-            </a>{' '}
-            across the population. In South Korea, 80% of positive tests must be
-            able to be traced back to another known case.
-          </ListItem>
-          <ListItem>
-            <strong>Treat:</strong> People who have tested positive for COVID-19
-            must be quarantined from the rest of the population.
-          </ListItem>
-        </UnorderedList>
-        <Paragraph>
-          This is an indefinite process, and very difficult to do effectively
-          (Singapore and Taiwan have still struggled/had pockets of outbreaks).
-          Must happen until a vaccine or fall back on distancing.
+          </a>{' '}
+          shows that when contact tracing is applied to a sufficient degree,
+          it’s possible to ease distancing restrictions and still keep the virus
+          contained for a period of time. Specifically, the data suggests that
+          distancing restrictions can be reduced when the number of new
+          confirmed cases per day falls below two cases per million people. To
+          keep the virus contained, data suggests that for every 100 tests
+          performed, only one should come back positive and 80% of positive
+          tests should be able to be traced back to another known case.
         </Paragraph>
       </div>
     </ModelStateProvider>
