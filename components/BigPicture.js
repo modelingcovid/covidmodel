@@ -197,9 +197,9 @@ export function BigPicture({location}) {
           </Title>
           <Paragraph>
             To illustrate how social distancing can impact the spread of
-            COVID-19, consider two example scenarios for {location.name}: one
-            without social distancing, and one with significant social
-            distancing.
+            COVID-19, we’ll use an example location — {location.name} — and
+            consider two scenarios: one without social distancing and one with
+            significant social distancing.
           </Paragraph>
           <ModelStateProvider value={withoutDistancing}>
             <Paragraph className="pullquote">
