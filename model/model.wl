@@ -632,7 +632,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     0
   };
 
-  paramExpectedtt = Append[Most[paramExpected], 1]
+  paramExpectedtt = Append[Most[paramExpected], 1];
 
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
