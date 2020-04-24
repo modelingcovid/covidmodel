@@ -51,8 +51,8 @@ export function SEIR({height, width}) {
   const {label} = useSEIRConfig();
 
   return (
-    <div className="margin-top-3 flow-root">
-      <Title className="margin-bottom-3">Model Detail</Title>
+    <div className="flow-root">
+      <Heading>How could distancing affect the population?</Heading>
       <Paragraph>
         As mentioned in the introduction, our model is based upon a standard
         epidemiological model called <strong>the SEIR model</strong>. The SEIR

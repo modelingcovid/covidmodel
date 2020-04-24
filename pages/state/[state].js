@@ -133,12 +133,12 @@ export default function StatePage() {
                 width={width}
                 height={height.small}
               />
+              <SEIR width={width} height={height.large} />
               <Fitting width={width} height={height.large} />
               <Daily width={width} height={height.large} />
-              <Hospitalizations width={width} height={height.regular} />
-              <ICU width={width} height={height.regular} />
+              <Hospitalizations width={width} height={height.large} />
+              <ICU width={width} height={height.large} />
               {/* <TestAndTrace width={width} height={height.large} /> */}
-              <SEIR width={width} height={height.large} />
               {/* <Symptomatic width={width} height={height.regular} /> */}
               {/* <ProjectedDeaths width={width} height={height.large} /> */}
               <ParameterTable />

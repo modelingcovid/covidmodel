@@ -73,7 +73,7 @@ export const Hospitalizations = ({width, height}) => {
         initialScale="log"
         xLabel="people"
         width={width}
-        height={256}
+        height={height}
         controls
       >
         {() => (
