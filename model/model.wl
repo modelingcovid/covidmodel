@@ -82,7 +82,7 @@ testTraceNewCaseThreshold0=2*10^-6;
 fractionSymptomatic0 = 0.7;
 
 (* Set heterogeneous susceptibility using lognormal function with bins of constant population size *)
-susceptibilityBins=10;
+susceptibilityBins=5;
 susceptibilityStdDev=1.2;
 susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
   m=-stdDev^2/2;
@@ -257,7 +257,7 @@ stateParams = Association[{#->getStateParams[#]}&/@Keys[fitStartingOverrides]];
 (* This defines an enriched SEIR model with extra states (e.g., hospitalized, deceased) and reporting (e.g., cumulative PCR rates) *)
 (* It also fires several events for things like when the hospital / icu capacities are exceeded so that those don't have to be computed manually later *)
 
-testTraceExposedDelay0=0;
+testTraceExposedDelay0=10;
 
 (* a set of parameters take from California that can be used for code testing purposes *)
 generateModelComponents[distancing_] := <|
@@ -336,11 +336,10 @@ generateModelComponents[distancing_] := <|
     WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength,est[t]->0],
-    WhenEvent[testAndTrace==1 && cumEq'[t] < testTraceNewCaseThreshold0 && t > today, testAndTraceCounter[t] -> 0.01]
+    WhenEvent[testAndTrace==1 && cumEq'[t] < testTraceNewCaseThreshold0 && t > today, {testAndTraceCounter[t] -> 0.01, Sow[{t, cumEq'[t]}, "testAndTrace"]}]
   },
 
   "parametricFitEvents" -> {
-    (*WhenEvent[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], testingAndTracingIsActive[t]\[Rule]1],*)
     WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength0,est[t]->0]
   },
@@ -472,7 +471,7 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
 
   {outputSolution, outputEvents} = Reap[
     Apply[parameterizedSolution, simulationParameters],
-    {"containment","herd","icu","hospital","cutoff"},
+    {"containment","herd","icu","hospital","cutoff","testAndTrace"},
     List
   ];
 
@@ -517,7 +516,7 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
   (*Echo[time];*)
   {outputSolution, outputEvents} = Reap[
     Apply[parameterizedSolution, simulationParameters],
-    {"containment","herd","icu","hospital","cutoff"},
+    {"containment","herd","icu","hospital","cutoff","testAndTrace"},
     List
   ];
 
@@ -639,6 +638,12 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
+  
+  Echo[events];
+  Echo[eventstt];
+  Echo[Plot[soltt[testAndTraceCounter][t], {t,100,250}]];
+  Echo[Plot[soltt[cumEq]'[t]-testTraceNewCaseThreshold0, {t,100,250}]];
+  Echo[Table[soltt[cumEq]'[t]-testTraceNewCaseThreshold0, {t,100,250}]];
 
   aug1 = 214;
   endOfYear = 730;
