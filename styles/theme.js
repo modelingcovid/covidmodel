@@ -43,7 +43,7 @@ export const {
       muted: '#8b5904',
     },
     red: {...['#ffa8a8', '#e6082d', '#cd0426'], text: '#cd0426'},
-    green: {...['#48c404', '#228403'], text: '#228403'},
+    green: {...['#48c404', '#3fad1c', '#38991a'], text: '#38991a'},
     magenta: ['#d64b91', '#df0371'],
     purple: {...['#f0defe'], muted: '#5a2c8e'},
   },
@@ -144,6 +144,7 @@ export const darkMode = setProperties({
       muted: '#c0c8d2',
     },
     red: {...['#ffa8a8', '#ff0a33', '#f00028'], text: '#ff0a33'},
+    green: {...['#79de41', '#62dc3c', '#56de2c'], text: '#56de2c'},
     blue: {
       ...['#b5eff1', '#26afff', '#0096ed', '#0670de'],
       bg: '#1e2639',

@@ -80,16 +80,17 @@ export function SEIR({height, width}) {
           have COVID-19 and can infect others.
         </ListItem>
         <ListItem>
+          <InlineLabel list {...label.hospitalized}>
+            Hospitalized people
+          </InlineLabel>{' '}
+          are currently in the hospital or ICU; the model assumes they cannot
+          infect others.
+        </ListItem>
+        <ListItem>
           <InlineLabel list {...label.recovered}>
             Recovered people
           </InlineLabel>{' '}
           have had COVID-19 and are immune to re-infection.
-        </ListItem>
-        <ListItem>
-          <InlineLabel list {...label.hospitalized}>
-            Hospitalized people
-          </InlineLabel>{' '}
-          are currently in the hospital or ICU and assumed to not infect others.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.deceased}>

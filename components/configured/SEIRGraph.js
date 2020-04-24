@@ -45,8 +45,8 @@ export function useSEIRConfig() {
         y: cumulativeRecoveries,
         label: 'Recovered',
         description: 'People who have recovered from COVID-19',
-        fill: theme.color.gray[3],
-        color: theme.color.gray[5],
+        fill: theme.color.green[1],
+        color: theme.color.green.text,
       },
       exposed: {
         y: currentlyInfected,
@@ -68,8 +68,8 @@ export function useSEIRConfig() {
         label: 'Hospitalized',
         description:
           'People who are undergoing treatment for COVID-19 in the hospital or ICU',
-        fill: theme.color.green[1],
-        color: theme.color.green.text,
+        fill: theme.color.gray[3],
+        color: theme.color.gray[5],
       },
       deceased: {
         y: cumulativeDeaths,
