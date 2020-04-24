@@ -3,9 +3,11 @@ import {theme} from '../../styles';
 import {Grid, Gutter, InlineLabel, Paragraph, Title} from '../content';
 import {Area, Graph, LegendRow, Line, LinearGradient, Stop} from '../graph';
 import {
+  ContainmentSplit,
   DistributionLegendRow,
   DistributionLine,
   Estimation,
+  useExpected,
   useModelState,
   useLocationData,
 } from '../modeling';
@@ -25,14 +27,37 @@ const blue = theme.color.blue[2];
 const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
-export const HospitalizationGraph = ({children, ...props}) => {
+export function HospitalizationGraphContents({clipPathId, gradientId}) {
   const {
-    domain,
     hospitalCapacity,
     currentlyHospitalized,
     currentlyReportedHospitalized,
     cumulativeDeaths,
   } = useLocationData();
+  const expected = useExpected();
+  return (
+    <>
+      <Area
+        clipPath={`url(#${clipPathId})`}
+        y0={hospitalCapacity.max}
+        y1={expected(currentlyHospitalized).get}
+        fill={`url(#${gradientId})`}
+      />
+      <Line y={expected(currentlyHospitalized).get} stroke={blue} />
+      <Line y={hospitalCapacity.max} stroke={theme.color.background} />
+      <Line y={hospitalCapacity.max} stroke={yellow} strokeDasharray="6,2" />
+      <Line
+        y={expected(cumulativeDeaths).get}
+        stroke={theme.color.background}
+        strokeWidth={4}
+      />
+      <Line y={expected(cumulativeDeaths).get} stroke={red} />
+    </>
+  );
+}
+
+export function HospitalizationGraph({children, ...props}) {
+  const {domain, hospitalCapacity} = useLocationData();
 
   return (
     <Graph
@@ -65,32 +90,18 @@ export const HospitalizationGraph = ({children, ...props}) => {
                 <Area y0={hospitalCapacity.max} y1={() => yDomain} />
               </clipPath>
             </defs>
-            <Area
-              clipPath={`url(#${clipPathId})`}
-              y0={hospitalCapacity.max}
-              y1={currentlyHospitalized.expected.get}
-              fill={`url(#${gradientId})`}
-            />
-            <Line y={currentlyHospitalized.expected.get} stroke={blue} />
-            <Line y={hospitalCapacity.max} stroke={theme.color.background} />
-            <Line
-              y={hospitalCapacity.max}
-              stroke={yellow}
-              strokeDasharray="6,2"
-            />
-            <Line
-              y={cumulativeDeaths.expected.get}
-              stroke={theme.color.background}
-              strokeWidth={4}
-            />
-            <Line y={cumulativeDeaths.expected.get} stroke={red} />
-            {children && children(context)}
+            <ContainmentSplit>
+              <HospitalizationGraphContents
+                clipPathId={clipPathId}
+                gradientId={gradientId}
+              />
+            </ContainmentSplit>
           </>
         );
       }}
     </Graph>
   );
-};
+}
 
 export const HospitalizationGutter = ({width, height}) => {
   const {

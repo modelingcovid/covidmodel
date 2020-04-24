@@ -6,6 +6,7 @@ import {GridRows, GridColumns} from '@vx/grid';
 import {withTooltip, Tooltip} from '@vx/tooltip';
 import {DistancingOverlay} from './DistancingOverlay';
 import {GraphControls} from './GraphControls';
+import {ContainmentMarker} from './ContainmentMarker';
 import {NearestMarker} from './NearestMarker';
 import {Scrubber} from './Scrubber';
 import {useGraphConfig} from './useGraphConfig';
@@ -141,6 +142,7 @@ export const GraphContents = React.memo(function Graph({
                     tickFormat={tickFormatWithLabel}
                     tickValues={yTicks}
                   />
+                  <ContainmentMarker />
                 </>
               )}
               {!decoration && !frameless && (

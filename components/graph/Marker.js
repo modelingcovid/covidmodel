@@ -8,6 +8,8 @@ export const VMarker = ({
   value,
   stroke = theme.color.shadow[2],
   strokeWidth = 1,
+  labelStroke = theme.color.background,
+  labelStrokeWidth = 5,
   ...props
 }) => {
   const {xScale, yMax} = useGraphData();
@@ -25,6 +27,8 @@ export const VMarker = ({
       to={to}
       stroke={stroke}
       strokeWidth={strokeWidth}
+      labelStroke={labelStroke}
+      labelStrokeWidth={labelStrokeWidth}
     />
   );
 };
@@ -34,6 +38,8 @@ export const HMarker = ({
   value,
   stroke = theme.color.shadow[2],
   strokeWidth = 1,
+  labelStroke = theme.color.background,
+  labelStrokeWidth = 5,
   ...props
 }) => {
   const {yScale, xMax} = useGraphData();
@@ -52,6 +58,8 @@ export const HMarker = ({
       to={to}
       stroke={stroke}
       strokeWidth={strokeWidth}
+      labelStroke={labelStroke}
+      labelStrokeWidth={labelStrokeWidth}
     />
   );
 };

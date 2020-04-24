@@ -8,12 +8,16 @@ export function ClipPathX({left, right, value}) {
     <defs>
       {left && (
         <clipPath id={left}>
-          <rect x="0" y="0" width={xPosition} height={yMax} />
+          {xPosition > 0 && (
+            <rect x="0" y="0" width={xPosition} height={yMax} />
+          )}
         </clipPath>
       )}
       {right && (
         <clipPath id={right}>
-          <rect x={xPosition} y="0" width={xMax - xPosition} height={yMax} />
+          {xPosition < xMax && (
+            <rect x={xPosition} y="0" width={xMax - xPosition} height={yMax} />
+          )}
         </clipPath>
       )}
     </defs>

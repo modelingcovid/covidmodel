@@ -30,6 +30,7 @@ import {
   useNearestData,
 } from './graph';
 import {
+  ContainmentStrategyContext,
   CurrentDate,
   CurrentScenario,
   Estimation,
@@ -377,6 +378,13 @@ export function BigPicture({height, width}) {
           and testing people who have recently been in contact with an infected
           person and encouraging infected and at-risk people to quarantine.
         </Paragraph>
+        <ContainmentStrategyContext.Provider value="testTrace">
+          <HospitalizationGraph
+            height={height}
+            width={width}
+            scrubber={false}
+          />
+        </ContainmentStrategyContext.Provider>
         <WithCitation
           citation={
             <>

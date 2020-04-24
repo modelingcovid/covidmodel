@@ -1,9 +1,16 @@
 import * as React from 'react';
-import {CurrentScenario, useDistancingInfo, useLocationData} from '../modeling';
+import {
+  CurrentScenario,
+  useContainmentStrategy,
+  useDistancingInfo,
+  useExpected,
+  useLocationData,
+} from '../modeling';
 import {useDistancingId} from './DistancingGradient';
 import {ClipPathX} from './ClipPathX';
 import {Line} from './Line';
 import {LinearGradient} from './LinearGradient';
+import {ContainmentMarker} from './ContainmentMarker';
 import {VMarker} from './Marker';
 import {useGraphData} from './useGraphData';
 import {SimpleGraph} from './SimpleGraph';
@@ -14,7 +21,8 @@ import {theme} from '../../styles';
 const {useCallback, useEffect, useRef} = React;
 
 export function DistancingOverlay() {
-  const {distancing} = useLocationData();
+  const {dateContained, distancing} = useLocationData();
+  const expected = useExpected();
   const [scenario, distancingDate] = useDistancingInfo();
   const {distancingLevel} = scenario;
   const hasDistancing = distancingLevel !== 1;
@@ -26,6 +34,11 @@ export function DistancingOverlay() {
   const scenarioLines = formatScenario(scenario).split('\n');
   const lastIndex = scenarioLines.length - 1;
   const hasVisibleEnd = hasDistancing && distancingX < xMax;
+
+  const strategy = useContainmentStrategy();
+  const containmentDate = new Date(dateContained());
+  const containmentX = strategy === 'none' ? Infinity : xScale(containmentDate);
+  const showContainment = containmentX < xMax;
 
   const height = 20;
   const offset = 8;
@@ -42,9 +55,10 @@ export function DistancingOverlay() {
           frameless
         >
           {({id, yMax}) => {
-            const leftId = `${id}-distancingLeft`;
-            const rightId = `${id}-distancingRight`;
-            const gradientId = `${id}-distancingFade`;
+            const distancingLeft = `${id}-distancingLeft`;
+            const distancingRight = `${id}-distancingRight`;
+            const containmentLeft = `${id}-containmentLeft`;
+            const containmentRight = `${id}-containmentRight`;
 
             return (
               <>
@@ -64,46 +78,55 @@ export function DistancingOverlay() {
                   height={yMax}
                   fill={`url(#${distancingId})`}
                 />
-                <ClipPathX left={leftId} right={rightId} value={today} />
-                {/* <defs>
-                  <clipPath id={leftId}>
-                    <rect x="0" y="0" width={todayX} height={yMax} />
-                  </clipPath>
-                  <clipPath id={rightId}>
-                    <rect
-                      x={todayX}
-                      y="0"
-                      width={xMax - todayX}
-                      height={yMax}
-                    />
-                  </clipPath>
-                </defs> */}
-                <VMarker
+                <ClipPathX
+                  left={distancingLeft}
+                  right={distancingRight}
                   value={today}
-                  strokeDasharray="4,2"
-                  stroke={theme.color.focus[1]}
-                  // opacity="0.8"
                 />
+                <ClipPathX
+                  left={containmentLeft}
+                  right={containmentRight}
+                  value={today}
+                />
+
+                <VMarker value={today} stroke={theme.color.focus[1]} />
                 {hasVisibleEnd && (
                   <VMarker
                     value={distancingDate}
-                    strokeDasharray="4,2"
                     stroke={theme.color.focus[1]}
-                    // opacity="0.8"
                   />
                 )}
+                {showContainment && (
+                  <>
+                    <g opacity="0.3">
+                      <VMarker
+                        value={containmentDate}
+                        stroke={theme.color.magenta[1]}
+                      />
+                    </g>
+                    <rect
+                      x={containmentX}
+                      y="0"
+                      width={xMax - containmentX}
+                      height={yMax}
+                      fill={theme.color.magenta[1]}
+                      opacity="0.1"
+                    />
+                  </>
+                )}
+
                 <Line
-                  y={distancing.expected.get}
+                  y={expected(distancing).get}
                   stroke={theme.color.focus[2]}
                   strokeWidth={1}
-                  clipPath={`url(#${leftId})`}
+                  clipPath={`url(#${distancingLeft})`}
                 />
                 <Line
-                  y={distancing.expected.get}
+                  y={expected(distancing).get}
                   stroke={theme.color.focus[2]}
                   strokeWidth={1.5}
                   strokeDasharray="3,1"
-                  clipPath={`url(#${rightId})`}
+                  clipPath={`url(#${distancingRight})`}
                 />
               </>
             );
