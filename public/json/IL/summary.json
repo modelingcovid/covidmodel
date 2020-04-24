@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.8969,
-"importtime":4.6298e1,
-"stateAdjustmentForTestingDifferences":0.6383,
-"distpow":1.8397
+"r0natural":4.8566,
+"importtime":5.3198e1,
+"stateAdjustmentForTestingDifferences":0.5926,
+"distpow":1.8002
 },
 "population":12854526,
 "ventilators":2311,
@@ -15,19 +15,31 @@
 "pH":5.1343e-2,
 "pC":1.9737e-2,
 "pPCRNH":0.1481,
-"pPCRH":0.6912,
+"pPCRH":0.7899,
 "fractionOfCriticalDeceased":0.3908,
 "initialInfectionImpulse":1.5165e1,
-"r0":4.8969,
-"importtime":4.6298e1,
+"r0":4.8566,
+"importtime":5.3198e1,
 "numberOfSimulations":100,
-"dateModelRun":"Thu 23 Apr 2020 18:20:21",
+"dateModelRun":"Fri 24 Apr 2020 21:44:29",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.6383,
-"distpow":1.8397,
+"stateAdjustmentForTestingDifferences":0.5926,
+"distpow":1.8002,
+"goodnessOfFitMetrics":{
+"chiSquared":8.3137e-6,
+"rmsRelativeError":0.7167,
+"rmsRelativeErrorDeaths":0.8319,
+"rmsRelativeErrorPcr":0.5943,
+"meanRelativeErrorDeaths":-0.5132,
+"meanRelativeErrorPcr":-0.2917,
+"rSquaredDeaths":6.8896e-3,
+"rSquaredPcr":8.8620e-3,
+"deathResidual7Day":-6.4468,
+"pcrResidual7Day":-1.3197e2
+},
 "parameters":{
 "r0":{
-"value":4.8969,
+"value":4.8566,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -44,7 +56,7 @@
 ]
 },
 "daysUntilHospitalized":{
-"value":9.5,
+"value":7,
 "name":"Days until hospitalized",
 "description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
 "type":"literature",
@@ -67,7 +79,7 @@
 ]
 },
 "daysToLeaveHosptialNonCritical":{
-"value":12,
+"value":8,
 "name":"Days to leave the hospital in a non-critical case",
 "description":"The number of days it takes to leave the hospital if you are not a critical case",
 "type":"literature",
@@ -83,7 +95,7 @@
 "type":"literature"
 },
 "pPCRH":{
-"value":0.6912,
+"value":0.7899,
 "name":"Probability of getting a positive PCR test if you are in the hospital or ICU,",
 "description":"An age-adjusted probability that you get a positive PCR test in cases that require hospitalization or critical care",
 "type":"literature",
@@ -103,7 +115,7 @@
 ]
 },
 "daysFromCriticalToRecoveredOrDeceased":{
-"value":10,
+"value":8.5,
 "name":"Days from an ICU admission to recovery or fatality",
 "description":"The number of days it takes on average to resolve an ICU admission on average",
 "type":"literature",
@@ -128,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":4.6298e1,
+"value":5.3198e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -168,13 +180,13 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.6383,
+"value":0.5926,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
 },
 "distancePower":{
-"value":1.8397,
+"value":1.8002,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
@@ -185,18 +197,6 @@
 "description":"",
 "type":"set"
 }
-},
-"goodnessOfFitMetrics":{
-"chiSquared":3.7145e-5,
-"rmsRelativeError":0.7835,
-"rmsRelativeErrorDeaths":0.5261,
-"rmsRelativeErrorPcr":0.9572,
-"meanRelativeErrorDeaths":-0.2885,
-"meanRelativeErrorPcr":-0.6389,
-"rSquaredDeaths":1.7254e-2,
-"rSquaredPcr":7.9372e-2,
-"deathResidual7Day":-3.5067,
-"pcrResidual7Day":-1.9258e2
 },
 "scenarios":[
 "scenario5",

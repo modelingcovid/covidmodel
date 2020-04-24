@@ -260,6 +260,13 @@ export function BigPicture({height, width}) {
                 <span className="footnote">immune</span> to re-infection.
               </ListItem>
               <ListItem>
+                <InlineLabel list {...label.hospitalized}>
+                  Hospitalized people
+                </InlineLabel>{' '}
+                are currently in the hospital or ICU and assumed to not infect
+                others.
+              </ListItem>
+              <ListItem>
                 <InlineLabel list {...label.deceased}>
                   Deceased people
                 </InlineLabel>{' '}

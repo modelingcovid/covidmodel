@@ -37,7 +37,7 @@ export function Fitting({height, width}) {
   const {
     cumulativeExposed,
     cumulativePcr,
-    cumulativeDeaths,
+    cumulativeReportedDeaths,
   } = useLocationData();
 
   return (
@@ -114,7 +114,7 @@ export function Fitting({height, width}) {
           gradient
         />
         <DistributionLine
-          y={cumulativeDeaths}
+          y={cumulativeReportedDeaths}
           color={theme.color.red[1]}
           gradient
         />
@@ -133,7 +133,7 @@ export function Fitting({height, width}) {
           description="Total number of COVID-19 tests projected to be positive"
         />
         <DistributionLegendRow
-          y={cumulativeDeaths}
+          y={cumulativeReportedDeaths}
           color={theme.color.red[1]}
           title="Total deceased"
           description="People who have died from COVID-19"

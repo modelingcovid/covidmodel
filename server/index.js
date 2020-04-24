@@ -31,13 +31,26 @@ export const typeDefs = gql`
     dateContained: String!
     dateHospitalsOverCapacity: String
     dateICUOverCapacity: String
+    fatalityRate: Float!
+    fatalityRateSymptomatic: Float!
+    fatalityRatePCR: Float!
+    fractionOfSymptomaticHospitalized: Float!
+    fractionOfSymptomaticHospitalizedOrICU: Float!
+    fractionOfPCRHospitalized: Float!
+    fractionOfPCRHospitalizedOrICU: Float!
+    fractionHospitalizedInICU: Float!
+    fractionOfDeathInICU: Float!
+    fractionDeathOfHospitalizedOrICU: Float!
+    fractionOfInfectionsPCRConfirmed: Float!
     distancingDays: Int!
     distancingLevel: Float!
     hospitalCapacity: Series
+    icuCapacity: Series
     distancing: DistributionSeries
     rt: DistributionSeries
     cumulativeCritical: DistributionSeries
     cumulativeDeaths: DistributionSeries
+    cumulativeReportedDeaths: DistributionSeries
     cumulativeExposed: DistributionSeries
     cumulativeHospitalized: DistributionSeries
     cumulativePcr: DistributionSeries
@@ -47,6 +60,7 @@ export const typeDefs = gql`
     currentlyHospitalized: DistributionSeries
     currentlyInfected: DistributionSeries
     currentlyInfectious: DistributionSeries
+    currentlyHospitalizedOrICU: DistributionSeries
     currentlyReportedHospitalized: DistributionSeries
     dailyDeath: DistributionSeries
     newlyExposed: DistributionSeries
@@ -56,10 +70,12 @@ export const typeDefs = gql`
   }
   type LocationDomain {
     hospitalCapacity: Domain
+    icuCapacity: Domain
     distancing: DistributionDomain
     rt: DistributionDomain
     cumulativeCritical: DistributionDomain
     cumulativeDeaths: DistributionDomain
+    cumulativeReportedDeaths: DistributionDomain
     cumulativeExposed: DistributionDomain
     cumulativeHospitalized: DistributionDomain
     cumulativePcr: DistributionDomain
@@ -69,6 +85,7 @@ export const typeDefs = gql`
     currentlyHospitalized: DistributionDomain
     currentlyInfected: DistributionDomain
     currentlyInfectious: DistributionDomain
+    currentlyHospitalizedOrICU: DistributionDomain
     currentlyReportedHospitalized: DistributionDomain
     dailyDeath: DistributionDomain
     newlyExposed: DistributionDomain
@@ -197,11 +214,46 @@ const Scenario = {
   dateICUOverCapacity(parent) {
     return parent.summary.dateICUOverCapacity;
   },
+  fatalityRate(parent) {
+    return parent.summary.fatalityRate;
+  },
+  fatalityRateSymptomatic(parent) {
+    return parent.summary.fatalityRateSymptomatic;
+  },
+  fatalityRatePCR(parent) {
+    return parent.summary.fatalityRatePCR;
+  },
+  fractionOfSymptomaticHospitalized(parent) {
+    return parent.summary.fractionOfSymptomaticHospitalized;
+  },
+  fractionOfSymptomaticHospitalizedOrICU(parent) {
+    return parent.summary.fractionOfSymptomaticHospitalizedOrICU;
+  },
+  fractionOfPCRHospitalized(parent) {
+    return parent.summary.fractionOfPCRHospitalized;
+  },
+  fractionOfPCRHospitalizedOrICU(parent) {
+    return parent.summary.fractionOfPCRHospitalizedOrICU;
+  },
+  fractionHospitalizedInICU(parent) {
+    return parent.summary.fractionHospitalizedInICU;
+  },
+  fractionOfDeathInICU(parent) {
+    return parent.summary.fractionOfDeathInICU;
+  },
+  fractionDeathOfHospitalizedOrICU(parent) {
+    return parent.summary.fractionDeathOfHospitalizedOrICU;
+  },
+  fractionOfInfectionsPCRConfirmed(parent) {
+    return parent.summary.fractionOfInfectionsPCRConfirmed;
+  },
   hospitalCapacity: field('series'),
+  icuCapacity: field('series'),
   distancing: field('distribution'),
   rt: field('distribution'),
   cumulativeCritical: field('distribution'),
   cumulativeDeaths: field('distribution'),
+  cumulativeReportedDeaths: field('distribution'),
   cumulativeExposed: field('distribution'),
   cumulativeHospitalized: field('distribution'),
   cumulativePcr: field('distribution'),
@@ -211,6 +263,7 @@ const Scenario = {
   currentlyHospitalized: field('distribution'),
   currentlyInfected: field('distribution'),
   currentlyInfectious: field('distribution'),
+  currentlyHospitalizedOrICU: field('distribution'),
   currentlyReportedHospitalized: field('distribution'),
   dailyDeath: field('distribution'),
   newlyExposed: field('distribution'),
@@ -258,10 +311,12 @@ function domain(type, accessor = defaultAccessor) {
 
 const LocationDomain = {
   hospitalCapacity: domain('series'),
+  icuCapacity: domain('series'),
   distancing: domain('distribution'),
   rt: domain('distribution'),
   cumulativeCritical: domain('distribution'),
   cumulativeDeaths: domain('distribution'),
+  cumulativeReportedDeaths: domain('distribution'),
   cumulativeExposed: domain('distribution'),
   cumulativeHospitalized: domain('distribution'),
   cumulativePcr: domain('distribution'),

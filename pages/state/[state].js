@@ -14,6 +14,7 @@ import {
   ModelInputs,
   OutcomeSummary,
   ParameterTable,
+  SummaryTable,
   ProjectedDeaths,
   SEIR,
   Symptomatic,
@@ -190,6 +191,7 @@ export default function StatePage() {
             <Symptomatic width={width} height={smallHeight} />
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
+            <SummaryTable />
           </Section>
           {/* <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>

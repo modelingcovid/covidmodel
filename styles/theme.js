@@ -43,7 +43,7 @@ export const {
       muted: '#8b5904',
     },
     red: {...['#ffa8a8', '#e6082d', '#cd0426'], text: '#cd0426'},
-    green: [null, '#48c404', '#228403'],
+    green: {...['#48c404', '#228403'], text: '#228403'},
     magenta: ['#d64b91', '#df0371'],
     purple: {...['#f0defe'], muted: '#5a2c8e'},
   },
