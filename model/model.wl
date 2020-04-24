@@ -303,7 +303,7 @@ generateModelComponents[distancing_] := <|
 
       (* Cumulative exposed *)
       cumEq'[t]==If[testAndTraceCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
-        Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+      Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -325,10 +325,10 @@ generateModelComponents[distancing_] := <|
       (* include any functions here that manage the machinery of the simulation itself *)
       (* establishment *)
       est'[t]==0,
-      
+
       (* test and trace counter: counts the amount of time after the test and trace event has fired *)
       testAndTraceCounter'[t]==If[testAndTraceCounter[t] > 0, 1, 0]
-      }],
+  }],
 
   "simulationEvents" -> {
     WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
@@ -414,13 +414,12 @@ generateModelComponents[distancing_] := <|
 |>;
 
 getModelComponentsForState[state_] := Association[{#["id"]->generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]]}&/@scenarios];
-getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelComponents, equationsODE, initialConditions, outputODE, dependentVariables, discreteVariables, eventsODE, parameters, parameterizedSolution},
+getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelComponents, equationsODE, initialConditions, outputODE, dependentVariables, eventsODE, parameters, parameterizedSolution},
       modelComponents = generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]];
       equationsODE = modelComponents["equationsODE"];
       initialConditions = modelComponents["initialConditions"];
       outputODE = modelComponents["outputFunctions"];
       dependentVariables = modelComponents["dependentVariables"];
-      discreteVariables = modelComponents["discreteVariables"];
 
       eventsODE = modelComponents["simulationEvents"];
       parameters = modelComponents["simulationParameters"];
@@ -434,7 +433,6 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
         {t,tmin0,tmax},
         parameters,
         DependentVariables->dependentVariables,
-        DiscreteVariables->discreteVariables,
         Method->{"DiscontinuityProcessing"->False}
       ];
 
@@ -842,9 +840,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
               percentileMap[CumulativeCriticalQuantiles[t]]
             }, First],
           "currentlyHospitalizedOrICU" -> Merge[{
-            <|"expected"->population*(sol[HHq][t]+sol[HCq][t]+sol[CCq][t])|>,
-            <|"expectedTestTrace"->population*(soltt[HHq][t]+soltt[HCq][t]+soltt[CCq][t])|>
-          },First],
+              <|"expected"->population*(sol[HHq][t]+sol[HCq][t]+sol[CCq][t])|>,
+              <|"expectedTestTrace"->population*(soltt[HHq][t]+soltt[HCq][t]+soltt[CCq][t])|>
+            },First],
           "currentlyCritical" -> Merge[{
               <|
                 "confirmed"->If[
@@ -946,7 +944,6 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     initialConditions,
     outputODE,
     dependentVariablesODE,
-    discreteVariablesODE,
     parameters,
     RepDeaqParametric,
     DeaqParametric,
@@ -986,7 +983,6 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   eventsODE = modelComponents["parametricFitEvents"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   initialConditions = modelComponents["initialConditions"];
   dependentVariablesODE = modelComponents["dependentVariables"];
-  discreteVariablesODE = modelComponents["discreteVariables"];
   parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
 
   outputODE = {RepDeaq, PCR, Deaq, sSq[1], sSq[2], sSq[3], sSq[4], sSq[5], ISq, ICq, IHq, RSq, RHq, RCq, HHq, HCq, CCq, Eq};
@@ -996,7 +992,6 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     {t,tmin0,tmax0},
     parameters,
     DependentVariables->dependentVariablesODE,
-    DiscreteVariables->discreteVariablesODE,
     Method->{"DiscontinuityProcessing"->False}
   ];
 
@@ -1094,7 +1089,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
     }]
   ];
-  
+
   paramExpected = <|
     "r0"-> <|"value"-> fitParams["r0natural"], "name"->"Basic reproduction number", "description"-> "The basic reproduction number.", "type"->"fit","citations"->{}|>,
     "daysUntilNotInfectious"-><|"value"-> daysUntilNotInfectious0, "name"-> "Days until not infectious", "description"-> "The number of days it takes to lose infectiousness after starting on average.", "type"->"literature",
