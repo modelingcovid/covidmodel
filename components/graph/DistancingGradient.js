@@ -60,8 +60,6 @@ export const DistancingGradientContents = React.memo(
 );
 
 export function DistancingGradient({width}) {
-  return null;
-
   return (
     <Suspense fallback={<div />}>
       <svg

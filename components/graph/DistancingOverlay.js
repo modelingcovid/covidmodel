@@ -6,7 +6,6 @@ import {
   useExpected,
   useLocationData,
 } from '../modeling';
-import {useDistancingId} from './DistancingGradient';
 import {ClipPathX} from './ClipPathX';
 import {Area} from './Area';
 import {Line} from './Line';
@@ -42,7 +41,6 @@ export function DistancingOverlay() {
 
   const height = 20;
   const offset = 48;
-  const distancingId = useDistancingId(xMax);
 
   return (
     <>
@@ -75,13 +73,6 @@ export function DistancingOverlay() {
                     stopOpacity="0.5"
                   />
                 </LinearGradient>
-                <rect
-                  x="0"
-                  y="0"
-                  width={xMax}
-                  height={yMax}
-                  fill={`url(#${distancingId})`}
-                />
                 <ClipPathX
                   left={distancingLeft}
                   right={distancingRight}

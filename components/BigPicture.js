@@ -21,7 +21,6 @@ import {
 } from './content';
 import {
   Area,
-  DistancingGradient,
   Graph,
   Line,
   WithGraphData,
@@ -133,17 +132,9 @@ export function BigPicture({height, width}) {
 
   return (
     <ModelStateProvider value={withDistancing}>
-      <DistancingGradient width={width} />
-      <ModelStateProvider value={withoutDistancing}>
-        <DistancingGradient width={width} />
-      </ModelStateProvider>
       <div className="flow-root">
         <div className="column-8" ref={sizeRef} />
         <XScaleDistancingPeriod>
-          <DistancingGradient width={smallWidth} />
-          <ModelStateProvider value={withoutDistancing}>
-            <DistancingGradient width={smallWidth} />
-          </ModelStateProvider>
           <Title>The impact of social distancing</Title>
           <Paragraph>
             To illustrate how social distancing can impact the spread of
