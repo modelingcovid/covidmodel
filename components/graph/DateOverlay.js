@@ -12,19 +12,20 @@ export function DateOverlay({scrubber}) {
   return (
     <>
       <g transform={`translate(0, ${yMax})`}>
-        <g transform={`translate(${todayX}, -8)`}>
+        <g transform={`translate(${todayX}, 0)`}>
           <line
             x1={0}
             x2={0}
-            y1={0}
-            y2={8}
-            stroke={theme.color.shadow[2]}
+            y1={-8}
+            y2={30}
+            stroke={theme.color.shadow[1]}
             shapeRendering="crispEdges"
           />
           <text
-            fill={theme.color.gray[2]}
+            fill={theme.color.gray[3]}
             textAnchor="middle"
-            y={-4}
+            alignmentBaseline="hanging"
+            y={34}
             stroke={theme.color.background}
             strokeWidth={4}
             paintOrder="stroke"

@@ -21,6 +21,9 @@ export const AxisBottom = React.memo(function AxisBottom(props) {
         textAnchor: 'middle',
         dy: '4px',
         fill: theme.color.gray[2],
+        stroke: theme.color.background,
+        strokeWidth: 5,
+        paintOrder: 'stroke',
       };
       if (i === 0) {
         props.textAnchor = 'start';
