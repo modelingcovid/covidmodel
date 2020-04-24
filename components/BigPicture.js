@@ -32,6 +32,7 @@ import {
   ContainmentStrategyContext,
   CurrentDate,
   CurrentScenario,
+  DateModelRun,
   Estimation,
   ModelStateProvider,
   useCreateModelState,
@@ -134,6 +135,51 @@ export function BigPicture({height, width}) {
     <ModelStateProvider value={withDistancing}>
       <div className="flow-root">
         <div className="column-8" ref={sizeRef} />
+        <Paragraph>
+          The COSMC model is an epidemiological model of COVID-19, fit to actual
+          social distancing, testing, and fatality data. We use this data to
+          project how COVID-19 might spread through a population for different{' '}
+          <strong>locations</strong> and different{' '}
+          <strong>social distancing scenarios</strong>.
+        </Paragraph>
+        <WithCitation
+          citation={
+            <>
+              We use data from the{' '}
+              <a href="https://covidtracking.com/">COVID Tracking Project</a>,
+              mobility data from{' '}
+              <a href="https://www.google.com/covid19/mobility/">Google</a>,
+              hospital capacity data from{' '}
+              <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
+                Esri
+              </a>
+              , and demographic data from{' '}
+              <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
+                Wolfram
+              </a>
+              . The model was last run on <DateModelRun />.
+            </>
+          }
+        >
+          <Paragraph>
+            <strong>
+              A model is only as good as{' '}
+              <span className="footnote">the data it’s based on,</span>
+            </strong>{' '}
+            and we’re thankful for the many people and organizations who have
+            worked to produce the data that powers the model. That said, all
+            data has its caveats and limitations: in particular, fatality counts
+            are difficult to assess and are{' '}
+            <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+              often underreported
+            </a>
+            . We’ve tried to make the best of the available data and hope to
+            continually improve the model as more data becomes available.
+          </Paragraph>
+        </WithCitation>
+        <Blockquote>
+          <em>“All models are wrong, but some are useful.”</em>
+        </Blockquote>
         <XScaleDistancingPeriod>
           <Title>The impact of social distancing</Title>
           <Paragraph>
