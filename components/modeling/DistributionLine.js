@@ -98,6 +98,7 @@ export function DistributionLine(props) {
           curve={curve}
           opacity="0.5"
           strokeDasharray="4,2"
+          dot={false}
         />
       </g>
     </>
