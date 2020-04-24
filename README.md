@@ -11,7 +11,9 @@ The main model code lives in `model/model.wl` this imports the other dependencie
 - Number of simulations (set to 10 for a fast run, default is 1000)
 - List of states to run (default to all states with more than 50 PCR confirmations and 5 deaths)
 
-So for example to run three states at ten simulations you would execute `GenerateModelExport[10, {"GA","VA","MD"}]`. 
+So for example to run three states at ten simulations you would execute:
+
+```GenerateModelExport[10, {"GA","VA","MD"}]```. 
 
 This function performs several steps:
 
