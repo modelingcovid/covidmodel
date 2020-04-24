@@ -124,7 +124,7 @@ export const Select = React.memo(function Select({
         </label>
         <button
           {...getToggleButtonProps()}
-          className="text-ui text-small weight-600 text-gray"
+          className="text-small weight-600 text-gray"
         >
           {itemText}
         </button>

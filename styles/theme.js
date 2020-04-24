@@ -50,7 +50,7 @@ export const {
   font: {
     family: {
       ui:
-        "system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+        "'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
       mono: "'IBM Plex Mono', monospace",
       text: "'IBM Plex Serif', serif",
     },
@@ -68,6 +68,14 @@ export const {
         body: 17,
         pullquote: 19,
       }),
+    },
+    spacing: {
+      jumbo: '-0.04em',
+      title: '-0.038em',
+      section: '-0.015em',
+      dek: '-0.02em',
+      pullquote: '-0.02em',
+      ui: '-0.01em',
     },
   },
   spacing: px([8, 16, 24, 32, 64, 96]),
@@ -101,6 +109,10 @@ export const tabletUp = setProperties({
       pullquote: 21,
       small: 15,
     }),
+    spacing: {
+      jumbo: '-0.024em',
+      title: '-0.02em',
+    },
   },
 });
 

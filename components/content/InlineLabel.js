@@ -30,6 +30,7 @@ export function InlineLabel({
         ...style,
         fontFamily: theme.font.family.ui,
         fontWeight: 500,
+        letterSpacing: theme.font.spacing.ui,
         color,
       }}
     >

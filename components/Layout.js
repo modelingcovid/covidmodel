@@ -12,21 +12,35 @@ const styles = css`
   .layout {
     padding-bottom: ${theme.spacing[5]};
   }
-  header {
+  header,
+  .sticky-anchor {
     position: sticky;
     top: 0;
+  }
+  .sticky-anchor {
+    height: 0;
+    z-index: 1;
+  }
+  header {
     z-index: 100;
+  }
+  nav,
+  .header-background {
+    height: 48px;
+  }
+  .header-background {
     background: ${theme.color.background};
+    box-shadow: 0 2px ${theme.color.shadow[0]};
   }
   nav {
     position: relative;
-    padding: ${theme.spacing[1]} 0;
+    padding: 12px 0;
+    line-height: 24px;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     font-size: ${theme.font.size.small};
     color: ${theme.color.gray[5]};
-    box-shadow: 0 2px ${theme.color.shadow[0]};
   }
   .title {
     font-family: ${theme.font.family.mono};
@@ -68,8 +82,13 @@ export function Layout({children}) {
         Please do not share these values; this model is under active
         development.
       </Notice>
+      <div className="sticky-anchor">
+        <Section>
+          <div className="header-background" />
+        </Section>
+      </div>
       <header>
-        <Section className="nav">
+        <Section>
           <nav>
             <Link href="/">
               <a className="focus title">COSMC</a>

@@ -82,12 +82,21 @@ export default function StatePage() {
           .controls-container {
             position: sticky;
             z-index: 50;
-            top: 51px;
+            top: 48px;
             background: ${theme.color.background};
-            box-shadow: 0 2px ${theme.color.shadow[0]};
           }
           .controls {
-            padding: var(--spacing1) 0;
+            margin: 0 calc(-1 * ${theme.spacing[1]});
+            padding: ${theme.spacing[1]};
+            background: ${theme.color.gray.bg};
+            box-shadow: 0 0 0 2px ${theme.color.shadow[0]};
+          }
+          @media (min-width: 1040px) {
+            .controls {
+              margin: 0 calc(-1 * ${theme.spacing[2]});
+              padding: ${theme.spacing[1]} ${theme.spacing[2]};
+              border-radius: 3px;
+            }
           }
         `}</style>
 

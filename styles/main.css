@@ -106,7 +106,7 @@ text {
 .text-jumbo {
   font-size: var(--font-size-jumbo);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--font-spacing-jumbo);
   line-height: 1.05;
   transform: translateX(calc(-1 * var(--font-size-jumbo) / 40));
 }
@@ -114,7 +114,7 @@ text {
   font-size: var(--font-size-title);
   line-height: 1.3;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--font-spacing-title);
 }
 .text-subtitle {
   font-size: var(--font-size-subtitle);
@@ -123,18 +123,12 @@ text {
 .weight-600 {
   font-weight: 500;
 }
-.section-label {
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 14px;
-  padding: 4px 0;
-  border-bottom: 2px solid var(--color-gray5);
-}
 .text-heading,
 .section-heading {
   font-size: var(--font-size-section);
   font-weight: 600;
   line-height: 1.3;
+  letter-spacing: var(--font-spacing-section);
 }
 .section-heading {
   margin-top: var(--spacing3);
@@ -167,13 +161,13 @@ text {
   font-weight: 400;
   font-size: var(--font-size-dek);
   line-height: 1.3;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--font-spacing-dek);
 }
 .pullquote {
   font-family: var(--font-family-text);
   font-size: var(--font-size-pullquote);
   line-height: 1.5;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--font-spacing-pullquote);
   background: var(--color-gray-bg);
   padding: var(--spacing1) var(--spacing2);
 }

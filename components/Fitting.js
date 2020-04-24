@@ -75,7 +75,7 @@ export function Fitting({height, width}) {
       >
         <Paragraph>
           If we look at this data on a{' '}
-          <a href="https://en.wikipedia.org/wiki/Logarithmic_scale">
+          <a href="https://www.nytimes.com/2020/03/20/health/coronavirus-data-logarithm-chart.html">
             logarithmic scale
           </a>
           , we can see how the actual data aligns with the model’s predictions:
