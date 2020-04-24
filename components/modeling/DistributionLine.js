@@ -16,7 +16,7 @@ export function DistributionLineContents({
         y0={y.percentile10.get}
         y1={y.percentile90.get}
         fill={color}
-        opacity="0.1"
+        opacity="0.05"
         curve={curve}
       />
       {gradient && (
@@ -25,29 +25,45 @@ export function DistributionLineContents({
             y0={y.percentile20.get}
             y1={y.percentile80.get}
             fill={color}
-            opacity="0.1"
+            opacity="0.05"
             curve={curve}
           />
           <Area
             y0={y.percentile30.get}
             y1={y.percentile70.get}
             fill={color}
-            opacity="0.1"
+            opacity="0.05"
             curve={curve}
           />
           <Area
             y0={y.percentile40.get}
             y1={y.percentile60.get}
             fill={color}
-            opacity="0.1"
+            opacity="0.05"
             curve={curve}
           />
         </>
       )}
       <Line
+        y={y.percentile10.get}
+        stroke={color}
+        strokeWidth={0.75}
+        opacity="0.1"
+        dot={false}
+        curve={curve}
+      />
+      <Line
+        y={y.percentile90.get}
+        stroke={color}
+        strokeWidth={0.75}
+        opacity="0.1"
+        dot={false}
+        curve={curve}
+      />
+      <Line
         y={y.percentile50.get}
         stroke={color}
-        opacity="0.2"
+        opacity="0.1"
         dot={false}
         curve={curve}
       />
@@ -67,24 +83,23 @@ export function DistributionLineContents({
 }
 
 export function DistributionLine(props) {
-  return <DistributionLineContents {...props} />;
-
   const {y, color, curve} = props;
   const {dateContained} = useLocationData();
   const id = useComponentId('distribution-line');
-  const left = `${id}-l`;
   const right = `${id}-r`;
   return (
     <>
-      <ClipPathX left={left} right={right} value={new Date(dateContained())} />
-      <g clipPath={`url(#${left})`}>
-        <DistributionLineContents {...props} />
-      </g>
-      <g clipPath={`url(#${right})`} opacity="0.1">
-        <DistributionLineContents {...props} />
-      </g>
+      <ClipPathX right={right} value={new Date(dateContained())} />
+      <DistributionLineContents {...props} />
       <g clipPath={`url(#${right})`}>
-        <Line y={y.expectedTestTrace.get} stroke={color} curve={curve} />
+        <Line
+          y={y.expectedTestTrace.get}
+          stroke={color}
+          curve={curve}
+          opacity="0.5"
+          strokeDasharray="4,2"
+          dot={false}
+        />
       </g>
     </>
   );

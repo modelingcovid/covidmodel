@@ -42,22 +42,22 @@ export const AxisBottom = React.memo(function AxisBottom(props) {
       tickLength={4}
       tickFormat={formatDateAxis}
       tickLabelProps={bottomTickLabelProps}
-      strokeWidth={1}
-      stroke={theme.color.gray[2]}
-      tickStroke={theme.color.gray[2]}
+      strokeWidth={0}
+      stroke="transparent"
+      tickStroke={theme.color.gray[1]}
       {...props}
     />
   );
 });
 
 const leftTickLabelProps = () => ({
-  dx: '4px',
+  dx: '0',
   dy: '-4px',
   textAnchor: 'start',
   fill: theme.color.gray[2],
   paintOrder: 'stroke',
   stroke: theme.color.background,
-  strokeWidth: 5,
+  strokeWidth: 3,
 });
 
 export const AxisLeft = React.memo(function AxisLeft(props) {
@@ -67,8 +67,8 @@ export const AxisLeft = React.memo(function AxisLeft(props) {
       scale={yScale}
       tickLength={0} // positions text at the axis
       hideTicks
-      stroke={theme.color.gray[2]}
-      strokeWidth={1}
+      stroke="transparent"
+      strokeWidth={0}
       tickLabelProps={leftTickLabelProps}
       {...props}
     />
@@ -91,8 +91,8 @@ export const AxisRight = React.memo(function AxisRight(props) {
       tickLabelProps={rightTickLabelProps}
       tickLength={0} // positions text at the axis
       hideTicks
-      stroke={theme.color.gray[2]}
-      strokeWidth={1}
+      stroke="transparent"
+      strokeWidth={0}
       {...props}
     />
   );

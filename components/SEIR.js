@@ -86,6 +86,12 @@ export function SEIR({height, width}) {
           have had COVID-19 and are immune to re-infection.
         </ListItem>
         <ListItem>
+          <InlineLabel list {...label.hospitalized}>
+            Hospitalized people
+          </InlineLabel>{' '}
+          are currently in the hospital or ICU and assumed to not infect others.
+        </ListItem>
+        <ListItem>
           <InlineLabel list {...label.deceased}>
             Deceased people
           </InlineLabel>{' '}
@@ -96,7 +102,7 @@ export function SEIR({height, width}) {
         <div
           style={{
             position: 'absolute',
-            top: '72px',
+            top: theme.spacing[3],
             right: theme.spacing[1],
             background: theme.color.background,
             zIndex: 2,

@@ -21,7 +21,6 @@ import {
 } from './content';
 import {
   Area,
-  DistancingGradient,
   Graph,
   Line,
   WithGraphData,
@@ -30,6 +29,7 @@ import {
   useNearestData,
 } from './graph';
 import {
+  ContainmentStrategyContext,
   CurrentDate,
   CurrentScenario,
   Estimation,
@@ -116,7 +116,6 @@ function TotalFatalitiesLabel() {
 export function BigPicture({height, width}) {
   const sizeRef = useRef(null);
   const {width: smallWidth} = useContentRect(sizeRef, {height, width});
-  const smallHeight = Math.min(256, height);
 
   const {location} = useModelState();
   const {population, domain} = useLocationData();
@@ -133,21 +132,15 @@ export function BigPicture({height, width}) {
 
   return (
     <ModelStateProvider value={withDistancing}>
-      <DistancingGradient width={width} />
-      <ModelStateProvider value={withoutDistancing}>
-        <DistancingGradient width={width} />
-      </ModelStateProvider>
       <div className="flow-root">
         <div className="column-8" ref={sizeRef} />
         <XScaleDistancingPeriod>
-          <DistancingGradient width={smallWidth} />
-          <ModelStateProvider value={withoutDistancing}>
-            <DistancingGradient width={smallWidth} />
-          </ModelStateProvider>
           <Title>The impact of social distancing</Title>
           <Paragraph>
             To illustrate how social distancing can impact the spread of
-            COVID-19, consider two example scenarios for {location.name}:
+            COVID-19, consider two example scenarios for {location.name}: one
+            without social distancing, and one with significant social
+            distancing.
           </Paragraph>
           <ModelStateProvider value={withoutDistancing}>
             <Paragraph className="pullquote">
@@ -163,7 +156,7 @@ export function BigPicture({height, width}) {
               increase the <TotalFatalitiesLabel />.
             </Paragraph>
             <HospitalizationGraph
-              height={smallHeight}
+              height={height}
               width={smallWidth}
               scrubber={false}
             />
@@ -196,7 +189,7 @@ export function BigPicture({height, width}) {
           </Paragraph>
 
           <HospitalizationGraph
-            height={smallHeight}
+            height={height}
             width={smallWidth}
             scrubber={false}
           />
@@ -267,6 +260,13 @@ export function BigPicture({height, width}) {
                 <span className="footnote">immune</span> to re-infection.
               </ListItem>
               <ListItem>
+                <InlineLabel list {...label.hospitalized}>
+                  Hospitalized people
+                </InlineLabel>{' '}
+                are currently in the hospital or ICU and assumed to not infect
+                others.
+              </ListItem>
+              <ListItem>
                 <InlineLabel list {...label.deceased}>
                   Deceased people
                 </InlineLabel>{' '}
@@ -283,7 +283,7 @@ export function BigPicture({height, width}) {
             <SEIRGraph
               domain={() => population() * 1.01}
               nice={false}
-              height={smallHeight}
+              height={height}
               width={smallWidth}
               scrubber={false}
             />
@@ -300,7 +300,7 @@ export function BigPicture({height, width}) {
           <SEIRGraph
             domain={() => population() * 1.01}
             nice={false}
-            height={smallHeight}
+            height={height}
             width={smallWidth}
             scrubber={false}
           />
@@ -358,36 +358,57 @@ export function BigPicture({height, width}) {
           mass infections.
         </Paragraph>
         <Paragraph>
-          <strong>Contact tracing</strong> is another approach that involves
+          <strong>“Test and trace”</strong> is another approach that involves
           tracking the virus to identify and suppress future outbreaks{' '}
           <em>without</em> establishing herd immunity. This approach could allow
           distancing restrictions to ease, but only if certain conditions are
           met.
         </Paragraph>
 
-        <Title className="margin-top-4">Contact tracing</Title>
+        <Title className="margin-top-4">Test and trace</Title>
         <Paragraph>
+          A “test and trace” approach couples high testing rates with widely
+          deployed contact tracing.{' '}
           <a href="https://www.cdc.gov/coronavirus/2019-ncov/php/open-america/contact-tracing.html">
             Contact tracing
           </a>{' '}
-          attempts to contain the virus by identifying, notifying, and testing
-          people who have recently been in contact with an infected person and
-          encouraging infected and at-risk people to quarantine.
+          attempts to reduce the spread of a disease by identifying, notifying,
+          and testing people who have recently been in contact with an infected
+          person and encouraging infected and at-risk people to quarantine.
         </Paragraph>
-        <Paragraph>
-          Data from{' '}
-          <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
-            South Korea
-          </a>{' '}
-          shows that when contact tracing is applied to a sufficient degree,
-          it’s possible to ease distancing restrictions and still keep the virus
-          contained for a period of time. Specifically, the data suggests that
-          distancing restrictions can be reduced when the number of new
-          confirmed cases per day falls below two cases per million people. To
-          keep the virus contained, data suggests that for every 100 tests
-          performed, only one should come back positive and 80% of positive
-          tests should be able to be traced back to another known case.
-        </Paragraph>
+        <ContainmentStrategyContext.Provider value="testTrace">
+          <HospitalizationGraph
+            height={height}
+            width={width}
+            scrubber={false}
+          />
+        </ContainmentStrategyContext.Provider>
+        <WithCitation
+          citation={
+            <>
+              For test and trace to be viable, testing capacity must be high
+              enough to detect all new cases within a short time span. The model
+              allots ten days to detect new cases: five days for symptoms to
+              develop and five days until a test is reported.
+            </>
+          }
+        >
+          <Paragraph>
+            Data from{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
+              South Korea
+            </a>{' '}
+            shows that with a “test and trace” strategy it’s possible to ease
+            distancing restrictions and still prevent exponential growth for a
+            period of time. Specifically, the data suggests that distancing
+            restrictions can be reduced when the number of{' '}
+            <span className="footnote">new cases per day</span> falls below two
+            cases per million people. To keep the virus contained, data suggests
+            that for every 100 tests performed, only one should come back
+            positive and 80% of positive tests should be able to be traced back
+            to another known case.
+          </Paragraph>
+        </WithCitation>
       </div>
     </ModelStateProvider>
   );

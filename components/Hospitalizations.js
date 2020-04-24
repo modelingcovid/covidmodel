@@ -73,17 +73,17 @@ export const Hospitalizations = ({width, height}) => {
         initialScale="log"
         xLabel="people"
         width={width}
-        height={height}
+        height={256}
         controls
       >
         {() => (
           <>
-            <Line y={hospitalCapacity.get} stroke={red} strokeDasharray="6,3" />
             <DistributionLine y={currentlyHospitalized} color={blue} />
             <DistributionLine
               y={currentlyReportedHospitalized}
               color={yellow}
             />
+            <Line y={hospitalCapacity.get} stroke={red} strokeDasharray="6,3" />
           </>
         )}
       </Graph>

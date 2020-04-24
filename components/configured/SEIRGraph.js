@@ -29,6 +29,7 @@ export function useSEIRConfig() {
     currentlyInfected,
     currentlyInfectious,
     cumulativeDeaths,
+    currentlyHospitalizedOrICU,
   } = useLocationData();
 
   return useMemo(() => {
@@ -61,6 +62,14 @@ export function useSEIRConfig() {
         description: 'People who have COVID-19 and can infect others',
         fill: theme.color.blue[2],
         color: theme.color.blue.text,
+      },
+      hospitalized: {
+        y: currentlyHospitalizedOrICU,
+        label: 'Hospitalized',
+        description:
+          'People who are undergoing treatment for COVID-19 in the hospital or ICU',
+        fill: theme.color.green[1],
+        color: theme.color.green.text,
       },
       deceased: {
         y: cumulativeDeaths,

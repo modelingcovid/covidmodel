@@ -52,12 +52,12 @@ export function ParameterTableContents() {
                     <cite className="parameter-citation">
                       {`[`}
                       {(citations || []).map((href, i) => (
-                        <>
+                        <React.Fragment key={i}>
                           <a href={href} target="__blank">
                             {i + 1}
                           </a>
                           {i < citations.length - 1 ? `, ` : ''}
-                        </>
+                        </React.Fragment>
                       ))}
                       {`]`}
                     </cite>

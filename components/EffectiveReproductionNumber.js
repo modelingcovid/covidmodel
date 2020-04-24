@@ -16,6 +16,7 @@ import {Graph, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   DistributionLegendRow,
+  DistributionLine,
   Estimation,
   useFindPoint,
   useModelState,
@@ -93,6 +94,7 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
         nice={false}
       >
         {() => <Line y={rt.expected.get} stroke={theme.color.magenta[1]} />}
+        {/* {() => <DistributionLine y={rt} color={theme.color.magenta[1]} />} */}
       </Graph>
       <Gutter>
         <DistributionLegendRow
@@ -106,6 +108,12 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
           format={formatNumber2}
         />
       </Gutter>
+      <Paragraph>
+        If the virus spreads through a significant portion of the population, it
+        has a decreasing chance of reaching a susceptible person. The model
+        predicts the effective reproduction number will decrease in these
+        scenarios as well.
+      </Paragraph>
     </div>
   );
 }

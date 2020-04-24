@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {Gutter, InlineLabel, InlineData, Paragraph, Title} from './content';
-import {Graph, Line} from './graph';
+import {Graph, Line, LegendRow} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   DistributionLegendRow,
@@ -31,7 +31,7 @@ const blue = theme.color.blue[2];
 const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
-function ICUCapacityExcedDate() {
+function ICUCapacityExceedDate() {
   const {dateICUOverCapacity} = useLocationData();
   return (
     <InlineData>
@@ -47,6 +47,7 @@ export const ICU = ({width, height}) => {
     cumulativeCritical,
     domain,
     icuBeds,
+    icuCapacity,
   } = useLocationData();
 
   return (
@@ -68,12 +69,18 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <Line y={icuBeds} stroke={red} strokeDasharray="6,3" />
-            <DistributionLine y={currentlyCritical} color={blue} />
+            <Line y={icuCapacity.get} stroke={red} strokeDasharray="6,3" />
+            <DistributionLine y={currentlyCritical} color={blue} gradient />
           </>
         )}
       </Graph>
       <Gutter>
+        <LegendRow
+          label="ICU capacity"
+          y={icuCapacity.get}
+          color={red}
+          format={formatNumber}
+        />
         <DistributionLegendRow
           title="Currently require intensive care"
           y={currentlyCritical}
@@ -90,7 +97,7 @@ export const ICU = ({width, height}) => {
       </Paragraph>
       <Estimation>
         The model estimates that hospitals in {location.name} will exceed ICU
-        capacity on <ICUCapacityExcedDate />.
+        capacity on <ICUCapacityExceedDate />.
       </Estimation>
       <Paragraph>
         While we expect that an overshoot of ICU capacity has a dramatic effect
@@ -111,7 +118,7 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <DistributionLine y={cumulativeCritical} color={blue} />
+            <DistributionLine y={cumulativeCritical} color={blue} gradient />
           </>
         )}
       </Graph>

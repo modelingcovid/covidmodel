@@ -1,3 +1,4 @@
+export * from './ContainmentSplit';
 export * from './CurrentDate';
 export * from './CurrentScenario';
 export * from './CurrentStatus';
@@ -5,6 +6,7 @@ export * from './DateModelRun';
 export * from './DistributionLegendRow';
 export * from './DistributionLine';
 export * from './Estimation';
+export * from './useContainmentStrategy';
 export * from './useDistancingInfo';
 export * from './useFindPoint';
 export * from './useLocationData';
