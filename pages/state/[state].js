@@ -37,6 +37,7 @@ import {
   DateModelRun,
   ModelDataProvider,
   ModelStateProvider,
+  StatefulContainmentStrategy,
   useCreateModelState,
 } from '../../components/modeling';
 import {Suspense, useContentRect} from '../../components/util';
@@ -69,149 +70,155 @@ export default function StatePage() {
   });
 
   return (
-    <ModelStateProvider value={interactiveModelState}>
-      <Layout>
-        <Head>
-          <title>Modeling COVID-19 in {stateName}</title>
-          <meta
-            name="Description"
-            content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
-          />
-        </Head>
-        <style jsx>{`
-          .controls-container {
-            position: sticky;
-            z-index: 50;
-            top: 48px;
-            background: ${theme.color.background};
-          }
-          .controls {
-            margin: 0 calc(-1 * ${theme.spacing[1]});
-            padding: ${theme.spacing[1]};
-            background: ${theme.color.gray.bg};
-            box-shadow: 0 0 0 2px ${theme.color.shadow[0]};
-          }
-          @media (min-width: 1040px) {
-            .controls {
-              margin: 0 calc(-1 * ${theme.spacing[2]});
-              padding: ${theme.spacing[1]} ${theme.spacing[2]};
-              border-radius: 3px;
+    <StatefulContainmentStrategy>
+      <ModelStateProvider value={interactiveModelState}>
+        <Layout>
+          <Head>
+            <title>Modeling COVID-19 in {stateName}</title>
+            <meta
+              name="Description"
+              content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
+            />
+          </Head>
+          <style jsx>{`
+            .controls-container {
+              position: sticky;
+              z-index: 50;
+              top: 48px;
+              background: ${theme.color.background};
             }
-          }
-        `}</style>
-
-        <div className="flex flex-col justify-center">
-          <Section className="margin-top-4 margin-bottom-3">
-            <div className="graph-size" ref={sizeRef} />
-            <h1 className="text-jumbo margin-bottom-1">
-              <span className="nowrap">Modeling COVID-19</span>{' '}
-              <span className="nowrap">in {stateName}</span>
-            </h1>
-            <h2 className="dek margin-bottom-3">
-              Forecasting the impact of the virus using models trained with
-              actual social distancing, testing, and fatality data
-            </h2>
-
-            <Paragraph>
-              The COSMC model is an epidemiological model of COVID-19, fit to
-              actual social distancing, testing, and fatality data. We use this
-              data to project how COVID-19 might spread through a population for
-              different <strong>locations</strong> and different{' '}
-              <strong>social distancing scenarios</strong>.
-            </Paragraph>
-            <WithCitation
-              citation={
-                <>
-                  We use data from the{' '}
-                  <a href="https://covidtracking.com/">
-                    COVID Tracking Project
-                  </a>
-                  , mobility data from{' '}
-                  <a href="https://www.google.com/covid19/mobility/">Google</a>,
-                  hospital capacity data from{' '}
-                  <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
-                    Esri
-                  </a>
-                  , and demographic data from{' '}
-                  <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
-                    Wolfram
-                  </a>
-                  . The model was last run on <DateModelRun />.
-                </>
+            .controls {
+              margin: 0 calc(-1 * ${theme.spacing[1]});
+              padding: ${theme.spacing[1]};
+              background: ${theme.color.gray.bg};
+              box-shadow: 0 0 0 2px ${theme.color.shadow[0]};
+            }
+            @media (min-width: 1040px) {
+              .controls {
+                margin: 0 calc(-1 * ${theme.spacing[2]});
+                padding: ${theme.spacing[1]} ${theme.spacing[2]};
+                border-radius: 3px;
               }
-            >
+            }
+          `}</style>
+
+          <div className="flex flex-col justify-center">
+            <Section className="margin-top-4 margin-bottom-3">
+              <div className="graph-size" ref={sizeRef} />
+              <h1 className="text-jumbo margin-bottom-1">
+                <span className="nowrap">Modeling COVID-19</span>{' '}
+                <span className="nowrap">in {stateName}</span>
+              </h1>
+              <h2 className="dek margin-bottom-3">
+                Forecasting the impact of the virus using models trained with
+                actual social distancing, testing, and fatality data
+              </h2>
+
               <Paragraph>
-                <strong>
-                  A model is only as good as{' '}
-                  <span className="footnote">the data it’s based on,</span>
-                </strong>{' '}
-                and we’re thankful for the many people and organizations who
-                have worked to produce the data that powers the model. That
-                said, all data has its caveats and limitations: in particular,
-                fatality counts are difficult to assess and are{' '}
-                <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
-                  often underreported
-                </a>
-                . We’ve tried to make the best of the available data and hope to
-                continually improve the model as more data becomes available.
+                The COSMC model is an epidemiological model of COVID-19, fit to
+                actual social distancing, testing, and fatality data. We use
+                this data to project how COVID-19 might spread through a
+                population for different <strong>locations</strong> and
+                different <strong>social distancing scenarios</strong>.
               </Paragraph>
-            </WithCitation>
-            <Blockquote>
-              <em>“All models are wrong, but some are useful.”</em>
-            </Blockquote>
+              <WithCitation
+                citation={
+                  <>
+                    We use data from the{' '}
+                    <a href="https://covidtracking.com/">
+                      COVID Tracking Project
+                    </a>
+                    , mobility data from{' '}
+                    <a href="https://www.google.com/covid19/mobility/">
+                      Google
+                    </a>
+                    , hospital capacity data from{' '}
+                    <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
+                      Esri
+                    </a>
+                    , and demographic data from{' '}
+                    <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
+                      Wolfram
+                    </a>
+                    . The model was last run on <DateModelRun />.
+                  </>
+                }
+              >
+                <Paragraph>
+                  <strong>
+                    A model is only as good as{' '}
+                    <span className="footnote">the data it’s based on,</span>
+                  </strong>{' '}
+                  and we’re thankful for the many people and organizations who
+                  have worked to produce the data that powers the model. That
+                  said, all data has its caveats and limitations: in particular,
+                  fatality counts are difficult to assess and are{' '}
+                  <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+                    often underreported
+                  </a>
+                  . We’ve tried to make the best of the available data and hope
+                  to continually improve the model as more data becomes
+                  available.
+                </Paragraph>
+              </WithCitation>
+              <Blockquote>
+                <em>“All models are wrong, but some are useful.”</em>
+              </Blockquote>
 
-            <BigPicture width={width} height={smallHeight} />
-          </Section>
-
-          <Section>
-            <h2 className="text-jumbo margin-top-5 margin-bottom-1">
-              Interacting with the model
-            </h2>
-            <h3 className="dek margin-bottom-3">
-              Select a location and social distancing scenario to model
-            </h3>
-          </Section>
-          <div className="controls-container">
-            <Section>
-              <div className="controls">
-                <Controls />
-              </div>
+              <BigPicture width={width} height={smallHeight} />
             </Section>
-          </div>
-          <Section className="margin-top-4">
-            <Paragraph>
-              <strong>Location</strong> determines the demographic data used by
-              the model, including population, existing data about the spread of
-              COVID-19 in the region, and historical social distancing levels.
-            </Paragraph>
-            <Paragraph>
-              The <strong>social distancing scenario</strong> models what the
-              people and governments in the region might do in the future—how
-              socially distanced will they be, and for how long?
-            </Paragraph>
-            <ModelInputs width={width} height={208} />
-            <EffectiveReproductionNumber width={width} height={208} />
-            <Fitting width={width} height={height} />
-            <Daily width={width} height={height} />
-            <Hospitalizations width={width} height={smallHeight} />
-            <ICU width={width} height={smallHeight} />
-            {/* <TestAndTrace width={width} height={height} /> */}
-            <SEIR width={width} height={height} />
-            {/* <Symptomatic width={width} height={smallHeight} /> */}
-            {/* <ProjectedDeaths width={width} height={height} /> */}
-            <ParameterTable />
-            <SummaryTable />
-          </Section>
-          {/* <Section style={{marginTop: '300px'}}>
+
+            <Section>
+              <h2 className="text-jumbo margin-top-5 margin-bottom-1">
+                Interacting with the model
+              </h2>
+              <h3 className="dek margin-bottom-3">
+                Select a location and social distancing scenario to model
+              </h3>
+            </Section>
+            <div className="controls-container">
+              <Section>
+                <div className="controls">
+                  <Controls />
+                </div>
+              </Section>
+            </div>
+            <Section className="margin-top-4">
+              <Paragraph>
+                <strong>Location</strong> determines the demographic data used
+                by the model, including population, existing data about the
+                spread of COVID-19 in the region, and historical social
+                distancing levels.
+              </Paragraph>
+              <Paragraph>
+                The <strong>social distancing scenario</strong> models what the
+                people and governments in the region might do in the future—how
+                socially distanced will they be, and for how long?
+              </Paragraph>
+              <ModelInputs width={width} height={208} />
+              <EffectiveReproductionNumber width={width} height={208} />
+              <Fitting width={width} height={height} />
+              <Daily width={width} height={height} />
+              <Hospitalizations width={width} height={smallHeight} />
+              <ICU width={width} height={smallHeight} />
+              {/* <TestAndTrace width={width} height={height} /> */}
+              <SEIR width={width} height={height} />
+              {/* <Symptomatic width={width} height={smallHeight} /> */}
+              {/* <ProjectedDeaths width={width} height={height} /> */}
+              <ParameterTable />
+              <SummaryTable />
+            </Section>
+            {/* <Section style={{marginTop: '300px'}}>
             <div className="text-jumbo">Work in progress</div>
             <div className="dek margin-top-1">
               These sections are being converted to match the format&nbsp;above.
             </div>
           </Section> */}
-        </div>
-        <FeedbackForm />
-      </Layout>
-    </ModelStateProvider>
+          </div>
+          <FeedbackForm />
+        </Layout>
+      </ModelStateProvider>
+    </StatefulContainmentStrategy>
   );
 }
 
