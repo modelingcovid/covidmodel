@@ -64,20 +64,20 @@ export function SEIR({height, width}) {
           <InlineLabel list {...label.susceptible}>
             Susceptible people
           </InlineLabel>{' '}
-          are healthy and at risk for contracting COVID-19.
+          are healthy and at risk for contracting Covid-19.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.exposed}>
             Exposed people
           </InlineLabel>{' '}
-          have COVID-19 and are in the incubation period; they cannot infect
+          have Covid-19 and are in the incubation period; they cannot infect
           others.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.infectious}>
             Infectious people
           </InlineLabel>{' '}
-          have COVID-19 and can infect others.
+          have Covid-19 and can infect others.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.hospitalized}>
@@ -90,13 +90,13 @@ export function SEIR({height, width}) {
           <InlineLabel list {...label.recovered}>
             Recovered people
           </InlineLabel>{' '}
-          have had COVID-19 and are immune to re-infection.
+          have had Covid-19 and are immune to re-infection.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.deceased}>
             Deceased people
           </InlineLabel>{' '}
-          have passed away due to COVID-19.
+          have passed away due to Covid-19.
         </ListItem>
       </UnorderedList>
       <div className="relative">
@@ -137,9 +137,9 @@ export function SEIR({height, width}) {
         <SEIRGraph domain={domain.seir} height={height} width={width} />
         <SEIRGutter />
         <Paragraph className="margin-top-2">
-          This graph shows a detailed view of how we project that COVID-19 will
+          This graph shows a detailed view of how we project that Covid-19 will
           affect the population of {location.name} over time. While only a small
-          portion of the population actively has COVID-19 at any given time, it
+          portion of the population actively has Covid-19 at any given time, it
           can quickly spread. The graph in the top right shows how small changes
           compound to impact the population as a whole.
         </Paragraph>
@@ -148,7 +148,7 @@ export function SEIR({height, width}) {
           <strong>
             <PercentCases />
           </strong>{' '}
-          of the {location.name} population will have contracted COVID-19 by{' '}
+          of the {location.name} population will have contracted Covid-19 by{' '}
           <CurrentDate />.
         </Estimation>
       </div>

@@ -71,7 +71,7 @@ export function Symptomatic({height, width}) {
         }
       >
         <Paragraph>
-          While the rate of asymptomatic cases of COVID-19 don’t influence the
+          While the rate of asymptomatic cases of Covid-19 don’t influence the
           results of the COSMC model, they’re useful for generating statistics
           to compare with other models.{' '}
           <span className="footnote">
@@ -81,7 +81,7 @@ export function Symptomatic({height, width}) {
         </Paragraph>
         <Estimation>
           Based on an asymptomatic rate of {formatPercent(asymptomaticRate)},
-          the model projects the fatality rate of symptomatic COVID-19 cases to
+          the model projects the fatality rate of symptomatic Covid-19 cases to
           be{' '}
           <strong>
             <FatalityRate asymptomaticRate={asymptomaticRate} />

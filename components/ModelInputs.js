@@ -56,7 +56,7 @@ export function ModelInputs({height, width, ...remaining}) {
           <>
             Past social distancing levels are calculated from Google’s{' '}
             <a href="https://www.google.com/covid19/mobility/">
-              COVID-19 Community Mobility Reports
+              Covid-19 Community Mobility Reports
             </a>
             , which track movement trends over time by geographic area and
             location category (e.g., retail, transit, workplace) relative to a
@@ -107,11 +107,11 @@ export function ModelInputs({height, width, ...remaining}) {
 
       <Paragraph>
         We use the data available to us — location demographics, reported
-        fatalities, and positive test cases — to estimate when COVID-19 reached
+        fatalities, and positive test cases — to estimate when Covid-19 reached
         a location.
       </Paragraph>
       <Estimation status={false}>
-        We estimate that COVID-19 reached {location.name} on{' '}
+        We estimate that Covid-19 reached {location.name} on{' '}
         <InlineData width="130px">
           {() => <strong>{formatDate(dayToDate(importtime()))}</strong>}
         </InlineData>

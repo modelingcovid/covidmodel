@@ -92,7 +92,7 @@ export function Fitting({height, width}) {
             color={theme.color.yellow.text}
             fill={theme.color.yellow[3]}
           >
-            total COVID-19 cases
+            total Covid-19 cases
           </InlineLabel>{' '}
           in {location.name}.
         </Paragraph>
@@ -123,26 +123,26 @@ export function Fitting({height, width}) {
         <DistributionLegendRow
           y={cumulativeExposed}
           color={theme.color.yellow[3]}
-          title="Total COVID-19 cases"
-          description="People who have been infected with COVID-19"
+          title="Total Covid-19 cases"
+          description="People who have been infected with Covid-19"
         />
         <DistributionLegendRow
           y={cumulativePcr}
           color={theme.color.blue[2]}
           title="Total reported positive tests"
-          description="Total number of COVID-19 tests projected to be positive"
+          description="Total number of Covid-19 tests projected to be positive"
         />
         <DistributionLegendRow
           y={cumulativeReportedDeaths}
           color={theme.color.red[1]}
           title="Total deceased"
-          description="People who have died from COVID-19"
+          description="People who have died from Covid-19"
         />
       </Grid>
       <Heading className="margin-top-4">Finding the best fit</Heading>
       <Paragraph>
         The model adjusts three values to find a set of curves with the best fit
-        for {location.name}: the <strong>date COVID-19 arrived</strong>, the{' '}
+        for {location.name}: the <strong>date Covid-19 arrived</strong>, the{' '}
         <strong>R₀</strong> (basic reproduction number), and{' '}
         <strong>fraction of cases being detected</strong> in {location.name}.
         Reported fatalities and confirmed positive cases are weighed at a{' '}

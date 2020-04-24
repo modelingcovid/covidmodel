@@ -54,7 +54,7 @@ export const ICU = ({width, height}) => {
     <div className="margin-top-3 flow-root">
       <Title>Intensive Care Unit (ICU) Admissions</Title>
       <Paragraph>
-        We also model the expected number of COVID-19 cases that will require
+        We also model the expected number of Covid-19 cases that will require
         intensive care. Similarly to hospitalizations, we do not fit the model
         to the reported ICU admission data, but show what the model would expect
         for this location and scenario combination.
@@ -101,7 +101,7 @@ export const ICU = ({width, height}) => {
       </Estimation>
       <Paragraph>
         While we expect that an overshoot of ICU capacity has a dramatic effect
-        of the fatality rate of COVID-19, at present we do not adjust the
+        of the fatality rate of Covid-19, at present we do not adjust the
         fatality rate in the model for a potential ICU overshoot.
       </Paragraph>
       <Paragraph>

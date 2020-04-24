@@ -40,21 +40,21 @@ export function SummaryTableContents() {
       id: 'fatalityRate',
       name: 'Fatality Rate',
       value: fatalityRate(),
-      description: 'fatality rate of all COVID-19 cases',
+      description: 'fatality rate of all Covid-19 cases',
       citations: [],
     },
     {
       id: 'fatalityRateSymptomatic',
       name: 'Fatality Rate Symp',
       value: fatalityRateSymptomatic(),
-      description: 'Fatality rate of all symptomatic COVID-19 cases',
+      description: 'Fatality rate of all symptomatic Covid-19 cases',
       citations: [],
     },
     {
       id: 'fatalityRatePCR',
       name: 'Fatality Rate PCR',
       value: fatalityRatePCR(),
-      description: 'Fatality rate of all PCR confirmed COVID-19 cases',
+      description: 'Fatality rate of all PCR confirmed Covid-19 cases',
       citations: [],
     },
     {
@@ -62,7 +62,7 @@ export function SummaryTableContents() {
       name: 'Fraction of symptomatic hospitalized',
       value: fractionOfSymptomaticHospitalized(),
       description:
-        'The fraction of all symptomatic COVID-19 cases that require hospitalization, but not critical care.',
+        'The fraction of all symptomatic Covid-19 cases that require hospitalization, but not critical care.',
       citations: [],
     },
     {
@@ -70,7 +70,7 @@ export function SummaryTableContents() {
       name: 'Fraction of symptomatic hospitalized or critical',
       value: fractionOfSymptomaticHospitalizedOrICU(),
       description:
-        'The fraction of all symptomatic COVID-19 cases that require hospitalization or critical care.',
+        'The fraction of all symptomatic Covid-19 cases that require hospitalization or critical care.',
       citations: [],
     },
     {
@@ -78,7 +78,7 @@ export function SummaryTableContents() {
       name: 'Fraction of PCR confirmed cases hospitalized',
       value: fractionOfPCRHospitalized(),
       description:
-        'The fraction of all PCR confirmed COVID-19 cases that require hospitalization.',
+        'The fraction of all PCR confirmed Covid-19 cases that require hospitalization.',
       citations: [],
     },
     {
@@ -86,10 +86,10 @@ export function SummaryTableContents() {
       name: 'Fraction of PCR confirmed cases hospitalized or critical',
       value: fractionOfPCRHospitalizedOrICU(),
       description:
-        'The fraction of all PCR confirmed COVID-19 cases that require hospitalization or intensive care.',
+        'The fraction of all PCR confirmed Covid-19 cases that require hospitalization or intensive care.',
       citations: [
         'https://arxiv.org/pdf/2003.09320.pdf',
-        'https://coronavirus.ohio.gov/static/COVIDSummaryData.csv',
+        'https://coronavirus.ohio.gov/static/CovidSummaryData.csv',
       ],
     },
     {

@@ -69,10 +69,10 @@ export default function StatePage() {
       <ModelStateProvider value={interactiveModelState}>
         <Layout>
           <Head>
-            <title>Modeling COVID-19 in {stateName}</title>
+            <title>Modeling Covid-19 in {stateName}</title>
             <meta
               name="Description"
-              content={`A projection of COVID 19 cases in ${stateName} under various scenarios of social distancing.`}
+              content={`A projection of Covid 19 cases in ${stateName} under various scenarios of social distancing.`}
             />
           </Head>
           <style jsx>{`
@@ -101,7 +101,7 @@ export default function StatePage() {
             <Section className="margin-top-4 margin-bottom-3">
               <div className="graph-size" ref={sizeRef} />
               <h1 className="text-jumbo margin-bottom-1">
-                <span className="nowrap">Modeling COVID-19</span>{' '}
+                <span className="nowrap">Modeling Covid-19</span>{' '}
                 <span className="nowrap">in {stateName}</span>
               </h1>
               <h2 className="dek margin-bottom-3">
@@ -120,7 +120,7 @@ export default function StatePage() {
               <Paragraph>
                 <strong>Location</strong> determines the demographic data used
                 by the model, including population, existing data about the
-                spread of COVID-19 in the region, and historical social
+                spread of Covid-19 in the region, and historical social
                 distancing levels.
               </Paragraph>
               <Paragraph>

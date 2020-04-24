@@ -37,7 +37,7 @@ export const TestAndTrace = ({width, height}) => {
 
   return (
     <div className="margin-top-3 flow-root">
-      <Title>Containment strategies for COVID-19</Title>
+      <Title>Containment strategies for Covid-19</Title>
       <Paragraph>
         Social distancing slows the spread of the virus through the population,
         but doesn’t contain it.

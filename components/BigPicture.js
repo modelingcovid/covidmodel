@@ -138,16 +138,16 @@ export function BigPicture({location}) {
         <div ref={sizeRef} />
         <div className="column-8" ref={partialSizeRef} />
         <Paragraph>
-          The COSMC model is an epidemiological model of COVID-19, fit to actual
+          The COSMC model is an epidemiological model of Covid-19, fit to actual
           social distancing, testing, and fatality data. We use this data to
-          project how COVID-19 might spread through a population for different{' '}
+          project how Covid-19 might spread through a population for different{' '}
           <strong>locations</strong> and different{' '}
           <strong>social distancing scenarios</strong>.
         </Paragraph>
         <Instruction>
           <strong>Who built this?</strong>
           <br />
-          This model is developed by the COVID Open Source Modeling
+          This model is developed by the Covid Open Source Modeling
           Collaboration (COSMC), a collection of researchers from{' '}
           <strong>Harvard</strong> and <strong>Stanford</strong> alongside data
           scientists and engineers at <strong>Stripe</strong> and{' '}
@@ -157,7 +157,7 @@ export function BigPicture({location}) {
           citation={
             <>
               We use data from the{' '}
-              <a href="https://covidtracking.com/">COVID Tracking Project</a>,
+              <a href="https://covidtracking.com/">Covid Tracking Project</a>,
               mobility data from{' '}
               <a href="https://www.google.com/covid19/mobility/">Google</a>,
               hospital capacity data from{' '}
@@ -197,7 +197,7 @@ export function BigPicture({location}) {
           </Title>
           <Paragraph>
             To illustrate how social distancing can impact the spread of
-            COVID-19, we’ll use an example location — {location.name} — and
+            Covid-19, we’ll use an example location — {location.name} — and
             consider two scenarios: one without social distancing and one with
             significant social distancing.
           </Paragraph>
@@ -264,7 +264,7 @@ export function BigPicture({location}) {
             .”
           </Paragraph>
           <Paragraph>
-            From here, we can zoom out. How might COVID-19 affect the{' '}
+            From here, we can zoom out. How might Covid-19 affect the{' '}
             <strong>
               <Population /> people
             </strong>{' '}
@@ -282,7 +282,7 @@ export function BigPicture({location}) {
           <Paragraph>
             If {location.name} returns to normal{' '}
             <strong>without any social distancing</strong>, the model projects
-            that COVID-19 will quickly spread through the population:
+            that Covid-19 will quickly spread through the population:
           </Paragraph>
           <ModelStateProvider value={withoutDistancing}>
             <SEIRGraph
@@ -298,7 +298,7 @@ export function BigPicture({location}) {
               social distancing{' '}
               <CurrentScenario format={formatDistancingDuration} length={7} />
             </strong>
-            , the model projects that COVID-19 cases would stabilize:
+            , the model projects that Covid-19 cases would stabilize:
           </Paragraph>
           <SEIRGraph
             height={height.regular}
@@ -330,7 +330,7 @@ export function BigPicture({location}) {
         <Paragraph>
           <strong>
             By the end of the social distancing period the majority of the
-            population is projected to still be susceptible to COVID-19.
+            population is projected to still be susceptible to Covid-19.
           </strong>{' '}
           While the model projects that the social distancing measures drive
           cases down to nearly zero, some cases remain. If left unchecked, the

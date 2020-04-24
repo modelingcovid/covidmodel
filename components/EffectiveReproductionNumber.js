@@ -62,10 +62,10 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
         infected person. R₀ differs across geographic locations based on
         population demographics and density. The model couples this information
         with confirmed fatality and positive testing data to estimate how
-        contagious COVID-19 is in each location.
+        contagious Covid-19 is in each location.
       </Paragraph>
       <Estimation status={false}>
-        The model estimates that COVID-19 has an R₀ of{' '}
+        The model estimates that Covid-19 has an R₀ of{' '}
         <InlineData>{() => formatNumber2(r0())}</InlineData> in {location.name}{' '}
         when there is no social distancing.
       </Estimation>

@@ -58,12 +58,12 @@ export const Hospitalizations = ({width, height}) => {
       <Title>Hospitalizations</Title>
       <Paragraph>
         The following charts show our projections of hospitalizations due to
-        COVID-19. Unlike the fatality and confirmed case data, we do not fit the
+        Covid-19. Unlike the fatality and confirmed case data, we do not fit the
         model specifically to hospitalization data. Rather, we simply show where
         we expect the occupancy to fall. Therefore some states with much faster
         or slower than average reporting may appear correspondingly ahead or
         behind our curves. Further, we estimate the hospital capacity for
-        COVID-19 patients by taking the number of available beds and discounting
+        Covid-19 patients by taking the number of available beds and discounting
         for that hospital system’s typical occupancy rate. Note that these
         hospitalization estimates do not include patients who are admitted to
         the intensive care unit, that is modeled separately below.
@@ -166,7 +166,7 @@ export const Hospitalizations = ({width, height}) => {
       </Grid>
       <Instruction>
         <strong>Reading the graph:</strong> This graph shows cumulative
-        hospitalizations as a result of COVID-19, as some states report only
+        hospitalizations as a result of Covid-19, as some states report only
         cumulative numbers.
       </Instruction>
     </div>

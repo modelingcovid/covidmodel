@@ -1,8 +1,8 @@
 # About
 
-This model is developed by the COVID Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [GitHub](https://github.com/wbunting/covidmodel/blob/master/model/COVID-model.nb).
+This model is developed by the Covid Open Source Modeling Collaboration. The model Mathematica code is open-source and available on [GitHub](https://github.com/wbunting/covidmodel/blob/master/model/Covid-model.nb).
 
-The COVID Open Source Modeling Collaboration is comprised of:
+The Covid Open Source Modeling Collaboration is comprised of:
 
 - [Marc Lipsitch](https://www.hsph.harvard.edu/marc-lipsitch/), [Yonatan Grad](https://www.hsph.harvard.edu/yonatan-grad/), [Stephen Kissler](https://www.hsph.harvard.edu/stephen-kissler/), and [Christine Tedijanto](https://ccdd.hsph.harvard.edu/people/christine-tedijanto/) at Harvard.
 - [Silvana Konermann](https://biochemistry.stanford.edu/silvana-konermann) at Stanford.
@@ -18,7 +18,7 @@ The model evaluated here is a standard epidemiological model called SEIR. It mod
 - Infectious
 - Recovered (or deceased)
 
-In our model we ignore the natural birth and death rates in the population for simplicity but also because the R0 (basic reproduction rate) of COVID-19 is high ~3.1 and therefore demographic shifts play a minimal role in the short term effect. We also follow a recent study out of Harvard [0] in separating states for infected individuals when they need hospitalization or ICU care. This allows us to, after fitting the model, predict when a given country or state will run out of ICU beds.
+In our model we ignore the natural birth and death rates in the population for simplicity but also because the R0 (basic reproduction rate) of Covid-19 is high ~3.1 and therefore demographic shifts play a minimal role in the short term effect. We also follow a recent study out of Harvard [0] in separating states for infected individuals when they need hospitalization or ICU care. This allows us to, after fitting the model, predict when a given country or state will run out of ICU beds.
 
 We also incorporate a best-guess age weighting to the Harvard model to get a more accurate estimate on the ICU bed needs, e.g. in states / countries with a higher proportion of elderly individuals.
 
@@ -34,4 +34,4 @@ After fitting the model parameters we generate forward looking forecasts in a nu
 
 ## Citations and Data sources
 
-[[0]](https://dash.harvard.edu/bitstream/handle/1/42638988/Social%20distancing%20strategies%20for%20curbing%20the%20COVID-19%20epidemic.pdf?sequence=1&isAllowed=y)
+[[0]](https://dash.harvard.edu/bitstream/handle/1/42638988/Social%20distancing%20strategies%20for%20curbing%20the%20Covid-19%20epidemic.pdf?sequence=1&isAllowed=y)
