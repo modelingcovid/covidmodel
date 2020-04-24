@@ -26,7 +26,16 @@ export function useNavigateToLocation() {
         state !== navigating.current.to
       ) {
         navigating.current.to = state;
-        push('/state/[state]', `/state/${state}`);
+        push('/state/[state]', `/state/${state}`).then(() => {
+          // If we're not on a location page yet, reset the scroll position.
+          if (!navigating.current.from) {
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: 'auto',
+            });
+          }
+        });
       }
     },
     [navigating, push]
