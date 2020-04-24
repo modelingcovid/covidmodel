@@ -197,7 +197,7 @@ export default function StatePage() {
             <ICU width={width} height={smallHeight} />
             {/* <TestAndTrace width={width} height={height} /> */}
             <SEIR width={width} height={height} />
-            <Symptomatic width={width} height={smallHeight} />
+            {/* <Symptomatic width={width} height={smallHeight} /> */}
             {/* <ProjectedDeaths width={width} height={height} /> */}
             <ParameterTable />
             <SummaryTable />

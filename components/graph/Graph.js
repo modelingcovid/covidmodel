@@ -23,8 +23,6 @@ const {createContext, useCallback, useMemo, useState} = React;
 export const GraphContents = React.memo(function Graph({
   children,
   overlay,
-  after,
-  before,
   xLabel = '',
   domain = 1,
   initialScale = 'linear',
@@ -75,8 +73,6 @@ export const GraphContents = React.memo(function Graph({
 
   return (
     <GraphDataProvider context={context}>
-      {before}
-      {controls && <GraphControls scale={scale} setScale={setScale} />}
       <div className="graph-contents no-select">
         <style jsx>{`
           .graph-contents {
@@ -164,6 +160,7 @@ export const GraphContents = React.memo(function Graph({
           </Group>
         </svg>
         <div className="graph-contents-overlay">
+          {controls && <GraphControls scale={scale} setScale={setScale} />}
           {scrubber && (
             <Scrubber>
               {(nearest, active) => (
@@ -210,7 +207,6 @@ export const GraphContents = React.memo(function Graph({
           {overlay}
         </div>
       </div>
-      {after}
     </GraphDataProvider>
   );
 });
