@@ -103,11 +103,7 @@ export const GraphContents = React.memo(function Graph({
           }
         `}</style>
         <svg className="block" width={width} height={height}>
-          <Group
-            // Add 0.5 to snap centered strokes onto the pixel grid
-            left={margin.left + 0.5}
-            top={margin.top + 0.5}
-          >
+          <Group left={margin.left} top={margin.top}>
             <g>
               <defs>
                 <clipPath id={clipPathId}>
@@ -180,14 +176,9 @@ export const GraphContents = React.memo(function Graph({
                     paddingBottom: theme.spacing[2],
                   }}
                 >
-                  <svg
-                    width="8"
-                    height="16"
-                    viewBox="0 0 8 16"
-                    transform="rotate(180)"
-                  >
+                  <svg width="9" height="15" viewBox="0 0 9 15">
                     <path
-                      d="M7.5 4.82843V14C7.5 14.8284 6.82843 15.5 6 15.5H2C1.17157 15.5 0.5 14.8284 0.5 14V4.82843C0.5 4.4306 0.658035 4.04907 0.93934 3.76777L2.93934 1.76777C3.52513 1.18198 4.47487 1.18198 5.06066 1.76777L7.06066 3.76777C7.34197 4.04907 7.5 4.4306 7.5 4.82843Z"
+                      d="M8.5 10.5509V1C8.5 0.723858 8.27614 0.5 8 0.5H1C0.723858 0.5 0.5 0.723858 0.5 1V10.5509C0.5 10.6938 0.561074 10.8298 0.667818 10.9246L4.16782 14.0357C4.35726 14.2041 4.64274 14.2041 4.83218 14.0357L8.33218 10.9246C8.43893 10.8298 8.5 10.6938 8.5 10.5509Z"
                       fill={theme.color.background}
                       stroke={theme.color.gray[2]}
                       strokeWidth={1.5}

@@ -24,9 +24,9 @@ export default function Marker({
   return (
     <Group top={top} left={left}>
       <line
-        x1={from.x}
+        x1={from.x - strokeWidth / 2}
         y1={from.y}
-        x2={to.x}
+        x2={to.x - strokeWidth / 2}
         y2={to.y}
         stroke={stroke}
         strokeWidth={strokeWidth}
