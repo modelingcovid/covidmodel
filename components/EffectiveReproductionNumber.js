@@ -16,6 +16,7 @@ import {Graph, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
   DistributionLegendRow,
+  DistributionLine,
   Estimation,
   useFindPoint,
   useModelState,
@@ -93,6 +94,7 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
         nice={false}
       >
         {() => <Line y={rt.expected.get} stroke={theme.color.magenta[1]} />}
+        {/* {() => <DistributionLine y={rt} color={theme.color.magenta[1]} />} */}
       </Graph>
       <Gutter>
         <DistributionLegendRow

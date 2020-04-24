@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {theme} from '../styles';
 import {Gutter, InlineLabel, InlineData, Paragraph, Title} from './content';
-import {Graph, Line} from './graph';
+import {Graph, Line, LegendRow} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
   DistributionLegendRow,
@@ -47,6 +47,7 @@ export const ICU = ({width, height}) => {
     cumulativeCritical,
     domain,
     icuBeds,
+    icuCapacity,
   } = useLocationData();
 
   return (
@@ -68,12 +69,18 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <Line y={icuBeds} stroke={red} strokeDasharray="6,3" />
+            <Line y={icuCapacity.get} stroke={red} strokeDasharray="6,3" />
             <DistributionLine y={currentlyCritical} color={blue} gradient />
           </>
         )}
       </Graph>
       <Gutter>
+        <LegendRow
+          label="ICU capacity"
+          y={icuCapacity.get}
+          color={red}
+          format={formatNumber}
+        />
         <DistributionLegendRow
           title="Currently require intensive care"
           y={currentlyCritical}

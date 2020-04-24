@@ -141,6 +141,17 @@ const queries = [
       dateContained
       dateHospitalsOverCapacity
       dateICUOverCapacity
+      fatalityRate
+      fatalityRateSymptomatic
+      fatalityRatePCR
+      fractionOfSymptomaticHospitalized
+      fractionOfSymptomaticHospitalizedOrICU
+      fractionOfPCRHospitalized
+      fractionOfPCRHospitalizedOrICU
+      fractionHospitalizedInICU
+      fractionOfDeathInICU
+      fractionDeathOfHospitalizedOrICU
+      fractionOfInfectionsPCRConfirmed
       distancing { ...DistributionSeriesFull }
       rt { ...DistributionSeriesFull }
     }`,
@@ -148,6 +159,21 @@ const queries = [
       dateContained: (d) => d.dateContained,
       dateHospitalsOverCapacity: (d) => d.dateHospitalsOverCapacity,
       dateICUOverCapacity: (d) => d.dateICUOverCapacity,
+      fatalityRate: (d) => d.fatalityRate,
+      fatalityRateSymptomatic: (d) => d.fatalityRateSymptomatic,
+      fatalityRatePCR: (d) => d.fatalityRatePCR,
+      fractionOfSymptomaticHospitalized: (d) =>
+        d.fractionOfSymptomaticHospitalized,
+      fractionOfSymptomaticHospitalizedOrICU: (d) =>
+        d.fractionOfSymptomaticHospitalizedOrICU,
+      fractionOfPCRHospitalized: (d) => d.fractionOfPCRHospitalized,
+      fractionOfPCRHospitalizedOrICU: (d) => d.fractionOfPCRHospitalizedOrICU,
+      fractionHospitalizedInICU: (d) => d.fractionHospitalizedInICU,
+      fractionOfDeathInICU: (d) => d.fractionOfDeathInICU,
+      fractionDeathOfHospitalizedOrICU: (d) =>
+        d.fractionDeathOfHospitalizedOrICU,
+      fractionOfInfectionsPCRConfirmed: (d) =>
+        d.fractionOfInfectionsPCRConfirmed,
       distancing: createDistributionSeries((d) => d.distancing),
       rt: createDistributionSeries((d) => d.rt),
     },
@@ -157,21 +183,29 @@ const queries = [
     'Scenario',
     `{
       cumulativeDeaths { ...DistributionSeriesFull }
+      cumulativeReportedDeaths { ...DistributionSeriesFull }
       cumulativeRecoveries { ...DistributionSeriesFull }
       currentlyInfected { ...DistributionSeriesFull }
       currentlyInfectious { ...DistributionSeriesFull }
+      currentlyHospitalizedOrICU { ...DistributionSeriesFull }
       susceptible { ...DistributionSeriesFull }
       cumulativeExposed { ...DistributionSeriesFull }
       cumulativePcr { ...DistributionSeriesFull }
     }`,
     {
       cumulativeDeaths: createDistributionSeries((d) => d.cumulativeDeaths),
+      cumulativeReportedDeaths: createDistributionSeries(
+        (d) => d.cumulativeReportedDeaths
+      ),
       cumulativeRecoveries: createDistributionSeries(
         (d) => d.cumulativeRecoveries
       ),
       currentlyInfected: createDistributionSeries((d) => d.currentlyInfected),
       currentlyInfectious: createDistributionSeries(
         (d) => d.currentlyInfectious
+      ),
+      currentlyHospitalizedOrICU: createDistributionSeries(
+        (d) => d.currentlyHospitalizedOrICU
       ),
       susceptible: createDistributionSeries((d) => d.susceptible),
       cumulativeExposed: createDistributionSeries((d) => d.cumulativeExposed),
@@ -197,6 +231,7 @@ const queries = [
     'Scenario',
     `{
       hospitalCapacity { ...SeriesFull }
+      icuCapacity { ...SeriesFull }
       currentlyHospitalized { ...DistributionSeriesFull }
       currentlyReportedHospitalized { ...DistributionSeriesFull }
       cumulativeHospitalized { ...DistributionSeriesFull }
@@ -204,6 +239,7 @@ const queries = [
     }`,
     {
       hospitalCapacity: createSeries((d) => d.hospitalCapacity),
+      icuCapacity: createSeries((d) => d.icuCapacity),
       currentlyHospitalized: createDistributionSeries(
         (d) => d.currentlyHospitalized
       ),
