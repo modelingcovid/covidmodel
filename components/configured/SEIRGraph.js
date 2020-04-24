@@ -10,6 +10,7 @@ import {
   Paragraph,
   Title,
   UnorderedList,
+  WithCitation,
 } from '../content';
 import {Area, Graph, Line, WithGraphData, useNearestData} from '../graph';
 import {
@@ -115,10 +116,21 @@ export function SEIRGutter() {
   );
 }
 
-export function SEIRGraph({children, ...props}) {
+export function SEIRGraph({children, domain, nice = false, ...props}) {
   const {config} = useSEIRConfig();
+  const {population} = useLocationData();
+  const seirDomain = useMemo(() => domain || (() => population() * 1.01), [
+    domain,
+    population,
+  ]);
   return (
-    <Graph {...props} initialScale="linear" xLabel="people">
+    <Graph
+      {...props}
+      domain={seirDomain}
+      initialScale="linear"
+      nice={nice}
+      xLabel="people"
+    >
       {(context) => (
         <>
           {config.map(({area: [y0, y1], fill}, i) => (
@@ -137,5 +149,66 @@ export function SEIRGraph({children, ...props}) {
         </>
       )}
     </Graph>
+  );
+}
+
+export function SEIRSummary() {
+  const {label} = useSEIRConfig();
+  return (
+    <WithCitation
+      citation={
+        <>
+          There is much we don’t know about immunity to COVID-19. Our model
+          makes a simplifying assumption that the typical immune response will
+          last “
+          <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
+            at least a year
+          </a>
+          .”
+        </>
+      }
+    >
+      <UnorderedList className="list-style-none">
+        <ListItem>
+          <InlineLabel list {...label.susceptible}>
+            Susceptible people
+          </InlineLabel>{' '}
+          are healthy and at risk for contracting COVID-19.
+        </ListItem>
+        <ListItem>
+          <InlineLabel list {...label.exposed}>
+            Exposed people
+          </InlineLabel>{' '}
+          have COVID-19 and are in the incubation period; they cannot infect
+          others.
+        </ListItem>
+        <ListItem>
+          <InlineLabel list {...label.infectious}>
+            Infectious people
+          </InlineLabel>{' '}
+          have COVID-19 and can infect others.
+        </ListItem>
+        <ListItem>
+          <InlineLabel list {...label.hospitalized}>
+            Hospitalized people
+          </InlineLabel>{' '}
+          are currently in the hospital or ICU; the model assumes they cannot
+          infect others.
+        </ListItem>
+        <ListItem>
+          <InlineLabel list {...label.recovered}>
+            Recovered people
+          </InlineLabel>{' '}
+          have had COVID-19 and are <span className="footnote">immune</span> to
+          re-infection.
+        </ListItem>
+        <ListItem>
+          <InlineLabel list {...label.deceased}>
+            Deceased people
+          </InlineLabel>{' '}
+          have passed away due to COVID-19.
+        </ListItem>
+      </UnorderedList>
+    </WithCitation>
   );
 }

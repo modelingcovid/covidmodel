@@ -9,5 +9,6 @@ export * from './SEIRGraph';
 export * from './ScenarioSelect';
 export * from './StateSelect';
 export * from './useCurrentLocation';
+export * from './useGraphSize';
 export * from './useLocationDropdownState';
 export * from './useNavigateToLocation';

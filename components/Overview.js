@@ -1,11 +1,14 @@
 import * as React from 'react';
 import Link from 'next/link';
 import css from 'styled-jsx/css';
+import {BigPicture} from './BigPicture';
 import {Label} from './content';
 import {LocationMap} from './configured';
 import {stateLabels} from '../lib/controls';
 import {formatNumber} from '../lib/format';
 import {theme} from '../styles';
+
+const exampleLocation = {id: 'CT', name: stateLabels.CT};
 
 const styles = css`
   .map-heading {
@@ -55,6 +58,7 @@ export function Overview({states, topo}) {
   return (
     <div>
       <style jsx>{styles}</style>
+      <BigPicture location={exampleLocation} />
       <div className="margin-top-5 map-heading">
         <span>Modeled states in the U.S.</span>
       </div>

@@ -4,7 +4,8 @@ import {
   HospitalizationGraph,
   SEIRGraph,
   SEIRGutter,
-  useSEIRConfig,
+  SEIRSummary,
+  useGraphSize,
 } from './configured';
 import {
   Blockquote,
@@ -12,6 +13,7 @@ import {
   Gutter,
   InlineData,
   InlineLabel,
+  Instruction,
   Heading,
   ListItem,
   Paragraph,
@@ -36,7 +38,6 @@ import {
   Estimation,
   ModelStateProvider,
   useCreateModelState,
-  useModelState,
   useDistancingDate,
   useLocationData,
 } from './modeling';
@@ -114,12 +115,14 @@ function TotalFatalitiesLabel() {
   );
 }
 
-export function BigPicture({height, width}) {
-  const sizeRef = useRef(null);
-  const {width: smallWidth} = useContentRect(sizeRef, {height, width});
+export function BigPicture({location}) {
+  const {ref: sizeRef, width, height} = useGraphSize();
+  const partialSizeRef = useRef(null);
+  const {width: smallWidth} = useContentRect(partialSizeRef, {
+    height: height.regular,
+    width,
+  });
 
-  const {location} = useModelState();
-  const {population, domain} = useLocationData();
   const withDistancing = useCreateModelState({
     locationId: location.id,
     scenarioId: 'scenario2',
@@ -129,12 +132,11 @@ export function BigPicture({height, width}) {
     scenarioId: 'scenario4',
   });
 
-  const {label} = useSEIRConfig();
-
   return (
     <ModelStateProvider value={withDistancing}>
       <div className="flow-root">
-        <div className="column-8" ref={sizeRef} />
+        <div ref={sizeRef} />
+        <div className="column-8" ref={partialSizeRef} />
         <Paragraph>
           The COSMC model is an epidemiological model of COVID-19, fit to actual
           social distancing, testing, and fatality data. We use this data to
@@ -142,6 +144,15 @@ export function BigPicture({height, width}) {
           <strong>locations</strong> and different{' '}
           <strong>social distancing scenarios</strong>.
         </Paragraph>
+        <Instruction>
+          <strong>Who built this?</strong>
+          <br />
+          This model is developed by the COVID Open Source Modeling
+          Collaboration (COSMC), a collection of researchers from{' '}
+          <strong>Harvard</strong> and <strong>Stanford</strong> alongside data
+          scientists and engineers at <strong>Stripe</strong> and{' '}
+          <strong>GitHub</strong>.
+        </Instruction>
         <WithCitation
           citation={
             <>
@@ -181,7 +192,9 @@ export function BigPicture({height, width}) {
           <em>“All models are wrong, but some are useful.”</em>
         </Blockquote>
         <XScaleDistancingPeriod>
-          <Title>The impact of social distancing</Title>
+          <Title className="margin-top-4">
+            The impact of social distancing
+          </Title>
           <Paragraph>
             To illustrate how social distancing can impact the spread of
             COVID-19, consider two example scenarios for {location.name}: one
@@ -202,7 +215,7 @@ export function BigPicture({height, width}) {
               increase the <TotalFatalitiesLabel />.
             </Paragraph>
             <HospitalizationGraph
-              height={height}
+              height={height.regular}
               width={smallWidth}
               scrubber={false}
             />
@@ -235,7 +248,7 @@ export function BigPicture({height, width}) {
           </Paragraph>
 
           <HospitalizationGraph
-            height={height}
+            height={height.regular}
             width={smallWidth}
             scrubber={false}
           />
@@ -265,61 +278,7 @@ export function BigPicture({height, width}) {
             <strong>compartmental model</strong>, which estimates the spread of
             a virus by dividing the population into different groups:
           </Paragraph>
-          <WithCitation
-            citation={
-              <>
-                There is much we don’t know about immunity to COVID-19. Our
-                model makes a simplifying assumption that the typical immune
-                response will last “
-                <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
-                  at least a year
-                </a>
-                .”
-              </>
-            }
-          >
-            <UnorderedList className="list-style-none">
-              <ListItem>
-                <InlineLabel list {...label.susceptible}>
-                  Susceptible people
-                </InlineLabel>{' '}
-                are healthy and at risk for contracting COVID-19.
-              </ListItem>
-              <ListItem>
-                <InlineLabel list {...label.exposed}>
-                  Exposed people
-                </InlineLabel>{' '}
-                have COVID-19 and are in the incubation period; they cannot
-                infect others.
-              </ListItem>
-              <ListItem>
-                <InlineLabel list {...label.infectious}>
-                  Infectious people
-                </InlineLabel>{' '}
-                have COVID-19 and can infect others.
-              </ListItem>
-              <ListItem>
-                <InlineLabel list {...label.hospitalized}>
-                  Hospitalized people
-                </InlineLabel>{' '}
-                are currently in the hospital or ICU; the model assumes they
-                cannot infect others.
-              </ListItem>
-              <ListItem>
-                <InlineLabel list {...label.recovered}>
-                  Recovered people
-                </InlineLabel>{' '}
-                have had COVID-19 and are{' '}
-                <span className="footnote">immune</span> to re-infection.
-              </ListItem>
-              <ListItem>
-                <InlineLabel list {...label.deceased}>
-                  Deceased people
-                </InlineLabel>{' '}
-                have passed away due to COVID-19.
-              </ListItem>
-            </UnorderedList>
-          </WithCitation>
+          <SEIRSummary />
           <Paragraph>
             If {location.name} returns to normal{' '}
             <strong>without any social distancing</strong>, the model projects
@@ -327,9 +286,7 @@ export function BigPicture({height, width}) {
           </Paragraph>
           <ModelStateProvider value={withoutDistancing}>
             <SEIRGraph
-              domain={() => population() * 1.01}
-              nice={false}
-              height={height}
+              height={height.regular}
               width={smallWidth}
               scrubber={false}
             />
@@ -344,9 +301,7 @@ export function BigPicture({height, width}) {
             , the model projects that COVID-19 cases would stabilize:
           </Paragraph>
           <SEIRGraph
-            domain={() => population() * 1.01}
-            nice={false}
-            height={height}
+            height={height.regular}
             width={smallWidth}
             scrubber={false}
           />
@@ -371,13 +326,7 @@ export function BigPicture({height, width}) {
           we continue to model further into the future, we can project what
           might occur if we return to normal:
         </Paragraph>
-        <SEIRGraph
-          domain={() => population() * 1.01}
-          nice={false}
-          height={height}
-          width={width}
-          scrubber={false}
-        />
+        <SEIRGraph height={height.regular} width={width} scrubber={false} />
         <Paragraph>
           <strong>
             By the end of the social distancing period the majority of the
@@ -394,7 +343,11 @@ export function BigPicture({height, width}) {
           distancing above. The model projects it will put a similar level of
           strain on {location.name}’s hospital system:
         </Paragraph>
-        <HospitalizationGraph height={height} width={width} scrubber={false} />
+        <HospitalizationGraph
+          height={height.regular}
+          width={width}
+          scrubber={false}
+        />
 
         <Paragraph>
           <strong>Is it possible to avoid the second wave?</strong> One option
@@ -424,7 +377,7 @@ export function BigPicture({height, width}) {
         </Paragraph>
         <ContainmentStrategyContext.Provider value="testTrace">
           <HospitalizationGraph
-            height={height}
+            height={height.regular}
             width={width}
             scrubber={false}
           />

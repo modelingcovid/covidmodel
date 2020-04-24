@@ -3,7 +3,6 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 
 import {
-  BigPicture,
   Daily,
   EffectiveReproductionNumber,
   FeedbackForm,
@@ -20,7 +19,7 @@ import {
   Symptomatic,
   TestAndTrace,
 } from '../../components';
-import {Controls} from '../../components/configured';
+import {Controls, useGraphSize} from '../../components/configured';
 import {
   Blockquote,
   Heading,
@@ -55,10 +54,7 @@ export default function StatePage() {
   } = useRouter();
   const [scenario, setScenario] = useState('scenario2');
 
-  const sizeRef = useRef(null);
-  const {width} = useContentRect(sizeRef, {width: 896, height: 360});
-  const height = width > 600 ? 360 : 256;
-  const smallHeight = width > 600 ? 256 : 224;
+  const {ref: sizeRef, width, height} = useGraphSize();
 
   const stateName = stateLabels[state];
 
@@ -112,16 +108,6 @@ export default function StatePage() {
                 Forecasting the impact of the virus using models trained with
                 actual social distancing, testing, and fatality data
               </h2>
-              <BigPicture width={width} height={smallHeight} />
-            </Section>
-
-            <Section>
-              <h2 className="text-jumbo margin-top-5 margin-bottom-1">
-                Interacting with the model
-              </h2>
-              <h3 className="dek margin-bottom-3">
-                Select a location and social distancing scenario to model
-              </h3>
             </Section>
             <div className="controls-container">
               <Section>
@@ -142,16 +128,19 @@ export default function StatePage() {
                 people and governments in the region might do in the future—how
                 socially distanced will they be, and for how long?
               </Paragraph>
-              <ModelInputs width={width} height={208} />
-              <EffectiveReproductionNumber width={width} height={208} />
-              <Fitting width={width} height={height} />
-              <Daily width={width} height={height} />
-              <Hospitalizations width={width} height={smallHeight} />
-              <ICU width={width} height={smallHeight} />
-              {/* <TestAndTrace width={width} height={height} /> */}
-              <SEIR width={width} height={height} />
-              {/* <Symptomatic width={width} height={smallHeight} /> */}
-              {/* <ProjectedDeaths width={width} height={height} /> */}
+              <ModelInputs width={width} height={height.small} />
+              <EffectiveReproductionNumber
+                width={width}
+                height={height.small}
+              />
+              <Fitting width={width} height={height.large} />
+              <Daily width={width} height={height.large} />
+              <Hospitalizations width={width} height={height.regular} />
+              <ICU width={width} height={height.regular} />
+              {/* <TestAndTrace width={width} height={height.large} /> */}
+              <SEIR width={width} height={height.large} />
+              {/* <Symptomatic width={width} height={height.regular} /> */}
+              {/* <ProjectedDeaths width={width} height={height.large} /> */}
               <ParameterTable />
               <SummaryTable />
             </Section>
