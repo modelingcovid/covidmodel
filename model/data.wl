@@ -392,13 +392,13 @@ usStateDistancingPrecompute = Module[{
   stateList = Map[
     statesToCodes[#]&,
     DeleteDuplicates[Map[
-      #["sub_region_1"]&,
-      Select[googleMobility,
-        And[
-          #["country_region_code"]=="US",
-          #["sub_region_1"]!="",
-          #["sub_region_2"]==""
-        ]&]]]];
+        #["sub_region_1"]&,
+        Select[googleMobility,
+          And[
+            #["country_region_code"]=="US",
+            #["sub_region_1"]!="",
+            #["sub_region_2"]==""
+          ]&]]]];
   rawCsvTable=Prepend[
     Map[stateDistancing, stateList],
     dates];
