@@ -98,10 +98,10 @@ export function DistancingOverlay() {
                 )}
                 {showContainment && (
                   <>
-                    <g opacity="0.3">
+                    <g opacity="0.7">
                       <VMarker
                         value={containmentDate}
-                        stroke={theme.color.magenta[1]}
+                        stroke={theme.color.magenta[0]}
                       />
                     </g>
                     <rect
@@ -109,7 +109,7 @@ export function DistancingOverlay() {
                       y="0"
                       width={xMax - containmentX}
                       height={yMax}
-                      fill={theme.color.magenta[1]}
+                      fill={theme.color.magenta[0]}
                       opacity="0.1"
                     />
                   </>

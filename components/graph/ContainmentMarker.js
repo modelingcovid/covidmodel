@@ -10,15 +10,13 @@ export function ContainmentMarker() {
     return null;
   }
   return (
-    <g opacity="0.5">
-      <VMarker
-        value={new Date(dateContained())}
-        stroke={theme.color.magenta[1]}
-        strokeDasharray="4,2"
-        label="Test and trace"
-        labelDx={4}
-        labelDy={16}
-      />
-    </g>
+    <VMarker
+      value={new Date(dateContained())}
+      stroke={theme.color.magenta[0]}
+      strokeDasharray="4,2"
+      label="Test and trace indefinitely"
+      labelDx={4}
+      labelDy={16}
+    />
   );
 }

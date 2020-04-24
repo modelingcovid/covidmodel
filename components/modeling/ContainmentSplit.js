@@ -32,7 +32,7 @@ export function ContainmentSplit({children}) {
       </defs>
       <ContainmentStrategyContext.Provider value="none">
         <g clipPath={`url(#${left})`}>{children}</g>
-        <g clipPath={`url(#${right})`} filter={`url(#${filter})`} opacity="0.2">
+        <g clipPath={`url(#${right})`} filter={`url(#${filter})`} opacity="0.3">
           {children}
         </g>
       </ContainmentStrategyContext.Provider>
