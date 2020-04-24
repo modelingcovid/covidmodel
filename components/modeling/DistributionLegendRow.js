@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {LegendEntry, LegendRow} from '../graph';
 import {useSuspense} from '../util';
-import {useModelState} from '../modeling';
+import {useExpected, useModelState} from '../modeling';
 import {formatNumber, formatNA} from '../../lib/format';
 
 const {useMemo} = React;
@@ -16,6 +16,7 @@ export const DistributionLegendRow = ({
   compact = false,
 }) => {
   const suspense = useSuspense();
+  const expected = useExpected();
   const hasConfirmed = suspense(() => y.confirmed.empty() === false, false);
   if (compact) {
     return (
@@ -23,7 +24,7 @@ export const DistributionLegendRow = ({
         label={title}
         color={color}
         format={format}
-        y={y.expected.get}
+        y={expected(y).get}
       />
     );
   }
@@ -33,7 +34,7 @@ export const DistributionLegendRow = ({
         label="Modeled"
         color={color}
         format={format}
-        y={y.expected.get}
+        y={expected(y).get}
       />
       {hasConfirmed && (
         <LegendEntry
