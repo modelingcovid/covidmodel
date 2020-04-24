@@ -96,7 +96,7 @@ export function SEIR({height, width}) {
         <div
           style={{
             position: 'absolute',
-            top: '72px',
+            top: theme.spacing[3],
             right: theme.spacing[1],
             background: theme.color.background,
             zIndex: 2,

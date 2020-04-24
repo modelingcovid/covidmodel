@@ -37,9 +37,7 @@ export function Scrubber({children, ...remaining}) {
           }}
         >
           <style jsx>{styles}</style>
-          <div {...remaining} className="content">
-            {children(d, active)}
-          </div>
+          <div {...remaining}>{children && children(d, active)}</div>
         </div>
       )}
     </NearestControl>

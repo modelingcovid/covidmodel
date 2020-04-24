@@ -31,7 +31,7 @@ const blue = theme.color.blue[2];
 const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
-function ICUCapacityExcedDate() {
+function ICUCapacityExceedDate() {
   const {dateICUOverCapacity} = useLocationData();
   return (
     <InlineData>
@@ -90,7 +90,7 @@ export const ICU = ({width, height}) => {
       </Paragraph>
       <Estimation>
         The model estimates that hospitals in {location.name} will exceed ICU
-        capacity on <ICUCapacityExcedDate />.
+        capacity on <ICUCapacityExceedDate />.
       </Estimation>
       <Paragraph>
         While we expect that an overshoot of ICU capacity has a dramatic effect

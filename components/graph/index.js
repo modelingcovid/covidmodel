@@ -2,6 +2,7 @@ export * from './Area';
 export * from './Axis';
 export * from './ClipPathX';
 export * from './ContainmentMarker';
+export * from './DateOverlay';
 export * from './DistancingGradient';
 export * from './DistancingOverlay';
 export * from './Graph';
