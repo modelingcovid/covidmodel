@@ -32,7 +32,6 @@ import {
   UnorderedList,
   WithCitation,
 } from '../../components/content';
-import {DistancingGradient} from '../../components/graph';
 import {
   DateModelRun,
   ModelDataProvider,
@@ -154,7 +153,6 @@ export default function StatePage() {
             <BigPicture width={width} height={smallHeight} />
           </Section>
 
-          <DistancingGradient width={width} />
           <Section>
             <h2 className="text-jumbo margin-top-5 margin-bottom-1">
               Interacting with the model
