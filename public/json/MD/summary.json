@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.8342,
-"importtime":5.8496e1,
-"stateAdjustmentForTestingDifferences":0.5758,
-"distpow":1.5123
+"r0natural":4.8180,
+"importtime":5.8642e1,
+"stateAdjustmentForTestingDifferences":0.5757,
+"distpow":1.5137
 },
 "population":5996079,
 "ventilators":953,
@@ -18,28 +18,28 @@
 "pPCRH":0.8005,
 "fractionOfCriticalDeceased":0.3788,
 "initialInfectionImpulse":1.4402e1,
-"r0":4.8342,
-"importtime":5.8496e1,
+"r0":4.8180,
+"importtime":5.8642e1,
 "numberOfSimulations":100,
-"dateModelRun":"Fri 24 Apr 2020 21:39:22",
+"dateModelRun":"Sat 25 Apr 2020 22:12:59",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.5758,
-"distpow":1.5123,
+"stateAdjustmentForTestingDifferences":0.5757,
+"distpow":1.5137,
 "goodnessOfFitMetrics":{
-"chiSquared":8.8015e-6,
-"rmsRelativeError":0.8493,
-"rmsRelativeErrorDeaths":1.1906,
-"rmsRelativeErrorPcr":0.3416,
-"meanRelativeErrorDeaths":-0.6593,
-"meanRelativeErrorPcr":-0.1735,
-"rSquaredDeaths":2.6493e-2,
-"rSquaredPcr":2.1788e-2,
-"deathResidual7Day":-2.5908,
-"pcrResidual7Day":-3.7066e1
+"chiSquared":1.0657e-5,
+"rmsRelativeError":0.6905,
+"rmsRelativeErrorDeaths":0.9601,
+"rmsRelativeErrorPcr":0.2980,
+"meanRelativeErrorDeaths":-0.4667,
+"meanRelativeErrorPcr":-0.1039,
+"rSquaredDeaths":5.6561e-2,
+"rSquaredPcr":2.8317e-2,
+"deathResidual7Day":-1.4174,
+"pcrResidual7Day":-3.2363e1
 },
 "parameters":{
 "r0":{
-"value":4.8342,
+"value":4.8180,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":5.8496e1,
+"value":5.8642e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -180,13 +180,13 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.5758,
+"value":0.5757,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
 },
 "distancePower":{
-"value":1.5123,
+"value":1.5137,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
