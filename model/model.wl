@@ -189,10 +189,13 @@ getStateParams[state_]:=Module[{raw,pop,dist,buckets},
 stateParams = Association[{#->getStateParams[#]}&/@statesToRun];
 
 
+testAndTraceSmoothTurnOnDuration = 7;
+testAndTraceTurnOff[testAndTrace_, days_]:=If[testAndTrace == 0, 1, Max[0, Min[1, 1 - (days - testTraceExposedDelay0) / testAndTraceSmoothTurnOnDuration]]]
+
+
 (* Define the model to be evaulated in the simulations -- all parameters are given either from the Monte-Carlo draws or evaluting the means *)
 (* This defines an enriched SEIR model with extra states (e.g., hospitalized, deceased) and reporting (e.g., cumulative PCR rates) *)
 (* It also fires several events for things like when the hospital / icu capacities are exceeded so that those don't have to be computed manually later *)
-
 generateModelComponents[distancing_] := <|
   "equationsODE" -> Flatten[{
       (**** Enriched SEIR model section ****)
@@ -200,13 +203,15 @@ generateModelComponents[distancing_] := <|
 
       (* Susceptible population, binned into (initially equally sized) groups having a range of relative susceptibilities; the sum of all sSq[i]'s is Sq, the full susceptible population *)
       Table[
-        sSq[i]'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
-        (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
+        sSq[i]'[t]==(
+          distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
+        ) * (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
         {i, 1, susceptibilityBins}],
 
       (* Exposed *)
-      Eq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
-      Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
+      Eq'[t]==(
+        distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
+      ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
 
       (* Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed); age independent *)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectious,
@@ -236,7 +241,9 @@ generateModelComponents[distancing_] := <|
       (* These quantities measure testing rates, cumulative reporting-only counts, etc. in this section *)
 
       (* Cumulative exposed *)
-      cumEq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+      cumEq'[t]==(
+          distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
+        ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -591,6 +598,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   (* generate solutions for both the expectation values with and without test and trace *)
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
+  
+  Echo[Plot[{sol[cumEq]'[t], soltt[cumEq]'[t], testTraceNewCaseThreshold0}, {t, 150, 200}, ImageSize->500, PlotStyle->{{},{Dashed},{}}]];
   
   (* set up dates for simulation / reporting *)
   aug1 = 214;
