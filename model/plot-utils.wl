@@ -42,3 +42,42 @@ icuBelowCapacity=Text[Framed[Style["ICU Below Capacity",FontSize->24,Bold,Black,
 icuBelowCapacityGraphics=Graphics[icuBelowCapacity,ImageSize->Rasterize[icuBelowCapacity,"RasterSize"]];
 icuOvershotText=Text[Framed[Style["ICU Capacity Overshot",FontSize->24,Bold,Black,FontFamily->"Calibri"],Background->Red,ContentPadding->False]];
 icuOvershotTextGraphics=Graphics[icuOvershotText,ImageSize->Rasterize[icuOvershotText,"RasterSize"]];
+
+
+
+fitPlots[state_, longData_, evaluateSolution_, fit_, fitParams_]:=Module[{deathDataLength},
+deathDataLength=Length[Select[longData,#[[1]]==1&]];
+Column[{
+        Text["Fit for "<>state],
+        Row[{
+            Show[
+              ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
+              LogPlot[{
+                  evaluateSolution[RepDeaq][Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t],
+                  evaluateSolution[PCR][
+                    Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t]},
+                {t,40,150},ImageSize->500]],
+            ListPlot[{
+                Thread[{#2,#1/#3}&[
+                    fit["FitResiduals"][[1;;deathDataLength]],
+                    (#[[2]]&/@longData[[1;;deathDataLength]]),
+                    (#[[3]]&/@longData[[1;;deathDataLength]])
+                ]],
+                Thread[{#2,#1/#3}&[
+                    fit["FitResiduals"][[deathDataLength+1;;Length[longData]]],
+                    Reverse[(#[[2]]&/@longData[[deathDataLength+1;;Length[longData]]])],
+                    Reverse[(#[[3]]&/@longData[[deathDataLength+1;;Length[longData]]])]
+                ]]
+              },ImageSize->500, Filling->Axis]
+        }],
+        Row[{fromLog@fit["ParameterTable"]//Quiet,fit["ANOVATable"]//Quiet}]
+    }]
+]
