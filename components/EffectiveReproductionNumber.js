@@ -110,9 +110,8 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
       </Gutter>
       <Paragraph>
         If the virus spreads through a significant portion of the population, it
-        has a decreasing chance of reaching a susceptible person. The model
-        predicts the effective reproduction number will decrease in these
-        scenarios as well.
+        has a decreasing chance of reaching a susceptible person. This also
+        contributes to a reduced R<sub>t</sub>.
       </Paragraph>
     </div>
   );

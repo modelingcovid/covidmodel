@@ -65,6 +65,18 @@ export function Fitting({height, width}) {
         the SEIR model.
       </Paragraph>
 
+      <Paragraph>
+        Both datasets are imperfect. The model assumes that the number of
+        reported positive tests is less than the number of cases in a region and
+        predicts the fraction of cases detected by tests in {location.name}.
+        While the number of fatalities can also be{' '}
+        <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+          underreported
+        </a>
+        , the model doesn’t include additional adjustments beyond computing the
+        fraction of cases detected.
+      </Paragraph>
+
       <WithCitation
         citation={
           <>
@@ -141,8 +153,9 @@ export function Fitting({height, width}) {
       </Grid>
       <Heading className="margin-top-4">Finding the best fit</Heading>
       <Paragraph>
-        The model adjusts three values to find a set of curves with the best fit
-        for {location.name}: the <strong>date Covid-19 arrived</strong>, the{' '}
+        To arrive at a prediction of viral spread for each state that best
+        matches the available data for {location.name}, the model adjusts three
+        values: the <strong>date Covid-19 arrived</strong>, the{' '}
         <strong>R₀</strong> (basic reproduction number), and{' '}
         <strong>fraction of cases being detected</strong> in {location.name}.
         Reported fatalities and confirmed positive cases are weighed at a{' '}

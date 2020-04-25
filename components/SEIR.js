@@ -54,10 +54,10 @@ export function SEIR({height, width}) {
     <div className="flow-root">
       <Heading>How could distancing affect the population?</Heading>
       <Paragraph>
-        As mentioned in the introduction, our model is based upon a standard
-        epidemiological model called <strong>the SEIR model</strong>. The SEIR
-        model is a <strong>compartmental model</strong>, which estimates the
-        spread of a virus by dividing the population into different groups:
+        Our model is based upon a standard epidemiological model called{' '}
+        <strong>the SEIR model</strong>. The SEIR model is a{' '}
+        <strong>compartmental model</strong>, which estimates the spread of a
+        virus by dividing the population into different groups:
       </Paragraph>
       <UnorderedList className="list-style-none">
         <ListItem>

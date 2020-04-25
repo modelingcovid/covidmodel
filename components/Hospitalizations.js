@@ -7,6 +7,7 @@ import {
   InlineData,
   Paragraph,
   Title,
+  WithCitation,
 } from './content';
 import {Graph, LegendRow, Line, useNearestData} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
@@ -56,18 +57,51 @@ export const Hospitalizations = ({width, height}) => {
   return (
     <div className="margin-top-3 flow-root">
       <Title>Hospitalizations</Title>
-      <Paragraph>
-        The following charts show our projections of hospitalizations due to
-        Covid-19. Unlike the fatality and confirmed case data, we do not fit the
-        model specifically to hospitalization data. Rather, we simply show where
-        we expect the occupancy to fall. Therefore some states with much faster
-        or slower than average reporting may appear correspondingly ahead or
-        behind our curves. Further, we estimate the hospital capacity for
-        Covid-19 patients by taking the number of available beds and discounting
-        for that hospital system’s typical occupancy rate. Note that these
-        hospitalization estimates do not include patients who are admitted to
-        the intensive care unit, that is modeled separately below.
-      </Paragraph>
+      <WithCitation
+        citation={
+          <>
+            Observed as 8.5 in{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.04.12.20062943v1.full.pdf">
+              California and Washington
+            </a>
+            , 5.9 in{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.03.03.20029983v1.full.pdf">
+              Singapore
+            </a>
+            , 2.7 in{' '}
+            <a href="https://www.medrxiv.org/content/medrxiv/early/2020/01/28/2020.01.26.20018754.full.pdf">
+              China
+            </a>
+            , and 3.4 in{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.03.03.20028423v3.full.pdf">
+              Shenzhen
+            </a>
+            .
+          </>
+        }
+      >
+        <Paragraph>
+          The following charts show our projections of hospitalizations due to
+          Covid-19. Unlike the fatality and confirmed case data, we do not fit
+          the model to hospitalization data. Instead, the model projects where
+          hospital occupancy is expected to fall based on{' '}
+          <span className="footnote">
+            published times from symptom onset to hospitalization.
+          </span>{' '}
+          Hospitalized cases are not consistently reported by all states. When
+          reported, they have variable reporting delays, may not reflect all
+          hospital systems in a state, and usually only include cases with
+          confirmed positive tests (and not unconfirmed suspected cases).
+        </Paragraph>
+
+        <Paragraph>
+          We estimate the hospital capacity for Covid-19 patients by taking the
+          number of available beds and discounting for that hospital system’s
+          typical occupancy rate. Note that these hospitalization estimates do
+          not include patients who are admitted to the intensive care unit,
+          which is modeled separately below.
+        </Paragraph>
+      </WithCitation>
       <Graph
         domain={domain.hospitalized.currently}
         initialScale="log"

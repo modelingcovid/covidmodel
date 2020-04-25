@@ -42,8 +42,9 @@ export const Daily = ({width, height}) => {
       <Paragraph>
         The graph above shows the impact of the virus on a cumulative basis:
         this gives us a sense of overall impact, but doesn’t give us a good look
-        into the impact of the virus at a moment in time. We can take the data
-        above and instead of showing a total, show the change per day.
+        at the daily change in cases. While daily reports tend to fluctuate,
+        over time they indicate if there is an increase or decrease in viral
+        spread.
       </Paragraph>
       <Paragraph>
         The following graph compares
