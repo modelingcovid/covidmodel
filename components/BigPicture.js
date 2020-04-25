@@ -39,6 +39,7 @@ import {
   ModelStateProvider,
   useCreateModelState,
   useDistancingDate,
+  useExpected,
   useLocationData,
 } from './modeling';
 import {useContentRect} from './util';
@@ -63,11 +64,12 @@ const {useMemo, useRef} = React;
 function PercentCases() {
   const nearest = useNearestData();
   const {population, susceptible} = useLocationData();
+  const expected = useExpected();
   return (
     <InlineData>
       {() =>
         formatPercent1(
-          (population() - susceptible.expected.get(nearest())) / population()
+          (population() - expected(susceptible).get(nearest())) / population()
         )
       }
     </InlineData>

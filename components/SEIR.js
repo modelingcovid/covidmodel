@@ -16,6 +16,7 @@ import {Area, Graph, Line, WithGraphData, useNearestData} from './graph';
 import {
   CurrentDate,
   Estimation,
+  useExpected,
   useModelState,
   useLocationData,
 } from './modeling';
@@ -33,11 +34,12 @@ const {useMemo} = React;
 function PercentCases() {
   const nearest = useNearestData();
   const {population, susceptible} = useLocationData();
+  const expected = useExpected();
   return (
     <InlineData>
       {() =>
         formatPercent1(
-          (population() - susceptible.expected.get(nearest())) / population()
+          (population() - expected(susceptible).get(nearest())) / population()
         )
       }
     </InlineData>

@@ -16,6 +16,7 @@ import {Area, Graph, Line, WithGraphData, useNearestData} from '../graph';
 import {
   DistributionLegendRow,
   Estimation,
+  useExpected,
   useModelState,
   useLocationData,
 } from '../modeling';
@@ -24,6 +25,7 @@ import {stackAccessors} from '../../lib/stack';
 const {useMemo} = React;
 
 export function useSEIRConfig() {
+  const expected = useExpected();
   const {
     susceptible,
     cumulativeRecoveries,
@@ -87,10 +89,11 @@ export function useSEIRConfig() {
       return o;
     }, {});
 
-    const accessors = stackAccessors(config.map(({y}) => y.expected.get));
+    const accessors = stackAccessors(config.map(({y}) => expected(y).get));
     config.forEach((c, i) => (c.area = accessors[i]));
     return {byId, config, label};
   }, [
+    expected,
     susceptible,
     cumulativeRecoveries,
     currentlyInfected,

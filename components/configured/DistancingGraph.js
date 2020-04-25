@@ -8,7 +8,7 @@ import {
   WithGraphData,
   useXScale,
 } from '../graph';
-import {useLocationData} from '../modeling';
+import {useExpected, useLocationData} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
 import {formatPercent} from '../../lib/format';
@@ -23,6 +23,7 @@ export const DistancingGraph = ({
   height = 400,
   ...remaining
 }) => {
+  const expected = useExpected();
   const {distancing} = useLocationData();
   const xScale = useXScale();
   const todayOffset = xScale(today);
@@ -57,7 +58,7 @@ export const DistancingGraph = ({
                     />
                   </LinearGradient>
                   <Line
-                    y={distancing.expected.get}
+                    y={expected(distancing).get}
                     stroke={`url(#${gradientId})`}
                     strokeWidth={1.5}
                   />

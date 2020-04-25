@@ -14,7 +14,12 @@ import {
   WithCitation,
 } from './content';
 import {useNearestData} from './graph';
-import {Estimation, useLocationData, useModelState} from './modeling';
+import {
+  Estimation,
+  useExpected,
+  useLocationData,
+  useModelState,
+} from './modeling';
 import {formatPercent, formatPercent1} from '../lib/format';
 
 const {useState} = React;
@@ -22,12 +27,13 @@ const {useState} = React;
 function FatalityRate({asymptomaticRate}) {
   const nearest = useNearestData();
   const {cumulativeDeaths, cumulativeRecoveries} = useLocationData();
+  const expected = useExpected();
 
   return (
     <InlineData>
       {() => {
-        const deaths = cumulativeDeaths.expected.get(nearest());
-        const recoveries = cumulativeRecoveries.expected.get(nearest());
+        const deaths = expected(cumulativeDeaths).get(nearest());
+        const recoveries = expected(cumulativeRecoveries).get(nearest());
         const cohort = (deaths + recoveries) * (1 - asymptomaticRate);
         const rate = cohort ? deaths / cohort : 0;
         return formatPercent1(rate);
