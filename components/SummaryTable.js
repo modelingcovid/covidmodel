@@ -137,7 +137,7 @@ export function SummaryTableContents() {
   ];
 
   return (
-    <div className="margin-top-3 flow-root">
+    <div className="margin-top-5 flow-root">
       <style jsx>{styles}</style>
       <Title>Summary table</Title>
       <Paragraph>

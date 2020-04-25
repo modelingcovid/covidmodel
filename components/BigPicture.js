@@ -382,32 +382,28 @@ export function BigPicture({location}) {
             scrubber={false}
           />
         </ContainmentStrategyContext.Provider>
-        <WithCitation
-          citation={
-            <>
-              For test and trace to be viable, testing capacity must be high
-              enough to detect all new cases within a short time span. The model
-              allots ten days to detect new cases: five days for symptoms to
-              develop and five days until a test is reported.
-            </>
-          }
-        >
-          <Paragraph>
-            Data from{' '}
-            <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
-              South Korea
-            </a>{' '}
-            shows that with a “test and trace” strategy it’s possible to ease
-            distancing restrictions and still prevent exponential growth for a
-            period of time. Specifically, the data suggests that distancing
-            restrictions can be reduced when the number of{' '}
-            <span className="footnote">new cases per day</span> falls below two
-            cases per million people. To keep the virus contained, data suggests
-            that for every 100 tests performed, only one should come back
-            positive and 80% of positive tests should be able to be traced back
-            to another known case.
-          </Paragraph>
-        </WithCitation>
+        {/* Citation for "new cases per day" if we use a delay in the model:
+        <>
+          For test and trace to be viable, testing capacity must be high
+          enough to detect all new cases within a short time span. The model
+          allots ten days to detect new cases: five days for symptoms to
+          develop and five days until a test is reported.
+        </>
+        */}
+        <Paragraph>
+          Data from{' '}
+          <a href="https://www.medrxiv.org/content/10.1101/2020.03.19.20039347v1.full.pdf">
+            South Korea
+          </a>{' '}
+          shows that with a “test and trace” strategy it’s possible to ease
+          distancing restrictions and still prevent exponential growth for a
+          period of time. Specifically, the data suggests that distancing
+          restrictions can be reduced when the number of new cases per day falls
+          below two cases per million people. To keep the virus contained, data
+          suggests that for every 100 tests performed, only one should come back
+          positive and 80% of positive tests should be able to be traced back to
+          another known case.
+        </Paragraph>
       </div>
     </ModelStateProvider>
   );

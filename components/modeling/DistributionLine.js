@@ -7,7 +7,7 @@ import {useComponentId} from '../util';
 
 export function DistributionLineContents({
   y,
-  color = 'var(--color-blue2)',
+  color,
   curve,
   gradient = false,
   points = true,
@@ -81,8 +81,8 @@ export function DistributionLineContents({
   );
 }
 
-export function DistributionLine(props) {
-  const {color, points, y} = props;
+export function DistributionLine({points = true, ...props}) {
+  const {color, y} = props;
   return (
     <>
       <ContainmentSplit>
