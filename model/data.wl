@@ -1,5 +1,8 @@
 (* ::Package:: *)
 
+(* This module gathers data from various sources via API calls and then parses them *)
+(* into the formats required by the model *)
+
 SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 
 (* Utils *)
@@ -75,9 +78,7 @@ countryVentilators = Association[{"United States"->61929,"France"->5000,"Italy"-
 countryImportTime=Association[{"United States"->62,"France"->55,"Italy"->45,"Spain"->53}];
 
 ItalyPopulation=60.48*10^6;
-
 FrancePopulation = 66.99*10^6;
-
 SpainPopulation=46.66*10^6;
 
 usData = Append[#, "day" ->
@@ -495,6 +496,9 @@ usStateDistancingPrecompute = Module[{
   Association[MapThread[processState, {stateLabels, stateDistancings}]]
 ];
 
+(* for convenience we pre-compute the most recent day of distancing data to be rendered on the front end *)
+mostRecentDistancingDay = usStateDistancingPrecompute["CA"]["scenario1"]["mostRecentDistancingDay"];
+
 
 stateDistancingPrecompute = Merge[{countryDistancingPrecompute,usStateDistancingPrecompute},First];
 
@@ -550,3 +554,23 @@ fit["ParameterTable"] /. Grid[array_, options___] :> Module[{a = array},
           fit["ANOVATableDegreesOfFreedom"][[2]], TwoSided -> True]]}, {1}];
   Grid[a, options]
 ]
+
+
+(* TODO:: re-incorporate to validate assumed parameters *)
+countryParams[country_, pCLimit_,pHLimit_,medianHospitalizationAge_,ageCriticalDependence_,ageHospitalizedDependence_] :=
+Module[{raw,pop,dist,buckets},
+  raw = cachedAgeDistributionFor[country];
+  pop = raw["Population"];
+  dist = raw["Distribution"];
+  buckets = raw["Buckets"];
+
+  (*return a map of per state params to values *)
+  <|
+    "population"->pop,
+    "importtime0"->countryImportTime[country],
+    "ventilators"->countryVentilators[country],
+    "pS"->Sum[noCare[a, medianHospitalizationAge, pCLimit,pHLimit,ageCriticalDependence,ageHospitalizedDependence ]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+    "pH"->Sum[infectedHospitalized[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
+    "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]
+  |>
+];
