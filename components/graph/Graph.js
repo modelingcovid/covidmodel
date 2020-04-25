@@ -31,6 +31,7 @@ export const GraphContents = React.memo(function Graph({
   tickFormat = formatLargeNumber,
   controls = false,
   decoration = true,
+  distancing = true,
   frameless = false,
   scrubber = true,
   nice = true,
@@ -112,7 +113,7 @@ export const GraphContents = React.memo(function Graph({
             <g pointerEvents="none">
               {decoration && (
                 <>
-                  <DistancingOverlay />
+                  {distancing && <DistancingOverlay />}
                   <GridRows
                     scale={yScale}
                     width={xMax}

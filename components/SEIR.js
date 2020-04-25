@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {theme} from '../styles';
-import {SEIRGraph, SEIRGutter, useSEIRConfig} from './configured';
+import {SEIRGraph, SEIRGutter, SEIRSummary, useSEIRConfig} from './configured';
 import {
   Grid,
   Gutter,
@@ -61,46 +61,7 @@ export function SEIR({height, width}) {
         <strong>compartmental model</strong>, which estimates the spread of a
         virus by dividing the population into different groups:
       </Paragraph>
-      <UnorderedList className="list-style-none">
-        <ListItem>
-          <InlineLabel list {...label.susceptible}>
-            Susceptible people
-          </InlineLabel>{' '}
-          are healthy and at risk for contracting Covid-19.
-        </ListItem>
-        <ListItem>
-          <InlineLabel list {...label.exposed}>
-            Exposed people
-          </InlineLabel>{' '}
-          have Covid-19 and are in the incubation period; they cannot infect
-          others.
-        </ListItem>
-        <ListItem>
-          <InlineLabel list {...label.infectious}>
-            Infectious people
-          </InlineLabel>{' '}
-          have Covid-19 and can infect others.
-        </ListItem>
-        <ListItem>
-          <InlineLabel list {...label.hospitalized}>
-            Hospitalized people
-          </InlineLabel>{' '}
-          are currently in the hospital or ICU; the model assumes they cannot
-          infect others.
-        </ListItem>
-        <ListItem>
-          <InlineLabel list {...label.recovered}>
-            Recovered people
-          </InlineLabel>{' '}
-          have had Covid-19 and are immune to re-infection.
-        </ListItem>
-        <ListItem>
-          <InlineLabel list {...label.deceased}>
-            Deceased people
-          </InlineLabel>{' '}
-          have passed away due to Covid-19.
-        </ListItem>
-      </UnorderedList>
+      <SEIRSummary />
       <div className="relative">
         <div
           style={{

@@ -99,11 +99,6 @@ export function ModelInputs({height, width, ...remaining}) {
           width="80%"
         />
       </Gutter>
-      <Instruction>
-        <strong>Reading the graph:</strong> The background of the graph
-        corresponds to the amount of social distancing at a given time. This is
-        also included on later graphs.
-      </Instruction>
 
       <Paragraph>
         We use the data available to us — location demographics, reported

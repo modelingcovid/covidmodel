@@ -42,6 +42,7 @@ export const DistancingGraph = ({
       {...remaining}
       height={height}
       width={width}
+      distancing={false}
     >
       {({xMax}) => {
         return (

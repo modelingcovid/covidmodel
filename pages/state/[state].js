@@ -52,7 +52,7 @@ export default function StatePage() {
   const {
     query: {state},
   } = useRouter();
-  const [scenario, setScenario] = useState('scenario2');
+  const [scenario, setScenario] = useState('scenario1');
 
   const {ref: sizeRef, width, height} = useGraphSize();
 
