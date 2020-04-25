@@ -82,7 +82,7 @@ testTraceNewCaseThreshold0=2*10^-6;
 fractionSymptomatic0 = 0.7;
 
 (* Set heterogeneous susceptibility using lognormal function with bins of constant population size *)
-susceptibilityBins=5;
+susceptibilityBins=10;
 susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
   m=-stdDev^2/2;
   s=Sqrt[Log[stdDev^2+1]];
@@ -264,14 +264,17 @@ generateModelComponents[distancing_] := <|
       (**** Enriched SEIR model section ****)
       (* Do not include test figures or reporting-only totals in this section *)
 
+
+(*If[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], 1, distancing[t]^distpow * r0natural]*)
+
       (* susceptible, binned by susceptibility; the sum of all sSq[i]'s would be Sq, the full susceptible population *)
       Table[
-        sSq[i]'[t]==If[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], 1, distancing[t]^distpow * r0natural] *
+        sSq[i]'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
         (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
         {i, 1, susceptibilityBins}],
 
       (* Exposed *)
-      Eq'[t]==If[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], 1, distancing[t]^distpow * r0natural] *
+      Eq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
       Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
 
       (*Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed; age independent *)
@@ -302,7 +305,7 @@ generateModelComponents[distancing_] := <|
       (* Do include quantities to measure testing rates, cumulative reporting-only counts, etc. in this section *)
 
       (* Cumulative exposed *)
-      cumEq'[t]==If[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], 1, distancing[t]^distpow * r0natural] * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+      cumEq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -321,39 +324,42 @@ generateModelComponents[distancing_] := <|
       RepDeaICUq'[t]==testingProbability[t] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (* establishment *)
-      est'[t]==0
+      est'[t]==0,
+      
+      (* test and trace tracker *)
+      testAndTraceDelayCounter'[t] == If[testAndTraceDelayCounter[t] > 0, 1, 0]
       }],
 
   "simulationEvents" -> {
-    (*WhenEvent[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], testingAndTracingIsActive[t]\[Rule]1],*)
-    WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7,Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
-    WhenEvent[CCq[t]>=icuCapacity,Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
-    WhenEvent[HHq[t]>=hospitalCapacity,Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
-    WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
-    WhenEvent[t>importtime+importlength,est[t]->0](*,
-    WhenEvent[!And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today],reff[t]->distancing[t]^distpow * r0natural],
-    WhenEvent[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today],reff[t]\[Rule]1,"RestartIntegration"]*)
-    },
+    WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
+    WhenEvent[CCq[t]>=icuCapacity, Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
+    WhenEvent[HHq[t]>=hospitalCapacity, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
+    WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
+    WhenEvent[t>importtime+importlength, est[t]->0],
+    WhenEvent[
+      cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1,
+      {testAndTraceDelayCounter[t]->1, "RemoveEvent"},
+      DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False]
+  },
 
   "parametricFitEvents" -> {
-    (*WhenEvent[And[testAndTrace==1, cumEq[t-testTraceExposedDelay0] - cumEq[t-1-testTraceExposedDelay0] < testTraceNewCaseThreshold0, t > today], testingAndTracingIsActive[t]\[Rule]1],*)
-    WhenEvent[t>=importtime,est[t]->Exp[-initialInfectionImpulse]],
-    WhenEvent[t>importtime+importlength0,est[t]->0]
+    WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
+    WhenEvent[t>importtime+importlength0, est[t]->0]
   },
 
   "initialConditions" -> Flatten[{
       Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
       Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
       RepHq[tmin0]==0,RepHCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
-      Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,(*testingAndTracingIsActive[tmin0]\[Equal]0,*)PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
+      Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,testAndTraceDelayCounter[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
 
   "outputFunctions" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est,(* testingAndTracingIsActive,*) cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
 
   "dependentVariables" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
       
   "discreteVariables" -> {},
 
@@ -431,7 +437,7 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
         {t,tmin0,tmax},
         parameters,
         DependentVariables->dependentVariables,
-        DiscreteVariables->discreteVariables,
+        DiscreteVariables->{},
         Method->{"DiscontinuityProcessing"->False}
       ];
 
@@ -441,11 +447,6 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
       |>
 
   ]}&/@scenarios];
-
-
-modelPrecompute = Association[{#->getModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
-
-simModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
 
 
 integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
@@ -512,8 +513,6 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
     soln
   },
 
-  (*{time, soln} = AbsoluteTiming[Apply[parameterizedSolution, simulationParameters]];*)
-  (*Echo[time];*)
   {outputSolution, outputEvents} = Reap[
     Apply[parameterizedSolution, simulationParameters],
     {"containment","herd","icu","hospital","cutoff"},
@@ -639,6 +638,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
 
+  Echo[Plot[soltt[testAndTraceDelayCounter][t],{t,1,365}, ImageSize->250]];
+  Echo[Plot[{soltt[cumEq]'[t], testTraceNewCaseThreshold0},{t,1,365}, ImageSize->500]];
+  
   aug1 = 214;
   endOfYear = 730;
   endOfEval = endOfYear;
@@ -680,11 +682,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CumulativeReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t]&] * population;
   CumulativeReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t]&] * population;
 
-  DailyPCRQuantiles[t_] := simDeciles[#[PCR][t] - #[PCR][t-1]&] * population;
-  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
-  DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
-  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t] - #[RepDeaq][t-1]&] * population;
-  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t] - #[RepDeaICUq][t-1]&] * population;
+  DailyPCRQuantiles[t_] := simDeciles[#[PCR]'[t]&] * population;
+  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq]'[t]&] * population;
+  DailyDeathQuantiles[t_] := simDeciles[#[Deaq]'[t]&] * population;
+  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq]'[t]&] * population;
+  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq]'[t]&] * population;
 
   (* TODO: Let's discuss these quantities *)
   CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*#[HHq][t],(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
@@ -698,11 +700,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
           "day"->t,
           "distancing"-><|
             "expected"->distancing[t],
-            "expectedTestTrace"->If[(soltt[cumEq][t-testTraceExposedDelay0]-soltt[cumEq][t-1-testTraceExposedDelay0])<testTraceNewCaseThreshold0 && t>today, 0.8, distancing[t]]
+            "expectedTestTrace"->If[soltt[testAndTraceDelayCounter][t] > testTraceExposedDelay0, 1, distancing[t]]
           |>,
           "rt"-><|
             "expected"->distancing[t]^fitParams["distpow"]*fitParams["r0natural"]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}],
-            "expectedTestTrace"->If[(soltt[cumEq][t-testTraceExposedDelay0]-soltt[cumEq][t-1-testTraceExposedDelay0])<testTraceNewCaseThreshold0 && t>today, 1, distancing[t]^fitParams["distpow"] * fitParams["r0natural"]]*Sum[susceptibilityValues[[i]]*soltt[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}]
+            "expectedTestTrace"->If[soltt[testAndTraceDelayCounter][t] > testTraceExposedDelay0, 1, distancing[t]^fitParams["distpow"] * fitParams["r0natural"]]*Sum[susceptibilityValues[[i]]*soltt[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}]
           |>,
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"],
           "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7],
@@ -960,8 +962,13 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     deathDataLength,
     output,
     paramExpected,
-    fittime
+    fittime,
+    parametricSolution,
+    evaluateSolution
   },
+
+  modelPrecompute = <|state->getModelComponentsForState[state]|>;
+  simModelPrecompute = <|state->getSimModelComponentsForState[state]|>;
 
   modelComponents = modelPrecompute[state]["scenario1"];
 
@@ -984,8 +991,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   discreteVariablesODE = modelComponents["discreteVariables"];
   parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
 
-  outputODE = {RepDeaq, PCR, Deaq, sSq[1], sSq[2], sSq[3], sSq[4], sSq[5], ISq, ICq, IHq, RSq, RHq, RCq, HHq, HCq, CCq, Eq};
-  {RepDeaqParametric,PCRParametric,DeaqParametric, sSq1Parametric, sSq2Parametric, sSq3Parametric, sSq4Parametric, sSq5Parametric, ISqParametric, ICqParametric, IHqParametric, RSqParametric, RHqParametric, RCqParametric, HHqParametric, HCqParametric, CCqParametric, EqParametric}= {RepDeaq, PCR, Deaq, sSq[1], sSq[2], sSq[3], sSq[4], sSq[5], ISq, ICq, IHq, RSq, RHq, RCq, HHq, HCq, CCq, Eq}/.ParametricNDSolve[
+  outputODE = {RepDeaq, PCR};
+  parametricSolution = ParametricNDSolve[
     {equationsODE, eventsODE, initialConditions},
     outputODE,
     {t,tmin0,tmax0},
@@ -994,6 +1001,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     DiscreteVariables->discreteVariablesODE,
     Method->{"DiscontinuityProcessing"->False}
   ];
+  evaluateSolution[f_]:=f/.parametricSolution;
 
   {rlower, rupper, tlower, tupper, replower, repupper, powlower, powupper}=getBounds[state];
 
@@ -1006,8 +1014,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   deathDataLength=Length[Select[longData,#[[1]]==1&]];
 
   model[r0natural_,importtime_,stateAdjustmentForTestingDifferences_,distpow_,c_][t_]:=Piecewise[{
-      {DeaqParametric[r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t],c==1},
-      {PCRParametric[r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t] ,c==2}
+      {evaluateSolution[RepDeaq][r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t],c==1},
+      {evaluateSolution[PCR][r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t] ,c==2}
   }];
 
   (* Weight death and PCR test data appropriatly. Factors include: *)
@@ -1021,8 +1029,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     poissonWeight * weekOverWeekWeight[.85] * boostDeathWeight[3]
   ];
 
-  (* the fitting function tries t=0 even though we start on t=1, quiet is to avoid annoying warning that isn't helpful *)
-  fit=Quiet[NonlinearModelFit[
+  fit=NonlinearModelFit[
       longData,
       {
         model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
@@ -1038,9 +1045,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
         {distpow, 1.8}
       },{c,t},
       Method->{"NMinimize",Method->{"SimulatedAnnealing", "RandomSeed"->111}},
-      Weights->dataWeights(*,
-      EvaluationMonitor :> Print["r0natural=", Exp[r0natural], ".    importtime=", Exp[importtime], ".    stateAdjustmentForTestingDifferences=", Exp[stateAdjustmentForTestingDifferences]]*)
-    ], {InterpolatingFunction::dmval}
+      Weights->dataWeights
   ];
 
   fitParams=Exp[#]&/@KeyMap[ToString[#]&, Association[fit["BestFitParameters"]]];
@@ -1048,8 +1053,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* quiet because of constraint boundary warning -- we have constraints so as to prevent certain local minima from happening
 	in the SimulatedAnnealing global search, but intentionally choose vallues of the constraint boundary so that the fit is unlikely to run into the boundary
 	and thus we feel okay about using the variance estimates *)
-  standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
-          fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
+  standardErrors=Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
+          fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}];
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
 
   Echo[gofMetrics];
@@ -1061,12 +1066,12 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
             Show[
               ListLogPlot[Cases[longData,{#, t_,c_}:>{t,c}]&/@{1,2},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
               LogPlot[{
-                  RepDeaqParametric[Log[fitParams["r0natural"]],
+                  evaluateSolution[RepDeaq][Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
                   ][t],
-                  PCRParametric[
+                  evaluateSolution[PCR][
                     Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
@@ -1282,96 +1287,4 @@ Module[{raw,pop,dist,buckets},
     "pH"->Sum[infectedHospitalized[a]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}],
     "pC"->Sum[infectedCritical[a, medianHospitalizationAge, pCLimit,ageCriticalDependence]*dist[[Position[dist,a][[1]][[1]]]][[2]],{a,buckets}]
   |>
-];
-
-(* helper to check that the parameter dists are centered *)
-(*Echo[(Mean[#]&/@Transpose[sims] - paramExpected)//N];*)
-
-
-
-
-
-fitManipulate[state_:"OH"] := Module[{params, distancing, modelComponents, logTransform, equationsODE, eventsODE, initialConditions, dependentVariablesODE, parameters,
-    outputODE, thisStateData, hospitalizationCumulativeData, icuCumulativeData, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
-  params=stateParams[state];
-  distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
-  modelComponents = generateModelComponents[distancing];
-  logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
-  equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
-  eventsODE = modelComponents["parametricFitEvents"]/.logTransform;
-  initialConditions = modelComponents["initialConditions"];
-  dependentVariablesODE = modelComponents["dependentVariables"];
-  parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
-
-  outputODE = {Deaq, PCR, RepHq};
-  {DeaqParametric,PCRParametric,  RepHqParametric}= {Deaq, PCR, RepHq}/.ParametricNDSolve[
-    {equationsODE, eventsODE, initialConditions},
-    outputODE,
-    {t,tmin0,tmax0},
-    parameters,
-    DependentVariables->dependentVariablesODE,
-    Method->{"DiscontinuityProcessing"->False}
-  ];
-
-  thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
-  hospitalizationCumulativeData = stateHospitalizationCumulativeActualsData[state];
-  icuCumulativeData = stateICUCumulativeActualsData[state];
-
-  longData=Select[Join[
-      {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
-      {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData,
-      {3,#["day"],#["hospitalizations"]/params["population"]}&/@hospitalizationCumulativeData],#[[3]]>0&]
-  ;
-
-  Manipulate[Show[
-      ListLogPlot[Cases[longData,{#,t_,c_}:>{t,c}]&/@{1,2,3},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
-      LogPlot[{
-          DeaqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-          PCRParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-          RepHqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t-daysForHospitalsToReportCases]
-        },{t,40,150},ImageSize->500]
-    ],{{r0,3.645},2,5},{{t0,65},35,70},{{adj,0.38},0,2},{{distpow,2},1.5,2},{{daysForHospitalsToReportCases,1.5},1,10}]
-];
-
-
-fitManipulateCurrent[state_:"TX"] := Module[
-  {params, distancing, modelComponents, logTransform, equationsODE, eventsODE, initialConditions, dependentVariablesODE, parameters,
-    outputODE, thisStateData, hospitalizationCurrentData, icuCumulativeData, HHqParametric, longData, DeaqParametric, PCRParametric, RepHqParametric, RepHCqParametric},
-  params=stateParams[state];
-  distancing = stateDistancingPrecompute[state]["scenario1"]["distancingFunction"];
-  modelComponents = generateModelComponents[distancing];
-  logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
-  equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
-  eventsODE = modelComponents["parametricFitEvents"]/.logTransform;
-  initialConditions = modelComponents["initialConditions"];
-  dependentVariablesODE = modelComponents["dependentVariables"];
-  parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
-
-  outputODE = {Deaq, PCR, HHq};
-  {DeaqParametric,PCRParametric,  HHqParametric}= {Deaq, PCR, HHq}/.ParametricNDSolve[
-    {equationsODE, eventsODE, initialConditions},
-    outputODE,
-    {t,tmin0,tmax0},
-    parameters,
-    DependentVariables->dependentVariablesODE,
-    Method->{"DiscontinuityProcessing"->False}
-  ];
-
-  thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>0)&];
-  hospitalizationCurrentData = stateHospitalizationCurrentActualsData[state];
-  icuCumulativeData = stateICUCumulativeActualsData[state];
-
-  longData=Select[Join[
-      {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
-      {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData,
-      {3,#["day"],#["hospitalizations"]/params["population"]}&/@hospitalizationCurrentData],#[[3]]>0&];
-
-  Manipulate[Show[
-      ListLogPlot[Cases[longData,{#,t_,c_}:>{t,c}]&/@{1,2,3},ImageSize->500,PlotRange->{{40,150},{0,Automatic}}],
-      LogPlot[{
-          DeaqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-          PCRParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t],
-          HHqParametric[Log[r0],Log[t0],Log[adj],Log[distpow]][t-daysForHospitalsToReportCases]
-        },{t,40,150},ImageSize->500]
-    ],{{r0,3.645},2,5},{{t0,65},35,70},{{adj,0.38},0,2},{{distpow,2},1.5,2},{{daysForHospitalsToReportCases,1.5},1,10}]
 ];
