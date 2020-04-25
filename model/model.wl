@@ -280,7 +280,7 @@ generateModelComponents[distancing_] := <|
     (* test and trace becomes viable event when the rate of new infections falls below the threshold *)
     WhenEvent[
       cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5,
-      {testAndTraceDelayCounter[t]->1, Sow[{t,cumEq[t]}, "containment"], "RemoveEvent"},
+      {testAndTraceDelayCounter[t]->0.01, Sow[{t, cumEq[t]}, "containment"], "RemoveEvent"},
       DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False]
   },
 
@@ -598,8 +598,6 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   (* generate solutions for both the expectation values with and without test and trace *)
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
-  
-  Echo[Plot[{sol[cumEq]'[t], soltt[cumEq]'[t], testTraceNewCaseThreshold0}, {t, 150, 200}, ImageSize->500, PlotStyle->{{},{Dashed},{}}]];
   
   (* set up dates for simulation / reporting *)
   aug1 = 214;
