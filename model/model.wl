@@ -699,7 +699,6 @@ getBounds[state_]:=Module[{},
 (* and at the end it returns a large object containing all the time series for the fitted / simulated model as well as summary statistics *)
 Clear[equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric];
 evaluateState[state_, numberOfSimulations_:100]:= Module[{
-    (*distancing,*)
     modelComponents,
     params,
     percentPositiveCase,
