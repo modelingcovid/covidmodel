@@ -3,7 +3,7 @@
 (** Model parameters. See https://docs.google.com/spreadsheets/d/1DH58EFf_YkWHa_zn8-onBGzsYFMamjSjOItr137vu9g/edit#gid=0 **)
 SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 
-(*Import["model/data.wl"];*)
+Import["model/data.wl"];
 Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
@@ -269,12 +269,12 @@ generateModelComponents[distancing_] := <|
 
       (* susceptible, binned by susceptibility; the sum of all sSq[i]'s would be Sq, the full susceptible population *)
       Table[
-        sSq[i]'[t]==distancing[t]^distpow * r0natural *
+        sSq[i]'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
         (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
         {i, 1, susceptibilityBins}],
 
       (* Exposed *)
-      Eq'[t]==distancing[t]^distpow * r0natural *
+      Eq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
       Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
 
       (*Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed; age independent *)
@@ -305,7 +305,7 @@ generateModelComponents[distancing_] := <|
       (* Do include quantities to measure testing rates, cumulative reporting-only counts, etc. in this section *)
 
       (* Cumulative exposed *)
-      cumEq'[t]==distancing[t]^distpow * r0natural * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+      cumEq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -327,7 +327,7 @@ generateModelComponents[distancing_] := <|
       est'[t]==0,
       
       (* test and trace tracker *)
-      testAndTraceDelayCounter'[t] == 0
+      testAndTraceDelayCounter'[t] == If[testAndTraceDelayCounter[t] > 0, 1, 0]
       }],
 
   "simulationEvents" -> {
@@ -336,7 +336,10 @@ generateModelComponents[distancing_] := <|
     WhenEvent[HHq[t]>=hospitalCapacity, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
     WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength, est[t]->0],
-    WhenEvent[t>today, testAndTraceDelayCounter[t]->.1]
+    WhenEvent[
+      cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1,
+      {testAndTraceDelayCounter[t]->1, "RemoveEvent"},
+      DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False]
   },
 
   "parametricFitEvents" -> {
@@ -444,11 +447,6 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
       |>
 
   ]}&/@scenarios];
-
-
-modelPrecompute = Association[{#->getModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
-
-simModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@Keys[fitStartingOverrides]];
 
 
 integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
@@ -640,8 +638,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
 
-  Echo[Plot[soltt[testAndTraceDelayCounter][t],{t,1,150}, ImageSize->250]];
-
+  Echo[Plot[soltt[testAndTraceDelayCounter][t],{t,1,365}, ImageSize->250]];
+  Echo[Plot[{soltt[cumEq]'[t], testTraceNewCaseThreshold0},{t,1,365}, ImageSize->500]];
+  
   aug1 = 214;
   endOfYear = 730;
   endOfEval = endOfYear;
@@ -683,11 +682,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   CumulativeReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t]&] * population;
   CumulativeReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t]&] * population;
 
-  DailyPCRQuantiles[t_] := simDeciles[#[PCR][t] - #[PCR][t-1]&] * population;
-  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
-  DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
-  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t] - #[RepDeaq][t-1]&] * population;
-  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t] - #[RepDeaICUq][t-1]&] * population;
+  DailyPCRQuantiles[t_] := simDeciles[#[PCR]'[t]&] * population;
+  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq]'[t]&] * population;
+  DailyDeathQuantiles[t_] := simDeciles[#[Deaq]'[t]&] * population;
+  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq]'[t]&] * population;
+  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq]'[t]&] * population;
 
   (* TODO: Let's discuss these quantities *)
   CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*#[HHq][t],(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
@@ -701,11 +700,11 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
           "day"->t,
           "distancing"-><|
             "expected"->distancing[t],
-            "expectedTestTrace"->If[(soltt[cumEq][t-testTraceExposedDelay0]-soltt[cumEq][t-1-testTraceExposedDelay0])<testTraceNewCaseThreshold0 && t>today, 0.8, distancing[t]]
+            "expectedTestTrace"->If[soltt[testAndTraceDelayCounter][t] > testTraceExposedDelay0, 1, distancing[t]]
           |>,
           "rt"-><|
             "expected"->distancing[t]^fitParams["distpow"]*fitParams["r0natural"]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}],
-            "expectedTestTrace"->If[(soltt[cumEq][t-testTraceExposedDelay0]-soltt[cumEq][t-1-testTraceExposedDelay0])<testTraceNewCaseThreshold0 && t>today, 1, distancing[t]^fitParams["distpow"] * fitParams["r0natural"]]*Sum[susceptibilityValues[[i]]*soltt[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}]
+            "expectedTestTrace"->If[soltt[testAndTraceDelayCounter][t] > testTraceExposedDelay0, 1, distancing[t]^fitParams["distpow"] * fitParams["r0natural"]]*Sum[susceptibilityValues[[i]]*soltt[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}]
           |>,
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"],
           "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7],
@@ -968,6 +967,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     evaluateSolution
   },
 
+  modelPrecompute = <|state->getModelComponentsForState[state]|>;
+  simModelPrecompute = <|state->getSimModelComponentsForState[state]|>;
+
   modelComponents = modelPrecompute[state]["scenario1"];
 
   percentPositiveCase[t_]:=posInterpMap[state][t];
@@ -1051,8 +1053,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* quiet because of constraint boundary warning -- we have constraints so as to prevent certain local minima from happening
 	in the SimulatedAnnealing global search, but intentionally choose vallues of the constraint boundary so that the fit is unlikely to run into the boundary
 	and thus we feel okay about using the variance estimates *)
-  standardErrors=Quiet[Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
-          fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}], {InterpolatingFunction::dmval}];
+  standardErrors=Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
+          fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}];
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
 
   Echo[gofMetrics];
