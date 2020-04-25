@@ -130,7 +130,7 @@ endTime[ifun_]:=Part[ifun["Domain"],1,-1];
 
 
 
-generateTimeSeries[state_,scenario_,sol_,soltt_,simResults_,fitParams_,population_,endOfEval_]:=Module[{
+generateTimeSeries[state_,scenario_,sol_,soltt_,simResults_,fitParams_,stateParams_,population_,endOfEval_]:=Module[{
     simDeciles,
     CumulativeCriticalQuantiles,
     CumulativeHospitalizedQuantiles,
@@ -367,17 +367,17 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
               |>,
               percentileMap[CurrentlyCriticalQuantiles[t]]
             }, First]
-      }], {t, Floor[fitParams["importtime"]] - 5, endOfEval}]     
+      }], {t, Floor[fitParams["importtime"]] - 5, endOfEval}] 
 ];
 
 
-generateSummaries[events_,sol_,population_,timeSeriesData_,endOfEval_,endOfEvalAug1_]:=Module[{hasContainment, hasHospitalOverload, hasIcuOverload, containmentTime, hospitalOverloadTime, icuOverloadTime},
+generateSummaries[events_,eventstt_,sol_,population_,timeSeriesData_,endOfEval_,endOfEvalAug1_]:=Module[{hasContainment, hasHospitalOverload, hasIcuOverload, containmentTime, hospitalOverloadTime, icuOverloadTime},
   (* define events / helpers for reporting, eg when we exceed capacity *)
-  hasContainment = KeyExistsQ[events, "containment"];
+  hasContainment = KeyExistsQ[eventstt, "containment"];
   hasHospitalOverload = KeyExistsQ[events, "hospital"];
   hasIcuOverload = KeyExistsQ[events, "icu"];
 
-  containmentTime = If[hasContainment,events["containment"]["day"]];
+  containmentTime = If[hasContainment,eventstt["containment"]["day"]];
   hospitalOverloadTime = If[hasHospitalOverload,events["hospital"]["day"]];
   icuOverloadTime = If[hasIcuOverload,events["icu"]["day"]];
 
@@ -401,7 +401,9 @@ generateSummaries[events_,sol_,population_,timeSeriesData_,endOfEval_,endOfEvalA
         "fractionOfDeathInICU"->(sol[RepDeaICUq][t]) / (sol[RepDeaq][t]),
         "fractionDeathOfHospitalizedOrICU"->((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]))*(fractionOfCriticalDeceased0 + (1 - ((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t])))*fractionOfHospitalizedNonCriticalDeceased0/((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]))),
         "fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
-        "dateContained"->DateString[DatePlus[{2020,1,1},Select[{#["day"], #["dailyPcr"]["expected"]/population}&/@timeSeriesData,#[[1]]>today&&#[[2]]<2/1000000&][[1]][[1]]-1]],
+        "dateContained"->If[!TrueQ[containmentTime == Null],
+          DateString[DatePlus[{2020,1,1},containmentTime-1]],
+          ""],
         "dateICUOverCapacity"->If[!TrueQ[icuOverloadTime == Null],
           DateString[DatePlus[{2020,1,1},icuOverloadTime-1]],
           ""],

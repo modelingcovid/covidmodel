@@ -263,8 +263,8 @@ generateModelComponents[distancing_] := <|
     WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength, est[t]->0],
     WhenEvent[
-      cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && RSq[t]+RSq[t]+RCq[t]<=0.5,
-      {testAndTraceDelayCounter[t]->1, "RemoveEvent"},
+      cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5,
+      {testAndTraceDelayCounter[t]->1, Sow[{t,cumEq[t]}, "containment"], "RemoveEvent"},
       DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False]
   },
 
@@ -609,8 +609,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   simResults=Select[rawSimResults, endTime[#[Sq]]>=endOfEval&];
 
   (* organize the simulation / expectation outputs into a time series array *)
-  timeSeriesData=generateTimeSeries[state,scenario,sol,soltt,simResults,fitParams,population,endOfEval];
-  {summary, summaryAug1}=generateSummaries[events,sol,population,timeSeriesData,endOfEval,endOfEvalAug1];
+  timeSeriesData=generateTimeSeries[state,scenario,sol,soltt,simResults,fitParams,stateParams,population,endOfEval];
+  {summary, summaryAug1}=generateSummaries[events,eventstt,sol,population,timeSeriesData,endOfEval,endOfEvalAug1];
 
   (* gather all the data we've generated for exporting *)
   Merge[{
