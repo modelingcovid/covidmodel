@@ -20,22 +20,22 @@
 "initialInfectionImpulse":1.3890e1,
 "r0":4.7164,
 "importtime":5.2806e1,
-"numberOfSimulations":100,
-"dateModelRun":"Fri 24 Apr 2020 21:04:41",
+"numberOfSimulations":10,
+"dateModelRun":"Sat 25 Apr 2020 10:51:10",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.3500,
 "distpow":1.8077,
 "goodnessOfFitMetrics":{
-"chiSquared":7.4182e-5,
-"rmsRelativeError":1.3644,
-"rmsRelativeErrorDeaths":1.5527,
-"rmsRelativeErrorPcr":1.1584,
-"meanRelativeErrorDeaths":-1.0399,
-"meanRelativeErrorPcr":-0.5359,
-"rSquaredDeaths":3.6704e-2,
-"rSquaredPcr":4.4457e-2,
+"chiSquared":7.3333e-5,
+"rmsRelativeError":1.3459,
+"rmsRelativeErrorDeaths":1.5311,
+"rmsRelativeErrorPcr":1.1432,
+"meanRelativeErrorDeaths":-1.0082,
+"meanRelativeErrorPcr":-0.5189,
+"rSquaredDeaths":3.3882e-2,
+"rSquaredPcr":4.2647e-2,
 "deathResidual7Day":-1.1413e1,
-"pcrResidual7Day":-2.4035e2
+"pcrResidual7Day":-2.4036e2
 },
 "parameters":{
 "r0":{
@@ -192,19 +192,13 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
 }
 },
 "scenarios":[
-"scenario5",
-"scenario1",
-"scenario2",
-"scenario3",
-"scenario4",
-"scenario6",
-"scenario7"
+"scenario1"
 ]
 }

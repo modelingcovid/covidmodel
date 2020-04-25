@@ -1,8 +1,8 @@
 {
 "parameterBest":{
-"r0natural":3.0468,
-"importtime":5.0685e1,
-"stateAdjustmentForTestingDifferences":0.6408,
+"r0natural":3.0462,
+"importtime":5.0690e1,
+"stateAdjustmentForTestingDifferences":0.6407,
 "distpow":1.6601
 },
 "population":2986220,
@@ -18,28 +18,28 @@
 "pPCRH":0.7751,
 "fractionOfCriticalDeceased":0.3799,
 "initialInfectionImpulse":1.3705e1,
-"r0":3.0468,
-"importtime":5.0685e1,
-"numberOfSimulations":100,
-"dateModelRun":"Fri 24 Apr 2020 21:01:56",
+"r0":3.0462,
+"importtime":5.0690e1,
+"numberOfSimulations":10,
+"dateModelRun":"Sat 25 Apr 2020 10:51:03",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.6408,
+"stateAdjustmentForTestingDifferences":0.6407,
 "distpow":1.6601,
 "goodnessOfFitMetrics":{
-"chiSquared":5.3946e-6,
-"rmsRelativeError":0.1636,
-"rmsRelativeErrorDeaths":0.1519,
-"rmsRelativeErrorPcr":0.1728,
-"meanRelativeErrorDeaths":5.0152e-2,
-"meanRelativeErrorPcr":0.1038,
-"rSquaredDeaths":2.3532e-2,
-"rSquaredPcr":2.1326e-2,
-"deathResidual7Day":-2.8428,
-"pcrResidual7Day":-4.0831e1
+"chiSquared":5.5255e-6,
+"rmsRelativeError":0.1625,
+"rmsRelativeErrorDeaths":0.1503,
+"rmsRelativeErrorPcr":0.1719,
+"meanRelativeErrorDeaths":4.8119e-2,
+"meanRelativeErrorPcr":0.1008,
+"rSquaredDeaths":2.3039e-2,
+"rSquaredPcr":2.1216e-2,
+"deathResidual7Day":-2.8243,
+"pcrResidual7Day":-4.0577e1
 },
 "parameters":{
 "r0":{
-"value":3.0468,
+"value":3.0462,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":5.0685e1,
+"value":5.0690e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -180,7 +180,7 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.6408,
+"value":0.6407,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
@@ -192,19 +192,13 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
 }
 },
 "scenarios":[
-"scenario5",
-"scenario1",
-"scenario2",
-"scenario3",
-"scenario4",
-"scenario6",
-"scenario7"
+"scenario1"
 ]
 }

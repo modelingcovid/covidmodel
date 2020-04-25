@@ -1,7 +1,7 @@
 {
 "parameterBest":{
 "r0natural":4.3010,
-"importtime":4.9883e1,
+"importtime":4.9884e1,
 "stateAdjustmentForTestingDifferences":0.4928,
 "distpow":2.0619
 },
@@ -19,23 +19,23 @@
 "fractionOfCriticalDeceased":0.3685,
 "initialInfectionImpulse":1.4151e1,
 "r0":4.3010,
-"importtime":4.9883e1,
-"numberOfSimulations":100,
-"dateModelRun":"Fri 24 Apr 2020 20:24:07",
+"importtime":4.9884e1,
+"numberOfSimulations":10,
+"dateModelRun":"Sat 25 Apr 2020 10:48:56",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.4928,
 "distpow":2.0619,
 "goodnessOfFitMetrics":{
-"chiSquared":4.9553e-5,
-"rmsRelativeError":0.4462,
-"rmsRelativeErrorDeaths":0.3147,
-"rmsRelativeErrorPcr":0.5402,
-"meanRelativeErrorDeaths":-1.2847e-2,
-"meanRelativeErrorPcr":-0.2579,
-"rSquaredDeaths":2.3023e-2,
-"rSquaredPcr":5.9202e-2,
-"deathResidual7Day":-4.5464,
-"pcrResidual7Day":-7.1972e1
+"chiSquared":5.1244e-5,
+"rmsRelativeError":0.4414,
+"rmsRelativeErrorDeaths":0.3113,
+"rmsRelativeErrorPcr":0.5346,
+"meanRelativeErrorDeaths":-1.5939e-2,
+"meanRelativeErrorPcr":-0.2565,
+"rSquaredDeaths":2.5232e-2,
+"rSquaredPcr":6.3049e-2,
+"deathResidual7Day":-4.5458,
+"pcrResidual7Day":-7.1962e1
 },
 "parameters":{
 "r0":{
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":4.9883e1,
+"value":4.9884e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -192,19 +192,13 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
 }
 },
 "scenarios":[
-"scenario5",
-"scenario1",
-"scenario2",
-"scenario3",
-"scenario4",
-"scenario6",
-"scenario7"
+"scenario1"
 ]
 }

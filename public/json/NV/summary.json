@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.1054,
-"importtime":5.6718e1,
+"r0natural":4.1035,
+"importtime":5.6749e1,
 "stateAdjustmentForTestingDifferences":0.6882,
-"distpow":1.6765
+"distpow":1.6767
 },
 "population":2887725,
 "ventilators":753,
@@ -18,28 +18,28 @@
 "pPCRH":0.7907,
 "fractionOfCriticalDeceased":0.3621,
 "initialInfectionImpulse":1.3672e1,
-"r0":4.1054,
-"importtime":5.6718e1,
-"numberOfSimulations":100,
-"dateModelRun":"Fri 24 Apr 2020 21:23:19",
+"r0":4.1035,
+"importtime":5.6749e1,
+"numberOfSimulations":10,
+"dateModelRun":"Sat 25 Apr 2020 10:52:10",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.6882,
-"distpow":1.6765,
+"distpow":1.6767,
 "goodnessOfFitMetrics":{
-"chiSquared":5.6036e-6,
-"rmsRelativeError":0.3030,
-"rmsRelativeErrorDeaths":0.2479,
-"rmsRelativeErrorPcr":0.3426,
-"meanRelativeErrorDeaths":-0.1016,
-"meanRelativeErrorPcr":-0.1508,
-"rSquaredDeaths":1.6782e-2,
-"rSquaredPcr":1.5399e-2,
-"deathResidual7Day":-1.5979,
-"pcrResidual7Day":-2.7562e1
+"chiSquared":5.5685e-6,
+"rmsRelativeError":0.2929,
+"rmsRelativeErrorDeaths":0.2389,
+"rmsRelativeErrorPcr":0.3318,
+"meanRelativeErrorDeaths":-9.0465e-2,
+"meanRelativeErrorPcr":-0.1384,
+"rSquaredDeaths":1.5842e-2,
+"rSquaredPcr":1.6196e-2,
+"deathResidual7Day":-1.5514,
+"pcrResidual7Day":-2.6866e1
 },
 "parameters":{
 "r0":{
-"value":4.1054,
+"value":4.1035,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":5.6718e1,
+"value":5.6749e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -186,25 +186,19 @@
 "type":"fit"
 },
 "distancePower":{
-"value":1.6765,
+"value":1.6767,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
 }
 },
 "scenarios":[
-"scenario5",
-"scenario1",
-"scenario2",
-"scenario3",
-"scenario4",
-"scenario6",
-"scenario7"
+"scenario1"
 ]
 }
