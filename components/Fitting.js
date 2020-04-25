@@ -65,17 +65,35 @@ export function Fitting({height, width}) {
         the SEIR model.
       </Paragraph>
 
-      <Paragraph>
-        Both datasets are imperfect. The model assumes that the number of
-        reported positive tests is less than the number of cases in a region and
-        predicts the fraction of cases detected by tests in {location.name}.
-        While the number of fatalities can also be{' '}
-        <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
-          underreported
-        </a>
-        , the model doesn’t include additional adjustments beyond computing the
-        fraction of cases detected.
-      </Paragraph>
+      <WithCitation
+        citation={
+          <>
+            To predict this number, the model combines overall estimations of{' '}
+            <a href="https://www.medrxiv.org/content/10.1101/2020.03.15.20036582v2.full.pdf">
+              testing capacity across the United States over time
+            </a>{' '}
+            and computes an adjustment for each state to fit to the available
+            data.
+          </>
+        }
+      >
+        <Paragraph>
+          Both datasets are imperfect. The model assumes that the number of
+          reported positive tests is less than the number of cases in a region
+          and predicts the{' '}
+          <span class="footnote">
+            <strong>fraction of cases detected by tests</strong> in{' '}
+            {location.name}, accounting for how testing capacity varies over
+            time.
+          </span>{' '}
+          While the number of fatalities can also be{' '}
+          <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+            underreported
+          </a>
+          , the model doesn’t include additional adjustments beyond predicting
+          the fraction of cases detected.
+        </Paragraph>
+      </WithCitation>
 
       <WithCitation
         citation={
