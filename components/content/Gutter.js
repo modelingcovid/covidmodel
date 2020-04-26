@@ -8,7 +8,6 @@ export function Gutter({children, ...remaining}) {
         div {
           margin-bottom: ${theme.spacing[2]};
           float: right;
-          user-select: none;
           width: 100%;
         }
         @media (min-width: 600px) {
