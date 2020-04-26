@@ -31,6 +31,7 @@ export const typeDefs = gql`
     dateContained: String!
     dateHospitalsOverCapacity: String
     dateICUOverCapacity: String
+    totalInfectedFraction: Float!
     fatalityRate: Float!
     fatalityRateSymptomatic: Float!
     fatalityRatePCR: Float!
@@ -213,6 +214,9 @@ const Scenario = {
   },
   dateICUOverCapacity(parent) {
     return parent.summary.dateICUOverCapacity;
+  },
+  totalInfectedFraction(parent) {
+    return parent.summary.totalInfectedFraction;
   },
   fatalityRate(parent) {
     return parent.summary.fatalityRate;

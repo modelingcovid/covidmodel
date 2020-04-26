@@ -141,6 +141,7 @@ const queries = [
       dateContained
       dateHospitalsOverCapacity
       dateICUOverCapacity
+      totalInfectedFraction
       fatalityRate
       fatalityRateSymptomatic
       fatalityRatePCR
@@ -159,6 +160,7 @@ const queries = [
       dateContained: (d) => d.dateContained,
       dateHospitalsOverCapacity: (d) => d.dateHospitalsOverCapacity,
       dateICUOverCapacity: (d) => d.dateICUOverCapacity,
+      totalInfectedFraction: (d) => d.totalInfectedFraction,
       fatalityRate: (d) => d.fatalityRate,
       fatalityRateSymptomatic: (d) => d.fatalityRateSymptomatic,
       fatalityRatePCR: (d) => d.fatalityRatePCR,

@@ -181,7 +181,7 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq]'[t]&] * population;
 
   (* TODO: Let's discuss these quantities *)
-  CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*(#[HHq][t]+#[HCq][t]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
+  CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*(#[RepCHHq][t]+#[RepCHCq][t]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
   CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[CCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&];
 
   (* define some helpers to generate percentile keys in the json export like "percentile10" etc. *)
@@ -311,8 +311,8 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
                       (#["day"]==t)&][[1]],"hospitalizations"],
                   Select[stateParams["hospitalizationCurrentData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0],
-                "expected"-> Min[population*(sol[HHq][t - daysForHospitalsToReportCases0]+sol[HCq][t - daysForHospitalsToReportCases0]), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]],
-                "expectedTestTrace"-> Min[population*(soltt[HHq][t - daysForHospitalsToReportCases0]+soltt[HCq][t - daysForHospitalsToReportCases0]), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]
+                "expected"-> Min[population*(sol[RepCHHq][t - daysForHospitalsToReportCases0]+sol[RepCHCq][t - daysForHospitalsToReportCases0]), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]],
+                "expectedTestTrace"-> Min[population*(soltt[RepCHHq][t - daysForHospitalsToReportCases0]+soltt[RepCHCq][t - daysForHospitalsToReportCases0]), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]
               |>,
               percentileMap[CurrentlyReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             }, First],

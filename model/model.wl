@@ -35,7 +35,7 @@ daysFromCriticalToRecoveredOrDeceased0 = 8.5;
 
 (* probabilities of getting pcr confirmations given hospitalized / non-hospitalized resp *)
 pPCRH0 = 0.8;
-pPCRNH0 = 0.15;
+pPCRNH0 = 0.11;
 
 (* How out of date are reports of hospitalizations? *)
 daysForHospitalsToReportCases0 = 1.5;
@@ -74,11 +74,11 @@ pCritical80YearOld0=0.1125;
 pHospitalized80YearOld0=0.165;
 
 (* convergence function for differences in state testing *)
-(* we allow the model to fit a multiplicative difference of the rate of change of the tests *)
+(* we allow the model to fit a multiplicative difference of the rate of change of th e tests *)
 (* but after some time we expect states to converge on a common value *)
 (* that common value statesConvergeToValue is chosen to target an overall percent of infections confirmed beteween 28 and 34% *)
 (* see fractionOfInfectionsPCRConfirmed in the summary *)
-statesConvergeToValue=1.7;
+statesConvergeToValue=2.3;
 convergenceMidpoint=100+30; (*30 days from now *)
 convergencePeriod=60; (* 90% 2 months from now *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
@@ -116,7 +116,7 @@ susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m, s, dist, binEdges, 
   binCount unnormalizedRelativeSusceptibilities / Total[unnormalizedRelativeSusceptibilities]
 ];
 susceptibilityBins = 10;
-susceptibilityStdev0 = 1.2;
+susceptibilityStdev0 = 1.6;
 susceptibilityInitialPopulations = ConstantArray[1/susceptibilityBins, susceptibilityBins];
 susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];
 
@@ -249,10 +249,16 @@ generateModelComponents[distancing_] := <|
       (*Cumulative critical count*)
       EHCq'[t]==ICq[t] / daysUntilHospitalized,
 
+      (* Current reported positive hospital cases *)
+      RepCHHq'[t]==testingProbability[t] * pPCRH * (IHq[t]/daysUntilHospitalized) - RepCHHq[t]/daysToLeaveHosptialNonCritical,
+      (* Current reported positive hospital critical cases *)
+      RepCHCq'[t]==testingProbability[t] * pPCRH * (ICq[t]/daysUntilHospitalized) - RepCHCq[t]/daysTogoToCriticalCare,
+
       (*Cumulative reported positive hospital cases*)
-      RepHq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * IHq[t] / daysUntilHospitalized,
+      RepHq'[t]== testingProbability[t] * pPCRH  * IHq[t] / daysUntilHospitalized,
       (*Cumulative reported ICU cases*)
-      RepHCq'[t]== testingProbability[t] * pPCRH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * ICq[t] / daysUntilHospitalized,
+      RepHCq'[t]== testingProbability[t] * pPCRH * ICq[t] / daysUntilHospitalized,
+      
       (*Cumulative PCR confirmations*)
       PCR'[t] == testingProbability[t] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
 
@@ -293,16 +299,16 @@ generateModelComponents[distancing_] := <|
   "initialConditions" -> Flatten[{
       Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
       Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
-      RepHq[tmin0]==0,RepHCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
+      RepHq[tmin0]==0,RepHCq[tmin0]==0,RepCHHq[tmin0]==0,RepCHCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
       Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,testAndTraceDelayCounter[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
 
   "outputFunctions" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
 
   "dependentVariables" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
       
   "discreteVariables" -> {},
 
@@ -659,7 +665,7 @@ fitStartingOverrides=<|
   "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.45,"powlower"->1.5,"powupper"->2|>,
   "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
   "MA"-><| "rlower"->4.85,"rupper"->5,"tlower"->46.5,"tupper"-> 53,"replower"->0.6,"repupper"->0.7,"powlower"->1.45,"powupper"->1.65|>,
-  "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->75,"replower"->0.5,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
+  "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->58,"replower"->0.5,"repupper"->0.65,"powlower"->1.8,"powupper"->2.3|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->47,"tupper"->75,"replower"->0.40,"repupper"->0.6,"powlower"->1.9,"powupper"->2.3|>,
   "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
   "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->2|>,
@@ -845,7 +851,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* Echo out some info on how good the fits are / show the plots *)
   Echo[gofMetrics];
   Echo[fitPlots[state, longData, evaluateSolution, fit, fitParams]];
-
+  
+  
   (* run simulations and compute expectations for each of the scenarios *)
   (* this gives back both time series data and summary data at August 1st and 2 years out *)
   simulatedScenarioRuns=Association[

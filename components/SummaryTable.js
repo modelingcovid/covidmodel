@@ -22,6 +22,7 @@ const styles = css`
 
 export function SummaryTableContents() {
   const {
+    totalInfectedFraction,
     fatalityRate,
     fatalityRateSymptomatic,
     fatalityRatePCR,
@@ -132,6 +133,13 @@ export function SummaryTableContents() {
       value: fractionOfInfectionsPCRConfirmed(),
       description:
         'The fraction of all infections that eventually get PCR confirmed',
+      citations: [],
+    },
+    {
+      id: 'totalInfectedFraction',
+      name: 'Total infected fraction',
+      value: totalInfectedFraction(),
+      description: 'Fraction of population infected',
       citations: [],
     },
   ];
