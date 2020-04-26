@@ -193,6 +193,7 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
 
   (* gather all of our time series information into one large association for exporting to JSON *)
   (* takes the expected solutions and evalutes them at each day in the range, as well as the simulation quantiles *)
+  
   Table[Association[{
           "day"->t,
           "distancing"-><|
@@ -202,9 +203,11 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
             "expectedTestTrace"->If[soltt[testAndTraceDelayCounter][t] > testTraceExposedDelay0, 0.8, distancing[t]]
           |>,
           "rt"-><|
-            "expected"->distancing[t]^fitParams["distpow"]*fitParams["r0natural"]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}],
+            "expected"->distancing[t]^fitParams["distpow"]*fitParams["r0natural"]*Sum[susceptibilityValues[[i]]*sol[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t], {i, 1, susceptibilityBins}],
             (* if test and trace is qualified for we pin r0 to 1 and only allow for it to decrease due to heterogeneity / less available susceptible individuals *)
-            "expectedTestTrace"->If[soltt[testAndTraceDelayCounter][t] > testTraceExposedDelay0, 1, distancing[t]^fitParams["distpow"] * fitParams["r0natural"]]*Sum[susceptibilityValues[[i]]*soltt[sSq[i]][t],{i,1,susceptibilityBins}] / Sum[sol[sSq[i]][t],{i,1,susceptibilityBins}]
+            "expectedTestTrace"->(
+              distancing[t]^fitParams["distpow"]*fitParams["r0natural"] * testAndTraceTurnOff[1, soltt[testAndTraceDelayCounter][t]] + (1 - testAndTraceTurnOff[1, soltt[testAndTraceDelayCounter][t]])
+            ) * Sum[susceptibilityValues[[i]] * soltt[sSq[i]][t], {i, 1, susceptibilityBins}] / Sum[soltt[sSq[i]][t], {i, 1, susceptibilityBins}]
           |>,
           (* hospital and ICU capacity are ajusted upwards when distancing is higher than 30% *)
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"],
