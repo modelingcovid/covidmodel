@@ -94,22 +94,31 @@ testTraceExposedDelay0=10;
 (* Fraction of symptomatic cases *)
 fractionSymptomatic0 = 0.7;
 
-(* Set heterogeneous susceptibility using lognormal function with bins of constant population size *)
-(* this causes a smaller overall fraction of the population to get infected in scenarios where the epidemic is uncontained *)
-(* the nubmer of bins is just to give a relatively good approximation to the susceptibility distribution we use *)
-(* the standard deviation is chosen so that the final infected fraction ends up at roughly 70% in uncontained scenarios *)
-susceptibilityBins=10;
-susceptibilityStdev0=1.2;
-susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m,s,dist,binEdges},
-  m=-stdDev^2/2;
-  s=Sqrt[Log[stdDev^2+1]];
-  dist=LogNormalDistribution[m,s];
-  binEdges=InverseCDF[dist,Range[0,binCount]/binCount];
-  Table[
-    NIntegrate[x PDF[dist,x],{x,binEdges[[i]],binEdges[[i+1]]}],{i,1,binCount}]//(binCount #/Total[#])&
+(****
+Heterogeneous susceptibility:
+Separate the susceptible population into bins of (initially) equal size. Assign to each bin a relative susceptibility
+using a log-normal susceptibility distribution having mean 1 and adjustable standard deviation. The population-weighted
+average (which initially is a simple average) of these susceptibilities must be 1 to preserve the intended meaning of
+R0.
+
+As the infection progresses, individuals in bins of higher relative susceptibility become infected more frequently,
+depleting the population in those bins and lowering the average relative susceptibility of the currently susceptible
+population. At late times, this has the effect of limiting the number of individuals who become infected. We choose
+a standard deviation of 1.2 so that roughly 70% of individuals become infected in unconstrained models.
+****)
+susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m, s, dist, binEdges, unnormalizedRelativeSusceptibilities},
+  m = -stdDev^2 / 2;
+  s = Sqrt[Log[stdDev^2 + 1]];
+  dist = LogNormalDistribution[m,s];
+  binEdges = InverseCDF[dist, Range[0, binCount] / binCount];
+  unnormalizedRelativeSusceptibilities = Table[
+    NIntegrate[x PDF[dist,x], {x, binEdges[[i]], binEdges[[i+1]]}], {i, 1, binCount}];
+  binCount unnormalizedRelativeSusceptibilities / Total[unnormalizedRelativeSusceptibilities]
 ];
-susceptibilityValues=susceptibilityValuesLogNormal[susceptibilityBins,susceptibilityStdev0];
-susceptibilityInitialPopulations=ConstantArray[1/susceptibilityBins,susceptibilityBins];
+susceptibilityBins = 10;
+susceptibilityStdev0 = 1.2;
+susceptibilityInitialPopulations = ConstantArray[1/susceptibilityBins, susceptibilityBins];
+susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];
 
 
 (* Compute age adjusted parameters per-state *)
@@ -187,9 +196,9 @@ stateParams = Association[{#->getStateParams[#]}&/@statesToRun];
 generateModelComponents[distancing_] := <|
   "equationsODE" -> Flatten[{
       (**** Enriched SEIR model section ****)
-      (* Do not include test figures or reporting-only totals in this section *)
+      (* Quantities that relate directly to the enriched SEIR model [for clarity, avoid putting reporting quantities in this section] *)
 
-      (* susceptible, binned by susceptibility; the sum of all sSq[i]'s would be Sq, the full susceptible population *)
+      (* Susceptible population, binned into (initially equally sized) groups having a range of relative susceptibilities; the sum of all sSq[i]'s is Sq, the full susceptible population *)
       Table[
         sSq[i]'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
         (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
@@ -199,32 +208,32 @@ generateModelComponents[distancing_] := <|
       Eq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] *
       Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
 
-      (*Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed; age independent *)
+      (* Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed); age independent *)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectious,
-      (*Recovered without needing care*)
+      (* Recovered without needing care *)
       RSq'[t]==ISq[t]/daysUntilNotInfectious,
 
-      (*Infected and will need hospital, won't need critical care*)
+      (* Infected and will eventually need hospital (but not need critical care) *)
       IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilHospitalized,
-      (*Going to hospital*)
+      (* Going to hospital *)
       HHq'[t]==IHq[t]/daysUntilHospitalized - HHq[t]/daysToLeaveHosptialNonCritical,
-      (*Recovered after hospitalization*)
+      (* Recovered after hospitalization *)
       RHq'[t]==(1 - fractionOfHospitalizedNonCriticalDeceased0) * HHq[t]/daysToLeaveHosptialNonCritical,
 
-      (*Infected, will need critical care*)
+      (* Infected and will eventually need critical care *)
       ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilHospitalized,
-      (*Hospitalized, need critical care*)
+      (* Hospitalized and will eventually need critical care *)
       HCq'[t]==ICq[t]/daysUntilHospitalized - HCq[t]/daysTogoToCriticalCare,
-      (*Entering critical care*)
+      (* Entering critical care *)
       CCq'[t]==HCq[t]/daysTogoToCriticalCare - CCq[t]/daysFromCriticalToRecoveredOrDeceased,
-      (*Leaving critical care*)
+      (* Recovered after critical care *)
       RCq'[t]==(1 - fractionOfCriticalDeceased) * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
-      (* Dead *)
+      (* Deceased *)
       Deaq'[t]==fractionOfHospitalizedNonCriticalDeceased0 * HHq[t]/daysToLeaveHosptialNonCritical + fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (**** Reporting section ****)
-      (* Do include quantities to measure testing rates, cumulative reporting-only counts, etc. in this section *)
+      (* These quantities measure testing rates, cumulative reporting-only counts, etc. in this section *)
 
       (* Cumulative exposed *)
       cumEq'[t]==If[testAndTrace == 1 && testAndTraceDelayCounter[t] > testTraceExposedDelay0, 1, distancing[t]^distpow * r0natural] * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
@@ -240,28 +249,28 @@ generateModelComponents[distancing_] := <|
       (*Cumulative PCR confirmations*)
       PCR'[t] == testingProbability[t] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
 
-      (* Cumulative PCR confirmed deaths (both hospitalized and ICU) *)
+      (* Cumulative PCR confirmed and reported deaths (both hospitalized and ICU) *)
       RepDeaq'[t]==testingProbability[t] * Deaq'[t],
-      (* Cumulative PCR confirmed ICU deaths *)
+      (* Cumulative PCR confirmed and reported ICU deaths *)
       RepDeaICUq'[t]==testingProbability[t] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
-      (* establishment *)
+      (* Establishment *)
       est'[t]==0,
       
-      (* test and trace tracker *)
+      (* Test and trace tracker: this counts the number of days after testing and tracing becomes viable *)
       testAndTraceDelayCounter'[t] == If[testAndTraceDelayCounter[t] > 0, 1, 0]
   }],
 
   (* events used in evaluting the simluations / expectation values *)
-  (* some are used purely for reporting *)
-  (* the events that affect cumEq'[t] set the test and trace *)
-  (* events with est[t] provide the initial infection impulse *)
   "simulationEvents" -> {
+    (* Reporting events *)
     WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
     WhenEvent[CCq[t]>=icuCapacity, Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
     WhenEvent[HHq[t]>=hospitalCapacity, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
+    (* initial infection impulse events *)
     WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength, est[t]->0],
+    (* test and trace becomes viable event when the rate of new infections falls below the threshold *)
     WhenEvent[
       cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5,
       {testAndTraceDelayCounter[t]->1, Sow[{t,cumEq[t]}, "containment"], "RemoveEvent"},
@@ -334,13 +343,7 @@ generateModelComponents[distancing_] := <|
       icuCapacity -> stateParams[state]["icuBeds"]/stateParams[state]["population"],
       hospitalCapacity -> (1-stateParams[state]["bedUtilization"])*stateParams[state]["staffedBeds"]/stateParams[state]["population"],
       testAndTrace -> 0
-  }],
-
-  "simulationTestParameters" -> {
-    3.315677597140117`,5,7,4,12,0.0480977695615949`,0.7695643129855184`,
-    4,10,0.3575906619299291`,52.460287850366974`,3,12.5`,730,0.9015240847617458`,
-    0.07427433850312418`,0.024201576735129928`,0.00017764223326223455`,0.0009525570076091405`,
-    1.3130347650158096`,1.5775877732714718`,0}
+  }]
 |>;
 
 
@@ -377,7 +380,8 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
       |>
 
   ]}&/@scenarios];
-  
+
+(* TODO: move these calls into the evaluateAllStates routine so that we don't have to reinclude this file inorder to pick up changes in the model *)
 modelPrecompute = Association[{#->getModelComponentsForState[#]}&/@statesToRun];	
 simModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@statesToRun];
 
@@ -433,6 +437,7 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
 ];
 
 
+(* TODO: DRY this code by merging it with the previous integration function *)
 (* simulation integrator which takes a parameterized solution and evaluates it at the simulated values that are passed in *)
 integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Module[{
     modelComponents,
@@ -484,9 +489,9 @@ BetaMeanSig[mu_,sig_]:=BetaDistribution[(mu^2-mu^3-mu sig)/sig,((-1+mu) (-mu+mu^
 PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu,sig]]
 
 (* a function to generate the monte carlo simulations from combo of fit / assumed parameters *)
-(* for the assumed parameters we temporarily have a 5% stdev, but we will replace this with a calculated
-one when we have multiple literature sources *)
+(* for the assumed parameters we temporarily have a 5% stdev, but we will replace this with a calculated one when we have multiple literature sources *)
 (* we mostly use normal distributions of those variables, truncated to keep them positive (physical constraint) *)
+(* TODO why do we use truncated normal distributions instead of log-normal (which is probably more realistic)? *)
 (* we also use a beta distribution for fractional parameters because that bounds them between zero and 1, and is generally used to represent distributions of fractional quantities *)
 generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{}, {
     RandomVariate[PosNormal[fitParams["r0natural"],0.05*fitParams["r0natural"]]],
@@ -514,8 +519,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
   }&/@Range[numberOfSimulations]]
 
 
-(* Given a set fit parameters, simulated parameters and a definition of a scenario,
-run all the simulations and produce the quantiles for the mean and confidence band estimates *)
+(* Given a set fit parameters, simulated parameters and a definition of a scenario, run all the simulations and produce the quantiles for the mean and confidence band estimates *)
 evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, numberOfSimulations_:100]:=Module[{
     aug1,
     containmentTime,
@@ -756,6 +760,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   discreteVariablesODE = modelComponents["discreteVariables"];
   parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
 
+  (* TODO we should move this ParametricNDSolve and NonlinearModelFit into a separate "model fit" function *)
   (* generate parametric solutions to the equations that can be used for the fitting to reported fatalities and PCR confirmed cases *)
   outputODE = {RepDeaq, PCR};
   parametricSolution = ParametricNDSolve[
