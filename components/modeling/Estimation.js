@@ -4,7 +4,13 @@ import {theme} from '../../styles';
 import {Paragraph} from '../content';
 import {CurrentStatus} from './CurrentStatus';
 
-export function Estimation({children, className, status = true, ...remaining}) {
+export function Estimation({
+  children,
+  className,
+  date,
+  status = true,
+  ...remaining
+}) {
   return (
     <>
       <Paragraph
@@ -14,7 +20,7 @@ export function Estimation({children, className, status = true, ...remaining}) {
         {children}
         {status && (
           <span className="caption margin-top-0">
-            On <CurrentStatus />
+            <CurrentStatus date={date} />
           </span>
         )}
       </Paragraph>

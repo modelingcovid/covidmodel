@@ -2,6 +2,7 @@ export * from './ContainmentSplit';
 export * from './CurrentDate';
 export * from './CurrentScenario';
 export * from './CurrentStatus';
+export * from './CapacityEstimation';
 export * from './DateModelRun';
 export * from './DistributionLegendRow';
 export * from './DistributionLine';

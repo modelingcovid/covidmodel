@@ -4,13 +4,9 @@ import {Gutter, InlineLabel, InlineData, Paragraph, Title} from './content';
 import {Graph, Line, LegendRow} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
+  CapacityEstimation,
   DistributionLegendRow,
   DistributionLine,
-  DistributionSeriesFullFragment,
-  Estimation,
-  SeriesFullFragment,
-  createDistributionSeries,
-  createSeries,
   useLocationData,
   useModelState,
 } from './modeling';
@@ -31,15 +27,6 @@ const blue = theme.color.blue[2];
 const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
-function ICUCapacityExceedDate() {
-  const {dateICUOverCapacity} = useLocationData();
-  return (
-    <InlineData>
-      {() => formatFixedDate(new Date(dateICUOverCapacity()))}
-    </InlineData>
-  );
-}
-
 export const ICU = ({width, height}) => {
   const {location} = useModelState();
   const {
@@ -47,6 +34,7 @@ export const ICU = ({width, height}) => {
     currentlyReportedCritical,
     cumulativeCritical,
     cumulativeReportedCritical,
+    dateICUOverCapacity,
     domain,
     icuBeds,
     icuCapacity,
@@ -104,10 +92,7 @@ export const ICU = ({width, height}) => {
         </InlineLabel>{' '}
         and the ICU capacity.
       </Paragraph>
-      <Estimation>
-        The model estimates that hospitals in {location.name} will exceed ICU
-        capacity on <ICUCapacityExceedDate />.
-      </Estimation>
+      <CapacityEstimation subject="ICUs" date={dateICUOverCapacity} />
       <Paragraph>
         While we expect that an overshoot of ICU capacity has a dramatic effect
         of the fatality rate of Covid-19, at present we do not adjust the

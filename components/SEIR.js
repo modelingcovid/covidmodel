@@ -107,12 +107,11 @@ export function SEIR({height, width}) {
           compound to impact the population as a whole.
         </Paragraph>
         <Estimation>
-          The model estimates that{' '}
+          The model estimates that by <CurrentDate />,{' '}
           <strong>
             <PercentCases />
           </strong>{' '}
-          of the {location.name} population will have contracted Covid-19 by{' '}
-          <CurrentDate />.
+          of the {location.name} population will have contracted Covid-19.
         </Estimation>
       </div>
     </div>

@@ -66,8 +66,8 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
       </Paragraph>
       <Estimation status={false}>
         The model estimates that Covid-19 has an R₀ of{' '}
-        <InlineData>{() => formatNumber2(r0())}</InlineData> in {location.name}{' '}
-        when there is no social distancing.
+        <InlineData>{() => formatNumber2(r0())}</InlineData> in&nbsp;
+        {location.name}.
       </Estimation>
       <Paragraph>
         When social distancing measures are introduced, it becomes more

@@ -12,9 +12,9 @@ import {
 import {Graph, LegendRow, Line, useNearestData} from './graph';
 import {HeadSideCough, People, Vial} from './icon';
 import {
+  CapacityEstimation,
   DistributionLegendRow,
   DistributionLine,
-  Estimation,
   useModelState,
   useLocationData,
 } from './modeling';
@@ -34,18 +34,10 @@ const blue = theme.color.blue[2];
 const red = theme.color.red[1];
 const yellow = theme.color.yellow[3];
 
-function HospitalCapacityExcedDate() {
-  const {dateHospitalsOverCapacity} = useLocationData();
-  return (
-    <InlineData>
-      {() => formatFixedDate(new Date(dateHospitalsOverCapacity()))}
-    </InlineData>
-  );
-}
-
 export const Hospitalizations = ({width, height}) => {
   const {location} = useModelState();
   const {
+    dateHospitalsOverCapacity,
     domain,
     hospitalCapacity,
     currentlyHospitalized,
@@ -158,10 +150,10 @@ export const Hospitalizations = ({width, height}) => {
         hospitalization and we don't expect the number reported to ever exceed
         the hospital capacity.
       </Paragraph>
-      <Estimation>
-        The model estimates that hospitals in {location.name} will exceed
-        capacity on <HospitalCapacityExcedDate />.
-      </Estimation>
+      <CapacityEstimation
+        subject="hospitals"
+        date={dateHospitalsOverCapacity}
+      />
       <Paragraph>
         Next, we look at an analagous graph for cumulative hospitalizations,
         which is how some states report this statistic.

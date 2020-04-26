@@ -7,7 +7,7 @@ import {useModelState} from './useModelState';
 import {InlineData} from '../content';
 import {formatFixedDate} from '../../lib/format';
 
-export function CurrentStatus({date = true}) {
+export function CurrentStatus({date = false}) {
   const {location} = useModelState();
   return (
     <span>

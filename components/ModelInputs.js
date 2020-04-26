@@ -106,7 +106,7 @@ export function ModelInputs({height, width, ...remaining}) {
         a location.
       </Paragraph>
       <Estimation status={false}>
-        We estimate that Covid-19 reached {location.name} on{' '}
+        The model estimates that Covid-19 reached {location.name} on{' '}
         <InlineData width="130px">
           {() => <strong>{formatDate(dayToDate(importtime()))}</strong>}
         </InlineData>
