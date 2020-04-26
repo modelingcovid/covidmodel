@@ -229,8 +229,8 @@ exportAllStatesHospitalizationGoodnessOfFitMetricsSvg[file_,allStatesData_]:=Mod
   processState[state_]:=Module[{icucurrent, hospcumulative, hospcurrent,icucumulative,hascurrhosp,hascumhosp,hascurricu,hascumicu},
     hospcurrent=Select[{#["day"],#["currentlyReportedHospitalized"]["confirmed"],#["currentlyReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
     hospcumulative=Select[{#["day"],#["cumulativeReportedHospitalized"]["confirmed"],#["cumulativeReportedHospitalized"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
-    icucurrent=Select[{#["day"],#["currentlyCritical"]["confirmed"],#["currentlyCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
-    icucumulative=Select[{#["day"],#["cumulativeCritical"]["confirmed"],#["cumulativeCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
+    icucurrent=Select[{#["day"],#["currentlyReportedCritical"]["confirmed"],#["currentlyReportedCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
+    icucumulative=Select[{#["day"],#["cumulativeReportedCritical"]["confirmed"],#["cumulativeReportedCritical"]["expected"]}&/@allStatesData[state]["scenarios"]["scenario1"]["timeSeriesData"],#[[2]]>0&];
 
     hascurrhosp=Length[Select[hospcurrent,#[[2]]>0&]]>0;
     hascumhosp=Length[Select[hospcumulative,#[[2]]>0&]]>0;

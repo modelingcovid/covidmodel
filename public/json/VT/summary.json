@@ -16,26 +16,26 @@
 "pC":2.4057e-2,
 "pPCRNH":0.1171,
 "pPCRH":0.8518,
-"fractionOfCriticalDeceased":0.4585,
+"fractionOfCriticalDeceased":0.4012,
 "initialInfectionImpulse":1.2140e1,
 "r0":3.1286,
 "importtime":5.4430e1,
-"numberOfSimulations":100,
-"dateModelRun":"Sun 26 Apr 2020 21:03:39",
+"numberOfSimulations":10,
+"dateModelRun":"Mon 27 Apr 2020 01:33:09",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.7465,
 "distpow":1.8016,
 "goodnessOfFitMetrics":{
-"chiSquared":1.0236e-5,
-"rmsRelativeError":0.2893,
-"rmsRelativeErrorDeaths":0.2705,
-"rmsRelativeErrorPcr":0.3065,
-"meanRelativeErrorDeaths":0.1559,
-"meanRelativeErrorPcr":-8.5931e-2,
-"rSquaredDeaths":8.7593e-2,
-"rSquaredPcr":5.2537e-2,
-"deathResidual7Day":2.5156,
-"pcrResidual7Day":-6.2127e1
+"chiSquared":1.2200e-5,
+"rmsRelativeError":0.2971,
+"rmsRelativeErrorDeaths":0.3172,
+"rmsRelativeErrorPcr":0.2762,
+"meanRelativeErrorDeaths":0.2323,
+"meanRelativeErrorPcr":-2.1893e-2,
+"rSquaredDeaths":0.1257,
+"rSquaredPcr":9.3405e-2,
+"deathResidual7Day":2.8254,
+"pcrResidual7Day":-5.5383e1
 },
 "parameters":{
 "r0":{
@@ -56,7 +56,7 @@
 ]
 },
 "daysUntilHospitalized":{
-"value":7,
+"value":8.5,
 "name":"Days until hospitalized",
 "description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
 "type":"literature",
@@ -104,7 +104,7 @@
 ]
 },
 "daysTogoToCriticalCare":{
-"value":1.5,
+"value":2.5,
 "name":"Days to go to critical care after arriving in the hospital",
 "description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
 "type":"literature",
@@ -129,7 +129,7 @@
 ]
 },
 "fractionOfCriticalDeceased":{
-"value":0.4585,
+"value":0.4012,
 "name":"Fraction of ICU admissions deceased.",
 "description":"An age adjusted fraction of the ICU admissions that will be deceased.",
 "type":"literature",
@@ -192,7 +192,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"

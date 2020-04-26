@@ -22,13 +22,13 @@ daysFromInfectedToSymptomatic0 = 5;
 
 (*Rate of losing infectiousness or going to the hospital*)
 daysUntilNotInfectious0 = 5;
-daysUntilHospitalized0 = 7;
+daysUntilHospitalized0 = 8.5;
 
 (*Rate of leaving hospital for those not going to critical care*)
 daysToLeaveHosptialNonCritical0 = 8;
 
 (*Rate of leaving hospital and going to critical care*)
-daysTogoToCriticalCare0 = 1.5;
+daysTogoToCriticalCare0 = 2.5;
 
 (*Rate of leaving critical care, weeks*)
 daysFromCriticalToRecoveredOrDeceased0 = 8.5;
@@ -38,7 +38,7 @@ pPCRH0 = 0.8;
 pPCRNH0 = 0.11;
 
 (* How out of date are reports of hospitalizations? *)
-daysForHospitalsToReportCases0 = 1.5;
+daysForHospitalsToReportCases0 =3;
 (* days to get tested after infectious *)
 daysToGetTested0 = 7.5;
 
@@ -52,10 +52,10 @@ initialInfectionPeople0 = 10;
 importlength0 = 3;
 
 (*Fraction of critical patents who pass *)
-fractionOfCriticalDeceased0 = 0.4;
+fractionOfCriticalDeceased0 = 0.35;
 (*Fraction deceased from hospital who dont make it to critical care (clear it happens from NY cumulative ICU numbers) *)
 (* currently unused, but we should figure out if it makes sense to add *)
-fractionOfHospitalizedNonCriticalDeceased0 = 0.07;
+fractionOfHospitalizedNonCriticalDeceased0 = 0.10;
 
 (* interpret as: steepness of age depencence*)
 medianHospitalizationAge0 = 61;
@@ -78,7 +78,7 @@ pHospitalized80YearOld0=0.165;
 (* but after some time we expect states to converge on a common value *)
 (* that common value statesConvergeToValue is chosen to target an overall percent of infections confirmed beteween 28 and 34% *)
 (* see fractionOfInfectionsPCRConfirmed in the summary *)
-statesConvergeToValue=2.3;
+statesConvergeToValue=2.4;
 convergenceMidpoint=100+30; (*30 days from now *)
 convergencePeriod=60; (* 90% 2 months from now *)
 convergenceFunction[stateRate_,t_]:=stateRate+(statesConvergeToValue-stateRate)LogisticSigmoid[(t-convergenceMidpoint)*5.88888/convergencePeriod];
@@ -653,30 +653,30 @@ and starting with a different random seed, then pick the best one (the real one 
 fitStartingOverrides=<|
   "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.65,"repupper"->0.8,"powlower"->1.8,"powupper"->2.5|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.55,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
-  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1.2,"repupper"->1.5,"powlower"->1.8,"powupper"->2.5|>,
-  "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->42.5,"tupper"->55,"replower"->0.6,"repupper"->0.65,"powlower"->1.8,"powupper"->2.5|>,
-  "TX"-><|"rlower"->4.8,"rupper"->5,"tlower"->42,"tupper"->75,"replower"->0.6,"repupper"->0.8,"powlower"->2.3,"powupper"->2.5|>,
-  "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.75,"repupper"->0.95,"powlower"->1.5,"powupper"->2|>,
-  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->53,"tupper"->57,"replower"->0.3,"repupper"->0.8,"powlower"->1.8,"powupper"->2|>,
-  "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.45,"repupper"->0.6,"powlower"->1.6,"powupper"->2|>,
-  "NY"-><|"rlower"->4.7,"rupper"->5,"tlower"->30,"tupper"->45,"replower"->0.4,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
+  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1.2,"repupper"->1.4,"powlower"->1.8,"powupper"->2.5|>,
+  "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->54,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
+  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->49,"tupper"->55,"replower"->0.6,"repupper"->0.65,"powlower"->1.8,"powupper"->2.5|>,
+  "TX"-><|"rlower"->4.8,"rupper"->5,"tlower"->42,"tupper"->55.5,"replower"->0.9,"repupper"->1,"powlower"->2.5,"powupper"->3|>,
+  "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.88,"repupper"->0.95,"powlower"->1.5,"powupper"->2|>,
+  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->54,"tupper"->57,"replower"->0.2,"repupper"->0.25,"powlower"->1.7,"powupper"->2.3|>,
+  "OH"-><|"rlower"->3.9,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.25,"repupper"->0.4,"powlower"->1.8,"powupper"->2.3|>,
+  "NY"-><|"rlower"->4.8,"rupper"->5,"tlower"->30,"tupper"->45,"replower"->0.4,"repupper"->0.7,"powlower"->1.7,"powupper"->2|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->52.5,"replower"->0.2,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
   "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.85,"powlower"->1.8,"powupper"->2|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
-  "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.35,"powlower"->1.5,"powupper"->2|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.7,"powupper"->2|>,
+  "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.35,"powlower"->1.8,"powupper"->2|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.6,"repupper"->0.65,"powlower"->2.1,"powupper"->2.5|>,
   "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->51,"tupper"-> 53,"replower"->0.3,"repupper"->0.6,"powlower"->1.45,"powupper"->2.5|>,
-  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->48,"tupper"->58,"replower"->0.5,"repupper"->0.65,"powlower"->1.7,"powupper"->2.3|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->40,"tupper"->75,"replower"->0.40,"repupper"->0.6,"powlower"->1.9,"powupper"->2.3|>,
+  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->55,"tupper"->59,"replower"->0.48,"repupper"->0.5,"powlower"->1.7,"powupper"->2|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->39,"tupper"->41.5,"replower"->0.55,"repupper"->0.65,"powlower"->1.9,"powupper"->2.3|>,
   "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
-  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->2|>,
-  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->62,"replower"->0.35,"repupper"->1,"powlower"->1.9,"powupper"->2.5|>,
-  "OK"-><|"rlower"->4.3,"rupper"->5,"tlower"->35,"tupper"->58,"replower"->0.2,"repupper"->1,"powlower"->2.2,"powupper"->2.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7,"powlower"->1.9,"powupper"->2.5|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->0.7,"powlower"->1.6,"powupper"->2|>,
+  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.55,"powlower"->1.8,"powupper"->2|>,
+  "IN"-><|"rlower"->4.3,"rupper"->5,"tlower"->35,"tupper"->62,"replower"->0.35,"repupper"->1,"powlower"->2.5,"powupper"->3|>,
+  "OK"-><|"rlower"->3.2,"rupper"->4,"tlower"->35,"tupper"->58,"replower"->0.35,"repupper"->0.5,"powlower"->3.3,"powupper"->3.5|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.67,"powlower"->1.9,"powupper"->2.5|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.63,"repupper"->0.7,"powlower"->1.6,"powupper"->2|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->55,"replower"->0.85,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "SC"-><|"rlower"->3.8,"rupper"->4.6,"tlower"->35,"tupper"->58,"replower"->0.7,"repupper"->1.4,"powlower"->1.7,"powupper"->2.8|>(*,
+  "SC"-><|"rlower"->4,"rupper"->4.6,"tlower"->35,"tupper"->58,"replower"->0.75,"repupper"->1.4,"powlower"->2.6,"powupper"->3|>(*,
   "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
   "France"-><|"rlower"->2.8,"rupper"->4.6,"tlower"\[Rule]25,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1,"powupper"->2.5|>,
   "Italy"-><|"rlower"\[Rule]3.5,"rupper"\[Rule]5,"tlower"\[Rule]10,"tupper"\[Rule]15,"replower"->0.2,"repupper"->0.4,"powlower"->1,"powupper"\[Rule]1.25|>*)

@@ -16,26 +16,26 @@
 "pC":2.1099e-2,
 "pPCRNH":0.1123,
 "pPCRH":0.8170,
-"fractionOfCriticalDeceased":0.4238,
+"fractionOfCriticalDeceased":0.3708,
 "initialInfectionImpulse":1.4526e1,
 "r0":4.9733,
 "importtime":5.1025e1,
-"numberOfSimulations":100,
-"dateModelRun":"Sun 26 Apr 2020 21:21:58",
+"numberOfSimulations":10,
+"dateModelRun":"Mon 27 Apr 2020 01:38:05",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.4967,
 "distpow":1.4522,
 "goodnessOfFitMetrics":{
-"chiSquared":9.1763e-5,
-"rmsRelativeError":1.2975,
-"rmsRelativeErrorDeaths":1.6356,
-"rmsRelativeErrorPcr":0.9720,
-"meanRelativeErrorDeaths":-1.0802,
-"meanRelativeErrorPcr":-0.5861,
-"rSquaredDeaths":4.3592e-2,
-"rSquaredPcr":3.0568e-2,
-"deathResidual7Day":-2.4326e1,
-"pcrResidual7Day":5.6595e1
+"chiSquared":5.4317e-5,
+"rmsRelativeError":1.0672,
+"rmsRelativeErrorDeaths":1.3022,
+"rmsRelativeErrorPcr":0.8510,
+"meanRelativeErrorDeaths":-0.8008,
+"meanRelativeErrorPcr":-0.4624,
+"rSquaredDeaths":3.4691e-2,
+"rSquaredPcr":8.3444e-3,
+"deathResidual7Day":-1.9978e1,
+"pcrResidual7Day":5.8770e1
 },
 "parameters":{
 "r0":{
@@ -56,7 +56,7 @@
 ]
 },
 "daysUntilHospitalized":{
-"value":7,
+"value":8.5,
 "name":"Days until hospitalized",
 "description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
 "type":"literature",
@@ -104,7 +104,7 @@
 ]
 },
 "daysTogoToCriticalCare":{
-"value":1.5,
+"value":2.5,
 "name":"Days to go to critical care after arriving in the hospital",
 "description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
 "type":"literature",
@@ -129,7 +129,7 @@
 ]
 },
 "fractionOfCriticalDeceased":{
-"value":0.4238,
+"value":0.3708,
 "name":"Fraction of ICU admissions deceased.",
 "description":"An age adjusted fraction of the ICU admissions that will be deceased.",
 "type":"literature",
@@ -192,7 +192,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
