@@ -81,7 +81,7 @@ export function Fitting({height, width}) {
           Both datasets are imperfect. The model assumes that the number of
           reported positive tests is less than the number of cases in a region
           and predicts the{' '}
-          <span class="footnote">
+          <span className="footnote">
             <strong>fraction of cases detected by tests</strong> in{' '}
             {location.name}, accounting for how testing capacity varies over
             time.

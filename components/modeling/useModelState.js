@@ -5,6 +5,7 @@ import {memo} from '../../lib/fn';
 import {NearestDataProvider} from '../graph';
 import {useComponentId} from '../util';
 import {fetchLocationData} from '../query';
+import {StatefulContainmentStrategy} from './useContainmentStrategy';
 
 const {createContext, useContext, useMemo} = React;
 
@@ -67,13 +68,15 @@ export const useCreateModelState = ({scenarioId, locationId, setScenario}) => {
 export const ModelStateProvider = ({children, value}) => {
   return (
     <ModelStateContext.Provider value={value}>
-      <NearestDataProvider
-        x={value.x}
-        data={value.indices}
-        initial={initialTargetDate}
-      >
-        {children}
-      </NearestDataProvider>
+      <StatefulContainmentStrategy>
+        <NearestDataProvider
+          x={value.x}
+          data={value.indices}
+          initial={initialTargetDate}
+        >
+          {children}
+        </NearestDataProvider>
+      </StatefulContainmentStrategy>
     </ModelStateContext.Provider>
   );
 };

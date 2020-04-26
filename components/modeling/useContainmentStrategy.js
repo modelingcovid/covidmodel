@@ -1,4 +1,6 @@
-import {createContext, useCallback, useContext, useState} from 'react';
+import {createContext, useCallback, useContext, useState, useMemo} from 'react';
+import {useLocationData} from './useLocationData';
+import {useSuspense} from '../util';
 
 export const ContainmentStrategyContext = createContext('none');
 
@@ -9,7 +11,15 @@ export function useContainmentStrategy() {
 export const SetContainmentStrategyContext = createContext(() => null);
 
 export function StatefulContainmentStrategy({initial = 'none', children}) {
-  const [strategy, setStrategy] = useState(initial);
+  const {dateContained} = useLocationData();
+  const [strategyState, setStrategy] = useState(initial);
+
+  const suspense = useSuspense();
+  const isContained = suspense(() => !!dateContained(), false);
+  const strategy = useMemo(() => (isContained ? strategyState : 'none'), [
+    isContained,
+    strategyState,
+  ]);
   return (
     <SetContainmentStrategyContext.Provider value={setStrategy}>
       <ContainmentStrategyContext.Provider value={strategy}>
