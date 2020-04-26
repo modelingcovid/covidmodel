@@ -33,7 +33,12 @@ const {useCallback, useMemo} = React;
 
 export const TestAndTrace = ({width, height}) => {
   const {location, indices, x} = useModelState();
-  const {dailyDeath, newlyExposed, dailyPcr, domain} = useLocationData();
+  const {
+    dailyReportedDeath,
+    newlyExposed,
+    dailyPcr,
+    domain,
+  } = useLocationData();
 
   return (
     <div className="margin-top-3 flow-root">

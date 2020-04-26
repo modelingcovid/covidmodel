@@ -31,6 +31,7 @@ export const typeDefs = gql`
     dateContained: String!
     dateHospitalsOverCapacity: String
     dateICUOverCapacity: String
+    totalInfectedFraction: Float!
     fatalityRate: Float!
     fatalityRateSymptomatic: Float!
     fatalityRatePCR: Float!
@@ -42,6 +43,8 @@ export const typeDefs = gql`
     fractionOfDeathInICU: Float!
     fractionDeathOfHospitalizedOrICU: Float!
     fractionOfInfectionsPCRConfirmed: Float!
+    fractionOfDeathsReported: Float!
+    fractionOfHospitalizationsReported: Float
     distancingDays: Int!
     distancingLevel: Float!
     hospitalCapacity: Series
@@ -49,6 +52,7 @@ export const typeDefs = gql`
     distancing: DistributionSeries
     rt: DistributionSeries
     cumulativeCritical: DistributionSeries
+    cumulativeReportedCritical: DistributionSeries
     cumulativeDeaths: DistributionSeries
     cumulativeReportedDeaths: DistributionSeries
     cumulativeExposed: DistributionSeries
@@ -57,12 +61,14 @@ export const typeDefs = gql`
     cumulativeRecoveries: DistributionSeries
     cumulativeReportedHospitalized: DistributionSeries
     currentlyCritical: DistributionSeries
+    currentlyReportedCritical: DistributionSeries
     currentlyHospitalized: DistributionSeries
     currentlyInfected: DistributionSeries
     currentlyInfectious: DistributionSeries
     currentlyHospitalizedOrICU: DistributionSeries
     currentlyReportedHospitalized: DistributionSeries
     dailyDeath: DistributionSeries
+    dailyReportedDeath: DistributionSeries
     newlyExposed: DistributionSeries
     dailyPcr: DistributionSeries
     dailyTestsRequiredForContainment: DistributionSeries
@@ -74,6 +80,7 @@ export const typeDefs = gql`
     distancing: DistributionDomain
     rt: DistributionDomain
     cumulativeCritical: DistributionDomain
+    cumulativeReportedCritical: DistributionDomain
     cumulativeDeaths: DistributionDomain
     cumulativeReportedDeaths: DistributionDomain
     cumulativeExposed: DistributionDomain
@@ -82,12 +89,14 @@ export const typeDefs = gql`
     cumulativeRecoveries: DistributionDomain
     cumulativeReportedHospitalized: DistributionDomain
     currentlyCritical: DistributionDomain
+    currentlyReportedCritical: DistributionDomain
     currentlyHospitalized: DistributionDomain
     currentlyInfected: DistributionDomain
     currentlyInfectious: DistributionDomain
     currentlyHospitalizedOrICU: DistributionDomain
     currentlyReportedHospitalized: DistributionDomain
     dailyDeath: DistributionDomain
+    dailyReportedDeath: DistributionDomain
     newlyExposed: DistributionDomain
     dailyPcr: DistributionDomain
     dailyTestsRequiredForContainment: DistributionDomain
@@ -214,6 +223,9 @@ const Scenario = {
   dateICUOverCapacity(parent) {
     return parent.summary.dateICUOverCapacity;
   },
+  totalInfectedFraction(parent) {
+    return parent.summary.totalInfectedFraction;
+  },
   fatalityRate(parent) {
     return parent.summary.fatalityRate;
   },
@@ -247,11 +259,18 @@ const Scenario = {
   fractionOfInfectionsPCRConfirmed(parent) {
     return parent.summary.fractionOfInfectionsPCRConfirmed;
   },
+  fractionOfDeathsReported(parent) {
+    return parent.summary.fractionOfDeathsReported;
+  },
+  fractionOfHospitalizationsReported(parent) {
+    return parent.summary.fractionOfHospitalizationsReported;
+  },
   hospitalCapacity: field('series'),
   icuCapacity: field('series'),
   distancing: field('distribution'),
   rt: field('distribution'),
   cumulativeCritical: field('distribution'),
+  cumulativeReportedCritical: field('distribution'),
   cumulativeDeaths: field('distribution'),
   cumulativeReportedDeaths: field('distribution'),
   cumulativeExposed: field('distribution'),
@@ -260,12 +279,14 @@ const Scenario = {
   cumulativeRecoveries: field('distribution'),
   cumulativeReportedHospitalized: field('distribution'),
   currentlyCritical: field('distribution'),
+  currentlyReportedCritical: field('distribution'),
   currentlyHospitalized: field('distribution'),
   currentlyInfected: field('distribution'),
   currentlyInfectious: field('distribution'),
   currentlyHospitalizedOrICU: field('distribution'),
   currentlyReportedHospitalized: field('distribution'),
   dailyDeath: field('distribution'),
+  dailyReportedDeath: field('distribution'),
   newlyExposed: field('distribution'),
   dailyPcr: field('distribution'),
   dailyTestsRequiredForContainment: field('distribution'),
@@ -315,6 +336,7 @@ const LocationDomain = {
   distancing: domain('distribution'),
   rt: domain('distribution'),
   cumulativeCritical: domain('distribution'),
+  cumulativeReportedCritical: domain('distribution'),
   cumulativeDeaths: domain('distribution'),
   cumulativeReportedDeaths: domain('distribution'),
   cumulativeExposed: domain('distribution'),
@@ -323,11 +345,13 @@ const LocationDomain = {
   cumulativeRecoveries: domain('distribution'),
   cumulativeReportedHospitalized: domain('distribution'),
   currentlyCritical: domain('distribution'),
+  currentlyReportedCritical: domain('distribution'),
   currentlyHospitalized: domain('distribution'),
   currentlyInfected: domain('distribution'),
   currentlyInfectious: domain('distribution'),
   currentlyReportedHospitalized: domain('distribution'),
   dailyDeath: domain('distribution'),
+  dailyReportedDeath: domain('distribution'),
   newlyExposed: domain('distribution'),
   dailyPcr: domain('distribution'),
   dailyTestsRequiredForContainment: domain('distribution'),

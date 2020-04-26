@@ -34,7 +34,12 @@ const textColor = theme.color.red.text;
 
 export const Daily = ({width, height}) => {
   const {location, indices, x} = useModelState();
-  const {dailyDeath, newlyExposed, dailyPcr, domain} = useLocationData();
+  const {
+    dailyReportedDeath,
+    newlyExposed,
+    dailyPcr,
+    domain,
+  } = useLocationData();
 
   return (
     <div className="margin-top-3 flow-root">
@@ -77,7 +82,7 @@ export const Daily = ({width, height}) => {
         {() => (
           <>
             <DistributionLine
-              y={dailyDeath}
+              y={dailyReportedDeath}
               color={theme.color.red[1]}
               gradient
             />
@@ -108,8 +113,8 @@ export const Daily = ({width, height}) => {
           format={formatNumber}
         />
         <DistributionLegendRow
-          title="Fatalities per day"
-          y={dailyDeath}
+          title="Reported fatalities per day"
+          y={dailyReportedDeath}
           color={theme.color.red[1]}
           format={formatNumber}
         />
