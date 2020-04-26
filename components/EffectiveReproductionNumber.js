@@ -18,7 +18,6 @@ import {
   DistributionLegendRow,
   DistributionLine,
   Estimation,
-  useExpected,
   useFindPoint,
   useModelState,
   useLocationData,
@@ -51,7 +50,6 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
   const {location} = useModelState();
   const {r0, importtime, distancing, rt} = useLocationData();
 
-  const expected = useExpected();
   const formatR = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   return (
@@ -95,8 +93,7 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
         xLabel="R"
         nice={false}
       >
-        {() => <Line y={expected(rt).get} stroke={theme.color.magenta[1]} />}
-        {/* {() => <DistributionLine y={rt} color={theme.color.magenta[1]} />} */}
+        {() => <DistributionLine y={rt} color={theme.color.magenta[1]} />}
       </Graph>
       <Gutter>
         <DistributionLegendRow

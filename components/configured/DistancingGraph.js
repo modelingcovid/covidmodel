@@ -2,13 +2,12 @@ import * as React from 'react';
 import {
   Graph,
   GraphDataProvider,
-  Line,
   LinearGradient,
   Stop,
   WithGraphData,
   useXScale,
 } from '../graph';
-import {useExpected, useLocationData} from '../modeling';
+import {DistributionLine, useLocationData} from '../modeling';
 import {WithComponentId} from '../util';
 import {today} from '../../lib/date';
 import {formatPercent} from '../../lib/format';
@@ -23,7 +22,6 @@ export const DistancingGraph = ({
   height = 400,
   ...remaining
 }) => {
-  const expected = useExpected();
   const {distancing} = useLocationData();
   const xScale = useXScale();
   const todayOffset = xScale(today);
@@ -58,10 +56,9 @@ export const DistancingGraph = ({
                       stopColor="var(--color-yellow3)"
                     />
                   </LinearGradient>
-                  <Line
-                    y={expected(distancing).get}
-                    stroke={`url(#${gradientId})`}
-                    strokeWidth={1.5}
+                  <DistributionLine
+                    y={distancing}
+                    color={`url(#${gradientId})`}
                   />
                 </>
               )}
