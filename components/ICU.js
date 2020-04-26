@@ -44,7 +44,9 @@ export const ICU = ({width, height}) => {
   const {location} = useModelState();
   const {
     currentlyCritical,
+    currentlyReportedCritical,
     cumulativeCritical,
+    cumulativeReportedCritical,
     domain,
     icuBeds,
     icuCapacity,
@@ -69,8 +71,9 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <Line y={icuCapacity.get} stroke={red} strokeDasharray="6,3" />
             <DistributionLine y={currentlyCritical} color={blue} gradient />
+            <DistributionLine y={currentlyReportedCritical} color={yellow} />
+            <Line y={icuCapacity.get} stroke={red} strokeDasharray="6,3" />
           </>
         )}
       </Graph>
@@ -85,6 +88,12 @@ export const ICU = ({width, height}) => {
           title="Currently require intensive care"
           y={currentlyCritical}
           color={blue}
+          format={formatNumber}
+        />
+        <DistributionLegendRow
+          title="Currently require intensive care"
+          y={currentlyReportedCritical}
+          color={yellow}
           format={formatNumber}
         />
       </Gutter>
@@ -119,6 +128,7 @@ export const ICU = ({width, height}) => {
         {() => (
           <>
             <DistributionLine y={cumulativeCritical} color={blue} gradient />
+            <DistributionLine y={cumulativeReportedCritical} color={yellow} />
           </>
         )}
       </Graph>
@@ -127,6 +137,12 @@ export const ICU = ({width, height}) => {
           title="Total cases that require intensive care"
           y={cumulativeCritical}
           color={blue}
+          format={formatNumber}
+        />
+        <DistributionLegendRow
+          title="Total reported hospitalized"
+          y={cumulativeReportedCritical}
+          color={yellow}
           format={formatNumber}
         />
       </Gutter>

@@ -34,6 +34,8 @@ export function SummaryTableContents() {
     fractionOfDeathInICU,
     fractionDeathOfHospitalizedOrICU,
     fractionOfInfectionsPCRConfirmed,
+    fractionOfDeathsReported,
+    fractionOfHospitalizationsReported,
   } = useLocationData();
 
   const metrics = [
@@ -140,6 +142,20 @@ export function SummaryTableContents() {
       name: 'Total infected fraction',
       value: totalInfectedFraction(),
       description: 'Fraction of population infected',
+      citations: [],
+    },
+    {
+      id: 'fractionOfDeathsReported',
+      name: 'Total fraction of deaths reported',
+      value: fractionOfDeathsReported(),
+      description: 'Fraction of deaths that eventually are reported',
+      citations: [],
+    },
+    {
+      id: 'fractionOfHospitalizationsReported',
+      name: 'Total fraction of hospitalizations reported',
+      value: fractionOfHospitalizationsReported(),
+      description: 'Fraction of hospitalizations that eventually are reported',
       citations: [],
     },
   ];

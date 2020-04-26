@@ -250,9 +250,11 @@ generateModelComponents[distancing_] := <|
       EHCq'[t]==ICq[t] / daysUntilHospitalized,
 
       (* Current reported positive hospital cases *)
-      RepCHHq'[t]==testingProbability[t] * pPCRH * (IHq[t]/daysUntilHospitalized) - RepCHHq[t]/daysToLeaveHosptialNonCritical,
+      RepCHHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHosptialNonCritical,
       (* Current reported positive hospital critical cases *)
-      RepCHCq'[t]==testingProbability[t] * pPCRH * (ICq[t]/daysUntilHospitalized) - RepCHCq[t]/daysTogoToCriticalCare,
+      RepCHCq'[t]==testingProbability[t] * pPCRH * ICq[t]/daysUntilHospitalized - RepCHCq[t]/daysTogoToCriticalCare,
+      (* Currently reported in critical care *)
+      RepCCCq'[t]==testingProbability[t] * pPCRH * HCq[t]/daysTogoToCriticalCare - RepCCCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (*Cumulative reported positive hospital cases*)
       RepHq'[t]== testingProbability[t] * pPCRH  * IHq[t] / daysUntilHospitalized,
@@ -263,7 +265,7 @@ generateModelComponents[distancing_] := <|
       PCR'[t] == testingProbability[t] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
 
       (* Cumulative PCR confirmed and reported deaths (both hospitalized and ICU) *)
-      RepDeaq'[t]==testingProbability[t] * Deaq'[t],
+      RepDeaq'[t]==testingProbability[t] * pPCRH * Deaq'[t],
       (* Cumulative PCR confirmed and reported ICU deaths *)
       RepDeaICUq'[t]==testingProbability[t] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
@@ -299,16 +301,16 @@ generateModelComponents[distancing_] := <|
   "initialConditions" -> Flatten[{
       Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
       Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
-      RepHq[tmin0]==0,RepHCq[tmin0]==0,RepCHHq[tmin0]==0,RepCHCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
+      RepHq[tmin0]==0,RepHCq[tmin0]==0,RepCHHq[tmin0]==0,RepCHCq[tmin0]==0,RepCCCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
       Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,testAndTraceDelayCounter[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
 
   "outputFunctions" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
 
   "dependentVariables" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
       
   "discreteVariables" -> {},
 
@@ -623,7 +625,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   parameterizedSolution = modelComponents["parameterizedSolution"];
 
   rawSimResults=Map[integrateModelSim[parameterizedSolution, outputODE, #][[1]]&, sims];
-  simResults=Select[rawSimResults, endTime[#[Sq]]>=endOfEval&];
+  simResults=Select[rawSimResults, endTime[#[Sq]]>=endOfEval&]; 
 
   (* organize the simulation / expectation outputs into a time series array *)
   timeSeriesData=generateTimeSeries[state,scenario,sol,soltt,simResults,fitParams,stateParams,population,endOfEval];
@@ -649,32 +651,32 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.8,"powlower"->1.8,"powupper"->2.5|>,
+  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.65,"repupper"->0.8,"powlower"->1.8,"powupper"->2.5|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.55,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
-  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->0.9,"repupper"->1.2,"powlower"->1.8,"powupper"->2|>,
+  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1.2,"repupper"->1.5,"powlower"->1.8,"powupper"->2.5|>,
   "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
   "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->42.5,"tupper"->55,"replower"->0.6,"repupper"->0.65,"powlower"->1.8,"powupper"->2.5|>,
-  "TX"-><|"rlower"->3,"rupper"->5,"tlower"->42,"tupper"->75,"replower"->0.5,"repupper"->0.75,"powlower"->1.8,"powupper"->2.5|>,
+  "TX"-><|"rlower"->4.8,"rupper"->5,"tlower"->42,"tupper"->75,"replower"->0.6,"repupper"->0.8,"powlower"->2.3,"powupper"->2.5|>,
   "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.75,"repupper"->0.95,"powlower"->1.5,"powupper"->2|>,
-  "CT"-><|"rlower"->4.7,"rupper"->5,"tlower"->47,"tupper"->53,"replower"->0.3,"repupper"->0.8,"powlower"->1.8,"powupper"->2|>,
+  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->53,"tupper"->57,"replower"->0.3,"repupper"->0.8,"powlower"->1.8,"powupper"->2|>,
   "OH"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.45,"repupper"->0.6,"powlower"->1.6,"powupper"->2|>,
   "NY"-><|"rlower"->4.7,"rupper"->5,"tlower"->30,"tupper"->45,"replower"->0.4,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.65,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
+  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
   "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.85,"powlower"->1.8,"powupper"->2|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
-  "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.35,"repupper"->0.45,"powlower"->1.5,"powupper"->2|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.6,"repupper"->0.75,"powlower"->1.5,"powupper"->2|>,
-  "MA"-><| "rlower"->4.85,"rupper"->5,"tlower"->46.5,"tupper"-> 53,"replower"->0.6,"repupper"->0.7,"powlower"->1.45,"powupper"->1.65|>,
-  "MD"-><|"rlower"->4.8,"rupper"->5,"tlower"->48,"tupper"->58,"replower"->0.5,"repupper"->0.65,"powlower"->1.8,"powupper"->2.3|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->47,"tupper"->75,"replower"->0.40,"repupper"->0.6,"powlower"->1.9,"powupper"->2.3|>,
+  "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.35,"powlower"->1.5,"powupper"->2|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.7,"powupper"->2|>,
+  "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->51,"tupper"-> 53,"replower"->0.3,"repupper"->0.6,"powlower"->1.45,"powupper"->2.5|>,
+  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->48,"tupper"->58,"replower"->0.5,"repupper"->0.65,"powlower"->1.7,"powupper"->2.3|>,
+  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->40,"tupper"->75,"replower"->0.40,"repupper"->0.6,"powlower"->1.9,"powupper"->2.3|>,
   "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
   "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->2|>,
-  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->60,"replower"->0.35,"repupper"->0.5,"powlower"->1.9,"powupper"->2|>,
-  "OK"-><|"rlower"->3.5,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.2,"repupper"->0.4,"powlower"->1.9,"powupper"->2.5|>,
+  "IN"-><|"rlower"->4.1,"rupper"->5,"tlower"->35,"tupper"->62,"replower"->0.35,"repupper"->1,"powlower"->1.9,"powupper"->2.5|>,
+  "OK"-><|"rlower"->4.3,"rupper"->5,"tlower"->35,"tupper"->58,"replower"->0.2,"repupper"->1,"powlower"->2.2,"powupper"->2.5|>,
   "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.7,"powlower"->1.9,"powupper"->2.5|>,
   "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.6,"repupper"->0.7,"powlower"->1.6,"powupper"->2|>,
   "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->55,"replower"->0.85,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "SC"-><|"rlower"->2.8,"rupper"->4.6,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.8,"powlower"->1.7,"powupper"->2.5|>(*,
+  "SC"-><|"rlower"->3.8,"rupper"->4.6,"tlower"->35,"tupper"->58,"replower"->0.7,"repupper"->1.4,"powlower"->1.7,"powupper"->2.8|>(*,
   "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
   "France"-><|"rlower"->2.8,"rupper"->4.6,"tlower"\[Rule]25,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1,"powupper"->2.5|>,
   "Italy"-><|"rlower"\[Rule]3.5,"rupper"\[Rule]5,"tlower"\[Rule]10,"tupper"\[Rule]15,"replower"->0.2,"repupper"->0.4,"powlower"->1,"powupper"\[Rule]1.25|>*)
@@ -809,10 +811,10 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (*   poissonWeight: weights data assuming its uncertainty is poisson *)
   (*   boostDeathWeight: increases the weighting of deaths by some factor *)
   dataWeights=Module[{weekOverWeekWeight,poissonWeight,boostDeathWeight},
-    weekOverWeekWeight[factor_]:=Map[(factor^(-#[[2]]/7))&,longData];
+    weekOverWeekWeight[factor_]:=Map[(factor^((today-#[[2]])/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[.85] * boostDeathWeight[3]
+    poissonWeight * weekOverWeekWeight[.1] * boostDeathWeight[100]
   ];
 
   (* run the fitting algorithm to the non-linear equations *)

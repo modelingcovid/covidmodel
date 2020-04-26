@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":3.5165,
-"importtime":3.8396e1,
-"stateAdjustmentForTestingDifferences":0.4408,
-"distpow":1.5393
+"r0natural":3.5979,
+"importtime":3.6827e1,
+"stateAdjustmentForTestingDifferences":0.2324,
+"distpow":1.8406
 },
 "population":9925568,
 "ventilators":1847,
@@ -14,32 +14,32 @@
 "pS":0.9242,
 "pH":5.4038e-2,
 "pC":2.1721e-2,
-"pPCRNH":0.1521,
+"pPCRNH":0.1115,
 "pPCRH":0.8112,
 "fractionOfCriticalDeceased":0.4235,
 "initialInfectionImpulse":1.4906e1,
-"r0":3.5165,
-"importtime":3.8396e1,
+"r0":3.5979,
+"importtime":3.6827e1,
 "numberOfSimulations":100,
-"dateModelRun":"Sat 25 Apr 2020 21:20:56",
+"dateModelRun":"Sun 26 Apr 2020 21:12:27",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.4408,
-"distpow":1.5393,
+"stateAdjustmentForTestingDifferences":0.2324,
+"distpow":1.8406,
 "goodnessOfFitMetrics":{
-"chiSquared":2.2301e-5,
-"rmsRelativeError":2.6349,
-"rmsRelativeErrorDeaths":4.0572,
-"rmsRelativeErrorPcr":0.4123,
-"meanRelativeErrorDeaths":-1.8010,
-"meanRelativeErrorPcr":0.3006,
-"rSquaredDeaths":1.6336e-2,
-"rSquaredPcr":1.4362e-2,
-"deathResidual7Day":-3.4573e1,
-"pcrResidual7Day":4.2110e1
+"chiSquared":2.2015e-5,
+"rmsRelativeError":3.4312,
+"rmsRelativeErrorDeaths":5.2905,
+"rmsRelativeErrorPcr":0.3833,
+"meanRelativeErrorDeaths":-2.4673,
+"meanRelativeErrorPcr":0.2147,
+"rSquaredDeaths":3.8817e-2,
+"rSquaredPcr":7.1776e-3,
+"deathResidual7Day":-4.5195e1,
+"pcrResidual7Day":4.1736e1
 },
 "parameters":{
 "r0":{
-"value":3.5165,
+"value":3.5979,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -89,7 +89,7 @@
 ]
 },
 "pPCRNH":{
-"value":0.1521,
+"value":0.1115,
 "name":"Probability of getting a positive PCR test if you are not in the hospital",
 "description":"An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.",
 "type":"literature"
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":3.8396e1,
+"value":3.6827e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -180,13 +180,13 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.4408,
+"value":0.2324,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
 },
 "distancePower":{
-"value":1.5393,
+"value":1.8406,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"

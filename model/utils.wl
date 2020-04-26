@@ -142,10 +142,12 @@ generateTimeSeries[state_,scenario_,sol_,soltt_,simResults_,fitParams_,statePara
     CumulativeExposedQuantiles,
     CurrentlyReportedHospitalizedQuantiles,
     CurrentlyReportedCriticalQuantiles,
+    CumulativeReportedHospitalizedQuantiles,
     CurrentlySuseptibleQuantiles,
     CumulativeDeathQuantiles,
     CumulativeReportedDeathQuantiles,
     CumulativeReportedICUDeathQuantiles,
+    CumulativeReportedCriticalQuantiles,
     CumulativePCRQuantiles,
     DailyExposedQuantiles,
     DailyPCRQuantiles,
@@ -168,21 +170,21 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   CumulativeDeathQuantiles[t_] := simDeciles[#[Deaq][t]&] * population;
 
   CumulativeExposedQuantiles[t_]:=simDeciles[#[cumEq][t]&] * population;
-  CumulativeHospitalizedQuantiles[t_] := simDeciles[(#[RepHq][t]+#[RepHCq][t])*population &];
-  CumulativeCriticalQuantiles[t_] := simDeciles[#[RepHCq][t]*population&];
+  CumulativeHospitalizedQuantiles[t_] := simDeciles[(#[EHq][t]+#[EHCq][t])*population &];
+  CumulativeReportedHospitalizedQuantiles[t_] := simDeciles[(#[RepHq][t]+#[RepHCq][t])*population &];
+  CumulativeCriticalQuantiles[t_] := simDeciles[#[EHCq][t]*population&];
+  CumulativeReportedCriticalQuantiles[t_] := simDeciles[#[RepHCq][t]*population&];
   CumulativePCRQuantiles[t_] := simDeciles[#[PCR][t]&] * population;
   CumulativeReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t]&] * population;
   CumulativeReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t]&] * population;
 
-  DailyPCRQuantiles[t_] := simDeciles[#[PCR]'[t]&] * population;
-  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq]'[t]&] * population;
-  DailyDeathQuantiles[t_] := simDeciles[#[Deaq]'[t]&] * population;
-  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq]'[t]&] * population;
-  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq]'[t]&] * population;
-
-  (* TODO: Let's discuss these quantities *)
+  DailyPCRQuantiles[t_] := simDeciles[#[PCR][t] - #[PCR][t-1]&] * population;
+  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
+  DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
+  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t]-#[RepDeaq][t-1]&] * population;
+  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t]-#[RepDeaICUq][t-1]&] * population;
   CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*(#[RepCHHq][t]+#[RepCHCq][t]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
-  CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[CCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&];
+  CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[RepCCCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&];
 
   (* define some helpers to generate percentile keys in the json export like "percentile10" etc. *)
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
@@ -228,11 +230,18 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
             }, First],
           "dailyDeath" -> Merge[{
               <|
-                "confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["deathIncrease"]],
                 "expected"-> population*(sol[Deaq][t] - sol[Deaq][t-1]),
                 "expectedTestTrace"-> population*(soltt[Deaq][t]-soltt[Deaq][t-1])
               |>,
               percentileMap[DailyDeathQuantiles[t]]
+            }, First],
+          "dailyReportedDeath" -> Merge[{
+              <|
+                "confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["deathIncrease"]],
+                "expected"-> population*(sol[RepDeaq][t] - sol[RepDeaq][t-1]),
+                "expectedTestTrace"-> population*(soltt[RepDeaq][t]-soltt[RepDeaq][t-1])
+              |>,
+              percentileMap[DailyReportedDeathQuantiles[t]]
             }, First],
           "dailyTestsRequiredForContainment" -> <|
             "expected"-> population*testToAllCaseRatio0*(sol[cumEq][t] - sol[cumEq][t-1])|>,
@@ -333,7 +342,7 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
                 "expected"->population*(sol[RepHq][t - daysForHospitalsToReportCases0]+sol[RepHCq][t - daysForHospitalsToReportCases0]),
                 "expectedTestTrace"-> population*(soltt[RepHq][t - daysForHospitalsToReportCases0]+soltt[RepHCq][t - daysForHospitalsToReportCases0])
               |>,
-              percentileMap[CumulativeHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
+              percentileMap[CumulativeReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             }, First],
           "cumulativeHospitalized" -> Merge[{
               <|
@@ -342,7 +351,7 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
               |>,
               percentileMap[CumulativeHospitalizedQuantiles[t]]
             }, First],
-          "cumulativeCritical" -> Merge[{
+          "cumulativeReportedCritical" -> Merge[{
               <|
                 "confirmed"->If[
                   Length[Select[stateParams["icuCumulativeData"],(#["day"]==t)&]]==1 && KeyExistsQ[Select[stateParams["icuCumulativeData"],
@@ -352,24 +361,38 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
                 "expected"->population*(sol[RepHCq][t - daysForHospitalsToReportCases0]),
                 "expectedTestTrace"->population*(soltt[RepHCq][t - daysForHospitalsToReportCases0])
               |>,
+              percentileMap[CumulativeReportedCriticalQuantiles[t - daysForHospitalsToReportCases0]]
+            }, First],
+            "cumulativeCritical" -> Merge[{
+              <|
+                "expected"->population*(sol[EHCq][t]),
+                "expectedTestTrace"->population*(soltt[EHCq][t])
+              |>,
               percentileMap[CumulativeCriticalQuantiles[t]]
             }, First],
-          "currentlyHospitalizedOrICU" -> Merge[{
-            <|"expected"->population*(sol[HHq][t]+sol[HCq][t]+sol[CCq][t])|>,
-            <|"expectedTestTrace"->population*(soltt[HHq][t]+soltt[HCq][t]+soltt[CCq][t])|>
-          },First],
-          "currentlyCritical" -> Merge[{
+          "currentlyReportedCritical" -> Merge[{
               <|
                 "confirmed"->If[
                   Length[Select[stateParams["icuCurrentData"],(#["day"]==t)&]]==1 && KeyExistsQ[Select[stateParams["icuCurrentData"],
                       (#["day"]==t)&][[1]],"icu"],
                   Select[stateParams["icuCurrentData"],(#["day"]==t)&][[1]]["icu"],
                   0],
+                "expected"->Min[population*sol[RepCCCq][t - daysForHospitalsToReportCases0], stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]],
+                "expectedTestTrace"-> Min[population*soltt[RepCCCq][t - daysForHospitalsToReportCases0], stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]
+              |>,
+              percentileMap[CurrentlyReportedCriticalQuantiles[t - daysForHospitalsToReportCases0]]
+            }, First],
+          "currentlyCritical" -> Merge[{
+              <|
                 "expected"->population*sol[CCq][t],
                 "expectedTestTrace"-> population*soltt[CCq][t]
               |>,
               percentileMap[CurrentlyCriticalQuantiles[t]]
-            }, First]
+            }, First],
+          "currentlyHospitalizedOrICU" -> Merge[{
+            <|"expected"->population*(sol[HHq][t]+sol[HCq][t]+sol[CCq][t])|>,
+            <|"expectedTestTrace"->population*(soltt[HHq][t]+soltt[HCq][t]+soltt[CCq][t])|>
+          },First]
       }], {t, Floor[fitParams["importtime"]] - 5, endOfEval}] 
 ];
 
@@ -404,6 +427,8 @@ generateSummaries[events_,eventstt_,sol_,population_,timeSeriesData_,endOfEval_,
         "fractionOfDeathInICU"->(sol[RepDeaICUq][t]) / (sol[RepDeaq][t]),
         "fractionDeathOfHospitalizedOrICU"->((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]))*(fractionOfCriticalDeceased0 + (1 - ((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t])))*fractionOfHospitalizedNonCriticalDeceased0/((sol[EHCq][t]) / (sol[EHq][t] + sol[EHCq][t]))),
         "fractionOfInfectionsPCRConfirmed"-> sol[PCR][t] / (sol[cumEq][t]),
+        "fractionOfDeathsReported"-> sol[RepDeaq][t] / sol[Deaq][t],
+        "fractionOfHospitalizationsReported"-> sol[RepHq][t] / sol[EHq][t],
         "dateContained"->If[!TrueQ[containmentTime == Null],
           DateString[DatePlus[{2020,1,1},containmentTime-1]],
           ""],

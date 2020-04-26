@@ -153,6 +153,8 @@ const queries = [
       fractionOfDeathInICU
       fractionDeathOfHospitalizedOrICU
       fractionOfInfectionsPCRConfirmed
+      fractionOfDeathsReported
+      fractionOfHospitalizationsReported
       distancing { ...DistributionSeriesFull }
       rt { ...DistributionSeriesFull }
     }`,
@@ -176,6 +178,9 @@ const queries = [
         d.fractionDeathOfHospitalizedOrICU,
       fractionOfInfectionsPCRConfirmed: (d) =>
         d.fractionOfInfectionsPCRConfirmed,
+      fractionOfDeathsReported: (d) => d.fractionOfDeathsReported,
+      fractionOfHospitalizationsReported: (d) =>
+        d.fractionOfHospitalizationsReported,
       distancing: createDistributionSeries((d) => d.distancing),
       rt: createDistributionSeries((d) => d.rt),
     },
@@ -219,11 +224,13 @@ const queries = [
     'Scenario',
     `{
       dailyDeath { ...DistributionSeriesFull }
+      dailyReportedDeath { ...DistributionSeriesFull }
       newlyExposed { ...DistributionSeriesFull }
       dailyPcr { ...DistributionSeriesFull }
     }`,
     {
       dailyDeath: createDistributionSeries((d) => d.dailyDeath),
+      dailyReportedDeath: createDistributionSeries((d) => d.dailyReportedDeath),
       newlyExposed: createDistributionSeries((d) => d.newlyExposed),
       dailyPcr: createDistributionSeries((d) => d.dailyPcr),
     },
@@ -261,11 +268,19 @@ const queries = [
     'Scenario',
     `{
       currentlyCritical { ...DistributionSeriesFull }
+      currentlyReportedCritical { ...DistributionSeriesFull }
       cumulativeCritical { ...DistributionSeriesFull }
+      cumulativeReportedCritical { ...DistributionSeriesFull }
     }`,
     {
       currentlyCritical: createDistributionSeries((d) => d.currentlyCritical),
+      currentlyReportedCritical: createDistributionSeries(
+        (d) => d.currentlyReportedCritical
+      ),
       cumulativeCritical: createDistributionSeries((d) => d.cumulativeCritical),
+      cumulativeReportedCritical: createDistributionSeries(
+        (d) => d.cumulativeReportedCritical
+      ),
     },
     DistributionSeriesFull,
   ],
