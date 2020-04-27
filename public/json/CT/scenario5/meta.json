@@ -5,7 +5,13 @@
 	"maintain":true,
 	"name":"Current Indefinite",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"icu":{
+			"eventName":"icu",
+			"day":9.058847744594088e1,
+			"thresholdCrossed":1.3526303402051698e-4
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":9.710666346514729e3,
 		"totalProjectedPCRConfirmed":1.3657528995369913e5,
@@ -25,7 +31,7 @@
 		"fractionOfDeathsReported":0.826372457937401,
 		"fractionOfHospitalizationsReported":0.824550826905978,
 		"dateContained":"Mon 16 Nov 2020 20:14:33",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Mon 30 Mar 2020 14:07:24",
 		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
@@ -47,7 +53,7 @@
 		"fractionOfDeathsReported":0.8263450039874386,
 		"fractionOfHospitalizationsReported":0.8244874932346771,
 		"dateContained":"Mon 16 Nov 2020 20:14:33",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Mon 30 Mar 2020 14:07:24",
 		"dateHospitalsOverCapacity":""
 	}
 }

@@ -279,9 +279,9 @@ generateModelComponents[distancing_] := <|
   (* events used in evaluting the simluations / expectation values *)
   "simulationEvents" -> {
     (* Reporting events *)
-    WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
-    WhenEvent[CCq[t]>=icuBeds*If[distancing[t]<0.7,0.85,0.7], Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
-    WhenEvent[HHq[t]>=(1-bedUtilization*If[distancing[t]<0.7,0.5,1])*staffedBeds, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
+    WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],(*
+    WhenEvent[CCq[t]>=icuCapacity, Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
+    WhenEvent[HHq[t]>=hospitalCapacity, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)*)
     (* initial infection impulse events *)
     WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength, est[t]->0],
@@ -289,7 +289,9 @@ generateModelComponents[distancing_] := <|
     WhenEvent[
       cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5,
       {testAndTraceDelayCounter[t]->0.01, Sow[{t, cumEq[t]}, "containment"], "RemoveEvent"},
-      DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False]
+      DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False],
+    WhenEvent[CCq[t]>=icuBeds*If[distancing[t]<0.7,0.85,0.7], Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
+    WhenEvent[HHq[t]>=(1-bedUtilization*If[distancing[t]<0.7,0.5,1])*staffedBeds, Sow[{t,HHq[t]},"hospital"]](*Hospitals Capacity overshot*)
   },
 
   (* for the fitting the only event that we use is the initial infection impulse *)
@@ -356,9 +358,9 @@ generateModelComponents[distancing_] := <|
       pC -> stateParams[state]["pC"],
       pPCRNH -> stateParams[state]["pPCRNH"],
       pPCRH -> stateParams[state]["pPCRH"],
-      icuBeds -> stateParams[state]["icuBeds"],
+      icuBeds -> stateParams[state]["icuBeds"] / stateParams[state]["population"],
       bedUtilization -> stateParams[state]["bedUtilization"],
-      staffedBeds -> stateParams[state]["staffedBeds"],
+      staffedBeds -> stateParams[state]["staffedBeds"] / stateParams[state]["population"],
       testAndTrace -> 0
   }]
 |>;
@@ -528,9 +530,9 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
     stateParams["params"]["pC"],
-    stateParams["params"]["icuBeds"],
+    stateParams["params"]["icuBeds"]/stateParams["params"]["population"],
     stateParams["params"]["bedUtilization"],
-    stateParams["params"]["staffedBeds"],
+    stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
     RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
     RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]],
     0
@@ -596,9 +598,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
     stateParams["params"]["pC"],
-    stateParams["params"]["icuBeds"],
+    stateParams["params"]["icuBeds"]/stateParams["params"]["population"],
     stateParams["params"]["bedUtilization"],
-    stateParams["params"]["staffedBeds"],
+    stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
     fitParams["stateAdjustmentForTestingDifferences"],
     fitParams["distpow"],
     0
@@ -610,7 +612,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   (* generate solutions for both the expectation values with and without test and trace *)
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
-  
+
   (* set up dates for simulation / reporting *)
   aug1 = 214;
   endOfYear = 730;
@@ -665,9 +667,9 @@ fitStartingOverrides=<|
   "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->51,"tupper"->57,"replower"->0.15,"repupper"->0.2,"powlower"->1.7,"powupper"->2.3|>,
   "OH"-><|"rlower"->3.9,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.25,"repupper"->0.4,"powlower"->2.2,"powupper"->2.6|>,
   "NY"-><|"rlower"->4.8,"rupper"->5,"tlower"->30,"tupper"->45,"replower"->0.4,"repupper"->0.7,"powlower"->1.7,"powupper"->2|>,
-  "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->52.5,"replower"->0.2,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
+  "VA"-><|"rlower"->3.7,"rupper"->4.2,"tlower"->35,"tupper"->52.5,"replower"->0.2,"repupper"->1,"powlower"->1.6,"powupper"->1.8|>,
   "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.85,"powlower"->1.8,"powupper"->2|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->44.5,"replower"->0.25,"repupper"->0.4,"powlower"->1.9,"powupper"->2.5|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->44.5,"replower"->0.25,"repupper"->0.4,"powlower"->2.4,"powupper"->3|>,
   "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.35,"powlower"->1.8,"powupper"->2|>,
   "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.55,"repupper"->0.6,"powlower"->2.1,"powupper"->2.5|>,
   "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->49,"tupper"-> 53,"replower"->0.3,"repupper"->0.45,"powlower"->1.45,"powupper"->2.5|>,
