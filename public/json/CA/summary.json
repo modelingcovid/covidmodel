@@ -11,31 +11,31 @@
 "staffedBeds":80802,
 "bedUtilization":0.5404,
 "hospitalCapacity":3.7133e4,
-"pS":0.9328,
-"pH":4.9021e-2,
-"pC":1.8151e-2,
+"pS":0.9455,
+"pH":3.9811e-2,
+"pC":1.4682e-2,
 "pPCRNH":0.1058,
 "pPCRH":0.7695,
 "fractionOfCriticalDeceased":0.3128,
 "initialInfectionImpulse":1.6274e1,
 "r0":4.3373,
 "importtime":4.6181e1,
-"numberOfSimulations":200,
-"dateModelRun":"Mon 27 Apr 2020 02:02:47",
+"numberOfSimulations":10,
+"dateModelRun":"Mon 27 Apr 2020 12:39:42",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.6313,
 "distpow":1.9612,
 "goodnessOfFitMetrics":{
-"chiSquared":6.3989e-6,
-"rmsRelativeError":0.4228,
-"rmsRelativeErrorDeaths":0.2510,
-"rmsRelativeErrorPcr":0.5263,
-"meanRelativeErrorDeaths":-0.1243,
-"meanRelativeErrorPcr":-0.1838,
-"rSquaredDeaths":1.8987e-2,
-"rSquaredPcr":1.3979e-2,
-"deathResidual7Day":2.4137,
-"pcrResidual7Day":4.8049e1
+"chiSquared":5.5557e-6,
+"rmsRelativeError":0.3969,
+"rmsRelativeErrorDeaths":0.1926,
+"rmsRelativeErrorPcr":0.5100,
+"meanRelativeErrorDeaths":1.9011e-2,
+"meanRelativeErrorPcr":-0.1563,
+"rSquaredDeaths":2.0216e-2,
+"rSquaredPcr":1.0841e-2,
+"deathResidual7Day":2.5964,
+"pcrResidual7Day":4.8143e1
 },
 "parameters":{
 "r0":{
@@ -104,7 +104,7 @@
 ]
 },
 "daysTogoToCriticalCare":{
-"value":2.5,
+"value":1.5,
 "name":"Days to go to critical care after arriving in the hospital",
 "description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
 "type":"literature",
@@ -158,13 +158,13 @@
 "type":"assumed"
 },
 "pS":{
-"value":0.9328,
+"value":0.9455,
 "name":"Probability of getting a mild case.",
 "description":"An age-adjusted probability that you get a mild case.",
 "type":"literature"
 },
 "pH":{
-"value":4.9021e-2,
+"value":3.9811e-2,
 "name":"Probability of getting a case bad enough to require hospitalization.",
 "description":"An age-adjusted probability that you get a case requiring hospitalization.",
 "type":"literature",
@@ -174,7 +174,7 @@
 ]
 },
 "pC":{
-"value":1.8151e-2,
+"value":1.4682e-2,
 "name":"Probability of getting a case bad enough to require ICU admission",
 "description":"An age-adjusted probability get a severe case requiring ICU admission.",
 "type":"literature"
@@ -192,7 +192,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":200,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"

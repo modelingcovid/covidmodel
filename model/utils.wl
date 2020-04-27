@@ -320,15 +320,15 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
                       (#["day"]==t)&][[1]],"hospitalizations"],
                   Select[stateParams["hospitalizationCurrentData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0],
-                "expected"-> Min[population*(sol[RepCHHq][t - daysForHospitalsToReportCases0]+sol[RepCHCq][t - daysForHospitalsToReportCases0]), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]],
-                "expectedTestTrace"-> Min[population*(soltt[RepCHHq][t - daysForHospitalsToReportCases0]+soltt[RepCHCq][t - daysForHospitalsToReportCases0]), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]
+                "expected"-> Min[population*(sol[RepCHHq][t - daysForHospitalsToReportCases0](*+sol[RepCHCq][t - daysForHospitalsToReportCases0]*)), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]],
+                "expectedTestTrace"-> Min[population*(soltt[RepCHHq][t - daysForHospitalsToReportCases0](*+soltt[RepCHCq][t - daysForHospitalsToReportCases0]*)), (1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]
               |>,
               percentileMap[CurrentlyReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             }, First],
           "currentlyHospitalized" -> Merge[{
               <|
-                "expected"-> population*(sol[HHq][t]+sol[HCq][t]),
-                "expectedTestTrace"-> population*(soltt[HHq][t]+soltt[HCq][t])
+                "expected"-> population*(sol[HHq][t](*+sol[HCq][t]*)),
+                "expectedTestTrace"-> population*(soltt[HHq][t](*+soltt[HCq][t]*))
               |>,
               percentileMap[CurrentlyHospitalizedQuantiles[t]]
             }, First],
@@ -339,15 +339,15 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
                       (#["day"]==t)&][[1]],"hospitalizations"],
                   Select[stateParams["hospitalizationCumulativeData"],(#["day"]==t)&][[1]]["hospitalizations"],
                   0],
-                "expected"->population*(sol[RepHq][t - daysForHospitalsToReportCases0]+sol[RepHCq][t - daysForHospitalsToReportCases0]),
-                "expectedTestTrace"-> population*(soltt[RepHq][t - daysForHospitalsToReportCases0]+soltt[RepHCq][t - daysForHospitalsToReportCases0])
+                "expected"->population*(sol[RepHq][t - daysForHospitalsToReportCases0](*+sol[RepHCq][t - daysForHospitalsToReportCases0]*)),
+                "expectedTestTrace"-> population*(soltt[RepHq][t - daysForHospitalsToReportCases0](*+soltt[RepHCq][t - daysForHospitalsToReportCases0]*))
               |>,
               percentileMap[CumulativeReportedHospitalizedQuantiles[t - daysForHospitalsToReportCases0]]
             }, First],
           "cumulativeHospitalized" -> Merge[{
               <|
-                "expected"->population*(sol[EHq][t]+sol[EHCq][t]),
-                "expectedTestTrace"->population*(soltt[EHq][t]+soltt[EHCq][t])
+                "expected"->population*(sol[EHq][t](*+sol[EHCq][t]*)),
+                "expectedTestTrace"->population*(soltt[EHq][t](*+soltt[EHCq][t]*))
               |>,
               percentileMap[CumulativeHospitalizedQuantiles[t]]
             }, First],

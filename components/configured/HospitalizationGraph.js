@@ -35,6 +35,9 @@ export function HospitalizationGraphContents({clipPathId, gradientId}) {
     cumulativeDeaths,
   } = useLocationData();
   const expected = useExpected();
+
+  debugger;
+
   return (
     <>
       <Area
