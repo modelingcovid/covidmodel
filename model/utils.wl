@@ -311,7 +311,14 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
               |>,
               percentileMap[CurrentlySuseptibleQuantiles[t]]
             }, First],
-            
+          "currentlyMildOrAsymptomatic"->Merge[{
+            <|"expected"->population*sol[ISq][t]|>,
+            <|"expectedTestTrace"->population*soltt[ISq][t]|>
+          },First],
+          "cumulativeMildOrAsymptomatic"->Merge[{
+            <|"expected"->population*sol[ESq][t]|>,
+            <|"expectedTestTrace"->population*soltt[ESq][t]|>
+          },First],
           (* hospitalization and ICU time series *)
           "currentlyReportedHospitalized" -> Merge[{
               <|
