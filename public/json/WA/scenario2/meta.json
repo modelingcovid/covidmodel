@@ -5,7 +5,23 @@
 	"maintain":false,
 	"name":"Italy",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":3.965127592138333e2,
+			"thresholdCrossed":0.6999999999999994
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":3.507388287387811e2,
+			"thresholdCrossed":1.3121399303511448e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":3.5950603153224836e2,
+			"thresholdCrossed":8.298988186727965e-4
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":3.306789448667673e4,
 		"totalProjectedPCRConfirmed":1.0019691488290026e6,
@@ -25,8 +41,8 @@
 		"fractionOfDeathsReported":0.7922108817263595,
 		"fractionOfHospitalizationsReported":0.7909817845988595,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Tue 15 Dec 2020 17:43:54",
+		"dateHospitalsOverCapacity":"Thu 24 Dec 2020 12:08:41"
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":1.250671209502569e3,
@@ -47,7 +63,7 @@
 		"fractionOfDeathsReported":0.7625742334174417,
 		"fractionOfHospitalizationsReported":0.7300796407012043,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Tue 15 Dec 2020 17:43:54",
+		"dateHospitalsOverCapacity":"Thu 24 Dec 2020 12:08:41"
 	}
 }

@@ -5,7 +5,23 @@
 	"maintain":false,
 	"name":"Wuhan",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.554835241466318e2,
+			"thresholdCrossed":0.6999999999999955
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.3743489429504424e2,
+			"thresholdCrossed":1.6625801393259007e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.4268199034843883e2,
+			"thresholdCrossed":1.4080908433940665e-3
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":4.7788511250224234e4,
 		"totalProjectedPCRConfirmed":1.3711183757927623e6,
@@ -25,8 +41,8 @@
 		"fractionOfDeathsReported":0.7834804117908241,
 		"fractionOfHospitalizationsReported":0.7833534877718794,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Mon 24 Aug 2020 10:26:14",
+		"dateHospitalsOverCapacity":"Sat 29 Aug 2020 16:22:03"
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":2.7661204151263146e3,
@@ -47,7 +63,7 @@
 		"fractionOfDeathsReported":0.7826577975031754,
 		"fractionOfHospitalizationsReported":0.7804711512896058,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Mon 24 Aug 2020 10:26:14",
+		"dateHospitalsOverCapacity":"Sat 29 Aug 2020 16:22:03"
 	}
 }

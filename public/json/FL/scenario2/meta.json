@@ -5,7 +5,23 @@
 	"maintain":false,
 	"name":"Italy",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":3.111854112583132e2,
+			"thresholdCrossed":0.6999999999999948
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.8715361211356606e2,
+			"thresholdCrossed":1.7187213596780228e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.922305496675715e2,
+			"thresholdCrossed":1.1191896431429235e-3
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":1.8963675794702707e5,
 		"totalProjectedPCRConfirmed":4.318499627787744e6,
@@ -25,8 +41,8 @@
 		"fractionOfDeathsReported":0.8464434049068554,
 		"fractionOfHospitalizationsReported":0.8463475198342839,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Tue 13 Oct 2020 03:41:12",
+		"dateHospitalsOverCapacity":"Sun 18 Oct 2020 05:31:59"
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":3.3082115166132885e3,
@@ -47,7 +63,7 @@
 		"fractionOfDeathsReported":0.8437773039391563,
 		"fractionOfHospitalizationsReported":0.8382822643285842,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Tue 13 Oct 2020 03:41:12",
+		"dateHospitalsOverCapacity":"Sun 18 Oct 2020 05:31:59"
 	}
 }

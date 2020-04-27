@@ -612,6 +612,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   (* generate solutions for both the expectation values with and without test and trace *)
   {sol, events} = integrateModel[state, scenario["id"], paramExpected];
   {soltt, eventstt} = integrateModel[state, scenario["id"], paramExpectedtt];
+  
+  Echo[events];
+  Echo[eventstt];
 
   (* set up dates for simulation / reporting *)
   aug1 = 214;

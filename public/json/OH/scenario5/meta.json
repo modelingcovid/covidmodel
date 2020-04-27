@@ -5,7 +5,13 @@
 	"maintain":true,
 	"name":"Current Indefinite",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"icu":{
+			"eventName":"icu",
+			"day":1.5332314795671144e2,
+			"thresholdCrossed":1.773982157764556e-4
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":2.697316124805166e4,
 		"totalProjectedPCRConfirmed":6.601888893645854e5,
@@ -25,7 +31,7 @@
 		"fractionOfDeathsReported":0.8083702615457523,
 		"fractionOfHospitalizationsReported":0.808094381166546,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Mon 1 Jun 2020 07:45:19",
 		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
@@ -47,7 +53,7 @@
 		"fractionOfDeathsReported":0.8083004980856254,
 		"fractionOfHospitalizationsReported":0.8079290598189679,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Mon 1 Jun 2020 07:45:19",
 		"dateHospitalsOverCapacity":""
 	}
 }
