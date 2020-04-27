@@ -1,5 +1,6 @@
 export * from './Citation';
 export * from './Definition';
+export * from './Glyph';
 export * from './Grid';
 export * from './Gutter';
 export * from './InlineData';

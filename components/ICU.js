@@ -59,7 +59,11 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <DistributionLine y={currentlyCritical} color={blue} gradient />
+            <DistributionLine
+              y={currentlyCritical}
+              color={blue}
+              mode="gradient"
+            />
             <DistributionLine y={currentlyReportedCritical} color={yellow} />
             <Line y={icuCapacity.get} stroke={red} strokeDasharray="6,3" />
           </>
@@ -86,11 +90,26 @@ export const ICU = ({width, height}) => {
         />
       </Gutter>
       <Paragraph>
-        The graph shows projections for
+        The graph shows how projections for
         <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[3]}>
-          patients requiring ICU admissions
+          patients who currently require intensive care
         </InlineLabel>{' '}
-        and the ICU capacity.
+        and
+        <InlineLabel
+          color={theme.color.yellow.text}
+          fill={theme.color.yellow[2]}
+        >
+          patients currently reported in intensive care
+        </InlineLabel>{' '}
+        compare to estimated{' '}
+        <InlineLabel
+          color={theme.color.red.text}
+          fill={theme.color.red[2]}
+          glyph="dash"
+        >
+          ICU capacity
+        </InlineLabel>
+        .
       </Paragraph>
       <CapacityEstimation subject="ICUs" date={dateICUOverCapacity} />
       <Paragraph>
@@ -112,7 +131,11 @@ export const ICU = ({width, height}) => {
       >
         {() => (
           <>
-            <DistributionLine y={cumulativeCritical} color={blue} gradient />
+            <DistributionLine
+              y={cumulativeCritical}
+              color={blue}
+              mode="gradient"
+            />
             <DistributionLine y={cumulativeReportedCritical} color={yellow} />
           </>
         )}

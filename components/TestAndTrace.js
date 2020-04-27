@@ -101,12 +101,12 @@ export const TestAndTrace = ({width, height}) => {
             <DistributionLine
               y={newlyExposed}
               color={theme.color.yellow[3]}
-              gradient
+              mode="gradient"
             />
             <DistributionLine
               y={dailyPcr}
               color={theme.color.blue[2]}
-              gradient
+              mode="gradient"
             />
           </>
         )}

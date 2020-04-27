@@ -134,16 +134,24 @@ export const Hospitalizations = ({width, height}) => {
         />
       </Grid>
       <Paragraph>
-        The graph shows projections for
+        The graph shows how projections for
         <InlineLabel color={theme.color.blue.text} fill={theme.color.blue[3]}>
           patients requiring hospitalization
-        </InlineLabel>
-        , and
+        </InlineLabel>{' '}
+        and
         <InlineLabel
           color={theme.color.yellow.text}
           fill={theme.color.yellow[2]}
         >
           patients currently reported hospitalized
+        </InlineLabel>{' '}
+        compare to estimated{' '}
+        <InlineLabel
+          color={theme.color.red.text}
+          fill={theme.color.red[2]}
+          glyph="dash"
+        >
+          hospital capacity
         </InlineLabel>
         . The distinction being that the number reported hospitalized is delayed
         from the actual number of infections severe enough to require

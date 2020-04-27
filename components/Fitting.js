@@ -37,6 +37,7 @@ export function Fitting({height, width}) {
   const {
     cumulativeExposed,
     cumulativePcr,
+    cumulativeDeaths,
     cumulativeReportedDeaths,
   } = useLocationData();
 
@@ -47,16 +48,16 @@ export function Fitting({height, width}) {
         We use two primary data sources to calibrate the curves for each state:{' '}
         <InlineLabel
           color={theme.color.blue.text}
-          stroke={theme.color.blue[2]}
-          strokeWidth={2}
+          fill={theme.color.blue[2]}
+          glyph="stroke"
         >
           confirmed positive tests
         </InlineLabel>{' '}
         and{' '}
         <InlineLabel
           color={theme.color.red.text}
-          stroke={theme.color.red[1]}
-          strokeWidth={2}
+          fill={theme.color.red[1]}
+          glyph="stroke"
         >
           confirmed fatalities
         </InlineLabel>
@@ -99,7 +100,7 @@ export function Fitting({height, width}) {
         citation={
           <>
             The total number of cases is equivalent to the number of people who
-            have been in the <strong>exposed</strong> group.
+            have been in the “exposed” group.
           </>
         }
       >
@@ -114,17 +115,18 @@ export function Fitting({height, width}) {
           </InlineLabel>{' '}
           and
           <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
-            fatalities
+            reported fatalities
           </InlineLabel>
           , and how they compare to the predicted number of
           <InlineLabel
             className="footnote"
             color={theme.color.yellow.text}
             fill={theme.color.yellow[3]}
+            dashed
           >
             total Covid-19 cases
           </InlineLabel>{' '}
-          in {location.name}.
+          in {location.name} after accounting for estimated testing rates.
         </Paragraph>
         <Instruction>
           <strong>Reading the graph:</strong> Each line represents the model’s
@@ -136,17 +138,23 @@ export function Fitting({height, width}) {
         <DistributionLine
           y={cumulativeExposed}
           color={theme.color.yellow[3]}
-          gradient
+          mode="gradient"
         />
         <DistributionLine
           y={cumulativePcr}
           color={theme.color.blue[2]}
-          gradient
+          mode="gradient"
+        />
+        <DistributionLine
+          y={cumulativeDeaths}
+          color={theme.color.red[1]}
+          strokeDasharray="6,4"
+          mode="line"
         />
         <DistributionLine
           y={cumulativeReportedDeaths}
           color={theme.color.red[1]}
-          gradient
+          mode="gradient"
         />
       </PopulationGraph>
       <Grid mobile={1}>
@@ -159,13 +167,13 @@ export function Fitting({height, width}) {
         <DistributionLegendRow
           y={cumulativePcr}
           color={theme.color.blue[2]}
-          title="Total reported positive tests"
+          title="Total positive tests"
           description="Total number of Covid-19 tests projected to be positive"
         />
         <DistributionLegendRow
           y={cumulativeReportedDeaths}
           color={theme.color.red[1]}
-          title="Total deceased"
+          title="Total reported deceased"
           description="People who have died from Covid-19"
         />
       </Grid>

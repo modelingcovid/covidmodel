@@ -35,6 +35,7 @@ const textColor = theme.color.red.text;
 export const Daily = ({width, height}) => {
   const {location, indices, x} = useModelState();
   const {
+    dailyDeath,
     dailyReportedDeath,
     newlyExposed,
     dailyPcr,
@@ -65,7 +66,7 @@ export const Daily = ({width, height}) => {
         </InlineLabel>
         , and
         <InlineLabel color={theme.color.red.text} fill={theme.color.red[1]}>
-          fatalities per day
+          reported fatalities per day
         </InlineLabel>
         , along with their respective confirmed data points:
       </Paragraph>
@@ -82,19 +83,25 @@ export const Daily = ({width, height}) => {
         {() => (
           <>
             <DistributionLine
+              y={dailyDeath}
+              color={theme.color.red[1]}
+              strokeDasharray="6,4"
+              mode="line"
+            />
+            <DistributionLine
               y={dailyReportedDeath}
               color={theme.color.red[1]}
-              gradient
+              mode="gradient"
             />
             <DistributionLine
               y={newlyExposed}
               color={theme.color.yellow[3]}
-              gradient
+              mode="gradient"
             />
             <DistributionLine
               y={dailyPcr}
               color={theme.color.blue[2]}
-              gradient
+              mode="gradient"
             />
           </>
         )}

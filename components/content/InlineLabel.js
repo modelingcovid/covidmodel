@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Glyph} from './Glyph';
 import {theme} from '../../styles';
 
 function getFirstWord(children) {
@@ -15,10 +16,9 @@ function getFirstWord(children) {
 export function InlineLabel({
   children,
   color,
+  glyph = 'fill',
   fill = theme.color.background,
   list = false,
-  stroke = 'transparent',
-  strokeWidth = 0,
   style = {},
   ...remaining
 }) {
@@ -35,42 +35,17 @@ export function InlineLabel({
       }}
     >
       <span className="nowrap">
-        <span
+        <Glyph
+          fill={fill}
+          mode={glyph}
           style={{
             display: 'inline-block',
-            height: 8,
-            width: 8,
-            margin: `0 ${list ? theme.spacing[0] : '6px'} 0 ${
-              list ? `calc(-1 * ${theme.spacing[1]})` : '6px'
-            }`,
             verticalAlign: 'middle',
-            position: 'relative',
+            margin: `-1px 4px 0 ${
+              list ? `calc(-1 * ${theme.spacing[1]})` : '4px'
+            }`,
           }}
-        >
-          <span
-            style={{
-              display: 'inline-block',
-              background: strokeWidth ? stroke : fill,
-              height: 16,
-              width: 2,
-              position: 'absolute',
-              left: 3,
-              top: -4,
-              transform: 'rotate(45deg)',
-            }}
-          />
-          <span
-            style={{
-              display: 'inline-block',
-              background: fill,
-              boxShadow: `inset 0 0 0 ${strokeWidth}px ${stroke}`,
-              position: 'absolute',
-              borderRadius: 8,
-              height: 8,
-              width: 8,
-            }}
-          />
-        </span>
+        />
         {first}
       </span>
       {rest}

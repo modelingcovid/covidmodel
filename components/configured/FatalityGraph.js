@@ -34,7 +34,9 @@ export function FatalityGraph({width, height}) {
       width={width}
       height={height}
     >
-      {() => <DistributionLine y={cumulativeDeaths} color={red} gradient />}
+      {() => (
+        <DistributionLine y={cumulativeDeaths} color={red} mode="gradient" />
+      )}
     </Graph>
   );
 }

@@ -9,11 +9,11 @@ export function DistributionLineContents({
   y,
   color,
   curve,
-  gradient = false,
-  points = true,
+  mode = 'bounds',
+  ...remaining
 }) {
   const strategy = useContainmentStrategy();
-  const showPercentiles = strategy === 'none';
+  const showPercentiles = strategy === 'none' && mode !== 'line';
   const expected = useExpected();
   return (
     <>
@@ -26,7 +26,7 @@ export function DistributionLineContents({
             opacity="0.07"
             curve={curve}
           />
-          {gradient && (
+          {mode === 'gradient' && (
             <>
               <Area
                 y0={y.percentile20.get}
@@ -76,7 +76,7 @@ export function DistributionLineContents({
           />
         </>
       )}
-      <Line y={expected(y).get} stroke={color} curve={curve} />
+      <Line {...remaining} y={expected(y).get} stroke={color} curve={curve} />
     </>
   );
 }

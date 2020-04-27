@@ -180,9 +180,9 @@ export function BigPicture({location}) {
               <span className="footnote">the data it’s based on,</span>
             </strong>{' '}
             and we’re thankful for the many people and organizations who have
-            worked to produce the data that powers the model. That said, all
-            data has its caveats and limitations: in particular, fatality counts
-            are difficult to assess and are{' '}
+            worked to produce the data that powers the model. However, all data
+            has its caveats and limitations: in particular, fatality counts are
+            difficult to assess and{' '}
             <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
               often underreported
             </a>

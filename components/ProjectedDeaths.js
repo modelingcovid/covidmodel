@@ -72,7 +72,9 @@ export const ProjectedDeaths = ({width, height}) => {
         height={height}
         controls
       >
-        {() => <DistributionLine y={dailyDeath} color={color} gradient />}
+        {() => (
+          <DistributionLine y={dailyDeath} color={color} mode="gradient" />
+        )}
       </Graph>
       <Gutter>
         <DistributionLegendRow
