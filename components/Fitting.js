@@ -19,8 +19,8 @@ import {People, Vial, HeadSideCough} from './icon';
 import {
   DistributionLegendRow,
   DistributionLine,
-  DistributionSeriesFullFragment,
   Estimation,
+  ExpectedLegendEntry,
   useLocationData,
   useModelState,
 } from './modeling';
@@ -173,8 +173,17 @@ export function Fitting({height, width}) {
         <DistributionLegendRow
           y={cumulativeReportedDeaths}
           color={theme.color.red[1]}
-          title="Total reported deceased"
+          title="Total fatalities"
           description="People who have died from Covid-19"
+          formatLabel={(label) => `${label} reported fatalities`}
+          before={
+            <ExpectedLegendEntry
+              label="Modeled total fatalities"
+              color={theme.color.red[1]}
+              mode="dash"
+              y={cumulativeDeaths}
+            />
+          }
         />
       </Grid>
       <Heading className="margin-top-4">Finding the best fit</Heading>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import css from 'styled-jsx/css';
 import {breakpoint, theme} from '../../styles';
 
-import {InlineData} from '../content';
+import {Glyph, InlineData} from '../content';
 import {useNearestData} from './useNearestData';
 import {formatShortDate, formatNumber} from '../../lib/format';
 
@@ -40,12 +40,10 @@ const entryStyles = css`
   }
   .entry-symbol {
     flex-shrink: 0;
-    border: 2px solid rgb(255, 0, 0, 0.5);
-    height: 8px;
-    width: 8px;
-    border-radius: 999em;
+    height: 12px;
+    width: 12px;
     align-self: center;
-    margin-right: ${theme.spacing[0]};
+    margin-right: 6px;
   }
   .entry-data {
     font-family: ${theme.font.family.mono};
@@ -61,16 +59,13 @@ export const LegendEntry = ({
   label,
   hide,
   kind = 'minor',
-  symbol = 'fill',
+  mode = 'fill',
   y,
   className,
   width = '60%',
   ...remaining
 }) => {
   const nearest = useNearestData();
-
-  const isStroke = symbol === 'stroke';
-  const borderColor = isStroke ? color : 'transparent';
 
   return (
     <div
@@ -84,15 +79,15 @@ export const LegendEntry = ({
           color: ${theme.color.gray[kind === 'minor' ? 3 : 5]};
           max-width: ${y ? width : '100%'};
         }
-        .entry-symbol {
-          background-color: ${isStroke ? 'transparent' : color};
-          border-color: ${borderColor};
-        }
       `}</style>
       <div className="entry-label">{label}</div>
       {y && (
         <div className="entry-info">
-          {color && <div className="entry-symbol" />}
+          {color && (
+            <div className="entry-symbol">
+              <Glyph fill={color} mode={mode} />
+            </div>
+          )}
           <div className="entry-data">
             <InlineData>
               {() => {

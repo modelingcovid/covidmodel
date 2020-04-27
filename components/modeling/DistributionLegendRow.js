@@ -6,15 +6,24 @@ import {formatNumber, formatNA} from '../../lib/format';
 
 const {useMemo} = React;
 
-export const DistributionLegendRow = ({
-  children,
+const identity = (x) => x;
+
+export function ExpectedLegendEntry({y, ...props}) {
+  const expected = useExpected();
+  return <LegendEntry {...props} y={expected(y).get} />;
+}
+
+export function DistributionLegendRow({
+  after,
+  before,
   description,
   format = formatNumber,
   color,
   title,
   y,
   compact = false,
-}) => {
+  formatLabel = identity,
+}) {
   const suspense = useSuspense();
   const expected = useExpected();
   const hasConfirmed = suspense(() => y.confirmed.empty() === false, false);
@@ -25,26 +34,31 @@ export const DistributionLegendRow = ({
         color={color}
         format={format}
         y={expected(y).get}
-      />
+      >
+        {before}
+        {after}
+      </LegendRow>
     );
   }
   return (
     <LegendRow label={title}>
+      {before}
       <LegendEntry
-        label="Modeled"
+        label={formatLabel('Modeled')}
         color={color}
         format={format}
         y={expected(y).get}
       />
       {hasConfirmed && (
         <LegendEntry
-          label="Confirmed"
+          label={formatLabel('Confirmed')}
           color={color}
-          symbol="stroke"
+          mode="stroke"
           y={y.confirmed.get}
           format={formatNA(format)}
         />
       )}
+      {after}
     </LegendRow>
   );
-};
+}

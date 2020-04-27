@@ -119,6 +119,7 @@ export const Hospitalizations = ({width, height}) => {
           y={hospitalCapacity.get}
           color={red}
           format={formatNumber}
+          mode="dash"
         />
         <DistributionLegendRow
           title="Currently hospitalized"

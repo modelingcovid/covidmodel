@@ -75,6 +75,7 @@ export const ICU = ({width, height}) => {
           y={icuCapacity.get}
           color={red}
           format={formatNumber}
+          mode="dash"
         />
         <DistributionLegendRow
           title="Currently require intensive care"

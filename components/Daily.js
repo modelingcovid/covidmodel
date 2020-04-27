@@ -14,6 +14,7 @@ import {
   DistributionLegendRow,
   DistributionLine,
   Estimation,
+  ExpectedLegendEntry,
   useLocationData,
   useModelState,
 } from './modeling';
@@ -120,10 +121,19 @@ export const Daily = ({width, height}) => {
           format={formatNumber}
         />
         <DistributionLegendRow
-          title="Reported fatalities per day"
           y={dailyReportedDeath}
           color={theme.color.red[1]}
-          format={formatNumber}
+          title="Fatalities per day"
+          description="People who have died from Covid-19"
+          formatLabel={(label) => `${label} reported fatalities`}
+          before={
+            <ExpectedLegendEntry
+              label="Modeled fatalities per day"
+              color={theme.color.red[1]}
+              mode="dash"
+              y={dailyDeath}
+            />
+          }
         />
       </Grid>
     </div>
