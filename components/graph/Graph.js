@@ -84,10 +84,15 @@ export const GraphContents = React.memo(function Graph({
           .graph-contents-overlay {
             pointer-events: none;
             position: absolute;
-            top: ${margin.top}px;
-            left: ${margin.left}px;
-            bottom: ${margin.bottom}px;
-            right: ${margin.right}px;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            padding-top: ${margin.top}px;
+            padding-left: ${margin.left}px;
+            padding-bottom: ${margin.bottom}px;
+            padding-right: ${margin.right}px;
+            overflow: hidden;
           }
           @keyframes fade-in {
             from {
@@ -161,51 +166,53 @@ export const GraphContents = React.memo(function Graph({
           </Group>
         </svg>
         <div className="graph-contents-overlay">
-          {controls && <GraphControls scale={scale} setScale={setScale} />}
-          {scrubber && (
-            <Scrubber>
-              {(nearest, active) => (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    marginTop: '-10px',
-                    paddingBottom: theme.spacing[2],
-                  }}
-                >
-                  <svg width="9" height="15" viewBox="0 0 9 15">
-                    <path
-                      d="M8.5 10.5509V1C8.5 0.723858 8.27614 0.5 8 0.5H1C0.723858 0.5 0.5 0.723858 0.5 1V10.5509C0.5 10.6938 0.561074 10.8298 0.667818 10.9246L4.16782 14.0357C4.35726 14.2041 4.64274 14.2041 4.83218 14.0357L8.33218 10.9246C8.43893 10.8298 8.5 10.6938 8.5 10.5509Z"
-                      fill={theme.color.background}
-                      stroke={theme.color.gray[2]}
-                      strokeWidth={1.5}
-                    />
-                  </svg>
+          <div style={{height: '100%', width: '100%', position: 'relative'}}>
+            {controls && <GraphControls scale={scale} setScale={setScale} />}
+            {scrubber && (
+              <Scrubber>
+                {(nearest, active) => (
                   <div
-                    className="nowrap"
                     style={{
-                      padding: `0px ${theme.spacing[3]} 4px`,
-                      textAlign: 'center',
-                      color: theme.color.gray[4],
-                      fontSize: theme.font.size.micro,
-                      fontWeight: 500,
-                      background: `linear-gradient(
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      marginTop: '-10px',
+                      paddingBottom: theme.spacing[2],
+                    }}
+                  >
+                    <svg width="9" height="15" viewBox="0 0 9 15">
+                      <path
+                        d="M8.5 10.5509V1C8.5 0.723858 8.27614 0.5 8 0.5H1C0.723858 0.5 0.5 0.723858 0.5 1V10.5509C0.5 10.6938 0.561074 10.8298 0.667818 10.9246L4.16782 14.0357C4.35726 14.2041 4.64274 14.2041 4.83218 14.0357L8.33218 10.9246C8.43893 10.8298 8.5 10.6938 8.5 10.5509Z"
+                        fill={theme.color.background}
+                        stroke={theme.color.gray[2]}
+                        strokeWidth={1.5}
+                      />
+                    </svg>
+                    <div
+                      className="nowrap"
+                      style={{
+                        padding: `0px ${theme.spacing[3]} 4px`,
+                        textAlign: 'center',
+                        color: theme.color.gray[4],
+                        fontSize: theme.font.size.micro,
+                        fontWeight: 500,
+                        background: `linear-gradient(
                         to right,
                         rgba(${theme.color.backgroundRgb}, 0%) 0%,
                         rgba(${theme.color.backgroundRgb}, 100%) 20%,
                         rgba(${theme.color.backgroundRgb}, 100%) 80%,
                         rgba(${theme.color.backgroundRgb}, 0%) 100%
                       )`,
-                    }}
-                  >
-                    {formatShortDate(x(nearest()))}
+                      }}
+                    >
+                      {formatShortDate(x(nearest()))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </Scrubber>
-          )}
-          {overlay}
+                )}
+              </Scrubber>
+            )}
+            {overlay}
+          </div>
         </div>
       </div>
     </GraphDataProvider>
