@@ -28,7 +28,7 @@ daysUntilHospitalized0 = 8.5;
 daysToLeaveHosptialNonCritical0 = 8;
 
 (*Rate of leaving hospital and going to critical care*)
-daysTogoToCriticalCare0 = 2.5;
+daysTogoToCriticalCare0 = 1.5;
 
 (*Rate of leaving critical care, weeks*)
 daysFromCriticalToRecoveredOrDeceased0 = 8.5;
@@ -68,10 +68,10 @@ ageHospitalizedDependence0 = 15;
 percentPositiveTestDelay0 = 11;
 
 (* probability that an infected 80 year old will require critical care *)
-pCritical80YearOld0=0.1125;
+pCritical80YearOld0=0.091;
 
 (* probability that an infecteed 80 year old will need hospitalization but not critical care *)
-pHospitalized80YearOld0=0.165;
+pHospitalized80YearOld0=0.134;
 
 (* convergence function for differences in state testing *)
 (* we allow the model to fit a multiplicative difference of the rate of change of th e tests *)
@@ -280,8 +280,8 @@ generateModelComponents[distancing_] := <|
   "simulationEvents" -> {
     (* Reporting events *)
     WhenEvent[RSq[t]+RSq[t]+RCq[t]>=0.7, Sow[{t,RSq[t]+RSq[t]+RCq[t]},"herd"]],
-    WhenEvent[CCq[t]>=icuCapacity, Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
-    WhenEvent[HHq[t]>=hospitalCapacity, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
+    WhenEvent[CCq[t]>=icuBeds*If[distancing[t]<0.7,0.85,0.7], Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
+    WhenEvent[HHq[t]>=(1-bedUtilization*If[distancing[t]<0.7,0.5,1])*staffedBeds, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)
     (* initial infection impulse events *)
     WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
     WhenEvent[t>importtime+importlength, est[t]->0],
@@ -332,8 +332,9 @@ generateModelComponents[distancing_] := <|
     pS,
     pH,
     pC,
-    icuCapacity,
-    hospitalCapacity,
+    icuBeds,
+    bedUtilization,
+    staffedBeds,
     stateAdjustmentForTestingDifferences,
     distpow,
     testAndTrace
@@ -355,8 +356,9 @@ generateModelComponents[distancing_] := <|
       pC -> stateParams[state]["pC"],
       pPCRNH -> stateParams[state]["pPCRNH"],
       pPCRH -> stateParams[state]["pPCRH"],
-      icuCapacity -> stateParams[state]["icuBeds"]/stateParams[state]["population"],
-      hospitalCapacity -> (1-stateParams[state]["bedUtilization"])*stateParams[state]["staffedBeds"]/stateParams[state]["population"],
+      icuBeds -> stateParams[state]["icuBeds"],
+      bedUtilization -> stateParams[state]["bedUtilization"],
+      staffedBeds -> stateParams[state]["staffedBeds"],
       testAndTrace -> 0
   }]
 |>;
@@ -526,8 +528,9 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
     stateParams["params"]["pC"],
-    stateParams["icuCapacity"],
-    stateParams["hospitalCapacity"],
+    stateParams["params"]["icuBeds"],
+    stateParams["params"]["bedUtilization"],
+    stateParams["params"]["staffedBeds"],
     RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
     RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]],
     0
@@ -593,8 +596,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
     stateParams["params"]["pC"],
-    stateParams["icuCapacity"],
-    stateParams["hospitalCapacity"],
+    stateParams["params"]["icuBeds"],
+    stateParams["params"]["bedUtilization"],
+    stateParams["params"]["staffedBeds"],
     fitParams["stateAdjustmentForTestingDifferences"],
     fitParams["distpow"],
     0
@@ -651,31 +655,31 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.65,"repupper"->0.8,"powlower"->1.8,"powupper"->2.5|>,
+  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->2.5|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->55,"replower"->0.55,"repupper"->0.7,"powlower"->1.5,"powupper"->2|>,
   "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1.2,"repupper"->1.4,"powlower"->1.8,"powupper"->2.5|>,
   "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->54,"tupper"->75,"replower"->0.8,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
-  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->49,"tupper"->55,"replower"->0.6,"repupper"->0.65,"powlower"->1.8,"powupper"->2.5|>,
+  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->49,"tupper"->55,"replower"->0.5,"repupper"->0.55,"powlower"->1.8,"powupper"->2.5|>,
   "TX"-><|"rlower"->4.8,"rupper"->5,"tlower"->42,"tupper"->55.5,"replower"->0.9,"repupper"->1,"powlower"->2.5,"powupper"->3|>,
-  "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.88,"repupper"->0.95,"powlower"->1.5,"powupper"->2|>,
-  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->54,"tupper"->57,"replower"->0.2,"repupper"->0.25,"powlower"->1.7,"powupper"->2.3|>,
-  "OH"-><|"rlower"->3.9,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.25,"repupper"->0.4,"powlower"->1.8,"powupper"->2.3|>,
+  "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.8,"repupper"->0.9,"powlower"->1.5,"powupper"->2|>,
+  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->51,"tupper"->57,"replower"->0.15,"repupper"->0.2,"powlower"->1.7,"powupper"->2.3|>,
+  "OH"-><|"rlower"->3.9,"rupper"->4.5,"tlower"->40,"tupper"->51,"replower"->0.25,"repupper"->0.4,"powlower"->2.2,"powupper"->2.6|>,
   "NY"-><|"rlower"->4.8,"rupper"->5,"tlower"->30,"tupper"->45,"replower"->0.4,"repupper"->0.7,"powlower"->1.7,"powupper"->2|>,
   "VA"-><|"rlower"->3.4,"rupper"->4.2,"tlower"->35,"tupper"->52.5,"replower"->0.2,"repupper"->1,"powlower"->1.5,"powupper"->2|>,
   "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.85,"powlower"->1.8,"powupper"->2|>,
-  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->75,"replower"->0.4,"repupper"->0.5,"powlower"->1.9,"powupper"->2.5|>,
+  "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->44.5,"replower"->0.25,"repupper"->0.4,"powlower"->1.9,"powupper"->2.5|>,
   "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.35,"powlower"->1.8,"powupper"->2|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.6,"repupper"->0.65,"powlower"->2.1,"powupper"->2.5|>,
-  "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->51,"tupper"-> 53,"replower"->0.3,"repupper"->0.6,"powlower"->1.45,"powupper"->2.5|>,
-  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->55,"tupper"->59,"replower"->0.48,"repupper"->0.5,"powlower"->1.7,"powupper"->2|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.55,"repupper"->0.6,"powlower"->2.1,"powupper"->2.5|>,
+  "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->49,"tupper"-> 53,"replower"->0.3,"repupper"->0.45,"powlower"->1.45,"powupper"->2.5|>,
+  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->55,"tupper"->59,"replower"->0.43,"repupper"->0.5,"powlower"->1.7,"powupper"->2|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->39,"tupper"->41.5,"replower"->0.55,"repupper"->0.65,"powlower"->1.9,"powupper"->2.3|>,
   "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
-  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.45,"repupper"->0.55,"powlower"->1.8,"powupper"->2|>,
-  "IN"-><|"rlower"->4.3,"rupper"->5,"tlower"->35,"tupper"->62,"replower"->0.35,"repupper"->1,"powlower"->2.5,"powupper"->3|>,
-  "OK"-><|"rlower"->3.2,"rupper"->4,"tlower"->35,"tupper"->58,"replower"->0.35,"repupper"->0.5,"powlower"->3.3,"powupper"->3.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.55,"repupper"->0.67,"powlower"->1.9,"powupper"->2.5|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.63,"repupper"->0.7,"powlower"->1.6,"powupper"->2|>,
-  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->55,"replower"->0.85,"repupper"->1.1,"powlower"->1.8,"powupper"->2|>,
+  "IL"-><|"rlower"->4.6,"rupper"->5,"tlower"->35,"tupper"->75,"replower"->0.4,"repupper"->0.48,"powlower"->1.8,"powupper"->2|>,
+  "IN"-><|"rlower"->4.3,"rupper"->5,"tlower"->35,"tupper"->62,"replower"->0.35,"repupper"->0.45,"powlower"->2.5,"powupper"->3|>,
+  "OK"-><|"rlower"->3.2,"rupper"->4,"tlower"->35,"tupper"->58,"replower"->0.3,"repupper"->0.4,"powlower"->3.3,"powupper"->3.5|>,
+  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->35,"tupper"->75,"replower"->0.5,"repupper"->0.6,"powlower"->1.9,"powupper"->2.5|>,
+  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->48,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.6,"powupper"->2|>,
+  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->55,"replower"->0.85,"repupper"->1.05,"powlower"->1.8,"powupper"->2|>,
   "SC"-><|"rlower"->4,"rupper"->4.6,"tlower"->35,"tupper"->58,"replower"->0.75,"repupper"->1.4,"powlower"->2.6,"powupper"->3|>(*,
   "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
   "France"-><|"rlower"->2.8,"rupper"->4.6,"tlower"\[Rule]25,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1,"powupper"->2.5|>,
@@ -814,7 +818,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     weekOverWeekWeight[factor_]:=Map[(factor^((today-#[[2]])/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[.1] * boostDeathWeight[100]
+    poissonWeight * weekOverWeekWeight[.1] * boostDeathWeight[75]
   ];
 
   (* run the fitting algorithm to the non-linear equations *)

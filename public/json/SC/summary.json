@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.0349,
-"importtime":5.7999e1,
+"r0natural":4.0422,
+"importtime":5.7820e1,
 "stateAdjustmentForTestingDifferences":0.8800,
-"distpow":2.6030
+"distpow":2.6018
 },
 "population":4893444,
 "ventilators":949,
@@ -11,35 +11,35 @@
 "staffedBeds":12394,
 "bedUtilization":0.5386,
 "hospitalCapacity":5.7183e3,
-"pS":0.9245,
-"pH":5.3568e-2,
-"pC":2.1895e-2,
+"pS":0.9387,
+"pH":4.3504e-2,
+"pC":1.7710e-2,
 "pPCRNH":0.1108,
 "pPCRH":0.8064,
 "fractionOfCriticalDeceased":0.3569,
 "initialInfectionImpulse":1.4199e1,
-"r0":4.0349,
-"importtime":5.7999e1,
-"numberOfSimulations":200,
-"dateModelRun":"Mon 27 Apr 2020 02:41:22",
+"r0":4.0422,
+"importtime":5.7820e1,
+"numberOfSimulations":10,
+"dateModelRun":"Mon 27 Apr 2020 11:47:24",
 "mostRecentDistancingDate":"Sat 11 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.8800,
-"distpow":2.6030,
+"distpow":2.6018,
 "goodnessOfFitMetrics":{
-"chiSquared":2.8364e-6,
-"rmsRelativeError":0.2237,
-"rmsRelativeErrorDeaths":0.2490,
-"rmsRelativeErrorPcr":0.1983,
-"meanRelativeErrorDeaths":0.1537,
-"meanRelativeErrorPcr":-2.3048e-2,
-"rSquaredDeaths":6.5657e-2,
-"rSquaredPcr":2.0826e-2,
-"deathResidual7Day":1.0025,
-"pcrResidual7Day":-1.7634e1
+"chiSquared":2.7731e-6,
+"rmsRelativeError":0.2462,
+"rmsRelativeErrorDeaths":0.2787,
+"rmsRelativeErrorPcr":0.2129,
+"meanRelativeErrorDeaths":0.2166,
+"meanRelativeErrorPcr":-6.1957e-2,
+"rSquaredDeaths":4.6655e-2,
+"rSquaredPcr":2.1433e-2,
+"deathResidual7Day":1.1446,
+"pcrResidual7Day":-2.0618e1
 },
 "parameters":{
 "r0":{
-"value":4.0349,
+"value":4.0422,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -104,7 +104,7 @@
 ]
 },
 "daysTogoToCriticalCare":{
-"value":2.5,
+"value":1.5,
 "name":"Days to go to critical care after arriving in the hospital",
 "description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
 "type":"literature",
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":5.7999e1,
+"value":5.7820e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -158,13 +158,13 @@
 "type":"assumed"
 },
 "pS":{
-"value":0.9245,
+"value":0.9387,
 "name":"Probability of getting a mild case.",
 "description":"An age-adjusted probability that you get a mild case.",
 "type":"literature"
 },
 "pH":{
-"value":5.3568e-2,
+"value":4.3504e-2,
 "name":"Probability of getting a case bad enough to require hospitalization.",
 "description":"An age-adjusted probability that you get a case requiring hospitalization.",
 "type":"literature",
@@ -174,7 +174,7 @@
 ]
 },
 "pC":{
-"value":2.1895e-2,
+"value":1.7710e-2,
 "name":"Probability of getting a case bad enough to require ICU admission",
 "description":"An age-adjusted probability get a severe case requiring ICU admission.",
 "type":"literature"
@@ -186,13 +186,13 @@
 "type":"fit"
 },
 "distancePower":{
-"value":2.6030,
+"value":2.6018,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":200,
+"value":10,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
