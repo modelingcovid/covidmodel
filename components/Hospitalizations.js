@@ -146,9 +146,11 @@ export const Hospitalizations = ({width, height}) => {
           patients currently reported hospitalized
         </InlineLabel>
         . The distinction being that the number reported hospitalized is delayed
-        somewhat from the actual number of infections severe enough to require
-        hospitalization and we don't expect the number reported to ever exceed
-        the hospital capacity.
+        from the actual number of infections severe enough to require
+        hospitalization and there are a percentage of cases that will require
+        hospitalization but never be tested (the model assumes all reported
+        hospitalizations have tested positive). We don’t expect the number
+        reported to ever exceed the hospital capacity.
       </Paragraph>
       <CapacityEstimation
         subject="hospitals"
