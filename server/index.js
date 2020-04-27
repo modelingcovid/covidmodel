@@ -15,6 +15,7 @@ export const typeDefs = gql`
     dateModelRun: String!
     icuBeds: Int!
     importtime: Float!
+    mostRecentDistancingDate: String!
     population: Int!
     r0: Float!
     ventilators: Int!
@@ -205,6 +206,7 @@ const Location = {
   dateModelRun: locationProp,
   icuBeds: locationProp,
   importtime: locationProp,
+  mostRecentDistancingDate: locationProp,
   population: locationProp,
   r0: locationProp,
   ventilators: locationProp,

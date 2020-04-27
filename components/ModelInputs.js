@@ -45,7 +45,14 @@ function TodayDistancing() {
 
 export function ModelInputs({height, width, ...remaining}) {
   const {location} = useModelState();
-  const {r0, importtime, distancing, rt, domain} = useLocationData();
+  const {
+    r0,
+    importtime,
+    mostRecentDistancingDate,
+    distancing,
+    rt,
+    domain,
+  } = useLocationData();
 
   const formatR = useCallback((n) => formatNumber2(n), [r0]);
 
@@ -85,9 +92,20 @@ export function ModelInputs({height, width, ...remaining}) {
           are based on the scenario selected above.
         </Paragraph>
         <Paragraph>
-          The current distancing level, <TodayDistancing />, is calculated based
-          on the average the past three days of available mobility data for{' '}
-          {location.name}, which is usually reported with a three-day delay.
+          The current distancing level,{' '}
+          <strong>
+            <TodayDistancing />
+          </strong>
+          , is calculated based on the average the past three days of available
+          mobility data for {location.name}, which was last updated on{' '}
+          <InlineData width="130px">
+            {() => (
+              <strong>
+                {formatDate(new Date(mostRecentDistancingDate()))}
+              </strong>
+            )}
+          </InlineData>
+          .
         </Paragraph>
       </WithCitation>
       <DistancingGraph width={width} height={height} />

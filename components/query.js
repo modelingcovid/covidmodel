@@ -116,6 +116,7 @@ const queries = [
       days { data }
       icuBeds
       importtime
+      mostRecentDistancingDate
       population
       r0
       scenarios {
@@ -130,6 +131,7 @@ const queries = [
       days: ({days}) => days.data,
       icuBeds: (location) => location.icuBeds,
       importtime: (location) => location.importtime,
+      mostRecentDistancingDate: (location) => location.mostRecentDistancingDate,
       population: (location) => location.population,
       r0: (location) => location.r0,
       scenarios: (location) => location.scenarios,
