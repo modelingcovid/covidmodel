@@ -178,11 +178,11 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   CumulativeReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t]&] * population;
   CumulativeReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t]&] * population;
 
-  DailyPCRQuantiles[t_] := simDeciles[#[PCR][t] - #[PCR][t-1]&] * population;
-  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq][t] - #[cumEq][t-1]&] * population;
-  DailyDeathQuantiles[t_] := simDeciles[#[Deaq][t]-#[Deaq][t-1]&] * population;
-  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq][t]-#[RepDeaq][t-1]&] * population;
-  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq][t]-#[RepDeaICUq][t-1]&] * population;
+  DailyPCRQuantiles[t_] := simDeciles[#[PCR]'[t]&] * population;
+  DailyExposedQuantiles[t_]:=simDeciles[#[cumEq]'[t]&] * population;
+  DailyDeathQuantiles[t_] := simDeciles[#[Deaq]'[t]&] * population;
+  DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq]'[t]&] * population;
+  DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq]'[t]&] * population;
   CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*(#[RepCHHq][t]+#[RepCHCq][t]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
   CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[RepCCCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&];
 
@@ -223,28 +223,28 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
           "dailyPcr" -> Merge[{
               <|
                 "confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positiveIncrease"]],
-                "expected"-> population*(sol[PCR][t] - sol[PCR][t-1]),
-                "expectedTestTrace"-> population*(soltt[PCR][t]-soltt[PCR][t-1])
+                "expected"-> population*(sol[PCR]'[t]),
+                "expectedTestTrace"-> population*(soltt[PCR]'[t])
               |>,
               percentileMap[DailyPCRQuantiles[t]]
             }, First],
           "dailyDeath" -> Merge[{
               <|
-                "expected"-> population*(sol[Deaq][t] - sol[Deaq][t-1]),
-                "expectedTestTrace"-> population*(soltt[Deaq][t]-soltt[Deaq][t-1])
+                "expected"-> population*(sol[Deaq]'[t]),
+                "expectedTestTrace"-> population*(soltt[Deaq]'[t])
               |>,
               percentileMap[DailyDeathQuantiles[t]]
             }, First],
           "dailyReportedDeath" -> Merge[{
               <|
                 "confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["deathIncrease"]],
-                "expected"-> population*(sol[RepDeaq][t] - sol[RepDeaq][t-1]),
-                "expectedTestTrace"-> population*(soltt[RepDeaq][t]-soltt[RepDeaq][t-1])
+                "expected"-> population*(sol[RepDeaq]'[t]),
+                "expectedTestTrace"-> population*(soltt[RepDeaq]'[t])
               |>,
               percentileMap[DailyReportedDeathQuantiles[t]]
             }, First],
           "dailyTestsRequiredForContainment" -> <|
-            "expected"-> population*testToAllCaseRatio0*(sol[cumEq][t] - sol[cumEq][t-1])|>,
+            "expected"-> population*testToAllCaseRatio0*(sol[cumEq]'[t])|>,
           "cumulativePcr" -> Merge[{
               <|
                 "confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["positive"]],
@@ -265,8 +265,8 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
             }, First],
           "newlyExposed"->Merge[{
               <|
-                "expected"-> population*(sol[cumEq][t] - sol[cumEq][t-1]),
-                "expectedTestTrace"-> population*(soltt[cumEq][t] - soltt[cumEq][t-1])
+                "expected"-> population*(sol[cumEq]'[t]),
+                "expectedTestTrace"-> population*(soltt[cumEq]'[t])
               |>,
               percentileMap[DailyExposedQuantiles[t]]
             }, First],
