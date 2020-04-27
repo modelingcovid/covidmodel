@@ -5,23 +5,7 @@
 	"maintain":true,
 	"name":"Current",
 	"gradual":false,
-	"events":{
-		"herd":{
-			"eventName":"herd",
-			"day":2.4548181596901506e2,
-			"thresholdCrossed":0.6999999999999997
-		},
-		"icu":{
-			"eventName":"icu",
-			"day":1.2670383504310301e2,
-			"thresholdCrossed":2.0140765983903169e-4
-		},
-		"hospital":{
-			"eventName":"hospital",
-			"day":2.3484141952322472e2,
-			"thresholdCrossed":1.3066558979518482e-3
-		}
-	},
+	"events":{},
 	"summary":{
 		"totalProjectedDeaths":1.0749040289917063e5,
 		"totalProjectedPCRConfirmed":2.5401236172063323e6,
@@ -41,8 +25,8 @@
 		"fractionOfDeathsReported":0.7899286015968112,
 		"fractionOfHospitalizationsReported":0.7897997952296273,
 		"dateContained":"",
-		"dateICUOverCapacity":"Tue 5 May 2020 16:53:31",
-		"dateHospitalsOverCapacity":"Fri 21 Aug 2020 20:11:38"
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":3.071055719339812e4,
@@ -63,7 +47,7 @@
 		"fractionOfDeathsReported":0.7898170304110598,
 		"fractionOfHospitalizationsReported":0.7894020586460598,
 		"dateContained":"",
-		"dateICUOverCapacity":"Tue 5 May 2020 16:53:31",
-		"dateHospitalsOverCapacity":"Fri 21 Aug 2020 20:11:38"
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
 	}
 }
