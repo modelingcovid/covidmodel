@@ -248,6 +248,8 @@ generateModelComponents[distancing_] := <|
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
       EHCq'[t]==ICq[t] / daysUntilHospitalized,
+      (*Cumulative mild count *)
+      ESq'[t]==ISq[t] / daysUntilNotInfectious,
 
       (* Current reported positive hospital cases *)
       RepCHHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHosptialNonCritical,
@@ -304,15 +306,15 @@ generateModelComponents[distancing_] := <|
       Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
       Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
       RepHq[tmin0]==0,RepHCq[tmin0]==0,RepCHHq[tmin0]==0,RepCHCq[tmin0]==0,RepCCCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
-      Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,testAndTraceDelayCounter[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,cumEq[tmin0]==0}],
+      Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,testAndTraceDelayCounter[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,ESq[tmin0]==0,cumEq[tmin0]==0}],
 
   "outputFunctions" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, ESq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
 
   "dependentVariables" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
-      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
+      Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, ESq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
       
   "discreteVariables" -> {},
 
