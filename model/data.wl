@@ -378,7 +378,8 @@ usStateDistancingPrecompute = Module[{
     googleMobility,
     stateList
   },
-  googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
+  (* switch back to the google data when they start updating more regularly *)
+  (*googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
   dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="Virginia"&&#["sub_region_2"]==""&],"State"];
 
   stateDistancing[state_]:=Module[{stateName},
@@ -402,19 +403,19 @@ usStateDistancingPrecompute = Module[{
           ]&]]]];
   rawCsvTable=Prepend[
     Map[stateDistancing, stateList],
-    dates];
+    dates];*)
 
-  (*rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];*)
+  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = rawCsvTable[[2;;,2;;]];
+  stateDistancings = 1-rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
 
   totalDays = tmax0;
   fullDays = Range[0, totalDays];
 
-  smoothing = 3;
+  smoothing = 7;
   SlowJoin := Fold[Module[{smoother},
       smoother=1-Exp[-Range[Length[#2]]/smoothing];
       Join[#1, Last[#1](1-smoother)+#2 smoother]]&];
@@ -461,7 +462,7 @@ usStateDistancingPrecompute = Module[{
     smoothedFullDistancing = SlowJoin[{
         ConstantArray[1., IntegerPart[Min[dataDays]]],
         smoothedDistancing,
-        ConstantArray[Mean[smoothedDistancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
+        ConstantArray[Mean[smoothedDistancing[[-7;;]]], today - IntegerPart[Max[dataDays]]],
         ConstantArray[distancingLevel, If[scenario["gradual"],may1-today,scenario["distancingDays"]]],
         If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(may1-today)) Array[#&,scenario["distancingDays"]-(may1-today)]+distancingLevel,{}],
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
