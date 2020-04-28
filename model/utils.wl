@@ -114,9 +114,98 @@ exportTimeSeries[state_, scenario_, data_]:=Module[{timeData, fixedKeys, timeDat
 ];
 
 
-evaluateStateAndPrint[state_, simulationsPerCombo_:1000]:=Module[{},
+evaluateStateAndPrint[state_, simulationsPerCombo_, backtestMask_]:=Module[{},
   Print["Fitting model for " <> state];
-  evaluateState[state, simulationsPerCombo]
+  evaluateState[state, simulationsPerCombo, backtestMask]
+];
+
+
+evaluateBacktestAccuracy[state_, backtestMask_, evaluateSolution_, fitParams_]:=Module[{thisStateData,maxDataDay,deathBacktest,pcrBacktest,backtestStats,res},
+  thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>50)&];
+  maxDataDay=Max[#["day"]&/@thisStateData];
+
+  deathBacktest = Table[{t,evaluateSolution[RepDeaq][Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t]*stateParams[state]["population"],Select[thisStateData,#["day"]==t&][[1]]["death"],
+                  evaluateSolution[RepDeaq][Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t]*stateParams[state]["population"]-Select[thisStateData,#["day"]==t&][[1]]["death"]},{t,maxDataDay-backtestMask,maxDataDay}];
+                  
+  Echo[deathBacktest];
+                  
+  pcrBacktest = Table[{t,evaluateSolution[PCR][Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t]*stateParams[state]["population"],Select[thisStateData,#["day"]==t&][[1]]["positive"],
+                  evaluateSolution[PCR][Log[fitParams["r0natural"]],
+                    Log[fitParams["importtime"]],
+                    Log[fitParams["stateAdjustmentForTestingDifferences"]],
+                    Log[fitParams["distpow"]]
+                  ][t]*stateParams[state]["population"]-Select[thisStateData,#["day"]==t&][[1]]["positive"]},{t,maxDataDay-backtestMask,maxDataDay}];
+                  
+   Echo[pcrBacktest];
+                  
+                  
+   backtestStats[backtest_]:=Module[{average, stdev, averagePercent, stdevPercent},
+      average = Mean[#[[4]]&/@backtest];
+      averagePercent = Mean[(#[[4]]/#[[3]])&/@backtest];
+      stdev = StandardDeviation[#[[4]]&/@backtest];
+      stdevPercent = StandardDeviation[(#[[4]]/#[[3]])&/@backtest];
+      <|"average"->average,"averagePercent"->averagePercent,"stdev"->stdev,"stdevPercent"->stdevPercent|>
+   ];
+   
+   res=<|"death"->backtestStats[deathBacktest],"pcr"->backtestStats[pcrBacktest]|>;
+   Echo[res];
+   res
+];
+
+
+evaluateBacktestAccuracyData[state_, backtestMask_, data_, fitParams_]:=Module[{thisStateData,maxDataDay,deathBacktest,pcrBacktest,backtestStats},
+  thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>50)&];
+  maxDataDay=Max[#["day"]&/@thisStateData];
+
+  deathBacktest = Table[{t,Select[data,#["day"]==t+1&][[1]]["cumulativeReportedDeaths"]["expected"],Select[thisStateData,#["day"]==t&][[1]]["death"],
+                  Select[data,#["day"]==t+1&][[1]]["cumulativeReportedDeaths"]["expected"]-Select[thisStateData,#["day"]==t&][[1]]["death"]},{t,maxDataDay-backtestMask,maxDataDay}];
+                  
+  Echo[deathBacktest];
+                  
+  pcrBacktest = Table[{t,Select[data,#["day"]==t+1&][[1]]["cumulativePcr"]["expected"],Select[thisStateData,#["day"]==t&][[1]]["positive"],
+                  Select[data,#["day"]==t+1&][[1]]["cumulativePcr"]["expected"]-Select[thisStateData,#["day"]==t&][[1]]["positive"]},{t,maxDataDay-backtestMask,maxDataDay}];
+                  
+  Echo[pcrBacktest];
+                  
+                  
+   backtestStats[backtest_]:=Module[{average, stdev, averagePercent, stdevPercent},
+      average = Mean[#[[4]]&/@backtest];
+      averagePercent = Mean[(#[[4]]/#[[3]])&/@backtest];
+      stdev = StandardDeviation[#[[4]]&/@backtest];
+      stdevPercent = StandardDeviation[(#[[4]]/#[[3]])&/@backtest];
+      <|"average"->average,"averagePercent"->averagePercent,"stdev"->stdev,"stdevPercent"->stdevPercent|>
+   ];
+   
+   <|"death"->backtestStats[deathBacktest],"pcr"->backtestStats[pcrBacktest]|>
+];
+
+
+exportAllStatesBacktest[filename_,allStates_,backtestMask_]:=Module[{header, rows, table, generateBacktestForState},
+  header = {"state","backtestDays","deathAverage","deathAveragePercent","deathStdev","deathStdevPercent","pcrAverage","pcrAveragePercent","pcrStdev","pcrStdevPercent"};
+  
+  generateBacktestForState[stateOutput_,state_,mask_]:=Module[{bktest},
+    bktest=stateOutput["backtest"];
+    (*evaluateBacktestAccuracyData[state,mask,stateOutput["scenarios"]["scenario1"]["timeSeriesData"],stateOutput["parameterBest"]];*)
+    
+    {state,mask,bktest["death"]["average"],bktest["death"]["averagePercent"],bktest["death"]["stdev"],bktest["death"]["stdevPercent"],bktest["death"]["average"],bktest["pcr"]["averagePercent"],bktest["pcr"]["stdev"],bktest["pcr"]["stdevPercent"]}
+  ];
+  
+  rows = generateBacktestForState[allStates[#],#,backtestMask]&/@Keys[allStates];
+
+  table = Join[{header}, rows];
+  Export[filename, table];
 ];
 
 

@@ -715,7 +715,7 @@ getBounds[state_]:=Module[{},
 (* at the end it calls evaluateScenario  which runs the simulations in that scenario *)
 (* and at the end it returns a large object containing all the time series for the fitted / simulated model as well as summary statistics *)
 Clear[equationsODE,eventsODE,initialConditions,outputODE,dependentVariablesODE,parameters,DeaqParametric,PCRParametric];
-evaluateState[state_, numberOfSimulations_:100]:= Module[{
+evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
     modelComponents,
     params,
     percentPositiveCase,
@@ -760,7 +760,8 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
     fittime,
     parametricSolution,
     evaluateSolution,
-    simulatedScenarioRuns
+    simulatedScenarioRuns,
+    backtest
   },
 
   modelComponents = modelPrecompute[state]["scenario1"];
@@ -809,7 +810,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   longData=Select[Join[
       {1,#["day"],If[TrueQ[#["death"]==Null],0,(#["death"]/params["population"])//N]}&/@thisStateData,
       {2,#["day"],(#["positive"]/params["population"])//N}&/@thisStateData
-    ],#[[3]]>0&];
+    ],#[[3]]>0&&#[[2]]<today-backtestMask&];
 
   (* generate the model to fit using the parametric equations and the indicator variables *)
   model[r0natural_,importtime_,stateAdjustmentForTestingDifferences_,distpow_,c_][t_]:=Piecewise[{
@@ -864,7 +865,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
   (* Echo out some info on how good the fits are / show the plots *)
   Echo[gofMetrics];
   Echo[fitPlots[state, longData, evaluateSolution, fit, fitParams]];
-  
+  backtest=If[backtestMask>0,evaluateBacktestAccuracy[state, backtestMask, evaluateSolution, fitParams],Unevaluated[Sequence[]]];
   
   (* run simulations and compute expectations for each of the scenarios *)
   (* this gives back both time series data and summary data at August 1st and 2 years out *)
@@ -892,6 +893,7 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
       "stateAdjustmentForTestingDifferences"->fitParams["stateAdjustmentForTestingDifferences"],
       "distpow"->fitParams["distpow"],
       "goodnessOfFitMetrics"->gofMetrics,
+      "backtest"->backtest,
       (* generate a json for the parameter values with some additional metadata for the site *)
       "parameters"->getExpectedParameters[fitParams, params, numberOfSimulations]
     }, First];
@@ -907,9 +909,9 @@ evaluateState[state_, numberOfSimulations_:100]:= Module[{
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
 when running the web server *)
-GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun] := Module[{days},
+GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask_:0] := Module[{days},
   loopBody[state_]:=Module[{stateData},
-    stateData=evaluateStateAndPrint[state, simulationsPerCombo];
+    stateData=evaluateStateAndPrint[state, simulationsPerCombo, backtestMask];
     Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;
     exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios;
     days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
@@ -927,7 +929,8 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun] := Module[{d
 
   exportAllStatesSummary[allStatesData];
   exportAllStatesSummaryAug1[allStatesData];
-
+  
+  If[backtestMask>0,exportAllStatesBacktest["tests/backtest.csv",allStatesData,backtestMask],Unevaluated[Sequence[]]];
   exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
   exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
   exportAllStatesHospitalizationGoodnessOfFitMetricsSvg["tests/hospitalization-relative-fit-errors.svg",allStatesData];
