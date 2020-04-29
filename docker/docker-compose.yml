@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  cosmc:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    working_dir: /root/Github/covidmodel
+    command: -file model/test.wl
+    volumes:
+      # Mount the Wolfram license directory into the container.
+      - ${WOLFRAM_LICENSING_DIR}:/root/.WolframEngine/Licensing:ro

@@ -5,7 +5,9 @@ SetDirectory[$UserDocumentsDirectory<>"/Github/covidmodel"];
 
 (* In mathematica imported code is executed *)
 (* these load some data from various sources, and generate helper functions for evaluating statistics and generating plots *)
-Import["model/data.wl"];
+(* data.wl is loaded conditionally, only if the variable `isDataImported` is set.
+This allows callers to modify the global data without losing their changes when importing the model. *)
+If[!ValueQ[isDataImported], Import["model/data.wl"]];
 Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
