@@ -24,8 +24,9 @@ scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintai
 scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite", "gradual"->False|>;
 scenario6=<|"id"->"scenario6","distancingDays"->may1-today,"maintain"->True,"postDistancingLevel"->1, "name"->"Open May 1", "gradual"->False|>;
 scenario7=<|"id"->"scenario7","distancingDays"->60,"maintain"->True,"postDistancingLevel"->1, "name"->"Open Gradual May 1", "gradual"->True|>;
+scenario8=<|"id"->"scenario8","distancingDays"->tmax0-today-1,"maintain"->False,"distancingLevel"->0.7, "name"->"relaxed restrictions", "gradual"->False|>;
 
-scenarios={scenario5,scenario1,scenario2,scenario3,scenario4,scenario6,scenario7};
+scenarios={scenario5,scenario1,scenario2,scenario3,scenario4,scenario6,scenario7,scenario8};
 
 (* helper to get the scenario for a given id *)
 scenarioFor[name_] := Select[scenarios,#["id"]== name&][[1]];
