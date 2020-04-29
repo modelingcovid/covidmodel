@@ -1,8 +1,8 @@
 {
 "parameterBest":{
 "r0natural":4.6211,
-"importtime":5.8176e1,
-"stateAdjustmentForTestingDifferences":0.6116,
+"importtime":5.8177e1,
+"stateAdjustmentForTestingDifferences":0.5762,
 "distpow":2.9243
 },
 "population":6809946,
@@ -19,23 +19,23 @@
 "fractionOfCriticalDeceased":0.3639,
 "initialInfectionImpulse":1.4529e1,
 "r0":4.6211,
-"importtime":5.8176e1,
+"importtime":5.8177e1,
 "numberOfSimulations":100,
-"dateModelRun":"Wed 29 Apr 2020 11:33:42",
+"dateModelRun":"Wed 29 Apr 2020 13:03:56",
 "mostRecentDistancingDate":"Sat 25 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.6116,
+"stateAdjustmentForTestingDifferences":0.5762,
 "distpow":2.9243,
 "goodnessOfFitMetrics":{
-"chiSquared":1.4956e-6,
-"rmsRelativeError":0.2401,
-"rmsRelativeErrorDeaths":0.1670,
-"rmsRelativeErrorPcr":0.2905,
-"meanRelativeErrorDeaths":0.1512,
-"meanRelativeErrorPcr":-6.8763e-2,
-"rSquaredDeaths":3.2821e-2,
-"rSquaredPcr":1.1079e-2,
-"deathResidual7Day":0.6624,
-"pcrResidual7Day":-8.9769e1
+"chiSquared":1.6261e-6,
+"rmsRelativeError":0.2267,
+"rmsRelativeErrorDeaths":0.1672,
+"rmsRelativeErrorPcr":0.2693,
+"meanRelativeErrorDeaths":0.1514,
+"meanRelativeErrorPcr":-2.7733e-2,
+"rSquaredDeaths":3.2952e-2,
+"rSquaredPcr":1.0138e-2,
+"deathResidual7Day":0.6614,
+"pcrResidual7Day":-8.2751e1
 },
 "parameters":{
 "r0":{
@@ -140,7 +140,7 @@
 ]
 },
 "importtime":{
-"value":5.8176e1,
+"value":5.8177e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -180,7 +180,7 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.6116,
+"value":0.5762,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
