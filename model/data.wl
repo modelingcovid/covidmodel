@@ -84,7 +84,7 @@ SpainPopulation=46.66*10^6;
 
 usData = Append[#, "day" ->
   QuantityMagnitude[DateDifference[DateList[{2020,1,1}], DateList[#["date"] // ToString]]]] & /@
-URLExecute[URLBuild["https://covidtracking.com/api/us/daily"],"RawJSON"];
+URLExecute[URLBuild["https://covidtracking.com/api/v1/us/daily.json"],"RawJSON"];
 
 countryData = Association[{"United States"->usData,"France"->franceData,"Spain"->spainData,"Italy"->italyData}];
 
@@ -94,7 +94,7 @@ ventilators=Association[{"AL"->920,"AK"->104,"AZ"->1309,"AR"->633,"CA"->6589,"CO
 
 
 (* Data from covidtracking on reported PCR and fatalities *)
-stateData = URLExecute[URLBuild["https://covidtracking.com/api/states/daily"],"RawJSON"];
+stateData = URLExecute[URLBuild["https://covidtracking.com/api/v1/states/daily.json"],"RawJSON"];
 (* remove data when there is only one positive case / death since that doesn't contain any trend information *)
 stateParsedData = Merge[{
     <|"death"-> If[KeyExistsQ[#,"death"],If[TrueQ[#["death"]<=2] || TrueQ[#["death"]==Null],Null,#["death"]],Null]|>,
