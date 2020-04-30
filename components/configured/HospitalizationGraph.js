@@ -25,7 +25,7 @@ const {useCallback, useMemo} = React;
 
 const blue = theme.color.blue[2];
 const red = theme.color.red[1];
-const yellow = theme.color.yellow[3];
+const deepBlue = theme.color.blue[3];
 
 export function HospitalizationGraphContents({clipPathId, gradientId}) {
   const {
@@ -36,8 +36,6 @@ export function HospitalizationGraphContents({clipPathId, gradientId}) {
   } = useLocationData();
   const expected = useExpected();
 
-  debugger;
-
   return (
     <>
       <Area
@@ -46,15 +44,19 @@ export function HospitalizationGraphContents({clipPathId, gradientId}) {
         y1={expected(currentlyHospitalized).get}
         fill={`url(#${gradientId})`}
       />
-      <Line y={expected(currentlyHospitalized).get} stroke={blue} />
-      <Line y={hospitalCapacity.max} stroke={theme.color.background} />
-      <Line y={hospitalCapacity.max} stroke={yellow} strokeDasharray="6,2" />
       <Line
         y={expected(cumulativeDeaths).get}
         stroke={theme.color.background}
-        strokeWidth={4}
+        strokeWidth={3.5}
       />
       <Line y={expected(cumulativeDeaths).get} stroke={red} />
+      <Line y={expected(currentlyHospitalized).get} stroke={blue} />
+      <Line
+        y={hospitalCapacity.max}
+        stroke={theme.color.background}
+        strokeWidth={3}
+      />
+      <Line y={hospitalCapacity.max} stroke={deepBlue} strokeDasharray="6,2" />
     </>
   );
 }
@@ -111,7 +113,7 @@ export const HospitalizationGutter = ({width, height}) => {
     domain,
     hospitalCapacity,
     currentlyHospitalized,
-    currentlyReportedHospitalized,
+    cumulativeDeaths,
   } = useLocationData();
 
   return (
@@ -119,7 +121,7 @@ export const HospitalizationGutter = ({width, height}) => {
       <LegendRow
         label="Hospital capacity"
         y={hospitalCapacity.max}
-        color={red}
+        color={deepBlue}
         format={formatNumber}
       />
       <DistributionLegendRow
@@ -129,9 +131,9 @@ export const HospitalizationGutter = ({width, height}) => {
         format={formatNumber}
       />
       <DistributionLegendRow
-        title="Currently reported hospitalized"
-        y={currentlyReportedHospitalized}
-        color={yellow}
+        title="Total fatalities"
+        y={cumulativeDeaths}
+        color={red}
         format={formatNumber}
       />
     </Gutter>

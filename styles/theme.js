@@ -146,7 +146,7 @@ export const darkMode = setProperties({
     red: {...['#ffa8a8', '#ff0a33', '#f00028'], text: '#ff0a33'},
     green: {...['#79de41', '#62dc3c', '#56de2c'], text: '#56de2c'},
     blue: {
-      ...['#b5eff1', '#26afff', '#0096ed', '#0670de'],
+      ...['#b5eff1', '#26afff', '#0096ed', '#0b7ef9'],
       bg: '#1e2639',
       text: '#26afff',
     },

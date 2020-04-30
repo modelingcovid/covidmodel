@@ -103,7 +103,11 @@ function CurrentlyHospitalizedLabel() {
 
 function HospitalCapacityLabel() {
   return (
-    <InlineLabel color={theme.color.yellow.text} fill={theme.color.yellow[3]}>
+    <InlineLabel
+      color={theme.color.blue[3]}
+      fill={theme.color.blue[3]}
+      glyph="dash"
+    >
       hospital capacity
     </InlineLabel>
   );
