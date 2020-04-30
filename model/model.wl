@@ -678,7 +678,7 @@ fitStartingOverrides=<|
   "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.85,"powlower"->2,"powupper"->2.5|>,
   "LA"-><|"rlower"->4.1,"rupper"->4.5,"tlower"->41.5,"tupper"->44.5,"replower"->0.25,"repupper"->0.4,"powlower"->2.4,"powupper"->3|>,
   "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.35,"powlower"->1.9,"powupper"->2.3|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.45,"repupper"->0.6,"powlower"->2.5,"powupper"->3.1|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.47,"repupper"->0.6,"powlower"->2.5,"powupper"->3.1|>,
   "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->46,"tupper"-> 53,"replower"->0.2,"repupper"->0.5,"powlower"->1.8,"powupper"->2.5|>,
   "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->55,"tupper"->59,"replower"->0.35,"repupper"->0.45,"powlower"->1.9,"powupper"->2.4|>,
   "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->39,"tupper"->41.5,"replower"->0.55,"repupper"->0.65,"powlower"->1.9,"powupper"->2.3|>,
@@ -867,7 +867,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
   (* Echo out some info on how good the fits are / show the plots *)
   Echo[gofMetrics];
   Echo[fitPlots[state, longData, evaluateSolution, fit, fitParams]];
-  backtest=If[backtestMask>0,evaluateBacktestAccuracy[state, backtestMask, evaluateSolution, fitParams],Unevaluated[Sequence[]]];
+  backtest=If[backtestMask>0,evaluateBacktestAccuracy[state, backtestMask, evaluateSolution, fitParams],""];
   
   (* run simulations and compute expectations for each of the scenarios *)
   (* this gives back both time series data and summary data at August 1st and 2 years out *)
