@@ -120,7 +120,8 @@ susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m, s, dist, binEdges, 
 susceptibilityBins = 10;
 susceptibilityStdev0 = 1.6;
 susceptibilityInitialPopulations = ConstantArray[1/susceptibilityBins, susceptibilityBins];
-susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];
+(* susceptibilityValues are now defined later as part of the model to allow for parameterization of susceptibilityStdev0 *)
+(*susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];*)
 
 
 (* Compute age adjusted parameters per-state *)
@@ -207,13 +208,13 @@ generateModelComponents[distancing_] := <|
       Table[
         sSq[i]'[t]==(
           distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-        ) * (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
+        ) * (-susceptibilityValues[i][t] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
         {i, 1, susceptibilityBins}],
 
       (* Exposed *)
       Eq'[t]==(
         distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-      ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
+      ) * Sum[(susceptibilityValues[i][t] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
 
       (* Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed); age independent *)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectious,
@@ -245,7 +246,7 @@ generateModelComponents[distancing_] := <|
       (* Cumulative exposed *)
       cumEq'[t]==(
           distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-        ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+        ) * Sum[(susceptibilityValues[i][t] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -276,10 +277,15 @@ generateModelComponents[distancing_] := <|
       (* Establishment *)
       est'[t]==0,
       
+      (* suscepitibilityValues are constant; they are included in the integration only to allow parameterization *)
+      Table[susceptibilityValues[i]'[t]==0, {i,1,susceptibilityBins}],
+      
       (* Test and trace tracker: this counts the number of days after testing and tracing becomes viable *)
       testAndTraceDelayCounter'[t] == If[testAndTraceDelayCounter[t] > 0, 1, 0]
   }],
 
+
+  (*;*)
   (* events used in evaluting the simluations / expectation values *)
   "simulationEvents" -> {
     (* Reporting events *)
@@ -305,6 +311,7 @@ generateModelComponents[distancing_] := <|
   },
 
   "initialConditions" -> Flatten[{
+      MapIndexed[susceptibilityValues[First[#2]][tmin0]==#1&, susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0]],
       Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
       Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
       RepHq[tmin0]==0,RepHCq[tmin0]==0,RepCHHq[tmin0]==0,RepCHCq[tmin0]==0,RepCCCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
@@ -315,6 +322,7 @@ generateModelComponents[distancing_] := <|
       Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, ESq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
 
   "dependentVariables" -> Flatten[{
+      Table[susceptibilityValues[i],{i,1,susceptibilityBins}],
       Table[sSq[i],{i,1,susceptibilityBins}],
       Deaq, RepDeaq, RepDeaICUq, PCR, RepHq, RepHCq, RepCHHq, RepCHCq, RepCCCq, Eq, ISq, RSq, IHq, HHq, RHq, ICq, EHq, EHCq, ESq, HCq, CCq, RCq, est, testAndTraceDelayCounter, cumEq}],
       
