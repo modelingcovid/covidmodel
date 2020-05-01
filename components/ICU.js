@@ -42,7 +42,7 @@ export const ICU = ({width, height}) => {
 
   return (
     <div className="margin-top-3 flow-root">
-      <Title>Intensive Care Unit (ICU) Admissions</Title>
+      <Title>Projecting intensive care unit (ICU) occupancy</Title>
       <Paragraph>
         We also model the expected number of Covid-19 cases that will require
         intensive care. Similarly to hospitalizations, we do not fit the model

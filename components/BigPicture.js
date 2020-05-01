@@ -144,29 +144,21 @@ export function BigPicture({location}) {
         <div ref={sizeRef} />
         <div className="column-8" ref={partialSizeRef} />
         <Paragraph>
-          The COSMC model is an epidemiological model of Covid-19, fit to actual
+          The COSMC model is an epidemiological model of Covid-19 fit to actual
           social distancing, testing, and fatality data. We use this data to
           project how Covid-19 might spread through a population for different{' '}
           <strong>locations</strong> and different{' '}
           <strong>social distancing scenarios</strong>.
         </Paragraph>
-        <Instruction>
-          <strong>Who built this?</strong>
-          <br />
-          This model is developed by the Covid Open Source Modeling
-          Collaboration (COSMC), a collection of researchers from{' '}
-          <strong>Harvard</strong> and <strong>Stanford</strong> alongside data
-          scientists and engineers at <strong>Stripe</strong> and{' '}
-          <strong>GitHub</strong>.
-        </Instruction>
         <WithCitation
           citation={
             <>
               We use data from the{' '}
               <a href="https://covidtracking.com/">Covid Tracking Project</a>,
               mobility data from{' '}
-              <a href="https://www.google.com/covid19/mobility/">Google</a>,
-              hospital capacity data from{' '}
+              <a href="https://www.google.com/covid19/mobility/">Google</a> and{' '}
+              <a href="https://www.unacast.com/">Unacast</a>, hospital capacity
+              data from{' '}
               <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
                 Esri
               </a>

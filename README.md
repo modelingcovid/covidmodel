@@ -2,7 +2,7 @@
 
 This model is intended to provide guidance on the efficiency of Covid-19 mitigation efforts.
 
-We’ve implemented a model for the spread of the virus which is an enrichment of the basic SEIR model with adjustments for distancing and adding PCR confirmation and Fatality states. This allowes us to fit the solutions of the system of SEIR equations to actual data as reported by various states. We then use a combination of parameters from the fits and literature values to generate Monte Carlo simulations around the fit expectations to get a sense of our uncertainty in the projections.
+We’ve implemented a model for the spread of the virus which is an enrichment of the basic SEIR model with adjustments for distancing and adding PCR confirmation and fatality states. This allows us to fit the solutions of the system of SEIR equations to actual data as reported by various states. We then use a combination of parameters from the fits and literature values to generate Monte Carlo simulations around the fit expectations to get a sense of our uncertainty in the projections.
 
 ## How to run the model
 

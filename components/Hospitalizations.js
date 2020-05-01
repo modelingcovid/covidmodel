@@ -48,7 +48,7 @@ export const Hospitalizations = ({width, height}) => {
 
   return (
     <div className="margin-top-3 flow-root">
-      <Title>Hospitalizations</Title>
+      <Title>Modeling hospitalizations</Title>
       <WithCitation
         citation={
           <>

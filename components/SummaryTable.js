@@ -1,7 +1,7 @@
 import * as React from 'react';
 import css from 'styled-jsx/css';
 import {theme} from '../styles';
-import {Grid, Title, Paragraph, createTextComponent} from './content';
+import {Grid, Heading, Title, Paragraph, createTextComponent} from './content';
 import {LegendRow, LegendEntry} from './graph';
 import {useLocationData} from './modeling';
 import {Suspense} from './util';
@@ -163,7 +163,7 @@ export function SummaryTableContents() {
   return (
     <div className="margin-top-5 flow-root">
       <style jsx>{styles}</style>
-      <Title>Summary table</Title>
+      <Heading>Summary table</Heading>
       <Paragraph>
         The following is a summary of the COSMC model output after two years:
       </Paragraph>

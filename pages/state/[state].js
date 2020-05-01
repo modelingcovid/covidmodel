@@ -135,6 +135,9 @@ export default function StatePage() {
             {/* <TestAndTrace width={width} height={height.large} /> */}
             {/* <Symptomatic width={width} height={height.regular} /> */}
             {/* <ProjectedDeaths width={width} height={height.large} /> */}
+            <Title className="margin-top-5">
+              Model details, references, and outcomes
+            </Title>
             <ParameterTable />
             <SummaryTable />
           </Section>
