@@ -288,8 +288,8 @@ generateModelComponents[distancing_] := <|
     WhenEvent[CCq[t]>=icuCapacity, Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
     WhenEvent[HHq[t]>=hospitalCapacity, Sow[{t,HHq[t]},"hospital"]],(*Hospitals Capacity overshot*)*)
     (* initial infection impulse events *)
-    WhenEvent[t>=importtime, est[t]->Exp[-initialInfectionImpulse]],
-    WhenEvent[t>importtime+importlength, est[t]->0],
+    WhenEvent[t>=importtime && bands == 0, est[t]->Exp[-initialInfectionImpulse]],
+    WhenEvent[t>importtime+importlength && bands == 0, est[t]->0],
     (* test and trace becomes viable event when the rate of new infections falls below the threshold *)
     WhenEvent[
       cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5,
@@ -306,10 +306,19 @@ generateModelComponents[distancing_] := <|
   },
 
   "initialConditions" -> Flatten[{
-      Table[sSq[i][tmin0]==susceptibilityInitialPopulations[[i]],{i,1,susceptibilityBins}],
-      Eq[tmin0]==0,ISq[tmin0]==0,RSq[tmin0]==0,IHq[tmin0]==0,HHq[tmin0]==0,
-      RepHq[tmin0]==0,RepHCq[tmin0]==0,RepCHHq[tmin0]==0,RepCHCq[tmin0]==0,RepCCCq[tmin0]==0,RHq[tmin0]==0,ICq[tmin0]==0,HCq[tmin0]==0,CCq[tmin0]==0,RCq[tmin0]==0,
-      Deaq[tmin0]==0,RepDeaq[tmin0]==0,RepDeaICUq[tmin0]==0,est[tmin0]==0,testAndTraceDelayCounter[tmin0]==0,PCR[tmin0]==0,EHq[tmin0]==0,EHCq[tmin0]==0,ESq[tmin0]==0,cumEq[tmin0]==0}],
+      sSq[1][tmin0]==susceptibilityInitialPopulations01,
+      sSq[2][tmin0]==susceptibilityInitialPopulations02,
+      sSq[3][tmin0]==susceptibilityInitialPopulations03,
+      sSq[4][tmin0]==susceptibilityInitialPopulations04,
+      sSq[5][tmin0]==susceptibilityInitialPopulations05,
+      sSq[6][tmin0]==susceptibilityInitialPopulations06,
+      sSq[7][tmin0]==susceptibilityInitialPopulations07,
+      sSq[8][tmin0]==susceptibilityInitialPopulations08,
+      sSq[9][tmin0]==susceptibilityInitialPopulations09,
+      sSq[10][tmin0]==susceptibilityInitialPopulations010,
+      Eq[tmin0]==Eq0,ISq[tmin0]==ISq0,RSq[tmin0]==RSq0,IHq[tmin0]==IHq0,HHq[tmin0]==HHq0,
+      RepHq[tmin0]==RepHq0,RepHCq[tmin0]==RepHCq0,RepCHHq[tmin0]==RepCHHq0,RepCHCq[tmin0]==RepCHCq0,RepCCCq[tmin0]==RepCCCq0,RHq[tmin0]==RHq0,ICq[tmin0]==ICq0,HCq[tmin0]==HCq0,CCq[tmin0]==CCq0,RCq[tmin0]==RCq0,
+      Deaq[tmin0]==Deaq0,RepDeaq[tmin0]==RepDeaq0,RepDeaICUq[tmin0]==RepDeaICUq0,est[tmin0]==est0,testAndTraceDelayCounter[tmin0]==testAndTraceDelayCounter0,PCR[tmin0]==PCR0,EHq[tmin0]==EHq0,EHCq[tmin0]==EHCq0,ESq[tmin0]==ESq0,cumEq[tmin0]==cumEq0}],
 
   "outputFunctions" -> Flatten[{
       Table[sSq[i],{i,1,susceptibilityBins}],
@@ -345,6 +354,42 @@ generateModelComponents[distancing_] := <|
     staffedBeds,
     stateAdjustmentForTestingDifferences,
     distpow,
+    susceptibilityInitialPopulations01,
+susceptibilityInitialPopulations02,
+susceptibilityInitialPopulations03,
+susceptibilityInitialPopulations04,
+susceptibilityInitialPopulations05,
+susceptibilityInitialPopulations06,
+susceptibilityInitialPopulations07,
+susceptibilityInitialPopulations08,
+susceptibilityInitialPopulations09,
+susceptibilityInitialPopulations010,
+    Eq0,
+    ISq0,
+    RSq0,
+    IHq0,
+    HHq0,
+    RepHq0,
+    RepHCq0,
+    RepCHHq0,
+    RepCHCq0,
+    RepCCCq0,
+    RHq0,
+    ICq0,
+    HCq0,
+    CCq0,
+    RCq0,
+    Deaq0,
+    RepDeaq0,
+    RepDeaICUq0,
+    est0,
+    testAndTraceDelayCounter0,
+    PCR0,
+    EHq0,
+    EHCq0,
+    ESq0,
+    cumEq0,
+    bands,
     testAndTrace
   }],
 
@@ -368,8 +413,34 @@ generateModelComponents[distancing_] := <|
       icuBeds -> stateParams[state]["icuBeds"] / stateParams[state]["population"],
       bedUtilization -> stateParams[state]["bedUtilization"],
       staffedBeds -> stateParams[state]["staffedBeds"] / stateParams[state]["population"],
-      testAndTrace -> 0
-  }]]
+      testAndTrace -> 0,
+      bands -> 0,
+      Eq0 -> 0,
+      ISq0 -> 0,
+      RSq0 -> 0,
+      IHq0 -> 0,
+      HHq0 -> 0,
+      RepHq0 -> 0,
+      RepHCq0 -> 0,
+      RepCHHq0 -> 0,
+      RepCHCq0 -> 0,
+      RepCCCq0 -> 0,
+      RHq0 -> 0,
+      ICq0 -> 0,
+      HCq0 -> 0,
+      CCq0 -> 0,
+      RCq0 -> 0,
+      Deaq0 -> 0,
+      RepDeaq0 -> 0,
+      RepDeaICUq0 -> 0,
+      est0 -> 0,
+      testAndTraceDelayCounter0 -> 0,
+      PCR0 -> 0,
+      EHq0 -> 0,
+      EHCq0 -> 0,
+      ESq0 -> 0,
+      cumEq0 -> 0
+  }]
 |>;
 
 
@@ -517,8 +588,9 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 (* we mostly use normal distributions of those variables, truncated to keep them positive (physical constraint) *)
 (* TODO why do we use truncated normal distributions instead of log-normal (which is probably more realistic)? *)
 (* we also use a beta distribution for fractional parameters because that bounds them between zero and 1, and is generally used to represent distributions of fractional quantities *)
-generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{},
-  Flatten[{
+
+generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_, todayValues_]:=Module[{},
+ Flatten[{
     RandomVariate[PosNormal[fitParams["r0natural"],0.05*fitParams["r0natural"]]],
     RandomVariate[PosNormal[daysUntilNotInfectious0,daysUntilNotInfectious0*0.05]],
     RandomVariate[PosNormal[daysUntilHospitalized0,daysUntilHospitalized0*0.05]],
@@ -542,8 +614,64 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
     RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
     RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]],
+    todayValues["Eq0"],
+    todayValues["ISq0"],
+    todayValues["RSq0"],
+    todayValues["IHq0"],
+    todayValues["HHq0"],
+    todayValues["RepHq0"],
+    todayValues["RepHCq0"],
+    todayValues["RepCHHq0"],
+    todayValues["RepCHCq0"],
+    todayValues["RepCCCq0"],
+    todayValues["RHq0"],
+    todayValues["ICq0"],
+    todayValues["HCq0"],
+    todayValues["CCq0"],
+    todayValues["RCq0"],
+    todayValues["Deaq0"],
+    todayValues["RepDeaq0"],
+    todayValues["RepDeaICUq0"],
+    todayValues["est0"],
+    todayValues["testAndTraceDelayCounter0"],
+    todayValues["PCR0"],
+    todayValues["EHq0"],
+    todayValues["EHCq0"],
+    todayValues["ESq0"],
+    todayValues["cumEq0"],
+    1,
     0
   }]&/@Range[numberOfSimulations]]
+
+getStartingValues[sol_]:=Module[{},
+  <|
+    "Eq0"->sol[Eq][today],
+    "ISq0"->sol[ISq][today],
+    "RSq0"->sol[RSq][today],
+    "IHq0"->sol[IHq][today],
+    "HHq0"->sol[HHq][today],
+    "RepHq0"->sol[RepHq][today],
+    "RepHCq0"->sol[RepHCq][today],
+    "RepCHHq0"->sol[RepCHHq][today],
+    "RepCHCq0"->sol[RepCHCq][today],
+    "RepCCCq0"->sol[RepCCCq][today],
+    "RHq0"->sol[RHq][today],
+    "ICq0"->sol[ICq][today],
+    "HCq0"->sol[HCq][today],
+    "CCq0"->sol[CCq][today],
+    "RCq0"->sol[RCq][today],
+    "Deaq0"->sol[Deaq][today],
+    "RepDeaq0"->sol[RepDeaq][today],
+    "RepDeaICUq0"->sol[RepDeaICUq][today],
+    "est0"->sol[est][today],
+    "testAndTraceDelayCounter0"->sol[testAndTraceDelayCounter][today],
+    "PCR0"->sol[PCR][today],
+    "EHq0"->sol[EHq][today],
+    "EHCq0"->sol[EHCq][today],
+    "ESq0"->sol[ESq][today],
+    "cumEq0"->sol[cumEq][today]
+  |>
+];
 
 
 (* Given a set fit parameters, simulated parameters and a definition of a scenario, run all the simulations and produce the quantiles for the mean and confidence band estimates *)
@@ -583,7 +711,8 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     parameterizedSolution,
     soltt,
     eventstt,
-    paramExpectedtt
+    paramExpectedtt,
+    startingValues
   },
 
   (* the expected parameter values, from fit + literature *)
@@ -611,6 +740,33 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
     fitParams["stateAdjustmentForTestingDifferences"],
     fitParams["distpow"],
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    (* test and trace *)
+    0,
     0
   }];
   
@@ -632,7 +788,9 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   population = stateParams["params"]["population"];
 
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
-  sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams];
+  startingValues=getStartingValues[sol];
+  Echo[KeyValueMap[#1->(#2*population)&, startingValues]];
+  sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams,startingValues];
 
   (* generate a solution for each simulation so we can get bands *)
   modelComponents = simModelPrecompute[state][scenario["id"]];
@@ -787,7 +945,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
   logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
   equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   eventsODE = modelComponents["parametricFitEvents"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
-  initialConditions = modelComponents["initialConditions"];
+  initialConditions = modelComponents["initialConditions"]/.modelComponents["replaceKnownParameters"][state];
   dependentVariablesODE = modelComponents["dependentVariables"];
   discreteVariablesODE = modelComponents["discreteVariables"];
   parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
