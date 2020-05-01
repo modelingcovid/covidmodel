@@ -264,6 +264,8 @@ countryDistancingPrecompute = Module[{
   },
 
   googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
+  (*googleMobility=Select[googleMobility,AlphabeticOrder[#["date"],'2020-2-16']\[Equal]1&];*)
+  
   dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"State"];
   es=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="ES"&&#["sub_region_1"]==""&],"Spain"];
   it=Prepend[Min[1,(1+(#["retail_and_recreation_percent_change_from_baseline"]+#["transit_stations_percent_change_from_baseline"]+#["workplaces_percent_change_from_baseline"])/300. )]&/@Select[googleMobility,#["country_region_code"]=="IT"&&#["sub_region_1"]==""&],"Italy"];

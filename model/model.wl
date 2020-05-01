@@ -412,18 +412,11 @@ simModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@statesT
 (* model integrator used for evaluating the model at the expectation values of the fit + literature parameters *)
 integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
     modelComponents,
-    equationsODE,
-    eventsODE,
-    initialConditions,
     outputODE,
-    dependentVariables,
-    parameters,
     outputSolution,
-    outputSolutionRules,
     outputEvents,
-    time,
-    soln,
-    parameterizedSolution
+    parameterizedSolution,
+    reinterpolate
   },
 
   modelComponents = simModelPrecompute[state][scenarioId];
@@ -439,16 +432,21 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
 
   outputSolution = Association[
     MapThread[#1->#2&,{outputODE,outputSolution}]];
-
-  outputSolution = Join[
-    outputSolution,
-    <|
-      Sq->(Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&),
-      Iq->(outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&),
-      Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)
-    |>
-  ];
-
+    
+  reinterpolate[f_]:=Interpolation[Map[f,Range[tmin0,tmax0]]];
+  outputSolution = Join[outputSolution, <|
+      Sq->reinterpolate[Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&],
+      Iq->reinterpolate[outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&],
+      Rq->reinterpolate[outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&]
+  |>];
+  outputSolution = Join[outputSolution, <|
+      rt->reinterpolate[If[
+          # > simulationParameters[[11]]+simulationParameters[[11]]+1 && outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]] > 0,
+          -outputSolution[Sq]'[#] / (
+            outputSolution[Sq][#] * (outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]])),
+          simulationParameters[[1]]]&]
+  |>];
+    
   outputEvents = Association[Table[
       event[[1]]-><|
         "eventName"->event[[1]],
@@ -464,16 +462,10 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
 (* simulation integrator which takes a parameterized solution and evaluates it at the simulated values that are passed in *)
 integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Module[{
     modelComponents,
-    equationsODE,
-    eventsODE,
-    initialConditions,
-    dependentVariables,
-    parameters,
     outputSolution,
     outputSolutionRules,
     outputEvents,
-    time,
-    soln
+    reinterpolate
   },
 
   {outputSolution, outputEvents} = Reap[
@@ -485,14 +477,20 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
   outputSolution = Association[
     MapThread[#1->#2&,{outputODE,outputSolution}]];
 
-  outputSolution = Join[
-    outputSolution,
-    <|
-      Sq->(Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&),
-      Iq->(outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&),
-      Rq->(outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&)
-    |>
-  ];
+  reinterpolate[f_]:=Interpolation[Map[f,Range[tmin0,tmax0]]];
+
+  outputSolution = Join[outputSolution, <|
+      Sq->reinterpolate[Sum[outputSolution[s][#],{s,Cases[outputODE,sSq[_]]}]&],
+      Iq->reinterpolate[outputSolution[ISq][#]+outputSolution[IHq][#]+outputSolution[ICq][#]&],
+      Rq->reinterpolate[outputSolution[RSq][#]+outputSolution[RHq][#]+outputSolution[RCq][#]&]
+  |>];
+  outputSolution = Join[outputSolution, <|
+      rt->reinterpolate[If[
+          # > simulationParameters[[11]]+simulationParameters[[11]]+1 && outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]] > 0,
+          -outputSolution[Sq]'[#] / (
+            outputSolution[Sq][#] * (outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]])),
+          simulationParameters[[1]]]&]
+  |>];
 
   outputEvents = Association[Table[
       event[[1]]-><|
