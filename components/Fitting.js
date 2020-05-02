@@ -122,7 +122,7 @@ export function Fitting({height, width}) {
             className="footnote"
             color={theme.color.yellow.text}
             fill={theme.color.yellow[3]}
-            dashed
+            glyph="dash"
           >
             total Covid-19 cases
           </InlineLabel>{' '}

@@ -13,7 +13,7 @@ import {MDXComponents} from '../components';
 const {useState} = React;
 
 const title = 'Modeling Covid-19';
-const browserTitle = `${title} — The Covid Open Source Modeling Collaboration`;
+const browserTitle = title;
 const description =
   'Forecasting the impact of Covid-19 using models trained with actual social distancing, testing, and fatality data.';
 const canonicalUrl = 'https://modelingcovid.com/';

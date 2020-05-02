@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {theme} from '../../styles';
 
-export const Grid = ({children, mobile = 2, desktop = 3, ...remaining}) => (
+export const Grid = ({children, mobile = 1, desktop = 3, ...remaining}) => (
   <div {...remaining}>
     <style jsx>{`
       div {

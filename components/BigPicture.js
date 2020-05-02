@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Link from 'next/link';
 import {theme} from '../styles';
 import {
   HospitalizationGraph,
@@ -20,6 +21,7 @@ import {
   Title,
   UnorderedList,
   WithCitation,
+  WithGutter,
 } from './content';
 import {
   Area,
@@ -140,16 +142,32 @@ export function BigPicture({location}) {
 
   return (
     <ModelStateProvider value={withDistancing}>
-      <div className="flow-root">
+      <div className="flow-root margin-top-3">
         <div ref={sizeRef} />
         <div className="column-8" ref={partialSizeRef} />
-        <Paragraph>
-          Modeling Covid-19 (MC19) is an epidemiological model of Covid-19 fit
-          to actual social distancing, testing, and fatality data. We use this
-          data to project how Covid-19 might spread through a population for
-          different <strong>locations</strong> and different{' '}
-          <strong>social distancing scenarios</strong>.
-        </Paragraph>
+        <WithGutter>
+          <Paragraph>
+            The Modeling Covid-19 (MC19) project is an epidemiological model of
+            Covid-19 fit to actual social distancing, testing, and fatality
+            data. We use this data to project how Covid-19 might spread through
+            a population for different <strong>locations</strong> and different{' '}
+            <strong>social distancing scenarios</strong>.
+          </Paragraph>
+          <Gutter>
+            <Instruction className="instruction-sparse">
+              <strong>
+                Model run on <DateModelRun />
+              </strong>
+              <br />
+              <Link href="/about">
+                <a>
+                  <em>Recent & upcoming changes</em>
+                </a>
+              </Link>
+            </Instruction>
+          </Gutter>
+        </WithGutter>
+
         <WithCitation
           citation={
             <>
@@ -166,7 +184,7 @@ export function BigPicture({location}) {
               <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
                 Wolfram
               </a>
-              . The model was last run on <DateModelRun />.
+              .
             </>
           }
         >

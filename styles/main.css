@@ -191,6 +191,9 @@ text {
 .instruction strong {
   color: var(--color-gray5);
 }
+.instruction-sparse {
+  box-shadow: none;
+}
 body,
 .footnotes {
   counter-reset: citation footnote;

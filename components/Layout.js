@@ -44,12 +44,11 @@ const styles = css`
   }
   .title {
     font-family: ${theme.font.family.mono};
-    color: ${theme.color.gray[2]};
+    color: ${theme.color.gray[5]};
     font-size: 16px;
     display: block;
     flex-shrink: 0;
     font-weight: 500;
-    letter-spacing: 0.4em;
     padding-left: 0.4em;
     margin: 0 -0.4em;
   }
@@ -89,14 +88,11 @@ export function Layout({children}) {
       </div>
       <header>
         <Section>
-          <nav>
+          <nav className="text-small">
             <Link href="/">
-              <a className="focus title">MC19</a>
+              <a className="focus nav-link">Modeling Covid-19</a>
             </Link>
-            <div className="pages text-small">
-              <Link href="/">
-                <a className="focus nav-link">Home</a>
-              </Link>
+            <div className="pages">
               <div className="nav-link location-menu">
                 <LocationMenu
                   menuProps={{

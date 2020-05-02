@@ -96,7 +96,7 @@ export function ModelInputs({height, width, ...remaining}) {
           <strong>
             <TodayDistancing />
           </strong>
-          , is calculated based on the average the past three days of available
+          , is calculated based on the average the past seven days of available
           mobility data for {location.name}, which was last updated on{' '}
           <InlineData width="130px">
             {() => (
