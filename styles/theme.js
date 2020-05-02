@@ -56,7 +56,7 @@ export const {
     },
     size: {
       // TODO(koop): Define this in relation to other variables
-      jumbo: 'calc(var(--maxWidth) * 0.1)',
+      jumbo: 'calc(var(--maxWidth) * 0.08)',
       ...px({
         tiny: 12,
         micro: 13,
@@ -99,16 +99,19 @@ export const mediaQuery = {
 
 export const tabletUp = setProperties({
   font: {
-    size: px({
-      jumbo: 64,
-      title: 36,
-      dek: 28,
-      subtitle: 20,
-      section: 26,
-      body: 18.5,
-      pullquote: 21,
-      small: 15,
-    }),
+    size: {
+      // TODO(koop): Define this in relation to other variables
+      jumbo: 'calc(var(--maxWidth) * 0.055)',
+      ...px({
+        title: 36,
+        dek: 28,
+        subtitle: 20,
+        section: 26,
+        body: 18.5,
+        pullquote: 21,
+        small: 15,
+      }),
+    },
     spacing: {
       jumbo: '-0.024em',
       title: '-0.02em',
