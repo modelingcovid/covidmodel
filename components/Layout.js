@@ -91,7 +91,7 @@ export function Layout({children}) {
         <Section>
           <nav>
             <Link href="/">
-              <a className="focus title">COSMC</a>
+              <a className="focus title">MC19</a>
             </Link>
             <div className="pages text-small">
               <Link href="/">

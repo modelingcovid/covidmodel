@@ -1,14 +1,14 @@
-# COSMC Docker image
+# MC19 Docker image
 
-This directory provides a simple way to build and run COSMC in a standalone Docker image. It uses Docker and Docker Compose.
+This directory provides a simple way to build and run MC19 in a standalone Docker image. It uses Docker and Docker Compose.
 
 ### Building the Docker image
 
 1. Navigate to the `docker` directory in a terminal.
 1. Run the following:
-    ```sh
-    docker-compose build cosmc
-    ```
+   ```sh
+   docker-compose build mc19
+   ```
 
 ### Running the Docker image
 
@@ -16,9 +16,11 @@ This directory provides a simple way to build and run COSMC in a standalone Dock
 1. Save your password file on your local machine, e.g. at `~/wolfram/licensing/mathpass`.
 1. Navigate to the `docker` directory in a terminal.
 1. Run the following:
-    ```sh
-    WOLFRAM_LICENSING_DIR=~/wolfram/licensing docker-compose run cosmc
-    ```
-    This will launch a Docker container with the model code, use your password file to activate the Wolfram Engine, and run the Wolfram Engine.
 
-    By default, this runs `model/model.wl`. Change the value of `command` in `docker-compose.yml` to run different Wolfram Language code or files from the repository.
+   ```sh
+   WOLFRAM_LICENSING_DIR=~/wolfram/licensing docker-compose run mc19
+   ```
+
+   This will launch a Docker container with the model code, use your password file to activate the Wolfram Engine, and run the Wolfram Engine.
+
+   By default, this runs `model/model.wl`. Change the value of `command` in `docker-compose.yml` to run different Wolfram Language code or files from the repository.

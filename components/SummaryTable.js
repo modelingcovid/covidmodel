@@ -165,7 +165,7 @@ export function SummaryTableContents() {
       <style jsx>{styles}</style>
       <Heading>Summary table</Heading>
       <Paragraph>
-        The following is a summary of the COSMC model output after two years:
+        The following is a summary of the MC19 model output after two years:
       </Paragraph>
       <Grid mobile={1} desktop={2}>
         {metrics.map(({id, name, value, description, citations}) => (

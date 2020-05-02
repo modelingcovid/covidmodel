@@ -144,10 +144,10 @@ export function BigPicture({location}) {
         <div ref={sizeRef} />
         <div className="column-8" ref={partialSizeRef} />
         <Paragraph>
-          The COSMC model is an epidemiological model of Covid-19 fit to actual
-          social distancing, testing, and fatality data. We use this data to
-          project how Covid-19 might spread through a population for different{' '}
-          <strong>locations</strong> and different{' '}
+          Modeling Covid-19 (MC19) is an epidemiological model of Covid-19 fit
+          to actual social distancing, testing, and fatality data. We use this
+          data to project how Covid-19 might spread through a population for
+          different <strong>locations</strong> and different{' '}
           <strong>social distancing scenarios</strong>.
         </Paragraph>
         <WithCitation

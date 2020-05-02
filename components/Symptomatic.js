@@ -78,8 +78,8 @@ export function Symptomatic({height, width}) {
       >
         <Paragraph>
           While the rate of asymptomatic cases of Covid-19 don’t influence the
-          results of the COSMC model, they’re useful for generating statistics
-          to compare with other models.{' '}
+          results of the MC19 model, they’re useful for generating statistics to
+          compare with other models.{' '}
           <span className="footnote">
             By default, we set the <strong>asymptomatic rate</strong> to{' '}
             <strong>{formatPercent(defaultAsymptomaticRate)}</strong>.

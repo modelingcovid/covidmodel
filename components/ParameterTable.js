@@ -27,9 +27,7 @@ export function ParameterTableContents() {
     <div className="margin-top-3 flow-root">
       <style jsx>{styles}</style>
       <Heading>Parameter table</Heading>
-      <Paragraph>
-        The following parameters are used in the COSMC model:
-      </Paragraph>
+      <Paragraph>The following parameters are used in the model:</Paragraph>
       <Grid mobile={1} desktop={2}>
         {parameters().map(({id, name, value, description, type, citations}) => (
           <LegendRow
