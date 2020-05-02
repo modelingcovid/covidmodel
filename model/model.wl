@@ -207,14 +207,15 @@ generateModelComponents[distancing_] := <|
       (* Susceptible population, binned into (initially equally sized) groups having a range of relative susceptibilities; the sum of all sSq[i]'s is Sq, the full susceptible population *)
       Table[
         sSq[i]'[t]==(
-          distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-        ) * (-susceptibilityValues[i] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
+          distancing[t+If[bands==0,0,today]]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
+        ) * (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
         {i, 1, susceptibilityBins}],
 
       (* Exposed *)
       Eq'[t]==(
-        distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-      ) * Sum[(susceptibilityValues[i] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
+        distancing[t+If[bands==0,0,today]]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
+      ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
+
 
       (* Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed); age independent *)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectious,
@@ -245,8 +246,8 @@ generateModelComponents[distancing_] := <|
 
       (* Cumulative exposed *)
       cumEq'[t]==(
-          distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-        ) * Sum[(susceptibilityValues[i] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+          distancing[t+If[bands==0,0,today]]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
+        ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -255,24 +256,24 @@ generateModelComponents[distancing_] := <|
       ESq'[t]==ISq[t] / daysUntilNotInfectious,
 
       (* Current reported positive hospital cases *)
-      RepCHHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHosptialNonCritical,
+      RepCHHq'[t]==testingProbability[t+If[bands==0,0,today+1]] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHosptialNonCritical,
       (* Current reported positive hospital critical cases *)
-      RepCHCq'[t]==testingProbability[t] * pPCRH * ICq[t]/daysUntilHospitalized - RepCHCq[t]/daysTogoToCriticalCare,
+      RepCHCq'[t]==testingProbability[t+If[bands==0,0,today+1]] * pPCRH * ICq[t]/daysUntilHospitalized - RepCHCq[t]/daysTogoToCriticalCare,
       (* Currently reported in critical care *)
-      RepCCCq'[t]==testingProbability[t] * pPCRH * HCq[t]/daysTogoToCriticalCare - RepCCCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      RepCCCq'[t]==testingProbability[t+If[bands==0,0,today+1]] * pPCRH * HCq[t]/daysTogoToCriticalCare - RepCCCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (*Cumulative reported positive hospital cases*)
-      RepHq'[t]== testingProbability[t] * pPCRH  * IHq[t] / daysUntilHospitalized,
+      RepHq'[t]== testingProbability[t+If[bands==0,0,today+1]] * pPCRH  * IHq[t] / daysUntilHospitalized,
       (*Cumulative reported ICU cases*)
-      RepHCq'[t]== testingProbability[t] * pPCRH * ICq[t] / daysUntilHospitalized,
+      RepHCq'[t]== testingProbability[t+If[bands==0,0,today+1]] * pPCRH * ICq[t] / daysUntilHospitalized,
       
       (*Cumulative PCR confirmations*)
-      PCR'[t] == testingProbability[t] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
+      PCR'[t] == testingProbability[t+If[bands==0,0,today+1]] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t+If[bands==0,0,today+1]] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
 
       (* Cumulative PCR confirmed and reported deaths (both hospitalized and ICU) *)
-      RepDeaq'[t]==testingProbability[t] * pPCRH * Deaq'[t],
+      RepDeaq'[t]==testingProbability[t+If[bands==0,0,today+1]] * pPCRH * Deaq'[t],
       (* Cumulative PCR confirmed and reported ICU deaths *)
-      RepDeaICUq'[t]==testingProbability[t] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      RepDeaICUq'[t]==testingProbability[t+If[bands==0,0,today+1]] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (* Establishment *)
       est'[t]==0,
@@ -447,7 +448,7 @@ susceptibilityInitialPopulations010,
 
 (* to help speed up the simulations we pre-compute the parametric solutions to the equations for each state / scenario combination *)
 getModelComponentsForState[state_] := Association[{#["id"]->generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]]}&/@scenarios];
-getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelComponents, equationsODE, initialConditions, outputODE, dependentVariables, discreteVariables, eventsODE, parameters, parameterizedSolution},
+getSimModelComponentsForState[state_, tmin_:tmin0]:= Association[{#["id"]->Module[{modelComponents, equationsODE, initialConditions, outputODE, dependentVariables, discreteVariables, eventsODE, parameters, parameterizedSolution},
       modelComponents = generateModelComponents[stateDistancingPrecompute[state][#["id"]]["distancingFunction"]];
       equationsODE = modelComponents["equationsODE"];
       initialConditions = modelComponents["initialConditions"];
@@ -464,7 +465,7 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
           initialConditions
         },
         outputODE,
-        {t,tmin0,tmax},
+        {t,tmin,tmax},
         parameters,
         DependentVariables->dependentVariables,
         DiscreteVariables->{},
@@ -480,7 +481,8 @@ getSimModelComponentsForState[state_]:= Association[{#["id"]->Module[{modelCompo
 
 (* TODO: move these calls into the evaluateAllStates routine so that we don't have to reinclude this file inorder to pick up changes in the model *)
 modelPrecompute = Association[{#->getModelComponentsForState[#]}&/@statesToRun];	
-simModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@statesToRun];
+expectedModelPrecompute = Association[{#->getSimModelComponentsForState[#]}&/@statesToRun];
+simModelPrecompute = Association[{#->getSimModelComponentsForState[#, 1]}&/@statesToRun];
 
 
 (* model integrator used for evaluating the model at the expectation values of the fit + literature parameters *)
@@ -493,7 +495,7 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
     reinterpolate
   },
 
-  modelComponents = simModelPrecompute[state][scenarioId];
+  modelComponents = expectedModelPrecompute[state][scenarioId];
 
   outputODE = modelComponents["outputODE"];
   parameterizedSolution = modelComponents["parameterizedSolution"];
@@ -589,9 +591,8 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 (* TODO why do we use truncated normal distributions instead of log-normal (which is probably more realistic)? *)
 (* we also use a beta distribution for fractional parameters because that bounds them between zero and 1, and is generally used to represent distributions of fractional quantities *)
 
-generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_, todayValues_]:=Module[{},
- Flatten[{
-    RandomVariate[PosNormal[fitParams["r0natural"],0.05*fitParams["r0natural"]]],
+generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_, todayValues_]:=Module[{}, {
+    RandomVariate[PosNormal[fitParams["r0natural"],fitParams["r0natural"]*(standardErrors["r0natural"]-1)/2]],
     RandomVariate[PosNormal[daysUntilNotInfectious0,daysUntilNotInfectious0*0.05]],
     RandomVariate[PosNormal[daysUntilHospitalized0,daysUntilHospitalized0*0.05]],
     RandomVariate[PosNormal[daysFromInfectedToInfectious0,daysFromInfectedToInfectious0*0.05]],
@@ -601,7 +602,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     RandomVariate[PosNormal[daysTogoToCriticalCare0,daysTogoToCriticalCare0*0.05]],
     RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,daysFromCriticalToRecoveredOrDeceased0*0.05]],
     RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,fractionOfCriticalDeceased0*0.02]],
-    RandomVariate[PosNormal[fitParams["importtime"],0.05*fitParams["importtime"]]],
+    RandomVariate[PosNormal[fitParams["importtime"],fitParams["importtime"]*(standardErrors["importtime"]-1)/2]],
     importlength0,
     stateParams["params"]["initialInfectionImpulse"],
     susceptibilityValuesLogNormal[susceptibilityBins, RandomVariate[PosNormal[susceptibilityStdev0,susceptibilityStdev0*0.5]]],
@@ -612,8 +613,8 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     stateParams["params"]["icuBeds"]/stateParams["params"]["population"],
     stateParams["params"]["bedUtilization"],
     stateParams["params"]["staffedBeds"]/stateParams["params"]["population"],
-    RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
-    RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]],
+    RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], fitParams["stateAdjustmentForTestingDifferences"]* (standardErrors["stateAdjustmentForTestingDifferences"]-1)/2]],
+    RandomVariate[PosNormal[fitParams["distpow"],fitParams["distpow"]* (standardErrors["distpow"]-1)/2]],
     todayValues["Eq0"],
     todayValues["ISq0"],
     todayValues["RSq0"],
@@ -789,7 +790,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
 
   Echo["Generating simulations for " <>state<> " in the " scenario["name"] <> " scenario"];
   startingValues=getStartingValues[sol];
-  Echo[KeyValueMap[#1->(#2*population)&, startingValues]];
+  Echo[standardErrors];
   sims=generateSimulations[numberOfSimulations,fitParams,standardErrors,endOfEval,stateParams,startingValues];
 
   (* generate a solution for each simulation so we can get bands *)
