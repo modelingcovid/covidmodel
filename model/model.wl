@@ -109,8 +109,8 @@ population. At late times, this has the effect of limiting the number of individ
 a standard deviation of 1.2 so that roughly 70% of individuals become infected in unconstrained models.
 ****)
 susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m, s, dist, binEdges, unnormalizedRelativeSusceptibilities},
-  m = -stdDev^2 / 2;
   s = Sqrt[Log[stdDev^2 + 1]];
+  m = -s^2 / 2;
   dist = LogNormalDistribution[m,s];
   binEdges = InverseCDF[dist, Range[0, binCount] / binCount];
   unnormalizedRelativeSusceptibilities = Table[
@@ -118,9 +118,10 @@ susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m, s, dist, binEdges, 
   binCount unnormalizedRelativeSusceptibilities / Total[unnormalizedRelativeSusceptibilities]
 ];
 susceptibilityBins = 10;
-susceptibilityStdev0 = 1.6;
+susceptibilityStdev0 = 1.2;
 susceptibilityInitialPopulations = ConstantArray[1/susceptibilityBins, susceptibilityBins];
-susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];
+(* susceptibilityValues are now defined later as part of the model to allow for parameterization of susceptibilityStdev0 *)
+(*susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];*)
 
 
 (* Compute age adjusted parameters per-state *)
@@ -207,13 +208,13 @@ generateModelComponents[distancing_] := <|
       Table[
         sSq[i]'[t]==(
           distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-        ) * (-susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
+        ) * (-susceptibilityValues[i] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) - est[t]) * sSq[i][t],
         {i, 1, susceptibilityBins}],
 
       (* Exposed *)
       Eq'[t]==(
         distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-      ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
+      ) * Sum[(susceptibilityValues[i] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}] - Eq[t]/daysFromInfectedToInfectious,
 
       (* Infected who won't need hospitalization or ICU care (not necessarily PCR confirmed); age independent *)
       ISq'[t]==pS*Eq[t]/daysFromInfectedToInfectious - ISq[t]/daysUntilNotInfectious,
@@ -245,7 +246,7 @@ generateModelComponents[distancing_] := <|
       (* Cumulative exposed *)
       cumEq'[t]==(
           distancing[t]^distpow * r0natural * testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]] + (1 - testAndTraceTurnOff[testAndTrace, testAndTraceDelayCounter[t]])
-        ) * Sum[(susceptibilityValues[[i]] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
+        ) * Sum[(susceptibilityValues[i] * (ISq[t]/daysUntilNotInfectious + (IHq[t] + ICq[t])/daysUntilHospitalized) + est[t]) * sSq[i][t], {i, 1, susceptibilityBins}],
       (*Cumulative hospitalized count*)
       EHq'[t]==IHq[t] / daysUntilHospitalized,
       (*Cumulative critical count*)
@@ -320,7 +321,7 @@ generateModelComponents[distancing_] := <|
       
   "discreteVariables" -> {},
 
-  "simulationParameters" -> {
+  "simulationParameters" -> Flatten[{
     r0natural,
     daysUntilNotInfectious,
     daysUntilHospitalized,
@@ -334,6 +335,7 @@ generateModelComponents[distancing_] := <|
     importtime,
     importlength,
     initialInfectionImpulse,
+    Table[susceptibilityValues[i],{i,1,susceptibilityBins}],
     tmax,
     pS,
     pH,
@@ -344,9 +346,9 @@ generateModelComponents[distancing_] := <|
     stateAdjustmentForTestingDifferences,
     distpow,
     testAndTrace
-  },
+  }],
 
-  "replaceKnownParameters"->Function[state, {
+  "replaceKnownParameters"->Function[state, Flatten[{
       daysUntilNotInfectious -> daysUntilNotInfectious0,
       daysUntilHospitalized -> daysUntilHospitalized0,
       daysFromInfectedToInfectious -> daysFromInfectedToInfectious0,
@@ -356,6 +358,7 @@ generateModelComponents[distancing_] := <|
       fractionOfCriticalDeceased -> fractionOfCriticalDeceased0,
       importlength -> importlength0,
       initialInfectionImpulse -> stateParams[state]["initialInfectionImpulse"],
+      MapIndexed[susceptibilityValues[First[#2]] -> #1&, susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0]],
       tmax -> tmax0,
       pS -> stateParams[state]["pS"],
       pH -> stateParams[state]["pH"],
@@ -366,7 +369,7 @@ generateModelComponents[distancing_] := <|
       bedUtilization -> stateParams[state]["bedUtilization"],
       staffedBeds -> stateParams[state]["staffedBeds"] / stateParams[state]["population"],
       testAndTrace -> 0
-  }]
+  }]]
 |>;
 
 
@@ -514,7 +517,8 @@ PosNormal[mu_,sig_]:=TruncatedDistribution[{0,\[Infinity]},NormalDistribution[mu
 (* we mostly use normal distributions of those variables, truncated to keep them positive (physical constraint) *)
 (* TODO why do we use truncated normal distributions instead of log-normal (which is probably more realistic)? *)
 (* we also use a beta distribution for fractional parameters because that bounds them between zero and 1, and is generally used to represent distributions of fractional quantities *)
-generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{}, {
+generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, stateParams_]:=Module[{},
+  Flatten[{
     RandomVariate[PosNormal[fitParams["r0natural"],0.05*fitParams["r0natural"]]],
     RandomVariate[PosNormal[daysUntilNotInfectious0,daysUntilNotInfectious0*0.05]],
     RandomVariate[PosNormal[daysUntilHospitalized0,daysUntilHospitalized0*0.05]],
@@ -528,6 +532,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     RandomVariate[PosNormal[fitParams["importtime"],0.05*fitParams["importtime"]]],
     importlength0,
     stateParams["params"]["initialInfectionImpulse"],
+    susceptibilityValuesLogNormal[susceptibilityBins, RandomVariate[PosNormal[susceptibilityStdev0,susceptibilityStdev0*0.5]]],
     cutoff,
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
@@ -538,7 +543,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     RandomVariate[PosNormal[fitParams["stateAdjustmentForTestingDifferences"], 0.05*fitParams["stateAdjustmentForTestingDifferences"]]],
     RandomVariate[PosNormal[fitParams["distpow"], 0.05*fitParams["distpow"]]],
     0
-  }&/@Range[numberOfSimulations]]
+  }]&/@Range[numberOfSimulations]]
 
 
 (* Given a set fit parameters, simulated parameters and a definition of a scenario, run all the simulations and produce the quantiles for the mean and confidence band estimates *)
@@ -582,7 +587,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
   },
 
   (* the expected parameter values, from fit + literature *)
-  paramExpected = {
+  paramExpected = Flatten[{
     fitParams["r0natural"],
     daysUntilNotInfectious0,
     daysUntilHospitalized0,
@@ -596,6 +601,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     fitParams["importtime"],
     importlength0,
     stateParams["params"]["initialInfectionImpulse"],
+    susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0],
     tmax0,
     stateParams["params"]["pS"],
     stateParams["params"]["pH"],
@@ -606,7 +612,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     fitParams["stateAdjustmentForTestingDifferences"],
     fitParams["distpow"],
     0
-  };
+  }];
   
   (* the expected parameter values with test and trace turned on (last parameter) *)
   paramExpectedtt = Append[Most[paramExpected], 1];
