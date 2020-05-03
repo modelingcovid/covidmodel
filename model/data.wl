@@ -12,7 +12,7 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 (* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365 * 2;
 tmin0 = 1;
-may1=121;
+may1=131;
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
@@ -243,7 +243,7 @@ codesToStates=<|"AL" -> "Alabama",
 statesToCodes = Association[KeyValueMap[#2->#1&,codesToStates]];
 
 
-countryDistancingPrecompute = Module[{
+(*countryDistancingPrecompute = Module[{
     totalDays,
     rawCsvTable,
     stateLabels,
@@ -357,7 +357,7 @@ countryDistancingPrecompute = Module[{
     Map[processScenario[#, distancing]&, scenarios]];
 
   Association[MapThread[processState, {stateLabels, stateDistancings}]]
-];
+];*)
 
 
 (* grab state distancing data and return smoothed distancing functions for each scenario in the list of scenarios provided. *)
@@ -382,7 +382,7 @@ usStateDistancingPrecompute = Module[{
     stateList
   },
   (* switch back to the google data when they start updating more regularly *)
-  (*googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
+  googleMobility=parseCsv["https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv"];
   dates=Prepend[QuantityMagnitude[DateDifference[DateObject[{2020,1,1}],DateObject[#["date"]]]]&/@Select[googleMobility,#["country_region_code"]=="US"&&#["sub_region_1"]=="Virginia"&&#["sub_region_2"]==""&],"State"];
 
   stateDistancing[state_]:=Module[{stateName},
@@ -406,12 +406,10 @@ usStateDistancingPrecompute = Module[{
           ]&]]]];
   rawCsvTable=Prepend[
     Map[stateDistancing, stateList],
-    dates];*)
-
-  rawCsvTable = Transpose[Import["https://docs.google.com/spreadsheets/d/1NXGm3acRUTTOSE0IaqA3mzOIFjMSMvdCR2sL1G3Mrxc/export?format=csv&gid=2031828246","CSV"]];
+    dates];
 
   dataDays = rawCsvTable[[1,2;;]];
-  stateDistancings = 1-rawCsvTable[[2;;,2;;]];
+  stateDistancings = rawCsvTable[[2;;,2;;]];
   stateLabels = rawCsvTable[[2;;,1]];
   countStates = Length[stateLabels];
 
@@ -504,7 +502,7 @@ usStateDistancingPrecompute = Module[{
 mostRecentDistancingDay = usStateDistancingPrecompute["CA"]["scenario1"]["mostRecentDistancingDay"];
 
 
-stateDistancingPrecompute = Merge[{countryDistancingPrecompute,usStateDistancingPrecompute},First];
+stateDistancingPrecompute = usStateDistancingPrecompute;
 
 
 maxPosTestDay=Max[#["day"]&/@statePositiveTestData];
