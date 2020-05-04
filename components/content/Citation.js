@@ -5,11 +5,14 @@ import {createTextComponent} from './Text';
 export const Citation = createTextComponent('cite', 'citation');
 
 export function WithCitation({children, citation}) {
+  const citations = Array.isArray(citation) ? citation : [citation];
   return (
     <WithGutter>
       <div>{children}</div>
       <Gutter>
-        <Citation>{citation}</Citation>
+        {citations.map((citation, i) => (
+          <Citation key={i}>{citation}</Citation>
+        ))}
       </Gutter>
     </WithGutter>
   );

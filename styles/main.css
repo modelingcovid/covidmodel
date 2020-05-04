@@ -241,10 +241,13 @@ body,
   color: var(--color-gray5);
 }
 .citation {
-  box-shadow: inset 0 2px var(--color-shadow0);
-  padding: var(--spacing1) 0;
   padding-left: var(--spacing1);
+  margin-bottom: var(--spacing1);
   font-style: italic;
+}
+.citation:first-child {
+  padding-top: var(--spacing1);
+  box-shadow: inset 0 2px var(--color-shadow0);
 }
 .citation::before {
   counter-increment: citation;
