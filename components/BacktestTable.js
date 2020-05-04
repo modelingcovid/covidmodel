@@ -118,14 +118,17 @@ export function BacktestTable({data}) {
           label={<span className="text-gray">PCR Percentage Difference</span>}
         />
         {currentIntervalData.map(
-          ({
-            state,
-            deathAverage,
-            deathAveragePercent,
-            pcrAverage,
-            pcrAveragePercent,
-          }) => (
-            <React.Fragment>
+          (
+            {
+              state,
+              deathAverage,
+              deathAveragePercent,
+              pcrAverage,
+              pcrAveragePercent,
+            },
+            i
+          ) => (
+            <React.Fragment key={i}>
               <LegendEntry label={<span className="text-gray">{state}</span>} />
               <LegendEntry y={deathAverage} format={formatNumber} />
               <LegendEntry y={deathAveragePercent} format={formatPercent2} />
