@@ -12,7 +12,7 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 (* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365 * 2;
 tmin0 = 1;
-may1=131;
+may1=131; (* actually may 10 *)
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
