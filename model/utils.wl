@@ -227,6 +227,7 @@ generateTimeSeries[state_,scenario_,sol_,soltt_,simResults_,fitParams_,statePara
     DailyDeathQuantiles,
     DailyReportedDeathQuantiles,
     DailyReportedICUDeathQuantiles,
+    RtQuantiles,
     percentileMap,
     percentileMapTestTrace,
     distancing
@@ -259,6 +260,8 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*(#[RepCHHq][t]+#[RepCHCq][t]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
   CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[RepCCCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&];
 
+  RtQuantiles[t_] := simDeciles[#[rt][t]&];
+
   (* define some helpers to generate percentile keys in the json export like "percentile10" etc. *)
   percentileMap[percentileList_]:=Association[MapIndexed[("percentile" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
   percentileMapTestTrace[percentileList_]:=Association[MapIndexed[("percentileTestTrace" <> ToString[10(First[#2]-1)]) -> #1&, percentileList]];
@@ -280,7 +283,8 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
           "rt"-><|
             "expected"->sol[rt][t],
             (* if test and trace is qualified for we pin r0 to 1 and only allow for it to decrease due to heterogeneity / less available susceptible individuals *)
-            "expectedTestTrace"->soltt[rt][t]
+            "expectedTestTrace"->soltt[rt][t],
+            percentileMap[RtQuantiles[t]]
           |>,
           (* hospital and ICU capacity are ajusted upwards when distancing is higher than 30% *)
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"],
