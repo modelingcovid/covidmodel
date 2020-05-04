@@ -1,7 +1,11 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import {theme} from '../../styles';
-import {useContainmentStrategy, useSetContainmentStrategy} from '../modeling';
+import {
+  useContainmentStrategy,
+  useLocationData,
+  useSetContainmentStrategy,
+} from '../modeling';
 
 const {useCallback} = React;
 
@@ -58,12 +62,18 @@ export function ScaleControls({scale, setScale}) {
 }
 
 export function ContainmentControls() {
+  const {dateContained} = useLocationData();
   const strategy = useContainmentStrategy();
   const setStrategy = useSetContainmentStrategy();
   const onClick = useCallback(
     () => setStrategy((s) => (s === 'none' ? 'testTrace' : 'none')),
     []
   );
+
+  if (!dateContained()) {
+    return null;
+  }
+
   return (
     <a
       className={classNames({active: strategy === 'testTrace'})}
