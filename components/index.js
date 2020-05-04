@@ -1,3 +1,4 @@
+export * from './BacktestTable';
 export * from './BigPicture';
 export * from './Daily';
 export * from './EffectiveReproductionNumber';
