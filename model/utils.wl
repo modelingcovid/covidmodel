@@ -178,7 +178,7 @@ evaluateBacktestAccuracy[state_, backtestMask_, evaluateSolution_, fitParams_]:=
 
 
 exportAllStatesBacktest[filename_,allStates_,backtestMask_]:=Module[{header, rows, table, generateBacktestForState},
-  header = {"state","backtestDays","deathAverage","deathAveragePercent","deathStdev","deathStdevPercent","pcrAverage","pcrAveragePercent","pcrStdev","pcrStdevPercent"};
+  header = {"state","backtestDays","deathAverage","deathAveragePercent","pcrAverage","pcrAveragePercent"};
   
   generateBacktestForState[stateOutput_,state_,mask_]:=Module[{bktest},
     bktest=stateOutput["backtest"];
@@ -189,7 +189,7 @@ exportAllStatesBacktest[filename_,allStates_,backtestMask_]:=Module[{header, row
   rows = generateBacktestForState[allStates[#],#,backtestMask]&/@Keys[allStates];
 
   table = Join[{header}, rows];
-  Export[filename<>"_"<>backtestMask<>"_days.csv", table];
+  Export[filename<>"_"<>ToString[backtestMask]<>"_days.csv", table];
 ];
 
 

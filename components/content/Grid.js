@@ -20,3 +20,28 @@ export const Grid = ({children, mobile = 1, desktop = 3, ...remaining}) => (
     {children}
   </div>
 );
+
+export const TableGrid = ({
+  children,
+  mobile = 1,
+  desktop = 3,
+  ...remaining
+}) => (
+  <div {...remaining}>
+    <style jsx>{`
+      div {
+        display: grid;
+        grid-template-columns: repeat(${mobile}, minmax(0, 1fr));
+        grid-gap: ${theme.spacing[1]};
+        align-items: start;
+      }
+      @media (min-width: 600px) {
+        div {
+          grid-template-columns: repeat(${desktop}, minmax(0, 1fr));
+          grid-gap: ${theme.spacing[1]};
+        }
+      }
+    `}</style>
+    {children}
+  </div>
+);
