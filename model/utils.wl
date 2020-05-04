@@ -189,7 +189,7 @@ exportAllStatesBacktest[filename_,allStates_,backtestMask_]:=Module[{header, row
   rows = generateBacktestForState[allStates[#],#,backtestMask]&/@Keys[allStates];
 
   table = Join[{header}, rows];
-  Export[filename, table];
+  Export[filename<>"_"<>backtestMask<>"_days.csv", table];
 ];
 
 

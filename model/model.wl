@@ -918,27 +918,27 @@ when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask_:0] := Module[{days},
   loopBody[state_]:=Module[{stateData},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo, backtestMask];
-    Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios;
-    exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios;
+    If[backtestMask==0,Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios];
+    If[backtestMask==0,exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios];
     days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
 
-    Export["public/json/"<>state<>"/days.json", Select[days, #<=370&]];
-    Export["public/json/"<>state<>"/summary.json",Merge[{
+    If[backtestMask==0,Export["public/json/"<>state<>"/days.json", Select[days, #<=370&]]];
+    If[backtestMask==0,Export["public/json/"<>state<>"/summary.json",Merge[{
           KeyDrop[stateData, {"scenarios"}],
           <|"scenarios"->(#["id"]&/@scenarios)|>
         }
-        ,First]];
+        ,First]]];
     stateData
   ];
 
   allStatesData=Association[Parallelize[Map[(#->loopBody[#])&,states]]];
 
-  exportAllStatesSummary[allStatesData];
-  exportAllStatesSummaryAug1[allStatesData];
+  If[backtestMask==0,exportAllStatesSummary[allStatesData]];
+  If[backtestMask==0,exportAllStatesSummaryAug1[allStatesData]];
   
-  If[backtestMask>0,exportAllStatesBacktest["tests/backtest.csv",allStatesData,backtestMask],Unevaluated[Sequence[]]];
-  exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData];
-  exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData];
-  exportAllStatesHospitalizationGoodnessOfFitMetricsSvg["tests/hospitalization-relative-fit-errors.svg",allStatesData];
+  If[backtestMask>0,exportAllStatesBacktest["tests/backtest",allStatesData,backtestMask],Unevaluated[Sequence[]]];
+  If[backtestMask==0,exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData]];
+  If[backtestMask==0,exportAllStatesGoodnessOfFitMetricsSvg["tests/relative-fit-errors.svg",allStatesData]];
+  If[backtestMask==0,exportAllStatesHospitalizationGoodnessOfFitMetricsSvg["tests/hospitalization-relative-fit-errors.svg",allStatesData]];
   allStatesData
 ]
