@@ -289,7 +289,8 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
           |>,
           (* hospital and ICU capacity are ajusted upwards when distancing is higher than 30% *)
           "hospitalCapacity"->(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"],
-          "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7],
+          "icuBeds"->stateParams["params"]["icuBeds"],
+          "icuCapacity"->stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.7,0.7],
           (* we dont predict negative tests yet, but give the confirmed data from COVID tracking for the site *)
           "dailyNegativePcr" -> <|
             "confirmed"-> If[Length[Select[stateParams["thisStateData"],(#["day"]==t)&]] != 1, 0, Select[stateParams["thisStateData"],(#["day"]==t)&][[1]]["negativeIncrease"]]
