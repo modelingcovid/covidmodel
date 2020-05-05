@@ -1,6 +1,6 @@
 # About
 
-The Modeling Covid-19 team is comprised of data scientists and engineers [Will Bunting](https://www.linkedin.com/in/willbunting/), [Daryl Koopersmith](https://www.linkedin.com/in/darylkoopersmith/), [Dara Straussman](https://www.linkedin.com/in/dara-straussman/), and [Ken Henisey](https://www.linkedin.com/in/kenhenisey/).
+The Modeling Covid-19 team is comprised of data scientists and engineers [Will Bunting](https://www.linkedin.com/in/willbunting/); [Daryl Koopersmith](https://www.linkedin.com/in/darylkoopersmith/); [Dara Straussman, PhD](https://www.linkedin.com/in/dara-straussman/); and [Ken Henisey, PhD](https://www.linkedin.com/in/kenhenisey/).
 
 We’d like to thank the following epidemiologists and researchers for their guidance:
 
@@ -22,4 +22,4 @@ The model code is open-source and available on [GitHub](https://github.com/model
 We’re currently focused on making the following updates to the model:
 
 - **Automate checking change of outcome metrics:** We plan to add automated alerting when outcome metrics vary by more than a certain amount between daily runs of the model.
-- **Automate avoiding local minima in fitting:** Our current fitting algorithm occasionally falls into incorrect local minima for which we need to manually adjust the parameter regions to compensate for. Work needs to be done to automate this procedure. 
+- **Automate avoiding local minima in fitting:** Our current fitting algorithm occasionally falls into incorrect local minima for which we need to manually adjust the parameter regions to compensate for. Work needs to be done to automate this procedure.
