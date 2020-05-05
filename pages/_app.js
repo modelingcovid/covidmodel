@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Head from 'next/head';
+import {useRouter} from 'next/router';
 import {SWRConfig} from 'swr';
 import 'normalize.css';
 
@@ -10,7 +11,7 @@ import '../styles/main.css';
 import {ComponentIdProvider} from '../components/util';
 import {MDXComponents} from '../components';
 
-const {useState} = React;
+const {useEffect} = React;
 
 const title = 'Modeling Covid-19';
 const browserTitle = title;
@@ -19,12 +20,25 @@ const description =
 const canonicalUrl = 'https://modelingcovid.com/';
 const socialImgUrl = `${canonicalUrl}social.png`;
 
+const GOOGLE_ANALYTICS_ID = process.env.GOOGLE_ANALYTICS_ID;
+
 export default function App({
   Component,
   pageProps,
   state,
   states: initialStates,
 }) {
+  const {events} = useRouter();
+  useEffect(() => {
+    const handler = (url) => {
+      if (typeof window !== 'undefined' && typeof window.ga !== 'undefined') {
+        window.ga('send', 'pageview');
+      }
+    };
+    events.on('routeChangeComplete', handler);
+    return () => events.off('routeChangeComplete', handler);
+  }, [events]);
+
   return (
     <SWRConfig
       value={{
@@ -33,6 +47,24 @@ export default function App({
     >
       <ComponentIdProvider>
         <Head>
+          {GOOGLE_ANALYTICS_ID && (
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', '${GOOGLE_ANALYTICS_ID.slice(0, 14)}', {
+                  'storage': 'none'
+                });
+                ga('set', 'anonymizeIp', true);
+                ga('send', 'pageview');
+              `,
+              }}
+            />
+          )}
           <link
             rel="icon"
             type="image/png"
