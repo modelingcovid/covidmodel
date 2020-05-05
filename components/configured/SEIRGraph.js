@@ -161,21 +161,26 @@ export function SEIRSummary() {
     <WithCitation
       citation={
         <>
-          In practice, while up to 10% of reported cases in both{' '}
+          Healthcare workers are at a higher risk of contracting Covid-19. The
+          fraction of overall reported cases who are healthcare workers was
+          observed as 10% in{' '}
           <a href="https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf">
             China
           </a>{' '}
-          and{' '}
+          , 10% in{' '}
           <a href="https://www.epicentro.iss.it/coronavirus/bollettino/Infografica_7aprile%20ITA.pdf">
             Italy
           </a>{' '}
-          were among healthcare workers, the WHO found that in a limited set of
-          infected healthcare workers outside of{' '}
-          <a href="https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf">
-            Hubei
+          , and 15.8% in{' '}
+          <a href="https://public.tableau.com/profile/oma.era#!/vizhome/CovidTable/Dashboard22">
+            Ontario
           </a>
-          , “the exposure for most was reported to have been traced back to a
-          confirmed case in a household.”
+          . Modeling this scenario is complicated: healthcare workers are also
+          part of the{' '}
+          <a href="https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf">
+            overall susceptible population
+          </a>{' '}
+          and have a higher likelihood of being tested.
         </>
       }
     >
@@ -204,10 +209,9 @@ export function SEIRSummary() {
             Hospitalized people
           </InlineLabel>{' '}
           are currently in the hospital or ICU. As a simplifying assumption, we
-          do not model susceptible healthcare workers. As a result,{' '}
-          <span className="footnote">
-            the model assumes hospitalized people cannot infect others.
-          </span>
+          do not model{' '}
+          <span className="footnote">susceptible healthcare workers.</span> As a
+          result, the model assumes hospitalized people cannot infect others.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.recovered}>
