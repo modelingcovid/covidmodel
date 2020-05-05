@@ -34,9 +34,6 @@ const styles = css`
     text-align: left;
     padding-left: 0;
   }
-  .backtest-container {
-    min-width: ;
-  }
   .parameter-description {
     padding-top: ${theme.spacing[0]};
     color: ${theme.color.gray[3]};
