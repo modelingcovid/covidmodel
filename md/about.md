@@ -13,5 +13,5 @@ The model code is open-source and available on [GitHub](https://github.com/model
 
 We’re currently focused on making the following updates to the model:
 
-- **Backtesting:** We plan to surface metrics for how the model performs when we exclude data from the immediate past (with up-to-date distancing data to ensure accurate comparisons).
-- **Add distribution data for R<sub>t</sub>:** This will help convey the model’s certainty around the modeled value of R<sub>t</sub> at a given point in time.
+- **Automate checking change of outcome metrics:** We plan to add automated alerting when outcome metrics vary by more than a certain amount between daily runs of the model.
+- **Automate avoiding local minima in fitting:** Our current fitting algorithm occasionally falls into incorrect local minima for which we need to manually adjust the parameter regions to compensate for. Work needs to be done to automate this procedure. 
