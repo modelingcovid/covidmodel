@@ -104,8 +104,8 @@ export default function StatePage() {
               <span className="nowrap">in {stateName}</span>
             </h1>
             <h2 className="dek margin-bottom-3">
-              Forecasting the impact of the virus using models trained with
-              actual social distancing, testing, and fatality data
+              Forecasting the impact of Covid-19 using an epidemiological model
+              trained on real world data
             </h2>
           </Section>
           <div className="controls-container">

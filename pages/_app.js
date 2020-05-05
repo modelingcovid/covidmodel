@@ -15,7 +15,7 @@ const {useState} = React;
 const title = 'Modeling Covid-19';
 const browserTitle = title;
 const description =
-  'Forecasting the impact of Covid-19 using models trained with actual social distancing, testing, and fatality data.';
+  'Forecasting the impact of Covid-19 using an epidemiological model trained on real world data.';
 const canonicalUrl = 'https://modelingcovid.com/';
 const socialImgUrl = `${canonicalUrl}social.png`;
 
