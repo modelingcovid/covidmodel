@@ -10,6 +10,7 @@ import {
 } from './configured';
 import {
   Blockquote,
+  Citation,
   Grid,
   Gutter,
   InlineData,
@@ -146,31 +147,45 @@ export function BigPicture({location}) {
         <div ref={sizeRef} />
         <div className="column-8" ref={partialSizeRef} />
         <WithGutter>
-          <Paragraph>
-            The Modeling Covid-19 (MC19) project is an epidemiological model of
-            Covid-19 fit to actual social distancing, testing, and fatality
-            data. We use this data to project how Covid-19 might spread through
-            a population for different <strong>locations</strong> and different{' '}
-            <strong>social distancing scenarios</strong>.
-          </Paragraph>
+          <div>
+            <Paragraph>
+              The Modeling Covid-19 (MC19) project is an epidemiological model
+              of Covid-19 fit to actual social distancing, testing, and fatality
+              data. We use this data to project how Covid-19 might spread
+              through a population for different <strong>locations</strong> and
+              different <strong>social distancing scenarios</strong>.
+            </Paragraph>
+            <Paragraph>
+              <strong>
+                A model is only as good as{' '}
+                <span className="footnote">the data it’s based on,</span>
+              </strong>{' '}
+              and we’re thankful for the many people and organizations who have
+              worked to produce the data that powers the model. However, all
+              data has its caveats and limitations: in particular, fatality
+              counts are difficult to assess and{' '}
+              <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+                often underreported
+              </a>
+              . We’ve tried to make the best of the available data and hope to
+              continually improve the model as more data becomes available.
+            </Paragraph>
+          </div>
           <Gutter>
             <Instruction className="instruction-sparse">
+              <strong>Questions? Feedback?</strong> Contact us at{' '}
+              <a href="mailto:info@modelingcovid.com">info@modelingcovid.com</a>
+              <br />
+              <br />
               <strong>
                 Model run on <DateModelRun />
               </strong>
               <br />
               <Link href="/about">
-                <a>
-                  <em>Recent & upcoming changes</em>
-                </a>
+                <a>Recent & upcoming changes</a>
               </Link>
             </Instruction>
-          </Gutter>
-        </WithGutter>
-
-        <WithCitation
-          citation={
-            <>
+            <Citation>
               We use data from the{' '}
               <a href="https://covidtracking.com/">Covid Tracking Project</a>,
               mobility data from{' '}
@@ -185,25 +200,9 @@ export function BigPicture({location}) {
                 Wolfram
               </a>
               .
-            </>
-          }
-        >
-          <Paragraph>
-            <strong>
-              A model is only as good as{' '}
-              <span className="footnote">the data it’s based on,</span>
-            </strong>{' '}
-            and we’re thankful for the many people and organizations who have
-            worked to produce the data that powers the model. However, all data
-            has its caveats and limitations: in particular, fatality counts are
-            difficult to assess and{' '}
-            <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
-              often underreported
-            </a>
-            . We’ve tried to make the best of the available data and hope to
-            continually improve the model as more data becomes available.
-          </Paragraph>
-        </WithCitation>
+            </Citation>
+          </Gutter>
+        </WithGutter>
         <Blockquote>
           <em>“All models are wrong, but some are useful.”</em>
         </Blockquote>

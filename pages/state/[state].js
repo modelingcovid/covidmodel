@@ -148,7 +148,7 @@ export default function StatePage() {
             </div>
           </Section> */}
         </div>
-        <FeedbackForm />
+        {/* <FeedbackForm /> */}
       </Layout>
     </ModelStateProvider>
   );
