@@ -122,11 +122,13 @@ export function BacktestTable({data}) {
       </div>
       <table>
         <thead>
-          <th>State</th>
-          <th>Deaths difference</th>
-          <th>Deaths percentage difference</th>
-          <th>PCR difference</th>
-          <th>PCR percentage difference</th>
+          <tr>
+            <th>State</th>
+            <th>Deaths difference</th>
+            <th>Deaths percentage difference</th>
+            <th>PCR difference</th>
+            <th>PCR percentage difference</th>
+          </tr>
         </thead>
         <tbody>
           {currentIntervalData.map(
