@@ -161,13 +161,21 @@ export function SEIRSummary() {
     <WithCitation
       citation={
         <>
-          There is much we don’t know about immunity to Covid-19. Our model
-          makes a simplifying assumption that the typical immune response will
-          last “
-          <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
-            at least a year
+          In practice, while up to 10% of reported cases in both{' '}
+          <a href="https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf">
+            China
+          </a>{' '}
+          and{' '}
+          <a href="https://www.epicentro.iss.it/coronavirus/bollettino/Infografica_7aprile%20ITA.pdf">
+            Italy
+          </a>{' '}
+          were among healthcare workers, the WHO found that in a limited set of
+          infected healthcare workers outside of{' '}
+          <a href="https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf">
+            Hubei
           </a>
-          .”
+          , “the exposure for most was reported to have been traced back to a
+          confirmed case in a household.”
         </>
       }
     >
@@ -182,8 +190,8 @@ export function SEIRSummary() {
           <InlineLabel list {...label.exposed}>
             Exposed people
           </InlineLabel>{' '}
-          have Covid-19 and are in the incubation period; they cannot infect
-          others.
+          have Covid-19 and are in the incubation period; the model assumes most
+          exposed people cannot infect others.
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.infectious}>
@@ -195,15 +203,22 @@ export function SEIRSummary() {
           <InlineLabel list {...label.hospitalized}>
             Hospitalized people
           </InlineLabel>{' '}
-          are currently in the hospital or ICU; the model assumes they cannot
-          infect others.
+          are currently in the hospital or ICU. As a simplifying assumption, we
+          do not model susceptible healthcare workers. As a result,{' '}
+          <span className="footnote">
+            the model assumes hospitalized people cannot infect others.
+          </span>
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.recovered}>
             Recovered people
           </InlineLabel>{' '}
-          have had Covid-19 and are <span className="footnote">immune</span> to
-          re-infection.
+          have had Covid-19 and are considered immune to re-infection. Our model
+          assumes that the typical immune response will last “
+          <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-immunity.html">
+            at least a year
+          </a>
+          .”
         </ListItem>
         <ListItem>
           <InlineLabel list {...label.deceased}>
