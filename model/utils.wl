@@ -258,7 +258,7 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
   DailyReportedDeathQuantiles[t_] := simDeciles[#[RepDeaq]'[t]&] * population;
   DailyReportedICUDeathQuantiles[t_] := simDeciles[#[RepDeaICUq]'[t]&] * population;
   CurrentlyReportedHospitalizedQuantiles[t_] := simDeciles[Min[population*(#[RepCHHq][t]+#[RepCHCq][t]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&];
-  CurrentlyReportedCriticalQuantiles[t_] := simDeciles[Min[population*#[RepCCCq][t],stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]&];
+  CurrentlyReportedCriticalQuantiles[t_] := simDeciles[population*#[RepCCCq][t]&];
 
   RtQuantiles[t_] := simDeciles[#[rt][t]&];
 
@@ -460,8 +460,8 @@ CurrentlySuseptibleQuantiles[t_] :=  simDeciles[#[Sq][t]&] * population;
                       (#["day"]==t)&][[1]],"icu"],
                   Select[stateParams["icuCurrentData"],(#["day"]==t)&][[1]]["icu"],
                   0],
-                "expected"->Min[population*sol[RepCCCq][t - daysForHospitalsToReportCases0], stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]],
-                "expectedTestTrace"-> Min[population*soltt[RepCCCq][t - daysForHospitalsToReportCases0], stateParams["params"]["icuBeds"]*If[distancing[t]<0.7,0.85,0.7]]
+                "expected"->population*sol[RepCCCq][t - daysForHospitalsToReportCases0],
+                "expectedTestTrace"-> population*soltt[RepCCCq][t - daysForHospitalsToReportCases0]
               |>,
               percentileMap[CurrentlyReportedCriticalQuantiles[t - daysForHospitalsToReportCases0]]
             }, First],
