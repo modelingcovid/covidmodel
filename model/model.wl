@@ -27,7 +27,7 @@ daysUntilNotInfectious0 = 5;
 daysUntilHospitalized0 = 8.5;
 
 (*Rate of leaving hospital for those not going to critical care*)
-daysToLeaveHosptialNonCritical0 = 8;
+daysToLeaveHospitalNonCritical0 = 8;
 
 (*Rate of leaving hospital and going to critical care*)
 daysTogoToCriticalCare0 = 1.5;
@@ -224,9 +224,9 @@ generateModelComponents[distancing_] := <|
       (* Infected and will eventually need hospital (but not need critical care) *)
       IHq'[t]==pH*Eq[t]/daysFromInfectedToInfectious - IHq[t]/daysUntilHospitalized,
       (* Going to hospital *)
-      HHq'[t]==IHq[t]/daysUntilHospitalized - HHq[t]/daysToLeaveHosptialNonCritical,
+      HHq'[t]==IHq[t]/daysUntilHospitalized - HHq[t]/daysToLeaveHospitalNonCritical,
       (* Recovered after hospitalization *)
-      RHq'[t]==(1 - fractionOfHospitalizedNonCriticalDeceased0) * HHq[t]/daysToLeaveHosptialNonCritical,
+      RHq'[t]==(1 - fractionOfHospitalizedNonCriticalDeceased0) * HHq[t]/daysToLeaveHospitalNonCritical,
 
       (* Infected and will eventually need critical care *)
       ICq'[t]==pC*Eq[t]/daysFromInfectedToInfectious - ICq[t]/daysUntilHospitalized,
@@ -238,7 +238,7 @@ generateModelComponents[distancing_] := <|
       RCq'[t]==(1 - fractionOfCriticalDeceased) * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (* Deceased *)
-      Deaq'[t]==fractionOfHospitalizedNonCriticalDeceased0 * HHq[t]/daysToLeaveHosptialNonCritical + fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      Deaq'[t]==fractionOfHospitalizedNonCriticalDeceased0 * HHq[t]/daysToLeaveHospitalNonCritical + fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (**** Reporting section ****)
       (* These quantities measure testing rates, cumulative reporting-only counts, etc. in this section *)
@@ -255,7 +255,7 @@ generateModelComponents[distancing_] := <|
       ESq'[t]==ISq[t] / daysUntilNotInfectious,
 
       (* Current reported positive hospital cases *)
-      RepCHHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHosptialNonCritical,
+      RepCHHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHospitalNonCritical,
       (* Current reported positive hospital critical cases *)
       RepCHCq'[t]==testingProbability[t] * pPCRH * ICq[t]/daysUntilHospitalized - RepCHCq[t]/daysTogoToCriticalCare,
       (* Currently reported in critical care *)
@@ -326,7 +326,7 @@ generateModelComponents[distancing_] := <|
     daysUntilNotInfectious,
     daysUntilHospitalized,
     daysFromInfectedToInfectious,
-    daysToLeaveHosptialNonCritical,
+    daysToLeaveHospitalNonCritical,
     pPCRNH,
     pPCRH,
     daysTogoToCriticalCare,
@@ -352,7 +352,7 @@ generateModelComponents[distancing_] := <|
       daysUntilNotInfectious -> daysUntilNotInfectious0,
       daysUntilHospitalized -> daysUntilHospitalized0,
       daysFromInfectedToInfectious -> daysFromInfectedToInfectious0,
-      daysToLeaveHosptialNonCritical -> daysToLeaveHosptialNonCritical0,
+      daysToLeaveHospitalNonCritical -> daysToLeaveHospitalNonCritical0,
       daysTogoToCriticalCare->daysTogoToCriticalCare0,
       daysFromCriticalToRecoveredOrDeceased -> daysFromCriticalToRecoveredOrDeceased0,
       fractionOfCriticalDeceased -> fractionOfCriticalDeceased0,
@@ -523,7 +523,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     RandomVariate[PosNormal[daysUntilNotInfectious0,daysUntilNotInfectious0*0.05]],
     RandomVariate[PosNormal[daysUntilHospitalized0,daysUntilHospitalized0*0.05]],
     RandomVariate[PosNormal[daysFromInfectedToInfectious0,daysFromInfectedToInfectious0*0.05]],
-    RandomVariate[PosNormal[daysToLeaveHosptialNonCritical0,daysToLeaveHosptialNonCritical0*0.05]],
+    RandomVariate[PosNormal[daysToLeaveHospitalNonCritical0,daysToLeaveHospitalNonCritical0*0.05]],
     RandomVariate[PosNormal[stateParams["params"]["pPCRNH"],stateParams["params"]["pPCRNH"]*0.05]],
     RandomVariate[PosNormal[stateParams["params"]["pPCRH"],stateParams["params"]["pPCRH"]*0.05]],
     RandomVariate[PosNormal[daysTogoToCriticalCare0,daysTogoToCriticalCare0*0.05]],
@@ -592,7 +592,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     daysUntilNotInfectious0,
     daysUntilHospitalized0,
     daysFromInfectedToInfectious0,
-    daysToLeaveHosptialNonCritical0,
+    daysToLeaveHospitalNonCritical0,
     stateParams["params"]["pPCRNH"],
     stateParams["params"]["pPCRH"],
     daysTogoToCriticalCare0,
