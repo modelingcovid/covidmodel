@@ -2,7 +2,7 @@
 "parameterBest":{
 "r0natural":2.3806,
 "importtime":1.3178e1,
-"stateAdjustmentForTestingDifferences":0.8038,
+"stateAdjustmentForTestingDifferences":0.7071,
 "distpow":1.7099
 },
 "population":7169967,
@@ -21,21 +21,21 @@
 "r0":2.3806,
 "importtime":1.3178e1,
 "numberOfSimulations":100,
-"dateModelRun":"Tue 5 May 2020 09:56:17",
+"dateModelRun":"Tue 5 May 2020 19:45:33",
 "mostRecentDistancingDate":"Sun 26 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.8038,
+"stateAdjustmentForTestingDifferences":0.7071,
 "distpow":1.7099,
 "goodnessOfFitMetrics":{
-"chiSquared":1.0436e-5,
-"rmsRelativeError":0.3564,
+"chiSquared":3.7234e-6,
+"rmsRelativeError":0.3449,
 "rmsRelativeErrorDeaths":0.4571,
-"rmsRelativeErrorPcr":0.2123,
-"meanRelativeErrorDeaths":0.3176,
-"meanRelativeErrorPcr":-0.1018,
-"rSquaredDeaths":2.8185e-2,
-"rSquaredPcr":3.0736e-2,
+"rmsRelativeErrorPcr":0.1703,
+"meanRelativeErrorDeaths":0.3177,
+"meanRelativeErrorPcr":-9.1629e-3,
+"rSquaredDeaths":2.8194e-2,
+"rSquaredPcr":4.5523e-3,
 "deathResidual7Day":1.3143e1,
-"pcrResidual7Day":5.4195
+"pcrResidual7Day":1.0385e1
 },
 "backtest":"",
 "parameters":{
@@ -181,7 +181,7 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.8038,
+"value":0.7071,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
