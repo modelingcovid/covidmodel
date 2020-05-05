@@ -94,12 +94,7 @@ export const LegendEntry = ({
                 if (y == null) {
                   return null;
                 }
-                let value;
-                if (nearest) {
-                  value = y(nearest());
-                } else {
-                  value = y;
-                }
+                const value = y(nearest());
                 if (value == null) {
                   return null;
                 }

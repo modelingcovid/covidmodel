@@ -24,25 +24,27 @@ export function Gutter({children, ...remaining}) {
 
 export function WithGutter({
   children,
+  gutter,
   alignItems = 'flex-start',
   ...remaining
 }) {
   return (
-    <div {...remaining}>
+    <div className="gutter" {...remaining}>
       <style jsx>{`
-        div {
+        .gutter {
           display: flex;
           flex-direction: column;
           margin-top: calc(-1 * ${theme.spacing[1]});
         }
         @media (min-width: 600px) {
-          div {
+          .gutter {
             flex-direction: row;
             align-items: ${alignItems};
           }
         }
       `}</style>
-      {children}
+      <div>{children}</div>
+      <Gutter>{gutter}</Gutter>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+export * from './Contact';
 export * from './Controls';
 export * from './DistancingGraph';
 export * from './FatalityGraph';

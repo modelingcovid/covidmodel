@@ -19,7 +19,7 @@ import {
   Symptomatic,
   TestAndTrace,
 } from '../../components';
-import {Controls, useGraphSize} from '../../components/configured';
+import {Contact, Controls, useGraphSize} from '../../components/configured';
 import {
   Blockquote,
   Heading,
@@ -31,6 +31,7 @@ import {
   Title,
   UnorderedList,
   WithCitation,
+  WithGutter,
 } from '../../components/content';
 import {
   ModelDataProvider,
@@ -115,16 +116,19 @@ export default function StatePage() {
             </Section>
           </div>
           <Section className="margin-top-4">
-            <Paragraph>
-              <strong>Location</strong> determines the demographic data used by
-              the model, including population, existing data about the spread of
-              Covid-19 in the region, and historical social distancing levels.
-            </Paragraph>
-            <Paragraph>
-              The <strong>social distancing scenario</strong> models what the
-              people and governments in the region might do in the future—how
-              socially distanced will they be, and for how long?
-            </Paragraph>
+            <WithGutter gutter={<Contact />}>
+              <Paragraph>
+                <strong>Location</strong> determines the demographic data used
+                by the model, including population, existing data about the
+                spread of Covid-19 in the region, and historical social
+                distancing levels.
+              </Paragraph>
+              <Paragraph>
+                The <strong>social distancing scenario</strong> models what the
+                people and governments in the region might do in the future—how
+                socially distanced will they be, and for how long?
+              </Paragraph>
+            </WithGutter>
             <ModelInputs width={width} height={height.small} />
             <EffectiveReproductionNumber width={width} height={height.small} />
             <SEIR width={width} height={height.large} />

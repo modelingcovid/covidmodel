@@ -2,6 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import {theme} from '../styles';
 import {
+  Contact,
   HospitalizationGraph,
   SEIRGraph,
   SEIRGutter,
@@ -146,62 +147,51 @@ export function BigPicture({location}) {
       <div className="flow-root margin-top-3">
         <div ref={sizeRef} />
         <div className="column-8" ref={partialSizeRef} />
-        <WithGutter>
-          <div>
-            <Paragraph>
-              The Modeling Covid-19 (MC19) project is an epidemiological model
-              of Covid-19 fit to actual social distancing, testing, and fatality
-              data. We use this data to project how Covid-19 might spread
-              through a population for different <strong>locations</strong> and
-              different <strong>social distancing scenarios</strong>.
-            </Paragraph>
-            <Paragraph>
-              <strong>
-                A model is only as good as{' '}
-                <span className="footnote">the data it’s based on,</span>
-              </strong>{' '}
-              and we’re thankful for the many people and organizations who have
-              worked to produce the data that powers the model. However, all
-              data has its caveats and limitations: in particular, fatality
-              counts are difficult to assess and{' '}
-              <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
-                often underreported
-              </a>
-              . We’ve tried to make the best of the available data and hope to
-              continually improve the model as more data becomes available.
-            </Paragraph>
-          </div>
-          <Gutter>
-            <Instruction className="instruction-sparse">
-              <strong>Questions? Feedback?</strong> Contact us at{' '}
-              <a href="mailto:info@modelingcovid.com">info@modelingcovid.com</a>
-              <br />
-              <br />
-              <strong>
-                Model run on <DateModelRun />
-              </strong>
-              <br />
-              <Link href="/about">
-                <a>Recent & upcoming changes</a>
-              </Link>
-            </Instruction>
-            <Citation>
-              We use data from the{' '}
-              <a href="https://covidtracking.com/">Covid Tracking Project</a>,
-              mobility data from{' '}
-              <a href="https://www.google.com/covid19/mobility/">Google</a> and{' '}
-              <a href="https://www.unacast.com/">Unacast</a>, hospital capacity
-              data from{' '}
-              <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
-                Esri
-              </a>
-              , and demographic data from{' '}
-              <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
-                Wolfram
-              </a>
-              .
-            </Citation>
-          </Gutter>
+        <WithGutter
+          gutter={
+            <>
+              <Contact />
+              <Citation>
+                We use data from the{' '}
+                <a href="https://covidtracking.com/">Covid Tracking Project</a>,
+                mobility data from{' '}
+                <a href="https://www.google.com/covid19/mobility/">Google</a>{' '}
+                and <a href="https://www.unacast.com/">Unacast</a>, hospital
+                capacity data from{' '}
+                <a href="https://coronavirus-resources.esri.com/datasets/definitivehc::definitive-healthcare-usa-hospital-beds?geometry=52.207%2C-16.820%2C-77.168%2C72.123">
+                  Esri
+                </a>
+                , and demographic data from{' '}
+                <a href="https://www.wolfram.com/language/12/financial-and-socioeconomic-entities/access-detailed-us-census-data.html">
+                  Wolfram
+                </a>
+                .
+              </Citation>
+            </>
+          }
+        >
+          <Paragraph>
+            The Modeling Covid-19 (MC19) project is an epidemiological model of
+            Covid-19 fit to actual social distancing, testing, and fatality
+            data. We use this data to project how Covid-19 might spread through
+            a population for different <strong>locations</strong> and different{' '}
+            <strong>social distancing scenarios</strong>.
+          </Paragraph>
+          <Paragraph>
+            <strong>
+              A model is only as good as{' '}
+              <span className="footnote">the data it’s based on,</span>
+            </strong>{' '}
+            and we’re thankful for the many people and organizations who have
+            worked to produce the data that powers the model. However, all data
+            has its caveats and limitations: in particular, fatality counts are
+            difficult to assess and{' '}
+            <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
+              often underreported
+            </a>
+            . We’ve tried to make the best of the available data and hope to
+            continually improve the model as more data becomes available.
+          </Paragraph>
         </WithGutter>
         <Blockquote>
           <em>“All models are wrong, but some are useful.”</em>
