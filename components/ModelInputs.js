@@ -111,7 +111,7 @@ export function ModelInputs({height, width, ...remaining}) {
       <DistancingGraph width={width} height={height} />
       <Gutter>
         <DistributionLegendRow
-          label="Social distancing level"
+          title="Social distancing level"
           y={distancing}
           format={formatDistancing}
           width="80%"
