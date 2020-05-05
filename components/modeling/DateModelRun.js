@@ -9,7 +9,11 @@ export function DateModelRun({length = 12, format = formatDate}) {
   const {dateModelRun} = useLocationData();
   return (
     <InlineData length={length}>
-      {() => format(new Date(dateModelRun()))}
+      {() => {
+        const str = dateModelRun();
+        const date = new Date(`${str} GMT+9`);
+        return format(date);
+      }}
     </InlineData>
   );
 }
