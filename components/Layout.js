@@ -77,10 +77,10 @@ export function Layout({children}) {
   return (
     <div className="layout">
       <style jsx>{styles}</style>
-      <Notice>
+      {/* <Notice>
         Please do not share these values; this model is under active
         development.
-      </Notice>
+      </Notice> */}
       <div className="sticky-anchor">
         <Section>
           <div className="header-background" />
