@@ -237,32 +237,32 @@ generateTimeSeries[state_,scenario_,sol_,soltt_,simResults_,fitParams_,statePara
   simDeciles[computationFunction_,simRes_:simResults]:=Quantile[Map[computationFunction, simRes], deciles];
   zeroTable=Table[Null,{i,1,10}];
 
-  CurrentlySuseptibleQuantiles[t_] := If[t<today,zeroTable, simDeciles[#[Sq][t-today+1]&] * population];
-  CurrentlyInfectedQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[Eq][t-today+1]&] * population];
-  CurrentlyInfectiousQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[Iq][t-today+1]&] * population];
-  CurrentlyHospitalizedQuantiles[t_]:=If[t<today,zeroTable,simDeciles[#[HHq][t-today+1]&] * population];
-  CurrentlyCriticalQuantiles[t_]:=If[t<today,zeroTable,simDeciles[#[CCq][t-today+1]&] * population];
-  CumulativeRecoveredQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[Rq][t-today+1]&] * population];
-  CumulativeDeathQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[Deaq][t-today+1]&] * population];
+  CurrentlySuseptibleQuantiles[t_] := If[t<=today,zeroTable, simDeciles[#[Sq][t-today+1]&] * population];
+  CurrentlyInfectedQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[Eq][t-today+1]&] * population];
+  CurrentlyInfectiousQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[Iq][t-today+1]&] * population];
+  CurrentlyHospitalizedQuantiles[t_]:=If[t<=today,zeroTable,simDeciles[#[HHq][t-today+1]&] * population];
+  CurrentlyCriticalQuantiles[t_]:=If[t<=today,zeroTable,simDeciles[#[CCq][t-today+1]&] * population];
+  CumulativeRecoveredQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[Rq][t-today+1]&] * population];
+  CumulativeDeathQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[Deaq][t-today+1]&] * population];
 
-  CumulativeExposedQuantiles[t_]:=If[t<today,zeroTable,simDeciles[#[cumEq][t-today+1]&] * population];
-  CumulativeHospitalizedQuantiles[t_] := If[t<today,zeroTable,simDeciles[(#[EHq][t-today+1]+#[EHCq][t-today+1])*population &]];
-  CumulativeReportedHospitalizedQuantiles[t_] := If[t<today,zeroTable,simDeciles[(#[RepHq][t-today+1]+#[RepHCq][t-today+1])*population &]];
-  CumulativeCriticalQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[EHCq][t-today+1]*population&]];
-  CumulativeReportedCriticalQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[RepHCq][t-today+1]*population&]];
-  CumulativePCRQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[PCR][t-today+1]&] * population];
-  CumulativeReportedDeathQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[RepDeaq][t-today+1]&] * population];
-  CumulativeReportedICUDeathQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[RepDeaICUq][t-today+1]&] * population];
+  CumulativeExposedQuantiles[t_]:=If[t<=today,zeroTable,simDeciles[#[cumEq][t-today+1]&] * population];
+  CumulativeHospitalizedQuantiles[t_] := If[t<=today,zeroTable,simDeciles[(#[EHq][t-today]+#[EHCq][t-today+1])*population &]];
+  CumulativeReportedHospitalizedQuantiles[t_] := If[t<=today,zeroTable,simDeciles[(#[RepHq][t-today+1]+#[RepHCq][t-today+1])*population &]];
+  CumulativeCriticalQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[EHCq][t-today+1]*population&]];
+  CumulativeReportedCriticalQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[RepHCq][t-today+1]*population&]];
+  CumulativePCRQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[PCR][t-today+1]&] * population];
+  CumulativeReportedDeathQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[RepDeaq][t-today+1]&] * population];
+  CumulativeReportedICUDeathQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[RepDeaICUq][t-today+1]&] * population];
 
-  DailyPCRQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[PCR][t-today+1] - #[PCR][t-today]&] * population];
-  DailyExposedQuantiles[t_]:=If[t<today,zeroTable,simDeciles[#[cumEq][t-today+1] - #[cumEq][t-today]&] * population];
-  DailyDeathQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[Deaq][t-today+1]-#[Deaq][t-today]&] * population];
-  DailyReportedDeathQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[RepDeaq][t-today+1]-#[RepDeaq][t-today]&] * population];
-  DailyReportedICUDeathQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[RepDeaICUq][t-today+1]-#[RepDeaICUq][t-today]&] * population];
-  CurrentlyReportedHospitalizedQuantiles[t_] := If[t<today,zeroTable,simDeciles[Min[population*(#[RepCHHq][t-today+1]+#[RepCHCq][t-today+1]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t+today]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&]];
-  CurrentlyReportedCriticalQuantiles[t_] := If[t<today,zeroTable,simDeciles[population*#[RepCCCq][t-today+1],stateParams["params"]["icuBeds"]&]];
+  DailyPCRQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[PCR][t-today+1] - #[PCR][t-today]&] * population];
+  DailyExposedQuantiles[t_]:=If[t<=today,zeroTable,simDeciles[#[cumEq][t-today+1] - #[cumEq][t-today]&] * population];
+  DailyDeathQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[Deaq][t-today+1]-#[Deaq][t-today]&] * population];
+  DailyReportedDeathQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[RepDeaq][t-today+1]-#[RepDeaq][t-today]&] * population];
+  DailyReportedICUDeathQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[RepDeaICUq][t-today+1]-#[RepDeaICUq][t-today]&] * population];
+  CurrentlyReportedHospitalizedQuantiles[t_] := If[t<=today,zeroTable,simDeciles[Min[population*(#[RepCHHq][t-today+1]+#[RepCHCq][t-today+1]),(1-stateParams["params"]["bedUtilization"]*If[distancing[t+today]<0.7,0.5,1])*stateParams["params"]["staffedBeds"]]&]];
+  CurrentlyReportedCriticalQuantiles[t_] := If[t<=today,zeroTable,simDeciles[population*#[RepCCCq][t-today+1]&]];
 
-  RtQuantiles[t_] := If[t<today,zeroTable,simDeciles[#[rt][t]&]];
+  RtQuantiles[t_] := If[t<=today,zeroTable,simDeciles[#[rt][t-today+1]&]];
 
 
   (* define some helpers to generate percentile keys in the json export like "percentile10" etc. *)
