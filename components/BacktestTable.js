@@ -2,7 +2,7 @@ import * as React from 'react';
 import css from 'styled-jsx/css';
 import classNames from 'classnames';
 import {theme} from '../styles';
-import {Heading, Title, Paragraph} from './content';
+import {Collapsed, Heading, Title, Paragraph} from './content';
 import {formatPercent2, formatNumber} from '../lib/format';
 import {stateLabels} from '../lib/controls';
 
@@ -115,44 +115,46 @@ export function BacktestTable({data}) {
       <Paragraph>
         The following is a summary of the model backtested at differing
         intervals. Numbers are all relative to the actual values for fatalities
-        and PCR confirmations over the specified backtest interval.
+        and positive tests over the specified backtest interval.
       </Paragraph>
       <div className="controls-container">
         <IntervalControls interval={interval} setInterval={setInterval} />
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>State</th>
-            <th>Deaths difference</th>
-            <th>Deaths percentage difference</th>
-            <th>PCR difference</th>
-            <th>PCR percentage difference</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentIntervalData.map(
-            (
-              {
-                state,
-                deathAverage,
-                deathAveragePercent,
-                pcrAverage,
-                pcrAveragePercent,
-              },
-              i
-            ) => (
-              <tr key={i}>
-                <td>{stateLabels[state] || state}</td>
-                <td>{formatNumber(deathAverage)}</td>
-                <td>{formatPercent2(deathAveragePercent)}</td>
-                <td>{formatNumber(pcrAverage)}</td>
-                <td>{formatPercent2(pcrAveragePercent)}</td>
-              </tr>
-            )
-          )}
-        </tbody>
-      </table>
+      <Collapsed label="Show backtest data">
+        <table>
+          <thead>
+            <tr>
+              <th>State</th>
+              <th>Deaths difference</th>
+              <th>Deaths percentage difference</th>
+              <th>Positive tests difference</th>
+              <th>Positive tests percentage difference</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentIntervalData.map(
+              (
+                {
+                  state,
+                  deathAverage,
+                  deathAveragePercent,
+                  pcrAverage,
+                  pcrAveragePercent,
+                },
+                i
+              ) => (
+                <tr key={i}>
+                  <td>{stateLabels[state] || state}</td>
+                  <td>{formatNumber(deathAverage)}</td>
+                  <td>{formatPercent2(deathAveragePercent)}</td>
+                  <td>{formatNumber(pcrAverage)}</td>
+                  <td>{formatPercent2(pcrAveragePercent)}</td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
+      </Collapsed>
     </div>
   );
 }
