@@ -120,11 +120,11 @@ export function ModelInputs({height, width, ...remaining}) {
 
       <Paragraph>
         We use the data available to us — location demographics, reported
-        fatalities, and positive test cases — to estimate when Covid-19 reached
-        a location.
+        fatalities, and positive test cases — to estimate when Covid-19 began to
+        spread in a location.
       </Paragraph>
       <Estimation status={false}>
-        The model estimates that Covid-19 reached {location.name} on{' '}
+        The model estimates that Covid-19 began to spread in {location.name} on{' '}
         <InlineData width="130px">
           {() => <strong>{formatDate(dayToDate(importtime()))}</strong>}
         </InlineData>

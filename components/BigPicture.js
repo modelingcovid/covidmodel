@@ -409,6 +409,14 @@ export function BigPicture({location}) {
           positive and 80% of positive tests should be able to be traced back to
           another known case.
         </Paragraph>
+
+        <Title className="margin-top-4">Interact with the model</Title>
+        <Paragraph>
+          We've run the MC19 model state-by-state for different future social
+          distancing scenarios and plan to add more states to the model as more
+          data becomes available. Select a state below to view the model’s
+          predictions and compare them to actual data:
+        </Paragraph>
       </div>
     </ModelStateProvider>
   );

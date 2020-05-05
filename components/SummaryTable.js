@@ -1,7 +1,14 @@
 import * as React from 'react';
 import css from 'styled-jsx/css';
 import {theme} from '../styles';
-import {Grid, Heading, Title, Paragraph, createTextComponent} from './content';
+import {
+  Collapsed,
+  Grid,
+  Heading,
+  Title,
+  Paragraph,
+  createTextComponent,
+} from './content';
 import {LegendRow, LegendEntry} from './graph';
 import {useLocationData} from './modeling';
 import {Suspense} from './util';
@@ -167,46 +174,48 @@ export function SummaryTableContents() {
       <Paragraph>
         The following is a summary of the MC19 model output after two years:
       </Paragraph>
-      <Grid mobile={1} desktop={2}>
-        {metrics.map(({id, name, value, description, citations}) => (
-          <LegendRow
-            key={id}
-            label={<span className="text-mono ellipsis">{id}</span>}
-            y={() => formatPercent2(value)}
-            width="80%"
-            format={null}
-          >
-            <LegendEntry
-              label={<span className="text-gray">{name}</span>}
-              y={() => citations}
-              format={(citations) => (
-                <span
-                  className="text-gray-faint"
-                  style={{display: 'inline-flex'}}
-                >
-                  {citations && citations.length > 0 && (
-                    <cite className="parameter-citation">
-                      {`[`}
-                      {(citations || []).map((href, i) => (
-                        <React.Fragment key={i}>
-                          <a href={href} target="__blank">
-                            {i + 1}
-                          </a>
-                          {i < citations.length - 1 ? `, ` : ''}
-                        </React.Fragment>
-                      ))}
-                      {`]`}
-                    </cite>
-                  )}
-                </span>
-              )}
-            />
-            <div className="margin-top-0">
-              <LegendEntry label={description} />
-            </div>
-          </LegendRow>
-        ))}
-      </Grid>
+      <Collapsed label="Show summary">
+        <Grid mobile={1} desktop={2}>
+          {metrics.map(({id, name, value, description, citations}) => (
+            <LegendRow
+              key={id}
+              label={<span className="text-mono ellipsis">{id}</span>}
+              y={() => formatPercent2(value)}
+              width="80%"
+              format={null}
+            >
+              <LegendEntry
+                label={<span className="text-gray">{name}</span>}
+                y={() => citations}
+                format={(citations) => (
+                  <span
+                    className="text-gray-faint"
+                    style={{display: 'inline-flex'}}
+                  >
+                    {citations && citations.length > 0 && (
+                      <cite className="parameter-citation">
+                        {`[`}
+                        {(citations || []).map((href, i) => (
+                          <React.Fragment key={i}>
+                            <a href={href} target="__blank">
+                              {i + 1}
+                            </a>
+                            {i < citations.length - 1 ? `, ` : ''}
+                          </React.Fragment>
+                        ))}
+                        {`]`}
+                      </cite>
+                    )}
+                  </span>
+                )}
+              />
+              <div className="margin-top-0">
+                <LegendEntry label={description} />
+              </div>
+            </LegendRow>
+          ))}
+        </Grid>
+      </Collapsed>
     </div>
   );
 }

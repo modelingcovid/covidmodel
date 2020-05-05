@@ -1,4 +1,5 @@
 export * from './Citation';
+export * from './Collapsed';
 export * from './Definition';
 export * from './Glyph';
 export * from './Grid';
