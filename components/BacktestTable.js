@@ -10,6 +10,7 @@ const styles = css`
   table {
     table-layout: fixed;
     width: 100%;
+    font-size: ${theme.font.size.tiny};
   }
   thead {
     margin-bottom: ${theme.spacing[1]};
@@ -33,6 +34,9 @@ const styles = css`
     text-align: left;
     padding-left: 0;
   }
+  .backtest-container {
+    min-width: ;
+  }
   .parameter-description {
     padding-top: ${theme.spacing[0]};
     color: ${theme.color.gray[3]};
@@ -45,6 +49,11 @@ const styles = css`
     display: flex;
     justify-content: flex-start;
     margin-bottom: ${theme.spacing[1]};
+  }
+  @media (min-width: 600px) {
+    table {
+      font-size: ${theme.font.size.small};
+    }
   }
 `;
 
@@ -68,16 +77,19 @@ export function IntervalControls({interval, setInterval}) {
           background: ${theme.color.background};
           border-radius: 3px;
           box-shadow: 0 0 0 1px ${theme.color.shadow[1]};
+          font-size: ${theme.font.size.tiny};
           overflow: hidden;
+          margin: 1px 2px;
         }
         a {
           display: block;
-          padding: ${theme.spacing[0]} ${theme.spacing[1]};
+          padding: 4px ${theme.spacing[0]};
           color: ${theme.color.gray[3]};
           transition: 200ms;
           cursor: pointer;
           background: ${theme.color.gray.bg};
           box-shadow: inset 1px 0 ${theme.color.shadow[1]};
+          white-space: nowrap;
         }
         a:first-child {
           box-shadow: none;
@@ -88,6 +100,11 @@ export function IntervalControls({interval, setInterval}) {
         }
         a:hover {
           color: ${theme.color.gray[6]};
+        }
+        @media (min-width: 600px) {
+          div {
+            font-size: ${theme.font.size.small};
+          }
         }
       `}</style>
       {intervals.map((s) => (
@@ -117,44 +134,46 @@ export function BacktestTable({data}) {
         intervals. Numbers are all relative to the actual values for fatalities
         and positive tests over the specified backtest interval.
       </Paragraph>
-      <div className="controls-container">
-        <IntervalControls interval={interval} setInterval={setInterval} />
+      <div className="backtest-container">
+        <Collapsed label="Show backtest data">
+          <div className="controls-container">
+            <IntervalControls interval={interval} setInterval={setInterval} />
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Deaths diff</th>
+                <th>Deaths pct diff</th>
+                <th>Positive tests diff</th>
+                <th>Positive tests pct diff</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentIntervalData.map(
+                (
+                  {
+                    state,
+                    deathAverage,
+                    deathAveragePercent,
+                    pcrAverage,
+                    pcrAveragePercent,
+                  },
+                  i
+                ) => (
+                  <tr key={i}>
+                    <td>{stateLabels[state] || state}</td>
+                    <td>{formatNumber(deathAverage)}</td>
+                    <td>{formatPercent2(deathAveragePercent)}</td>
+                    <td>{formatNumber(pcrAverage)}</td>
+                    <td>{formatPercent2(pcrAveragePercent)}</td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </Collapsed>
       </div>
-      <Collapsed label="Show backtest data">
-        <table>
-          <thead>
-            <tr>
-              <th>State</th>
-              <th>Deaths difference</th>
-              <th>Deaths percentage difference</th>
-              <th>Positive tests difference</th>
-              <th>Positive tests percentage difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentIntervalData.map(
-              (
-                {
-                  state,
-                  deathAverage,
-                  deathAveragePercent,
-                  pcrAverage,
-                  pcrAveragePercent,
-                },
-                i
-              ) => (
-                <tr key={i}>
-                  <td>{stateLabels[state] || state}</td>
-                  <td>{formatNumber(deathAverage)}</td>
-                  <td>{formatPercent2(deathAveragePercent)}</td>
-                  <td>{formatNumber(pcrAverage)}</td>
-                  <td>{formatPercent2(pcrAveragePercent)}</td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
-      </Collapsed>
     </div>
   );
 }
