@@ -9,6 +9,7 @@ const defaultEnd = new Date('2021-01-01').getTime();
 
 export function createXScale({start, end}) {
   return scaleUtc({
+    clamp: true,
     domain: [start, end],
     range: [0, 1],
   });

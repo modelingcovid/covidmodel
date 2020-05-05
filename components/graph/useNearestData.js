@@ -20,8 +20,6 @@ export const NearestDataProvider = ({
 }) => {
   const [point, setPoint] = useState(initial);
 
-  const setNearestData = useCallback((p) => {}, []);
-
   const [NearestDataContext, SetNearestDataContext] = contexts;
   const findNearestPoint = useMemo(() => findPoint(data, x), [data, x]);
 
