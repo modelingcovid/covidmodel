@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.8685,
-"importtime":5.5113e1,
+"r0natural":4.8674,
+"importtime":5.5204e1,
 "stateAdjustmentForTestingDifferences":0.2687,
-"distpow":1.7703
+"distpow":1.7712
 },
 "population":5996079,
 "ventilators":953,
@@ -18,29 +18,29 @@
 "pPCRH":0.8005,
 "fractionOfCriticalDeceased":0.3314,
 "initialInfectionImpulse":1.4402e1,
-"r0":4.8685,
-"importtime":5.5113e1,
-"numberOfSimulations":100,
-"dateModelRun":"Tue 5 May 2020 20:07:48",
-"mostRecentDistancingDate":"Sun 26 Apr 2020",
+"r0":4.8674,
+"importtime":5.5204e1,
+"numberOfSimulations":250,
+"dateModelRun":"Wed 6 May 2020 15:39:34",
+"mostRecentDistancingDate":"Thu 30 Apr 2020",
 "stateAdjustmentForTestingDifferences":0.2687,
-"distpow":1.7703,
+"distpow":1.7712,
 "goodnessOfFitMetrics":{
-"chiSquared":1.3623e-5,
-"rmsRelativeError":1.1455,
-"rmsRelativeErrorDeaths":1.6109,
-"rmsRelativeErrorPcr":0.4003,
-"meanRelativeErrorDeaths":-0.9008,
-"meanRelativeErrorPcr":-0.1635,
-"rSquaredDeaths":9.4473e-3,
-"rSquaredPcr":1.4569e-2,
-"deathResidual7Day":-4.2331,
-"pcrResidual7Day":-5.0966e1
+"chiSquared":1.5251e-5,
+"rmsRelativeError":1.0939,
+"rmsRelativeErrorDeaths":1.5390,
+"rmsRelativeErrorPcr":0.3769,
+"meanRelativeErrorDeaths":-0.8340,
+"meanRelativeErrorPcr":-0.1322,
+"rSquaredDeaths":9.8331e-3,
+"rSquaredPcr":1.9125e-2,
+"deathResidual7Day":-4.0519,
+"pcrResidual7Day":-4.8265e1
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":4.8685,
+"value":4.8674,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -141,7 +141,7 @@
 ]
 },
 "importtime":{
-"value":5.5113e1,
+"value":5.5204e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -187,13 +187,13 @@
 "type":"fit"
 },
 "distancePower":{
-"value":1.7703,
+"value":1.7712,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":250,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"

@@ -166,8 +166,8 @@ evaluateBacktestAccuracy[state_, backtestMask_, evaluateSolution_, fitParams_]:=
              
    backtestStats[backtest_]:=Module[{average, stdev, averagePercent, stdevPercent,filteredBacktest},
       filteredBacktest=Select[backtest,#[[3]]>0&];
-      average = (Total[#[[2]]&/@filteredBacktest] - Total[(#[[3]])&/@filteredBacktest]);
-      averagePercent = (Total[#[[2]]&/@filteredBacktest] - Total[(#[[3]])&/@filteredBacktest]) / Total[(#[[3]])&/@filteredBacktest];
+      average = (Mean[#[[2]]&/@filteredBacktest] - Mean[(#[[3]])&/@filteredBacktest]);
+      averagePercent = (Mean[#[[2]]&/@filteredBacktest] - Mean[(#[[3]])&/@filteredBacktest]) / Mean[(#[[3]])&/@filteredBacktest];
       <|"average"->average,"averagePercent"->averagePercent|>
    ];
    

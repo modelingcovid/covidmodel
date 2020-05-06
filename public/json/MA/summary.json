@@ -1,8 +1,8 @@
 {
 "parameterBest":{
 "r0natural":4.9323,
-"importtime":4.7174e1,
-"stateAdjustmentForTestingDifferences":0.4788,
+"importtime":4.7162e1,
+"stateAdjustmentForTestingDifferences":0.4789,
 "distpow":1.8168
 },
 "population":6789319,
@@ -19,23 +19,23 @@
 "fractionOfCriticalDeceased":0.3708,
 "initialInfectionImpulse":1.4526e1,
 "r0":4.9323,
-"importtime":4.7174e1,
-"numberOfSimulations":100,
-"dateModelRun":"Tue 5 May 2020 20:00:24",
-"mostRecentDistancingDate":"Sun 26 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.4788,
+"importtime":4.7162e1,
+"numberOfSimulations":250,
+"dateModelRun":"Wed 6 May 2020 15:20:54",
+"mostRecentDistancingDate":"Thu 30 Apr 2020",
+"stateAdjustmentForTestingDifferences":0.4789,
 "distpow":1.8168,
 "goodnessOfFitMetrics":{
-"chiSquared":7.7702e-4,
-"rmsRelativeError":3.1666,
-"rmsRelativeErrorDeaths":2.1181,
-"rmsRelativeErrorPcr":3.8902,
-"meanRelativeErrorDeaths":-1.2619,
-"meanRelativeErrorPcr":-2.2429,
-"rSquaredDeaths":4.3255e-2,
-"rSquaredPcr":0.1322,
-"deathResidual7Day":-2.2497e1,
-"pcrResidual7Day":-6.1794e2
+"chiSquared":7.6921e-4,
+"rmsRelativeError":3.1465,
+"rmsRelativeErrorDeaths":2.1044,
+"rmsRelativeErrorPcr":3.8667,
+"meanRelativeErrorDeaths":-1.2425,
+"meanRelativeErrorPcr":-2.2092,
+"rSquaredDeaths":4.0775e-2,
+"rSquaredPcr":0.1251,
+"deathResidual7Day":-2.2578e1,
+"pcrResidual7Day":-6.2013e2
 },
 "backtest":"",
 "parameters":{
@@ -141,7 +141,7 @@
 ]
 },
 "importtime":{
-"value":4.7174e1,
+"value":4.7162e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -181,7 +181,7 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.4788,
+"value":0.4789,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
@@ -193,7 +193,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":250,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
