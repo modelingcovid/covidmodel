@@ -8,9 +8,9 @@ export default function Index({backtest}) {
   return (
     <Layout>
       <About />
-      <Section>
+      {/* <Section>
         <BacktestTable data={backtest} />
-      </Section>
+      </Section> */}
     </Layout>
   );
 }
