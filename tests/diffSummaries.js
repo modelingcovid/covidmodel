@@ -4,8 +4,8 @@ const fs = require('fs');
 const fetch = require('isomorphic-unfetch');
 const {format} = require('d3-format');
 
-const formatNumber2 = format(',.2f');
-const formatPercent2 = format(',.2%');
+const formatNumber2 = format(',.4f');
+const formatPercent2 = format(',.4%');
 
 const readCsv = async (filename) => {
   const csvPath = path.join(process.cwd(), `tests/${filename}.csv`);
@@ -50,9 +50,20 @@ const main = async () => {
   );
 
   const metricsToCompare = [
+    'totalInfectedFraction',
     'fatalityRate',
     'fatalityRateSymptomatic',
     'fatalityRatePCR',
+    'fractionOfSymptomaticHospitalized',
+    'fractionOfSymptomaticHospitalizedOrICU',
+    'fractionOfPCRHospitalized',
+    'fractionOfPCRHospitalizedOrICU',
+    'fractionHospitalizedInICU',
+    'fractionOfDeathInICU',
+    'fractionDeathOfHospitalizedOrICU',
+    'fractionOfInfectionsPCRConfirmed',
+    'fractionOfDeathsReported',
+    'fractionOfHospitalizationsReported'
   ];
 
   const metricDifferences = Object.keys(currentGrouped).reduce(
@@ -97,9 +108,9 @@ const main = async () => {
         body: `Differences in summary metrics of greater than 5% detected between runs on August 1st:\n| State | Scenario | Metric | Current | Previous | Difference | Difference Percentage |\n| --- | --- | --- | --- | --- | --- | --- | \n${differencesAboveThreshold
           .map(
             (diff) =>
-              `|${diff.state}|${diff.scenario}|${diff.metric}|${formatNumber2(
+              `|${diff.state}|${diff.scenario}|${diff.metric}|${formatPercent2(
                 diff.current
-              )}|${formatNumber2(diff.previous)}|${formatNumber2(
+              )}|${formatPercent2(diff.previous)}|${formatPercent2(
                 diff.difference
               )}|${formatPercent2(diff.differencePercentage)}|`
           )
