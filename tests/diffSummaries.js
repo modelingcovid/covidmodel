@@ -94,15 +94,14 @@ const main = async () => {
     const resp = await fetch(COMMENT_API_PATH, {
       method: 'POST',
       body: JSON.stringify({
-        body: `| State | Scenario | Metric | Current | Previous | Difference | Difference Percentage |\n| --- | --- | --- | --- | --- | --- | --- | \n${differencesAboveThreshold.map(
+        body: `Differences in summary metrics of greater than 5% detected between runs on August 1st:\n| State | Scenario | Metric | Current | Previous | Difference | Difference Percentage |\n| --- | --- | --- | --- | --- | --- | --- | \n${differencesAboveThreshold.map(
           (diff) =>
             `|${diff.state}|${diff.scenario}|${diff.metric}|${formatNumber2(
               diff.current
             )}|${formatNumber2(diff.previous)}|${formatNumber2(
               diff.difference
             )}|${formatPercent2(diff.differencePercentage)}|\n`
-        )}
-        `,
+        )}`,
       }),
       headers: {
         'Content-Type': 'application/json',
