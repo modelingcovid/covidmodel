@@ -38,7 +38,7 @@ getExpectedParameters[fitParams_, params_, numberOfSimulations_]:=Module[{},
 (* helpers to generate the summary csv files that show the model 2 years out and on Aug 1 *)
 generateSummaryForState[data_, state_]:= Module[{},
   Join[{state},Values[Association[Join[
-          KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],
+          KeyDrop[KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],"summaryAug1"],
           data["scenarios"][#]["summary"]
     ]]],
     {
@@ -52,7 +52,7 @@ generateSummaryForState[data_, state_]:= Module[{},
 
 generateAugSummaryForState[data_, state_]:= Module[{},
   Join[{state},Values[Association[Join[
-          KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summaryAug1"],
+          KeyDrop[KeyDrop[KeyDrop[KeyDrop[data["scenarios"][#],"timeSeriesData"],"events"],"summary"],"summaryAug1"],
           data["scenarios"][#]["summaryAug1"]
     ]]],
     {
@@ -67,11 +67,11 @@ generateAugSummaryForState[data_, state_]:= Module[{},
 
 (* write the summaries to csv files *)
 exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
-  header = {Append[Prepend[Keys[
+  header = {Flatten[Append[Prepend[Keys[
           Association[Join[
-              KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],
+              KeyDrop[KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],"summaryAug1"],
               allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summary"]
-        ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences","distpow"}]};
+        ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences","distpow"}]]};
   rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
 
   table = Flatten[Join[{header}, rows],1];
@@ -80,16 +80,16 @@ exportAllStatesSummary[allStates_]:=Module[{header, rows, table},
 ]
 
 exportAllStatesSummaryAug1[allStates_]:=Module[{header, rows, table},
-  header = {Append[Prepend[Keys[
+  header = {Flatten[Append[Prepend[Keys[
           Association[Join[
-              KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summaryAug1"],
+              KeyDrop[KeyDrop[KeyDrop[KeyDrop[allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"],"timeSeriesData"],"events"],"summary"],"summaryAug1"],
               allStates[Keys[allStates][[1]]]["scenarios"]["scenario1"]["summaryAug1"]
-        ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences", "distpow"}]};
-  rows = generateSummaryForState[allStates[#],#]&/@Keys[allStates];
+        ]]],"state"], {"r0natural","importtime","stateAdjustmentForTestingDifferences", "distpow"}]]};
+  rows = generateAugSummaryForState[allStates[#],#]&/@Keys[allStates];
 
   table = Flatten[Join[{header}, rows],1];
 
-  Export["tests/summaryAug1.csv", table];
+  Export["tests/augustSummary/"<>DateString[Now, {"ISODate"}]<>".csv", table];
 ]
 
 getSeriesForKey[data_, key_]:=Module[{},
