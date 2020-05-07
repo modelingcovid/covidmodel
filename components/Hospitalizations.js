@@ -109,7 +109,12 @@ export const Hospitalizations = ({width, height}) => {
               y={currentlyReportedHospitalized}
               color={yellow}
             />
-            <Line y={hospitalCapacity.get} stroke={red} strokeDasharray="6,3" />
+            <Line
+              y={hospitalCapacity.get}
+              stroke={red}
+              strokeDasharray="6,3"
+              dot={false}
+            />
           </>
         )}
       </Graph>

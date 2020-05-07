@@ -40,7 +40,7 @@ export function DistancingOverlay() {
   const showContainment = containmentX < xMax;
 
   const height = 20;
-  const offset = 48;
+  const offset = 52;
 
   return (
     <>
@@ -88,8 +88,7 @@ export function DistancingOverlay() {
                   y="0"
                   width={width}
                   height={yMax}
-                  fill="transparent"
-                  stroke={theme.color.focus[1]}
+                  fill={theme.color.focus[0]}
                   strokeWidth={1}
                   shapeRendering="crispEdges"
                   opacity="0.5"
@@ -133,6 +132,25 @@ export function DistancingOverlay() {
             );
           }}
         </SimpleGraph>
+
+        <line
+          x1={todayX}
+          x2={todayX}
+          y1={-8}
+          y2={height}
+          stroke={theme.color.focus[1]}
+          shapeRendering="crispEdges"
+        />
+        {hasVisibleEnd && (
+          <line
+            x1={distancingX}
+            x2={distancingX}
+            y1={-8}
+            y2={height}
+            stroke={theme.color.focus[1]}
+            shapeRendering="crispEdges"
+          />
+        )}
         <g transform={`translate(${todayX}, 0)`}>
           {scenarioLines.map((text, i) => (
             <text

@@ -1,21 +1,24 @@
 import {useMemo, useRef} from 'react';
 import {useContentRect} from '../util';
+import {marginDecorated} from '../graph';
 
 export function useGraphSize(defaultSize = {width: 896, height: 360}) {
   const ref = useRef(null);
   const {width} = useContentRect(ref, defaultSize);
 
   return useMemo(() => {
-    const large = width > 600 ? 360 : 256;
-    const regular = width > 600 ? 256 : 224;
-    const small = 208;
+    const offset = marginDecorated.top + marginDecorated.bottom;
+    const large = width > 600 ? 220 : 128;
+    const regular = width > 600 ? 116 : 100;
+    const small = 68;
+
     return {
       ref,
       width,
       height: {
-        large,
-        regular,
-        small,
+        large: large + offset,
+        regular: regular + offset,
+        small: small + offset,
       },
     };
   }, [width]);

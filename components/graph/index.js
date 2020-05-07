@@ -18,6 +18,7 @@ export * from './Points';
 export * from './ScaleGradient';
 export * from './Scrubber';
 export * from './SimpleGraph';
+export * from './useGraphConfig';
 export * from './useGraphData';
 export * from './useNearestPoint';
 export * from './useNearestData';

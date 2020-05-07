@@ -88,6 +88,7 @@ export const Daily = ({width, height}) => {
               color={theme.color.red[1]}
               strokeDasharray="6,4"
               mode="line"
+              dot={false}
             />
             <DistributionLine
               y={dailyReportedDeath}
