@@ -118,7 +118,7 @@ susceptibilityValuesLogNormal[binCount_,stdDev_]:=Module[{m, s, dist, binEdges, 
   binCount unnormalizedRelativeSusceptibilities / Total[unnormalizedRelativeSusceptibilities]
 ];
 susceptibilityBins = 10;
-susceptibilityStdev0 = 1.6;
+susceptibilityStdev0 = 1.2;
 susceptibilityInitialPopulations = ConstantArray[1/susceptibilityBins, susceptibilityBins];
 (* susceptibilityValues are now defined later as part of the model to allow for parameterization of susceptibilityStdev0 *)
 (*susceptibilityValues = susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0];*)
