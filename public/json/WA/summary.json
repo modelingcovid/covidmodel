@@ -1,212 +1,212 @@
 {
-"parameterBest":{
-"r0natural":2.3806,
-"importtime":1.3178e1,
-"stateAdjustmentForTestingDifferences":0.7071,
-"distpow":1.7099
-},
-"population":7169967,
-"ventilators":836,
-"icuBeds":1344,
-"staffedBeds":13468,
-"bedUtilization":0.5581,
-"hospitalCapacity":5.9503e3,
-"pS":0.9423,
-"pH":4.1662e-2,
-"pC":1.6001e-2,
-"pPCRNH":0.1090,
-"pPCRH":0.7933,
-"fractionOfCriticalDeceased":0.3294,
-"initialInfectionImpulse":1.4581e1,
-"r0":2.3806,
-"importtime":1.3178e1,
-"numberOfSimulations":250,
-"dateModelRun":"Wed 6 May 2020 14:45:07",
-"mostRecentDistancingDate":"Thu 30 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.7071,
-"distpow":1.7099,
-"goodnessOfFitMetrics":{
-"chiSquared":3.6830e-6,
-"rmsRelativeError":0.3422,
-"rmsRelativeErrorDeaths":0.4535,
-"rmsRelativeErrorPcr":0.1690,
-"meanRelativeErrorDeaths":0.3121,
-"meanRelativeErrorPcr":-8.4848e-3,
-"rSquaredDeaths":2.7086e-2,
-"rSquaredPcr":4.5065e-3,
-"deathResidual7Day":1.3143e1,
-"pcrResidual7Day":1.0385e1
-},
-"backtest":"",
-"parameters":{
-"r0":{
-"value":2.3806,
-"name":"Basic reproduction number",
-"description":"The basic reproduction number.",
-"type":"fit",
-"citations":[]
-},
-"daysUntilNotInfectious":{
-"value":5,
-"name":"Days until not infectious",
-"description":"The number of days it takes to lose infectiousness after starting on average.",
-"type":"literature",
-"citations":[
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.24.2004v1.full.pdf",
-"https:\/\/www.nature.com\/articles\/s41586-020-2196-x_reference.pdf"
-]
-},
-"daysUntilHospitalized":{
-"value":8.5,
-"name":"Days until hospitalized",
-"description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
-"type":"literature",
-"citations":[
-"https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.2001.full.pdf",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.03.2002v1.full.pdf",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.03.2002v3.full.pdf",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.2006v1.full.pdf"
-]
-},
-"daysFromInfectedToInfectious":{
-"value":4,
-"name":"Days from infected to infectious",
-"description":"The number of days it takes to become infectious after being infected on average",
-"type":"literature",
-"citations":[
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.24.2004v1.full.pdf",
-"https:\/\/annals.org\/aim\/fullarticle\/2762808\/incubation-period-coronavirus-disease-2019-covid-19-from-publicly-reported",
-"https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.2001.full.pdf"
-]
-},
-"daysToLeaveHosptialNonCritical":{
-"value":8,
-"name":"Days to leave the hospital in a non-critical case",
-"description":"The number of days it takes to leave the hospital if you are not a critical case",
-"type":"literature",
-"citations":[
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.03.2002v1",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.2006v1.full.pdf"
-]
-},
-"pPCRNH":{
-"value":0.1090,
-"name":"Probability of getting a positive PCR test if you are not in the hospital",
-"description":"An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.",
-"type":"literature"
-},
-"pPCRH":{
-"value":0.7933,
-"name":"Probability of getting a positive PCR test if you are in the hospital or ICU,",
-"description":"An age-adjusted probability that you get a positive PCR test in cases that require hospitalization or critical care",
-"type":"literature",
-"citations":[
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.2006v1.full.pdf"
-]
-},
-"daysTogoToCriticalCare":{
-"value":1.5,
-"name":"Days to go to critical care after arriving in the hospital",
-"description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
-"type":"literature",
-"citations":[
-"https:\/\/www.thelancet.com\/journals\/lancet\/article\/PIIS0140-6736(20)30566-3\/fulltext",
-"https:\/\/jamanetwork.com\/journals\/jama\/fullarticle\/2761044",
-"https:\/\/www.nejm.org\/doi\/pdf\/10.1056\/NEJMoa2004500?articleTools=true"
-]
-},
-"daysFromCriticalToRecoveredOrDeceased":{
-"value":8.5,
-"name":"Days from an ICU admission to recovery or fatality",
-"description":"The number of days it takes on average to resolve an ICU admission on average",
-"type":"literature",
-"citations":[
-"https:\/\/www.icnarc.org\/DataServices\/Attachments\/Download\/b5f59585-5870-ea11-9124-00505601089b",
-"https:\/\/www.thelancet.com\/journals\/lancet\/article\/PIIS0140-6736(20)30566-3\/fulltext",
-"https:\/\/www.nejm.org\/doi\/pdf\/10.1056\/NEJMoa2004500?articleTools=true",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.08.2005v1.full.pdf",
-"https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.2001.full.pdf",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.2006v1.full.pdf"
-]
-},
-"fractionOfCriticalDeceased":{
-"value":0.3294,
-"name":"Fraction of ICU admissions deceased.",
-"description":"An age adjusted fraction of the ICU admissions that will be deceased.",
-"type":"literature",
-"citations":[
-"https:\/\/www.icnarc.org\/DataServices\/Attachments\/Download\/b5f59585-5870-ea11-9124-00505601089b",
-"https:\/\/jamanetwork.com\/journals\/jama\/fullarticle\/2762130",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.08.2005v1.full.pdf"
-]
-},
-"importtime":{
-"value":1.3178e1,
-"name":"Import Time",
-"description":"The day that COVID-19 was seeded into that state.",
-"type":"fit"
-},
-"importlength":{
-"value":3,
-"name":"Import duration",
-"description":"Duration of the covid seeding event -- together with the initial infection impulse gets the model kicked off starting at the import time.",
-"type":"assumed"
-},
-"initialInfectionImpulse":{
-"value":1.4581e1,
-"name":"Size of initial infection impulse",
-"description":"Size of the initial infection impulse. The model is not very sensitive to the exact value, but it is needed in order to start the virus spreading.",
-"type":"assumed"
-},
-"pS":{
-"value":0.9423,
-"name":"Probability of getting a mild case.",
-"description":"An age-adjusted probability that you get a mild case.",
-"type":"literature"
-},
-"pH":{
-"value":4.1662e-2,
-"name":"Probability of getting a case bad enough to require hospitalization.",
-"description":"An age-adjusted probability that you get a case requiring hospitalization.",
-"type":"literature",
-"citations":[
-"https:\/\/www.cdc.gov\/mmwr\/volumes\/69\/wr\/mm6912e2.htm#F1_down",
-"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.08.2005v1.full.pdf"
-]
-},
-"pC":{
-"value":1.6001e-2,
-"name":"Probability of getting a case bad enough to require ICU admission",
-"description":"An age-adjusted probability get a severe case requiring ICU admission.",
-"type":"literature"
-},
-"stateAdjustmentForTestingDifferences":{
-"value":0.7071,
-"name":"State adjustment for differences in PCR \/ death testing and reporting.",
-"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
-"type":"fit"
-},
-"distancePower":{
-"value":1.7099,
-"name":"Power of the distancing function",
-"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
-"type":"fit"
-},
-"numberOfSimulations":{
-"value":250,
-"name":"Number of Monte Carlo simulations run",
-"description":"",
-"type":"set"
-}
-},
-"scenarios":[
-"scenario5",
-"scenario1",
-"scenario2",
-"scenario3",
-"scenario4",
-"scenario6",
-"scenario7",
-"scenario8"
-]
+	"parameterBest":{
+		"r0natural":2.380663885192589,
+		"importtime":1.3178174870143737e1,
+		"stateAdjustmentForTestingDifferences":0.7071694404985555,
+		"distpow":1.7099844757253213
+	},
+	"population":7169967,
+	"ventilators":836,
+	"icuBeds":1344,
+	"staffedBeds":13468,
+	"bedUtilization":0.5581862828019803,
+	"hospitalCapacity":5.950347143222929e3,
+	"pS":0.9423356942680906,
+	"pH":4.1662355137957095e-2,
+	"pC":1.600195059395233e-2,
+	"pPCRNH":0.10908917784997699,
+	"pPCRH":0.7933758389089237,
+	"fractionOfCriticalDeceased":0.3294625827687163,
+	"initialInfectionImpulse":1.4581438805728816e1,
+	"r0":2.380663885192589,
+	"importtime":1.3178174870143737e1,
+	"numberOfSimulations":10,
+	"dateModelRun":"Thu 7 May 2020 14:49:59",
+	"mostRecentDistancingDate":"Thu 30 Apr 2020",
+	"stateAdjustmentForTestingDifferences":0.7071694404985555,
+	"distpow":1.7099844757253213,
+	"goodnessOfFitMetrics":{
+		"chiSquared":3.5834989739920993e-6,
+		"rmsRelativeError":0.3397227493470183,
+		"rmsRelativeErrorDeaths":0.4507913150137524,
+		"rmsRelativeErrorPcr":0.16616342303878381,
+		"meanRelativeErrorDeaths":0.31198217851973387,
+		"meanRelativeErrorPcr":4.704141877236116e-4,
+		"rSquaredDeaths":2.6449060117563854e-2,
+		"rSquaredPcr":4.8190316733548195e-3,
+		"deathResidual7Day":1.3144051232987545e1,
+		"pcrResidual7Day":1.0410485812760518e1
+	},
+	"backtest":"",
+	"parameters":{
+		"r0":{
+			"value":2.380663885192589,
+			"name":"Basic reproduction number",
+			"description":"The basic reproduction number.",
+			"type":"fit",
+			"citations":[]
+		},
+		"daysUntilNotInfectious":{
+			"value":5,
+			"name":"Days until not infectious",
+			"description":"The number of days it takes to lose infectiousness after starting on average.",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.24.20042606v1.full.pdf",
+				"https:\/\/www.nature.com\/articles\/s41586-020-2196-x_reference.pdf"
+			]
+		},
+		"daysUntilHospitalized":{
+			"value":8.5,
+			"name":"Days until hospitalized",
+			"description":"The number of days it takes to become hospitalized, if you are going to, after becoming infectious on average.",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.20018754.full.pdf",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.03.20029983v1.full.pdf",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.03.20028423v3.full.pdf",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.20062943v1.full.pdf"
+			]
+		},
+		"daysFromInfectedToInfectious":{
+			"value":4,
+			"name":"Days from infected to infectious",
+			"description":"The number of days it takes to become infectious after being infected on average",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.24.20042606v1.full.pdf",
+				"https:\/\/annals.org\/aim\/fullarticle\/2762808\/incubation-period-coronavirus-disease-2019-covid-19-from-publicly-reported",
+				"https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.20018754.full.pdf"
+			]
+		},
+		"daysToLeaveHospitalNonCritical":{
+			"value":8,
+			"name":"Days to leave the hospital in a non-critical case",
+			"description":"The number of days it takes to leave the hospital if you are not a critical case",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.03.03.20029983v1",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.20062943v1.full.pdf"
+			]
+		},
+		"pPCRNH":{
+			"value":0.10908917784997699,
+			"name":"Probability of getting a positive PCR test if you are not in the hospital",
+			"description":"An age-adjusted probability that you get a positive PCR test if your disease is not serious enough to require hospitalization or critical care.",
+			"type":"literature"
+		},
+		"pPCRH":{
+			"value":0.7933758389089237,
+			"name":"Probability of getting a positive PCR test if you are in the hospital or ICU,",
+			"description":"An age-adjusted probability that you get a positive PCR test in cases that require hospitalization or critical care",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.20062943v1.full.pdf"
+			]
+		},
+		"daysTogoToCriticalCare":{
+			"value":1.5,
+			"name":"Days to go to critical care after arriving in the hospital",
+			"description":"The number of days it takes to go to critical care after arriving in the hospital in a serious case.",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.thelancet.com\/journals\/lancet\/article\/PIIS0140-6736(20)30566-3\/fulltext",
+				"https:\/\/jamanetwork.com\/journals\/jama\/fullarticle\/2761044",
+				"https:\/\/www.nejm.org\/doi\/pdf\/10.1056\/NEJMoa2004500?articleTools=true"
+			]
+		},
+		"daysFromCriticalToRecoveredOrDeceased":{
+			"value":8.5,
+			"name":"Days from an ICU admission to recovery or fatality",
+			"description":"The number of days it takes on average to resolve an ICU admission on average",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.icnarc.org\/DataServices\/Attachments\/Download\/b5f59585-5870-ea11-9124-00505601089b",
+				"https:\/\/www.thelancet.com\/journals\/lancet\/article\/PIIS0140-6736(20)30566-3\/fulltext",
+				"https:\/\/www.nejm.org\/doi\/pdf\/10.1056\/NEJMoa2004500?articleTools=true",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.08.20057794v1.full.pdf",
+				"https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.20018754.full.pdf",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.12.20062943v1.full.pdf"
+			]
+		},
+		"fractionOfCriticalDeceased":{
+			"value":0.3294625827687163,
+			"name":"Fraction of ICU admissions deceased.",
+			"description":"An age adjusted fraction of the ICU admissions that will be deceased.",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.icnarc.org\/DataServices\/Attachments\/Download\/b5f59585-5870-ea11-9124-00505601089b",
+				"https:\/\/jamanetwork.com\/journals\/jama\/fullarticle\/2762130",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.08.20057794v1.full.pdf"
+			]
+		},
+		"importtime":{
+			"value":1.3178174870143737e1,
+			"name":"Import Time",
+			"description":"The day that COVID-19 was seeded into that state.",
+			"type":"fit"
+		},
+		"importlength":{
+			"value":3,
+			"name":"Import duration",
+			"description":"Duration of the covid seeding event -- together with the initial infection impulse gets the model kicked off starting at the import time.",
+			"type":"assumed"
+		},
+		"initialInfectionImpulse":{
+			"value":1.4581438805728816e1,
+			"name":"Size of initial infection impulse",
+			"description":"Size of the initial infection impulse. The model is not very sensitive to the exact value, but it is needed in order to start the virus spreading.",
+			"type":"assumed"
+		},
+		"pS":{
+			"value":0.9423356942680906,
+			"name":"Probability of getting a mild case.",
+			"description":"An age-adjusted probability that you get a mild case.",
+			"type":"literature"
+		},
+		"pH":{
+			"value":4.1662355137957095e-2,
+			"name":"Probability of getting a case bad enough to require hospitalization.",
+			"description":"An age-adjusted probability that you get a case requiring hospitalization.",
+			"type":"literature",
+			"citations":[
+				"https:\/\/www.cdc.gov\/mmwr\/volumes\/69\/wr\/mm6912e2.htm#F1_down",
+				"https:\/\/www.medrxiv.org\/content\/10.1101\/2020.04.08.20057794v1.full.pdf"
+			]
+		},
+		"pC":{
+			"value":1.600195059395233e-2,
+			"name":"Probability of getting a case bad enough to require ICU admission",
+			"description":"An age-adjusted probability get a severe case requiring ICU admission.",
+			"type":"literature"
+		},
+		"stateAdjustmentForTestingDifferences":{
+			"value":0.7071694404985555,
+			"name":"State adjustment for differences in PCR \/ death testing and reporting.",
+			"description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
+			"type":"fit"
+		},
+		"distancePower":{
+			"value":1.7099844757253213,
+			"name":"Power of the distancing function",
+			"description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
+			"type":"fit"
+		},
+		"numberOfSimulations":{
+			"value":10,
+			"name":"Number of Monte Carlo simulations run",
+			"description":"",
+			"type":"set"
+		}
+	},
+	"scenarios":[
+		"scenario5",
+		"scenario1",
+		"scenario2",
+		"scenario3",
+		"scenario4",
+		"scenario6",
+		"scenario7",
+		"scenario8"
+	]
 }
