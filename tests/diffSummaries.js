@@ -2,8 +2,10 @@ const csv = require('csvtojson');
 const path = require('path');
 const fs = require('fs');
 const fetch = require('isomorphic-unfetch');
+const {format} = require('d3-format');
 
-const {formatPercent2, formatNumber2} = require('../lib/format');
+const formatNumber2 = format(',.2f');
+const formatPercent2 = format(',.2%');
 
 const readCsv = async (filename) => {
   const csvPath = path.join(process.cwd(), `tests/${filename}.csv`);
