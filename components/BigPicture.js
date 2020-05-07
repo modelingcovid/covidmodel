@@ -183,11 +183,13 @@ export function BigPicture({location}) {
               <span className="footnote">the data it’s based on,</span>
             </strong>{' '}
             and we’re thankful for the many people and organizations who have
-            worked to produce the data that powers the model. However, all data
-            has its caveats and limitations: in particular, fatality counts are
-            difficult to assess and{' '}
+            worked to produce the data that powers the model. All data has its
+            caveats and limitations: due to (still) limited testing, cases are
+            undercounted to a large degree that varies by state. Fatality counts
+            are generally seen as more reliable, but analysis of all-cause
+            mortality indicates that they are often{' '}
             <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">
-              often underreported
+              still underreported
             </a>
             . We’ve tried to make the best of the available data and hope to
             continually improve the model as more data becomes available.
