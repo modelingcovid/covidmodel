@@ -41,8 +41,8 @@ export function useSEIRConfig() {
         y: susceptible,
         label: 'Susceptible',
         description: 'People who have not yet contracted Covid-19',
-        fill: theme.color.magenta[1],
-        color: theme.color.magenta[1],
+        fill: theme.color.yellow[2],
+        color: theme.color.yellow.text,
       },
       recovered: {
         y: cumulativeRecoveries,
@@ -56,8 +56,8 @@ export function useSEIRConfig() {
         label: 'Exposed',
         description:
           'People who have been infected with Covid-19 but cannot yet infect others',
-        fill: theme.color.yellow[2],
-        color: theme.color.yellow.text,
+        fill: theme.color.purple[1],
+        color: theme.color.purple.text,
       },
       infectious: {
         y: currentlyInfectious,
@@ -71,8 +71,8 @@ export function useSEIRConfig() {
         label: 'Hospitalized',
         description:
           'People who are undergoing treatment for Covid-19 in the hospital or ICU',
-        fill: theme.color.purple[1],
-        color: theme.color.purple.text,
+        fill: theme.color.magenta[1],
+        color: theme.color.magenta[1],
       },
       deceased: {
         y: cumulativeDeaths,
