@@ -97,7 +97,8 @@ const main = async () => {
         Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
       },
     });
-    console.log('response', JSON.stringify(resp));
+    const json = await resp.json();
+    console.log('response', JSON.stringify(json));
   } catch (e) {
     console.log('failed to comment results in PR');
     console.log('error was', e.toString());
