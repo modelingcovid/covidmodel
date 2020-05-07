@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const fetch = require('isomorphic-unfetch');
 
-import {formatPercent2, formatNumber2} from '../lib/format';
+const {formatPercent2, formatNumber2} = require('../lib/format');
 
 const readCsv = async (filename) => {
   const csvPath = path.join(process.cwd(), `tests/${filename}.csv`);
