@@ -93,7 +93,13 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
         xLabel="R"
         nice={false}
       >
-        {() => <DistributionLine y={rt} color={theme.color.magenta[1]} />}
+        {() => (
+          <DistributionLine
+            y={rt}
+            color={theme.color.magenta[1]}
+            mode="gradient"
+          />
+        )}
       </Graph>
       <Gutter>
         <DistributionLegendRow
