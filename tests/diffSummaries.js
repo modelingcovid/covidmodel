@@ -86,16 +86,21 @@ const main = async () => {
       };
     });
 
-  await fetch(COMMENT_API_PATH, {
-    method: 'POST',
-    body: JSON.stringify({
-      body: differencesAboveThreshold,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-    },
-  });
+  try {
+    await fetch(COMMENT_API_PATH, {
+      method: 'POST',
+      body: JSON.stringify({
+        body: differencesAboveThreshold,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      },
+    });
+  } catch (e) {
+    console.log('failed to comment results in PR');
+    console.log('error was', e.toString());
+  }
 
   console.log('differencesAboveThreshold', differencesAboveThreshold);
 };
