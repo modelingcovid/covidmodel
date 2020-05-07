@@ -90,7 +90,13 @@ const main = async () => {
     const resp = await fetch(COMMENT_API_PATH, {
       method: 'POST',
       body: JSON.stringify({
-        body: JSON.stringify(differencesAboveThreshold),
+        body: `| State | Scenario | Metric | Current | Previous | Difference | Difference Percentage |
+               | --- | --- | --- | --- | --- | --- | --- | 
+               ${differencesAboveThreshold.map(
+                 (diff) =>
+                   `|${differencesAboveThreshold.state}|${differencesAboveThreshold.scenario}|${differencesAboveThreshold.metric}|${differencesAboveThreshold.current}|${differencesAboveThreshold.previous}|${differencesAboveThreshold.difference}|${differencesAboveThreshold.differencePercentage}|\n`
+               )}
+        `,
       }),
       headers: {
         'Content-Type': 'application/json',
