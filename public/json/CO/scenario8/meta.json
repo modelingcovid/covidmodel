@@ -5,23 +5,7 @@
 	"maintain":false,
 	"name":"relaxed restrictions",
 	"gradual":false,
-	"events":{
-		"herd":{
-			"eventName":"herd",
-			"day":1.8909093992329875e2,
-			"thresholdCrossed":0.7000000000000476
-		},
-		"icu":{
-			"eventName":"icu",
-			"day":1.3833613903529076e2,
-			"thresholdCrossed":1.238660253003806e-4
-		},
-		"hospital":{
-			"eventName":"hospital",
-			"day":1.6528060121727998e2,
-			"thresholdCrossed":1.5039251818259626e-3
-		}
-	},
+	"events":{},
 	"summary":{
 		"totalProjectedDeaths":2.4822955335391292e4,
 		"totalProjectedPCRConfirmed":4.622734946931587e5,
@@ -41,8 +25,8 @@
 		"fractionOfDeathsReported":0.777571241986058,
 		"fractionOfHospitalizationsReported":0.7773140447531949,
 		"dateContained":"",
-		"dateICUOverCapacity":"Sun 17 May 2020 08:04:02",
-		"dateHospitalsOverCapacity":"Sat 13 Jun 2020 06:44:03"
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":1.997804570364455e4,
@@ -63,7 +47,7 @@
 		"fractionOfDeathsReported":0.7775443459360271,
 		"fractionOfHospitalizationsReported":0.7772669573930288,
 		"dateContained":"",
-		"dateICUOverCapacity":"Sun 17 May 2020 08:04:02",
-		"dateHospitalsOverCapacity":"Sat 13 Jun 2020 06:44:03"
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
 	}
 }

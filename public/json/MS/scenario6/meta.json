@@ -5,23 +5,7 @@
 	"maintain":true,
 	"name":"Open May 1",
 	"gradual":false,
-	"events":{
-		"herd":{
-			"eventName":"herd",
-			"day":1.6850436559937506e2,
-			"thresholdCrossed":0.7000000000000002
-		},
-		"icu":{
-			"eventName":"icu",
-			"day":1.3763046151264393e2,
-			"thresholdCrossed":1.5306976713035206e-4
-		},
-		"hospital":{
-			"eventName":"hospital",
-			"day":1.56415411282369e2,
-			"thresholdCrossed":1.9975879834024115e-3
-		}
-	},
+	"events":{},
 	"summary":{
 		"totalProjectedDeaths":2.102257813934756e4,
 		"totalProjectedPCRConfirmed":3.515421140198899e5,
@@ -41,8 +25,8 @@
 		"fractionOfDeathsReported":0.7751404297897428,
 		"fractionOfHospitalizationsReported":0.7750420826379297,
 		"dateContained":"",
-		"dateICUOverCapacity":"Sat 16 May 2020 15:07:51",
-		"dateHospitalsOverCapacity":"Thu 4 Jun 2020 09:58:11"
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":1.964087865207169e4,
@@ -63,7 +47,7 @@
 		"fractionOfDeathsReported":0.775137067427744,
 		"fractionOfHospitalizationsReported":0.7750384471057331,
 		"dateContained":"",
-		"dateICUOverCapacity":"Sat 16 May 2020 15:07:51",
-		"dateHospitalsOverCapacity":"Thu 4 Jun 2020 09:58:11"
+		"dateICUOverCapacity":"",
+		"dateHospitalsOverCapacity":""
 	}
 }
