@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const fetch = require('isomorphic-unfetch');
 
+import {formatPercent2, formatNumber2} from '../lib/format';
+
 const readCsv = async (filename) => {
   const csvPath = path.join(process.cwd(), `tests/${filename}.csv`);
   try {
@@ -94,7 +96,13 @@ const main = async () => {
                | --- | --- | --- | --- | --- | --- | --- | 
                ${differencesAboveThreshold.map(
                  (diff) =>
-                   `|${differencesAboveThreshold.state}|${differencesAboveThreshold.scenario}|${differencesAboveThreshold.metric}|${differencesAboveThreshold.current}|${differencesAboveThreshold.previous}|${differencesAboveThreshold.difference}|${differencesAboveThreshold.differencePercentage}|\n`
+                   `|${diff.state}|${diff.scenario}|${
+                     diff.metric
+                   }|${formatNumber2(diff.current)}|${formatNumber2(
+                     diff.previous
+                   )}|${formatNumber2(diff.difference)}|${formatPercent2(
+                     diff.differencePercentage
+                   )}|\n`
                )}
         `,
       }),
