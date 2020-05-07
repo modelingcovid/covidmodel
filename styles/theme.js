@@ -45,7 +45,11 @@ export const {
     red: {...['#ffa8a8', '#e6082d', '#cd0426'], text: '#cd0426'},
     green: {...['#48c404', '#3fad1c', '#38991a'], text: '#38991a'},
     magenta: ['#d64b91', '#df0371'],
-    purple: {...['#f0defe'], muted: '#5a2c8e'},
+    purple: {
+      ...['#f0defe', '#a728f6', '#880bd5'],
+      text: '#880bd5',
+      muted: '#5a2c8e',
+    },
   },
   font: {
     family: {
@@ -159,5 +163,10 @@ export const darkMode = setProperties({
       muted: '#822707',
     },
     magenta: ['#d64b91', '#ff248e'],
+    purple: {
+      ...['#f0defe', '#ce68fd', '#c44bfb'],
+      text: '#c44bfb',
+      muted: '#5a2c8e',
+    },
   },
 });

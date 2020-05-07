@@ -71,8 +71,8 @@ export function useSEIRConfig() {
         label: 'Hospitalized',
         description:
           'People who are undergoing treatment for Covid-19 in the hospital or ICU',
-        fill: theme.color.gray[3],
-        color: theme.color.gray[5],
+        fill: theme.color.purple[1],
+        color: theme.color.purple.text,
       },
       deceased: {
         y: cumulativeDeaths,
