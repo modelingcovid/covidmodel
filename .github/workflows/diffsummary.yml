@@ -2,7 +2,7 @@
 
 name: DiffSummary
 
-on: [push, pull_request]
+on: push
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -27,5 +27,5 @@ jobs:
 
       - name: run differ
         run: yarn testdiff
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
