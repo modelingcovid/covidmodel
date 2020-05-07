@@ -87,7 +87,7 @@ const main = async () => {
     });
 
   try {
-    await fetch(COMMENT_API_PATH, {
+    const resp = await fetch(COMMENT_API_PATH, {
       method: 'POST',
       body: JSON.stringify({
         body: differencesAboveThreshold,
@@ -97,6 +97,7 @@ const main = async () => {
         Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
       },
     });
+    console.log('response', JSON.stringify(resp));
   } catch (e) {
     console.log('failed to comment results in PR');
     console.log('error was', e.toString());
