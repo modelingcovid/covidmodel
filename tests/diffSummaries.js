@@ -1,6 +1,7 @@
 const csv = require('csvtojson');
 const path = require('path');
 const fs = require('fs');
+const fetch = require('isomorphic-unfetch');
 
 const readCsv = async (filename) => {
   const csvPath = path.join(process.cwd(), `tests/${filename}.csv`);
@@ -18,6 +19,8 @@ const groupSummary = (summary) =>
 const runCheck = (current, previous, metric) => {
   return (current[metric] - previous[metric]) / previous[metric];
 };
+
+const COMMENT_API_PATH = `https://api.github.com/repos/modelingcovid/covidmodel/commits/${process.env.GITHUB_SHA}/comments`;
 
 const main = async () => {
   const summaryPath = path.join(process.cwd(), `tests/augustSummary`);
@@ -82,6 +85,17 @@ const main = async () => {
           previousGrouped[`${state}#${scenario}`][metric],
       };
     });
+
+  await fetch(COMMENT_API_PATH, {
+    method: 'POST',
+    body: JSON.stringify({
+      body: differencesAboveThreshold,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  });
 
   console.log('differencesAboveThreshold', differencesAboveThreshold);
 };

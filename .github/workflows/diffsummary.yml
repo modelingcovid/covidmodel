@@ -33,3 +33,5 @@ jobs:
 
       - name: run differ
         run: yarn testdiff
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
