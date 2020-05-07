@@ -48,7 +48,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS=--max_old_space_size=8192 next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "testdiff": "node tests/diffSummaries.js"
   },
   "engines": {
     "node": "*"
