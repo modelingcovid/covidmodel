@@ -933,8 +933,9 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask
 
   allStatesData=Association[Parallelize[Map[(#->loopBody[#])&,states]]];
 
-  If[backtestMask==0,exportAllStatesSummary[allStatesData]];
-  If[backtestMask==0,exportAllStatesSummaryAug1[allStatesData]];
+  (* if you run all states then we generate summaries and save the August one with the timestamp *)
+  If[backtestMask==0&&states==statesToRun,exportAllStatesSummary[allStatesData]];
+  If[backtestMask==0&&states==statesToRun,exportAllStatesSummaryAug1[allStatesData]];
   
   If[backtestMask>0,exportAllStatesBacktest["tests/backtest",allStatesData,backtestMask],Unevaluated[Sequence[]]];
   If[backtestMask==0,exportAllStatesGoodnessOfFitMetricsCsv["tests/gof-metrics.csv",allStatesData]];
