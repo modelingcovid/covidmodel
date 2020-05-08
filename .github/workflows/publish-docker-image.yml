@@ -1,0 +1,30 @@
+name: Publish Docker Image
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker-compose build mc19
+        working-directory: docker
+
+      - name: Log into package registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Tag and push image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${GITHUB_REPOSITORY}/mc19
+          VERSION=$(git rev-parse --short ${GITHUB_SHA})
+          docker tag docker_mc19:latest ${IMAGE_ID}:${VERSION}
+          docker push ${IMAGE_ID}:${VERSION}
