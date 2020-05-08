@@ -29,7 +29,7 @@ import {
 } from '../lib/format';
 import {stackAccessors} from '../lib/stack';
 
-const {useMemo} = React;
+const {useCallback, useMemo} = React;
 
 function PercentCases() {
   const nearest = useNearestData();
@@ -48,7 +48,20 @@ function PercentCases() {
 
 export function SEIR({height, width}) {
   const {location} = useModelState();
-  const {population, domain} = useLocationData();
+  const {
+    population,
+    cumulativeDeaths,
+    currentlyInfected,
+    currentlyInfectious,
+  } = useLocationData();
+  const expected = useExpected();
+  const domain = useCallback(() => {
+    return (
+      expected(cumulativeDeaths).max() +
+      expected(currentlyInfected).max() +
+      expected(currentlyInfectious).max()
+    );
+  }, [expected, cumulativeDeaths, currentlyInfected, currentlyInfectious]);
 
   const {label} = useSEIRConfig();
 
@@ -81,7 +94,7 @@ export function SEIR({height, width}) {
             decoration={false}
           >
             {({xMax, yMax, yScale}) => {
-              const midY = yScale(domain.seir());
+              const midY = yScale(domain());
               const strokeWidth = 1;
               return (
                 <rect
@@ -97,7 +110,7 @@ export function SEIR({height, width}) {
             }}
           </SEIRGraph>
         </div>
-        <SEIRGraph domain={domain.seir} height={height} width={width} />
+        <SEIRGraph domain={domain} height={height} width={width} />
         <SEIRGutter />
         <Paragraph className="margin-top-2">
           This graph shows a detailed view of how we project that Covid-19 will

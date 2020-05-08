@@ -92,12 +92,18 @@ function ScenarioItem({currentDistancingLevel, scenario, setScenario}) {
 export function ScenariosList() {
   const {scenarioData, setScenario} = useModelState();
   const {scenarios} = useLocationData();
-  const currentDistancingLevel = scenarioData().distancingLevel;
+
+  const currentScenario = useMemo(
+    () => scenarios().find(({name}) => name === 'Current'),
+    [scenarios]
+  );
+  const currentDistancingLevel = currentScenario.distancingLevel;
+
   return (
     <>
-      {scenarios().map((scenario, i) => (
+      {scenarios().map((scenario) => (
         <ScenarioItem
-          key={i}
+          key={scenario.id}
           currentDistancingLevel={currentDistancingLevel}
           scenario={scenario}
           setScenario={setScenario}

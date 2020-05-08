@@ -15,6 +15,7 @@ import {
   DistributionLine,
   Estimation,
   ExpectedLegendEntry,
+  useExpectedMax,
   useLocationData,
   useModelState,
 } from './modeling';
@@ -40,8 +41,8 @@ export const Daily = ({width, height}) => {
     dailyReportedDeath,
     newlyExposed,
     dailyPcr,
-    domain,
   } = useLocationData();
+  const domain = useExpectedMax(newlyExposed);
 
   return (
     <div className="margin-top-3 flow-root">
@@ -73,7 +74,7 @@ export const Daily = ({width, height}) => {
       </Paragraph>
       <Graph
         data={indices}
-        domain={domain.newlyExposed}
+        domain={domain}
         initialScale="log"
         x={x}
         xLabel="people"

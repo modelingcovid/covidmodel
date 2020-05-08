@@ -48,3 +48,11 @@ export function useExpected() {
     [strategy]
   );
 }
+
+export function useExpectedMax(distribution) {
+  const expected = useExpected();
+  return useCallback(() => expected(distribution).max(), [
+    distribution,
+    expected,
+  ]);
+}

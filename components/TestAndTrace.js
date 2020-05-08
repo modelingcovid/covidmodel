@@ -16,6 +16,7 @@ import {
   DistributionLegendRow,
   DistributionLine,
   Estimation,
+  useExpectedMax,
   useLocationData,
   useModelState,
 } from './modeling';
@@ -33,12 +34,8 @@ const {useCallback, useMemo} = React;
 
 export const TestAndTrace = ({width, height}) => {
   const {location, indices, x} = useModelState();
-  const {
-    dailyReportedDeath,
-    newlyExposed,
-    dailyPcr,
-    domain,
-  } = useLocationData();
+  const {dailyReportedDeath, newlyExposed, dailyPcr} = useLocationData();
+  const domain = useExpectedMax(newlyExposed);
 
   return (
     <div className="margin-top-3 flow-root">
@@ -88,7 +85,7 @@ export const TestAndTrace = ({width, height}) => {
       </Paragraph>
       <Graph
         data={indices}
-        domain={domain.newlyExposed}
+        domain={domain}
         initialScale="log"
         x={x}
         xLabel="people"
