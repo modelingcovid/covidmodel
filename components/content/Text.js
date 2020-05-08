@@ -72,3 +72,4 @@ export const UnorderedList = createTextComponent(
   'paragraph unordered-list'
 );
 export const ListItem = createTextComponent('li');
+export const Block = createTextComponent('div');

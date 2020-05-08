@@ -122,6 +122,7 @@ const queries = [
       scenarios {
         id
         name
+        dateContained
         distancingLevel
         distancingDays
       }

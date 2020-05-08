@@ -53,7 +53,7 @@ export function EffectiveReproductionNumber({height, width, ...remaining}) {
   const formatR = useCallback((n) => formatNumber2(n * r0()), [r0]);
 
   return (
-    <div className="margin-top-3 flow-root" {...remaining}>
+    <div className="margin-top-4 flow-root" {...remaining}>
       <Title>How does social distancing relate to how the virus spreads?</Title>
       <Paragraph>
         Epidemiologists measure how quickly a disease spreads through{' '}

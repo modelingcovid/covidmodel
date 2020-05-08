@@ -14,9 +14,10 @@ import {
 import {Graph, LegendRow, Line} from './graph';
 import {CalendarDay, Clock, PeopleArrows, Viruses} from './icon';
 import {
-  Estimation,
+  CurrentScenario,
   DistributionLegendRow,
   DistributionLine,
+  Estimation,
   useFindPoint,
   useModelState,
   useLocationData,
@@ -57,7 +58,8 @@ export function ModelInputs({height, width, ...remaining}) {
   const formatR = useCallback((n) => formatNumber2(n), [r0]);
 
   return (
-    <div className="flow-root" {...remaining}>
+    <div className="flow-root margin-top-4" {...remaining}>
+      <Heading>Social distancing levels in {location.name}</Heading>
       <WithCitation
         citation={
           <>
@@ -77,22 +79,7 @@ export function ModelInputs({height, width, ...remaining}) {
       >
         <Paragraph>
           The following graph displays social distancing levels relative to
-          regular social activity.
-          <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue.text}>
-            Past social distancing levels
-          </InlineLabel>{' '}
-          are based on <span className="footnote">available mobility data</span>{' '}
-          for {location.name}, and{' '}
-          <InlineLabel
-            color={theme.color.yellow[3]}
-            fill={theme.color.yellow.text}
-          >
-            prospective social distancing levels
-          </InlineLabel>{' '}
-          are based on the scenario selected above.
-        </Paragraph>
-        <Paragraph>
-          The current distancing level,{' '}
+          regular social activity. The current distancing level,{' '}
           <strong>
             <TodayDistancing />
           </strong>
@@ -105,6 +92,24 @@ export function ModelInputs({height, width, ...remaining}) {
               </strong>
             )}
           </InlineData>
+          .
+        </Paragraph>
+        <Paragraph>
+          <InlineLabel color={theme.color.blue[2]} fill={theme.color.blue.text}>
+            Past social distancing levels
+          </InlineLabel>{' '}
+          are based on <span className="footnote">available mobility data</span>{' '}
+          for {location.name}, and{' '}
+          <InlineLabel
+            color={theme.color.yellow[3]}
+            fill={theme.color.yellow.text}
+          >
+            prospective social distancing levels
+          </InlineLabel>{' '}
+          are based on the selected scenario:{' '}
+          <strong>
+            <CurrentScenario />
+          </strong>
           .
         </Paragraph>
       </WithCitation>
@@ -121,15 +126,13 @@ export function ModelInputs({height, width, ...remaining}) {
       <Paragraph>
         We use the data available to us — location demographics, reported
         fatalities, and positive test cases — to estimate when Covid-19 began to
-        spread in a location.
-      </Paragraph>
-      <Estimation status={false}>
-        The model estimates that Covid-19 began to spread in {location.name} on{' '}
+        spread in a location. The model estimates that Covid-19 began to spread
+        in {location.name} on{' '}
         <InlineData width="130px">
           {() => <strong>{formatDate(dayToDate(importtime()))}</strong>}
         </InlineData>
         .
-      </Estimation>
+      </Paragraph>
     </div>
   );
 }
