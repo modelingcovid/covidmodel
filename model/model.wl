@@ -671,7 +671,7 @@ fitStartingOverrides=<|
   "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->50,"tupper"->75,"replower"->0.52,"repupper"->0.6,"powlower"->2.4,"powupper"->2.8|>,
   "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->48,"replower"->0.45,"repupper"->0.6,"powlower"->1.7,"powupper"->2.5|>,
   "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1.1,"repupper"->1.25,"powlower"->1.8,"powupper"->2.5|>,
-  "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->50,"tupper"->75,"replower"->0.7,"repupper"->0.9,"powlower"->2.2,"powupper"->2.8|>,
+  "PA"-><|"rlower"->4.8,"rupper"->5,"tlower"->50,"tupper"->75,"replower"->0.7,"repupper"->0.82,"powlower"->2.2,"powupper"->2.8|>,
   "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->49,"tupper"->55,"replower"->0.4,"repupper"->0.44,"powlower"->1.8,"powupper"->2.1|>,
   "TX"-><|"rlower"->4,"rupper"->5,"tlower"->42,"tupper"->55.5,"replower"->0.9,"repupper"->1.1,"powlower"->2.5,"powupper"->2.8|>,
   "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.7,"repupper"->0.9,"powlower"->1.5,"powupper"->2.2|>,

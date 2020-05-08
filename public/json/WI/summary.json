@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":3.6090,
-"importtime":4.9132e1,
-"stateAdjustmentForTestingDifferences":0.5789,
-"distpow":2.3254
+"r0natural":3.7717,
+"importtime":5.0513e1,
+"stateAdjustmentForTestingDifferences":0.5961,
+"distpow":2.4438
 },
 "population":5763217,
 "ventilators":864,
@@ -18,29 +18,29 @@
 "pPCRH":0.8086,
 "fractionOfCriticalDeceased":0.3705,
 "initialInfectionImpulse":1.4363e1,
-"r0":3.6090,
-"importtime":4.9132e1,
-"numberOfSimulations":250,
-"dateModelRun":"Wed 6 May 2020 15:52:55",
-"mostRecentDistancingDate":"Thu 30 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.5789,
-"distpow":2.3254,
+"r0":3.7717,
+"importtime":5.0513e1,
+"numberOfSimulations":200,
+"dateModelRun":"Fri 8 May 2020 13:15:03",
+"mostRecentDistancingDate":"Sat 2 May 2020",
+"stateAdjustmentForTestingDifferences":0.5961,
+"distpow":2.4438,
 "goodnessOfFitMetrics":{
-"chiSquared":3.1805e-6,
-"rmsRelativeError":0.3809,
-"rmsRelativeErrorDeaths":0.4732,
-"rmsRelativeErrorPcr":0.2665,
-"meanRelativeErrorDeaths":-0.2002,
-"meanRelativeErrorPcr":-0.1080,
-"rSquaredDeaths":1.8721e-2,
-"rSquaredPcr":2.0436e-2,
-"deathResidual7Day":-1.2290,
-"pcrResidual7Day":-7.7982e1
+"chiSquared":3.9887e-6,
+"rmsRelativeError":0.3537,
+"rmsRelativeErrorDeaths":0.4314,
+"rmsRelativeErrorPcr":0.2601,
+"meanRelativeErrorDeaths":-0.1677,
+"meanRelativeErrorPcr":-0.1046,
+"rSquaredDeaths":1.7870e-2,
+"rSquaredPcr":2.8277e-2,
+"deathResidual7Day":-0.8933,
+"pcrResidual7Day":-7.3853e1
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":3.6090,
+"value":3.7717,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -79,7 +79,7 @@
 "https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.2001.full.pdf"
 ]
 },
-"daysToLeaveHosptialNonCritical":{
+"daysToLeaveHospitalNonCritical":{
 "value":8,
 "name":"Days to leave the hospital in a non-critical case",
 "description":"The number of days it takes to leave the hospital if you are not a critical case",
@@ -141,7 +141,7 @@
 ]
 },
 "importtime":{
-"value":4.9132e1,
+"value":5.0513e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -181,19 +181,19 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.5789,
+"value":0.5961,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
 },
 "distancePower":{
-"value":2.3254,
+"value":2.4438,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":250,
+"value":200,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"

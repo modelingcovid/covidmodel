@@ -20,20 +20,20 @@
 "initialInfectionImpulse":1.4500e1,
 "r0":4.6042,
 "importtime":5.3756e1,
-"numberOfSimulations":250,
-"dateModelRun":"Wed 6 May 2020 15:18:48",
-"mostRecentDistancingDate":"Thu 30 Apr 2020",
+"numberOfSimulations":200,
+"dateModelRun":"Fri 8 May 2020 12:44:08",
+"mostRecentDistancingDate":"Sat 2 May 2020",
 "stateAdjustmentForTestingDifferences":0.2432,
 "distpow":2.6623,
 "goodnessOfFitMetrics":{
-"chiSquared":1.2313e-5,
-"rmsRelativeError":0.4669,
-"rmsRelativeErrorDeaths":0.1768,
-"rmsRelativeErrorPcr":0.6300,
-"meanRelativeErrorDeaths":-5.0747e-2,
-"meanRelativeErrorPcr":-0.1883,
-"rSquaredDeaths":7.9080e-3,
-"rSquaredPcr":2.9662e-2,
+"chiSquared":1.6759e-5,
+"rmsRelativeError":0.4589,
+"rmsRelativeErrorDeaths":0.1731,
+"rmsRelativeErrorPcr":0.6196,
+"meanRelativeErrorDeaths":-4.9423e-2,
+"meanRelativeErrorPcr":-0.1916,
+"rSquaredDeaths":6.7032e-3,
+"rSquaredPcr":5.4442e-2,
 "deathResidual7Day":-1.9184,
 "pcrResidual7Day":-1.3912e2
 },
@@ -79,7 +79,7 @@
 "https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.2001.full.pdf"
 ]
 },
-"daysToLeaveHosptialNonCritical":{
+"daysToLeaveHospitalNonCritical":{
 "value":8,
 "name":"Days to leave the hospital in a non-critical case",
 "description":"The number of days it takes to leave the hospital if you are not a critical case",
@@ -193,7 +193,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":250,
+"value":200,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"

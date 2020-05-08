@@ -1,7 +1,7 @@
 {
 "parameterBest":{
-"r0natural":4.9604,
-"importtime":4.5725e1,
+"r0natural":4.9603,
+"importtime":4.5723e1,
 "stateAdjustmentForTestingDifferences":0.4734,
 "distpow":1.6510
 },
@@ -18,29 +18,29 @@
 "pPCRH":0.8137,
 "fractionOfCriticalDeceased":0.3634,
 "initialInfectionImpulse":1.4804e1,
-"r0":4.9604,
-"importtime":4.5725e1,
-"numberOfSimulations":250,
-"dateModelRun":"Wed 6 May 2020 15:25:28",
-"mostRecentDistancingDate":"Thu 30 Apr 2020",
+"r0":4.9603,
+"importtime":4.5723e1,
+"numberOfSimulations":200,
+"dateModelRun":"Fri 8 May 2020 12:57:29",
+"mostRecentDistancingDate":"Sat 2 May 2020",
 "stateAdjustmentForTestingDifferences":0.4734,
 "distpow":1.6510,
 "goodnessOfFitMetrics":{
-"chiSquared":3.2815e-4,
-"rmsRelativeError":2.2049,
-"rmsRelativeErrorDeaths":1.8800,
-"rmsRelativeErrorPcr":2.4775,
-"meanRelativeErrorDeaths":-1.0873,
-"meanRelativeErrorPcr":-1.2175,
-"rSquaredDeaths":1.4105e-2,
-"rSquaredPcr":3.7434e-2,
-"deathResidual7Day":-1.9122e1,
-"pcrResidual7Day":-9.9825e2
+"chiSquared":3.1665e-4,
+"rmsRelativeError":2.1638,
+"rmsRelativeErrorDeaths":1.8442,
+"rmsRelativeErrorPcr":2.4321,
+"meanRelativeErrorDeaths":-1.0453,
+"meanRelativeErrorPcr":-1.1745,
+"rSquaredDeaths":1.2234e-2,
+"rSquaredPcr":3.4286e-2,
+"deathResidual7Day":-1.9129e1,
+"pcrResidual7Day":-9.9858e2
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":4.9604,
+"value":4.9603,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -79,7 +79,7 @@
 "https:\/\/www.medrxiv.org\/content\/medrxiv\/early\/2020\/01\/28\/2020.01.26.2001.full.pdf"
 ]
 },
-"daysToLeaveHosptialNonCritical":{
+"daysToLeaveHospitalNonCritical":{
 "value":8,
 "name":"Days to leave the hospital in a non-critical case",
 "description":"The number of days it takes to leave the hospital if you are not a critical case",
@@ -141,7 +141,7 @@
 ]
 },
 "importtime":{
-"value":4.5725e1,
+"value":4.5723e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -193,7 +193,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":250,
+"value":200,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
