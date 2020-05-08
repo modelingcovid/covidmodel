@@ -29,7 +29,7 @@ export const LocationMenu = React.memo(function LocationMenu({
         children
       ) : (
         <span>
-          Location
+          Locations
           <DownArrow
             style={{
               whiteSpace: 'nowrap',
