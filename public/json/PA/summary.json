@@ -2,7 +2,7 @@
 "parameterBest":{
 "r0natural":4.8767,
 "importtime":5.0289e1,
-"stateAdjustmentForTestingDifferences":0.8356,
+"stateAdjustmentForTestingDifferences":0.7825,
 "distpow":2.2362
 },
 "population":12790505,
@@ -20,22 +20,22 @@
 "initialInfectionImpulse":1.5160e1,
 "r0":4.8767,
 "importtime":5.0289e1,
-"numberOfSimulations":100,
-"dateModelRun":"Thu 7 May 2020 23:17:57",
-"mostRecentDistancingDate":"Thu 30 Apr 2020",
-"stateAdjustmentForTestingDifferences":0.8356,
+"numberOfSimulations":200,
+"dateModelRun":"Fri 8 May 2020 12:26:35",
+"mostRecentDistancingDate":"Sat 2 May 2020",
+"stateAdjustmentForTestingDifferences":0.7825,
 "distpow":2.2362,
 "goodnessOfFitMetrics":{
-"chiSquared":2.7640e-4,
-"rmsRelativeError":2.8125,
-"rmsRelativeErrorDeaths":2.0318,
-"rmsRelativeErrorPcr":3.3348,
-"meanRelativeErrorDeaths":-1.2700,
-"meanRelativeErrorPcr":-1.9250,
-"rSquaredDeaths":7.7210e-2,
-"rSquaredPcr":0.1088,
+"chiSquared":2.2885e-4,
+"rmsRelativeError":2.6556,
+"rmsRelativeErrorDeaths":2.0099,
+"rmsRelativeErrorPcr":3.1013,
+"meanRelativeErrorDeaths":-1.2380,
+"meanRelativeErrorPcr":-1.7514,
+"rSquaredDeaths":7.7738e-2,
+"rSquaredPcr":7.1591e-2,
 "deathResidual7Day":-3.2831e1,
-"pcrResidual7Day":-4.1562e2
+"pcrResidual7Day":-3.9006e2
 },
 "backtest":"",
 "parameters":{
@@ -181,7 +181,7 @@
 "type":"literature"
 },
 "stateAdjustmentForTestingDifferences":{
-"value":0.8356,
+"value":0.7825,
 "name":"State adjustment for differences in PCR \/ death testing and reporting.",
 "description":"A parameter fit to adjust the time difference between PCR and fatality reporting on a state by state basis",
 "type":"fit"
@@ -193,7 +193,7 @@
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":200,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
