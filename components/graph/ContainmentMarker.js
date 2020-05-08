@@ -14,8 +14,9 @@ export function ContainmentMarker() {
       value={new Date(dateContained())}
       stroke={theme.color.magenta[0]}
       strokeDasharray="4,2"
-      label="Test and trace indefinitely"
-      labelDx={4}
+      label="Test and trace begins"
+      labelAnchor="end"
+      labelDx={-4}
       labelDy={16}
     />
   );
