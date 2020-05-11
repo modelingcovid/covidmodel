@@ -5,7 +5,23 @@
 	"maintain":true,
 	"name":"Open Gradual May 10",
 	"gradual":true,
-	"events":{},
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.2384544517771127e2,
+			"thresholdCrossed":0.7000000000000063
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.9025656514780948e2,
+			"thresholdCrossed":7.732503409980362e-5
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":1.9999815546304254e2,
+			"thresholdCrossed":7.005190594202073e-4
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":5.418997746850185e3,
 		"totalProjectedPCRConfirmed":8.110021157008062e4,
@@ -25,8 +41,8 @@
 		"fractionOfDeathsReported":0.8516541824138754,
 		"fractionOfHospitalizationsReported":0.8513874285488934,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Wed 8 Jul 2020 06:09:27",
+		"dateHospitalsOverCapacity":"Fri 17 Jul 2020 23:57:20"
 	},
 	"summaryAug1":{
 		"totalProjectedDeaths":6.652758925763214e2,
@@ -47,7 +63,7 @@
 		"fractionOfDeathsReported":0.8505700994485107,
 		"fractionOfHospitalizationsReported":0.8500142880127679,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
-		"dateHospitalsOverCapacity":""
+		"dateICUOverCapacity":"Wed 8 Jul 2020 06:09:27",
+		"dateHospitalsOverCapacity":"Fri 17 Jul 2020 23:57:20"
 	}
 }
