@@ -1,7 +1,7 @@
 {
 "parameterBest":{
-"r0natural":4.9603,
-"importtime":4.5723e1,
+"r0natural":4.9604,
+"importtime":4.5725e1,
 "stateAdjustmentForTestingDifferences":0.4734,
 "distpow":1.6510
 },
@@ -18,29 +18,29 @@
 "pPCRH":0.8137,
 "fractionOfCriticalDeceased":0.3634,
 "initialInfectionImpulse":1.4804e1,
-"r0":4.9603,
-"importtime":4.5723e1,
+"r0":4.9604,
+"importtime":4.5725e1,
 "numberOfSimulations":200,
-"dateModelRun":"Fri 8 May 2020 12:57:29",
+"dateModelRun":"Mon 11 May 2020 11:55:26",
 "mostRecentDistancingDate":"Sat 2 May 2020",
 "stateAdjustmentForTestingDifferences":0.4734,
 "distpow":1.6510,
 "goodnessOfFitMetrics":{
-"chiSquared":3.1665e-4,
-"rmsRelativeError":2.1638,
-"rmsRelativeErrorDeaths":1.8442,
-"rmsRelativeErrorPcr":2.4321,
-"meanRelativeErrorDeaths":-1.0453,
-"meanRelativeErrorPcr":-1.1745,
-"rSquaredDeaths":1.2234e-2,
-"rSquaredPcr":3.4286e-2,
-"deathResidual7Day":-1.9129e1,
-"pcrResidual7Day":-9.9858e2
+"chiSquared":3.0028e-4,
+"rmsRelativeError":2.1042,
+"rmsRelativeErrorDeaths":1.7925,
+"rmsRelativeErrorPcr":2.3663,
+"meanRelativeErrorDeaths":-0.9870,
+"meanRelativeErrorPcr":-1.1146,
+"rSquaredDeaths":1.0009e-2,
+"rSquaredPcr":3.0726e-2,
+"deathResidual7Day":-1.9122e1,
+"pcrResidual7Day":-9.9825e2
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":4.9603,
+"value":4.9604,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -141,7 +141,7 @@
 ]
 },
 "importtime":{
-"value":4.5723e1,
+"value":4.5725e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"

@@ -1,9 +1,9 @@
 {
 "parameterBest":{
-"r0natural":4.9207,
-"importtime":5.1648e1,
+"r0natural":4.9092,
+"importtime":5.1929e1,
 "stateAdjustmentForTestingDifferences":0.1542,
-"distpow":1.9308
+"distpow":1.9330
 },
 "population":3594478,
 "ventilators":688,
@@ -18,29 +18,29 @@
 "pPCRH":0.8270,
 "fractionOfCriticalDeceased":0.3884,
 "initialInfectionImpulse":1.3890e1,
-"r0":4.9207,
-"importtime":5.1648e1,
+"r0":4.9092,
+"importtime":5.1929e1,
 "numberOfSimulations":200,
-"dateModelRun":"Fri 8 May 2020 12:31:54",
+"dateModelRun":"Mon 11 May 2020 11:37:10",
 "mostRecentDistancingDate":"Sat 2 May 2020",
 "stateAdjustmentForTestingDifferences":0.1542,
-"distpow":1.9308,
+"distpow":1.9330,
 "goodnessOfFitMetrics":{
-"chiSquared":5.6498e-5,
-"rmsRelativeError":1.0232,
-"rmsRelativeErrorDeaths":1.1334,
-"rmsRelativeErrorPcr":0.9047,
-"meanRelativeErrorDeaths":-0.6700,
-"meanRelativeErrorPcr":-0.4252,
-"rSquaredDeaths":1.1811e-2,
-"rSquaredPcr":2.8353e-2,
-"deathResidual7Day":-8.4019,
-"pcrResidual7Day":-2.1583e2
+"chiSquared":5.3993e-5,
+"rmsRelativeError":0.8756,
+"rmsRelativeErrorDeaths":0.9682,
+"rmsRelativeErrorPcr":0.7761,
+"meanRelativeErrorDeaths":-0.5043,
+"meanRelativeErrorPcr":-0.3077,
+"rSquaredDeaths":2.2547e-2,
+"rSquaredPcr":3.8026e-2,
+"deathResidual7Day":-7.5051,
+"pcrResidual7Day":-1.9323e2
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":4.9207,
+"value":4.9092,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -141,7 +141,7 @@
 ]
 },
 "importtime":{
-"value":5.1648e1,
+"value":5.1929e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -187,7 +187,7 @@
 "type":"fit"
 },
 "distancePower":{
-"value":1.9308,
+"value":1.9330,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
