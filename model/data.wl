@@ -12,7 +12,7 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 (* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365 * 2;
 tmin0 = 1;
-may10=131; (* actually may 10 *)
+twoWeeksFromNow=today+14; (* actually may 10 *)
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
@@ -21,7 +21,7 @@ scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.2,"maint
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan", "gradual"->False|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal", "gradual"->False|>;
 scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite", "gradual"->False|>;
-scenario6=<|"id"->"scenario6","distancingDays"->may10-today,"maintain"->True,"name"->"Open May 10", "gradual"->False|>;
+scenario6=<|"id"->"scenario6","distancingDays"->twoWeeksFromNow-today,"maintain"->True,"name"->"Open May 10", "gradual"->False|>;
 scenario7=<|"id"->"scenario7","distancingDays"->60,"maintain"->True, "name"->"Open Gradual May 10", "gradual"->True|>;
 scenario8=<|"id"->"scenario8","distancingDays"->tmax0-today-1,"maintain"->False,"distancingLevel"->0.7, "name"->"relaxed restrictions", "gradual"->False|>;
 
@@ -436,7 +436,7 @@ usStateDistancingPrecompute = Module[{
     },
 
     distancingLevel = If[
-      scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
+      scenario["maintain"],Mean[distancing[[-3;;]]],scenario["distancingLevel"]];
 
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
@@ -447,9 +447,9 @@ usStateDistancingPrecompute = Module[{
       (* for any gap between the last day of data and today, fill in with the average of the last three days of data *)
       ConstantArray[Mean[distancing[[-3;;]]], today - IntegerPart[Max[dataDays]]],
       (* moving average going forward in the scenario *)
-      ConstantArray[distancingLevel, If[scenario["gradual"],may10-today,scenario["distancingDays"]]],
+      ConstantArray[distancingLevel, If[scenario["gradual"],twoWeeksFromNow-today,scenario["distancingDays"]]],
       (* gradual gets another array raising back to 1 *)
-      If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(may10-today)) Array[#&,scenario["distancingDays"]-(may10-today)]+distancingLevel,{}],
+      If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(twoWeeksFromNow-today)) Array[#&,scenario["distancingDays"]-(twoWeeksFromNow-today)]+distancingLevel,{}],
       (* post-policy distancing - constant at 1 *)
       ConstantArray[1.,
         totalDays - scenario["distancingDays"] - today]];
@@ -463,8 +463,8 @@ usStateDistancingPrecompute = Module[{
         ConstantArray[1., IntegerPart[Min[dataDays]]],
         smoothedDistancing,
         ConstantArray[Mean[smoothedDistancing[[-7;;]]], today - IntegerPart[Max[dataDays]]],
-        ConstantArray[distancingLevel, If[scenario["gradual"],may10-today,scenario["distancingDays"]]],
-        If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(may10-today)) Array[#&,scenario["distancingDays"]-(may10-today)]+distancingLevel,{}],
+        ConstantArray[distancingLevel, If[scenario["gradual"],twoWeeksFromNow-today,scenario["distancingDays"]]],
+        If[scenario["gradual"], (1-distancingLevel)/(scenario["distancingDays"]-(twoWeeksFromNow-today)) Array[#&,scenario["distancingDays"]-(twoWeeksFromNow-today)]+distancingLevel,{}],
         ConstantArray[1., totalDays - scenario["distancingDays"] - today]
     }];
 
@@ -479,7 +479,7 @@ usStateDistancingPrecompute = Module[{
     distancingFunction = Interpolation[
       Transpose[{
           fullDays,
-          smoothedFullDistancing}],
+          Flatten[Join[ConstantArray[1.,7-1],MovingAverage[fullDistancing, 7]]]}],
       InterpolationOrder->3];
 
     scenario["id"]-><|
