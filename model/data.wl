@@ -479,7 +479,7 @@ usStateDistancingPrecompute = Module[{
     distancingFunction = Interpolation[
       Transpose[{
           fullDays,
-          Flatten[Join[ConstantArray[1.,3-1],MovingAverage[fullDistancing, 3]]]}],
+          Flatten[Join[ConstantArray[1.,7-1],MovingAverage[fullDistancing, 7]]]}],
       InterpolationOrder->3];
 
     scenario["id"]-><|
