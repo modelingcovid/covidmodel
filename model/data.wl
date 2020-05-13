@@ -12,7 +12,7 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 (* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365 * 2;
 tmin0 = 1;
-twoWeeksFromNow=today+14; (* actually may 10 *)
+twoWeeksFromNow=today + 10; (* actually may 10 *)
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
@@ -436,7 +436,7 @@ usStateDistancingPrecompute = Module[{
     },
 
     distancingLevel = If[
-      scenario["maintain"],Mean[distancing[[-3;;]]],scenario["distancingLevel"]];
+      scenario["maintain"],Mean[distancing[[-7;;]]],scenario["distancingLevel"]];
 
     (* policy distancing filled with 1s to complete a full year *)
     fullDistancing = Join[
@@ -479,7 +479,7 @@ usStateDistancingPrecompute = Module[{
     distancingFunction = Interpolation[
       Transpose[{
           fullDays,
-          Flatten[Join[ConstantArray[1.,7-1],MovingAverage[fullDistancing, 7]]]}],
+          smoothedFullDistancing}],
       InterpolationOrder->3];
 
     scenario["id"]-><|

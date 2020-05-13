@@ -55,12 +55,14 @@ Column[{
               LogPlot[{
                   evaluateSolution[RepDeaq][Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
+                    Log[fitParams["testingShift"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
                   ][t],
                   evaluateSolution[PCR][
                     Log[fitParams["r0natural"]],
                     Log[fitParams["importtime"]],
+                    Log[fitParams["testingShift"]],
                     Log[fitParams["stateAdjustmentForTestingDifferences"]],
                     Log[fitParams["distpow"]]
                   ][t]},
