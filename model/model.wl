@@ -255,24 +255,24 @@ generateModelComponents[distancing_] := <|
       ESq'[t]==ISq[t] / daysUntilNotInfectious,
 
       (* Current reported positive hospital cases *)
-      RepCHHq'[t]==testingProbability[t] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHospitalNonCritical,
+      RepCHHq'[t]==testingProbability[t - testingShift] * pPCRH * IHq[t]/daysUntilHospitalized - RepCHHq[t]/daysToLeaveHospitalNonCritical,
       (* Current reported positive hospital critical cases *)
-      RepCHCq'[t]==testingProbability[t] * pPCRH * ICq[t]/daysUntilHospitalized - RepCHCq[t]/daysTogoToCriticalCare,
+      RepCHCq'[t]==testingProbability[t - testingShift] * pPCRH * ICq[t]/daysUntilHospitalized - RepCHCq[t]/daysTogoToCriticalCare,
       (* Currently reported in critical care *)
-      RepCCCq'[t]==testingProbability[t] * pPCRH * HCq[t]/daysTogoToCriticalCare - RepCCCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      RepCCCq'[t]==testingProbability[t - testingShift] * pPCRH * HCq[t]/daysTogoToCriticalCare - RepCCCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (*Cumulative reported positive hospital cases*)
-      RepHq'[t]== testingProbability[t] * pPCRH  * IHq[t] / daysUntilHospitalized,
+      RepHq'[t]== testingProbability[t - testingShift] * pPCRH  * IHq[t] / daysUntilHospitalized,
       (*Cumulative reported ICU cases*)
-      RepHCq'[t]== testingProbability[t] * pPCRH * ICq[t] / daysUntilHospitalized,
+      RepHCq'[t]== testingProbability[t - testingShift] * pPCRH * ICq[t] / daysUntilHospitalized,
       
       (*Cumulative PCR confirmations*)
-      PCR'[t] == testingProbability[t] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
+      PCR'[t] == testingProbability[t - testingShift] * pPCRNH * convergenceFunction[stateAdjustmentForTestingDifferences,t] * pS * Eq[t]/daysFromInfectedToInfectious + RepHq'[t] + RepHCq'[t],
 
       (* Cumulative PCR confirmed and reported deaths (both hospitalized and ICU) *)
-      RepDeaq'[t]==testingProbability[t] * pPCRH * Deaq'[t],
+      RepDeaq'[t]==testingProbability[t - testingShift] * pPCRH * Deaq'[t],
       (* Cumulative PCR confirmed and reported ICU deaths *)
-      RepDeaICUq'[t]==testingProbability[t] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
+      RepDeaICUq'[t]==testingProbability[t - testingShift] * fractionOfCriticalDeceased * CCq[t]/daysFromCriticalToRecoveredOrDeceased,
 
       (* Establishment *)
       est'[t]==0,
@@ -333,6 +333,7 @@ generateModelComponents[distancing_] := <|
     daysFromCriticalToRecoveredOrDeceased,
     fractionOfCriticalDeceased,
     importtime,
+    testingShift,
     importlength,
     initialInfectionImpulse,
     Table[susceptibilityValues[i],{i,1,susceptibilityBins}],
@@ -530,6 +531,7 @@ generateSimulations[numberOfSimulations_, fitParams_, standardErrors_, cutoff_, 
     RandomVariate[PosNormal[daysFromCriticalToRecoveredOrDeceased0,daysFromCriticalToRecoveredOrDeceased0*0.05]],
     RandomVariate[BetaMeanSig[fractionOfCriticalDeceased0,fractionOfCriticalDeceased0*0.02]],
     RandomVariate[PosNormal[fitParams["importtime"],0.05*fitParams["importtime"]]],
+    RandomVariate[PosNormal[fitParams["testingShift"],0.05*fitParams["testingShift"]]],
     importlength0,
     stateParams["params"]["initialInfectionImpulse"],
     susceptibilityValuesLogNormal[susceptibilityBins, RandomVariate[PosNormal[susceptibilityStdev0,susceptibilityStdev0*0.5]]],
@@ -599,6 +601,7 @@ evaluateScenario[state_, fitParams_, standardErrors_, stateParams_, scenario_, n
     daysFromCriticalToRecoveredOrDeceased0,
     stateParams["params"]["fractionOfCriticalDeceased"],
     fitParams["importtime"],
+    fitParams["testingShift"],
     importlength0,
     stateParams["params"]["initialInfectionImpulse"],
     susceptibilityValuesLogNormal[susceptibilityBins, susceptibilityStdev0],
@@ -668,35 +671,32 @@ gap between PCR and death *)
 (* In the future a proposal for how to fix this is to run a meta fit varying the bounds around reasonable ranges
 and starting with a different random seed, then pick the best one (the real one that didnt get stuck hopefully) *)
 fitStartingOverrides=<|
-  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->50,"tupper"->75,"replower"->0.52,"repupper"->0.6,"powlower"->2.6,"powupper"->2.9|>,
-  "CA"-><|"rlower"->3.1,"rupper"->4.5,"tlower"->35,"tupper"->48,"replower"->0.45,"repupper"->0.6,"powlower"->1.7,"powupper"->2.5|>,
-  "FL"-><|"rlower"->3.6,"rupper"->4.2,"tlower"->38,"tupper"->75,"replower"->1.1,"repupper"->1.25,"powlower"->1.8,"powupper"->2.5|>,
-  "PA"-><|"rlower"->4.8,"rupper"->5.3,"tlower"->45,"tupper"->50,"replower"->0.65,"repupper"->0.73,"powlower"->2.2,"powupper"->2.8|>,
-  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->49,"tupper"->55,"replower"->0.4,"repupper"->0.44,"powlower"->2.1,"powupper"->2.4|>,
-  "TX"-><|"rlower"->4,"rupper"->5,"tlower"->42,"tupper"->55.5,"replower"->0.9,"repupper"->1.1,"powlower"->2.5,"powupper"->2.8|>,
-  "WA"-><|"rlower"->2,"rupper"->3.5,"tlower"->10,"tupper"->15,"replower"->0.7,"repupper"->0.9,"powlower"->1.5,"powupper"->2.2|>,
-  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->57,"replower"->0.15,"repupper"->0.18,"powlower"->2.3,"powupper"->3|>,
-  "OH"-><|"rlower"->3.9,"rupper"->5,"tlower"->50,"tupper"->57,"replower"->0.25,"repupper"->0.4,"powlower"->2.9,"powupper"->3.5|>,
-  "NY"-><|"rlower"->4.8,"rupper"->5,"tlower"->30,"tupper"->45,"replower"->0.4,"repupper"->0.7,"powlower"->1.7,"powupper"->2|>,
-  "VA"-><|"rlower"->3.7,"rupper"->4.2,"tlower"->35,"tupper"->52.5,"replower"->0.55,"repupper"->0.65,"powlower"->1.6,"powupper"->2|>,
-  "VT"-><|"rlower"->3,"rupper"->4.5,"tlower"->35,"tupper"->75,"replower"->0.7,"repupper"->0.85,"powlower"->2,"powupper"->2.5|>,
-  "LA"-><|"rlower"->4.1,"rupper"->5,"tlower"->41.5,"tupper"->50,"replower"->0.25,"repupper"->0.4,"powlower"->3.1,"powupper"->3.4|>,
-  "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"replower"->0.1,"repupper"->0.24,"powlower"->1.9,"powupper"->2.3|>,
-  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->48,"tupper"->55,"replower"->0.53,"repupper"->0.59,"powlower"->2.5,"powupper"->3.1|>,
-  "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->44,"tupper"-> 53,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2.5|>,
-  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->48,"tupper"->59,"replower"->0.25,"repupper"->0.3,"powlower"->2,"powupper"->2.5|>,
-  "GA"-><|"rlower"->3.3,"rupper"->4,"tlower"->39,"tupper"->41.5,"replower"->0.55,"repupper"->0.65,"powlower"->1.9,"powupper"->2.3|>,
-  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->40,"tupper"->48,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->2|>,
-  "IL"-><|"rlower"->4.9,"rupper"->5,"tlower"->45,"tupper"->75,"replower"->0.4,"repupper"->0.55,"powlower"->2.2,"powupper"->3.2|>,
-  "IN"-><|"rlower"->4,"rupper"->5,"tlower"->50,"tupper"->55,"replower"->0.2,"repupper"->0.5,"powlower"->2.9,"powupper"->3.5|>,
-  "OK"-><|"rlower"->3.2,"rupper"->5,"tlower"->45,"tupper"->49,"replower"->0.3,"repupper"->0.4,"powlower"->2.9,"powupper"->3.5|>,
-  "WI"-><|"rlower"->3.4,"rupper"->4.3,"tlower"->48,"tupper"->51,"replower"->0.54,"repupper"->0.6,"powlower"->2.3,"powupper"->2.7|>,
-  "NV"-><|"rlower"->3.6,"rupper"->4.3,"tlower"->50,"tupper"->75,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->2.5|>,
-  "OR"-><|"rlower"->2.8,"rupper"->4,"tlower"->35,"tupper"->55,"replower"->0.8,"repupper"->0.97,"powlower"->1.8,"powupper"->2.6|>,
-  "SC"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->55,"replower"->0.65,"repupper"->1,"powlower"->2.9,"powupper"->3.3|>(*,
-  "Spain"-><|"rlower"\[Rule]4,"rupper"\[Rule]5,"tlower"\[Rule]20,"tupper"->75,"replower"->0.3,"repupper"\[Rule]0.35,"powlower"->1,"powupper"\[Rule]1.25|>,
-  "France"-><|"rlower"->2.8,"rupper"->4.6,"tlower"\[Rule]25,"tupper"->75,"replower"->0.2,"repupper"->0.7,"powlower"->1,"powupper"->2.5|>,
-  "Italy"-><|"rlower"\[Rule]3.5,"rupper"\[Rule]5,"tlower"\[Rule]10,"tupper"\[Rule]15,"replower"->0.2,"repupper"->0.4,"powlower"->1,"powupper"\[Rule]1.25|>*)
+  "AZ"-><|"rlower"->3,"rupper"->5,"tlower"->50,"tupper"->58,"testLower"->0,"testUpper"->30,"replower"->0.52,"repupper"->0.6,"powlower"->2.4,"powupper"->3|>,
+  "CA"-><|"rlower"->3.1,"rupper"->5,"tlower"->35,"tupper"->48,"testLower"->0,"testUpper"->30,"replower"->0.53,"repupper"->0.6,"powlower"->1.7,"powupper"->3|>,
+  "FL"-><|"rlower"->3.6,"rupper"->5,"tlower"->38,"tupper"->54,"testLower"->5,"testUpper"->30,"replower"->1.1,"repupper"->1.15,"powlower"->1.8,"powupper"->3|>,
+  "PA"-><|"rlower"->4.8,"rupper"->6,"tlower"->50,"tupper"->75,"testLower"->3,"testUpper"->30,"replower"->0.8,"repupper"->0.85,"powlower"->2.4,"powupper"->3|>,
+  "CO"-><|"rlower"->3.3,"rupper"->5,"tlower"->49,"tupper"->55,"testLower"->0,"testUpper"->30,"replower"->0.4,"repupper"->0.6,"powlower"->1.8,"powupper"->3|>,
+  "TX"-><|"rlower"->4,"rupper"->5,"tlower"->42,"tupper"->55.5,"testLower"->10,"testUpper"->30,"replower"->1.12,"repupper"->1.3,"powlower"->2.5,"powupper"->3|>,
+  "WA"-><|"rlower"->2,"rupper"->5,"tlower"->10,"tupper"->15,"testLower"->0,"testUpper"->5,"replower"->0.7,"repupper"->0.9,"powlower"->1.5,"powupper"->3|>,
+  "CT"-><|"rlower"->4.8,"rupper"->5,"tlower"->45,"tupper"->50,"testLower"->6,"testUpper"->30,"replower"->0.15,"repupper"->0.18,"powlower"->2.2,"powupper"->3|>,
+  "OH"-><|"rlower"->3.9,"rupper"->5,"tlower"->54,"tupper"->57,"testLower"->0,"testUpper"->30,"replower"->0.25,"repupper"->0.4,"powlower"->2.4,"powupper"->3|>,
+  "NY"-><|"rlower"->4.8,"rupper"->5,"tlower"->30,"tupper"->45,"testLower"->0,"testUpper"->30,"replower"->0.4,"repupper"->0.7,"powlower"->1.7,"powupper"->3|>,
+  "VA"-><|"rlower"->3.7,"rupper"->5,"tlower"->35,"tupper"->52.5,"testLower"->4,"testUpper"->30,"replower"->0.55,"repupper"->0.65,"powlower"->2,"powupper"->3|>,
+  "VT"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->75,"testLower"->0,"testUpper"->30,"replower"->0.7,"repupper"->0.85,"powlower"->2,"powupper"->3|>,
+  "LA"-><|"rlower"->4.1,"rupper"->5,"tlower"->41.5,"tupper"->50,"testLower"->8,"testUpper"->30,"replower"->0.25,"repupper"->0.4,"powlower"->2.4,"powupper"->4|>,
+  "MI"-><|"rlower"->3.5,"rupper"->5,"tlower"->35,"tupper"->45,"testLower"->0,"testUpper"->30,"replower"->0.1,"repupper"->0.24,"powlower"->1.9,"powupper"->3|>,
+  "MS"-><|"rlower"->2.7,"rupper"->5,"tlower"->45,"tupper"->55,"testLower"->0,"testUpper"->30,"replower"->0.5,"repupper"->0.6,"powlower"->2.5,"powupper"->4|>,
+  "MA"-><| "rlower"->4.3,"rupper"->5,"tlower"->44,"tupper"-> 53,"testLower"->6,"testUpper"->30,"replower"->0.3,"repupper"->0.5,"powlower"->1.5,"powupper"->3|>,
+  "MD"-><|"rlower"->4.5,"rupper"->5,"tlower"->55,"tupper"->59,"testLower"->0,"testUpper"->30,"replower"->0.25,"repupper"->0.3,"powlower"->2.2,"powupper"->3|>,
+  "GA"-><|"rlower"->3.3,"rupper"->5,"tlower"->39,"tupper"->41.5,"testLower"->0,"testUpper"->30,"replower"->0.55,"repupper"->0.65,"powlower"->1.9,"powupper"->3|>,
+  "NJ"-><|"rlower"->4.8,"rupper"->5,"tlower"->40,"tupper"->48,"testLower"->0,"testUpper"->30,"replower"->0.4,"repupper"->0.6,"powlower"->1.5,"powupper"->3|>,
+  "IL"-><|"rlower"->4.7,"rupper"->5,"tlower"->48,"tupper"->52,"testLower"->0,"testUpper"->30,"replower"->0.4,"repupper"->0.55,"powlower"->2,"powupper"->3|>,
+  "IN"-><|"rlower"->4.3,"rupper"->5,"tlower"->35,"tupper"->62,"testLower"->0,"testUpper"->30,"replower"->0.2,"repupper"->0.25,"powlower"->2.5,"powupper"->3|>,
+  "OK"-><|"rlower"->3.2,"rupper"->5,"tlower"->35,"tupper"->58,"testLower"->0,"testUpper"->30,"replower"->0.3,"repupper"->0.4,"powlower"->2.6,"powupper"->4|>,
+  "WI"-><|"rlower"->3.4,"rupper"->5,"tlower"->48,"tupper"->51,"testLower"->0,"testUpper"->30,"replower"->0.53,"repupper"->0.6,"powlower"->2.3,"powupper"->3|>,
+  "NV"-><|"rlower"->3.6,"rupper"->5,"tlower"->50,"tupper"->75,"testLower"->8,"testUpper"->30,"replower"->0.55,"repupper"->0.65,"powlower"->1.8,"powupper"->3|>,
+  "OR"-><|"rlower"->2.8,"rupper"->5,"tlower"->35,"tupper"->55,"testLower"->0,"testUpper"->30,"replower"->0.83,"repupper"->0.97,"powlower"->1.8,"powupper"->3|>,
+  "SC"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->55,"testLower"->0,"testUpper"->30,"replower"->0.65,"repupper"->1,"powlower"->2.7,"powupper"->3|>
 |>;
 
 (* A helper to extract the bounds specified above for the fitting algorithm *)
@@ -707,12 +707,14 @@ getBounds[state_]:=Module[{},
       fitStartingOverrides[state]["rupper"],
       fitStartingOverrides[state]["tlower"],
       fitStartingOverrides[state]["tupper"],
+      fitStartingOverrides[state]["testLower"],
+      fitStartingOverrides[state]["testUpper"],
       fitStartingOverrides[state]["replower"],
       fitStartingOverrides[state]["repupper"],
       fitStartingOverrides[state]["powlower"],
       fitStartingOverrides[state]["powupper"]
     },
-    {2.5,5,35,75,0.1,2,1,2}]
+    {2.5,5,35,75,0,30,0.1,2,1,2}]
 ];
 
 
@@ -756,6 +758,8 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
     rlower,
     rupper,
     tlower,
+    testLower,
+    testUpper,
     tupper,
     replower,
     repupper,
@@ -784,13 +788,13 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
   icuCumulativeData = stateICUCumulativeActualsData[state];
 
   (* log transform the equations for an easier time fitting (per recommendation from Wolfram) *)
-  logTransform = Thread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logStateAdjustmentForTestingDifferences,logDistpow}]];
+  logTransform = Thread[{r0natural,importtime,testingShift,stateAdjustmentForTestingDifferences,distpow}->Exp[{logR0Natural,logImportTime,logTestingShift,logStateAdjustmentForTestingDifferences,logDistpow}]];
   equationsODE = modelComponents["equationsODE"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   eventsODE = modelComponents["parametricFitEvents"]/.modelComponents["replaceKnownParameters"][state]/.logTransform;
   initialConditions = modelComponents["initialConditions"];
   dependentVariablesODE = modelComponents["dependentVariables"];
   discreteVariablesODE = modelComponents["discreteVariables"];
-  parameters = {logR0Natural, logImportTime, logStateAdjustmentForTestingDifferences, logDistpow};
+  parameters = {logR0Natural, logImportTime, logTestingShift, logStateAdjustmentForTestingDifferences, logDistpow};
 
   (* TODO we should move this ParametricNDSolve and NonlinearModelFit into a separate "model fit" function *)
   (* generate parametric solutions to the equations that can be used for the fitting to reported fatalities and PCR confirmed cases *)
@@ -807,7 +811,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
   evaluateSolution[f_]:=f/.parametricSolution;
 
   (* get the bounds of the parameters to avoid local minima *)
-  {rlower, rupper, tlower, tupper, replower, repupper, powlower, powupper}=getBounds[state];
+  {rlower, rupper, tlower, tupper, testLower, testUpper, replower, repupper, powlower, powupper}=getBounds[state];
   
   (* get the fatality and PCR data for this state *)
   thisStateData=Select[parsedData,(#["state"]==state&&#["positive"]>50)&];
@@ -819,9 +823,9 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
     ],#[[3]]>0&&#[[2]]<today-backtestMask&];
 
   (* generate the model to fit using the parametric equations and the indicator variables *)
-  model[r0natural_,importtime_,stateAdjustmentForTestingDifferences_,distpow_,c_][t_]:=Piecewise[{
-      {evaluateSolution[RepDeaq][r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t],c==1},
-      {evaluateSolution[PCR][r0natural,importtime,stateAdjustmentForTestingDifferences, distpow][t] ,c==2}
+  model[r0natural_,importtime_,testingShift_,stateAdjustmentForTestingDifferences_,distpow_,c_][t_]:=Piecewise[{
+      {evaluateSolution[RepDeaq][r0natural,importtime,testingShift,stateAdjustmentForTestingDifferences, distpow][t],c==1},
+      {evaluateSolution[PCR][r0natural,importtime,testingShift,stateAdjustmentForTestingDifferences, distpow][t],c==2}
   }];
 
   (* Weight death and PCR test data appropriatly. Factors include: *)
@@ -832,7 +836,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
     weekOverWeekWeight[factor_]:=Map[(factor^((today-#[[2]])/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[.1] * boostDeathWeight[75]
+    poissonWeight * weekOverWeekWeight[0.3] * boostDeathWeight[10] 
   ];
 
   (* run the fitting algorithm to the non-linear equations *)
@@ -842,15 +846,17 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
   fit=NonlinearModelFit[
       longData,
       {
-        model[r0natural,importtime,stateAdjustmentForTestingDifferences,distpow,c][t],
+        model[r0natural,importtime,testingShift,stateAdjustmentForTestingDifferences,distpow,c][t],
         Log[rlower]<=r0natural<=Log[rupper],
         Log[tlower]<=importtime<=Log[tupper],
+        Log[testLower]<=testingShift<=Log[testUpper],
         Log[powlower]<=distpow<= Log[powupper],
         Log[replower]<= stateAdjustmentForTestingDifferences<=Log[repupper]
       },
       {
         {r0natural,Log[(rlower+rupper)/2]},
         {importtime,Log[(tlower+tupper)/2]},
+        {testingShift,Log[(testLower+testUpper)/2]},
         {stateAdjustmentForTestingDifferences,Log[(replower+repupper)/2]},
         {distpow, 1.8}
       },{c,t},
@@ -863,7 +869,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
   (* quiet because of constraint boundary warning -- we have constraints so as to prevent certain local minima from happening
 	in the SimulatedAnnealing global search, but intentionally choose vallues of the constraint boundary so that the fit is unlikely to run into the boundary
 	and thus we feel okay about using the variance estimates *)
-  standardErrors=Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,stateAdjustmentForTestingDifferences,distpow},
+  standardErrors=Quiet[Exp[#]&/@KeyMap[ToString[#]&, AssociationThread[{r0natural,importtime,testingShift,stateAdjustmentForTestingDifferences,distpow},
           fit["ParameterErrors", ConfidenceLevel->0.97]]], {FittedModel::constr}];
   (* once we have the fit use the residuals to evaluate some goodness of fit metrics *)
   gofMetrics=goodnessOfFitMetrics[fit["FitResiduals"],longData,params["population"]];
@@ -893,6 +899,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
       KeyDrop[stateParams[state],{"R0","importtime0"}],
       "r0"->fitParams["r0natural"],
       "importtime"->fitParams["importtime"],
+      "testingShift"->fitParams["testingShift"],
       "numberOfSimulations"->numberOfSimulations,
       "dateModelRun"->DateString[Now],
       "mostRecentDistancingDate"->mostRecentDistancingDay,
