@@ -5,7 +5,13 @@
 	"maintain":false,
 	"name":"relaxed restrictions",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"icu":{
+			"eventName":"icu",
+			"day":8.595011549174873e1,
+			"thresholdCrossed":1.1139308684042576e-4
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":1.1917822843874283e4,
 		"totalProjectedPCRConfirmed":1.3921715255082992e5,
@@ -25,7 +31,7 @@
 		"fractionOfDeathsReported":0.8224412942036645,
 		"fractionOfHospitalizationsReported":0.8137116939046449,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Wed 25 Mar 2020 22:48:09",
 		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
@@ -47,7 +53,7 @@
 		"fractionOfDeathsReported":0.8203656497903689,
 		"fractionOfHospitalizationsReported":0.8087728439928342,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Wed 25 Mar 2020 22:48:09",
 		"dateHospitalsOverCapacity":""
 	}
 }

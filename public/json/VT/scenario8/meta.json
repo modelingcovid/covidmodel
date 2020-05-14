@@ -5,7 +5,13 @@
 	"maintain":false,
 	"name":"relaxed restrictions",
 	"gradual":false,
-	"events":{},
+	"events":{
+		"icu":{
+			"eventName":"icu",
+			"day":3.618095047071737e2,
+			"thresholdCrossed":7.732503409985977e-5
+		}
+	},
 	"summary":{
 		"totalProjectedDeaths":1.077549579616888e3,
 		"totalProjectedPCRConfirmed":1.589992473676748e4,
@@ -25,7 +31,7 @@
 		"fractionOfDeathsReported":0.8512182606561746,
 		"fractionOfHospitalizationsReported":0.8500498270709428,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Sat 26 Dec 2020 19:25:41",
 		"dateHospitalsOverCapacity":""
 	},
 	"summaryAug1":{
@@ -47,7 +53,7 @@
 		"fractionOfDeathsReported":0.8465097267562244,
 		"fractionOfHospitalizationsReported":0.8369122370666706,
 		"dateContained":"",
-		"dateICUOverCapacity":"",
+		"dateICUOverCapacity":"Sat 26 Dec 2020 19:25:41",
 		"dateHospitalsOverCapacity":""
 	}
 }

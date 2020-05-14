@@ -12,7 +12,8 @@ dataFile[name_] := $UserDocumentsDirectory <> "/Github/covidmodel/model/data/" <
 (* model predict max/min 1 is Jan 1st 2020 *)
 tmax0 = 365 * 2;
 tmin0 = 1;
-twoWeeksFromNow=today + 10; (* actually may 10 *)
+twoWeeksFromNow=today + 14; (* actually may 10 *)
+twoWeeksFromNowQuantity=Today+Quantity[14,"days"];
 
 (* define scenario associations, days is required, level is optional if you maintain, need to flag maintain *)
 (* maintain takes the last day of data from the historicals and uses that as the distancing level *)
@@ -21,8 +22,8 @@ scenario2=<|"id"->"scenario2","distancingDays"->90,"distancingLevel"->0.2,"maint
 scenario3=<|"id"->"scenario3","distancingDays"->60,"distancingLevel"->0.11,"maintain"->False,"name"->"Wuhan", "gradual"->False|>;
 scenario4=<|"id"->"scenario4","distancingDays"->90,"distancingLevel"->1,"maintain"->False,"name"->"Normal", "gradual"->False|>;
 scenario5=<|"id"->"scenario5","distancingDays"->tmax0-today-1,"maintain"->True,"name"->"Current Indefinite", "gradual"->False|>;
-scenario6=<|"id"->"scenario6","distancingDays"->twoWeeksFromNow-today,"maintain"->True,"name"->"Open May 10", "gradual"->False|>;
-scenario7=<|"id"->"scenario7","distancingDays"->60,"maintain"->True, "name"->"Open Gradual May 10", "gradual"->True|>;
+scenario6=<|"id"->"scenario6","distancingDays"->twoWeeksFromNow-today,"maintain"->True,"name"->"Open "<>DateString[twoWeeksFromNowQuantity,{"MonthName"," ","Day"}], "gradual"->False|>;
+scenario7=<|"id"->"scenario7","distancingDays"->60,"maintain"->True, "name"->"Open Gradual "<>DateString[twoWeeksFromNowQuantity,{"MonthName"," ","Day"}], "gradual"->True|>;
 scenario8=<|"id"->"scenario8","distancingDays"->tmax0-today-1,"maintain"->False,"distancingLevel"->0.7, "name"->"relaxed restrictions", "gradual"->False|>;
 
 scenarios={scenario5,scenario1,scenario2,scenario3,scenario4,scenario6,scenario7,scenario8};

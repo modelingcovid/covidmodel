@@ -301,7 +301,7 @@ generateModelComponents[distancing_] := <|
     WhenEvent[t>importtime+importlength, est[t]->0],
     (* test and trace becomes viable event when the rate of new infections falls below the threshold *)
     WhenEvent[
-      cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5,
+      cumEq'[t] - testTraceNewCaseThreshold0 == 0 && t > today && testAndTrace == 1 && cumEq[t]<=0.5 && t<365,
       {testAndTraceDelayCounter[t]->0.01, Sow[{t, cumEq[t]}, "containment"], "RemoveEvent"},
       DetectionMethod->"Sign", LocationMethod->"StepEnd", IntegrateEvent->False],
     WhenEvent[CCq[t]>=icuBeds*If[distancing[t]<0.7,0.7,0.7], Sow[{t,CCq[t]},"icu"]],(*ICU Capacity overshot*)
@@ -460,7 +460,7 @@ integrateModel[state_, scenarioId_, simulationParameters_]:=Module[{
   |>];
   outputSolution = Join[outputSolution, <|
       rt->reinterpolate[If[
-          # > simulationParameters[[11]]+1 && outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]] > 0,
+          # > simulationParameters[[14]]+1 && outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]] > 0,
           -outputSolution[Sq]'[#] / (
             outputSolution[Sq][#] * (outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]])),
           simulationParameters[[1]]]&]
@@ -505,7 +505,7 @@ integrateModelSim[parameterizedSolution_, outputODE_, simulationParameters_]:=Mo
   |>];
   outputSolution = Join[outputSolution, <|
       rt->reinterpolate[If[
-          # > simulationParameters[[11]]+1 && outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]] > 0,
+          # > simulationParameters[[14]]+1 && outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]] > 0,
           -outputSolution[Sq]'[#] / (
             outputSolution[Sq][#] * (outputSolution[ISq][#]/simulationParameters[[2]] + (outputSolution[IHq][#] + outputSolution[ICq][#])/simulationParameters[[3]])),
           simulationParameters[[1]]]&]
