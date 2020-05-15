@@ -135,7 +135,7 @@ export function BigPicture({location}) {
 
   const withDistancing = useCreateModelState({
     locationId: location.id,
-    scenarioId: 'scenario2',
+    scenarioId: 'scenario3',
   });
   const withoutDistancing = useCreateModelState({
     locationId: location.id,
