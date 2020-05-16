@@ -1,10 +1,10 @@
 {
 "parameterBest":{
-"r0natural":3.4477,
-"importtime":5.6417e1,
+"r0natural":3.4471,
+"importtime":5.6420e1,
 "testingShift":0.9647,
 "stateAdjustmentForTestingDifferences":0.8291,
-"distpow":2.0228
+"distpow":2.0230
 },
 "population":624636,
 "ventilators":90,
@@ -19,30 +19,30 @@
 "pPCRH":0.8518,
 "fractionOfCriticalDeceased":0.4012,
 "initialInfectionImpulse":1.2140e1,
-"r0":3.4477,
-"importtime":5.6417e1,
+"r0":3.4471,
+"importtime":5.6420e1,
 "testingShift":0.9647,
-"numberOfSimulations":100,
-"dateModelRun":"Thu 14 May 2020 22:46:44",
-"mostRecentDistancingDate":"Thu 7 May 2020",
+"numberOfSimulations":150,
+"dateModelRun":"Sat 16 May 2020 22:41:04",
+"mostRecentDistancingDate":"Sat 9 May 2020",
 "stateAdjustmentForTestingDifferences":0.8291,
-"distpow":2.0228,
+"distpow":2.0230,
 "goodnessOfFitMetrics":{
-"chiSquared":8.5064e-6,
-"rmsRelativeError":0.2798,
-"rmsRelativeErrorDeaths":0.3013,
-"rmsRelativeErrorPcr":0.2570,
-"meanRelativeErrorDeaths":0.2147,
-"meanRelativeErrorPcr":-4.7574e-2,
-"rSquaredDeaths":9.6505e-2,
-"rSquaredPcr":4.4196e-2,
-"deathResidual7Day":3.1930,
-"pcrResidual7Day":-6.2440e1
+"chiSquared":8.2728e-6,
+"rmsRelativeError":0.2749,
+"rmsRelativeErrorDeaths":0.2967,
+"rmsRelativeErrorPcr":0.2517,
+"meanRelativeErrorDeaths":0.2053,
+"meanRelativeErrorPcr":-4.4807e-2,
+"rSquaredDeaths":9.4911e-2,
+"rSquaredPcr":4.3879e-2,
+"deathResidual7Day":3.1953,
+"pcrResidual7Day":-6.2270e1
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":3.4477,
+"value":3.4471,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -143,7 +143,7 @@
 ]
 },
 "importtime":{
-"value":5.6417e1,
+"value":5.6420e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -189,13 +189,13 @@
 "type":"fit"
 },
 "distancePower":{
-"value":2.0228,
+"value":2.0230,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
 },
 "numberOfSimulations":{
-"value":100,
+"value":150,
 "name":"Number of Monte Carlo simulations run",
 "description":"",
 "type":"set"
