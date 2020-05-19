@@ -11,7 +11,7 @@ If[!ValueQ[isDataImported], Import["model/data.wl"]];
 Import["model/gof-metrics.wl"];
 Import["model/plot-utils.wl"];
 
-statesToRun={"AZ", "CA", "FL", "PA", "CO", "TX", "WA", "CT", "OH", "NY", "VA", "VT", "LA", "MI", "MS", "MA", "MD", "GA", "NJ", "IL", "IN", "OK", "WI", "NV", "OR", "SC"};
+statesToRun={"AZ", "CA", "FL", "PA", "CO", "TX", "WA", "CT", "OH", "NY", "VA", "VT", "LA", "MI", "MS", "MA", "MD", "GA", "NJ", "IL", "IN", "OK", "WI", "NV", "OR", "SC", "ID", "UT","NM","ND","KY","WV","NH","RI","AL","NC","MN", "IA","AR","DE","MO","TN", "ID", "UT","NM","ND","KY","WV","NH","RI","AL","NC","MN", "IA","AR","DE","MO","TN"};
 
 
 (* Fixed parameters from the literature *)
@@ -717,7 +717,22 @@ fitStartingOverrides=<|
   "WI"-><|"rlower"->3.4,"rupper"->5,"tlower"->48,"tupper"->51,"testLower"->0,"testUpper"->15,"replower"->0.53,"repupper"->0.6,"powlower"->1.8,"powupper"->3|>,
   "NV"-><|"rlower"->3.6,"rupper"->5,"tlower"->50,"tupper"->75,"testLower"->8,"testUpper"->15,"replower"->0.6,"repupper"->0.7,"powlower"->1.8,"powupper"->3|>,
   "OR"-><|"rlower"->2.8,"rupper"->5,"tlower"->35,"tupper"->55,"testLower"->0,"testUpper"->15,"replower"->0.83,"repupper"->0.97,"powlower"->1.8,"powupper"->3|>,
-  "SC"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->55,"testLower"->6,"testUpper"->15,"replower"->0.8,"repupper"->0.9,"powlower"->2,"powupper"->4|>
+  "SC"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->55,"testLower"->6,"testUpper"->15,"replower"->0.8,"repupper"->0.9,"powlower"->2,"powupper"->4|>,
+  "UT"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->0,"testUpper"->15,"replower"->0.5,"repupper"->3,"powlower"->2,"powupper"->4|>,
+  "SD"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->70,"testLower"->0,"testUpper"->15,"replower"->0.5,"repupper"->2,"powlower"->2,"powupper"->4|>,
+  "ID"-><|"rlower"->3.3,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->0,"testUpper"->15,"replower"->0.5,"repupper"->2,"powlower"->2,"powupper"->4|>,
+  "KY"-><|"rlower"->2.5,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->10,"testUpper"->15,"replower"->0.5,"repupper"->1,"powlower"->1.6,"powupper"->3|>,
+  "NM"-><|"rlower"->3.5,"rupper"->5,"tlower"->55,"tupper"->60,"testLower"->10,"testUpper"->15,"replower"->0.5,"repupper"->1,"powlower"->1.6,"powupper"->3|>,
+  "NC"-><|"rlower"->2.6,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->4,"testUpper"->15,"replower"->0.5,"repupper"->1,"powlower"->1.5,"powupper"->3|>,
+  "NH"-><|"rlower"->2.4,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->0,"testUpper"->15,"replower"->0.5,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "WV"-><|"rlower"->2.4,"rupper"->5,"tlower"->55,"tupper"->70,"testLower"->0,"testUpper"->15,"replower"->0.5,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "AR"-><|"rlower"->2.4,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->0,"testUpper"->15,"replower"->1.5,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "MN"-><|"rlower"->2.4,"rupper"->5,"tlower"->50,"tupper"->60,"testLower"->0,"testUpper"->15,"replower"->0.5,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "MO"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->60,"testLower"->0,"testUpper"->15,"replower"->0.3,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "RI"-><|"rlower"->3,"rupper"->5,"tlower"->52,"tupper"->62,"testLower"->10,"testUpper"->15,"replower"->0.3,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "IA"-><|"rlower"->3,"rupper"->5,"tlower"->35,"tupper"->62,"testLower"->6,"testUpper"->15,"replower"->0.3,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "DE"-><|"rlower"->2.5,"rupper"->5,"tlower"->40,"tupper"->62,"testLower"->10,"testUpper"->25,"replower"->0.3,"repupper"->2,"powlower"->1.5,"powupper"->3|>,
+  "TN"-><|"rlower"->2.5,"rupper"->5,"tlower"->40,"tupper"->50,"testLower"->3,"testUpper"->15,"replower"->0.3,"repupper"->2.5,"powlower"->1.7,"powupper"->3|>
 |>;
 
 (* A helper to extract the bounds specified above for the fitting algorithm *)
@@ -735,7 +750,7 @@ getBounds[state_]:=Module[{},
       fitStartingOverrides[state]["powlower"],
       fitStartingOverrides[state]["powupper"]
     },
-    {2.5,5,35,75,0,30,0.1,2,1,2}]
+    {2.5,5,35,75,0,30,0.2,1.5,1.5,4}]
 ];
 
 
@@ -857,7 +872,7 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
     weekOverWeekWeight[factor_]:=Map[(factor^((today-#[[2]])/7))&,longData];
     poissonWeight:=Map[((params["population"]#[[3]])^-1)&,longData];
     boostDeathWeight[factor_]:=Map[If[First[#]==1,factor,1]&,longData];
-    poissonWeight * weekOverWeekWeight[0.3] * boostDeathWeight[10] 
+    poissonWeight * weekOverWeekWeight[0.3] * boostDeathWeight[80] 
   ];
 
   (* run the fitting algorithm to the non-linear equations *)

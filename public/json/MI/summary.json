@@ -1,10 +1,10 @@
 {
 "parameterBest":{
-"r0natural":4.1815,
-"importtime":4.1195e1,
-"testingShift":0.4883,
+"r0natural":4.1741,
+"importtime":4.1235e1,
+"testingShift":0.4882,
 "stateAdjustmentForTestingDifferences":0.2227,
-"distpow":2.1454
+"distpow":2.1461
 },
 "population":9925568,
 "ventilators":1847,
@@ -19,30 +19,30 @@
 "pPCRH":0.8112,
 "fractionOfCriticalDeceased":0.3706,
 "initialInfectionImpulse":1.4906e1,
-"r0":4.1815,
-"importtime":4.1195e1,
-"testingShift":0.4883,
+"r0":4.1741,
+"importtime":4.1235e1,
+"testingShift":0.4882,
 "numberOfSimulations":150,
-"dateModelRun":"Sat 16 May 2020 23:14:12",
+"dateModelRun":"Mon 18 May 2020 19:57:30",
 "mostRecentDistancingDate":"Sat 9 May 2020",
 "stateAdjustmentForTestingDifferences":0.2227,
-"distpow":2.1454,
+"distpow":2.1461,
 "goodnessOfFitMetrics":{
-"chiSquared":2.6232e-5,
-"rmsRelativeError":2.4649,
-"rmsRelativeErrorDeaths":3.6822,
-"rmsRelativeErrorPcr":0.3603,
-"meanRelativeErrorDeaths":-1.4927,
-"meanRelativeErrorPcr":0.1049,
-"rSquaredDeaths":2.2446e-2,
-"rSquaredPcr":1.9384e-2,
-"deathResidual7Day":-3.6919e1,
-"pcrResidual7Day":4.5604e1
+"chiSquared":2.0341e-5,
+"rmsRelativeError":2.3543,
+"rmsRelativeErrorDeaths":3.5064,
+"rmsRelativeErrorPcr":0.3517,
+"meanRelativeErrorDeaths":-1.3662,
+"meanRelativeErrorPcr":0.1212,
+"rSquaredDeaths":1.4742e-2,
+"rSquaredPcr":1.0707e-2,
+"deathResidual7Day":-3.6099e1,
+"pcrResidual7Day":4.5713e1
 },
 "backtest":"",
 "parameters":{
 "r0":{
-"value":4.1815,
+"value":4.1741,
 "name":"Basic reproduction number",
 "description":"The basic reproduction number.",
 "type":"fit",
@@ -143,7 +143,7 @@
 ]
 },
 "importtime":{
-"value":4.1195e1,
+"value":4.1235e1,
 "name":"Import Time",
 "description":"The day that COVID-19 was seeded into that state.",
 "type":"fit"
@@ -189,7 +189,7 @@
 "type":"fit"
 },
 "distancePower":{
-"value":2.1454,
+"value":2.1461,
 "name":"Power of the distancing function",
 "description":"Social distancing effect on reducing susceptibility has a larger effect when densities are higher (eg the original R0 is higher). So we fit a power of the distancing function.",
 "type":"fit"
