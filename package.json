@@ -7,6 +7,7 @@
   "dependencies": {
     "@mdx-js/loader": "^1.5.7",
     "@next/mdx": "^9.3.1",
+    "@prisma/client": "2.0.0-beta.5",
     "@vx/axis": "^0.0.195",
     "@vx/curve": "^0.0.195",
     "@vx/event": "^0.0.195",
@@ -49,9 +50,16 @@
     "dev": "NODE_OPTIONS=--max_old_space_size=8192 next",
     "build": "next build",
     "start": "next start",
-    "testdiff": "node tests/diffSummaries.js"
+    "testdiff": "node tests/diffSummaries.js",
+    "generate": "prisma generate --schema ./prisma/schema.prisma",
+    "migrate:save": "prisma migrate save --schema ./prisma/schema.prisma --experimental",
+    "migrate:up": "prisma migrate up --schema ./prisma/schema.prisma --experimental",
+    "studio": "prisma studio --schema ./prisma/schema.prisma --experimental"
   },
   "engines": {
     "node": "*"
+  },
+  "devDependencies": {
+    "@prisma/cli": "2.0.0-beta.5"
   }
 }
