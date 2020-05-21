@@ -939,22 +939,22 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
 ]
 
 
+baseUrlProd="https://modelingcovid.com";
+baseUrlLocal="http://localhost:3000";
+baseUrl=baseUrlProd;
+
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
 when running the web server *)
 GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask_:0] := Module[{days,createModelRunReq,modelRunInfo, allStatesData, loopBody},
   (* create a model run in the db *)
-   createModelRunReq = HTTPRequest["http://localhost:3000/api/modelRun", <|Method -> "POST", "ContentType" -> "application/json"|>]; 
+   createModelRunReq = HTTPRequest[baseUrl<>"/api/modelRun", <|Method -> "POST", "ContentType" -> "application/json"|>]; 
    modelRunInfo = ImportString[URLRead[createModelRunReq, "Body"],"RawJSON"];
 
-  loopBody[state_]:=Module[{stateData, createStateReq, createStateRes, stateJSON},
+  loopBody[state_]:=Module[{stateData, createStateReq, createStateRes, stateJSON,executeReq},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo, backtestMask];
-    Echo[stateData["r0"]];
-    Echo[modelRunInfo["id"]];
     Echo[modelRunInfo];
-    Echo[Keys[stateData["scenarios"]]];
-    Echo[Keys[stateData["scenarios"]["scenario1"]]];
     
     stateJSON=ExportString[
     <|
@@ -971,8 +971,11 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask
     |>
     , "RawJSON"];
     
-    createStateReq = HTTPRequest["http://localhost:3000/api/"<>state<>"/create", <|Method -> "PUT", "Body"-> stateJSON,"ContentType" -> "application/json"|>];
-    createStateRes = ImportString[URLRead[createStateReq,"Body"],"RawJSON"];
+    createStateReq = HTTPRequest[baseUrl<>"/api/"<>state<>"/create", <|Method -> "PUT", "Body"-> stateJSON,"ContentType" -> "application/json"|>,  TimeConstraint->10000000];
+    Echo[createStateReq];
+    executeReq=URLRead[createStateReq,"Body"];
+    Echo[executeReq];
+    createStateRes = ImportString[executeReq,"RawJSON"];
     Echo[createStateRes];
     
     If[backtestMask==0,Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios];
