@@ -114,6 +114,19 @@ exportTimeSeries[state_, scenario_, data_]:=Module[{timeData, fixedKeys, timeDat
 ];
 
 
+seriesArrayToObject[timeSeriesData_]:=Module[{timeData, fixedKeys, timeDataKeys, days, distancing, hospitalCapacity},
+  fixedKeys = {"day", "distancing", "hospitalCapacity"};
+  timeData = Select[timeSeriesData, #["day"]<=370&];
+  timeDataKeys = Keys[KeyDrop[timeData[[1]], fixedKeys]];
+  
+  distancing = #["distancing"]&/@timeSeriesData;
+  hospitalCapacity = #["hospitalCapacity"]&/@timeSeriesData;
+  
+  N[Merge[Flatten[{<|#->getSeriesForKey[timeSeriesData, #]|>&/@timeDataKeys,<|"distancing"->distancing|>,<|"hospitalCapacity"->hospitalCapacity|>}],First]]
+
+];
+
+
 evaluateStateAndPrint[state_, simulationsPerCombo_, backtestMask_]:=Module[{},
   Print["Fitting model for " <> state];
   evaluateState[state, simulationsPerCombo, backtestMask]
