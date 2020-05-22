@@ -1,6 +1,8 @@
 import {PrismaClient} from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  forceTransactions: true,
+});
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -111,7 +113,6 @@ export default async (req, res) => {
         data: {
           name: location,
           r0,
-          days,
           dateModelRun,
           icuBeds,
           importtime,
