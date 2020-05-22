@@ -26,7 +26,9 @@ export class ObjectDataSource extends DataSource {
     this.promises = {};
   }
 
+  // swap path for config object
   fetch(path) {
+    // switch on config object to return the data from the db
     return fetch(path).then((resp) => resp.json());
   }
 
