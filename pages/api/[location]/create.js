@@ -90,9 +90,6 @@ export default async (req, res) => {
             scenario.summary.fractionOfHospitalizationsReported,
           distancingDays: scenario.distancingDays,
           distancingLevel: scenario.distancingLevel,
-          //  series: {
-          //    connect: series.map((s) => ({id: s.id})),
-          //  },
         });
       });
 
