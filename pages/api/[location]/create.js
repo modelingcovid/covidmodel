@@ -26,6 +26,7 @@ export default async (req, res) => {
       population,
       r0,
       ventilators,
+      days,
       parameters,
       scenarios,
     } = req.body;
@@ -110,6 +111,7 @@ export default async (req, res) => {
         data: {
           name: location,
           r0,
+          days,
           dateModelRun,
           icuBeds,
           importtime,
