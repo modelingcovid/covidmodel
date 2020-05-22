@@ -46,3 +46,11 @@ export default async (req, res) => {
     res.status(500).json({error: e.toString()});
   }
 };
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1000mb',
+    },
+  },
+};
