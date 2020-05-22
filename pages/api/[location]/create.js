@@ -1,6 +1,8 @@
 import {PrismaClient} from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  forceTransactions: true,
+});
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -26,6 +28,7 @@ export default async (req, res) => {
       population,
       r0,
       ventilators,
+      days,
       parameters,
       scenarios,
     } = req.body;
