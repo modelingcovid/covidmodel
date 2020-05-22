@@ -952,12 +952,11 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask
    createModelRunReq = HTTPRequest[baseUrl<>"/api/modelRun", <|Method -> "POST", "ContentType" -> "application/json"|>]; 
    modelRunInfo = ImportString[URLRead[createModelRunReq, "Body"],"RawJSON"];
 
-  loopBody[state_]:=Module[{stateData, createStateReq, createStateRes, stateJSON,executeReq},
+  loopBody[state_]:=Module[{stateData, createStateReq, createStateRes, stateJSON,executeReq, registerScenarioSeries},
     stateData=evaluateStateAndPrint[state, simulationsPerCombo, backtestMask];
     Echo[modelRunInfo];
     
-    stateJSON=ExportString[
-    <|
+    stateJSON=ExportString[<|
       "modelRunId" -> modelRunInfo["id"],
       "r0"->stateData["r0"],
       "dateModelRun"->stateData["dateModelRun"],
@@ -967,16 +966,29 @@ GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask
       "population"->stateData["population"],
       "ventilators"->stateData["ventilators"],
       "parameters"->stateData["parameters"],
-      "scenarios"->Merge[<|#->Merge[{KeyDrop[stateData["scenarios"][#], {"summaryAug1", "timeSeriesData"}], <|"timeSeriesData"->seriesArrayToObject[stateData["scenarios"][#]["timeSeriesData"]]|>}, First]|>&/@Keys[stateData["scenarios"]],First]
-    |>
-    , "RawJSON"];
+      "scenarios"->Merge[<|#->KeyDrop[stateData["scenarios"][#], {"summaryAug1", "timeSeriesData"}]|>&/@Keys[stateData["scenarios"]],First]
+    |>, "RawJSON"];
     
-    createStateReq = HTTPRequest[baseUrl<>"/api/"<>state<>"/create", <|Method -> "PUT", "Body"-> stateJSON,"ContentType" -> "application/json"|>,  TimeConstraint->10000000];
+    createStateReq = HTTPRequest[baseUrl<>"/api/"<>state<>"/create", <|Method -> "PUT", "Body"-> stateJSON, "ContentType" -> "application/json"|>,  TimeConstraint->10000000];
     Echo[createStateReq];
     executeReq=URLRead[createStateReq,"Body"];
     Echo[executeReq];
     createStateRes = ImportString[executeReq,"RawJSON"];
-    Echo[createStateRes];
+    
+    registerScenarioSeries[scenario_]:=Module[{scenarioExecuteReq, rawJSON, runSeries},
+       rawJSON=seriesArrayToObject[stateData["scenarios"][scenario["name"]]["timeSeriesData"]];
+       
+       runSeries[key_, seriesData_]:=Module[{scenarioJSON, scenarioReq, scenarioRes},
+              scenarioJSON= ExportString[<|"timeSeriesData"-><|key->seriesData|>|>, "RawJSON", "Compact"->True];
+               scenarioReq = HTTPRequest[baseUrl<>"/api/"<>"CA"<>"/"<>ToString[scenario["id"]]<>"/series", <|Method -> "POST", "Body"-> scenarioJSON, "ContentType" -> "application/json"|>,  TimeConstraint->10000000];
+              scenarioRes = ImportString[URLRead[scenarioReq,"Body"],"RawJSON"];
+              Echo[scenarioRes];
+        ];
+
+      runSeries[#, data[#]]&/@Keys[rawJSON];
+    ];
+    
+    registerScenarioSeries[#]&/@createStateRes["scenarios"];
     
     If[backtestMask==0,Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios];
     

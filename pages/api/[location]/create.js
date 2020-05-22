@@ -56,21 +56,6 @@ export default async (req, res) => {
 
       await asyncForEach(Object.keys(scenarios), async (s) => {
         const scenario = scenarios[s];
-        let series = [];
-
-        await asyncForEach(
-          Object.keys(scenario.timeSeriesData),
-          async (timeSeries) => {
-            const tempSeries = await prisma.series.create({
-              data: {
-                name: timeSeries,
-                data: JSON.stringify(scenario.timeSeriesData[timeSeries]),
-              },
-            });
-
-            series.push(tempSeries);
-          }
-        );
 
         scenarioCreateArray.push({
           name: s,
@@ -105,9 +90,9 @@ export default async (req, res) => {
             scenario.summary.fractionOfHospitalizationsReported,
           distancingDays: scenario.distancingDays,
           distancingLevel: scenario.distancingLevel,
-          series: {
-            connect: series.map((s) => ({id: s.id})),
-          },
+          //  series: {
+          //    connect: series.map((s) => ({id: s.id})),
+          //  },
         });
       });
 
@@ -145,6 +130,9 @@ export default async (req, res) => {
           scenarios: {
             connect: scenariosCreated.map((s) => ({id: s.id})),
           },
+        },
+        include: {
+          scenarios: true,
         },
       });
 
