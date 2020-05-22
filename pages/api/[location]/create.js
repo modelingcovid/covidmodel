@@ -31,6 +31,7 @@ export default async (req, res) => {
       days,
       parameters,
       scenarios,
+      scenarioMeta,
     } = req.body;
 
     let parametersCreated = [];
@@ -57,11 +58,14 @@ export default async (req, res) => {
     try {
       const scenarioCreateArray = [];
 
+      console.log(scenarioMeta);
+
       await asyncForEach(Object.keys(scenarios), async (s) => {
         const scenario = scenarios[s];
 
         scenarioCreateArray.push({
           name: s,
+          displayName: scenarioMeta.find((m) => m.id === s).name,
           ...(scenario.events.containment && {
             dateContained: scenario.events.containment.day,
           }),
