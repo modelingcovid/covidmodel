@@ -8,6 +8,7 @@ export default async (req, res) => {
     res.status(500).end('No HTTP Method Supplied');
   } else if (method === 'POST') {
     const modelRun = await prisma.modelRun.create({data: {}});
+    console.log('modelRun', modelRun);
     prisma.disconnect();
     res.status(200).json(modelRun);
   } else if (method === 'PUT') {
