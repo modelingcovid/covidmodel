@@ -1,0 +1,79 @@
+datasource postgresql {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Series {
+  id         Int       @default(autoincrement()) @id
+  name       String
+  data       Json
+  scenario   Scenario? @relation(fields: [scenarioId], references: [id])
+  scenarioId Int?
+}
+
+model Scenario {
+  id                                     Int       @default(autoincrement()) @id
+  name                                   String
+  displayName                            String?
+  dateContained                          String?
+  dateHospitalsOverCapacity              String?
+  dateICUOverCapacity                    String?
+  totalInfectedFraction                  Float
+  fatalityRate                           Float
+  fatalityRateSymptomatic                Float
+  fatalityRatePCR                        Float
+  fractionOfSymptomaticHospitalized      Float
+  fractionOfSymptomaticHospitalizedOrICU Float
+  fractionOfPCRHospitalized              Float
+  fractionOfPCRHospitalizedOrICU         Float
+  fractionHospitalizedInICU              Float
+  fractionOfDeathInICU                   Float
+  fractionDeathOfHospitalizedOrICU       Float
+  fractionOfInfectionsPCRConfirmed       Float
+  fractionOfDeathsReported               Float
+  fractionOfHospitalizationsReported     Float
+  distancingDays                         Int
+  distancingLevel                        Float
+  series                                 Series[]
+  location                               Location? @relation(fields: [locationId], references: [id])
+  locationId                             Int?
+}
+
+model Parameter {
+  id          Int       @default(autoincrement()) @id
+  value       Float
+  name        String
+  description String
+  type        String
+  citations   String[]
+  location    Location? @relation(fields: [locationId], references: [id])
+  locationId  Int?
+}
+
+model ModelRun {
+  id         Int        @default(autoincrement()) @id
+  createdAt  DateTime   @default(now())
+  production Boolean    @default(false)
+  locations  Location[]
+}
+
+model Location {
+  id                       Int         @default(autoincrement()) @id
+  name                     String
+  dateModelRun             String
+  icuBeds                  Int
+  importtime               Float
+  mostRecentDistancingDate String
+  population               Int
+  r0                       Float
+  ventilators              Int
+  days                     Int[]
+  scenarios                Scenario[]
+  parameters               Parameter[]
+  modelRun                 ModelRun?   @relation(fields: [modelRunId], references: [id])
+  modelRunId               Int?
+}
