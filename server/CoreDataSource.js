@@ -11,6 +11,7 @@ const identity = (x) => x;
 export class CoreDataSource extends ObjectDataSource {
   defaultTtl = 3600;
 
+  // get rid of get
   _get(filepath, options) {
     const origin = this.context.origin;
     const url = `${origin}/json/${filepath}.json`;
@@ -21,6 +22,7 @@ export class CoreDataSource extends ObjectDataSource {
     return this._get(filepath);
   }
 
+  // switch these to config objects
   location(locationId) {
     return this._get(`${locationId}/summary`, {
       decorate: (data) => decorateLocationSummary(data, locationId),

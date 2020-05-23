@@ -1,0 +1,29 @@
+datasource postgresql {
+  url = "***"
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Series {
+  id         Int       @default(autoincrement()) @id
+  name       String
+  data       Json
+  Scenario   Scenario? @relation(fields: [scenarioId], references: [id])
+  scenarioId Int?
+}
+
+model Scenario {
+  id         Int       @default(autoincrement()) @id
+  series     Series[]
+  Location   Location? @relation(fields: [locationId], references: [id])
+  locationId Int?
+}
+
+model Location {
+  id        Int        @default(autoincrement()) @id
+  slug      String     @unique
+  scenarios Scenario[]
+}

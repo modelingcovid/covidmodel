@@ -939,17 +939,65 @@ evaluateState[state_, numberOfSimulations_:100, backtestMask_:0]:= Module[{
 ]
 
 
+baseUrlProd="https://modelingcovid.com";
+baseUrlLocal="http://localhost:3000";
+baseUrl=baseUrlProd;
+
 (* the main utility for generating fits / simulations for each state. pass a simulation count to the first
 argument and an array of two letter state code strings to the second *)
 (* this will write JSON out to the respective state files and the change can be previewd on localhost:3000
 when running the web server *)
-GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask_:0] := Module[{days},
-  loopBody[state_]:=Module[{stateData},
-    stateData=evaluateStateAndPrint[state, simulationsPerCombo, backtestMask];
-    If[backtestMask==0,Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios];
-    If[backtestMask==0,exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios];
-    days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
+GenerateModelExport[simulationsPerCombo_:1000, states_:statesToRun, backtestMask_:0] := Module[{days,createModelRunReq,modelRunInfo, allStatesData, loopBody},
+  (* create a model run in the db *)
+   createModelRunReq = HTTPRequest[baseUrl<>"/api/modelRun", <|Method -> "POST", "ContentType" -> "application/json"|>]; 
+   modelRunInfo = ImportString[URLRead[createModelRunReq, "Body"],"RawJSON"];
 
+  loopBody[state_]:=Module[{stateData, createStateReq, createStateRes, stateJSON,executeReq, registerScenarioSeries},
+    stateData=evaluateStateAndPrint[state, simulationsPerCombo, backtestMask];
+    Echo[modelRunInfo];
+    
+    stateJSON=ExportString[<|
+      "modelRunId" -> modelRunInfo["id"],
+      "r0"->stateData["r0"],
+      "dateModelRun"->stateData["dateModelRun"],
+      "icuBeds"->stateData["icuBeds"],
+      "importtime"->stateData["importtime"],
+      "mostRecentDistancingDate"->stateData["mostRecentDistancingDate"],
+      "population"->stateData["population"],
+      "ventilators"->stateData["ventilators"],
+      "parameters"->stateData["parameters"],
+      "scenarios"->Merge[<|#->KeyDrop[stateData["scenarios"][#], {"summaryAug1", "timeSeriesData"}]|>&/@Keys[stateData["scenarios"]],First]
+    |>, "RawJSON"];
+    
+    createStateReq = HTTPRequest[baseUrl<>"/api/"<>state<>"/create", <|Method -> "PUT", "Body"-> stateJSON, "ContentType" -> "application/json"|>,  TimeConstraint->10000000];
+    Echo[createStateReq];
+    executeReq=URLRead[createStateReq,"Body"];
+    Echo[executeReq];
+    createStateRes = ImportString[executeReq,"RawJSON"];
+    
+    registerScenarioSeries[scenario_]:=Module[{scenarioExecuteReq, rawJSON, runSeries, scenarioJSON, scenarioReq, scenarioRes},
+       rawJSON=seriesArrayToObject[stateData["scenarios"][scenario["name"]]["timeSeriesData"]];
+       
+       scenarioJSON= ExportString[<|"timeSeriesData"->seriesArrayToObject[stateData["scenarios"][scenario["name"]]["timeSeriesData"]]|>, "RawJSON", "Compact"->True];
+       scenarioReq = HTTPRequest[baseUrl<>"/api/"<>"CA"<>"/"<>ToString[scenario["id"]]<>"/series", <|Method -> "POST", "Body"-> scenarioJSON, "ContentType" -> "application/json"|>,  TimeConstraint->10000000];
+       scenarioRes = ImportString[URLRead[scenarioReq,"Body"],"RawJSON"];
+       
+      (* runSeries[key_, seriesData_]:=Module[{scenarioJSON, scenarioReq, scenarioRes},
+              scenarioJSON= ExportString[<|"timeSeriesData"\[Rule]<|key->seriesData|>|>, "RawJSON", "Compact"\[Rule]True];
+               scenarioReq = HTTPRequest[baseUrl<>"/api/"<>"CA"<>"/"<>ToString[scenario["id"]]<>"/series", <|Method -> "POST", "Body"-> scenarioJSON, "ContentType" -> "application/json"|>,  TimeConstraint->10000000];
+              scenarioRes = ImportString[URLRead[scenarioReq,"Body"],"RawJSON"];
+        ];
+
+      runSeries[#, data[#]]&/@Keys[rawJSON];*)
+    ];
+    
+    registerScenarioSeries[#]&/@createStateRes["scenarios"];
+    
+    If[backtestMask==0,Export["public/json/"<>state<>"/"<>#["id"]<>"/meta.json", KeyDrop[stateData["scenarios"][#["id"]], {"timeSeriesData"}]]&/@scenarios];
+    
+    If[backtestMask==0,exportTimeSeries[state, #, stateData["scenarios"][#["id"]]]&/@scenarios];
+    
+    days = #["day"]&/@stateData["scenarios"]["scenario1"]["timeSeriesData"];
     If[backtestMask==0,Export["public/json/"<>state<>"/days.json", Select[days, #<=370&]]];
     If[backtestMask==0,Export["public/json/"<>state<>"/summary.json",Merge[{
           KeyDrop[stateData, {"scenarios"}],
