@@ -58,23 +58,15 @@ export default async (req, res) => {
     try {
       const scenarioCreateArray = [];
 
-      console.log(scenarioMeta);
-
       await asyncForEach(Object.keys(scenarios), async (s) => {
         const scenario = scenarios[s];
 
         scenarioCreateArray.push({
           name: s,
           displayName: scenarioMeta.find((m) => m.id === s).name,
-          ...(scenario.events.containment && {
-            dateContained: scenario.events.containment.day,
-          }),
-          ...(scenario.events.hospital && {
-            dateHospitalsOverCapacity: scenario.events.hospital.day,
-          }),
-          ...(scenario.events.icu && {
-            dateICUOverCapacity: scenario.events.icu.day,
-          }),
+          dateContained: scenario.summary.dateContained,
+          dateHospitalsOverCapacity: scenario.summary.dateHospitalsOverCapacity,
+          dateICUOverCapacity: scenario.summary.dateICUOverCapacity,
           totalInfectedFraction: scenario.summary.totalInfectedFraction,
           fatalityRate: scenario.summary.fatalityRate,
           fatalityRateSymptomatic: scenario.summary.fatalityRateSymptomatic,
@@ -139,8 +131,6 @@ export default async (req, res) => {
           scenarios: true,
         },
       });
-
-      console.log('newLocation', newLocation);
 
       res.status(200).json(newLocation);
     } catch (e) {
