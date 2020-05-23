@@ -29,7 +29,7 @@ export const typeDefs = gql`
   type Scenario {
     id: ID!
     name: String!
-    dateContained: String!
+    dateContained: String
     dateHospitalsOverCapacity: String
     dateICUOverCapacity: String
     totalInfectedFraction: Float!

@@ -21,10 +21,14 @@ const series = (data) => {
 export const decorateLocationSummary = (data, locationId) => {
   data.id = locationId;
   data.name = stateLabels[locationId] || locationId;
+
+  return data;
 };
 
 export const decorateScenarioSummary = (data, locationId) => {
   data.locationId = locationId;
+
+  return data;
 };
 
 export const decorateSeries = (data) => {
