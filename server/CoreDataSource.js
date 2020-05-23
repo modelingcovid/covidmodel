@@ -1,10 +1,5 @@
 import dayjs from 'dayjs';
 import {PrismaClient} from '@prisma/client';
-
-const prisma = new PrismaClient({
-  forceTransactions: true,
-});
-
 import {
   decorateLocationSummary,
   decorateScenarioSummary,
@@ -12,6 +7,10 @@ import {
   decorateDistribution,
 } from './data';
 import {ObjectDataSource} from './util';
+
+const prisma = new PrismaClient({
+  forceTransactions: true,
+});
 
 const identity = (x) => x;
 
