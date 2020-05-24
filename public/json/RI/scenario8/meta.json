@@ -1,0 +1,64 @@
+{
+	"distancingLevel":0.7,
+	"id":"scenario8",
+	"distancingDays":590,
+	"maintain":false,
+	"name":"relaxed restrictions",
+	"gradual":false,
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.0146591274430452e2,
+			"thresholdCrossed":0.7000000000000001
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":1.1035915156340208e2,
+			"thresholdCrossed":1.6304687455616585e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":5.517015795753509e3,
+		"totalProjectedPCRConfirmed":7.893497194631718e4,
+		"totalProjectedInfected":4.82566369587438e5,
+		"totalInfectedFraction":0.4569160181599734,
+		"fatalityRate":1.1432657025955185e-2,
+		"fatalityRateSymptomatic":1.633236717993598e-2,
+		"fatalityRatePCR":6.98931748465759e-2,
+		"fractionOfSymptomaticHospitalized":6.356261920154044e-2,
+		"fractionOfSymptomaticHospitalizedOrICU":8.891230511840263e-2,
+		"fractionOfPCRHospitalized":0.22248431672733032,
+		"fractionOfPCRHospitalizedOrICU":0.3112142592833921,
+		"fractionHospitalizedInICU":0.2851088596016554,
+		"fractionOfDeathInICU":0.7434916218907249,
+		"fractionDeathOfHospitalizedOrICU":0.17127721490041387,
+		"fractionOfInfectionsPCRConfirmed":0.16357329669243487,
+		"fractionOfDeathsReported":0.8203180040888275,
+		"fractionOfHospitalizationsReported":0.8179221778596941,
+		"dateContained":"Tue 22 Dec 2020 03:25:53",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 08:37:10",
+		"dateHospitalsOverCapacity":""
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":4.415009466528115e3,
+		"totalProjectedPCRConfirmed":7.027979849322834e4,
+		"totalProjectedInfected":4.479640350159792e5,
+		"totalInfectedFraction":0.4241529374153559,
+		"fatalityRate":9.855723052344209e-3,
+		"fatalityRateSymptomatic":1.407960436049173e-2,
+		"fatalityRatePCR":6.282046279562845e-2,
+		"fractionOfSymptomaticHospitalized":5.9305062996202806e-2,
+		"fractionOfSymptomaticHospitalizedOrICU":8.295677431833527e-2,
+		"fractionOfPCRHospitalized":0.21627161126934788,
+		"fractionOfPCRHospitalizedOrICU":0.30252383761370877,
+		"fractionHospitalizedInICU":0.28510885960165544,
+		"fractionOfDeathInICU":0.7379481922784734,
+		"fractionDeathOfHospitalizedOrICU":0.17127721490041387,
+		"fractionOfInfectionsPCRConfirmed":0.15688714494841402,
+		"fractionOfDeathsReported":0.8199586631789249,
+		"fractionOfHospitalizationsReported":0.8173292924805646,
+		"dateContained":"Tue 22 Dec 2020 03:25:53",
+		"dateICUOverCapacity":"Sun 19 Apr 2020 08:37:10",
+		"dateHospitalsOverCapacity":""
+	}
+}

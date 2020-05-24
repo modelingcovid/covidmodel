@@ -1,0 +1,69 @@
+{
+	"distancingLevel":0.8133333333333334,
+	"id":"scenario1",
+	"distancingDays":90,
+	"maintain":true,
+	"name":"Current",
+	"gradual":false,
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.834325327879035e2,
+			"thresholdCrossed":0.7000000000002388
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.467280391850045e2,
+			"thresholdCrossed":1.26706388113734e-4
+		},
+		"hospital":{
+			"eventName":"hospital",
+			"day":2.6334439307524724e2,
+			"thresholdCrossed":1.2624845739521414e-3
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":9.909723158554136e3,
+		"totalProjectedPCRConfirmed":1.717275322391605e5,
+		"totalProjectedInfected":1.0614855135813314e6,
+		"totalInfectedFraction":0.6404618831473452,
+		"fatalityRate":9.335712105123184e-3,
+		"fatalityRateSymptomatic":1.3336731578747407e-2,
+		"fatalityRatePCR":5.7706082591072926e-2,
+		"fractionOfSymptomaticHospitalized":5.7926646347531786e-2,
+		"fractionOfSymptomaticHospitalizedOrICU":8.088145528045751e-2,
+		"fractionOfPCRHospitalized":0.19011357878862678,
+		"fractionOfPCRHospitalizedOrICU":0.26545059813660765,
+		"fractionHospitalizedInICU":0.2838080602448313,
+		"fractionOfDeathInICU":0.7456561627219148,
+		"fractionDeathOfHospitalizedOrICU":0.1709520150612078,
+		"fractionOfInfectionsPCRConfirmed":0.16178038234339284,
+		"fractionOfDeathsReported":0.7585824338973018,
+		"fractionOfHospitalizationsReported":0.7585121973689132,
+		"dateContained":"",
+		"dateICUOverCapacity":"Wed 2 Sep 2020 17:28:22",
+		"dateHospitalsOverCapacity":"Sat 19 Sep 2020 08:15:55"
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":3.590140953921279e2,
+		"totalProjectedPCRConfirmed":9.072827850221e3,
+		"totalProjectedInfected":5.779279610688917e4,
+		"totalInfectedFraction":3.487007835093999e-2,
+		"fatalityRate":6.212090772146111e-3,
+		"fatalityRateSymptomatic":8.874415388780161e-3,
+		"fatalityRatePCR":3.95702532131019e-2,
+		"fractionOfSymptomaticHospitalized":4.578376951932375e-2,
+		"fractionOfSymptomaticHospitalizedOrICU":6.39266752080106e-2,
+		"fractionOfPCRHospitalized":0.15439108077720393,
+		"fractionOfPCRHospitalizedOrICU":0.21557221215025513,
+		"fractionHospitalizedInICU":0.28380806024483146,
+		"fractionOfDeathInICU":0.7332075311853665,
+		"fractionDeathOfHospitalizedOrICU":0.17095201506120786,
+		"fractionOfInfectionsPCRConfirmed":0.15698890625469283,
+		"fractionOfDeathsReported":0.757778509146302,
+		"fractionOfHospitalizationsReported":0.7562782045490499,
+		"dateContained":"",
+		"dateICUOverCapacity":"Wed 2 Sep 2020 17:28:22",
+		"dateHospitalsOverCapacity":"Sat 19 Sep 2020 08:15:55"
+	}
+}

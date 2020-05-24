@@ -1,0 +1,64 @@
+{
+	"distancingLevel":0.8328571428571429,
+	"id":"scenario7",
+	"distancingDays":60,
+	"maintain":true,
+	"name":"Open Gradual June 02",
+	"gradual":true,
+	"events":{
+		"herd":{
+			"eventName":"herd",
+			"day":2.8489548875577304e2,
+			"thresholdCrossed":0.6999999999999998
+		},
+		"icu":{
+			"eventName":"icu",
+			"day":2.0497525054806783e2,
+			"thresholdCrossed":1.5678602418312782e-4
+		}
+	},
+	"summary":{
+		"totalProjectedDeaths":1.3161346963738304e4,
+		"totalProjectedPCRConfirmed":2.1324497761360314e5,
+		"totalProjectedInfected":1.2462215897582849e6,
+		"totalInfectedFraction":0.41848389014645165,
+		"fatalityRate":1.0561000605270415e-2,
+		"fatalityRateSymptomatic":1.508714372181488e-2,
+		"fatalityRatePCR":6.171937604826725e-2,
+		"fractionOfSymptomaticHospitalized":6.1027871203502074e-2,
+		"fractionOfSymptomaticHospitalizedOrICU":8.578932124229482e-2,
+		"fractionOfPCRHospitalized":0.19720066376670195,
+		"fractionOfPCRHospitalizedOrICU":0.2772128661781751,
+		"fractionHospitalizedInICU":0.28863091210220654,
+		"fractionOfDeathInICU":0.7537512928107344,
+		"fractionDeathOfHospitalizedOrICU":0.1721577280255516,
+		"fractionOfInfectionsPCRConfirmed":0.17111321081747896,
+		"fractionOfDeathsReported":0.78998287096405,
+		"fractionOfHospitalizationsReported":0.7898882472412303,
+		"dateContained":"",
+		"dateICUOverCapacity":"Wed 22 Jul 2020 23:24:21",
+		"dateHospitalsOverCapacity":""
+	},
+	"summaryAug1":{
+		"totalProjectedDeaths":1.4150951376954947e3,
+		"totalProjectedPCRConfirmed":4.0037964545556766e4,
+		"totalProjectedInfected":2.85410256098272e5,
+		"totalInfectedFraction":9.584137784265653e-2,
+		"fatalityRate":4.958108923767097e-3,
+		"fatalityRateSymptomatic":7.083012748238709e-3,
+		"fatalityRatePCR":3.53438331283136e-2,
+		"fractionOfSymptomaticHospitalized":3.894269459277687e-2,
+		"fractionOfSymptomaticHospitalizedOrICU":5.474330450295304e-2,
+		"fractionOfPCRHospitalized":0.1533072753896294,
+		"fractionOfPCRHospitalizedOrICU":0.2155101732669834,
+		"fractionHospitalizedInICU":0.28863091210220665,
+		"fractionOfDeathInICU":0.7327763038535975,
+		"fractionDeathOfHospitalizedOrICU":0.17215772802555165,
+		"fractionOfInfectionsPCRConfirmed":0.14028215065884306,
+		"fractionOfDeathsReported":0.7894138326339808,
+		"fractionOfHospitalizationsReported":0.7889348522487611,
+		"dateContained":"",
+		"dateICUOverCapacity":"Wed 22 Jul 2020 23:24:21",
+		"dateHospitalsOverCapacity":""
+	}
+}
