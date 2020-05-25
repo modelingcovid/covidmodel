@@ -123,7 +123,6 @@ seriesArrayToObject[timeSeriesData_]:=Module[{timeData, fixedKeys, timeDataKeys,
   hospitalCapacity = #["hospitalCapacity"]&/@timeSeriesData;
   
   N[Merge[Flatten[{<|#->getSeriesForKey[timeSeriesData, #]|>&/@timeDataKeys,<|"distancing"->distancing|>,<|"hospitalCapacity"->hospitalCapacity|>}],First]]
-
 ];
 
 
