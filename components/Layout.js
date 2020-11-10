@@ -77,10 +77,9 @@ export function Layout({children}) {
   return (
     <div className="layout">
       <style jsx>{styles}</style>
-      {/* <Notice>
-        Please do not share these values; this model is under active
-        development.
-      </Notice> */}
+      <Notice>
+        This model was last run on May 14, 2020 and has been archived.
+      </Notice>
       <div className="sticky-anchor">
         <Section>
           <div className="header-background" />
