@@ -16,7 +16,7 @@ export function ScenarioSelect({
   const {scenario, scenarios, setScenario} = useModelState();
 
   const currentScenario = useMemo(
-    () => scenarios.find(({name}) => name === 'Current'),
+    () => scenarios.find(({id}) => id === 'scenario5'),
     [scenarios]
   );
 
