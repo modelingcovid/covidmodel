@@ -21,7 +21,7 @@
     "@vx/tooltip": "^0.0.195",
     "apollo-datasource": "^0.7.0",
     "apollo-server-caching": "^0.5.1",
-    "apollo-server-micro": "^2.12.0",
+    "apollo-server-micro": "^2.19.0",
     "chalk": "^4.0.0",
     "classnames": "^2.2.6",
     "csvtojson": "^2.0.10",
@@ -34,7 +34,7 @@
     "downshift": "^5.0.5",
     "graphql": "^14.0.0",
     "isomorphic-unfetch": "^3.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "next": "^9.5.5",
     "normalize.css": "^8.0.1",
     "optimism": "^0.11.5",
@@ -53,5 +53,9 @@
   },
   "engines": {
     "node": "*"
+  },
+  "resolutions": {
+    "node-fetch": "^2.6.1",
+    "object-path": "^0.11.5"
   }
 }
